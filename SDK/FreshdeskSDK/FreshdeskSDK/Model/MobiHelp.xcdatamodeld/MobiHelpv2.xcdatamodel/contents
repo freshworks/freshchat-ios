@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="FDArticle" representedClassName="FDArticle" syncable="YES">
+        <attribute name="articleDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FDFolder" inverseName="articles" inverseEntity="FDFolder" syncable="YES"/>
+    </entity>
+    <entity name="FDFolder" representedClassName="FDFolder" syncable="YES">
+        <attribute name="categoryID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="categoryName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="folderDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="folderID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="articles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FDArticle" inverseName="folder" inverseEntity="FDArticle" syncable="YES"/>
+    </entity>
+    <entity name="FDNote" representedClassName="FDNote" syncable="YES">
+        <attribute name="attachmentOriginal" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="attachmentThumbnail" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hasAttachment" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="incoming" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="localNoteID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="noteID" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="pending" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="source" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="unread" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="ticket" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FDTicket" inverseName="notes" inverseEntity="FDTicket" syncable="YES"/>
+    </entity>
+    <entity name="FDTicket" representedClassName="FDTicket" syncable="YES">
+        <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ticketDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ticketID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="updatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FDNote" inverseName="ticket" inverseEntity="FDNote" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="FDArticle" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="FDFolder" positionX="0" positionY="0" width="128" height="148"/>
+        <element name="FDNote" positionX="0" positionY="0" width="128" height="225"/>
+        <element name="FDTicket" positionX="0" positionY="0" width="128" height="165"/>
+    </elements>
+</model>
