@@ -67,6 +67,7 @@
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
 		358DD4FA1BB01A7200B36E4E /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 358DD4F91BB01A7200B36E4E /* KonotorModels.bundle */; };
+		CEF55B9E1BB047D800987F23 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CEF55B9D1BB047D800987F23 /* HLResources.bundle */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -209,6 +210,7 @@
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		358DD4F91BB01A7200B36E4E /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		CEF55B9D1BB047D800987F23 /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +276,7 @@
 		355AE80F1B9DDA2F00E8999C /* KonotorResources */ = {
 			isa = PBXGroup;
 			children = (
+				CEF55B9D1BB047D800987F23 /* HLResources.bundle */,
 				358DD4F91BB01A7200B36E4E /* KonotorModels.bundle */,
 				355AE8101B9DDA2F00E8999C /* Konotor-Images */,
 				355AE8341B9DDA2F00E8999C /* XIB */,
@@ -590,6 +593,7 @@
 				355AE83B1B9DDA2F00E8999C /* konotor_cancel.png in Resources */,
 				355AE8441B9DDA2F00E8999C /* konotor_mic@2x.png in Resources */,
 				355AE84A1B9DDA2F00E8999C /* konotor_profile@2x.png in Resources */,
+				CEF55B9E1BB047D800987F23 /* HLResources.bundle in Resources */,
 				355AE8411B9DDA2F00E8999C /* konotor_cross.png in Resources */,
 				355AE8491B9DDA2F00E8999C /* konotor_profile.png in Resources */,
 				358DD4FA1BB01A7200B36E4E /* KonotorModels.bundle in Resources */,

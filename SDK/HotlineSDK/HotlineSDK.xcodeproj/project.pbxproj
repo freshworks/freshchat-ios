@@ -56,6 +56,7 @@
 		359E3E8B1BA6D20600B933C5 /* KonotorUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E831BA6D20600B933C5 /* KonotorUser.m */; };
 		359E3E8F1BA6D7E600B933C5 /* WebServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E8E1BA6D7E600B933C5 /* WebServices.m */; };
 		35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B790201BAFD9CC005443FD /* KonotorApp.m */; };
+		CEF55BA71BB0491000987F23 /* HLArticleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF55BA61BB0491000987F23 /* HLArticleDetailViewController.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,6 +209,8 @@
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		CEF55BA51BB0491000987F23 /* HLArticleDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticleDetailViewController.h; sourceTree = "<group>"; };
+		CEF55BA61BB0491000987F23 /* HLArticleDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +257,8 @@
 				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
 				3533F0B71BB01D38000B2D9A /* HLContainerController.h */,
 				3533F0B81BB01D38000B2D9A /* HLContainerController.m */,
+				CEF55BA51BB0491000987F23 /* HLArticleDetailViewController.h */,
+				CEF55BA61BB0491000987F23 /* HLArticleDetailViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -641,6 +646,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEF55BA71BB0491000987F23 /* HLArticleDetailViewController.m in Sources */,
 				35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */,
 				35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */,
 				35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */,
