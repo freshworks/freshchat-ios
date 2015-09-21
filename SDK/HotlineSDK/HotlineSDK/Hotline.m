@@ -32,4 +32,8 @@
     [Konotor setUnreadWelcomeMessage:text];
 }
 
++(void)presentSolutions:(UIViewController *)controller{
+    
+}
+
 @end

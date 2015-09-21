@@ -22,7 +22,7 @@
 }
 
 - (IBAction)showFAQ:(id)sender {
-    [[Mobihelp sharedInstance]presentSolutions:self];
+    [Hotline presentSolutions:self];
 }
 
 - (IBAction)conversations:(id)sender {
