@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface Hotline : NSObject
 
 +(void) setSecretKey:(NSString*)key;
 +(void) setUnreadWelcomeMessage:(NSString *) text;
 +(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
-+(void)showFeedbackScreen;
++(void) showFeedbackScreen;
++(void) presentSolutions:(UIViewController *)controller;
 
 @end

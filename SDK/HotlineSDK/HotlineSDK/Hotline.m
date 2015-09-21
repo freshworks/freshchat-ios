@@ -9,6 +9,8 @@
 #import "Hotline.h"
 #import "KonotorFeedbackScreen.h"
 #import "KonotorEventHandler.h"
+#import "HLContainerController.h"
+#import "HLArticlesController.h"
 
 @implementation Hotline
 
@@ -30,6 +32,14 @@
 
 +(void)setUnreadWelcomeMessage:(NSString *)text{
     [Konotor setUnreadWelcomeMessage:text];
+}
+
++(void)presentSolutions:(UIViewController *)controller{
+    HLArticlesController *articleController = [[HLArticlesController alloc]init];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:articleController];
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    navigationController.viewControllers = @[containerController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end
