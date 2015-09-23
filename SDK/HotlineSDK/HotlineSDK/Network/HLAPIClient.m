@@ -36,7 +36,12 @@
 
 -(NSURLSessionDataTask *)GET:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler{
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
+        if (!error) {
+            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            handler(responseDictionary, nil);
+        }else{
+            handler(nil,error);
+        }
     }];
     [task resume];
     return task;

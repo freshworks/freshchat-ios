@@ -58,7 +58,9 @@
 		359E3E8A1BA6D20600B933C5 /* KonotorShareMessageEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E811BA6D20600B933C5 /* KonotorShareMessageEvent.m */; };
 		359E3E8B1BA6D20600B933C5 /* KonotorUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E831BA6D20600B933C5 /* KonotorUser.m */; };
 		359E3E8F1BA6D7E600B933C5 /* WebServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E8E1BA6D7E600B933C5 /* WebServices.m */; };
+		35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */; };
 		35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B790201BAFD9CC005443FD /* KonotorApp.m */; };
+		35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158B71BB2966B009CFEDF /* HLListViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,9 +214,14 @@
 		359E3E8D1BA6D7E600B933C5 /* WebServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServices.h; sourceTree = "<group>"; };
 		359E3E8E1BA6D7E600B933C5 /* WebServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebServices.m; sourceTree = "<group>"; };
 		359E3E901BA6D80700B933C5 /* HLAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLAPI.h; sourceTree = "<group>"; };
+		35A82B1B1BB27BC0005BB983 /* HLCategoriesListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoriesListController.h; sourceTree = "<group>"; };
+		35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoriesListController.m; sourceTree = "<group>"; };
+		35AFF6311BB2797B004DD4A9 /* HLLocalNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLLocalNotification.h; sourceTree = "<group>"; };
 		35B7901F1BAFD9CC005443FD /* KonotorApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorApp.h; sourceTree = "<group>"; };
 		35B790201BAFD9CC005443FD /* KonotorApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorApp.m; sourceTree = "<group>"; };
 		35B790221BB004FE005443FD /* KonotorModel 22.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 22.xcdatamodel"; sourceTree = "<group>"; };
+		35D158B61BB2966B009CFEDF /* HLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLListViewController.h; sourceTree = "<group>"; };
+		35D158B71BB2966B009CFEDF /* HLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLListViewController.m; sourceTree = "<group>"; };
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -260,12 +267,16 @@
 		3533F0B41BB01D38000B2D9A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
-				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
 				3533F0B71BB01D38000B2D9A /* HLContainerController.h */,
 				3533F0B81BB01D38000B2D9A /* HLContainerController.m */,
+				35D158B61BB2966B009CFEDF /* HLListViewController.h */,
+				35D158B71BB2966B009CFEDF /* HLListViewController.m */,
+				35A82B1B1BB27BC0005BB983 /* HLCategoriesListController.h */,
+				35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */,
 				3533F0B51BB01D38000B2D9A /* HLArticlesController.h */,
 				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
+				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
+				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -283,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				3533F0C71BB04382000B2D9A /* HLMacros.h */,
+				35AFF6311BB2797B004DD4A9 /* HLLocalNotification.h */,
 				3533F0C41BB0435B000B2D9A /* KonotorUtil.h */,
 				3533F0C51BB0435B000B2D9A /* KonotorUtil.m */,
 			);
@@ -676,6 +688,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
 				35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */,
 				35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */,
 				35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */,
@@ -684,6 +697,7 @@
 				35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */,
 				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
+				35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */,
 				35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */,
 				3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */,
 				35591B091B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m in Sources */,
