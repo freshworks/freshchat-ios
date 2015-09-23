@@ -15,6 +15,4 @@
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;
 
-- (instancetype)initWithModalPresentationType:(BOOL)isModalPresentation;
-
 @end

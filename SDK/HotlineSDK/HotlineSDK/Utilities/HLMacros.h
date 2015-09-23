@@ -34,14 +34,14 @@
 #define trimString(str) [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
 
 //Localization
-#define HLLocalizedString(name) NSLocalizedStringFromTable(name, @"MHLocalizable", nil)
+#define HLLocalizedString(name) NSLocalizedStringFromTable(name, @"HLLocalizable", nil)
 
 //Logging
 
 #ifdef DEBUG
-    #define HLLog(fmt, ...) NSLog((@"%s %d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+    #define FDLog(fmt, ...) NSLog((@"%s %d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 #else
-    #define HLLog(...)
+    #define FDLog(...)
 #endif
 
 //ALog always displays output regardless of the DEBUG setting

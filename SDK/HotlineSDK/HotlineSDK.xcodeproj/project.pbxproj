@@ -61,6 +61,7 @@
 		35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */; };
 		35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B790201BAFD9CC005443FD /* KonotorApp.m */; };
 		35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158B71BB2966B009CFEDF /* HLListViewController.m */; };
+		35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158BF1BB2B847009CFEDF /* FDReachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -222,6 +223,8 @@
 		35B790221BB004FE005443FD /* KonotorModel 22.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 22.xcdatamodel"; sourceTree = "<group>"; };
 		35D158B61BB2966B009CFEDF /* HLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLListViewController.h; sourceTree = "<group>"; };
 		35D158B71BB2966B009CFEDF /* HLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLListViewController.m; sourceTree = "<group>"; };
+		35D158BE1BB2B847009CFEDF /* FDReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachability.h; sourceTree = "<group>"; };
+		35D158BF1BB2B847009CFEDF /* FDReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachability.m; sourceTree = "<group>"; };
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -367,6 +370,7 @@
 		35591B791B9EDD0700BC0B60 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				35D158BD1BB2B847009CFEDF /* Reachability */,
 				35591B7A1B9EDD0700BC0B60 /* AFNetworking */,
 			);
 			path = Vendor;
@@ -483,6 +487,15 @@
 				359E3E8E1BA6D7E600B933C5 /* WebServices.m */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		35D158BD1BB2B847009CFEDF /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				35D158BE1BB2B847009CFEDF /* FDReachability.h */,
+				35D158BF1BB2B847009CFEDF /* FDReachability.m */,
+			);
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 		843DD249178594180053E19E = {
@@ -664,6 +677,7 @@
 				35591B671B9EDCB700BC0B60 /* KonotorAudioRecorder.m in Sources */,
 				358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */,
 				35591B921B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */,
 				359E3E861BA6D20600B933C5 /* KonotorCustomProperties.m in Sources */,
 				359E3E851BA6D20600B933C5 /* KonotorConversation.m in Sources */,
 				35591B631B9EDCB700BC0B60 /* Konotor.m in Sources */,
