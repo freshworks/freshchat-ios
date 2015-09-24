@@ -13,6 +13,7 @@
 #import "HLCategory.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
+#import "HLLocalNotification.h"
 
 @implementation HLCategoriesListController
 
