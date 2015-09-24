@@ -778,7 +778,7 @@
 		AD3C7CC019069882009919CD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Freshdesk;
 			};
 			buildConfigurationList = AD3C7CC319069882009919CD /* Build configuration list for PBXProject "FreshdeskSDK" */;
@@ -988,6 +988,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = fast;
@@ -1090,6 +1091,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "FreshdeskSDKTests/FreshdeskSDKTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.balaji.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1106,6 +1108,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FreshdeskSDK/FreshdeskSDK-Prefix.pch";
 				INFOPLIST_FILE = "FreshdeskSDKTests/FreshdeskSDKTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.balaji.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1146,6 +1149,7 @@
 				INSTALL_OWNER = Freshdesk;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Freshdesk.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = bundle;
@@ -1164,6 +1168,7 @@
 				INSTALL_OWNER = Freshdesk;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Freshdesk.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = bundle;
