@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HLCategory.h"
+#import "HLListViewController.h"
 
-@interface HLArticlesController : UIViewController
+@interface HLArticlesController : HLListViewController
 
--(instancetype)initWithDataSource:(NSArray *)dataSource;
+-(instancetype)initWithCategory:(HLCategory *)category;
 
 @end

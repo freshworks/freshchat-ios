@@ -8,52 +8,36 @@
 
 #import "HLArticlesController.h"
 #import "WebServices.h"
+#import "HLFAQServices.h"
+#import "HLArticle.h"
+#import "HLArticleDetailViewController.h"
+#import "HLContainerController.h"
 
-@interface HLArticlesController () <UITableViewDelegate, UITableViewDataSource>
+@interface HLArticlesController ()
 
-@property(nonatomic, strong)UITableView *tableView;
-@property(nonatomic, strong)NSArray *dataSource;
+@property(nonatomic, strong)HLCategory *category;
 
 @end
 
 @implementation HLArticlesController
 
-- (instancetype)initWithDataSource:(NSArray *)dataSource{
+-(instancetype)initWithCategory:(HLCategory *)category{
     self = [super init];
     if (self) {
+        self.category = category;
     }
     return self;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
+    [super willMoveToParentViewController:parent];
     parent.title = @"Article List";
-    self.tableView = [[UITableView alloc]init];
-    self.dataSource = @[@"Item 1", @"Item 2"];
-    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    [self.view addSubview:self.tableView];
-    NSDictionary *views = @{@"tableView" : self.tableView };
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|" options:0 metrics:nil views:views]];
+    [self updateDataSource];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self fetchUpdates];
-    self.view.backgroundColor = [UIColor whiteColor];
+-(void)updateDataSource{
+    self.dataSource = [NSArray arrayWithArray:[self.category.articles allObjects]];
     [self.tableView reloadData];
-}
-
--(void)fetchUpdates{
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
-    return self.dataSource.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -62,8 +46,16 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text  = self.dataSource[indexPath.row];
+    HLArticle *article = self.dataSource[indexPath.row];
+    cell.textLabel.text  = article.title;
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
+    articleDetailController.articleDescription = @"Article Desciption";
+    HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+    [self.navigationController pushViewController:container animated:YES];
 }
 
 @end

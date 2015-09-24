@@ -6,35 +6,27 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-//#import "FDReachability.h"
-//#import "FDFooterView.h"
+#import "FDReachability.h"
 #import "HLArticleDetailViewController.h"
 //#import "FDVotingManager.h"
 //#import "FDSecureStore.h"
 //#import "FDTheme.h"
 //#import "FDBarButtonItem.h"
-//#import "FDMacros.h"
-//#import "FDAPIClient.h"
-//#import "FDCoreDataImporter.h"
-//#import "FDcoreDataCoordinator.h"
+#import "HLMacros.h"
 //#import "FDConstants.h"
-//#import "FDArticle.h"
 #import <AVFoundation/AVFoundation.h>
 #define HL_THEMES_DIR @"Themes"
 
 @interface HLArticleDetailViewController ()
 
-
 @property (strong, nonatomic) UIWebView *webView;
 //@property (strong, nonatomic) FDTheme *theme;
-//@property (strong, nonatomic) FDReachability *reachability;
-//@property (strong, nonatomic) FDFooterView *footerView;
+@property (strong, nonatomic) FDReachability *reachability;
 //@property (strong, nonatomic) FDSecureStore *secureStore;
 //@property (strong, nonatomic) FDVotingManager *votingManager;
 @property (strong, nonatomic) NSLayoutConstraint         *promptViewHeightConstraint;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) NSString *appAudioCategory;
-@property (nonatomic) BOOL isModalView;
 
 @end
 
@@ -42,37 +34,17 @@
 
 @synthesize promptViewHeightConstraint;
 
-
 #pragma mark - Lazy Instantiations
--(instancetype)initWithModalPresentationType:(BOOL)isModalPresentation {
+
+- (instancetype)init{
     self = [super init];
     if (self) {
-        self.isModalView = isModalPresentation;
+        // _theme = [FDTheme sharedInstance];
+        // _secureStore = [FDSecureStore sharedInstance];
+        // _votingManager = [FDVotingManager sharedInstance];
     }
     return self;
 }
-
-
-//-(FDTheme *)theme{
-//    if(!_theme){
-//        _theme = [FDTheme sharedInstance];
-//    }
-//    return _theme;
-//}
-//
-//-(FDSecureStore *)secureStore{
-//    if(!_secureStore){
-//        _secureStore = [FDSecureStore sharedInstance];
-//    }
-//    return _secureStore;
-//}
-//
-//-(FDVotingManager *)votingManager{
-//    if (!_votingManager) {
-//        _votingManager = [FDVotingManager sharedInstance];
-//    }
-//    return _votingManager;
-//}
 
 -(NSString *)embedHTML{
     NSString *article = [self.articleDescription stringByReplacingOccurrencesOfString:@"src=\"//" withString:@"src=\"http://"];
@@ -102,14 +74,18 @@
 
 #pragma mark - Life cycle methods
 
+-(void)willMoveToParentViewController:(UIViewController *)parent{
+}
+
+
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self registerAppAudioCategory];
 //    [self theming];
 //    [self setNavigationItem];
     [self setSubviews];
-//    [self checkNetworkReachability];
-//    [self fixAudioPlayback];
+    [self checkNetworkReachability];
+    [self fixAudioPlayback];
     //    [self handleArticleVoteAfterSometime];
 }
 
@@ -127,26 +103,15 @@
 //-(void)theming{
 //    self.view.backgroundColor = [self.theme backgroundColorSDK];
 //}
-//
-//-(void)setNavigationItem{
-//    [self.navigationItem setTitle:FDLocalizedString(@"Solutions Detail Nav Bar Title Text" )];
-//    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-//    [self.navigationItem setRightBarButtonItem:barButton animated:YES];
-//    if(self.isModalView)
-//    {
-//        FDBarButtonItem *backButton = [[FDBarButtonItem alloc]initWithTitle:FDLocalizedString(@"Solutions Detail Nav Bar Back Button Text") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-//        [self.navigationItem setLeftBarButtonItem:backButton];
-//    }
-//}
-//
-//-(void)closeButton:(id)sender{
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
 
+-(void)setNavigationItem{
+    [self.navigationItem setTitle:@"Solution Article"];
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    [self.navigationItem setRightBarButtonItem:barButton animated:YES];
+}
 
 -(void)setSubviews{
-    //Webview
     self.webView = [[UIWebView alloc]init];
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     self.webView.delegate = self;
@@ -161,9 +126,7 @@
 //    articleVotePrompt.translatesAutoresizingMaskIntoConstraints = NO;
 //    [self.view addSubview:articleVotePrompt];
 //    
-//    self.footerView = [[FDFooterView alloc]initWithController:self];
-//    [self.view addSubview:self.footerView];
-//    
+//
 //    
 //    self.promptViewHeightConstraint = [NSLayoutConstraint constraintWithItem:articleVotePrompt
 //                                                                   attribute:NSLayoutAttributeHeight
@@ -178,22 +141,21 @@
     NSDictionary *views = @{@"webView" : self.webView};
 //    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[promptView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView]|" options:0 metrics:nil views:views]];
     
 }
 
-//-(void)checkNetworkReachability{
-//    self.reachability = [FDReachability reachabilityWithHostname:@"www.google.com"];
-//    __weak typeof(self)weakSelf = self;
-//    //Internet is reachable
-//    self.reachability.reachableBlock = ^(FDReachability*reach){
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf.webView loadHTMLString:weakSelf.embedHTML baseURL:nil];
-//        });
-//    };
-//    [self.reachability startNotifier];
-//}
+-(void)checkNetworkReachability{
+    self.reachability = [FDReachability reachabilityWithHostname:@"www.google.com"];
+    __weak typeof(self)weakSelf = self;
+    //Internet is reachable
+    self.reachability.reachableBlock = ^(FDReachability*reach){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.webView loadHTMLString:weakSelf.embedHTML baseURL:nil];
+        });
+    };
+    [self.reachability startNotifier];
+}
 
 #pragma mark - Webview delegate
 
@@ -223,33 +185,33 @@
     self.appAudioCategory = audioSession.category;
 }
 
-//-(void) fixAudioPlayback {
-//    if([ self needAudioFix] ) {
-//        [self setAudioCategory:AVAudioSessionCategoryPlayback];
-//    }
-//}
-//
-//-(BOOL) needAudioFix {
-//    return (self.appAudioCategory &&
-//            ( self.appAudioCategory != AVAudioSessionCategoryPlayAndRecord
-//             && self.appAudioCategory != AVAudioSessionCategoryPlayback ) );
-//}
-//
-//-(void)resetAudioPlayback{
-//    if([self needAudioFix]) {
-//        [self setAudioCategory:self.appAudioCategory];
-//    }
-//}
+-(void) fixAudioPlayback {
+    if([ self needAudioFix] ) {
+        [self setAudioCategory:AVAudioSessionCategoryPlayback];
+    }
+}
 
-//-(void)setAudioCategory:(NSString *) audioSessionCategory{
-//    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-//    NSError *setCategoryError = nil;
-//    
-//    if (![audioSession setCategory:audioSessionCategory error:&setCategoryError]) {
-//        FDLog(@"%s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
-//    }
-//    
-//}
+-(BOOL) needAudioFix {
+    return (self.appAudioCategory &&
+            ( self.appAudioCategory != AVAudioSessionCategoryPlayAndRecord
+             && self.appAudioCategory != AVAudioSessionCategoryPlayback ) );
+}
+
+-(void)resetAudioPlayback{
+    if([self needAudioFix]) {
+        [self setAudioCategory:self.appAudioCategory];
+    }
+}
+
+-(void)setAudioCategory:(NSString *) audioSessionCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *setCategoryError = nil;
+    
+    if (![audioSession setCategory:audioSessionCategory error:&setCategoryError]) {
+        FDLog(@"%s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
+    }
+    
+}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //    [self handleArticleVotePrompt];

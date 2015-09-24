@@ -10,7 +10,8 @@
 #import "KonotorFeedbackScreen.h"
 #import "KonotorEventHandler.h"
 #import "HLContainerController.h"
-#import "HLArticlesController.h"
+#import "HLCategoriesListController.h"
+#import "HLCategoryGridViewController.h"
 
 @implementation Hotline
 
@@ -35,8 +36,8 @@
 }
 
 +(void)presentSolutions:(UIViewController *)controller{
-    HLArticlesController *articleController = [[HLArticlesController alloc]init];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:articleController];
+    HLCategoryGridViewController *categoryController = [[HLCategoryGridViewController alloc]init];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:categoryController];
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     navigationController.viewControllers = @[containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];

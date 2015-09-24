@@ -28,4 +28,7 @@
 - (void)addArticles:(NSSet *)values;
 - (void)removeArticles:(NSSet *)values;
 
++(HLCategory *)categoryWithInfo:(NSDictionary *)categoryInfo inManagedObjectContext:(NSManagedObjectContext *)context;
+
+
 @end

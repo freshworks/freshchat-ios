@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Vignesh G. All rights reserved.
 //
 #import "KonotorDataManager.h"
+#import "HLMacros.h"
 
 NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
 NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
@@ -105,7 +106,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 		return _mainObjectContext;
 	}
     
-	_mainObjectContext = [[NSManagedObjectContext alloc] init];
+	_mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
 	[_mainObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
     [_mainObjectContext setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
 
@@ -161,6 +162,18 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 	[ctx setPersistentStoreCoordinator:self.persistentStoreCoordinator];
     
 	return ctx;
+}
+
+-(void)deleteAllSolutions{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"HLCategory"];
+    [self.mainObjectContext performBlockAndWait:^{
+        NSArray *results = [self.mainObjectContext executeFetchRequest:request error:nil];
+        for (int i=0; i<[results count]; i++) {
+            id entry = results[i];
+            [self.mainObjectContext deleteObject:entry];
+        }
+        [self save];
+    }];
 }
 
 @end

@@ -20,4 +20,15 @@
 @dynamic title;
 @dynamic category;
 
++(HLArticle *)articleWithInfo:(NSDictionary *)articleInfo inManagedObjectContext:(NSManagedObjectContext *)context{
+    HLArticle *article = nil;
+    article = [NSEntityDescription insertNewObjectForEntityForName:@"HLArticle" inManagedObjectContext:context];
+    article.articleID            = [articleInfo valueForKey:@"article_id"];
+    article.title                = [articleInfo valueForKey:@"title"];
+    article.articleDescription   = [articleInfo valueForKey:@"description_html"];
+    article.position             = @([[articleInfo valueForKey:@"position"]intValue]);
+    return article;
+}
+
+
 @end
