@@ -18,7 +18,7 @@
 
 @interface HLCategoryGridViewController ()
 
-@property (nonatomic,strong) NSArray *dataSource;
+@property (nonatomic,strong) NSArray *categories;
 
 @end
 
@@ -27,9 +27,9 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = @"Collections View";
     self.view.backgroundColor = [UIColor whiteColor];
+    [self updateCategories];
     [self setupCollectionView];
     [self setNavigationItem];
-    [self updateDataSource];
     [self fetchUpdates];
     [self localNotificationSubscription];
 }
@@ -39,14 +39,14 @@
     [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
 }
 
--(void)updateDataSource{
+-(void)updateCategories{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"HLCategory"];
     NSSortDescriptor *position   = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
     request.sortDescriptors = @[position];
     NSError *error;
     NSArray *results =[[KonotorDataManager sharedInstance].mainObjectContext executeFetchRequest:request error:&error];
     if (results) {
-        self.dataSource = results;
+        self.categories = results;
         [self.collectionView reloadData];
     }
 }
@@ -62,7 +62,7 @@
 
 -(void)localNotificationSubscription{
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_AVAILABILITY_NOTIFICATION object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self updateDataSource];
+        [self updateCategories];
         NSLog(@"Got Notifications !!!");
     }];
 }
@@ -92,50 +92,52 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.dataSource.count;
+    NSInteger noOfItems = [self.categories count];
+    if (!noOfItems) {
+        return 0;
+    }
+    return self.categories.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     HLGridViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor blackColor];
     cell.imageView.image = [UIImage imageNamed:@"konotor_profile.png"];
-    HLCategory *category = self.dataSource[indexPath.row];
+    HLCategory *category = self.categories[indexPath.row];
     cell.label.text = category.title;
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    return CGSizeMake(160, 150);
+    return CGSizeMake( ([UIScreen mainScreen].bounds.size.height/5)+15, ([UIScreen mainScreen].bounds.size.height/5)+15);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    HLCategory *category = self.dataSource[indexPath.row];
+    HLCategory *category = self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
     [self.navigationController pushViewController:container animated:YES];
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 10.0f;
+    return [UIScreen mainScreen].bounds.size.width/25;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 10.0f;
+    return [UIScreen mainScreen].bounds.size.height/25;
 }
 
 // Layout: Set Edges
 - (UIEdgeInsets)collectionView:
 (UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    // return UIEdgeInsetsMake(0,8,0,8);  // top, left, bottom, right
-    return UIEdgeInsetsMake(10,10,10,10);  // top, left, bottom, right
+    return UIEdgeInsetsMake(15,15,15,15);  // top, left, bottom, right
 }
 
 - (NSArray *) layoutAttributesForElementsInRect:(CGRect)rect {
-    NSArray *answer = [self.collectionView.collectionViewLayout layoutAttributesForElementsInRect:rect];
-    
-    for(int i = 1; i < [answer count]; ++i) {
-        UICollectionViewLayoutAttributes *currentLayoutAttributes = answer[i];
-        UICollectionViewLayoutAttributes *prevLayoutAttributes = answer[i - 1];
+    NSArray *layoutForCells = [self.collectionView.collectionViewLayout layoutAttributesForElementsInRect:rect];
+    for(int i = 1; i < [layoutForCells count]; ++i) {
+        UICollectionViewLayoutAttributes *currentLayoutAttributes = layoutForCells[i];
+        UICollectionViewLayoutAttributes *prevLayoutAttributes = layoutForCells[i - 1];
         NSInteger maximumSpacing = 4;
         NSInteger origin = CGRectGetMaxX(prevLayoutAttributes.frame);
         if(origin + maximumSpacing + currentLayoutAttributes.frame.size.width < 10) {
@@ -144,7 +146,7 @@
             currentLayoutAttributes.frame = frame;
         }
     }
-    return answer;
+    return layoutForCells;
 }
 
 @end
