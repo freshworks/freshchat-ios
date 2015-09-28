@@ -9,6 +9,6 @@
 #ifndef HotlineSDK_HLLocalNotification_h
 #define HotlineSDK_HLLocalNotification_h
 
-#define HOTLINE_SOLUTIONS_UPDATED @"com.freshdesk.hotline_solution_availability"
+#define HOTLINE_SOLUTIONS_UPDATED @"com.freshdesk.hotline_solutions_updated"
 
 #endif
