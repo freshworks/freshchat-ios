@@ -46,14 +46,16 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     HLArticle *article = self.dataSource[indexPath.row];
     cell.textLabel.text  = article.title;
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    HLArticle *article = self.dataSource[indexPath.row];
     HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
-    articleDetailController.articleDescription = @"Article Desciption";
+    articleDetailController.articleDescription = article.articleDescription;
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
     [self.navigationController pushViewController:container animated:YES];
 }

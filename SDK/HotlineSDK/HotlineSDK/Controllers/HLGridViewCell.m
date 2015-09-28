@@ -21,13 +21,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
-        self.imageView.backgroundColor = [UIColor blueColor];
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         
         self.label = [[UILabel alloc] init];
         self.label.text = @"Test text";
-        self.label.textColor = [UIColor brownColor];
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.label];
         

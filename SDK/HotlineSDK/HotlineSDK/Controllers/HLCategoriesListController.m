@@ -48,7 +48,7 @@
 }
 
 -(void)localNotificationSubscription{
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_AVAILABILITY_NOTIFICATION object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         [self updateDataSource];
         NSLog(@"Got Notifications !!!");
     }];

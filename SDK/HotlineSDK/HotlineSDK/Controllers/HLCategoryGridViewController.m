@@ -61,7 +61,7 @@
 }
 
 -(void)localNotificationSubscription{
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_AVAILABILITY_NOTIFICATION object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         [self updateCategories];
         NSLog(@"Got Notifications !!!");
     }];
@@ -101,10 +101,10 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     HLGridViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor blackColor];
     cell.imageView.image = [UIImage imageNamed:@"konotor_profile.png"];
     HLCategory *category = self.categories[indexPath.row];
     cell.label.text = category.title;
+    cell.label.font = [UIFont systemFontOfSize:14];
     return cell;
 }
 

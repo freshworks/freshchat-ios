@@ -39,11 +39,14 @@
                 continue;
             }
             
-            NSURL *URL = [NSURL URLWithString:HOTLINE_API_ARTICLES];
+            
+            NSDictionary *categoryInfo = categories[i];
+            NSString *categoryID = categoryInfo[@"categoryId"];
+            NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_API_ARTICLES,categoryID]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
             [apiClient GET:request withHandler:^(id responseObject, NSError *error) {
                 if (!error) {
-                    [solutions addObject:@{ @"category" : categories[i], @"articles" : responseObject[@"articles"]}];
+                    [solutions addObject:@{ @"category" : categoryInfo, @"articles" : responseObject[@"articles"]}];
                 }else{
                     canAbortRequest = YES;
                 }
@@ -83,7 +86,7 @@
 }
 
 -(void)postNotification{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_AVAILABILITY_NOTIFICATION object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_UPDATED object:self];
 }
 
 @end

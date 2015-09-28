@@ -47,8 +47,8 @@
 }
 
 -(NSString *)embedHTML{
-    NSString *article = [self.articleDescription stringByReplacingOccurrencesOfString:@"src=\"//" withString:@"src=\"http://"];
-    article = [article stringByReplacingOccurrencesOfString:@"value=\"//" withString:@"value=\"http://"];
+    NSString *article = [self.articleDescription stringByReplacingOccurrencesOfString:@"src=\"//" withString:@"src=\"https://"];
+    article = [article stringByReplacingOccurrencesOfString:@"value=\"//" withString:@"value=\"https://"];
     return [NSString stringWithFormat:@""
             "<html>"
             "<style type=\"text/css\">"
