@@ -62,6 +62,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     HLArticle *article = self.articles[indexPath.row];
     HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
+    articleDetailController.articleID = article.articleID;
     articleDetailController.articleDescription = article.articleDescription;
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
     [self.navigationController pushViewController:container animated:YES];

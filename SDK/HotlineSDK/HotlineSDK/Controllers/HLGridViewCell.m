@@ -21,6 +21,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
+        self.imageView.backgroundColor = [UIColor brownColor];
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         

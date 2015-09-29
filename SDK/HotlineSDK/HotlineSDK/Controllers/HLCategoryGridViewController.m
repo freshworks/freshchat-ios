@@ -12,6 +12,7 @@
 #import "HLArticlesController.h"
 #import "KonotorDataManager.h"
 #import "HLFAQServices.h"
+#import "HLMacros.h"
 #import "HLArticlesController.h"
 #import "HLLocalNotification.h"
 #import "HLCategory.h"
@@ -92,17 +93,16 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    NSInteger noOfItems = [self.categories count];
-    if (!noOfItems) {
+    if(!self.categories){
         return 0;
     }
-    return self.categories.count;
+    return [self.categories count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     HLGridViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
-    cell.imageView.image = [UIImage imageNamed:@"konotor_profile.png"];
     HLCategory *category = self.categories[indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:@"konotor_profile.png"];
     cell.label.text = category.title;
     cell.label.font = [UIFont systemFontOfSize:14];
     return cell;
@@ -120,11 +120,27 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return [UIScreen mainScreen].bounds.size.width/25;
+    if IS_IPHONE {
+        return self.view.bounds.size.width/25;
+    }
+    else if IS_IPAD{
+        return self.view.bounds.size.width/45;
+    }
+    else{
+        return self.view.bounds.size.width/25;
+    }
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return [UIScreen mainScreen].bounds.size.height/25;
+    if IS_IPHONE {
+        return self.view.bounds.size.width/25;
+    }
+    else if IS_IPAD{
+        return self.view.bounds.size.width/45;
+    }
+    else{
+        return self.view.bounds.size.width/25;
+    }
 }
 
 // Layout: Set Edges
