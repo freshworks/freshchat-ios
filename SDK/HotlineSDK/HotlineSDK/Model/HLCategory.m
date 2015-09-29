@@ -8,7 +8,7 @@
 
 #import "HLCategory.h"
 #import "HLArticle.h"
-
+#import "KonotorDataManager.h"
 
 @implementation HLCategory
 
@@ -21,7 +21,7 @@
 
 +(HLCategory *)categoryWithInfo:(NSDictionary *)categoryInfo inManagedObjectContext:(NSManagedObjectContext *)context{
     HLCategory *category = nil;
-    category = [NSEntityDescription insertNewObjectForEntityForName:@"HLCategory" inManagedObjectContext:context];
+    category = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CATEGORY_ENTITY inManagedObjectContext:context];
     category.title = categoryInfo[@"title"];
     category.position = @([categoryInfo[@"position"] intValue]);
     category.icon = nil;

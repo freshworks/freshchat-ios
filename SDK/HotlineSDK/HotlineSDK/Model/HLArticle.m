@@ -8,7 +8,7 @@
 
 #import "HLArticle.h"
 #import "HLCategory.h"
-
+#import "KonotorDataManager.h"
 
 @implementation HLArticle
 
@@ -22,10 +22,10 @@
 
 +(HLArticle *)articleWithInfo:(NSDictionary *)articleInfo inManagedObjectContext:(NSManagedObjectContext *)context{
     HLArticle *article = nil;
-    article = [NSEntityDescription insertNewObjectForEntityForName:@"HLArticle" inManagedObjectContext:context];
-    article.articleID            = [articleInfo valueForKey:@"article_id"];
+    article = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_ARTICLE_ENTITY inManagedObjectContext:context];
+    article.articleID            = [articleInfo valueForKey:@"articleId"];
     article.title                = [articleInfo valueForKey:@"title"];
-    article.articleDescription   = [articleInfo valueForKey:@"description_html"];
+    article.articleDescription   = [articleInfo valueForKey:@"content"];
     article.position             = @([[articleInfo valueForKey:@"position"]intValue]);
     return article;
 }

@@ -13,8 +13,10 @@
 extern NSString * const DataManagerDidSaveNotification;
 extern NSString * const DataManagerDidSaveFailedNotification;
 
-@interface KonotorDataManager : NSObject {
-}
+#define HOTLINE_ARTICLE_ENTITY @"HLArticle"
+#define HOTLINE_CATEGORY_ENTITY  @"HLCategory"
+
+@interface KonotorDataManager : NSObject
 
 @property (nonatomic, readonly, retain) NSManagedObjectModel *objectModel;
 @property (nonatomic, readonly, retain) NSManagedObjectContext *mainObjectContext;

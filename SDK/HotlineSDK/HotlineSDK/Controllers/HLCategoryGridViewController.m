@@ -40,7 +40,7 @@
 }
 
 -(void)updateCategories{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"HLCategory"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
     NSSortDescriptor *position   = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
     request.sortDescriptors = @[position];
     NSError *error;

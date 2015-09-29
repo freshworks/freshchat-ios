@@ -37,12 +37,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 - (void)dealloc {
 	[self save];
-    
-	//[_persistentStoreCoordinator release];
-	//[_mainObjectContext release];
-	//[_objectModel release];
-    
-	//[super dealloc];
 }
 
 - (NSManagedObjectModel*)objectModel {
@@ -165,7 +159,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)deleteAllSolutions{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"HLCategory"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
     [self.mainObjectContext performBlockAndWait:^{
         NSArray *results = [self.mainObjectContext executeFetchRequest:request error:nil];
         for (int i=0; i<[results count]; i++) {
