@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
+
 @interface FDSecureStore : NSObject
 
 +(instancetype)sharedInstance;

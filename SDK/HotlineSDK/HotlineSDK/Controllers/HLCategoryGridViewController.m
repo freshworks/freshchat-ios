@@ -11,10 +11,10 @@
 #import "HLContainerController.h"
 #import "HLArticlesController.h"
 #import "KonotorDataManager.h"
-#import "HLFAQServices.h"
 #import "HLArticlesController.h"
 #import "HLLocalNotification.h"
 #import "HLCategory.h"
+#import "FDSolutionUpdater.h"
 
 @interface HLCategoryGridViewController ()
 
@@ -52,8 +52,13 @@
 }
 
 -(void)fetchUpdates{
-    HLFAQServices *service = [HLFAQServices new];
-    [service fetchSolutions];
+    FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
+    [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
+        if(isEmpty){
+            [updater resetTime];
+        }
+        [updater fetch];
+    }];
 }
 
 -(void)closeButton:(id)sender{

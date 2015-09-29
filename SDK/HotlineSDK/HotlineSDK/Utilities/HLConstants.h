@@ -10,7 +10,7 @@
 #define HLConstants_h
 
 #ifdef DEBUG
-#define SOLUTIONS_FETCH_INTERVAL 1
+#define SOLUTIONS_FETCH_INTERVAL 5
 #else
 #define SOLUTIONS_FETCH_INTERVAL 300
 #endif

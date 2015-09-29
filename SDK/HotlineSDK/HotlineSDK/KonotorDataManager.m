@@ -158,15 +158,24 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 	return ctx;
 }
 
--(void)deleteAllSolutions{
+- (void)deleteAllSolutions:(void(^)(NSError *error))handler{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
-    [self.mainObjectContext performBlockAndWait:^{
+    [self.mainObjectContext performBlock:^{
         NSArray *results = [self.mainObjectContext executeFetchRequest:request error:nil];
-        for (int i=0; i<[results count]; i++) {
+        for (int i=0; i<results.count; i++) {
             id entry = results[i];
             [self.mainObjectContext deleteObject:entry];
         }
         [self save];
+        handler(nil);
+    }];
+}
+
+-(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+    [self.mainObjectContext performBlock:^{
+        NSArray *results = [self.mainObjectContext executeFetchRequest:request error:nil];
+        handler(results.count == 0);
     }];
 }
 

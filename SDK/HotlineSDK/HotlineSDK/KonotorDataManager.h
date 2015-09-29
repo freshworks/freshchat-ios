@@ -25,7 +25,8 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 + (KonotorDataManager*)sharedInstance;
 - (BOOL)save;
 - (NSManagedObjectContext*)managedObjectContext;
--(void)deleteAllSolutions;
+- (void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler;
+- (void)deleteAllSolutions:(void(^)(NSError *error))handler;
 
 @end
 
