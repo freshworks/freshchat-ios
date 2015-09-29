@@ -16,6 +16,7 @@
 @interface HLArticlesController ()
 
 @property(nonatomic, strong)HLCategory *category;
+@property(nonatomic, strong)NSArray *articles;
 
 @end
 
@@ -36,7 +37,9 @@
 }
 
 -(void)updateDataSource{
-    self.dataSource = [NSArray arrayWithArray:[self.category.articles allObjects]];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+    NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    self.articles = sortedArticles;
     [self.tableView reloadData];
 }
 
@@ -47,13 +50,17 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    HLArticle *article = self.dataSource[indexPath.row];
+    HLArticle *article = self.articles[indexPath.row];
     cell.textLabel.text  = article.title;
     return cell;
 }
 
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
+    return self.articles.count;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HLArticle *article = self.dataSource[indexPath.row];
+    HLArticle *article = self.articles[indexPath.row];
     HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
     articleDetailController.articleDescription = article.articleDescription;
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];

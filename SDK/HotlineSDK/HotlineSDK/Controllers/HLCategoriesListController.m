@@ -15,6 +15,12 @@
 #import "HLContainerController.h"
 #import "HLLocalNotification.h"
 
+@interface HLCategoriesListController ()
+
+@property (nonatomic, strong)NSArray *categories;
+
+@end
+
 @implementation HLCategoriesListController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
@@ -33,7 +39,7 @@
     NSError *error;
     NSArray *results =[[KonotorDataManager sharedInstance].mainObjectContext executeFetchRequest:request error:&error];
     if (results) {
-        self.dataSource = results;
+        self.categories = results;
         [self.tableView reloadData];
     }
 }
@@ -65,13 +71,17 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    HLCategory *category =  self.dataSource[indexPath.row];
+    HLCategory *category =  self.categories[indexPath.row];
     cell.textLabel.text  = category.title;
     return cell;
 }
 
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
+    return self.categories.count;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HLCategory *category =  self.dataSource[indexPath.row];
+    HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
     [self.navigationController pushViewController:container animated:YES];
