@@ -19,6 +19,8 @@
 @property (nonatomic, retain) NSNumber * position;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *articles;
+@property (nonatomic, retain) NSString *iconURL;
+
 @end
 
 @interface HLCategory (CoreDataGeneratedAccessors)
