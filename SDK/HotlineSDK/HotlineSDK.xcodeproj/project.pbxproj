@@ -62,6 +62,7 @@
 		35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B790201BAFD9CC005443FD /* KonotorApp.m */; };
 		35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158B71BB2966B009CFEDF /* HLListViewController.m */; };
 		35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158BF1BB2B847009CFEDF /* FDReachability.m */; };
+		35D639DE1BBBE22D00979721 /* HLTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D639DD1BBBE22D00979721 /* HLTheme.m */; settings = {ASSET_TAGS = (); }; };
 		35D9F9DA1BB96DF8008C92E8 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9D91BB96DF8008C92E8 /* FDKeyChainStore.m */; settings = {ASSET_TAGS = (); }; };
 		35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9DC1BB96E02008C92E8 /* FDSecureStore.m */; settings = {ASSET_TAGS = (); }; };
 		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; settings = {ASSET_TAGS = (); }; };
@@ -231,6 +232,8 @@
 		35D158B71BB2966B009CFEDF /* HLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLListViewController.m; sourceTree = "<group>"; };
 		35D158BE1BB2B847009CFEDF /* FDReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachability.h; sourceTree = "<group>"; };
 		35D158BF1BB2B847009CFEDF /* FDReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachability.m; sourceTree = "<group>"; };
+		35D639DC1BBBE22D00979721 /* HLTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLTheme.h; sourceTree = "<group>"; };
+		35D639DD1BBBE22D00979721 /* HLTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLTheme.m; sourceTree = "<group>"; };
 		35D9F9D81BB96DF8008C92E8 /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
 		35D9F9D91BB96DF8008C92E8 /* FDKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDKeyChainStore.m; sourceTree = "<group>"; };
 		35D9F9DB1BB96E02008C92E8 /* FDSecureStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSecureStore.h; sourceTree = "<group>"; };
@@ -321,6 +324,8 @@
 			children = (
 				3533F0C71BB04382000B2D9A /* HLMacros.h */,
 				35ED5ED21BB3E92800E0052D /* HLConstants.h */,
+				35D639DC1BBBE22D00979721 /* HLTheme.h */,
+				35D639DD1BBBE22D00979721 /* HLTheme.m */,
 				35D9F9DB1BB96E02008C92E8 /* FDSecureStore.h */,
 				35D9F9DC1BB96E02008C92E8 /* FDSecureStore.m */,
 				35AFF6311BB2797B004DD4A9 /* HLLocalNotification.h */,
@@ -737,6 +742,7 @@
 				35591B961B9EDD0700BC0B60 /* UIImageView+AFNetworking.m in Sources */,
 				359E3E8B1BA6D20600B933C5 /* KonotorUser.m in Sources */,
 				359E3E8F1BA6D7E600B933C5 /* WebServices.m in Sources */,
+				35D639DE1BBBE22D00979721 /* HLTheme.m in Sources */,
 				35591B941B9EDD0700BC0B60 /* AFURLConnectionOperation.m in Sources */,
 				35591B8E1B9EDD0700BC0B60 /* AFHTTPClient.m in Sources */,
 				3533F0BD1BB020D3000B2D9A /* HLAPIClient.m in Sources */,
