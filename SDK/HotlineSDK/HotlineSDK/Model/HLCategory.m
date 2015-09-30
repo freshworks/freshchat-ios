@@ -18,11 +18,13 @@
 @dynamic position;
 @dynamic title;
 @dynamic articles;
+@dynamic iconURL;
 
 +(HLCategory *)categoryWithInfo:(NSDictionary *)categoryInfo inManagedObjectContext:(NSManagedObjectContext *)context{
     HLCategory *category = nil;
     category = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CATEGORY_ENTITY inManagedObjectContext:context];
     category.title = categoryInfo[@"title"];
+    category.iconURL = categoryInfo[@"icon"];
     category.position = @([categoryInfo[@"position"] intValue]);
     category.icon = nil;
     category.categoryDescription = categoryInfo[@"description"];
