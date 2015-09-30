@@ -13,6 +13,7 @@
 #import "HLArticle.h"
 #import "HLCategory.h"
 #import "HLLocalNotification.h"
+#import "FDSecureStore.h"
 
 @implementation HLFAQServices
 
@@ -56,17 +57,17 @@
         
         dispatch_group_notify(group, dispatch_get_main_queue(), ^{
             if (!canAbortRequest) {
-                [self deleteExistingSolutions];
-                [self updateDBWithSolutions:solutions];
-                [self postNotification];
+                [[KonotorDataManager sharedInstance]deleteAllSolutions:^(NSError *error) {
+                    if (!error) {
+                        [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
+                        [self updateDBWithSolutions:solutions];
+                        [self postNotification];
+                    }
+                }];
             }
         });
     }];
     return task;
-}
-
--(void)deleteExistingSolutions{
-    [[KonotorDataManager sharedInstance]deleteAllSolutions];
 }
 
 -(void)updateDBWithSolutions:(NSArray *)solutions{
