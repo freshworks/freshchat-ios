@@ -15,6 +15,7 @@
 #import "HLLocalNotification.h"
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"
+#import "HLTheme.h"
 
 @interface HLCategoryGridViewController ()
 
@@ -35,8 +36,18 @@
 }
 
 -(void)setNavigationItem{
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"SearchButton"];
+
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
+
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
+    
+    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+}
+
+-(void)searchButtonAction:(id)sender{
+    NSLog(@"Launch");
 }
 
 -(void)updateCategories{
