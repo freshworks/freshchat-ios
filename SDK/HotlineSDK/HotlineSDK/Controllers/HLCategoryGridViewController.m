@@ -18,10 +18,12 @@
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
+#import "IconDownloader.h"
 
-@interface HLCategoryGridViewController ()
+@interface HLCategoryGridViewController () <UIScrollViewDelegate>
 
 @property (nonatomic,strong) NSArray *categories;
+@property (nonatomic, strong) NSMutableDictionary *imageDownloadsInProgress;
 
 @end
 
@@ -30,6 +32,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = @"Collections View";
     self.view.backgroundColor = [UIColor whiteColor];
+    self.imageDownloadsInProgress = [NSMutableDictionary new];
     [self updateCategories];
     [self setupCollectionView];
     [self setNavigationItem];
@@ -80,6 +83,7 @@
 
 -(void)localNotificationSubscription{
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        self.categories = @[];
         [self updateCategories];
         NSLog(@"Got Notifications !!!");
     }];
@@ -117,11 +121,20 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    HLGridViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
-    HLCategory *category = self.categories[indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:@"konotor_profile.png"];
-    cell.label.text = category.title;
-    cell.label.font = [UIFont systemFontOfSize:14];
+    NSUInteger categoryCount = self.categories.count;
+    HLGridViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
+        if (categoryCount > 0){
+            HLCategory *category = (self.categories)[indexPath.row];
+            cell.label.text = category.title;
+            // Only load cached images; defer new downloads until scrolling ends
+            if (!category.icon){
+                if (self.collectionView.dragging == NO && self.collectionView.decelerating == NO){
+                    [self startIconDownload:category forIndexPath:indexPath];
+                }
+            }else{
+                cell.imageView.image = [UIImage imageWithData:category.icon];
+            }
+        }
     return cell;
 }
 
@@ -180,6 +193,63 @@
         }
     }
     return layoutForCells;
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (!decelerate){
+        [self loadImagesForOnscreenRows];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    [self loadImagesForOnscreenRows];
+}
+
+- (void)loadImagesForOnscreenRows{
+    if (self.categories.count > 0){
+        NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
+        for (NSIndexPath *indexPath in visiblePaths){
+            HLCategory *category = (self.categories)[indexPath.row];
+            if (!category.icon){
+                [self startIconDownload:category forIndexPath:indexPath];
+            }
+        }
+    }
+}
+
+- (void)startIconDownload:(HLCategory *)category forIndexPath:(NSIndexPath *)indexPath{
+    IconDownloader *iconDownloader = (self.imageDownloadsInProgress)[indexPath];
+    if (iconDownloader == nil){
+        iconDownloader = [[IconDownloader alloc] init];
+        iconDownloader.category = category;
+        __weak IconDownloader *temp = iconDownloader;
+        [temp setCompletionHandler:^{
+
+            HLGridViewCell *cell = (HLGridViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            
+            // Display the newly loaded image
+            cell.imageView.image = [UIImage imageWithData:temp.category.icon];
+            
+            // Remove the IconDownloader from the in progress list.
+            // This will result in it being deallocated.
+            [self.imageDownloadsInProgress removeObjectForKey:indexPath];
+            
+        }];
+        (self.imageDownloadsInProgress)[indexPath] = temp;
+        [temp startDownload];
+    }
+}
+
+- (void)terminateAllDownloads{
+    NSArray *allDownloads = [self.imageDownloadsInProgress allValues];
+    [allDownloads makeObjectsPerformSelector:@selector(cancelDownload)];
+    [self.imageDownloadsInProgress removeAllObjects];
+}
+
+- (void)dealloc{
+    [self terminateAllDownloads];
 }
 
 @end

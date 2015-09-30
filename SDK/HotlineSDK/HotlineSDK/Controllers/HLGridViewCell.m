@@ -21,7 +21,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
-        self.imageView.backgroundColor = [UIColor brownColor];
+        self.imageView.backgroundColor = [UIColor whiteColor];
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         
@@ -36,6 +36,10 @@
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView]-[label]-|" options:0 metrics:nil views:views]];
     }
     return self;
+}
+
+-(void)prepareForReuse{
+    [super prepareForReuse];
 }
 
 @end

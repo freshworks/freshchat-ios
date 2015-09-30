@@ -67,6 +67,7 @@
 		35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9DC1BB96E02008C92E8 /* FDSecureStore.m */; settings = {ASSET_TAGS = (); }; };
 		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; settings = {ASSET_TAGS = (); }; };
 		35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */; settings = {ASSET_TAGS = (); }; };
+		CE6E3D071BBAC258007C7234 /* IconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6E3D061BBAC258007C7234 /* IconDownloader.m */; settings = {ASSET_TAGS = (); }; };
 		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; settings = {ASSET_TAGS = (); }; };
 		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -246,6 +247,8 @@
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		CE6E3D051BBAC258007C7234 /* IconDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconDownloader.h; sourceTree = "<group>"; };
+		CE6E3D061BBAC258007C7234 /* IconDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconDownloader.m; sourceTree = "<group>"; };
 		CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryGridViewController.h; sourceTree = "<group>"; };
 		CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryGridViewController.m; sourceTree = "<group>"; };
 		CE80CBCE1BB2B6C500B1C74B /* HLGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLGridViewCell.h; sourceTree = "<group>"; };
@@ -302,6 +305,8 @@
 				35D158B71BB2966B009CFEDF /* HLListViewController.m */,
 				35A82B1B1BB27BC0005BB983 /* HLCategoriesListController.h */,
 				35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */,
+				CE6E3D051BBAC258007C7234 /* IconDownloader.h */,
+				CE6E3D061BBAC258007C7234 /* IconDownloader.m */,
 				3533F0B51BB01D38000B2D9A /* HLArticlesController.h */,
 				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
 				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
@@ -768,6 +773,7 @@
 				35591B001B9EDBBC00BC0B60 /* KonotorEventHandler.m in Sources */,
 				35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */,
 				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
+				CE6E3D071BBAC258007C7234 /* IconDownloader.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
 				35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */,
 				35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */,
