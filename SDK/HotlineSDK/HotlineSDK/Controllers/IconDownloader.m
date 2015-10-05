@@ -17,7 +17,6 @@
                 abort();
             }
         }
-                                                       
         [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
             self.category.icon = data;
             if (self.completionHandler != nil){

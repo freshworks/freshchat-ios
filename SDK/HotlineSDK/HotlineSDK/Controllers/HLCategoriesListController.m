@@ -11,6 +11,7 @@
 #import "HLLocalNotification.h"
 #import "KonotorDataManager.h"
 #import "HLCategory.h"
+#import "HLMacros.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
 #import "HLLocalNotification.h"
@@ -25,7 +26,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = @"Categories";
+    parent.title = HLLocalizedString(@"CATEGORIES_LIST_VIEW_TITLE");
     [self setNavigationItem];
     [self updateDataSource];
     [self fetchUpdates];
@@ -45,7 +46,7 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
 }
 

@@ -10,6 +10,7 @@
 #import "WebServices.h"
 #import "HLFAQServices.h"
 #import "HLArticle.h"
+#import "HLMacros.h"
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 
@@ -32,7 +33,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = @"Article List";
+    parent.title = HLLocalizedString(@"ARTICLE_LIST_VIEW_TITLE");
     [self updateDataSource];
 }
 

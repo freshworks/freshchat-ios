@@ -29,7 +29,6 @@
         self.label.text = @"Test text";
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.label];
-        
         NSDictionary *views = @{ @"imageView" : self.imageView, @"label" : self.label};
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
@@ -40,6 +39,7 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
+    self.imageView.image=nil;
 }
 
 @end

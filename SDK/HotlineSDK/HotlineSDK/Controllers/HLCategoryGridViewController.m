@@ -30,9 +30,9 @@
 @implementation HLCategoryGridViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = @"Collections View";
+    parent.title = HLLocalizedString(@"FAQ_GRID_VIEW_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.imageDownloadsInProgress = [NSMutableDictionary new];
+    self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
     [self updateCategories];
     [self setupCollectionView];
     [self setNavigationItem];
@@ -41,11 +41,11 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"SearchButton"];
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
 
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
 
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
@@ -90,6 +90,7 @@
 }
 
 -(void)setupCollectionView{
+    
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
     self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
     self.collectionView.delegate = self;
@@ -98,10 +99,11 @@
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.collectionView];
     
-    NSDictionary *views = @{ @"collectionView" : self.collectionView };
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[collectionView]-10-|"
+    NSDictionary *views = @{ @"collectionView" : self.collectionView};
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|"
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:0 metrics:nil views:views]];
+    
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
@@ -123,24 +125,39 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger categoryCount = self.categories.count;
     HLGridViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
-        if (categoryCount > 0){
+    if (!cell) {
+        cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.width/2 )];
+    }
+    if (categoryCount > 0){
             HLCategory *category = (self.categories)[indexPath.row];
             cell.label.text = category.title;
+            cell.label.numberOfLines =0;
+            cell.layer.borderWidth=0.0f;
+            cell.layer.borderColor=[UIColor grayColor].CGColor;
             // Only load cached images; defer new downloads until scrolling ends
             if (!category.icon){
                 if (self.collectionView.dragging == NO && self.collectionView.decelerating == NO){
                     [self startIconDownload:category forIndexPath:indexPath];
+                    [cell.label sizeToFit];
                 }
             }else{
                 cell.imageView.image = [UIImage imageWithData:category.icon];
+                [cell.label sizeToFit];
             }
         }
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    return CGSizeMake( ([UIScreen mainScreen].bounds.size.height/5)+15, ([UIScreen mainScreen].bounds.size.height/5)+15);
+    if (IS_IPAD) {
+        return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/3), ([UIScreen mainScreen].bounds.size.width/4));
+    }
+    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/3), ([UIScreen mainScreen].bounds.size.height/2));
+    }
+    return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/2), ([UIScreen mainScreen].bounds.size.height/4));
 }
+
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     HLCategory *category = self.categories[indexPath.row];
@@ -150,49 +167,17 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    if IS_IPHONE {
-        return self.view.bounds.size.width/25;
-    }
-    else if IS_IPAD{
-        return self.view.bounds.size.width/45;
-    }
-    else{
-        return self.view.bounds.size.width/25;
-    }
+    return 0.0f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    if IS_IPHONE {
-        return self.view.bounds.size.width/25;
-    }
-    else if IS_IPAD{
-        return self.view.bounds.size.width/45;
-    }
-    else{
-        return self.view.bounds.size.width/25;
-    }
+        return 0.0f;
 }
 
 // Layout: Set Edges
 - (UIEdgeInsets)collectionView:
 (UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(15,15,15,15);  // top, left, bottom, right
-}
-
-- (NSArray *) layoutAttributesForElementsInRect:(CGRect)rect {
-    NSArray *layoutForCells = [self.collectionView.collectionViewLayout layoutAttributesForElementsInRect:rect];
-    for(int i = 1; i < [layoutForCells count]; ++i) {
-        UICollectionViewLayoutAttributes *currentLayoutAttributes = layoutForCells[i];
-        UICollectionViewLayoutAttributes *prevLayoutAttributes = layoutForCells[i - 1];
-        NSInteger maximumSpacing = 4;
-        NSInteger origin = CGRectGetMaxX(prevLayoutAttributes.frame);
-        if(origin + maximumSpacing + currentLayoutAttributes.frame.size.width < 10) {
-            CGRect frame = currentLayoutAttributes.frame;
-            frame.origin.x = origin + maximumSpacing;
-            currentLayoutAttributes.frame = frame;
-        }
-    }
-    return layoutForCells;
+    return UIEdgeInsetsMake(0,0,0,0);  // top, left, bottom, right
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -240,6 +225,12 @@
         (self.imageDownloadsInProgress)[indexPath] = temp;
         [temp startDownload];
     }
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    // do something after rotation
+    [self.collectionView reloadData];
 }
 
 - (void)terminateAllDownloads{
