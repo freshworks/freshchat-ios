@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *articles;
 @property (nonatomic, retain) NSString *iconURL;
+@property (nonatomic, retain) NSDate * lastUpdatedTime;
 
 @end
 

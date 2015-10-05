@@ -30,6 +30,7 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		35C297DB1BC29C25008FCCAF /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35C297DA1BC29C25008FCCAF /* KonotorModels.bundle */; settings = {ASSET_TAGS = (); }; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; settings = {ASSET_TAGS = (); }; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; settings = {ASSET_TAGS = (); }; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; settings = {ASSET_TAGS = (); }; };
@@ -66,7 +67,6 @@
 		35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */; settings = {ASSET_TAGS = (); }; };
 		35ED5F271BB3EA4600E0052D /* konotor_uploading.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */; settings = {ASSET_TAGS = (); }; };
 		35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */; settings = {ASSET_TAGS = (); }; };
-		35ED5F291BB3EA4600E0052D /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F011BB3EA4600E0052D /* KonotorModels.bundle */; settings = {ASSET_TAGS = (); }; };
 		35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -174,6 +174,7 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		35C297DA1BC29C25008FCCAF /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
@@ -210,7 +211,6 @@
 		35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_supportprofile@2x.png"; sourceTree = "<group>"; };
 		35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_uploading.png; sourceTree = "<group>"; };
 		35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
-		35ED5F011BB3EA4600E0052D /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorConversationViewController.xib; sourceTree = "<group>"; };
 		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -379,10 +379,10 @@
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
 			children = (
+				35C297DA1BC29C25008FCCAF /* KonotorModels.bundle */,
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 				35ED5EDE1BB3EA4600E0052D /* Konotor-Images */,
-				35ED5F011BB3EA4600E0052D /* KonotorModels.bundle */,
 				35ED5F021BB3EA4600E0052D /* XIB */,
 			);
 			path = HotlineResources;
@@ -596,6 +596,7 @@
 				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
 				355AE77D1B9DD42400E8999C /* MHResources.bundle in Resources */,
 				35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */,
+				35C297DB1BC29C25008FCCAF /* KonotorModels.bundle in Resources */,
 				35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */,
 				35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */,
 				35ED5F151BB3EA4600E0052D /* konotor_placeholder.png in Resources */,
@@ -609,7 +610,6 @@
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
 				35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */,
 				35ED5F231BB3EA4600E0052D /* konotor_stop.png in Resources */,
-				35ED5F291BB3EA4600E0052D /* KonotorModels.bundle in Resources */,
 				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,

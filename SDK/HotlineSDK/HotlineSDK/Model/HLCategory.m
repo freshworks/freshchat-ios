@@ -19,6 +19,7 @@
 @dynamic title;
 @dynamic articles;
 @dynamic iconURL;
+@dynamic lastUpdatedTime;
 
 +(HLCategory *)categoryWithInfo:(NSDictionary *)categoryInfo inManagedObjectContext:(NSManagedObjectContext *)context{
     HLCategory *category = nil;
