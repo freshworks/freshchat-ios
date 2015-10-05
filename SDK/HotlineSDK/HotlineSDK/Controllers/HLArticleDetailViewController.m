@@ -75,19 +75,15 @@
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-}
-
-
--(void)viewDidLoad{
-    [super viewDidLoad];
+    [self setNavigationItem];
     [self registerAppAudioCategory];
-//    [self theming];
-//    [self setNavigationItem];
+    //[self theming];
     [self setSubviews];
     [self checkNetworkReachability];
     [self fixAudioPlayback];
-    //    [self handleArticleVoteAfterSometime];
+    //[self handleArticleVoteAfterSometime];
 }
+
 
 //-(void)handleArticleVoteAfterSometime{
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -108,7 +104,7 @@
     [self.navigationItem setTitle:@"Solution Article"];
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    [self.navigationItem setRightBarButtonItem:barButton animated:YES];
+    [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
 }
 
 -(void)setSubviews{
