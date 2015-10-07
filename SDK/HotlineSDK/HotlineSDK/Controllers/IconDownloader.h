@@ -3,8 +3,8 @@
 
 @interface IconDownloader : NSObject
 
-@property (nonatomic, strong) HLCategory *category;
-@property (nonatomic, copy) void (^completionHandler)(void);
+@property (nonatomic,strong) NSString *iconURL;
+@property (nonatomic, copy) void (^completionHandler)(NSData *imageData);
 
 - (void)startDownload;
 - (void)cancelDownload;

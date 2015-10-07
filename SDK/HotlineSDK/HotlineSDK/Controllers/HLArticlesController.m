@@ -11,6 +11,7 @@
 #import "HLFAQServices.h"
 #import "HLArticle.h"
 #import "HLMacros.h"
+#import "HLTheme.h"
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 
@@ -33,8 +34,9 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(@"ARTICLE_LIST_VIEW_TITLE");
+    parent.title = self.category.title;
     [self updateDataSource];
+    [self setNavigationItem];
 }
 
 -(void)updateDataSource{
@@ -42,6 +44,14 @@
     NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
     self.articles = sortedArticles;
     [self.tableView reloadData];
+}
+
+-(void)setNavigationItem{
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
+    
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
+    
+    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -65,6 +75,7 @@
     HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
     articleDetailController.articleID = article.articleID;
     articleDetailController.articleDescription = article.articleDescription;
+    articleDetailController.categoryTitle = self.category.title;
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
     [self.navigationController pushViewController:container animated:YES];
 }

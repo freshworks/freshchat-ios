@@ -10,7 +10,7 @@
 @implementation IconDownloader
 
 - (void)startDownload{
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.category.iconURL]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.iconURL]];
     self.sessionTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error != nil){
             if ([error code] == NSURLErrorAppTransportSecurityRequiresSecureConnection){
@@ -18,9 +18,8 @@
             }
         }
         [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
-            self.category.icon = data;
             if (self.completionHandler != nil){
-                self.completionHandler();
+                self.completionHandler(data);
             }
         }];
     }];

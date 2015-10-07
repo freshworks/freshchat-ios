@@ -7,6 +7,7 @@
 //
 
 #import "HLGridViewCell.h"
+#import "HLTheme.h"
 
 @interface HLGridViewCell()
 
@@ -21,7 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
-        self.imageView.backgroundColor = [UIColor whiteColor];
+        self.imageView.backgroundColor = [[HLTheme sharedInstance] gridViewItemBackgroundColor];
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         
@@ -39,7 +40,7 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
-    self.imageView.image=nil;
+    self.imageView.image=[UIImage imageNamed:@"loading.png"];
 }
 
 @end

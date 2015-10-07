@@ -10,6 +10,9 @@
 
 @interface HLTheme : NSObject
 
++ (instancetype)sharedInstance;
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
+
+-(UIColor *)gridViewItemBackgroundColor;
 
 @end

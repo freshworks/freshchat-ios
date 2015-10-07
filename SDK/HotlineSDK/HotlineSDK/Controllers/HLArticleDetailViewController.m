@@ -111,6 +111,7 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
+    self.parentViewController.navigationItem.leftBarButtonItem.title = self.categoryTitle;
 }
 
 -(void)setSubviews{

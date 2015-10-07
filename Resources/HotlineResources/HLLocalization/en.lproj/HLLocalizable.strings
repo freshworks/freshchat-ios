@@ -6,12 +6,11 @@
 */
 
 /* Grid View */
-"FAQ_GRID_VIEW_TITLE_TEXT"="FAQs";
+"FAQ_TITLE_TEXT"="FAQs";
 "FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE"="SearchButton";
 "FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT"="Close";
 
 /* Categories List View Controller */
-"CATEGORIES_LIST_VIEW_TITLE"="Categories";
 "CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE"="Close";
 
 /* Articles List View Controller */

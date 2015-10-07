@@ -30,7 +30,7 @@
 @implementation HLCategoryGridViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = HLLocalizedString(@"FAQ_GRID_VIEW_TITLE_TEXT");
+    parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
     self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
     [self updateCategories];
@@ -140,6 +140,8 @@
                 if (self.collectionView.dragging == NO && self.collectionView.decelerating == NO){
                     [self startIconDownload:category forIndexPath:indexPath];
                     [cell.label sizeToFit];
+                    //When loading is in progress
+                    cell.imageView.image=[UIImage imageNamed:@"loading.png"];
                 }
             }else{
                 cell.imageView.image = [UIImage imageWithData:category.icon];
@@ -209,15 +211,15 @@
     IconDownloader *iconDownloader = (self.imageDownloadsInProgress)[indexPath];
     if (iconDownloader == nil){
         iconDownloader = [[IconDownloader alloc] init];
-        iconDownloader.category = category;
+        iconDownloader.iconURL = category.iconURL;
         __weak IconDownloader *temp = iconDownloader;
         __weak typeof(self)weakSelf = self;
-        [temp setCompletionHandler:^{
+        [temp setCompletionHandler:^(NSData *imageData){
 
             HLGridViewCell *cell = (HLGridViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
             
             // Display the newly loaded image
-            cell.imageView.image = [UIImage imageWithData:temp.category.icon];
+            cell.imageView.image = [UIImage imageWithData:imageData];
             
             // Remove the IconDownloader from the in progress list.
             // This will result in it being deallocated.

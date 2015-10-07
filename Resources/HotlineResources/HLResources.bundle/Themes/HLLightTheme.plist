@@ -158,5 +158,18 @@
 		<key>TimeDetailTextColor</key>
 		<string>D3D3D3</string>
 	</dict>
+	<key>GridView</key>
+	<dict>
+		<key>ItemBackgroundColor</key>
+		<string>FFFFFF</string>
+		<key>ItemSeparatorColor</key>
+		<string>C8C8C8</string>
+		<key>FontColor</key>
+		<string>222222</string>
+		<key>FontName</key>
+		<string>HelveticaNeue</string>
+		<key>FontSize</key>
+		<string>15.0f</string>
+	</dict>
 </dict>
 </plist>
