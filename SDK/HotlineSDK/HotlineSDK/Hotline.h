@@ -11,9 +11,10 @@
 
 @interface Hotline : NSObject
 
++(id) sharedInstance;
 +(void) setSecretKey:(NSString*)key;
 +(void) setUnreadWelcomeMessage:(NSString *) text;
-+(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
+-(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void) showFeedbackScreen;
 +(void) presentSolutions:(UIViewController *)controller;
 

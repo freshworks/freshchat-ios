@@ -14,7 +14,7 @@
 #import "HLFAQServices.h"
 #import "HLMacros.h"
 #import "HLArticlesController.h"
-#import "HLLocalNotification.h"
+#import "FDLocalNotification.h"
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
@@ -242,6 +242,7 @@
 }
 
 - (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self terminateAllDownloads];
 }
 

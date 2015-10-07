@@ -8,13 +8,12 @@
 
 #import "HLCategoriesListController.h"
 #import "HLFAQServices.h"
-#import "HLLocalNotification.h"
+#import "FDLocalNotification.h"
 #import "KonotorDataManager.h"
 #import "HLCategory.h"
 #import "HLMacros.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
-#import "HLLocalNotification.h"
 
 @interface HLCategoriesListController ()
 

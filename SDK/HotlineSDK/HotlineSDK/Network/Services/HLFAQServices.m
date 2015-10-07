@@ -12,7 +12,7 @@
 #import "KonotorDataManager.h"
 #import "HLArticle.h"
 #import "HLCategory.h"
-#import "HLLocalNotification.h"
+#import "FDLocalNotification.h"
 #import "FDSecureStore.h"
 
 @implementation HLFAQServices

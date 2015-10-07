@@ -12,8 +12,34 @@
 #import "HLContainerController.h"
 #import "HLCategoriesListController.h"
 #import "HLCategoryGridViewController.h"
+#import "FDReachabilityManager.h"
+
+@interface Hotline ()
+
+@property(nonatomic, strong) FDReachabilityManager *globalReachabilityManager;
+
+@end
 
 @implementation Hotline
+
++(id)sharedInstance{
+    static Hotline *sharedInstance = nil;
+    static dispatch_once_t oncetoken;
+    dispatch_once(&oncetoken,^{
+        sharedInstance = [[Hotline alloc]init];
+    });
+    return sharedInstance;
+}
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        self.globalReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"www.google.com"];
+        [self.globalReachabilityManager start];
+    }
+    return self;
+}
+
 
 +(void)showFeedbackScreen{
     [KonotorFeedbackScreen showFeedbackScreen];
@@ -23,7 +49,7 @@
     [Konotor setSecretKey:key];
 }
 
-+(void)InitWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
+-(void)InitWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
     if (delegate) {
         [Konotor InitWithAppID:AppID AppKey:AppKey withDelegate:delegate];
     }else{

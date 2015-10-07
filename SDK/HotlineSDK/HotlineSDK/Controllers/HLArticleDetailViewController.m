@@ -6,7 +6,7 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-#import "FDReachability.h"
+#import <AVFoundation/AVFoundation.h>
 #import "HLArticleDetailViewController.h"
 //#import "FDVotingManager.h"
 //#import "FDSecureStore.h"
@@ -14,14 +14,14 @@
 //#import "FDBarButtonItem.h"
 #import "HLMacros.h"
 //#import "FDConstants.h"
-#import <AVFoundation/AVFoundation.h>
+#import "FDLocalNotification.h"
+
 #define HL_THEMES_DIR @"Themes"
 
 @interface HLArticleDetailViewController ()
 
 @property (strong, nonatomic) UIWebView *webView;
 //@property (strong, nonatomic) FDTheme *theme;
-@property (strong, nonatomic) FDReachability *reachability;
 //@property (strong, nonatomic) FDSecureStore *secureStore;
 //@property (strong, nonatomic) FDVotingManager *votingManager;
 @property (strong, nonatomic) NSLayoutConstraint         *promptViewHeightConstraint;
@@ -79,11 +79,17 @@
     [self registerAppAudioCategory];
     //[self theming];
     [self setSubviews];
-    [self checkNetworkReachability];
     [self fixAudioPlayback];
     //[self handleArticleVoteAfterSometime];
+    [self localNotificationSubscription];
 }
 
+-(void)localNotificationSubscription{
+    __weak typeof(self)weakSelf = self;
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [weakSelf.webView loadHTMLString:self.embedHTML baseURL:nil];
+    }];
+}
 
 //-(void)handleArticleVoteAfterSometime{
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -139,18 +145,6 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView]|" options:0 metrics:nil views:views]];
     
-}
-
--(void)checkNetworkReachability{
-    self.reachability = [FDReachability reachabilityWithHostname:@"www.google.com"];
-    __weak typeof(self)weakSelf = self;
-    //Internet is reachable
-    self.reachability.reachableBlock = ^(FDReachability*reach){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.webView loadHTMLString:weakSelf.embedHTML baseURL:nil];
-        });
-    };
-    [self.reachability startNotifier];
 }
 
 #pragma mark - Webview delegate
@@ -252,5 +246,9 @@
 //        FDLog(@"Voting Completed");
 //    }];
 //}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
