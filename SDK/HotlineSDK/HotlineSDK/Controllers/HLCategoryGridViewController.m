@@ -82,9 +82,10 @@
 }
 
 -(void)localNotificationSubscription{
+    __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        self.categories = @[];
-        [self updateCategories];
+        weakSelf.categories = @[];
+        [weakSelf updateCategories];
         NSLog(@"Got Notifications !!!");
     }];
 }
@@ -210,6 +211,7 @@
         iconDownloader = [[IconDownloader alloc] init];
         iconDownloader.category = category;
         __weak IconDownloader *temp = iconDownloader;
+        __weak typeof(self)weakSelf = self;
         [temp setCompletionHandler:^{
 
             HLGridViewCell *cell = (HLGridViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -219,7 +221,7 @@
             
             // Remove the IconDownloader from the in progress list.
             // This will result in it being deallocated.
-            [self.imageDownloadsInProgress removeObjectForKey:indexPath];
+            [weakSelf.imageDownloadsInProgress removeObjectForKey:indexPath];
             
         }];
         (self.imageDownloadsInProgress)[indexPath] = temp;

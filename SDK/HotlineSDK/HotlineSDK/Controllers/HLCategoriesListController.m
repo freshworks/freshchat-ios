@@ -55,8 +55,9 @@
 }
 
 -(void)localNotificationSubscription{
+    __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self updateDataSource];
+        [weakSelf updateDataSource];
         NSLog(@"Got Notifications !!!");
     }];
 }
