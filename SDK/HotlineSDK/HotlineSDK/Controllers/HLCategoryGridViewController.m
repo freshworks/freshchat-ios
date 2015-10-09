@@ -56,15 +56,12 @@
 }
 
 -(void)updateCategories{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
-    NSSortDescriptor *position   = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-    request.sortDescriptors = @[position];
-    NSError *error;
-    NSArray *results =[[KonotorDataManager sharedInstance].mainObjectContext executeFetchRequest:request error:&error];
-    if (results) {
-        self.categories = results;
-        [self.collectionView reloadData];
-    }
+    [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
+        if (!error) {
+            self.categories = solutions;
+            [self.collectionView reloadData];
+        }
+    }];
 }
 
 -(void)fetchUpdates{
@@ -84,9 +81,11 @@
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        weakSelf.categories = @[];
-        [weakSelf updateCategories];
-        NSLog(@"Got Notifications !!!");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.categories = @[];
+            [weakSelf updateCategories];
+            NSLog(@"Got Notifications");
+        });
     }];
 }
 

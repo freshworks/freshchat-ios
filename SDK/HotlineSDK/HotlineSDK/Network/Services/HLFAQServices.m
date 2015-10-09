@@ -61,7 +61,6 @@
                     if (!error) {
                         [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
                         [self updateDBWithSolutions:solutions];
-                        [self postNotification];
                     }
                 }];
             }
@@ -71,19 +70,22 @@
 }
 
 -(void)updateDBWithSolutions:(NSArray *)solutions{
-    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
-    for (int i=0; i<solutions.count; i++){
-        NSDictionary *categoryInfo = solutions[i][@"category"];
-        HLCategory *category = [HLCategory categoryWithInfo:categoryInfo inManagedObjectContext:context];
-        NSArray *articles = solutions[i][@"articles"];
-        for (int j=0; j<articles.count; j++) {
-            NSDictionary *articleInfo = articles[j];
-            HLArticle *article = [HLArticle articleWithInfo:articleInfo inManagedObjectContext:context];
-            [category addArticlesObject:article];
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
+    [context performBlock:^{
+        for (int i=0; i<solutions.count; i++){
+            NSDictionary *categoryInfo = solutions[i][@"category"];
+            HLCategory *category = [HLCategory categoryWithInfo:categoryInfo inManagedObjectContext:context];
+            NSArray *articles = solutions[i][@"articles"];
+            for (int j=0; j<articles.count; j++) {
+                NSDictionary *articleInfo = articles[j];
+                HLArticle *article = [HLArticle articleWithInfo:articleInfo inManagedObjectContext:context];
+                [category addArticlesObject:article];
+            }
         }
-    }
-    [[KonotorDataManager sharedInstance]save];
-    NSLog(@"All done successfully, Solutions %@",solutions);
+        [context save:nil];
+        NSLog(@"Fetched Solutions %@",solutions);
+        [self postNotification];
+    }];
 }
 
 -(void)postNotification{
