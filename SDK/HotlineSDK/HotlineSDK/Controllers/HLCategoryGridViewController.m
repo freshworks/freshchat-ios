@@ -18,7 +18,6 @@
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
-#import "IconDownloader.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate>
 
@@ -136,12 +135,7 @@
             cell.layer.borderColor=[UIColor grayColor].CGColor;
             // Only load cached images; defer new downloads until scrolling ends
             if (!category.icon){
-                if (self.collectionView.dragging == NO && self.collectionView.decelerating == NO){
-                    [self startIconDownload:category forIndexPath:indexPath];
-                    [cell.label sizeToFit];
-                    //When loading is in progress
-                    cell.imageView.image=[UIImage imageNamed:@"loading.png"];
-                }
+                cell.imageView.image=[UIImage imageNamed:@"loading.png"];
             }else{
                 cell.imageView.image = [UIImage imageWithData:category.icon];
                 [cell.label sizeToFit];
@@ -159,7 +153,6 @@
     }
     return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/2), ([UIScreen mainScreen].bounds.size.height/4));
 }
-
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     HLCategory *category = self.categories[indexPath.row];
@@ -182,57 +175,7 @@
     return UIEdgeInsetsMake(0,0,0,0);  // top, left, bottom, right
 }
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (!decelerate){
-        [self loadImagesForOnscreenRows];
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    [self loadImagesForOnscreenRows];
-}
-
-- (void)loadImagesForOnscreenRows{
-    if (self.categories.count > 0){
-        NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
-        for (NSIndexPath *indexPath in visiblePaths){
-            HLCategory *category = (self.categories)[indexPath.row];
-            if (!category.icon){
-                [self startIconDownload:category forIndexPath:indexPath];
-            }
-        }
-    }
-}
-
-- (void)startIconDownload:(HLCategory *)category forIndexPath:(NSIndexPath *)indexPath{
-    IconDownloader *iconDownloader = (self.imageDownloadsInProgress)[indexPath];
-    if (iconDownloader == nil){
-        iconDownloader = [[IconDownloader alloc] init];
-        iconDownloader.iconURL = category.iconURL;
-        __weak IconDownloader *temp = iconDownloader;
-        __weak typeof(self)weakSelf = self;
-        [temp setCompletionHandler:^(NSData *imageData){
-
-            HLGridViewCell *cell = (HLGridViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            
-            // Display the newly loaded image
-            cell.imageView.image = [UIImage imageWithData:imageData];
-            
-            // Remove the IconDownloader from the in progress list.
-            // This will result in it being deallocated.
-            [weakSelf.imageDownloadsInProgress removeObjectForKey:indexPath];
-            
-        }];
-        (self.imageDownloadsInProgress)[indexPath] = temp;
-        [temp startDownload];
-    }
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    // do something after rotation
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self.collectionView reloadData];
 }
 
