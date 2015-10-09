@@ -8,10 +8,9 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import "HLArticleDetailViewController.h"
-//#import "FDVotingManager.h"
-//#import "FDSecureStore.h"
-//#import "FDTheme.h"
-//#import "FDBarButtonItem.h"
+#import "FDVotingManager.h"
+#import "FDSecureStore.h"
+#import "KonotorFeedbackScreen.h"
 #import "HLMacros.h"
 //#import "FDConstants.h"
 #import "FDLocalNotification.h"
@@ -22,9 +21,11 @@
 
 @property (strong, nonatomic) UIWebView *webView;
 //@property (strong, nonatomic) FDTheme *theme;
-//@property (strong, nonatomic) FDSecureStore *secureStore;
-//@property (strong, nonatomic) FDVotingManager *votingManager;
+@property (strong, nonatomic) FDSecureStore *secureStore;
+@property (strong, nonatomic) FDVotingManager *votingManager;
 @property (strong, nonatomic) NSLayoutConstraint         *promptViewHeightConstraint;
+@property (strong,nonatomic) FDYesNoPromptView *articleVotePromptView;
+@property (strong, nonatomic) FDAlertView *contactUsPromptView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) NSString *appAudioCategory;
 
@@ -40,8 +41,8 @@
     self = [super init];
     if (self) {
         // _theme = [FDTheme sharedInstance];
-        // _secureStore = [FDSecureStore sharedInstance];
-        // _votingManager = [FDVotingManager sharedInstance];
+         _secureStore = [FDSecureStore sharedInstance];
+         _votingManager = [FDVotingManager sharedInstance];
     }
     return self;
 }
@@ -80,7 +81,7 @@
     //[self theming];
     [self setSubviews];
     [self fixAudioPlayback];
-    //[self handleArticleVoteAfterSometime];
+    [self handleArticleVoteAfterSometime];
     [self localNotificationSubscription];
 }
 
@@ -91,11 +92,11 @@
     }];
 }
 
-//-(void)handleArticleVoteAfterSometime{
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-//        [self handleArticleVotePrompt];
-//    });
-//}
+-(void)handleArticleVoteAfterSometime{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self handleArticleVotePrompt];
+    });
+}
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -119,33 +120,51 @@
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     self.webView.delegate = self;
     self.webView.dataDetectorTypes = UIDataDetectorTypeAll;
+    self.webView.scrollView.scrollEnabled = YES;
     self.webView.scrollView.delegate = self;
     [self.webView loadHTMLString:self.embedHTML baseURL:nil];
     [self.view addSubview:self.webView];
     [self.webView setBackgroundColor:[UIColor whiteColor]];
     
-//    FDYesNoPromptView *articleVotePrompt = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"Article Vote Prompt"];
-//    articleVotePrompt.delegate = self;
-//    articleVotePrompt.translatesAutoresizingMaskIntoConstraints = NO;
-//    [self.view addSubview:articleVotePrompt];
-//    
-//
-//    
-//    self.promptViewHeightConstraint = [NSLayoutConstraint constraintWithItem:articleVotePrompt
-//                                                                   attribute:NSLayoutAttributeHeight
-//                                                                   relatedBy:NSLayoutRelationEqual
-//                                                                      toItem:nil
-//                                                                   attribute:NSLayoutAttributeNotAnAttribute
-//                                                                  multiplier:1.0
-//                                                                    constant:0];
-//    
-//    [self.view addConstraint:self.promptViewHeightConstraint];
+    //Article Vote Prompt View
+    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"Article Vote Prompt"];
+    self.articleVotePromptView.delegate = self;
+    self.articleVotePromptView.tag = 11;
+    self.articleVotePromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    NSDictionary *views = @{@"webView" : self.webView};
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[promptView]|" options:0 metrics:nil views:views]];
+    //contact us prompt view
+    self.contactUsPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"Contact Us Prompt"];
+    self.contactUsPromptView.tag = 12;
+    self.contactUsPromptView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.view addSubview:self.webView];
+    [self.view addSubview:self.articleVotePromptView];
+    
+    //promptView
+    [self addPromptView:self.articleVotePromptView withHeight:0];
+}
+
+-(void)addPromptView:(UIView *) currentPromptView withHeight:(CGFloat) height{
+    //remove all subviews
+    [currentPromptView removeFromSuperview];
+    
+    [self.view addSubview:currentPromptView];
+
+    
+    self.promptViewHeightConstraint = [NSLayoutConstraint constraintWithItem:currentPromptView
+                                                                   attribute:NSLayoutAttributeHeight
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:nil
+                                                                   attribute:NSLayoutAttributeNotAnAttribute
+                                                                  multiplier:1.0
+                                                                    constant:height];
+    
+    [self.view addConstraint:self.promptViewHeightConstraint];
+    
+    NSDictionary *views = @{@"webView" : self.webView, @"promptView" : currentPromptView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView]|" options:0 metrics:nil views:views]];
-    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[promptView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView][promptView]|" options:0 metrics:nil views:views]];
 }
 
 #pragma mark - Webview delegate
@@ -205,48 +224,66 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    //    [self handleArticleVotePrompt];
+        [self handleArticleVotePrompt];
 }
 
-//-(void)handleArticleVotePrompt{
-//    if (self.webView.scrollView.contentOffset.y >= (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)) {
-//        BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
-//        if (!isArticleVoted) {
-//            [self showArticleRatingPrompt];
-//        }
-//    }
-//    else if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){
-//        [self hideArticleRatingPrompt];
-//    }
-//}
-//
-//-(void) showArticleRatingPrompt{
-//    [UIView animateWithDuration:.5 animations:^{
-//        self.promptViewHeightConstraint.constant = PROMPT_VIEW_HEIGHT;
-//        [self.view layoutIfNeeded];
-//    }];
-//}
-//
-//-(void) hideArticleRatingPrompt{
-//    [UIView animateWithDuration:.5 animations:^{
-//        self.promptViewHeightConstraint.constant = 0;
-//        [self.view layoutIfNeeded];
-//    }];
-//}
-//
-//-(void)yesButtonClicked:(id)sender{
-//    [self hideArticleRatingPrompt];
-//    [self.votingManager upVoteForArticle:self.articleID withCompletion:^(NSError *error) {
-//        FDLog(@"Voting Completed");
-//    }];
-//}
-//
-//-(void)noButtonClicked:(id)sender{
-//    [self hideArticleRatingPrompt];
-//    [self.votingManager downVoteForArticle:self.articleID withCompletion:^(NSError *error) {
-//        FDLog(@"Voting Completed");
-//    }];
-//}
+-(void)handleArticleVotePrompt{
+    if (self.webView.scrollView.contentOffset.y >= (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)-20) {
+        BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
+        if (!isArticleVoted) {
+            [self showArticleRatingPrompt];
+        }
+    }
+    else if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){
+        [self hideArticleRatingPrompt];
+    }
+}
+
+-(void) showArticleRatingPrompt{
+    [UIView animateWithDuration:.5 animations:^{
+        [self addPromptView:self.articleVotePromptView withHeight:PROMPT_VIEW_HEIGHT];
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void) hideArticleRatingPrompt{
+    [UIView animateWithDuration:.5 animations:^{
+        [self addPromptView:self.articleVotePromptView withHeight:0];
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void)showContactUsPrompt{
+        [self addPromptView:self.contactUsPromptView withHeight:PROMPT_VIEW_HEIGHT];
+        [self.view layoutIfNeeded];
+}
+
+-(void)hideContactUsPrompt{
+    [UIView animateWithDuration:.5 animations:^{
+        [self addPromptView:self.contactUsPromptView withHeight:0];
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void)yesButtonClicked:(id)sender{
+    [self hideArticleRatingPrompt];
+    [self.votingManager upVoteForArticle:self.articleID withCompletion:^(NSError *error) {
+        FDLog(@"Voting Completed");
+    }];
+}
+
+-(void)noButtonClicked:(id)sender{
+    [self hideArticleRatingPrompt];
+    [self showContactUsPrompt];
+    [self.votingManager downVoteForArticle:self.articleID withCompletion:^(NSError *error) {
+        FDLog(@"Voting Completed");
+    }];
+}
+
+-(void)buttonClickedEvent:(id)sender{
+    [self hideContactUsPrompt];
+    [KonotorFeedbackScreen showFeedbackScreen];
+}
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];

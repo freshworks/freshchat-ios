@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "FDYesNoPromptView.h"
+#import "FDYesNoPromptView.h"
+#import "FDAlertView.h"
 
 //Implement FDYesNoPromptViewDelegate if needed
-@interface HLArticleDetailViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate>
+@interface HLArticleDetailViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate, FDYesNoPromptViewDelegate, FDAlertViewDelegate>
 
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;
