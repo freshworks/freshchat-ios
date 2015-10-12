@@ -8,6 +8,7 @@
 
 #import "FDVotingManager.h"
 #import "FDSecureStore.h"
+#import "HLFAQServices.h"
 
 #define MOBIHELP_DEFAULTS_VOTED_ARTICLES @"mobihelp_defaults_voted_articles"
 
@@ -43,29 +44,18 @@
     return self;
 }
 
--(void)downVoteForArticle:(NSNumber *)articleID withCompletion:(void(^)(NSError *error))completion{
+-(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
     NSLog(@"Article Downvoted");
     [self storeArticleVoteLocallyForArticleID:articleID];
-//    FDAPIClient *webservice         = [[FDAPIClient alloc]init];
-//    [webservice downVoteArticleWithID:articleID completion:^(NSDictionary *responseObject, NSError *error) {
-//        
-//        if (!error) {
-//            [self storeArticleVoteLocallyForArticleID:articleID];
-//            completion(error);
-//        }
-//    }];
+    HLFAQServices *service = [[HLFAQServices alloc]init];
+    [service downVoteFor:articleID inCategory:categoryID];
 }
 
--(void)upVoteForArticle:(NSNumber *)articleID withCompletion:(void(^)(NSError *error))completion{
+-(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
     NSLog(@"Article Upvoted");
     [self storeArticleVoteLocallyForArticleID:articleID];
-//    FDAPIClient *webservice         = [[FDAPIClient alloc]init];
-//    [webservice upVoteArticleWithID:articleID completion:^(NSDictionary *responseObject, NSError *error) {
-//        if (!error) {
-//            [self storeArticleVoteLocallyForArticleID:articleID];
-//            completion(error);
-//        }
-//    }];
+    HLFAQServices *service = [[HLFAQServices alloc]init];
+    [service upVoteFor:articleID inCategory:categoryID];
 }
 
 -(BOOL)isArticleVoted:(NSNumber *)articleID{

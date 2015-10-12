@@ -12,6 +12,8 @@
 static const CGFloat ADDITIONAL_OFFSET = 25;
 static const CGFloat BUTTON_SPACING = 30;
 static CGFloat PROMPT_VIEW_HEIGHT  = 80;
+static CGFloat ARTICLE_PROMPT_VIEW_HEIGHT = 80;
+static CGFloat ALERT_PROMPT_VIEW_HEIGHT = 90;
 
 @interface FDPromptView : UIView
 

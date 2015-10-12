@@ -169,7 +169,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
         NSMutableArray *fetchedSolutions = [NSMutableArray new];
         [mainContext performBlock:^{
-            [mainContext reset];
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
                 [fetchedSolutions addObject:newSolution];

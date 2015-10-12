@@ -11,8 +11,8 @@
 @interface FDVotingManager : NSObject
 
 +(instancetype)sharedInstance;
--(void)downVoteForArticle:(NSNumber *)articleID withCompletion:(void(^)(NSError *error))completion;
--(void)upVoteForArticle:(NSNumber *)articleID withCompletion:(void(^)(NSError *error))completion;
+-(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion;
+-(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion;
 -(BOOL)isArticleVoted:(NSNumber *)articleID;
 
 @end
