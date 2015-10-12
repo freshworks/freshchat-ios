@@ -10,6 +10,7 @@
 
 @interface HLFAQServices : NSObject
 
--(NSURLSessionDataTask *)fetchSolutions;
+-(NSURLSessionDataTask *)fetchAllCategories;
+-(NSURLSessionDataTask *)fetchCategoriesInBatches;
 
 @end

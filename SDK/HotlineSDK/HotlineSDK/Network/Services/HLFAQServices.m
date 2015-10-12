@@ -14,14 +14,19 @@
 #import "HLCategory.h"
 #import "FDLocalNotification.h"
 #import "FDSecureStore.h"
+#import "HLServiceRequest.h"
+#import "HLMacros.h"
 
 @implementation HLFAQServices
 
--(NSURLSessionDataTask *)fetchSolutions{
+-(NSURLSessionDataTask *)fetchCategoriesInBatches{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    NSURL *URL = [NSURL URLWithString:HOTLINE_API_CATEGORIES];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-    NSURLSessionDataTask *task = [apiClient GET:request withHandler:^(id responseObject, NSError *error) {
+    
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    request.HTTPMethod = @"GET";
+    [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:HOTLINE_REQUEST_PARAMS];
+    
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         __block BOOL canAbortRequest = NO;
         __block NSMutableArray *solutions = [NSMutableArray new];
         dispatch_group_t group = dispatch_group_create();
@@ -43,9 +48,8 @@
             
             NSDictionary *categoryInfo = categories[i];
             NSString *categoryID = categoryInfo[@"categoryId"];
-            NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_API_ARTICLES,categoryID]];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-            [apiClient GET:request withHandler:^(id responseObject, NSError *error) {
+            [request setRelativePath:[NSString stringWithFormat:HOTLINE_API_ARTICLES,categoryID] andURLParams:HOTLINE_REQUEST_PARAMS];
+            [apiClient request:request withHandler:^(id responseObject, NSError *error) {
                 if (!error) {
                     [solutions addObject:@{ @"category" : categoryInfo, @"articles" : responseObject[@"articles"]}];
                 }else{
@@ -60,7 +64,6 @@
                 [[KonotorDataManager sharedInstance]deleteAllSolutions:^(NSError *error) {
                     if (!error) {
                         [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
-                        [self updateDBWithSolutions:solutions];
                     }
                 }];
             }
@@ -69,26 +72,44 @@
     return task;
 }
 
--(void)updateDBWithSolutions:(NSArray *)solutions{
+-(NSURLSessionDataTask *)fetchAllCategories{
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    request.HTTPMethod = @"GET";
+    NSString *URLParams = [NSString stringWithFormat:@"%@&%@",HOTLINE_REQUEST_PARAMS,@"deep=true"];
+    [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:URLParams];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+        [self importSolutions:responseObject];
+        [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
+    }];
+    return task;
+}
+
+-(void)importSolutions:(NSDictionary *)solutions{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
     [context performBlock:^{
-        for (int i=0; i<solutions.count; i++){
-            NSDictionary *categoryInfo = solutions[i][@"category"];
-            HLCategory *category = [HLCategory categoryWithInfo:categoryInfo inManagedObjectContext:context];
-            __block NSData *imageData = nil;
-            dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:category.iconURL]];
-            });
-            category.icon = imageData;
-            NSArray *articles = solutions[i][@"articles"];
-            for (int j=0; j<articles.count; j++) {
-                NSDictionary *articleInfo = articles[j];
-                HLArticle *article = [HLArticle articleWithInfo:articleInfo inManagedObjectContext:context];
-                [category addArticlesObject:article];
+        NSArray *categories = solutions[@"categories"];
+        for(int i=0; i<categories.count; i++){
+            NSDictionary *categoryInfo = categories[i];
+            HLCategory *category = [HLCategory getWithID:categoryInfo[@"categoryId"] inContext:context];
+            BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
+            if (isCategoryEnabled) {
+                if (category) {
+                    NSDate *updateTime = [NSDate dateWithTimeIntervalSince1970:[categoryInfo[@"lastUpdatedAt"]doubleValue]];
+                    if ([category.lastUpdatedTime compare:updateTime] == NSOrderedAscending) {
+                        [category updateWithInfo:categoryInfo];
+                        FDLog(@"Category with ID:%@ updated", categoryInfo[@"categoryId"]);
+                    }
+                }else{
+                    category = [HLCategory createWithInfo:categoryInfo inContext:context];
+                }
+            }else{
+                if (category) {
+                    [context deleteObject:category];
+                }
             }
         }
         [context save:nil];
-        NSLog(@"Fetched Solutions %@",solutions);
         [self postNotification];
     }];
 }

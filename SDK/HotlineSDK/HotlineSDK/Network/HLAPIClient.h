@@ -13,7 +13,7 @@
 typedef void(^HLNetworkCallback)(id responseObject, NSError *error);
 
 +(id)sharedInstance;
--(NSURLSessionDataTask *)GET:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler;
+-(NSURLSessionDataTask *)request:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler;
 
 @end
 
