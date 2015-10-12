@@ -14,6 +14,7 @@
 #import "HLMacros.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
+#import "FDSolutionUpdater.h"
 
 @interface HLCategoriesListController ()
 
@@ -27,21 +28,18 @@
     [super willMoveToParentViewController:parent];
     parent.title = HLLocalizedString(@"CATEGORIES_LIST_VIEW_TITLE");
     [self setNavigationItem];
-    [self updateDataSource];
+    [self updateCategories];
     [self fetchUpdates];
     [self localNotificationSubscription];
 }
 
--(void)updateDataSource{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
-    NSSortDescriptor *position   = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-    request.sortDescriptors = @[position];
-    NSError *error;
-    NSArray *results =[[KonotorDataManager sharedInstance].mainObjectContext executeFetchRequest:request error:&error];
-    if (results) {
-        self.categories = results;
-        [self.tableView reloadData];
-    }
+-(void)updateCategories{
+    [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
+        if (!error) {
+            self.categories = solutions;
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 -(void)setNavigationItem{
@@ -56,14 +54,19 @@
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [weakSelf updateDataSource];
+        [weakSelf updateCategories];
         NSLog(@"Got Notifications !!!");
     }];
 }
 
 -(void)fetchUpdates{
-    HLFAQServices *service = [HLFAQServices new];
-    [service fetchSolutions];
+    FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
+    [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
+        if(isEmpty){
+            [updater resetTime];
+        }
+        [updater fetch];
+    }];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

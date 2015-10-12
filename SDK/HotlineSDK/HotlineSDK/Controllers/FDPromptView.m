@@ -70,7 +70,7 @@
 }
 
 -(void)addConstraintWithBaseLine:(NSString *)constraintString inView:(UIView *)view{
-    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:constraintString options:NSLayoutFormatAlignAllBaseline metrics:self.metrics views:self.views]];
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:constraintString options:NSLayoutFormatAlignAllBottom metrics:self.metrics views:self.views]];
 }
 
 -(void)addConstraint:(NSString *)constraintString InView:(UIView *)view{

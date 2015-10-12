@@ -161,6 +161,9 @@
     
     [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:0];
     [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:0];
+    
+    [self.contactUsPromptView setHidden:YES];
+    [self.articleVotePromptView setHidden:YES];
 }
 
 -(void)modifyConstraint:(NSLayoutConstraint *)constraint withHeight:(CGFloat)height{
@@ -242,6 +245,7 @@
 
 -(void) showArticleRatingPrompt{
     [UIView animateWithDuration:.5 animations:^{
+        [self.articleVotePromptView setHidden:NO];
         [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:ARTICLE_PROMPT_VIEW_HEIGHT];
         [self.view layoutIfNeeded];
     }];
@@ -249,6 +253,7 @@
 
 -(void) hideArticleRatingPrompt{
     [UIView animateWithDuration:.5 animations:^{
+        [self.articleVotePromptView setHidden:YES];
         [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:0];
         [self.view layoutIfNeeded];
     }];
@@ -256,6 +261,7 @@
 
 -(void)showContactUsPrompt{
     [UIView animateWithDuration:.5 animations:^{
+        [self.contactUsPromptView setHidden:NO];
         [self.articleVotePromptView setHidden:YES];
         [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
         [self.view layoutIfNeeded];
@@ -264,6 +270,7 @@
 
 -(void)hideContactUsPrompt{
     [UIView animateWithDuration:.5 animations:^{
+        [self.contactUsPromptView setHidden:YES];
         [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:0];
         [self.view layoutIfNeeded];
     }];
@@ -277,7 +284,6 @@
 }
 
 -(void)noButtonClicked:(id)sender{
-    [self hideArticleRatingPrompt];
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");

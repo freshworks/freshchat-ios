@@ -11,8 +11,11 @@
 
 @interface HLFAQServices : NSObject
 
--(NSURLSessionDataTask *)fetchSolutions;
 -(NSURLSessionDataTask *)upVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID;
 -(NSURLSessionDataTask *)downVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID;
+
+-(NSURLSessionDataTask *)fetchAllCategories;
+-(NSURLSessionDataTask *)fetchCategoriesInBatches;
+
 
 @end

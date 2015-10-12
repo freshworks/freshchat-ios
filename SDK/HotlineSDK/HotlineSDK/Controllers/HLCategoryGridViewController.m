@@ -22,7 +22,6 @@
 @interface HLCategoryGridViewController () <UIScrollViewDelegate>
 
 @property (nonatomic,strong) NSArray *categories;
-@property (nonatomic, strong) NSMutableDictionary *imageDownloadsInProgress;
 
 @end
 
@@ -31,7 +30,6 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.imageDownloadsInProgress = [NSMutableDictionary dictionary];
     [self updateCategories];
     [self setupCollectionView];
     [self setNavigationItem];
@@ -179,15 +177,8 @@
     [self.collectionView reloadData];
 }
 
-- (void)terminateAllDownloads{
-    NSArray *allDownloads = [self.imageDownloadsInProgress allValues];
-    [allDownloads makeObjectsPerformSelector:@selector(cancelDownload)];
-    [self.imageDownloadsInProgress removeAllObjects];
-}
-
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self terminateAllDownloads];
 }
 
 @end
