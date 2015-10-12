@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3528BA301BC86076008F6C38 /* HLServiceRequest.m */; };
 		3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B61BB01D38000B2D9A /* HLArticlesController.m */; };
 		3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B81BB01D38000B2D9A /* HLContainerController.m */; };
 		3533F0BD1BB020D3000B2D9A /* HLAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0BC1BB020D3000B2D9A /* HLAPIClient.m */; };
@@ -62,16 +63,16 @@
 		35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B790201BAFD9CC005443FD /* KonotorApp.m */; };
 		35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158B71BB2966B009CFEDF /* HLListViewController.m */; };
 		35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158BF1BB2B847009CFEDF /* FDReachability.m */; };
-		35D639DE1BBBE22D00979721 /* HLTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D639DD1BBBE22D00979721 /* HLTheme.m */; settings = {ASSET_TAGS = (); }; };
-		35D9F9DA1BB96DF8008C92E8 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9D91BB96DF8008C92E8 /* FDKeyChainStore.m */; settings = {ASSET_TAGS = (); }; };
-		35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9DC1BB96E02008C92E8 /* FDSecureStore.m */; settings = {ASSET_TAGS = (); }; };
-		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; settings = {ASSET_TAGS = (); }; };
-		35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */; settings = {ASSET_TAGS = (); }; };
-		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; settings = {ASSET_TAGS = (); }; };
-		CE10645A1BC2779300922494 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE1064591BC2779300922494 /* Info.plist */; settings = {ASSET_TAGS = (); }; };
-		CE6E3D071BBAC258007C7234 /* IconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6E3D061BBAC258007C7234 /* IconDownloader.m */; settings = {ASSET_TAGS = (); }; };
-		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; settings = {ASSET_TAGS = (); }; };
-		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; settings = {ASSET_TAGS = (); }; };
+		35D639DE1BBBE22D00979721 /* HLTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D639DD1BBBE22D00979721 /* HLTheme.m */; };
+		35D9F9DA1BB96DF8008C92E8 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9D91BB96DF8008C92E8 /* FDKeyChainStore.m */; };
+		35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9DC1BB96E02008C92E8 /* FDSecureStore.m */; };
+		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; };
+		35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */; };
+		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
+		CE10645A1BC2779300922494 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE1064591BC2779300922494 /* Info.plist */; };
+		CE6E3D071BBAC258007C7234 /* IconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6E3D061BBAC258007C7234 /* IconDownloader.m */; };
+		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; };
+		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3528BA2F1BC86076008F6C38 /* HLServiceRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLServiceRequest.h; sourceTree = "<group>"; };
+		3528BA301BC86076008F6C38 /* HLServiceRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLServiceRequest.m; sourceTree = "<group>"; };
 		3533F0B51BB01D38000B2D9A /* HLArticlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticlesController.h; sourceTree = "<group>"; };
 		3533F0B61BB01D38000B2D9A /* HLArticlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticlesController.m; sourceTree = "<group>"; };
 		3533F0B71BB01D38000B2D9A /* HLContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLContainerController.h; sourceTree = "<group>"; };
@@ -323,6 +326,8 @@
 			children = (
 				3533F0C01BB042C2000B2D9A /* HLFAQServices.h */,
 				3533F0C11BB042C2000B2D9A /* HLFAQServices.m */,
+				3528BA2F1BC86076008F6C38 /* HLServiceRequest.h */,
+				3528BA301BC86076008F6C38 /* HLServiceRequest.m */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -726,6 +731,7 @@
 				35591B951B9EDD0700BC0B60 /* AFXMLRequestOperation.m in Sources */,
 				35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */,
 				35591B671B9EDCB700BC0B60 /* KonotorAudioRecorder.m in Sources */,
+				3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */,
 				358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */,
 				35591B921B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */,
