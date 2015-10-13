@@ -54,6 +54,7 @@
 -(UIImageView *)createImageView{
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
+    [imageView.image drawInRect:CGRectMake(0,0,100,100)];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     return imageView;
 }

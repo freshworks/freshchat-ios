@@ -117,8 +117,9 @@
 -(NSURLSessionDataTask *)downVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSString *URLString = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,categoryID,articleID];
-    NSURL *URL = [NSURL URLWithString:URLString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    NSString *URLParams = [NSString stringWithFormat:@"&%@",HOTLINE_REQUEST_PARAMS];
+    [request setRelativePath:URLString andURLParams:URLParams];
     NSDictionary *voteDictionary = @{@"article":
                                      @{
                                          @"upvote":@"-1",
@@ -132,8 +133,9 @@
     [request setHTTPMethod:@"PUT"];
 
     [request setHTTPBody:postData];
+    NSLog(@"Request URL : %@",request.URL);
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
-        NSLog(@"Upvote response : %@",responseObject);
+        NSLog(@"DownVote response : %@",responseObject);
     }];
     return task;
 }
@@ -141,8 +143,9 @@
 -(NSURLSessionDataTask *)upVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSString *URLString = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,categoryID,articleID];
-    NSURL *URL = [NSURL URLWithString:URLString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    NSString *URLParams = [NSString stringWithFormat:@"&%@",HOTLINE_REQUEST_PARAMS];
+    [request setRelativePath:URLString andURLParams:URLParams];
     NSDictionary *voteDictionary = @{@"article":
                                          @{
                                              @"upvote":@"1",
@@ -156,6 +159,7 @@
     [request setHTTPMethod:@"PUT"];
     
     [request setHTTPBody:postData];
+    NSLog(@"Request URL : %@",request.URL);
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         NSLog(@"Upvote response : %@",responseObject);
     }];
