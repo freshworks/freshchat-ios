@@ -76,6 +76,7 @@
     articleDetailController.articleID = article.articleID;
     articleDetailController.articleDescription = article.articleDescription;
     articleDetailController.categoryTitle = self.category.title;
+    articleDetailController.categoryID = self.category.categoryID;
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
     [self.navigationController pushViewController:container animated:YES];
 }

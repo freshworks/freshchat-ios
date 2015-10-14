@@ -7,10 +7,15 @@
 //
 
 #import "HLTheme.h"
+#define FD_COLOR_WHITE @"FFFFFF"
+#define FD_DIALOGUES_BUTTON_FONT_COLOR @"007AFF"
+#define FD_COLOR_BLACK @"000000"
 
 @interface HLTheme ()
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
+@property (strong, nonatomic) UIFont *systemFont;
+
 
 @end
 
@@ -23,6 +28,15 @@
         sharedHLTheme = [[self alloc]init];
     });
     return sharedHLTheme;
+}
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        self.systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSystemFont:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    }
+    return self;
 }
 
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName{
@@ -56,6 +70,53 @@
                            green:g / 255.0f
                             blue:b / 255.0f
                            alpha:1.0f];
+}
+
+#pragma mark - Dialogue box
+
+-(UIColor *)dialogueTitleTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueLabelFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *)dialogueTitleFont{
+    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:23];
+}
+-(UIColor *)dialogueButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BUTTON_FONT_COLOR];
+}
+
+-(UIFont *)dialogueButtonFont{
+    return [self getFontWithKey:@"Dialogues.Button" andDefaultSize:20];
+}
+
+-(UIColor *)dialogueBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
+    NSString *preferredFontName; CGFloat preferredFontSize;
+    NSString *fontNameValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@"FontName"]];
+    NSString *fontSizeValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@"FontSize"]];
+    
+    if (([fontNameValue caseInsensitiveCompare:@"SYS_DEFAULT_FONT_NAME"] == NSOrderedSame) || (fontNameValue == nil) ){
+        preferredFontName = self.systemFont.familyName;
+    }else{
+        preferredFontName = fontNameValue;
+    }
+    
+    if ([fontSizeValue caseInsensitiveCompare:@"DEFAULT_FONT_SIZE"] == NSOrderedSame ) {
+        preferredFontSize = defaultSize;
+    }else{
+        if (fontSizeValue) {
+            preferredFontSize = [fontSizeValue floatValue];
+        }else{
+            preferredFontSize = defaultSize;
+        }
+    }
+    return [UIFont fontWithName:preferredFontName size:preferredFontSize];
 }
 
 @end

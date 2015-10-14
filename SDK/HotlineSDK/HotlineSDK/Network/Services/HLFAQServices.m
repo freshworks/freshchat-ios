@@ -114,6 +114,58 @@
     }];
 }
 
+-(NSURLSessionDataTask *)downVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID{
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSString *URLString = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,categoryID,articleID];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    NSString *URLParams = [NSString stringWithFormat:@"&%@",HOTLINE_REQUEST_PARAMS];
+    [request setRelativePath:URLString andURLParams:URLParams];
+    NSDictionary *voteDictionary = @{@"article":
+                                     @{
+                                         @"upvote":@"-1",
+                                         @"downvote":@"1"
+                                     }
+                                    };
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:voteDictionary options:0 error:nil];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [request setHTTPMethod:@"PUT"];
+
+    [request setHTTPBody:postData];
+    NSLog(@"Request URL : %@",request.URL);
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+        NSLog(@"DownVote response : %@",responseObject);
+    }];
+    return task;
+}
+
+-(NSURLSessionDataTask *)upVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID{
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSString *URLString = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,categoryID,articleID];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    NSString *URLParams = [NSString stringWithFormat:@"&%@",HOTLINE_REQUEST_PARAMS];
+    [request setRelativePath:URLString andURLParams:URLParams];
+    NSDictionary *voteDictionary = @{@"article":
+                                         @{
+                                             @"upvote":@"1",
+                                             @"downvote":@"-1"
+                                             }
+                                     };
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:voteDictionary options:0 error:nil];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [request setHTTPMethod:@"PUT"];
+    
+    [request setHTTPBody:postData];
+    NSLog(@"Request URL : %@",request.URL);
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+        NSLog(@"Upvote response : %@",responseObject);
+    }];
+    return task;
+}
+
 -(void)postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_UPDATED object:self];
 }

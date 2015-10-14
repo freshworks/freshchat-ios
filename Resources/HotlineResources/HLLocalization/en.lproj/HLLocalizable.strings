@@ -16,3 +16,17 @@
 /* Articles List View Controller */
 "ARTICLE_LIST_VIEW_TITLE"="Article List";
 
+/* Resolved Ticket Scenario */
+"Resolved Prompt Label Text" = "Did we help solve your issue ?";
+"Resolved Prompt Yes"="YES";
+"Resolved Prompt No"="NO";
+
+/* Article UpVote DownVote */
+"Article Vote Prompt Label Text"="Was this helpful?";
+"Article Vote Prompt Yes"="YES";
+"Article Vote Prompt No"="NO";
+
+/* Contact Us prompt */
+"Contact Us Prompt Button"="Still need help? Contact Us ";
+
+
