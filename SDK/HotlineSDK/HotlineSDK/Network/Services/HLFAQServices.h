@@ -13,7 +13,6 @@
 
 -(NSURLSessionDataTask *)fetchAllCategories;
 -(NSURLSessionDataTask *)fetchCategoriesInBatches;
--(NSURLSessionDataTask *)upVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID;
--(NSURLSessionDataTask *)downVoteFor:(NSNumber *)articleID inCategory:(NSNumber *)categoryID;
+-(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID;
 
 @end

@@ -48,14 +48,14 @@
     NSLog(@"Article Downvoted");
     [self storeArticleVoteLocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
-    [service downVoteFor:articleID inCategory:categoryID];
+    [service vote:NO forArticleID:articleID inCategoryID:categoryID];
 }
 
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
     NSLog(@"Article Upvoted");
     [self storeArticleVoteLocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
-    [service upVoteFor:articleID inCategory:categoryID];
+    [service vote:YES forArticleID:articleID inCategoryID:categoryID];
 }
 
 -(BOOL)isArticleVoted:(NSNumber *)articleID{
