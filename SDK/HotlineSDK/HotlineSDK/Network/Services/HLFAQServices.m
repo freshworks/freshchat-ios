@@ -16,8 +16,15 @@
 #import "FDSecureStore.h"
 #import "HLServiceRequest.h"
 #import "HLMacros.h"
+#import "FDIndex.h"
+#import "FDUtilities.h"
+
+
+#define MOBIHELP_DEFAULTS_IS_INDEX_CREATED @"mobihelp_defaults_is_index_created"    
 
 @implementation HLFAQServices
+
+static bool INDEX_INPROGRESS=NO;
 
 -(NSURLSessionDataTask *)fetchCategoriesInBatches{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -110,6 +117,7 @@
             }
         }
         [context save:nil];
+        [self updateIndex];
         [self postNotification];
     }];
 }
@@ -117,5 +125,110 @@
 -(void)postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_UPDATED object:self];
 }
+
+// Create Index
+#pragma Indexing
+
+-(void)updateIndex{
+    if(INDEX_INPROGRESS){
+        return;
+    }
+    BOOL indexState = [self.secureStore boolValueForKey:MOBIHELP_DEFAULTS_IS_INDEX_CREATED];
+    if (!indexState) {
+        [self createIndex];
+    }
+}
+
+-(void)createIndex{
+    INDEX_INPROGRESS = YES;
+    [self setIndexingCompleted:NO];
+    KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
+    [datamanager deleteAllIndices];
+    [datamanager.backgroundContext performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
+        NSError *error;
+        NSArray *results = [datamanager.backgroundContext executeFetchRequest:request error:&error];
+        if (!error) {
+            if (results.count > 0) {
+                for (int i=0; i<[results count]; i++) {
+                    HLArticle *article = results[i];
+                    FDArticleContent *articleContent = [[FDArticleContent alloc]initWithArticle:article];
+                    [self insertIndexforArticleWithContent:articleContent];
+                }
+                INDEX_INPROGRESS = NO;
+                [self setIndexingCompleted:YES];
+                [datamanager save];
+//                HLFAQServices *services = [[HLFAQServices alloc] init];
+//                NSLog(@"Indices : %@",[services fetchAllIndices]);
+            }
+        }else{
+            FDLog(@"Failed to create index. %@",error);
+        }
+    }];
+}
+
+-(void)setIndexingCompleted:(BOOL)state{
+    [self.secureStore setBoolValue:state forKey:MOBIHELP_DEFAULTS_IS_INDEX_CREATED];
+}
+
+-(void)insertIndexforArticleWithContent:(FDArticleContent *)articleContent{
+    articleContent.title = [FDUtilities replaceSpecialCharacters:articleContent.title with:@" "];
+    articleContent.articleDescription = [FDUtilities replaceSpecialCharacters:articleContent.articleDescription with:@" "];
+    [self stringByStrippingHTML:articleContent.articleDescription];
+    NSMutableDictionary *indexInfo = [[NSMutableDictionary alloc] init];
+    NSArray *substrings = [articleContent.title componentsSeparatedByString:@" "];
+    indexInfo = [self convertIntoDictionary:indexInfo withArray:substrings forLabel:ARTICLE_TITLE and:articleContent.articleID];
+    substrings = [articleContent.articleDescription componentsSeparatedByString:@" "];
+    indexInfo = [self convertIntoDictionary:indexInfo withArray:substrings forLabel:ARTICLE_DESCRIPTION and:articleContent.articleID];
+}
+
+-(NSString *) stringByStrippingHTML:(NSString *)stringContent {
+    NSRange r;
+    while ((r = [stringContent rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        stringContent = [stringContent stringByReplacingCharactersInRange:r withString:@""];
+    return stringContent;
+}
+
+-(NSMutableDictionary *)convertIntoDictionary:(NSMutableDictionary *)indexInfo withArray:(NSArray *)Array forLabel:(NSString *)label and:(NSNumber*)articleID{
+    if (Array) {
+        FDIndex *index = nil;
+        for (int i=0; i < [Array count]; i++) {
+            NSString* keyword = Array[i];
+            if (keyword.length >= 3) {
+                if ([indexInfo objectForKey:keyword]) {
+                    index = indexInfo[keyword];
+                }else{
+                    index = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_INDEX_ENTITY inManagedObjectContext:[KonotorDataManager sharedInstance].backgroundContext];
+                    index.keyWord = keyword;
+                    index.articleID = articleID;
+                }
+                if ([label isEqualToString:ARTICLE_TITLE]) {
+                    index.titleMatches = [NSNumber numberWithInt:[index.titleMatches intValue] + 1];
+                }else{
+                    index.descMatches  =  [NSNumber numberWithInt:[index.descMatches intValue] + 1];
+                }
+                indexInfo[index.keyWord] = index;
+            }
+        }
+    }
+    return indexInfo;
+}
+
+-(NSArray *)fetchAllIndices{
+    __block NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    __block NSArray *fetchedTuples = [[NSArray alloc] init];
+    __block NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
+    [context performBlockAndWait:^{
+        NSEntityDescription *entity = [NSEntityDescription entityForName:HOTLINE_INDEX_ENTITY inManagedObjectContext:context];
+        NSError *error;
+        [fetchRequest setEntity:entity];
+        fetchedTuples= [context executeFetchRequest:fetchRequest error:&error];
+        if (error) {
+            FDLog(@"Fetch all entries failed : %@", error);
+        }
+    }];
+    return fetchedTuples ? [NSMutableArray arrayWithArray:fetchedTuples] : nil;
+}
+
 
 @end

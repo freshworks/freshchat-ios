@@ -8,6 +8,7 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 
+
 NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
 NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
 
@@ -207,6 +208,19 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         dispatch_async(dispatch_get_main_queue(), ^{
             if (handler) handler(count == 0);
         });
+    }];
+}
+
+- (void)deleteAllIndices{
+    NSManagedObjectContext *context = self.backgroundContext;
+    [context performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_INDEX_ENTITY];
+        NSArray *results = [context executeFetchRequest:request error:nil];
+        for (int i=0; i<results.count; i++) {
+            NSManagedObject *object = results[i];
+            [context deleteObject:object];
+        }
+        [context save:nil];
     }];
 }
 

@@ -30,5 +30,14 @@
     return article;
 }
 
+/* Checks for the passed articleID in the database, returns a article if found one */
++(HLArticle *)getArticleWithID:(NSNumber *)articleID inManagedObjectContext:(NSManagedObjectContext *)context{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"articleID == %@",articleID];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if ([matches count] > 1) return nil;
+    return [matches firstObject];
+}
+
 
 @end

@@ -22,5 +22,6 @@
 @property (nonatomic, retain) HLCategory *category;
 
 +(HLArticle *)articleWithInfo:(NSDictionary *)articleInfo inManagedObjectContext:(NSManagedObjectContext *)context;
++(HLArticle *)getArticleWithID:(NSNumber *)articleID inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

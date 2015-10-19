@@ -12,7 +12,38 @@
 
 + (instancetype)sharedInstance;
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
-
+-(UIColor *)searchBarInnerBackgroundColor;
 -(UIColor *)gridViewItemBackgroundColor;
+
+//Search Bar
+-(UIFont *)searchBarFont;
+-(UIFont *)searchBarCancelButtonFont;
+-(UIColor *)searchBarFontColor;
+-(UIColor *)searchBarInnerBackgroundColor;
+-(UIColor *)searchBarOuterBackgroundColor;
+-(UIColor *)searchBarCancelButtonColor;
+-(UIColor *)searchBarCursorColor;
+
+//Table View
+-(UIFont *)tableViewCellFont;
+-(UIColor *)tableViewCellBackgroundColor;
+-(UIColor *)tableViewCellSeparatorColor;
+-(UIColor *)tableViewCellFontColor;
+-(UIColor *)timeDetailTextColor;
+-(UIFont *)conversationsTimeDetailFont;
+
+//Table View Section
+-(UIFont *)tableViewSectionHeaderFont;
+-(UIColor *)tableViewSectionHeaderFontColor;
+-(UIColor *)tableViewSectionHeaderBackgroundColor;
+-(CGFloat)tableViewSectionHeaderHeight;
+
+//Overall SDK
+-(UIFont *)talkToUsButtonFont;
+-(UIColor *)backgroundColorSDK;
+-(UIColor *)badgeButtonBackgroundColor;
+-(UIColor *)badgeButtonTitleColor;
+-(UIColor *)talkToUsButtonColor;
+-(UIColor *)noItemsFoundMessageColor;
 
 @end

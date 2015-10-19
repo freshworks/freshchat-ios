@@ -11,17 +11,24 @@
 #import "HLContainerController.h"
 #import "HLArticlesController.h"
 #import "KonotorDataManager.h"
-#import "HLFAQServices.h"
 #import "HLMacros.h"
+#import "FDRanking.h"
 #import "HLArticlesController.h"
 #import "FDLocalNotification.h"
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
+#import "HLSearchViewController.h"
+#import "FDSearchBar.h"
+#import "FDUtilities.h"
 
-@interface HLCategoryGridViewController () <UIScrollViewDelegate>
+@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
 
 @property (nonatomic,strong) NSArray *categories;
+@property (strong, nonatomic) HLSearchViewController     *searchViewController;
+@property (strong,nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UILabel                    *noSolutionsLabel;
+@property (strong, nonatomic) FDSearchBar *searchBar;
 
 @end
 
@@ -30,11 +37,68 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
+    self.searchResults = [[NSArray alloc]init];
     [self updateCategories];
-    [self setupCollectionView];
+    [self setupSubviews];
+    [self adjustUIBounds];
     [self setNavigationItem];
+    [self theming];
     [self fetchUpdates];
+    [self handleEmptySolutionsScenario];
     [self localNotificationSubscription];
+}
+
+-(void)setupSubviews{
+    [self setupCollectionView];
+    [self setupSearchBar];
+//    [self setupSearchDisplay];
+}
+
+-(void)setupSearchDisplay{
+    self.searchViewController = [[HLSearchViewController alloc]initWithSearchBar:self.searchBar withContentsController:self andTableView:self.tableView];
+}
+
+
+-(void)viewWillLayoutSubviews{
+    self.searchBar.frame= CGRectMake(0, 0, self.view.frame.size.width, 65);
+}
+
+-(void)theming{
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[[HLTheme sharedInstance] backgroundColorSDK]];
+}
+
+-(void)setupSearchBar{
+    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.searchBar.delegate = self;
+    self.searchBar.placeholder = HLLocalizedString(@"Search Placeholder");
+    self.searchBar.showsCancelButton=YES;
+    
+    [self.view addSubview:self.searchBar];
+
+    UIView *mainSubView = [self.searchBar.subviews lastObject];
+    
+    for (id subview in mainSubView.subviews) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            UITextField *textField = (UITextField *)subview;
+            textField.backgroundColor = [[HLTheme sharedInstance] searchBarInnerBackgroundColor];
+        }
+    }
+    
+    self.searchBar.hidden = YES;
+}
+
+-(void)setUpCoreDataFetch{
+    self.searchViewController = [[HLSearchViewController alloc] initWithSearchBar:self.searchBar withContentsController:self andTableView:self.tableView];
+}
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    self.searchBar.hidden = YES;
+    self.parentViewController.navigationController.navigationBarHidden=NO;
+}
+
+-(void)adjustUIBounds{
+    self.edgesForExtendedLayout=UIRectEdgeNone;
+    self.navigationController.view.backgroundColor = [[HLTheme sharedInstance] searchBarOuterBackgroundColor];
 }
 
 -(void)setNavigationItem{
@@ -46,10 +110,21 @@
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+    
+    self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
+    
 }
 
 -(void)searchButtonAction:(id)sender{
     NSLog(@"Launch");
+
+    HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
+    navController.navigationBarHidden = YES;
+    self.providesPresentationContextTransitionStyle = YES;
+    self.definesPresentationContext = YES;
+    [navController setModalPresentationStyle:UIModalPresentationCustom];
+    [self presentViewController:navController animated:NO completion:nil];
 }
 
 -(void)updateCategories{
@@ -125,6 +200,9 @@
     if (!cell) {
         cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.width/2 )];
     }
+    if (categoryCount == 0) {
+        [self handleEmptySolutionsScenario];
+    }
     if (categoryCount > 0){
             HLCategory *category = (self.categories)[indexPath.row];
             cell.label.text = category.title;
@@ -141,6 +219,52 @@
         }
     return cell;
 }
+
+- (void)handleEmptySolutionsScenario {
+    self.noSolutionsLabel = [[UILabel alloc] init];
+    self.noSolutionsLabel.backgroundColor = [UIColor clearColor];
+    self.noSolutionsLabel.numberOfLines = 0;
+    self.noSolutionsLabel.textAlignment = NSTextAlignmentCenter;
+    self.noSolutionsLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.noSolutionsLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0f];
+    self.noSolutionsLabel.textColor = [[HLTheme sharedInstance] noItemsFoundMessageColor];
+    [self.noSolutionsLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    self.noSolutionsLabel.text = HLLocalizedString(@"No Folders Message" );
+    [self.view addSubview:self.noSolutionsLabel];
+    self.noSolutionsLabel.hidden = YES;
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
+                                                          attribute:NSLayoutAttributeTop
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeTop
+                                                         multiplier:1.0
+                                                           constant:150.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
+                                                          attribute:NSLayoutAttributeLeading
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeLeading
+                                                         multiplier:1.0
+                                                           constant:20.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:nil
+                                                          attribute:NSLayoutAttributeNotAnAttribute
+                                                         multiplier:1.0
+                                                           constant:100.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
+                                                          attribute:NSLayoutAttributeTrailing
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeTrailing
+                                                         multiplier:1.0
+                                                           constant:-20.0]];
+}
+
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (IS_IPAD) {
