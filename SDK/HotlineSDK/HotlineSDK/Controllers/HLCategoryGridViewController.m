@@ -123,12 +123,11 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger categoryCount = self.categories.count;
     HLGridViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
     if (!cell) {
         cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.width/2 )];
     }
-    if (categoryCount > 0){
+    if (self.categories.count > 0){
             HLCategory *category = (self.categories)[indexPath.row];
             cell.label.text = category.title;
             cell.label.numberOfLines =0;
@@ -156,10 +155,12 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    HLCategory *category = self.categories[indexPath.row];
-    HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
-    [self.navigationController pushViewController:container animated:YES];
+    if (self.categories.count > 0) {
+        HLCategory *category = self.categories[indexPath.row];
+        HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+        [self.navigationController pushViewController:container animated:YES];
+    }
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {

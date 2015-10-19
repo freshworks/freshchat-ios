@@ -54,6 +54,10 @@
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
 }
 
+-(void)searchButtonAction:(id)sender{
+    
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLArticleCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
