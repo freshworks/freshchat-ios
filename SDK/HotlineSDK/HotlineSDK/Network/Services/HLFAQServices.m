@@ -104,9 +104,7 @@
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
             }else{
-                if (category) {
-                    [context deleteObject:category];
-                }
+                if (category) [context deleteObject:category];
             }
         }
         [context save:nil];
@@ -130,7 +128,7 @@
     NSData *postData = [NSJSONSerialization dataWithJSONObject:voteInfo options:0 error:nil];
     request.HTTPBody = postData;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
-        FDLog(@"DownVote response : %@",responseObject);
+        FDLog(@"Article vote status: %@",responseObject);
     }];
     return task;
 }
