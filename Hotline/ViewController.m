@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "FreshdeskSDK/Mobihelp.h"
 #import "HotlineSDK/Hotline.h"
 
 @interface ViewController ()

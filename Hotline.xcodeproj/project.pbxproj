@@ -26,7 +26,6 @@
 		356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1A1B9DC4AF002F1E2A /* CoreGraphics.framework */; };
 		356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */; };
 		356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */; };
-		356F1B9B1B9DD13B002F1E2A /* libFreshdeskSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A381B9DC541002F1E2A /* libFreshdeskSDK.a */; };
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
@@ -122,13 +121,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = AD3C7CD819069882009919CD;
 			remoteInfo = FreshdeskSDKTests;
-		};
-		356F1AAD1B9DC5BA002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = AD3C7CC719069882009919CD;
-			remoteInfo = FreshdeskSDK;
 		};
 		358DD4E71BB012CA00B36E4E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -228,7 +220,6 @@
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
 				356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */,
-				356F1B9B1B9DD13B002F1E2A /* libFreshdeskSDK.a in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
 				356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */,
 				356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */,
@@ -467,7 +458,6 @@
 			);
 			dependencies = (
 				35591BA81B9EDF0900BC0B60 /* PBXTargetDependency */,
-				356F1AAE1B9DC5BA002F1E2A /* PBXTargetDependency */,
 			);
 			name = Hotline;
 			productName = Hotline;
@@ -688,11 +678,6 @@
 			target = 356F19E61B9DBF14002F1E2A /* Hotline */;
 			targetProxy = 356F1A011B9DBF14002F1E2A /* PBXContainerItemProxy */;
 		};
-		356F1AAE1B9DC5BA002F1E2A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FreshdeskSDK;
-			targetProxy = 356F1AAD1B9DC5BA002F1E2A /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -820,6 +805,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = Hotline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -836,6 +822,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = Hotline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
