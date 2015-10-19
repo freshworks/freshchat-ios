@@ -45,21 +45,19 @@
     // Hook for no update functionality
 }
 
-- (void)fetchWithCompletion:(void(^)(NSError *error))completion{
+- (void)fetchWithCompletion:(void(^)(BOOL isFetchPerformed, NSError *error))completion{
     if([self hasTimedOut]){
         [self doFetch:^(NSError * error) {
             if(!error){
                 [self.secureStore setObject:[NSDate date] forKey:self.intervalConfigKey];
                 FDLog("%@ Completed Update", [[self class] debugDescription]);
             }
-            if(completion)completion(error);
+            if(completion) completion(YES,error);
         }];
-    }
-    else{
-       FDLog("%@ Data still fresh . Not Updating", [[self class] debugDescription]);
-       [self noUpdate];
-       if (completion)
-           completion(nil);
+    }else{
+        [self noUpdate];
+        if (completion) completion(NO, nil);
+        FDLog("%@ Data still fresh . Not Updating", [[self class] debugDescription]);
     }
 }
 

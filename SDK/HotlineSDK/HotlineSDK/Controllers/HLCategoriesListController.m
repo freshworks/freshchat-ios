@@ -15,6 +15,7 @@
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
 #import "FDSolutionUpdater.h"
+#import "HLTheme.h"
 
 @interface HLCategoriesListController ()
 
@@ -29,8 +30,11 @@
     parent.title = HLLocalizedString(@"CATEGORIES_LIST_VIEW_TITLE");
     [self setNavigationItem];
     [self updateCategories];
-    [self fetchUpdates];
     [self localNotificationSubscription];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self fetchUpdates];
 }
 
 -(void)updateCategories{
@@ -43,17 +47,28 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"Search Button"];
+    
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
+    
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    
+    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
 }
 
 -(void)closeButton:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)searchButtonAction:(id)sender{
+    
+}
+
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        HideNetworkActivityIndicator();
         [weakSelf updateCategories];
         NSLog(@"Got Notifications !!!");
     }];
@@ -62,10 +77,11 @@
 -(void)fetchUpdates{
     FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
-        if(isEmpty){
-            [updater resetTime];
-        }
-        [updater fetch];
+        if(isEmpty)[updater resetTime];
+        ShowNetworkActivityIndicator();
+        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+            if (!isFetchPerformed) HideNetworkActivityIndicator();
+        }];
     }];
 }
 
@@ -75,8 +91,11 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    HLCategory *category =  self.categories[indexPath.row];
-    cell.textLabel.text  = category.title;
+    
+    if (self.categories.count > 0) {
+        HLCategory *category =  self.categories[indexPath.row];
+        cell.textLabel.text  = category.title;
+    }
     return cell;
 }
 
@@ -85,10 +104,12 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HLCategory *category =  self.categories[indexPath.row];
-    HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
-    [self.navigationController pushViewController:container animated:YES];
+    if (self.categories.count > 0) {
+        HLCategory *category =  self.categories[indexPath.row];
+        HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+        [self.navigationController pushViewController:container animated:YES];
+    }
 }
 
 @end
