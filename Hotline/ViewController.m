@@ -30,4 +30,8 @@
 
 }
 
+- (IBAction)settings:(id)sender {
+    NSLog(@"Settings");
+}
+
 @end

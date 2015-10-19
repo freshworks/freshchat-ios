@@ -33,8 +33,11 @@
     [self updateCategories];
     [self setupCollectionView];
     [self setNavigationItem];
-    [self fetchUpdates];
     [self localNotificationSubscription];
+}
+
+-(void) viewWillAppear:(BOOL)animated{
+    [self fetchUpdates];    
 }
 
 -(void)setNavigationItem{

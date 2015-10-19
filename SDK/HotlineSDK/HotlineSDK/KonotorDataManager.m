@@ -156,8 +156,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     return _backgroundContext;
 }
 
-/* Execute fetch request on the background context (I/O). which inturn update PSC, fetch objects from updated PSC from main context (non I/O)
- Controllers can safely can this method without blocking UI, returned managed objects are managed by main context. */
+/* Execute fetch request on the background context (I/O)
+   fetch objects from updated PSC from main context (non I/O)
+   controllers can safely call this method without blocking UI.
+   returned managed objects are managed by the Main context.  */
 
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler{
     NSManagedObjectContext *backgroundContext = self.backgroundContext;
