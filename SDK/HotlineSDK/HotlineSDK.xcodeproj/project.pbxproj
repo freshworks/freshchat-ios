@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 350EFDEC1BD673DD00F3410B /* FDIndexManager.m */; settings = {ASSET_TAGS = (); }; };
 		3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3528BA301BC86076008F6C38 /* HLServiceRequest.m */; };
 		3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B61BB01D38000B2D9A /* HLArticlesController.m */; };
 		3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B81BB01D38000B2D9A /* HLContainerController.m */; };
@@ -120,6 +121,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		350EFDEB1BD673DD00F3410B /* FDIndexManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndexManager.h; sourceTree = "<group>"; };
+		350EFDEC1BD673DD00F3410B /* FDIndexManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndexManager.m; sourceTree = "<group>"; };
 		3528BA2F1BC86076008F6C38 /* HLServiceRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLServiceRequest.h; sourceTree = "<group>"; };
 		3528BA301BC86076008F6C38 /* HLServiceRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLServiceRequest.m; sourceTree = "<group>"; };
 		3533F0B51BB01D38000B2D9A /* HLArticlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticlesController.h; sourceTree = "<group>"; };
@@ -391,6 +394,8 @@
 				35AFF6311BB2797B004DD4A9 /* FDLocalNotification.h */,
 				CE9D4D041BCD286F006F2E66 /* FDRanking.h */,
 				CE9D4D051BCD286F006F2E66 /* FDRanking.m */,
+				350EFDEB1BD673DD00F3410B /* FDIndexManager.h */,
+				350EFDEC1BD673DD00F3410B /* FDIndexManager.m */,
 				35FE04421BC4D1DD00EAA8E0 /* FDReachabilityManager.h */,
 				35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */,
 				CE9D4D2D1BCE576A006F2E66 /* FDUtilities.h */,
@@ -774,6 +779,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */,
 				358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */,
 				35591B901B9EDD0700BC0B60 /* AFImageRequestOperation.m in Sources */,
 				359E3E881BA6D20600B933C5 /* KonotorMessageBinary.m in Sources */,

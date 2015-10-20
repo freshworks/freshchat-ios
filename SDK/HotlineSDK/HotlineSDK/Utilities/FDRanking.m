@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 
+#import "FDRanking.h"
 #import "HLArticle.h"
 #import "FDIndex.h"
 #import "KonotorDataManager.h"

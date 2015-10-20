@@ -18,8 +18,6 @@
 
 @interface HLFAQServices : NSObject
 
-@property (nonatomic, strong) FDSecureStore *secureStore;
-
 -(NSURLSessionDataTask *)fetchAllCategories;
 -(NSURLSessionDataTask *)fetchCategoriesInBatches;
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID;
