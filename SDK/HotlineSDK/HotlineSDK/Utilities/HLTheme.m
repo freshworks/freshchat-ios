@@ -106,6 +106,7 @@
 -(UIColor *)searchBarCursorColor{
     UIColor *color = [self getColorForKeyPath:@"SearchBar.CursorColor"];
     return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+}
 
 #pragma mark - Dialogue box
 
@@ -117,6 +118,7 @@
 -(UIFont *)dialogueTitleFont{
     return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:23];
 }
+    
 -(UIColor *)dialogueButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BUTTON_FONT_COLOR];

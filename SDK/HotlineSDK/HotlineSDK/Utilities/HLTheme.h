@@ -19,7 +19,6 @@
 -(UIFont *)searchBarFont;
 -(UIFont *)searchBarCancelButtonFont;
 -(UIColor *)searchBarFontColor;
--(UIColor *)searchBarInnerBackgroundColor;
 -(UIColor *)searchBarOuterBackgroundColor;
 -(UIColor *)searchBarCancelButtonColor;
 -(UIColor *)searchBarCursorColor;
