@@ -30,7 +30,7 @@ static bool INDEX_INPROGRESS=NO;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
-    request.HTTPMethod = @"GET";
+    request.HTTPMethod = HTTP_METHOD_GET;
     [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:HOTLINE_REQUEST_PARAMS];
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
@@ -82,7 +82,7 @@ static bool INDEX_INPROGRESS=NO;
 -(NSURLSessionDataTask *)fetchAllCategories{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
-    request.HTTPMethod = @"GET";
+    request.HTTPMethod = HTTP_METHOD_GET;
     NSString *URLParams = [NSString stringWithFormat:@"%@&%@",HOTLINE_REQUEST_PARAMS,@"deep=true"];
     [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:URLParams];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
@@ -111,15 +111,34 @@ static bool INDEX_INPROGRESS=NO;
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
             }else{
-                if (category) {
-                    [context deleteObject:category];
-                }
+                if (category) [context deleteObject:category];
             }
         }
         [context save:nil];
         [self updateIndex];
         [self postNotification];
     }];
+}
+
+-(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID{
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSString *URLString = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,categoryID,articleID];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    NSString *URLParams = [NSString stringWithFormat:@"%@&%@",HOTLINE_REQUEST_PARAMS,@"platform=ios"];
+    [request setRelativePath:URLString andURLParams:URLParams];
+    NSDictionary *voteInfo;
+    if (vote) {
+        voteInfo = @{ @"article": @{ @"upvote" : @"1", @"downvote" : @"-1" } };
+    }else{
+        voteInfo = @{ @"article": @{ @"upvote" : @"-1", @"downvote" : @"1" } };
+    }
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:voteInfo options:0 error:nil];
+    request.HTTPBody = postData;
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+        FDLog(@"Article vote status: %@",responseObject);
+    }];
+    return task;
 }
 
 -(void)postNotification{

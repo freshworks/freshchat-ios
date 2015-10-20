@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "FreshdeskSDK/Mobihelp.h"
 #import "HotlineSDK/Hotline.h"
 
 @interface AppDelegate ()
@@ -16,20 +15,9 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self konotorIntegration];
     return YES;
-}
-
--(void)rexinc{
-    MobihelpConfig *config = [[MobihelpConfig alloc]initWithDomain:@"rexinc.freshdesk.com" withAppKey:@"arvchz-2-0596aef1ff21fb369717fbb1991c557c" andAppSecret:@"3389816b76ae70737910a9f57f4b25390dff21a4"];
-    config.feedbackType = FEEDBACK_TYPE_NAME_REQUIRED_AND_EMAIL_OPTIONAL;
-    config.enableAutoReply = YES;
-    config.enableEnhancedPrivacy = NO;
-    config.appStoreId=@"id849713306";
-    Mobihelp *mobihelp = [Mobihelp sharedInstance];
-    [mobihelp initWithConfig:config];
 }
 
 -(void)konotorIntegration{

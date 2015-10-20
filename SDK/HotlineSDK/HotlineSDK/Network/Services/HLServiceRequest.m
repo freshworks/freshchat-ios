@@ -32,6 +32,7 @@
 -(void)setDefaultHTTPHeaders{
     NSString *userAgent = [NSString stringWithFormat:@"%@ %@",[UIDevice currentDevice].systemName,[UIDevice currentDevice].systemVersion];
     [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
+    [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 }
 

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FDSecureStore.h"
 #import "FDArticleContent.h"
+#import "HLArticle.h"
 
 @interface HLFAQServices : NSObject
 
@@ -17,5 +18,6 @@
 -(NSURLSessionDataTask *)fetchAllCategories;
 -(NSURLSessionDataTask *)fetchCategoriesInBatches;
 -(NSArray *)fetchAllIndices;
+-(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID;
 
 @end

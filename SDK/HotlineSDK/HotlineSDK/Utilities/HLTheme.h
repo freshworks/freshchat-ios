@@ -46,4 +46,12 @@
 -(UIColor *)talkToUsButtonColor;
 -(UIColor *)noItemsFoundMessageColor;
 
+//Dialogues
+-(UIColor *)getButtontextColorForKey:(NSString *)key;
+-(UIFont *)dialogueTitleFont;
+-(UIColor *)dialogueTitleTextColor;
+-(UIFont *)dialogueButtonFont;
+-(UIColor *)dialogueButtonTextColor;
+-(UIColor *)dialogueBackgroundColor;
+
 @end

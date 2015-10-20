@@ -21,7 +21,7 @@
                                 <rect key="frame" x="281" y="112" width="38" height="30"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="38" id="kdK-lF-HlO"/>
+                                    <constraint firstAttribute="width" constant="38" id="QdT-7t-NHq"/>
                                 </constraints>
                                 <state key="normal" title="FAQs">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -34,7 +34,7 @@
                                 <rect key="frame" x="251" y="208" width="99" height="30"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="99" id="Stn-Bf-sXf"/>
+                                    <constraint firstAttribute="width" constant="99" id="e5w-xF-bXR"/>
                                 </constraints>
                                 <state key="normal" title="Conversations">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -43,14 +43,24 @@
                                     <action selector="conversations:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nvx-7c-jks"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ffW-gi-m2d">
+                                <rect key="frame" x="272" y="298" width="57" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Settings"/>
+                                <connections>
+                                    <action selector="settings:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rH6-Ls-y9U"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Ig7-l3-DoE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8lO-wF-7p1"/>
-                            <constraint firstItem="j2q-zP-81C" firstAttribute="centerX" secondItem="Ig7-l3-DoE" secondAttribute="centerX" id="YBB-VE-17r"/>
-                            <constraint firstItem="Ig7-l3-DoE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="92" id="eRH-7b-fJo"/>
-                            <constraint firstItem="j2q-zP-81C" firstAttribute="top" secondItem="Ig7-l3-DoE" secondAttribute="bottom" constant="66" id="jNt-Fq-hYN"/>
+                            <constraint firstItem="ffW-gi-m2d" firstAttribute="centerX" secondItem="j2q-zP-81C" secondAttribute="centerX" id="5uq-5f-kBt"/>
+                            <constraint firstItem="ffW-gi-m2d" firstAttribute="top" secondItem="j2q-zP-81C" secondAttribute="bottom" constant="60" id="iiN-wZ-FEP"/>
+                            <constraint firstItem="Ig7-l3-DoE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="92" id="rc6-8A-tvM"/>
+                            <constraint firstItem="j2q-zP-81C" firstAttribute="top" secondItem="Ig7-l3-DoE" secondAttribute="bottom" constant="66" id="uHo-9M-vzb"/>
+                            <constraint firstItem="j2q-zP-81C" firstAttribute="centerX" secondItem="Ig7-l3-DoE" secondAttribute="centerX" id="yhl-kp-OoD"/>
+                            <constraint firstItem="j2q-zP-81C" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="zrL-ce-NEO"/>
                         </constraints>
                     </view>
                 </viewController>

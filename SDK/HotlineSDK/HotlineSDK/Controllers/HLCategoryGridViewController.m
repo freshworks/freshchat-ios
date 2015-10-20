@@ -33,17 +33,27 @@
 
 @implementation HLCategoryGridViewController
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        self.searchResults = [[NSArray alloc]init];
+    }
+    return self;
+}
+
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.searchResults = [[NSArray alloc]init];
     [self updateCategories];
     [self setupSubviews];
     [self adjustUIBounds];
     [self setNavigationItem];
     [self theming];
-    [self fetchUpdates];
     [self localNotificationSubscription];
+}
+
+-(void) viewWillAppear:(BOOL)animated{
+    [self fetchUpdates];
 }
 
 -(void)setupSubviews{
@@ -100,7 +110,6 @@
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
-    
 }
 
 -(void)searchButtonAction:(id)sender{
@@ -125,10 +134,11 @@
 -(void)fetchUpdates{
     FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
-        if(isEmpty){
-            [updater resetTime];
-        }
-        [updater fetch];
+        if(isEmpty) [updater resetTime];
+        ShowNetworkActivityIndicator();
+        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+            if (!isFetchPerformed) HideNetworkActivityIndicator();
+        }];
     }];
 }
 
@@ -142,6 +152,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             weakSelf.categories = @[];
             [weakSelf updateCategories];
+            HideNetworkActivityIndicator();
             NSLog(@"Got Notifications");
         });
     }];
@@ -174,33 +185,28 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    if(!self.categories){
-        return 0;
-    }
-    return [self.categories count];
+    return (self.categories) ? self.categories.count : 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger categoryCount = self.categories.count;
     HLGridViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
     if (!cell) {
-        cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.width/2 )];
+        CGFloat cellSize = [UIScreen mainScreen].bounds.size.width/2;
+        cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, cellSize, cellSize)];
     }
-
-    if (categoryCount > 0){
-            HLCategory *category = (self.categories)[indexPath.row];
-            cell.label.text = category.title;
-            cell.label.numberOfLines =0;
-            cell.layer.borderWidth=0.0f;
-            cell.layer.borderColor=[UIColor grayColor].CGColor;
-            // Only load cached images; defer new downloads until scrolling ends
-            if (!category.icon){
-                cell.imageView.image=[UIImage imageNamed:@"loading.png"];
-            }else{
-                cell.imageView.image = [UIImage imageWithData:category.icon];
-                [cell.label sizeToFit];
-            }
+    if (self.categories.count > 0){
+        HLCategory *category = (self.categories)[indexPath.row];
+        cell.label.text = category.title;
+        cell.label.numberOfLines =0;
+        cell.layer.borderWidth=0.0f;
+        cell.layer.borderColor=[UIColor grayColor].CGColor;
+        if (!category.icon){
+            cell.imageView.image=[UIImage imageNamed:@"loading.png"];
+        }else{
+            cell.imageView.image = [UIImage imageWithData:category.icon];
+            [cell.label sizeToFit];
         }
+    }
     return cell;
 }
 
@@ -215,10 +221,12 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    HLCategory *category = self.categories[indexPath.row];
-    HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
-    [self.navigationController pushViewController:container animated:YES];
+    if (self.categories.count > 0) {
+        HLCategory *category = self.categories[indexPath.row];
+        HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+        [self.navigationController pushViewController:container animated:YES];
+    }
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {

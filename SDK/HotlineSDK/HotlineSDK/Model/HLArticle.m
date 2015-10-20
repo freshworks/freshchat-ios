@@ -9,6 +9,7 @@
 #import "HLArticle.h"
 #import "HLCategory.h"
 #import "KonotorDataManager.h"
+#import "HLMacros.h"
 
 @implementation HLArticle
 
@@ -20,24 +21,36 @@
 @dynamic title;
 @dynamic category;
 
-+(HLArticle *)articleWithInfo:(NSDictionary *)articleInfo inManagedObjectContext:(NSManagedObjectContext *)context{
++(HLArticle *)getWithID:(NSNumber *)articleID inContext:(NSManagedObjectContext *)context{
     HLArticle *article = nil;
-    article = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_ARTICLE_ENTITY inManagedObjectContext:context];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"articleID == %@",articleID];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count == 1) {
+        article = matches.firstObject;
+    }
+    if (matches.count > 1) {
+        article = nil;
+        FDLog(@"Duplicates found in Articles table !");
+    }
+    return article;
+}
+
++(HLArticle *)createWithInfo:(NSDictionary *)articleInfo inContext:(NSManagedObjectContext *)context{
+    HLArticle *article = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_ARTICLE_ENTITY inManagedObjectContext:context];
+    return [self updateArticle:article withInfo:articleInfo];
+}
+
+-(void)updateWithInfo:(NSDictionary *)articleInfo{
+    [HLArticle updateArticle:self withInfo:articleInfo];
+}
+
++(HLArticle *)updateArticle:(HLArticle *)article withInfo:(NSDictionary *)articleInfo{
     article.articleID            = [articleInfo valueForKey:@"articleId"];
     article.title                = [articleInfo valueForKey:@"title"];
     article.articleDescription   = [articleInfo valueForKey:@"content"];
     article.position             = @([[articleInfo valueForKey:@"position"]intValue]);
     return article;
 }
-
-/* Checks for the passed articleID in the database, returns a article if found one */
-+(HLArticle *)getArticleWithID:(NSNumber *)articleID inManagedObjectContext:(NSManagedObjectContext *)context{
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"articleID == %@",articleID];
-    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if ([matches count] > 1) return nil;
-    return [matches firstObject];
-}
-
 
 @end

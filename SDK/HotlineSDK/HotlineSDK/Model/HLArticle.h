@@ -21,7 +21,8 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) HLCategory *category;
 
-+(HLArticle *)articleWithInfo:(NSDictionary *)articleInfo inManagedObjectContext:(NSManagedObjectContext *)context;
-+(HLArticle *)getArticleWithID:(NSNumber *)articleID inManagedObjectContext:(NSManagedObjectContext *)context;
++(HLArticle *)getWithID:(NSNumber *)articleID inContext:(NSManagedObjectContext *)context;
++(HLArticle *)createWithInfo:(NSDictionary *)articleInfo inContext:(NSManagedObjectContext *)context;
+-(void)updateWithInfo:(NSDictionary *)articleInfo;
 
 @end

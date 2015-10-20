@@ -54,6 +54,10 @@
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
 }
 
+-(void)searchButtonAction:(id)sender{
+    
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLArticleCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -76,6 +80,7 @@
     articleDetailController.articleID = article.articleID;
     articleDetailController.articleDescription = article.articleDescription;
     articleDetailController.categoryTitle = self.category.title;
+    articleDetailController.categoryID = self.category.categoryID;
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
     [self.navigationController pushViewController:container animated:YES];
 }

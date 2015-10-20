@@ -31,8 +31,8 @@
         category = matches.firstObject;
     }
     if (matches.count > 1) {
-        FDLog(@"Duplicates found in Articles table !");
         category = nil;
+        FDLog(@"Duplicates found in Category table !");
     }
     return category;
 }
@@ -47,6 +47,7 @@
 }
 
 +(HLCategory *)updateCategory:(HLCategory *)category withInfo:(NSDictionary *)categoryInfo{
+    NSManagedObjectContext *context = category.managedObjectContext;
     category.categoryID = categoryInfo[@"categoryId"];
     category.title = categoryInfo[@"title"];
     category.iconURL = categoryInfo[@"icon"];
@@ -54,19 +55,29 @@
     category.lastUpdatedTime = [NSDate dateWithTimeIntervalSince1970:[categoryInfo[@"lastUpdatedAt"]doubleValue]];
     category.categoryDescription = categoryInfo[@"description"];
 
-    //Prefetch images
+    //Prefetch category icon
     __block NSData *imageData = nil;
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:categoryInfo[@"icon"]]];
     });
     category.icon = imageData;
     
-    //Add Articles
+    //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];
     for (int j=0; j<articles.count; j++) {
         NSDictionary *articleInfo = articles[j];
-        HLArticle *article = [HLArticle articleWithInfo:articleInfo inManagedObjectContext:category.managedObjectContext];
-        [category addArticlesObject:article];
+        HLArticle *article = [HLArticle getWithID:articleInfo[@"articleId"] inContext:context];
+        BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
+        if (isArticleEnabled) {
+            if (article) {
+                [article updateWithInfo:articleInfo];
+            }else{
+                article = [HLArticle createWithInfo:articleInfo inContext:context];
+                [category addArticlesObject:article];
+            }
+        }else{
+            if (article) [context deleteObject:article];
+        }
     }
     return category;
 }

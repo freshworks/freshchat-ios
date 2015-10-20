@@ -26,7 +26,6 @@
 		356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1A1B9DC4AF002F1E2A /* CoreGraphics.framework */; };
 		356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */; };
 		356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */; };
-		356F1B9B1B9DD13B002F1E2A /* libFreshdeskSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A381B9DC541002F1E2A /* libFreshdeskSDK.a */; };
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
@@ -70,6 +69,7 @@
 		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		CE10648C1BC54C9300922494 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = CE10648B1BC54C9300922494 /* loading.png */; settings = {ASSET_TAGS = (); }; };
 		CE9D4D311BCE7341006F2E66 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE9D4D301BCE7341006F2E66 /* KonotorModels.bundle */; settings = {ASSET_TAGS = (); }; };
+		CE1064A21BC6780700922494 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1064A11BC6780700922494 /* message.png */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,13 +121,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = AD3C7CD819069882009919CD;
 			remoteInfo = FreshdeskSDKTests;
-		};
-		356F1AAD1B9DC5BA002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = AD3C7CC719069882009919CD;
-			remoteInfo = FreshdeskSDK;
 		};
 		358DD4E71BB012CA00B36E4E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -215,6 +208,7 @@
 		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
 		CE10648B1BC54C9300922494 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		CE9D4D301BCE7341006F2E66 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		CE1064A11BC6780700922494 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,7 +220,6 @@
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
 				356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */,
-				356F1B9B1B9DD13B002F1E2A /* libFreshdeskSDK.a in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
 				356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */,
 				356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */,
@@ -402,6 +395,7 @@
 			isa = PBXGroup;
 			children = (
 				CE10648B1BC54C9300922494 /* loading.png */,
+				CE1064A11BC6780700922494 /* message.png */,
 				35ED5EDF1BB3EA4600E0052D /* konotor_back.png */,
 				35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */,
 				35ED5EE11BB3EA4600E0052D /* konotor_cam.png */,
@@ -464,7 +458,6 @@
 			);
 			dependencies = (
 				35591BA81B9EDF0900BC0B60 /* PBXTargetDependency */,
-				356F1AAE1B9DC5BA002F1E2A /* PBXTargetDependency */,
 			);
 			name = Hotline;
 			productName = Hotline;
@@ -594,6 +587,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE1064A21BC6780700922494 /* message.png in Resources */,
 				35ED5F1E1BB3EA4600E0052D /* konotor_progress_blue@2x.png in Resources */,
 				35ED5F1C1BB3EA4600E0052D /* konotor_progress_black@2x.png in Resources */,
 				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
@@ -683,11 +677,6 @@
 			isa = PBXTargetDependency;
 			target = 356F19E61B9DBF14002F1E2A /* Hotline */;
 			targetProxy = 356F1A011B9DBF14002F1E2A /* PBXContainerItemProxy */;
-		};
-		356F1AAE1B9DC5BA002F1E2A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FreshdeskSDK;
-			targetProxy = 356F1AAD1B9DC5BA002F1E2A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -816,11 +805,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = Hotline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "Freshdesk.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -832,11 +822,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = Hotline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "Freshdesk.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

@@ -17,7 +17,7 @@
 @property (nonatomic        ) NSString         * intervalConfigKey;
 @property (strong, nonatomic) FDSecureStore    *secureStore;
 
-- (void) fetchWithCompletion:(void(^)(NSError *error))completion;
+- (void) fetchWithCompletion:(void(^)(BOOL isFetchPerformed, NSError *error))completion;
 - (void) fetch;
 - (void) doFetch:(void(^)(NSError *error))completion;
 - (void) resetTime;
