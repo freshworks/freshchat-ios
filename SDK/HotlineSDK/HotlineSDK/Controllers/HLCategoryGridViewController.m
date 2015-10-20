@@ -33,14 +33,6 @@
 
 @implementation HLCategoryGridViewController
 
-- (instancetype)init{
-    self = [super init];
-    if (self) {
-        self.searchResults = [[NSArray alloc]init];
-    }
-    return self;
-}
-
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
@@ -194,8 +186,8 @@
         CGFloat cellSize = [UIScreen mainScreen].bounds.size.width/2;
         cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, cellSize, cellSize)];
     }
-    if (self.categories.count > 0){
-        HLCategory *category = (self.categories)[indexPath.row];
+    if (indexPath.row < self.categories.count){
+        HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
         cell.label.numberOfLines =0;
         cell.layer.borderWidth=0.0f;
@@ -221,7 +213,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.categories.count > 0) {
+    if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];

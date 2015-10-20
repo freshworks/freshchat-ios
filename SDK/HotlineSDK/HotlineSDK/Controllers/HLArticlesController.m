@@ -65,8 +65,10 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    HLArticle *article = self.articles[indexPath.row];
-    cell.textLabel.text  = article.title;
+    if (indexPath.row < self.articles.count) {
+        HLArticle *article = self.articles[indexPath.row];
+        cell.textLabel.text  = article.title;
+    }
     return cell;
 }
 
@@ -75,14 +77,16 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HLArticle *article = self.articles[indexPath.row];
-    HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
-    articleDetailController.articleID = article.articleID;
-    articleDetailController.articleDescription = article.articleDescription;
-    articleDetailController.categoryTitle = self.category.title;
-    articleDetailController.categoryID = self.category.categoryID;
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
-    [self.navigationController pushViewController:container animated:YES];
+    if (indexPath.row < self.articles.count) {
+        HLArticle *article = self.articles[indexPath.row];
+        HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
+        articleDetailController.articleID = article.articleID;
+        articleDetailController.articleDescription = article.articleDescription;
+        articleDetailController.categoryTitle = self.category.title;
+        articleDetailController.categoryID = self.category.categoryID;
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+        [self.navigationController pushViewController:container animated:YES];
+    }
 }
 
 @end

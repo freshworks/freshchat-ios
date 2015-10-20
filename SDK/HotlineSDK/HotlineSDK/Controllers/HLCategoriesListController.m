@@ -92,7 +92,7 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    if (self.categories.count > 0) {
+    if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
         cell.textLabel.text  = category.title;
     }
@@ -104,7 +104,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.categories.count > 0) {
+    if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];

@@ -95,20 +95,18 @@
         cell.textLabel.numberOfLines = 0;
         cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
-    if (self.searchResults.count > 0) {
+    if (indexPath.row < self.searchResults.count) {
         FDArticleContent *article = self.searchResults[indexPath.row];
         [cell.textLabel sizeToFit];
         cell.textLabel.text = article.title;
-    }else{
-        cell = nil;
     }
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.searchResults.count > 0) {
+    if (indexPath.row < self.searchResults.count) {
         HLArticleDetailViewController *articlesDetailController = [[HLArticleDetailViewController alloc]init];
-        FDArticleContent *article = [self.searchResults objectAtIndex:indexPath.row];
+        FDArticleContent *article = self.searchResults[indexPath.row];
         articlesDetailController.articleDescription = article.articleDescription;
         articlesDetailController.articleID = article.articleID;
         [self.navigationController setNavigationBarHidden:NO];

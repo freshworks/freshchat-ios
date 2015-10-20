@@ -19,16 +19,14 @@
 #import "FDIndex.h"
 #import "FDUtilities.h"
 
-
 #define MOBIHELP_DEFAULTS_IS_INDEX_CREATED @"mobihelp_defaults_is_index_created"    
 
 @implementation HLFAQServices
 
-static bool INDEX_INPROGRESS=NO;
+static BOOL INDEX_INPROGRESS = NO;
 
 -(NSURLSessionDataTask *)fetchCategoriesInBatches{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
     request.HTTPMethod = HTTP_METHOD_GET;
     [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:HOTLINE_REQUEST_PARAMS];
@@ -230,22 +228,5 @@ static bool INDEX_INPROGRESS=NO;
     }
     return indexInfo;
 }
-
--(NSArray *)fetchAllIndices{
-    __block NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    __block NSArray *fetchedTuples = [[NSArray alloc] init];
-    __block NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
-    [context performBlockAndWait:^{
-        NSEntityDescription *entity = [NSEntityDescription entityForName:HOTLINE_INDEX_ENTITY inManagedObjectContext:context];
-        NSError *error;
-        [fetchRequest setEntity:entity];
-        fetchedTuples= [context executeFetchRequest:fetchRequest error:&error];
-        if (error) {
-            FDLog(@"Fetch all entries failed : %@", error);
-        }
-    }];
-    return fetchedTuples ? [NSMutableArray arrayWithArray:fetchedTuples] : nil;
-}
-
 
 @end

@@ -11,13 +11,17 @@
 #import "FDArticleContent.h"
 #import "HLArticle.h"
 
+/* 
+ FAQServices fetches solutions and updates the database,
+ users can observe key: HOTLINE_SOLUTIONS_UPDATED to get updates.
+ */
+
 @interface HLFAQServices : NSObject
 
 @property (nonatomic, strong) FDSecureStore *secureStore;
 
 -(NSURLSessionDataTask *)fetchAllCategories;
 -(NSURLSessionDataTask *)fetchCategoriesInBatches;
--(NSArray *)fetchAllIndices;
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID;
 
 @end
