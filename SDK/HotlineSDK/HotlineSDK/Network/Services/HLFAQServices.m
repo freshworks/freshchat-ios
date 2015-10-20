@@ -126,7 +126,6 @@ static bool INDEX_INPROGRESS=NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_UPDATED object:self];
 }
 
-// Create Index
 #pragma Indexing
 
 -(void)updateIndex{
@@ -143,27 +142,26 @@ static bool INDEX_INPROGRESS=NO;
     INDEX_INPROGRESS = YES;
     [self setIndexingCompleted:NO];
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
-    [datamanager deleteAllIndices];
-    [datamanager.backgroundContext performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
-        NSError *error;
-        NSArray *results = [datamanager.backgroundContext executeFetchRequest:request error:&error];
-        if (!error) {
-            if (results.count > 0) {
-                for (int i=0; i<[results count]; i++) {
-                    HLArticle *article = results[i];
-                    FDArticleContent *articleContent = [[FDArticleContent alloc]initWithArticle:article];
-                    [self insertIndexforArticleWithContent:articleContent];
+    [datamanager deleteAllIndices:^(NSError *error) {
+        [datamanager.backgroundContext performBlock:^{
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
+            NSError *error;
+            NSArray *results = [datamanager.backgroundContext executeFetchRequest:request error:&error];
+            if (!error) {
+                if (results.count > 0) {
+                    for (int i=0; i<[results count]; i++) {
+                        HLArticle *article = results[i];
+                        FDArticleContent *articleContent = [[FDArticleContent alloc]initWithArticle:article];
+                        [self insertIndexforArticleWithContent:articleContent];
+                    }
+                    INDEX_INPROGRESS = NO;
+                    [self setIndexingCompleted:YES];
+                    [datamanager save];
                 }
-                INDEX_INPROGRESS = NO;
-                [self setIndexingCompleted:YES];
-                [datamanager save];
-//                HLFAQServices *services = [[HLFAQServices alloc] init];
-//                NSLog(@"Indices : %@",[services fetchAllIndices]);
+            }else{
+                FDLog(@"Failed to create index. %@",error);
             }
-        }else{
-            FDLog(@"Failed to create index. %@",error);
-        }
+        }];
     }];
 }
 

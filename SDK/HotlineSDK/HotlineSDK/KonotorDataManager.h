@@ -29,10 +29,8 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 +(KonotorDataManager*)sharedInstance;
 -(BOOL)save;
 -(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler;
+-(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
--(void)deleteAllIndices;
 
 @end
-
-

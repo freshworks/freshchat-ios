@@ -45,16 +45,12 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 		return _objectModel;
     
 	NSBundle *bundle = [NSBundle mainBundle];
-	if (kDataManagerBundleName)
-    {
-        
-        
+	if (kDataManagerBundleName){
         NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KonotorModels" ofType:@"bundle"];
 		bundle = [NSBundle bundleWithPath:bundlePath];
 	}
 	NSString *modelPath = [bundle pathForResource:kDataManagerModelName ofType:@"momd"];
 	_objectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:modelPath]];
-    
 	return _objectModel;
 }
 
@@ -181,10 +177,18 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
-- (void)deleteAllSolutions:(void(^)(NSError *error))handler{
+-(void)deleteAllSolutions:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CATEGORY_ENTITY handler:handler];
+}
+
+-(void)deleteAllIndices:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_INDEX_ENTITY handler:handler];
+}
+
+-(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler{
     NSManagedObjectContext *context = self.backgroundContext;
     [context performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
         NSArray *results = [context executeFetchRequest:request error:nil];
         for (int i=0; i<results.count; i++) {
             NSManagedObject *object = results[i];
@@ -208,19 +212,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         dispatch_async(dispatch_get_main_queue(), ^{
             if (handler) handler(count == 0);
         });
-    }];
-}
-
-- (void)deleteAllIndices{
-    NSManagedObjectContext *context = self.backgroundContext;
-    [context performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_INDEX_ENTITY];
-        NSArray *results = [context executeFetchRequest:request error:nil];
-        for (int i=0; i<results.count; i++) {
-            NSManagedObject *object = results[i];
-            [context deleteObject:object];
-        }
-        [context save:nil];
     }];
 }
 
