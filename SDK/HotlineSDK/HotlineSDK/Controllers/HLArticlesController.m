@@ -12,6 +12,7 @@
 #import "HLArticle.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
+#import "HLSearchViewController.h"
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 
@@ -55,7 +56,13 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    
+    HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
+    navController.navigationBarHidden = YES;
+    self.providesPresentationContextTransitionStyle = YES;
+    self.definesPresentationContext = YES;
+    [navController setModalPresentationStyle:UIModalPresentationCustom];
+    [self presentViewController:navController animated:NO completion:nil];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

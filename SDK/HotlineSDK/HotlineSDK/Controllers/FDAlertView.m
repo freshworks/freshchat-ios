@@ -44,7 +44,7 @@
     self.views = @{@"Button1" : self.Button1, @"iconView" : self.iconView, @"leftSpacer" : self.leftSpacer, @"rightSpacer" : self.rightSpacer};
     self.metrics = @{ @"buttonLabelWidth" : @(self.buttonLabelWidth),  @"buttonSpacing" : @(BUTTON_SPACING) };
     
-    [self addConstraintWithBaseLine:@"H:|-[iconView][Button1(buttonLabelWidth)]-|" inView:self];
+    [self addConstraint:@"H:|[leftSpacer][iconView][Button1(buttonLabelWidth)][rightSpacer]|" InView:self];
     [self addConstraint:@"V:|[iconView]|" InView:self];
     [self addConstraint:@"V:|[Button1]|" InView:self];
     [super layoutSubviews];

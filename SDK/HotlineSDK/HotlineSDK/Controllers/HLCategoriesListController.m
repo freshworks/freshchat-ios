@@ -16,6 +16,7 @@
 #import "HLContainerController.h"
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
+#import "HLSearchViewController.h"
 
 @interface HLCategoriesListController ()
 
@@ -27,7 +28,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(@"CATEGORIES_LIST_VIEW_TITLE");
+    parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     [self setNavigationItem];
     [self updateCategories];
     [self localNotificationSubscription];
@@ -47,14 +48,16 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"Search Button"];
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+    
+    self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
 
 -(void)closeButton:(id)sender{
@@ -62,7 +65,13 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    
+    HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
+    navController.navigationBarHidden = YES;
+    self.providesPresentationContextTransitionStyle = YES;
+    self.definesPresentationContext = YES;
+    [navController setModalPresentationStyle:UIModalPresentationCustom];
+    [self presentViewController:navController animated:NO completion:nil];
 }
 
 -(void)localNotificationSubscription{
