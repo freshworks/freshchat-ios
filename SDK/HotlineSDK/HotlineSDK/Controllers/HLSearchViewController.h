@@ -11,10 +11,7 @@
 #import <UIKit/UIKit.h>
 
 @interface HLSearchViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-//Properties
-@property (strong, nonatomic) NSArray               *searchResults;
 
-//Public API
-- (instancetype)initWithTableView:(UITableView *)tableView withRowAnimation:(UITableViewRowAnimation)animation;
-- (instancetype)initWithSearchBar:(UISearchBar *)searchBar withContentsController:(id)controller andTableView:(UITableView *)tableView;
+@property (strong, nonatomic) NSArray *searchResults;
+
 @end

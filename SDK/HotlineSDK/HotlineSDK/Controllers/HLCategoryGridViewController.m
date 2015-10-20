@@ -25,9 +25,8 @@
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
 
 @property (nonatomic,strong) NSArray *categories;
-@property (strong, nonatomic) HLSearchViewController     *searchViewController;
 @property (strong,nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UILabel                    *noSolutionsLabel;
+@property (strong, nonatomic) UILabel  *noSolutionsLabel;
 @property (strong, nonatomic) FDSearchBar *searchBar;
 
 @end
@@ -44,20 +43,13 @@
     [self setNavigationItem];
     [self theming];
     [self fetchUpdates];
-    [self handleEmptySolutionsScenario];
     [self localNotificationSubscription];
 }
 
 -(void)setupSubviews{
     [self setupCollectionView];
     [self setupSearchBar];
-//    [self setupSearchDisplay];
 }
-
--(void)setupSearchDisplay{
-    self.searchViewController = [[HLSearchViewController alloc]initWithSearchBar:self.searchBar withContentsController:self andTableView:self.tableView];
-}
-
 
 -(void)viewWillLayoutSubviews{
     self.searchBar.frame= CGRectMake(0, 0, self.view.frame.size.width, 65);
@@ -87,10 +79,6 @@
     self.searchBar.hidden = YES;
 }
 
--(void)setUpCoreDataFetch{
-    self.searchViewController = [[HLSearchViewController alloc] initWithSearchBar:self.searchBar withContentsController:self andTableView:self.tableView];
-}
-
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     self.searchBar.hidden = YES;
     self.parentViewController.navigationController.navigationBarHidden=NO;
@@ -116,8 +104,6 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    NSLog(@"Launch");
-
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     navController.navigationBarHidden = YES;
@@ -200,9 +186,7 @@
     if (!cell) {
         cell = [[HLGridViewCell alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.width/2 )];
     }
-    if (categoryCount == 0) {
-        [self handleEmptySolutionsScenario];
-    }
+
     if (categoryCount > 0){
             HLCategory *category = (self.categories)[indexPath.row];
             cell.label.text = category.title;
@@ -219,52 +203,6 @@
         }
     return cell;
 }
-
-- (void)handleEmptySolutionsScenario {
-    self.noSolutionsLabel = [[UILabel alloc] init];
-    self.noSolutionsLabel.backgroundColor = [UIColor clearColor];
-    self.noSolutionsLabel.numberOfLines = 0;
-    self.noSolutionsLabel.textAlignment = NSTextAlignmentCenter;
-    self.noSolutionsLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.noSolutionsLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0f];
-    self.noSolutionsLabel.textColor = [[HLTheme sharedInstance] noItemsFoundMessageColor];
-    [self.noSolutionsLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-    self.noSolutionsLabel.text = HLLocalizedString(@"No Folders Message" );
-    [self.view addSubview:self.noSolutionsLabel];
-    self.noSolutionsLabel.hidden = YES;
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
-                                                          attribute:NSLayoutAttributeTop
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
-                                                          attribute:NSLayoutAttributeTop
-                                                         multiplier:1.0
-                                                           constant:150.0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
-                                                          attribute:NSLayoutAttributeLeading
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
-                                                          attribute:NSLayoutAttributeLeading
-                                                         multiplier:1.0
-                                                           constant:20.0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
-                                                          attribute:NSLayoutAttributeHeight
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:nil
-                                                          attribute:NSLayoutAttributeNotAnAttribute
-                                                         multiplier:1.0
-                                                           constant:100.0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.noSolutionsLabel
-                                                          attribute:NSLayoutAttributeTrailing
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
-                                                          attribute:NSLayoutAttributeTrailing
-                                                         multiplier:1.0
-                                                           constant:-20.0]];
-}
-
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (IS_IPAD) {
@@ -288,7 +226,7 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-        return 0.0f;
+    return 0.0f;
 }
 
 // Layout: Set Edges
