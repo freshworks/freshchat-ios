@@ -22,6 +22,7 @@
 +(NSString *)replaceSpecialCharacters:(NSString *)term with:(NSString *)replaceString;
 +(void)assertMainThread;
 +(UIImage *)imageWithColor:(UIColor *)color;
++(NSString*) stringRepresentationForDate:(NSDate*) date;
 
 @end
 

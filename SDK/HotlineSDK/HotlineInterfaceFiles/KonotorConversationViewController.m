@@ -7,7 +7,7 @@
 //
 
 #import "KonotorConversationViewController.h"
-//#import "KonotorImageViewController.h"
+#import "FDUtilities.h"
 
 @interface KonotorConversationViewController ()
 
@@ -109,12 +109,6 @@ NSString* otherName=nil,*userName=nil;
     userName=[konotorUIOptions userName];
     if(!userName) userName=@"You";
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    // [self.tableView scrollRectToVisible:CGRectMake(0,self.tableView.contentSize.height-50, 2, 50) animated:YES];
     [Konotor MarkAllMessagesAsRead];
     [self registerForKeyboardNotifications];
     
@@ -140,17 +134,6 @@ NSString* otherName=nil,*userName=nil;
         [refreshMessagesTimer fire];
     }
 
-}
-
-- (void) animateAndDisplayView
-{
-
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -266,7 +249,7 @@ NSString* otherName=nil,*userName=nil;
             CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
             
             NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-            NSString *strDate = [KonotorConversationViewController stringRepresentationForDate:date];
+            NSString *strDate = [FDUtilities stringRepresentationForDate:date];
 
             UITextView* tempView2=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
             [tempView2 setFont:[UIFont systemFontOfSize:11.0]];
@@ -315,30 +298,26 @@ NSString* otherName=nil,*userName=nil;
         messageTextBoxY=isSenderOther?(messageContentViewY+(KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING):0)):(messageContentViewY+(KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING):0));
     }
     
+    CGRect messageTextBoxFrame=CGRectMake(messageTextBoxX,messageTextBoxY,messageTextBoxWidth,0);
+    CGRect messageContentViewFrame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, 0);
+    
     static NSString *CellIdentifier = @"KonotorMessagesTableCell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
-        
-        if(KONOTOR_USESCALLOUTIMAGE==YES){
-            
-            UIImageView *messageBackground=[[UIImageView alloc] initWithFrame:CGRectMake((KONOTOR_SHOWPROFILEIMAGE?1:0)*(KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)+KONOTOR_HORIZONTAL_PADDING, KONOTOR_VERTICAL_PADDING, 1, 1)];
-            UIEdgeInsets insets=UIEdgeInsetsMake(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_BOTTOM_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_RIGHT_INSET);
-            [messageBackground setImage:[[UIImage imageNamed:@"konotor_chatbubble_ios7_other.png"] resizableImageWithCapInsets:insets]];
-            messageBackground.tag=KONOTOR_CALLOUT_TAG;
-            [cell.contentView addSubview:messageBackground];
-            
-        }
+        UIImageView *messageBackground=[[UIImageView alloc] initWithFrame:CGRectMake((KONOTOR_SHOWPROFILEIMAGE?1:0)*(KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)+KONOTOR_HORIZONTAL_PADDING, KONOTOR_VERTICAL_PADDING, 1, 1)];
+        UIEdgeInsets insets=UIEdgeInsetsMake(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_BOTTOM_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_RIGHT_INSET);
+        [messageBackground setImage:[[UIImage imageNamed:@"konotor_chatbubble_ios7_other.png"] resizableImageWithCapInsets:insets]];
+        messageBackground.tag=KONOTOR_CALLOUT_TAG;
+        [cell.contentView addSubview:messageBackground];
         
         UITextView *userNameField=[[UITextView alloc] initWithFrame:CGRectMake(messageTextBoxX, messageTextBoxY, messageTextBoxWidth, KONOTOR_USERNAMEFIELD_HEIGHT)];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         
         if([userNameField respondsToSelector:@selector(textContainerInset)])
             [userNameField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
         else
-#endif
             userNameField.contentInset=UIEdgeInsetsMake(-4, 0,-4,0);
         [userNameField setFont:[UIFont systemFontOfSize:12.0]];
         [userNameField setBackgroundColor:KONOTOR_MESSAGE_BACKGROUND_COLOR];
@@ -350,10 +329,8 @@ NSString* otherName=nil,*userName=nil;
             [userNameField setTextColor:KONOTOR_UIBUTTON_COLOR];
         [userNameField setEditable:NO];
         [userNameField setScrollEnabled:NO];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         if([userNameField respondsToSelector:@selector(setSelectable:)])
             [userNameField setSelectable:NO];
-#endif
         //   [userNameField setContentOffset:CGPointMake(0,-4)];
         // [userNameField setContentSize:CGSizeMake(messageTextBoxWidth, KONOTOR_USERNAMEFIELD_HEIGHT)];
         userNameField.tag=KONOTOR_USERNAMEFIELD_TAG;
@@ -366,32 +343,12 @@ NSString* otherName=nil,*userName=nil;
         [timeField setTextAlignment:NSTextAlignmentLeft];
         [timeField setTextColor:[UIColor darkGrayColor]];
         [timeField setEditable:NO];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         if([timeField respondsToSelector:@selector(setSelectable:)])
             [timeField setSelectable:NO];
-#endif
         [timeField setScrollEnabled:NO];
         timeField.tag=KONOTOR_TIMEFIELD_TAG;
         if(KONOTOR_SHOW_TIMESTAMP)
             [cell.contentView addSubview:timeField];
-        
-        if(KONOTOR_SHOW_DURATION&&KONOTOR_SHOW_SENDERNAME&&KONOTOR_SHOW_TIMESTAMP)
-        {
-            UITextView *durationField=[[UITextView alloc] initWithFrame:CGRectMake(messageTextBoxX, messageTextBoxY+((KONOTOR_SHOW_SENDERNAME)?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT)];
-            [durationField setFont:[UIFont systemFontOfSize:11.0]];
-            [durationField setBackgroundColor:KONOTOR_MESSAGE_BACKGROUND_COLOR];
-            [durationField setTextAlignment:NSTextAlignmentRight];
-            [durationField setTextColor:[UIColor darkGrayColor]];
-            [durationField setEditable:NO];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
-            if([durationField respondsToSelector:@selector(setSelectable:)])
-                [durationField setSelectable:NO];
-#endif
-            [durationField setScrollEnabled:NO];
-            durationField.tag=KONOTOR_DURATION_TAG;
-            [cell.contentView addSubview:durationField];
-        }
-        
         
         UITextView* messageText=[[UITextView alloc] initWithFrame:CGRectMake((KONOTOR_SHOWPROFILEIMAGE?1:0)*(KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)+KONOTOR_HORIZONTAL_PADDING, KONOTOR_VERTICAL_PADDING+KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING, self.view.frame.size.width-(KONOTOR_SHOWPROFILEIMAGE?1:0)*(KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)-30, 10)];
         [messageText setFont:KONOTOR_MESSAGETEXT_FONT];
@@ -465,7 +422,6 @@ NSString* otherName=nil,*userName=nil;
     
     UITextView* userNameField=(UITextView*)[cell.contentView viewWithTag:KONOTOR_USERNAMEFIELD_TAG];
     UITextView* timeField=(UITextView*)[cell.contentView viewWithTag:KONOTOR_TIMEFIELD_TAG];
-    UITextView* durationField=(UITextView*)[cell.contentView viewWithTag:KONOTOR_DURATION_TAG];
     
     KonotorActionButton* actionButton = (KonotorActionButton*)[cell.contentView viewWithTag:KONOTOR_ACTIONBUTTON_TAG];
     
@@ -506,14 +462,11 @@ NSString* otherName=nil,*userName=nil;
         [userNameField setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERNAME_TEXT_COLOR:interfaceOptions.userTextColor)];
         [messageText setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERMESSAGE_TEXT_COLOR:interfaceOptions.userTextColor)];
         [timeField setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERTIMESTAMP_COLOR:interfaceOptions.userTextColor)];
-        [durationField setHidden:NO];
-        [durationField setBackgroundColor:KONOTOR_MESSAGE_BACKGROUND_COLOR];
-        [durationField setTextColor:KONOTOR_USERTIMESTAMP_COLOR];
 
     }
     
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-    [timeField setText:[KonotorConversationViewController stringRepresentationForDate:date]];
+    [timeField setText:[FDUtilities stringRepresentationForDate:date]];
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
@@ -530,41 +483,24 @@ NSString* otherName=nil,*userName=nil;
 
         [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), txtSize.width + 16, KONOTOR_TIMEFIELD_HEIGHT+4)];
 
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         
         if([timeField respondsToSelector:@selector(textContainerInset)])
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
         else
-#endif
             [timeField setContentOffset:CGPointMake(0, 4)];
-        
-        [durationField setHidden:YES];
         
         [messageText setText:nil];
         [messageText setDataDetectorTypes:UIDataDetectorTypeNone];
         [messageText setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
         [messageText setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
         
-        CGRect txtMsgFrame=messageText.frame;
-        
-        txtMsgFrame.origin.x=messageTextBoxX;
-        txtMsgFrame.origin.y=messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
-        txtMsgFrame.size.width=messageTextBoxWidth;
-
         CGSize sizer = [self getSizeOfTextViewWidth:messageTextBoxWidth text:currentMessage.text withFont:KONOTOR_MESSAGETEXT_FONT];
+        float msgHeight=sizer.height;
+        float textViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
+        float contentViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)+(isSenderOther?((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)):((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)));
+     
+        [self adjustHeightForMessageBubble:messageBackground textView:messageText actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:KONOTOR_SHOW_SENDERNAME sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
-        txtMsgFrame.size.height=sizer.height;
-        
-        messageText.frame=txtMsgFrame;
-
-        txtMsgFrame.size.height=sizer.height+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)+(isSenderOther?((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)):((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)));
-        txtMsgFrame.size.height+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
-        txtMsgFrame.origin.y=messageText.frame.origin.y-KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING;
-        txtMsgFrame.origin.y=messageContentViewY;
-        txtMsgFrame.origin.x=messageContentViewX;
-        txtMsgFrame.size.width=messageContentViewWidth;
-        if(KONOTOR_USESCALLOUTIMAGE)
-            messageBackground.frame=txtMsgFrame;
         [picView setHidden:YES];
         [self setupActionButtonWithUrlString:actionUrl label:actionLabel actionButton:actionButton frame:messageText.frame];
 
@@ -576,69 +512,26 @@ NSString* otherName=nil,*userName=nil;
 
         if((KONOTOR_SHOW_TIMESTAMP)&&(KONOTOR_SHOW_SENDERNAME))
         {
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=70000)
             
             if([timeField respondsToSelector:@selector(textContainerInset)])
                 [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
             else
-#endif
                 [timeField setContentOffset:CGPointMake(0, 10)];
         }
         else{
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=70000)
             
             if([timeField respondsToSelector:@selector(textContainerInset)])
                 [timeField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
             else
-#endif
                 [timeField setContentOffset:CGPointMake(0, 4)];
         }
         
-        if(KONOTOR_SHOW_DURATION){
-            [durationField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?(KONOTOR_USERNAMEFIELD_HEIGHT+KONOTOR_AUDIOMESSAGE_HEIGHT):KONOTOR_VERTICAL_PADDING), messageTextBoxWidth-KONOTOR_HORIZONTAL_PADDING, KONOTOR_TIMEFIELD_HEIGHT)];
-            if((KONOTOR_SHOW_TIMESTAMP)&&(KONOTOR_SHOW_SENDERNAME))
-            {
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=70000)
-                
-                if([durationField respondsToSelector:@selector(textContainerInset)])
-                    [durationField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-                else
-#endif
-                    [durationField setContentOffset:CGPointMake(0, 10)];
-            }
-            else{
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=70000)
-                
-                if([durationField respondsToSelector:@selector(textContainerInset)])
-                    [durationField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
-                else
-#endif
-                    [durationField setContentOffset:CGPointMake(0, 4)];
-                
-            }
-            
-            if(isSenderOther)
-                [durationField setHidden:YES];
-            else{
-                [durationField setHidden:NO];
-                [durationField setText:[NSString stringWithFormat:@"%@ secs",[currentMessage durationInSecs]]];
-            }
-        }
         
-        CGRect txtMsgFrame=messageText.frame;
-        txtMsgFrame.size.height=KONOTOR_AUDIOMESSAGE_HEIGHT;
-        txtMsgFrame.origin.x=messageTextBoxX;
-        txtMsgFrame.origin.y=messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:(KONOTOR_SHOW_TIMESTAMP?(KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING):KONOTOR_VERTICAL_PADDING));
-        txtMsgFrame.size.width=messageTextBoxWidth;
-        messageText.frame=txtMsgFrame;
+        float msgHeight=KONOTOR_AUDIOMESSAGE_HEIGHT;
+        float textViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:(KONOTOR_SHOW_TIMESTAMP?(KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING):KONOTOR_VERTICAL_PADDING));
+        float contentViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
         
-        txtMsgFrame.size.height=KONOTOR_AUDIOMESSAGE_HEIGHT+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
-        txtMsgFrame.size.height+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
-        txtMsgFrame.origin.y=messageContentViewY;
-        txtMsgFrame.origin.x=messageContentViewX;
-        txtMsgFrame.size.width=messageContentViewWidth;
-        if(KONOTOR_USESCALLOUTIMAGE)
-            messageBackground.frame=txtMsgFrame;
+        [self adjustHeightForMessageBubble:messageBackground textView:messageText actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:KONOTOR_SHOW_SENDERNAME sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
         [playButton.mediaProgressBar setHidden:NO];
         [playButton setHidden:NO];
@@ -672,12 +565,10 @@ NSString* otherName=nil,*userName=nil;
         }
 
         [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         
         if([timeField respondsToSelector:@selector(textContainerInset)])
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
         else
-#endif
             [timeField setContentOffset:CGPointMake(0, 4)];
         float txtheight=0.0;
         
@@ -687,12 +578,7 @@ NSString* otherName=nil,*userName=nil;
             NSString *htmlString = currentMessage.picCaption;
             NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:messageText.font,NSFontAttributeName,nil];
             NSMutableAttributedString* attributedString=nil;
-            if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-                attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-            }
-            else{
-                attributedString=[[NSMutableAttributedString alloc] initWithString:htmlString];
-            }
+            attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
             [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
             if(isSenderOther){
                 [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_OTHERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
@@ -715,21 +601,11 @@ NSString* otherName=nil,*userName=nil;
         }
         
         
-        CGRect txtMsgFrame=messageText.frame;
-        txtMsgFrame.size.height=16+height+txtheight;
-        txtMsgFrame.origin.x=messageTextBoxX;
-        txtMsgFrame.origin.y=messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
-        txtMsgFrame.size.width=messageTextBoxWidth;
-        messageText.frame=txtMsgFrame;
+        float msgHeight=16+height+txtheight;
+        float textViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
+        float contentViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
         
-        txtMsgFrame.size.height=16+height+txtheight+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
-        txtMsgFrame.size.height+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
-
-        txtMsgFrame.origin.y=messageContentViewY;
-        txtMsgFrame.origin.x=messageContentViewX;
-        txtMsgFrame.size.width=messageContentViewWidth;
-        if(KONOTOR_USESCALLOUTIMAGE)
-            messageBackground.frame=txtMsgFrame;
+        [self adjustHeightForMessageBubble:messageBackground textView:messageText actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:KONOTOR_SHOW_SENDERNAME sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
         [playButton.mediaProgressBar setHidden:YES];
         [playButton setHidden:YES];
@@ -863,25 +739,16 @@ NSString* otherName=nil,*userName=nil;
         [playButton setHidden:YES];
         
         [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         
         if([timeField respondsToSelector:@selector(textContainerInset)])
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
         else
-#endif
             [timeField setContentOffset:CGPointMake(0, 4)];
-        
-        [durationField setHidden:YES];
         
         NSString *htmlString = currentMessage.text;
         NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:messageText.font,NSFontAttributeName,nil];
         NSMutableAttributedString* attributedString=nil;
-        if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-            attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-        }
-        else{
-            attributedString=[[NSMutableAttributedString alloc] initWithString:htmlString];
-        }
+        attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
         [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
         
         if([messageText respondsToSelector:@selector(setAttributedText:)])
@@ -889,24 +756,14 @@ NSString* otherName=nil,*userName=nil;
         else
             [messageText setText:[attributedString string]];
         
-        CGRect txtMsgFrame=messageText.frame;
-        
-        txtMsgFrame.origin.x=messageTextBoxX;
-        txtMsgFrame.origin.y=messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
-        txtMsgFrame.size.width=messageTextBoxWidth;
         CGSize sizer=[messageText sizeThatFits:CGSizeMake(messageTextBoxWidth, 1000)];
-        txtMsgFrame.size.height=sizer.height;
         
-        messageText.frame=txtMsgFrame;
+        float msgHeight=sizer.height;
+        float textViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
+        float contentViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)+(isSenderOther?((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)):((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)));
         
-        txtMsgFrame.size.height=sizer.height+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)+(isSenderOther?((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)):((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)));
-        txtMsgFrame.size.height+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
-        txtMsgFrame.origin.y=messageText.frame.origin.y-KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING;
-        txtMsgFrame.origin.y=messageContentViewY;
-        txtMsgFrame.origin.x=messageContentViewX;
-        txtMsgFrame.size.width=messageContentViewWidth;
-        if(KONOTOR_USESCALLOUTIMAGE)
-            messageBackground.frame=txtMsgFrame;
+        [self adjustHeightForMessageBubble:messageBackground textView:messageText actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:KONOTOR_SHOW_SENDERNAME sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
+  
         [picView setHidden:YES];
         [self setupActionButtonWithUrlString:actionUrl label:actionLabel actionButton:actionButton frame:messageText.frame];
 
@@ -919,38 +776,24 @@ NSString* otherName=nil,*userName=nil;
         [playButton setHidden:YES];
         [picView setHidden:YES];
         [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         
         if([timeField respondsToSelector:@selector(textContainerInset)])
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
         else
-#endif
             [timeField setContentOffset:CGPointMake(0, 4)];
-        
-        [durationField setHidden:YES];
-        
+                
         if(([currentMessage text]!=nil)&&(![[currentMessage text] isEqualToString:@""]))
             [messageText setText:currentMessage.text];
         else
             [messageText setText:@"Message cannot be displayed. Please upgrade your app to view new messages."];
-        
-        CGRect txtMsgFrame=messageText.frame;
-        
-        txtMsgFrame.origin.x=messageTextBoxX;
-        txtMsgFrame.origin.y=messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
-        txtMsgFrame.size.width=messageTextBoxWidth;
+                
         CGSize sizer=[messageText sizeThatFits:CGSizeMake(messageTextBoxWidth, 1000)];
-        txtMsgFrame.size.height=sizer.height;
         
-        messageText.frame=txtMsgFrame;
+        float msgHeight=sizer.height;
+        float textViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
+        float contentViewY=(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)+(isSenderOther?((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)):((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)));
         
-        txtMsgFrame.size.height=sizer.height+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)+(isSenderOther?((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_OTHER?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)):((KONOTOR_MESSAGE_BACKGROUND_TOP_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)));
-        txtMsgFrame.origin.y=messageText.frame.origin.y-KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING;
-        txtMsgFrame.origin.y=messageContentViewY;
-        txtMsgFrame.origin.x=messageContentViewX;
-        txtMsgFrame.size.width=messageContentViewWidth;
-        if(KONOTOR_USESCALLOUTIMAGE)
-            messageBackground.frame=txtMsgFrame;
+        [self adjustHeightForMessageBubble:messageBackground textView:messageText actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:KONOTOR_SHOW_SENDERNAME sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
     }
     
@@ -989,15 +832,6 @@ NSString* otherName=nil,*userName=nil;
     fullImageView.sourceViewController=self;
     [fullImageView showImageView];
 
-    /* 
-     KonotorImageViewController* fullImageView=[[KonotorImageViewController alloc] initWithNibName:@"KonotorImageView" bundle:nil];
-
-    self.navigationItem.backBarButtonItem.title=@"Cancel";
-    self.navigationItem.title=@"";
-    
-    [[KonotorFeedbackScreen sharedInstance].conversationViewController.navigationController pushViewController:fullImageView animated:YES]; 
-     */
-    
     [[KonotorFeedbackScreen sharedInstance].conversationViewController.navigationController
      setNavigationBarHidden:YES animated:NO];
     
@@ -1208,22 +1042,11 @@ NSString* otherName=nil,*userName=nil;
             NSString *htmlString = currentMessage.picCaption;
             NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:KONOTOR_MESSAGETEXT_FONT,NSFontAttributeName,nil];
             NSMutableAttributedString* attributedString=nil;
-            if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-                attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-            }
-            else{
-                attributedString=[[NSMutableAttributedString alloc] initWithString:htmlString];
-            }
+            attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
 
             [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
             
-
-            if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-                txtheight=[attributedString boundingRectWithSize:CGSizeMake(width, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil].size.height;
-            }
-            else{
-                txtheight=[self getTextViewHeightForMaxWidth:width text:[attributedString string] withFont:KONOTOR_MESSAGETEXT_FONT];
-            }
+            txtheight=[attributedString boundingRectWithSize:CGSizeMake(width, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil].size.height;
             
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
@@ -1236,12 +1059,7 @@ NSString* otherName=nil,*userName=nil;
         NSString *htmlString = currentMessage.text;
         NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:txtView.font,NSFontAttributeName,nil];
         NSMutableAttributedString* attributedString=nil;
-        if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-            attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-        }
-        else{
-            attributedString=[[NSMutableAttributedString alloc] initWithString:htmlString];
-        }
+        attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
 
         [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
         
@@ -1308,17 +1126,6 @@ NSString* otherName=nil,*userName=nil;
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [Konotor playMessageWithMessageID:[(KonotorMessageData*)[messages objectAtIndex:indexPath.row] messageId]];
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-}
 
 - (void) refreshView
 {
@@ -1375,14 +1182,7 @@ NSString* otherName=nil,*userName=nil;
 
 
 
-- (void) didFinishDownloadingMessages
-{
-    /*  Commented section to test if downloading messages was successful and message counts have been updated
-     int count=[[Konotor getAllMessagesForDefaultConversation] count];
-     NSString* messagesDownloadedAlertText=[NSString stringWithFormat:@"%d messages in this conversation", count];
-     UIAlertView* konotorAlert=[[UIAlertView alloc] initWithTitle:@"Finished loading messages" message:messagesDownloadedAlertText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-     [konotorAlert show];
-     */
+- (void) didFinishDownloadingMessages{
     if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
         loading=NO;
         [self refreshView];
@@ -1515,58 +1315,6 @@ NSString* otherName=nil,*userName=nil;
     }
 }
 
-
-
-+ (NSString*) stringRepresentationForDate:(NSDate*) date
-{
-    NSString* timeString;
-    
-#if KONOTOR_SMART_TIMESTAMP
-    NSArray* weekdays=[NSArray arrayWithObjects:@"Sunday",@"Monday",@"Tuesday",@"Wednesday",@"Thursday",@"Friday",@"Saturday",nil];
-    
-    NSDate* today=[[NSDate alloc] init];
-    
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
-    NSCalendar* calendar=[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents* comp=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date];
-    NSDateComponents* comp2=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:today];
-    
-    NSDate* date2=[calendar dateFromComponents:comp];
-    NSDate* today2=[calendar dateFromComponents:comp2];
-    
-    NSDateComponents* comp3=[calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date2 toDate:today2 options:0];
-    
-#else
-    NSCalendar* calendar=[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents* comp=[calendar components:(NSCalendarUnitWeekday|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:date];
-    NSDateComponents* comp2=[calendar components:(NSCalendarUnitWeekday|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:today];
-    
-    NSDate* date2=[calendar dateFromComponents:comp];
-    NSDate* today2=[calendar dateFromComponents:comp2];
-    
-    NSDateComponents* comp3=[calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:date2 toDate:today2 options:0];
-
-#endif
-    int days=(int)comp3.year*36+(int)comp3.month*30+(int)comp3.day;
-    if([comp isEqual:comp2]){
-        timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-    }
-    else{
-        if(days>7){
-#endif
-            timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
-#if KONOTOR_SMART_TIMESTAMP
-        }
-        else if(days==1)
-            timeString=[NSString stringWithFormat:@"Yesterday %@",[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
-        else if(days>1)
-            timeString=[NSString stringWithFormat:@"%@ %@",[weekdays objectAtIndex:(comp.weekday-1)],[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
-    }
-#endif
-    return timeString;
-    
-}
-
 -(void) openActionUrl:(id) sender
 {
     KonotorActionButton* button=(KonotorActionButton*)sender;
@@ -1600,6 +1348,40 @@ NSString* otherName=nil,*userName=nil;
 
 }
 
+-(void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)KONOTOR_SHOW_SENDERNAME sender:(BOOL)isSenderOther textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY
+{
+    
+    CGRect txtMsgFrame=messageText.frame;
+    
+    float messageTextBoxX=messageTextFrame.origin.x;
+    float messageTextBoxY=messageTextFrame.origin.y;
+    float messageTextBoxWidth=messageTextFrame.size.width;
+    
+    float messageContentViewX=messageContentFrame.origin.x;
+    float messageContentViewY=messageContentFrame.origin.y;
+    float messageContentViewWidth=messageContentFrame.size.width;
+    
+    txtMsgFrame.origin.x=messageTextBoxX;
+    txtMsgFrame.origin.y=messageTextBoxY+textViewY;
+
+    txtMsgFrame.size.width=messageTextBoxWidth;
+    
+    txtMsgFrame.size.height=msgHeight;
+    
+    messageText.frame=txtMsgFrame;
+    
+    txtMsgFrame.size.height=msgHeight+contentViewY;
+    txtMsgFrame.size.height=msgHeight+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+
+    txtMsgFrame.size.height+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
+    txtMsgFrame.origin.y=messageText.frame.origin.y-KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING;
+    txtMsgFrame.origin.y=messageContentViewY;
+    txtMsgFrame.origin.x=messageContentViewX;
+    txtMsgFrame.size.width=messageContentViewWidth;
+    messageBackground.frame=txtMsgFrame;
+    
+}
+
 - (void) setupActionButtonWithUrlString:(NSString*)actionUrl label:(NSString*)actionLabel actionButton:(KonotorActionButton*)actionButton frame:(CGRect)messageFrame
 {
     float messageFrameWidth=messageFrame.size.width;
@@ -1620,7 +1402,6 @@ NSString* otherName=nil,*userName=nil;
     float labelWidth=padding + 20+labelSize.width;
     float buttonWidth=MAX(MIN(labelWidth, maxButtonWidth), maxButtonWidth*percentWidth);
     
-   // float buttonXRightAlign=messageOriginX+messageFrameWidth-buttonWidth-horizontalPadding;
     float buttonXCenterAlign=messageOriginX-horizontalPadding/3.0+(messageFrameWidth-buttonWidth)/2;
     
     if(actionUrl!=nil){

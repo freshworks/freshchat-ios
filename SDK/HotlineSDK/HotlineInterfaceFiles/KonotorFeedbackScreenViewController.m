@@ -49,25 +49,11 @@ static KonotorUIParameters* konotorUIParameters=nil;
     //Modified for removing table view separators
     self.messageTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-    float topPaddingIOS7=0;
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
-    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-        topPaddingIOS7=20;
-    }
-#endif
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
-
-    if(KONOTOR_PUSH_ON_NAVIGATIONCONTROLLER){
-        float systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        if (systemVersion >= 7.0) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-        }
-    }
-#endif
+    float topPaddingIOS7=20;
     
-#if KONOTOR_VOICE_INPUT_SUPPORT==0
-    [[KonotorUIParameters sharedInstance] setVoiceInputEnabled:NO];
-#endif
+    if(KONOTOR_PUSH_ON_NAVIGATIONCONTROLLER){
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
     if([konotorUIParameters headerViewColor])
         [headerView setBackgroundColor:[konotorUIParameters headerViewColor]];
@@ -231,18 +217,9 @@ static KonotorUIParameters* konotorUIParameters=nil;
 - (void) viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        CGFloat topBarOffset = self.topLayoutGuide.length;
-        [headerContainerView setFrame:CGRectMake(headerContainerView.frame.origin.x, headerContainerView.frame.origin.y, headerContainerView.frame.size.width, topBarOffset)];
-        [messageTableView setFrame:CGRectMake(messageTableView.frame.origin.x, topBarOffset, messageTableView.frame.size.width, messageTableView.frame.size.height-topBarOffset+messageTableView.frame.origin.y)];
-    }
-    else{
-        [messageTableView setFrame:CGRectMake(messageTableView.frame.origin.x,
-            headerContainerView.frame.origin.y, messageTableView.frame.size.width,
-            messageTableView.frame.size.height+headerContainerView.frame.size.height)];
-        [headerContainerView setFrame:CGRectMake(headerContainerView.frame.origin.x, headerContainerView.frame.origin.y, headerContainerView.frame.size.width, 0)];
-
-    }
+    CGFloat topBarOffset = self.topLayoutGuide.length;
+    [headerContainerView setFrame:CGRectMake(headerContainerView.frame.origin.x, headerContainerView.frame.origin.y, headerContainerView.frame.size.width, topBarOffset)];
+    [messageTableView setFrame:CGRectMake(messageTableView.frame.origin.x, topBarOffset, messageTableView.frame.size.width, messageTableView.frame.size.height-topBarOffset+messageTableView.frame.origin.y)];
     [messagesView refreshView];
 }
 
@@ -314,20 +291,13 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 - (void) setupNavigationController{
     if([konotorUIParameters headerViewColor]){
-        if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-            UINavigationController* navController=[KonotorFeedbackScreen sharedInstance].konotorFeedbackScreenNavigationController;
-            [navController.navigationBar setBarTintColor:[konotorUIParameters headerViewColor]];
-        }
-        else{
-            [self.navigationController.navigationBar setTintColor:[konotorUIParameters headerViewColor]];
-        }
+        UINavigationController* navController=[KonotorFeedbackScreen sharedInstance].konotorFeedbackScreenNavigationController;
+        [navController.navigationBar setBarTintColor:[konotorUIParameters headerViewColor]];
     }
     
     if([konotorUIParameters titleTextColor]){
         [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[konotorUIParameters titleTextColor], NSForegroundColorAttributeName, nil]];
-        if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
-            [self.navigationController.navigationBar setTintColor:[konotorUIParameters titleTextColor]];
-        }
+        [self.navigationController.navigationBar setTintColor:[konotorUIParameters titleTextColor]];
     }
     
     if([konotorUIParameters titleText])
