@@ -153,7 +153,7 @@ static id <KonotorDelegate> _delegate;
                        
                        if(KONOTOR_APP_INIT_DONE)
                        {
-                           [KonotorMessage UploadAllUnuploadedMessages];
+                           [KonotorMessage uploadAllUnuploadedMessages];
 
                        }
                    });
@@ -170,7 +170,7 @@ static id <KonotorDelegate> _delegate;
         {
             [KonotorShareMessageEvent UploadAllUnuploadedEvents];
             [KonotorCustomProperty UploadAllUnuploadedProperties];
-            [KonotorMessage UploadAllUnuploadedMessages];
+            [KonotorMessage uploadAllUnuploadedMessages];
             [KonotorConversation DownloadAllMessages];
             [KonotorApp SendCachedTokenIfNotUpdated];
             [KonotorApp UpdateAppAndSDKVersions];
@@ -254,8 +254,8 @@ static id <KonotorDelegate> _delegate;
 
 +(void) uploadTextFeedback:(NSString *)textFeedback
 {
-    NSString *messageID = [KonotorMessage SaveTextMessageInCoreData:textFeedback];
-    KonotorMessage *message = [KonotorMessage RetriveMessageForMessageId: messageID];
+    NSString *messageID = [KonotorMessage saveTextMessageInCoreData:textFeedback];
+    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
     
     if(messageID)
     {
@@ -267,8 +267,8 @@ static id <KonotorDelegate> _delegate;
 
 +(void) uploadImage:(UIImage *) image
 {
-    NSString *messageID = [KonotorMessage SavePictureMessageInCoreData:image withCaption:nil];
-    KonotorMessage *message = [KonotorMessage RetriveMessageForMessageId: messageID];
+    NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:nil];
+    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
     
     if(messageID)
     {
@@ -279,8 +279,8 @@ static id <KonotorDelegate> _delegate;
 
 +(void) uploadImage:(UIImage *) image withCaption:(NSString *)caption
 {
-    NSString *messageID = [KonotorMessage SavePictureMessageInCoreData:image withCaption:caption];
-    KonotorMessage *message = [KonotorMessage RetriveMessageForMessageId: messageID];
+    NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption];
+    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
     
     if(messageID)
     {
@@ -291,10 +291,10 @@ static id <KonotorDelegate> _delegate;
 
 +(void)MarkMessageAsRead:(NSString *) messageID
 {
-    KonotorMessage *message = [KonotorMessage RetriveMessageForMessageId:messageID];
+    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
     if(message)
     {
-        [message MarkAsReadwithNotif:YES];
+        [message markAsReadwithNotif:YES];
     }
 }
 
@@ -302,12 +302,12 @@ static id <KonotorDelegate> _delegate;
 {
     if(marketingId)
     {
-        [KonotorMessage MarkMarketingMessageAsClicked:marketingId ];
+        [KonotorMessage markMarketingMessageAsClicked:marketingId ];
     }
 }
 +(void) MarkAllMessagesAsRead
 {
-    [KonotorMessage MarkAllMessagesAsRead];
+    [KonotorMessage markAllMessagesAsRead];
 
 }
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
@@ -335,7 +335,7 @@ static id <KonotorDelegate> _delegate;
 
 +(NSArray *) getAllMessagesForDefaultConversation
 {
-    return [KonotorMessage GetAllMessagesForDefaultConversation];
+    return [KonotorMessage getAllMessagesForDefaultConversation];
 }
 
 +(NSArray*) getAllConversations
@@ -345,14 +345,14 @@ static id <KonotorDelegate> _delegate;
 
 +(NSArray *) getAllMessagesForConversation:(NSString *) conversationID
 {
-    return [KonotorMessage GetAllMessagesForConversation:conversationID];
+    return [KonotorMessage getAllMessagesForConversation:conversationID];
 }
 
 +(void) setWelcomeMessage:(NSString *) text
 {
     if(![KonotorApp hasWelcomeMessageDisplayed])
     {
-        [KonotorMessage InsertLocalTextMessage:text Read:YES IsWelcomeMessage:YES];
+        [KonotorMessage insertLocalTextMessage:text Read:YES IsWelcomeMessage:YES];
         [KonotorApp setWelcomeMessageStatus:YES];
     }
     else{
@@ -364,7 +364,7 @@ static id <KonotorDelegate> _delegate;
 {
     if(![KonotorApp hasWelcomeMessageDisplayed])
     {
-        [KonotorMessage InsertLocalTextMessage:text Read:NO IsWelcomeMessage:YES];
+        [KonotorMessage insertLocalTextMessage:text Read:NO IsWelcomeMessage:YES];
         [KonotorApp setWelcomeMessageStatus:YES];
     }
     else{

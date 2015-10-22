@@ -54,7 +54,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     
     NSError *error;
-    KonotorMessage *messageObject = [KonotorMessage RetriveMessageForMessageId:messageID];
+    KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
     if(!messageObject)
         return NO;
     

@@ -264,7 +264,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                              {
                                  
                                  //message not found on disk its a new message  add it to the conversation.
-                                 KonotorMessage *messageToBeAdded = [KonotorMessage CreateNewMessage:JSONMessage];
+                                 KonotorMessage *messageToBeAdded = [KonotorMessage createNewMessage:JSONMessage];
                                  [conversationFromDisk incrementUnreadCount];
                                  [messageToBeAdded setUploadStatus:[NSNumber numberWithInt:2]];
 
@@ -290,7 +290,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                      
                      for( KonotorMessage *newMessage in [conversationFromJSON valueForKey:@"messages"])
                      {
-                         KonotorMessage *messageToBeAdded = [KonotorMessage CreateNewMessage:newMessage];
+                         KonotorMessage *messageToBeAdded = [KonotorMessage createNewMessage:newMessage];
                          [messageToBeAdded setUploadStatus:[NSNumber numberWithInt:2]];
                          [newConversation incrementUnreadCount];
 

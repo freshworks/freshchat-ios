@@ -302,7 +302,7 @@ KonotorAlertView *pAlert;
     NSString *messageID = nil;
     if(gkAudioRecorder)
     {
-         messageID = [KonotorMessage GenerateMessageID];
+         messageID = [KonotorMessage generateMessageID];
         gkAudioRecorder.messageID = messageID;
         
         [gkAudioRecorder stop];
@@ -349,7 +349,7 @@ KonotorAlertView *pAlert;
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID toConversationID:(NSString *) conversationID
 {
     KonotorConversation *conversation = nil;
-    KonotorMessage *message = [KonotorMessage RetriveMessageForMessageId:messageID];
+    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
     
     if(conversationID)
        conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];

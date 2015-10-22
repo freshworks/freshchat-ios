@@ -42,8 +42,7 @@
 
 NSMutableDictionary *gkMessageIdMessageMap;
 
-+(NSString *) GenerateMessageID
-{
++(NSString *)generateMessageID{
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
     NSString *intervalString = [NSString stringWithFormat:@"%.0f", today*1000];
     NSString *userid = [KonotorUser GetUserAlias];
@@ -51,29 +50,22 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return messageID;
 }
 
-+(void) InsertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage
-{
++(void)insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    
-    [message setMessageAlias:[KonotorMessage GenerateMessageID]];
+    [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:[NSNumber numberWithInt:1]];
     [message setMessageRead:read];
     [message setText:text];
     [message setUploadStatus:[NSNumber numberWithInt:2]];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
-    
     [datamanager save];
     
-    
     KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-    if(pUser)
-    {
+    if(pUser){
         KonotorConversation *pDefaultConvo = [pUser valueForKeyPath:@"defaultConversation"];
-        
-        [message AssociateMessageToConversation:pDefaultConvo];
+        [message associateMessageToConversation:pDefaultConvo];
         if(!read)
             [pDefaultConvo incrementUnreadCount];
     }
@@ -84,79 +76,54 @@ NSMutableDictionary *gkMessageIdMessageMap;
         [defaults setObject:[moURI absoluteString] forKey:@"uriForWelcomeMessage"];
         [defaults synchronize];
     }
-    
 }
 
-+ (void) updateWelcomeMessageText:(NSString*)text
-{
++(void)updateWelcomeMessageText:(NSString*)text{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *urlString = [defaults stringForKey:@"uriForWelcomeMessage"];
-    
     if(urlString){
         NSURL *mouri = [NSURL URLWithString:urlString];
         NSPersistentStoreCoordinator *coord = [[KonotorDataManager sharedInstance]persistentStoreCoordinator];
         NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-        
         KonotorMessage *message = (KonotorMessage*)[context objectWithID:[coord managedObjectIDForURIRepresentation:mouri]];
-        
         if(message){
-            
             if([[message text] isEqualToString:text])
                 return;
             message.text=text;
             [[KonotorDataManager sharedInstance] save];
-
         }
     }
 }
 
-
-
-+(NSString *) SaveTextMessageInCoreData : (NSString *)text
-{
++(NSString *)saveTextMessageInCoreData : (NSString *)text{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    
     [message setMessageUserId:[KonotorUser GetUserAlias]];
-    [message setMessageAlias:[KonotorMessage GenerateMessageID]];
+    [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:[NSNumber numberWithInt:1]];
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
-    
     [datamanager save];
-    
     return message.messageAlias;
-
 }
 
-
-+(NSString*) SavePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption
-{
++(NSString*)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    
     [message setMessageUserId:[KonotorUser GetUserAlias]];
-    [message setMessageAlias:[KonotorMessage GenerateMessageID]];
+    [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:[NSNumber numberWithInt:3]];
     [message setMessageRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     [message setPicCaption:caption];
-    
-    
     KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
-    
     NSData *imageData, *thumbnailData;
   
-    if(image)
-    {
+    if(image){
         imageData = UIImageJPEGRepresentation(image, 0.5);
-        
-        
         CGImageSourceRef src = CGImageSourceCreateWithData( (__bridge CFDataRef)(imageData), NULL);
         NSDictionary *osptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:300], kCGImageSourceThumbnailMaxPixelSize, nil];
 #if KONOTOR_IMG_COMPRESSION
@@ -181,7 +148,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
         
 #if KONOTOR_IMG_COMPRESSION
         imageData=UIImageJPEGRepresentation(imgCompressed, 0.5);
-        
         [message setPicHeight:[NSNumber numberWithInt:imgCompressed.size.height]];
         [message setPicWidth:[NSNumber numberWithInt:imgCompressed.size.width]];
 #else
@@ -191,270 +157,152 @@ NSMutableDictionary *gkMessageIdMessageMap;
 #endif
         [message setPicThumbHeight:[NSNumber numberWithInt:h]];
         [message setPicThumbWidth:[NSNumber numberWithInt:w]];
-
-
-
     }
-
-    
     [messageBinary setBinaryImage:imageData];
     [messageBinary setBinaryThumbnail:thumbnailData];
-    
     [messageBinary setValue:message forKey:@"belongsToMessage"];
     [message setValue:messageBinary forKey:@"hasMessageBinary"];
-    
-    
     [datamanager save];
-    
     return message.messageAlias;
-    
 }
 
-+(void) MarkAllMessagesAsRead
-{
++(void)markAllMessagesAsRead{
     dispatch_async(dispatch_get_main_queue(), ^{[KonotorMessage MarkAllMessagesAsReadA];});
 }
 
-+(void) MarkAllMessagesAsReadA
-{
- 
-    
++(void) MarkAllMessagesAsReadA{
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
     [request setEntity:entityDescription];
-    
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO"];
-    
-    [request setPredicate:predicate];
-    //NSLog(@"%@",[predicate description]);
+    request.predicate = predicate;
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
-    
-    if([array count]==0)
-    {
+    if([array count]==0){
         [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
-        return ;
-    }
-    
-    else
-    {
-        for(int i=0;i<[array count];i++)
-        {
+        return;
+    }else{
+        for(int i=0;i<[array count];i++){
             KonotorMessage *message = [array objectAtIndex:i];
-            if(message)
-            {
-                
-                if(![[message marketingId] isEqualToNumber:[NSNumber numberWithInt:0]])
-                {
+            if(message){
+                if(![[message marketingId] isEqualToNumber:[NSNumber numberWithInt:0]]){
                     [message MarkMarketingMessageAsRead];
+                }else{
+                     [message markAsReadwithNotif:NO];
                 }
-                
-                else
-                    [message MarkAsReadwithNotif:NO];
-
             }
         }
-        
         [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
-
     }
-    
-
 }
 
-+(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId
-{
++(void) markMarketingMessageAsClicked:(NSNumber *) marketingId{
     
-    if(![KonotorUser isUserCreatedOnServer])
-        return;
+    if(![KonotorUser isUserCreatedOnServer]) return;
     
     NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
     
-    
     NSString *app = [KonotorApp GetAppID];
     NSString *user = [KonotorUser GetUserAlias];
     NSString *token = [KonotorApp GetAppKey];
     
-    
-    if([marketingId intValue] ==0 || !marketingId)
-        return;
+    if([marketingId intValue] ==0 || !marketingId) return;
     
     //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-    
-    
     NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",app,@"/user/",user,@"/message/marketing/",[marketingId stringValue ],@"/status?clicked=1&t=",token];
-    
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject)
-     {
-         
-     }
-                                     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error)
-     {
-         
-     }];
+    [operation setCompletionBlockWithSuccess:nil failure:nil];
     [operation start];
-    
-    
 }
 
-+(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId
-{
++(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
-
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-
-    KonotorMessage* messageObject = [KonotorMessage RetriveMessageForMessageId:messageId];
-    
-    if(!messageObject)
-        return NO;
+    KonotorMessage* messageObject = [KonotorMessage retriveMessageForMessageId:messageId];
+    if(!messageObject) return NO;
     
     KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[messageObject valueForKeyPath:@"hasMessageBinary"];
-    
-    if(!pMessageBinary)
-
-    {
+    if(!pMessageBinary){
         KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
-        
         [pMessageBinary setBinaryImage:imageData];
-        
         [messageBinary setValue:messageObject forKey:@"belongsToMessage"];
         [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];
-        
         [datamanager save];
-        
         return YES;
-
-        
-
-    }
-    else
-    {
+    }else{
         [pMessageBinary setBinaryImage:imageData];
-        
         [datamanager save];
-        
         return YES;
-
-
     }
-    
     return NO;
-    
-
 }
 
 
-+(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId
-{
++(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
-    
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    
-    KonotorMessage* messageObject = [KonotorMessage RetriveMessageForMessageId:messageId];
-    
-    if(!messageObject)
+    KonotorMessage* messageObject = [KonotorMessage retriveMessageForMessageId:messageId];
+    if(!messageObject){
         return NO;
-    
+    }
     KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[messageObject valueForKeyPath:@"hasMessageBinary"];
-    
-    if(!pMessageBinary)
-        
-    {
+    if(!pMessageBinary){
         KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
-        
         [pMessageBinary setBinaryThumbnail:imageData];
-        
         [messageBinary setValue:messageObject forKey:@"belongsToMessage"];
         [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];
-        
         [datamanager save];
-        
         return YES;
-        
-        
-        
-    }
-    else
-    {
+    }else{
         [pMessageBinary setBinaryThumbnail:imageData];
-        
         [datamanager save];
-        
         return YES;
-        
-        
     }
-    
     return NO;
-    
-    
 }
 
--(void) MarkMarketingMessageAsRead
-{
+-(void) MarkMarketingMessageAsRead{
     
-    if(![KonotorUser isUserCreatedOnServer])
-        return;
+    if(![KonotorUser isUserCreatedOnServer]) return;
     
-    if([self messageRead])
-        return;
+    if([self messageRead])return;
     
     NSNumber *marketingId = [self marketingId];
     
-    if([marketingId intValue] ==0 || !marketingId)
-        return;
-    
+    if([marketingId intValue] ==0 || !marketingId) return;
     
     //mark as read, if the call fails we can mark it as unread.
     [self MarkAsRead];
 
-    
     NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    
-    
     
     NSString *app = [KonotorApp GetAppID];
     NSString *user = [KonotorUser GetUserAlias];
     NSString *token = [KonotorApp GetAppKey];
     
-    
     //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-
-    
     NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",app,@"/user/",user,@"/message/marketing/",[marketingId stringValue ],@"/status?seen=1&t=",token];
     
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject)
-     {
-         
-     }
-    failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error)
-     {
-         [self MarkAsUnread];
+    [operation setCompletionBlockWithSuccess:nil failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
+         [self markAsUnread];
      }];
     [operation start];
-    
-
 }
 
-+(void) PostUnreadCountNotifWithNumber:(NSNumber *)number
-{
++(void) PostUnreadCountNotifWithNumber:(NSNumber *)number{
     [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:number];
 }
 
-
-+(void) UploadAllUnuploadedMessages
-{
++(void)uploadAllUnuploadedMessages{
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
@@ -469,16 +317,12 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
     
-    if([array count]==0) return ;
-    
-       
-    else 
-    {
-        for(int i=0;i<[array count];i++)
-        {
+    if([array count]==0){
+        return;
+    }else{
+        for(int i=0;i<[array count];i++){
             KonotorMessage *message = [array objectAtIndex:i];
-            if(message)
-            {
+            if(message){
                 KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
                 [KonotorWebServices UploadMessage:message toConversation:convo];
             }
@@ -488,18 +332,13 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
 }
 
-+(KonotorMessage *) RetriveMessageForMessageId: (NSString *)messageId
-{
-    if(gkMessageIdMessageMap)
-    {
++(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId{
+    if(gkMessageIdMessageMap){
         KonotorMessage *message = [gkMessageIdMessageMap objectForKey:messageId];
-        if(message)
-            return message;
+        if(message) return message;
     }
     
-    
-    if(!gkMessageIdMessageMap)
-    {
+    if(!gkMessageIdMessageMap){
         gkMessageIdMessageMap = [[ NSMutableDictionary alloc]init];
     }
     
@@ -507,42 +346,31 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
     [request setEntity:entityDescription];
     
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageAlias == %@",messageId];
-    
     [request setPredicate:predicate];
     //NSLog(@"%@",[predicate description]);
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
+    if([array count]==0){
+        return nil;
+    }
     
-    if([array count]==0) return nil;
-    
-    if([array count] >1)
+    if([array count] >1){
         NSLog(@"%@", @"Multiple Messages stored with the same message Id");
-    
-    else if([array count]==1)
-    {
+    }else if([array count]==1){
         KonotorMessage *message = [array objectAtIndex:0];
-        if(message)
-        {
+        if(message){
             [gkMessageIdMessageMap setObject:message forKey:messageId];
             return message;
         }
     }
-    
-    
     return nil;
-    
-    
 }
 
-
--(void) AssociateMessageToConversation: (KonotorConversation *)conversation
-{
-    if(conversation)
-    {
+-(void)associateMessageToConversation: (KonotorConversation *)conversation{
+    if(conversation){
         NSMutableSet *mutableSetOfExistingConversationsOnDisk = [conversation  mutableSetValueForKey:@"hasMessages"];
         [mutableSetOfExistingConversationsOnDisk addObject:self];
         [self setValue:conversation forKey:@"belongsToConversation"];
@@ -550,13 +378,11 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
 }
 
--(KonotorConversation *) parentConversation
-{
+-(KonotorConversation *) parentConversation{
     return [self valueForKeyPath:@"belongsToConversation"];
 }
 
--(NSString *) GetJSON
-{
+-(NSString *)getJSON{
     NSMutableDictionary *messageDict = [[NSMutableDictionary alloc]init];
     [messageDict setObject:[self messageAlias] forKey:@"alias"];
     [messageDict setObject:[self messageType] forKey:@"messageType"];
@@ -573,36 +399,22 @@ NSMutableDictionary *gkMessageIdMessageMap;
         
         if([self picCaption])
             [messageDict setObject:[self picCaption] forKey:@"picCaption"];
-
-
     }
-
-   
     NSError *error;
     NSData *pJsonString = [NSJSONSerialization dataWithJSONObject:messageDict options:0 error:&error];
     return [[NSString alloc ]initWithData:pJsonString encoding:NSUTF8StringEncoding];
-    
-
-
-    
 }
 
--(void) MarkAsReadwithNotif:(BOOL) notif
-{
+-(void) markAsReadwithNotif:(BOOL) notif{
     BOOL wasRead = [self messageRead];
  
-    if(![[self marketingId] isEqualToNumber:[NSNumber numberWithInt:0]])
-    {
+    if(![[self marketingId] isEqualToNumber:[NSNumber numberWithInt:0]]){
         [self MarkMarketingMessageAsRead];
-    }
-    
-    else
-    {
+    }else{
         [self setMessageRead:YES];
     }
     KonotorConversation *parentConvo = [self parentConversation];
-    if(parentConvo)
-    {
+    if(parentConvo){
         if(!wasRead)
             [parentConvo decrementUnreadCount];
         
@@ -612,40 +424,30 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 //introducing this function to solve for the recursive calling of markmarketingasread
--(void) MarkAsRead
-{
+-(void) MarkAsRead{
     BOOL wasRead = [self messageRead];
 
     [self setMessageRead:YES];
     KonotorConversation *parentConvo = [self parentConversation];
-    if(parentConvo)
-    {
+    if(parentConvo){
         if(!wasRead)
             [parentConvo decrementUnreadCount];
     }
-    
 }
 
-
--(void) MarkAsUnread
-{
+-(void)markAsUnread{
     BOOL wasRead = [self messageRead];
-
-    if(!wasRead)
-        return
-        
+    if(!wasRead) return
     [self setMessageRead:NO];
     KonotorConversation *parentConvo = [self parentConversation];
-    if(parentConvo)
-    {
+    if(parentConvo){
         [parentConvo incrementUnreadCount];
     }
-
 }
 
-+(KonotorMessage *) CreateNewMessage: (KonotorMessage *)message
-{
-    KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
++(KonotorMessage *)createNewMessage: (KonotorMessage *)message{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
     newMessage.messageUserId = [message valueForKey:@"messageUserAlias"];
@@ -658,11 +460,8 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [newMessage setMarketingId:[message valueForKey:@"marketingId"]];
     [newMessage setActionLabel:[message valueForKey:@"messageActionLabel"]];
     [newMessage setActionURL:[message valueForKey:@"messageActionUrl"]];
-                                
     
-    if(([newMessage.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePicture]])||([newMessage.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePictureV2]]))
-    {
-        
+    if(([newMessage.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePicture]])||([newMessage.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePictureV2]])){
         [newMessage setPicHeight:[message valueForKey:@"picHeight"]];
         [newMessage setPicWidth:[message valueForKey:@"picWidth"]];
         [newMessage setPicThumbHeight:[message valueForKey:@"picThumbHeight"]];
@@ -670,58 +469,38 @@ NSMutableDictionary *gkMessageIdMessageMap;
         [newMessage setPicUrl:[message valueForKey:@"picUrl"]];
         [newMessage setPicThumbUrl:[message valueForKey:@"picThumbUrl"]];
         [newMessage setPicCaption:[message valueForKey:@"picCaption"]];
-
-
     }
     [[KonotorDataManager sharedInstance]save];
     return newMessage;
 }
 
-+(NSArray *) GetAllMessagesForConversation: (NSString* )conversationID;
-{
-    
++(NSArray *)getAllMessagesForConversation: (NSString* )conversationID;{
     KonotorConversation *convo = [KonotorConversation RetriveConversationForConversationId:conversationID];
-    if(convo)
-    {
+    if(convo){
         NSSet *pMessagesSet =[NSSet setWithSet:[convo valueForKeyPath:@"hasMessages"]];
         NSMutableArray *pMessages = [NSMutableArray arrayWithArray:[pMessagesSet allObjects]];
-        
         NSMutableArray *pMessageArrayToReturn = [[NSMutableArray alloc]init];
-        
-        for(int i =0;i<[pMessages count];i++)
-        {
+        for(int i =0;i<[pMessages count];i++){
             KonotorMessageData *message = [[pMessages objectAtIndex:i] ReturnMessageDataFromManagedObject] ;
             [pMessageArrayToReturn addObject:message];
         }
-        
         return pMessageArrayToReturn;
     }
-    
-    
     return nil;
 }
 
-
-
-+(NSArray *) GetAllMessagesForDefaultConversation
-{
++(NSArray *)getAllMessagesForDefaultConversation{
     KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-    if(pUser)
-    {
+    if(pUser){
         KonotorConversation *pDefaultConvo = [pUser valueForKeyPath:@"defaultConversation"];
-        if(pDefaultConvo)
-        {
+        if(pDefaultConvo){
             NSSet *pMessagesSet =[NSSet setWithSet:[pDefaultConvo valueForKeyPath:@"hasMessages"]];
             NSMutableArray *pMessages = [NSMutableArray arrayWithArray:[pMessagesSet allObjects]];
-            
             NSMutableArray *pMessageArrayToReturn = [[NSMutableArray alloc]init];
-            
-            for(int i =0;i<[pMessages count];i++)
-            {
+            for(int i =0;i<[pMessages count];i++){
                 KonotorMessageData *message = [[pMessages objectAtIndex:i] ReturnMessageDataFromManagedObject] ;
                 [pMessageArrayToReturn addObject:message];
             }
-
             return pMessageArrayToReturn;
         }
 
@@ -729,11 +508,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return nil;
 }
 
-
-
-
--(KonotorMessageData *) ReturnMessageDataFromManagedObject
-{
+-(KonotorMessageData *) ReturnMessageDataFromManagedObject{
     KonotorMessageData *message = [[KonotorMessageData alloc]init];
     message.messageType = [self messageType];
     message.messageUserId = [self messageUserId];
@@ -748,61 +523,39 @@ NSMutableDictionary *gkMessageIdMessageMap;
     message.actionLabel = [self actionLabel];
     message.isMarketingMessage = [self isMarketingMessage];
     
-    if([message.messageType isEqualToNumber:[NSNumber numberWithInt:2]])
-    {
+    if([message.messageType isEqualToNumber:[NSNumber numberWithInt:2]]){
         KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[self valueForKeyPath:@"hasMessageBinary"];
-
         message.audioData = [pMessageBinary binaryAudio];
     }
-    if(([message.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePicture]])||([message.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePictureV2]]))
-    {
+    
+    if(([message.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePicture]])||([message.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePictureV2]])){
         message.picHeight = [self picHeight];
         message.picWidth = [self picWidth];
         message.picThumbHeight = [self picThumbHeight];
         message.picThumbWidth = [self picThumbWidth];
         
-        if([self picUrl])
-            message.picUrl = [self picUrl];
+        if([self picUrl])  message.picUrl = [self picUrl];
         
-        if([self picThumbUrl])
-            message.picThumbUrl = [self picThumbUrl];
+        if([self picThumbUrl]) message.picThumbUrl = [self picThumbUrl];
         
-        if([self picCaption])
-        {
-            message.picCaption = [self picCaption];
-        }
-        
+        if([self picCaption])message.picCaption = [self picCaption];
         
         KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[self valueForKeyPath:@"hasMessageBinary"];
-        if(pMessageBinary)
-        {
+        if(pMessageBinary){
             message.picData = [pMessageBinary binaryImage];
             message.picThumbData = [pMessageBinary binaryThumbnail];
         }
 
     }
-
     return message;
-
 }
 
 
-- (BOOL) isMarketingMessage
-{
+- (BOOL) isMarketingMessage{
     if(([[self marketingId] intValue]<=0)||(![self marketingId]))
         return NO;
     else
         return YES;
 }
-
-
-
-
-
-
-
-
-
-
 
 @end

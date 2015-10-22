@@ -454,12 +454,12 @@
     {
         KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
         KonotorConversation *defaultConvo = (KonotorConversation *)[pUser valueForKeyPath:@"defaultConversation"];
-        [pMessage AssociateMessageToConversation:defaultConvo];
+        [pMessage associateMessageToConversation:defaultConvo];
     }
     
     else
     {
-        [pMessage AssociateMessageToConversation:conversationToUploadTo];
+        [pMessage associateMessageToConversation:conversationToUploadTo];
 
     }
     if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING)
@@ -480,7 +480,7 @@
     NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock: ^(id <AFKonotorMultipartFormData>formData) {
         
         
-        [formData appendPartWithFormData:[[pMessage GetJSON] dataUsingEncoding:NSUTF8StringEncoding]  name:@"message"];
+        [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding]  name:@"message"];
         
         if([[pMessage messageType]intValue]== 2) //if audio message add the binary audio also.
         {

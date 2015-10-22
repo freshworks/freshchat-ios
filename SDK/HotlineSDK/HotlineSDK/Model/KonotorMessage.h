@@ -41,26 +41,24 @@
 @property (nonatomic, retain) NSString *picThumbUrl;
 @property (nonatomic, retain) NSString *actionLabel, *actionURL;
 
-
-
-+(NSArray *) GetAllMessagesForDefaultConversation;
-+(NSArray *) GetAllMessagesForConversation: (NSString* )conversationID;
-+(KonotorMessage *) RetriveMessageForMessageId: (NSString *)messageId;
-+(KonotorMessage *) CreateNewMessage: (KonotorMessage *)message;
--(NSString *) GetJSON;
-+(NSString *) GenerateMessageID;
--(void) AssociateMessageToConversation: (KonotorConversation *)conversation;
-+(NSString *) SaveTextMessageInCoreData : (NSString *)text;
-+(NSString *) SavePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *)caption;
-+(void) InsertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage;
-+ (void) updateWelcomeMessageText:(NSString*)text;
-+(void) UploadAllUnuploadedMessages;
--(void) MarkAsReadwithNotif:(BOOL) notif;
--(void) MarkAsUnread;
-+(void) MarkAllMessagesAsRead;
-+(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId;
-+(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
-+(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
--(BOOL) isMarketingMessage;
++(NSArray *)getAllMessagesForDefaultConversation;
++(NSArray *)getAllMessagesForConversation: (NSString* )conversationID;
++(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId;
++(KonotorMessage *)createNewMessage: (KonotorMessage *)message;
+-(NSString *)getJSON;
++(NSString *)generateMessageID;
+-(void)associateMessageToConversation: (KonotorConversation *)conversation;
++(NSString *)saveTextMessageInCoreData : (NSString *)text;
++(NSString *)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *)caption;
++(void)insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage;
++(void)updateWelcomeMessageText:(NSString*)text;
++(void)uploadAllUnuploadedMessages;
+-(void)markAsReadwithNotif:(BOOL) notif;
+-(void)markAsUnread;
++(void)markAllMessagesAsRead;
++(void)markMarketingMessageAsClicked:(NSNumber *) marketingId;
++(BOOL)setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
++(BOOL)setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
+-(BOOL)isMarketingMessage;
 
 @end

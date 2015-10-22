@@ -411,6 +411,7 @@
 		35591AE71B9EDBBC00BC0B60 /* HotlineInterfaceFiles */ = {
 			isa = PBXGroup;
 			children = (
+				35591AF81B9EDBBC00BC0B60 /* KonotorUI.h */,
 				35591AE81B9EDBBC00BC0B60 /* KonotorConversationViewController.h */,
 				35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */,
 				35591AEA1B9EDBBC00BC0B60 /* KonotorEventHandler.h */,
@@ -427,7 +428,6 @@
 				35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */,
 				35591AF61B9EDBBC00BC0B60 /* KonotorTextInputOverlay.h */,
 				35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */,
-				35591AF81B9EDBBC00BC0B60 /* KonotorUI.h */,
 				35591AF91B9EDBBC00BC0B60 /* KonotorUITextView.h */,
 				35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */,
 				35591AFB1B9EDBBC00BC0B60 /* KonotorUtility.h */,
