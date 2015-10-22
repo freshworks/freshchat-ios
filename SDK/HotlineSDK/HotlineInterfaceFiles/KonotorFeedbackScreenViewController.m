@@ -68,9 +68,6 @@ static KonotorUIParameters* konotorUIParameters=nil;
 #if KONOTOR_VOICE_INPUT_SUPPORT==0
     [[KonotorUIParameters sharedInstance] setVoiceInputEnabled:NO];
 #endif
-#if KONOTOR_IMAGE_INPUT_SUPPORT==0
-    [[KonotorUIParameters sharedInstance] setImageInputEnabled:NO];
-#endif
     
     if([konotorUIParameters headerViewColor])
         [headerView setBackgroundColor:[konotorUIParameters headerViewColor]];
