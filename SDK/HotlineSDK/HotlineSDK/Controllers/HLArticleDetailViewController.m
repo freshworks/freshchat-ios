@@ -99,15 +99,10 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-//    [self resetAudioPlayback];
+    [self resetAudioPlayback];
 }
 
-//-(void)theming{
-//    self.view.backgroundColor = [self.theme backgroundColorSDK];
-//}
-
 -(void)setNavigationItem{
-    [self.navigationItem setTitle:@"Solution Article"];
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
