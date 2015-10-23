@@ -23,7 +23,7 @@
     if (self) {
         self.baseURL = baseURL;
         self.stringEncoding = NSUTF8StringEncoding;
-        self.timeoutInterval = 30;
+        self.timeoutInterval = 60;
         [self setDefaultHTTPHeaders];
     }
     return self;
