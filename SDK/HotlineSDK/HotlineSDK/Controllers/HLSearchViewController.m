@@ -22,10 +22,11 @@
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 
-@interface  HLSearchViewController () <UISearchDisplayDelegate,UISearchBarDelegate>
+@interface  HLSearchViewController () <UISearchDisplayDelegate,UISearchBarDelegate,UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) UIView *trialView;
+@property (strong,nonatomic) UITapGestureRecognizer *recognizer;
 @end
 
 @implementation HLSearchViewController
@@ -37,8 +38,37 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [self checkNavigationBar];
+    [self setupTap];
     self.view.userInteractionEnabled=YES;
 }
+
+-(void)setupTap{
+    self.recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
+    [self.recognizer setNumberOfTapsRequired:1];
+    [self.view addGestureRecognizer:self.recognizer];
+}
+
+- (void)handleTapBehind:(UITapGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        [self.view resignFirstResponder];
+        if (self.searchResults==0) {
+            CGPoint location = [sender locationInView:nil]; //Passing nil gives us coordinates in the window
+            
+            UIWindow *mainWindow = [[[UIApplication sharedApplication]
+                                     delegate] window];
+            CGPoint pointInSubview = [self.view convertPoint:location
+                                                    fromView:mainWindow];
+            if (!CGRectContainsPoint(self.searchBar.bounds, pointInSubview)) {
+                // Remove the recognizer first so it's view.window is valid.
+                [self.view removeGestureRecognizer:sender];
+                [self dismissModalViewControllerAnimated:YES];
+            }
+        }
+    }
+}
+
 
 -(void)setupSubviews{
     self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
@@ -165,12 +195,27 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     NSInteger searchStringLength = searchText.length;
     if (searchStringLength!=0) {
+        [self.view removeGestureRecognizer:self.recognizer];
         self.tableView.alpha = 1.0;
+        self.tableView.tableFooterView.backgroundColor = [UIColor whiteColor];
         [self filterArticlesForSearchTerm:searchText];
     }else{
+        [self.view addGestureRecognizer:self.recognizer];
         self.searchResults = nil;
         [self.tableView reloadData];
     }
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+       shouldReceiveTouch:(UITouch *)touch {
+    return YES;
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.view endEditing:YES]; 
+}
+
+
 
 @end

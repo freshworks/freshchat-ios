@@ -189,7 +189,6 @@
     if (indexPath.row < self.categories.count){
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
-        cell.label.numberOfLines =0;
         cell.layer.borderWidth=0.0f;
         cell.layer.borderColor=[UIColor grayColor].CGColor;
         if (!category.icon){
