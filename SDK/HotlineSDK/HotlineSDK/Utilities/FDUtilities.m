@@ -142,7 +142,7 @@
         timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
     }
     else{
-        if(days>7){
+        if((days>7)||(days<0)){
             timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
         }
         else if(days==1)

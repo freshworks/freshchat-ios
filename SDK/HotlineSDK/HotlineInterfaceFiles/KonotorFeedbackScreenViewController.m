@@ -20,6 +20,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 @synthesize textInputBox,transparentView,messagesView;
 @synthesize headerContainerView,headerView,closeButton,footerView,messageTableView,voiceInput,input,picInput,poweredByLabel;
+@synthesize showingInTab,tabBarHeight;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -69,17 +70,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
         [headerView setTextColor:[konotorUIParameters titleTextColor]];
     }
     
-    if([konotorUIParameters closeButtonImage]==nil)
-        [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:[KonotorFeedbackScreen class] action:@selector(dismissScreen)]];
-    else{
-        UIButton *leftButton=[UIButton buttonWithType:UIButtonTypeCustom];
-        [leftButton setFrame:CGRectMake(0, 0, 32, 32)];
-        [leftButton setImage:[konotorUIParameters closeButtonImage] forState:UIControlStateNormal];
-        [leftButton addTarget:[KonotorFeedbackScreen class] action:@selector(dismissScreen) forControlEvents:UIControlEventTouchUpInside];
-        [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:leftButton]];
-    }
-    
- 
+    [self setUpDoneButton];
     
     if(!KONOTOR_PUSH_ON_NAVIGATIONCONTROLLER){
         CGRect headerRect=headerContainerView.frame;
@@ -89,7 +80,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
     
     
     if([konotorUIParameters closeButtonImage])
-       [closeButton setImage:[konotorUIParameters closeButtonImage] forState:UIControlStateNormal];
+        [closeButton setImage:[konotorUIParameters closeButtonImage] forState:UIControlStateNormal];
     [closeButton addTarget:[KonotorFeedbackScreen class] action:@selector(dismissScreen) forControlEvents:UIControlEventTouchUpInside];
     
     footerView.layer.shadowOffset=CGSizeMake(1,1);
@@ -98,7 +89,11 @@ static KonotorUIParameters* konotorUIParameters=nil;
     footerView.layer.shadowOpacity=1.0;
     
     UITapGestureRecognizer* tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTextInput)];
+    UILongPressGestureRecognizer* longPress=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showTextInput)];
     [input addGestureRecognizer:tap];
+    [input addGestureRecognizer:longPress];
+    if([input respondsToSelector:@selector(setSelectable:)])
+        [input setSelectable:NO];
     input.layer.borderColor=[[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0] CGColor];
     input.layer.borderWidth=1.0;
     input.layer.cornerRadius=5.0;
@@ -111,40 +106,40 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
     if([[KonotorUIParameters sharedInstance] voiceInputEnabled]){
     
-    [voiceInput setFrame:CGRectMake(footerView.frame.size.width-5-40, 2, 40, 40)];
-    voiceInput.layer.cornerRadius=20.0;
-    [voiceInput setImage:[UIImage imageNamed:@"konotor_mic.png"] forState:UIControlStateNormal];
-    
-    [voiceInput addTarget:self action:@selector(showVoiceInput) forControlEvents:UIControlEventTouchDown];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchToTextOnlyInput) name:microphoneAccessDenied object:nil];
+        [voiceInput setFrame:CGRectMake(footerView.frame.size.width-5-40, 2, 40, 40)];
+        voiceInput.layer.cornerRadius=20.0;
+        [voiceInput setImage:[UIImage imageNamed:@"konotor_mic.png"] forState:UIControlStateNormal];
+        
+        [voiceInput addTarget:self action:@selector(showVoiceInput) forControlEvents:UIControlEventTouchDown];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchToTextOnlyInput) name:microphoneAccessDenied object:nil];
     }
     else{
-    [voiceInput setTitle:@"Send" forState:UIControlStateNormal];
-    [voiceInput setImage:nil forState:UIControlStateNormal];
-    [voiceInput setAlpha:1.0];
-    [voiceInput setBackgroundColor:[UIColor clearColor]];
-    [voiceInput setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [voiceInput setFrame:CGRectMake(voiceInput.frame.origin.x-10, voiceInput.frame.origin.y, voiceInput.frame.size.width+10, voiceInput.frame.size.height)];
-    [input setFrame:CGRectMake(input.frame.origin.x, input.frame.origin.y, input.frame.size.width-12, input.frame.size.height)];
-    [voiceInput setUserInteractionEnabled:NO];
+        [voiceInput setTitle:@"Send" forState:UIControlStateNormal];
+        if([[KonotorUIParameters sharedInstance] customFontName]){
+            [voiceInput setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Send" attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:[[KonotorUIParameters sharedInstance] customFontName] size:14.0],NSFontAttributeName, nil]] forState:UIControlStateNormal];
+        }
+        [voiceInput setImage:nil forState:UIControlStateNormal];
+        [voiceInput setAlpha:1.0];
+        [voiceInput setBackgroundColor:[UIColor clearColor]];
+        [voiceInput setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [voiceInput setFrame:CGRectMake(voiceInput.frame.origin.x-10, voiceInput.frame.origin.y, voiceInput.frame.size.width+10, voiceInput.frame.size.height)];
+        [input setFrame:CGRectMake(input.frame.origin.x, input.frame.origin.y, input.frame.size.width-12, input.frame.size.height)];
+        [voiceInput setUserInteractionEnabled:NO];
     }
     
     if([[KonotorUIParameters sharedInstance] imageInputEnabled])
-    [picInput addTarget:self action:@selector(showImageInput) forControlEvents:UIControlEventTouchDown];
+        [picInput addTarget:self action:@selector(showImageInput) forControlEvents:UIControlEventTouchDown];
     else{
-    [picInput setHidden:YES];
-    [input setFrame:CGRectMake(input.frame.origin.x-40, input.frame.origin.y, input.frame.size.width+40, input.frame.size.height)];
+        [picInput setHidden:YES];
+        [input setFrame:CGRectMake(input.frame.origin.x-40, input.frame.origin.y, input.frame.size.width+40, input.frame.size.height)];
     }
-
-//#if (KONOTOR_DONTSHOWPOWEREDBY==1)
     if([Konotor isPoweredByHidden])
     {
         [messageTableView setFrame:CGRectMake(messageTableView.frame.origin.x, messageTableView.frame.origin.y, messageTableView.frame.size.width, messageTableView.frame.size.height+14)];
         [footerView setFrame:CGRectMake(footerView.frame.origin.x, footerView.frame.origin.y+14, footerView.frame.size.width, footerView.frame.size.height)];
         [poweredByLabel setHidden:YES];
     }
-//#endif
     
     if((!konotorUIParameters.showInputOptions)&&(!footerView.hidden)){
         [messageTableView setFrame:CGRectMake(messageTableView.frame.origin.x, messageTableView.frame.origin.y, messageTableView.frame.size.width, messageTableView.frame.size.height+footerView.frame.size.height)];
@@ -176,6 +171,72 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 }
 
+- (void) setUpDoneButton
+{
+    if([konotorUIParameters closeButtonImage]==nil){
+        if(konotorUIParameters.doneButtonText){
+            [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:konotorUIParameters.doneButtonText style:UIBarButtonItemStyleDone target:[KonotorFeedbackScreen class] action:@selector(dismissScreen)]];
+        }
+        else{
+            [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleDone target:[KonotorFeedbackScreen class] action:@selector(dismissScreen)]];
+        }
+        if(konotorUIParameters.doneButtonFont||konotorUIParameters.doneButtonColor){
+            NSMutableDictionary* fontAttributes=[[NSMutableDictionary alloc] init];
+            if(konotorUIParameters.doneButtonColor){
+                [fontAttributes setObject:konotorUIParameters.doneButtonColor forKey:NSForegroundColorAttributeName];
+            }
+            if(konotorUIParameters.doneButtonFont){
+                [fontAttributes setObject:konotorUIParameters.doneButtonFont forKey:NSFontAttributeName];
+            }
+            [self.navigationItem.leftBarButtonItem setTitleTextAttributes:fontAttributes forState:UIControlStateNormal];
+        }
+        
+    }
+    
+    else{
+        UIButton *leftButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [leftButton setFrame:CGRectMake(0, 0, 32, 32)];
+        [leftButton setImage:[konotorUIParameters closeButtonImage] forState:UIControlStateNormal];
+        [leftButton addTarget:[KonotorFeedbackScreen class] action:@selector(dismissScreen) forControlEvents:UIControlEventTouchUpInside];
+        [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:leftButton]];
+    }
+    
+    
+}
+
+
+
+- (void) hideDoneButton
+{
+    [self.navigationItem setLeftBarButtonItem:nil];
+}
+
+
+- (void) viewWillAppear:(BOOL)animated{
+    [KonotorFeedbackScreen sharedInstance].konotorFeedbackScreenNavigationController=self.navigationController;
+    [KonotorFeedbackScreen sharedInstance].conversationViewController=self;
+    UIViewController* currentTab=self.tabBarController.selectedViewController;
+    if(currentTab&&(!showingInTab)){
+        showingInTab=YES;
+        tabBarHeight=self.tabBarController.tabBar.frame.size.height;
+    }
+    else if(!currentTab){
+        showingInTab=NO;
+    }
+    
+    if(showingInTab){
+        [self hideDoneButton];
+    }
+    else{
+        [self setUpDoneButton];
+    }
+    [messagesView refreshView];
+}
+
+- (UIRectEdge)edgesForExtendedLayout
+{
+    return UIRectEdgeNone;
+}
 
 - (void) viewDidAppear:(BOOL)animated
 {
@@ -213,14 +274,10 @@ static KonotorUIParameters* konotorUIParameters=nil;
   
 }
 
-
-- (void) viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
+- (void) viewWillLayoutSubviews{
     CGFloat topBarOffset = self.topLayoutGuide.length;
     [headerContainerView setFrame:CGRectMake(headerContainerView.frame.origin.x, headerContainerView.frame.origin.y, headerContainerView.frame.size.width, topBarOffset)];
     [messageTableView setFrame:CGRectMake(messageTableView.frame.origin.x, topBarOffset, messageTableView.frame.size.width, messageTableView.frame.size.height-topBarOffset+messageTableView.frame.origin.y)];
-    [messagesView refreshView];
 }
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -283,15 +340,11 @@ static KonotorUIParameters* konotorUIParameters=nil;
     [messagesView refreshView];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (void) setupNavigationController{
     if([konotorUIParameters headerViewColor]){
         UINavigationController* navController=[KonotorFeedbackScreen sharedInstance].konotorFeedbackScreenNavigationController;
+        [navController.navigationBar setBackgroundColor:[konotorUIParameters headerViewColor]];
         [navController.navigationBar setBarTintColor:[konotorUIParameters headerViewColor]];
     }
     
@@ -303,21 +356,25 @@ static KonotorUIParameters* konotorUIParameters=nil;
     if([konotorUIParameters titleText])
         [self setTitle:[konotorUIParameters titleText]];
     
+    if([konotorUIParameters titleTextFont])
+        self.navigationController.navigationBar.titleTextAttributes=[NSDictionary dictionaryWithObjectsAndKeys:[konotorUIParameters titleTextFont],NSFontAttributeName, nil];
+    
     if([konotorUIParameters doneButtonColor])
         [self.navigationItem.leftBarButtonItem setTintColor:[konotorUIParameters doneButtonColor]];
+   
 }
 
 @end
 
 @implementation KonotorUIParameters
 
-@synthesize disableTransparentOverlay,headerViewColor,backgroundViewColor,voiceInputEnabled,imageInputEnabled,closeButtonImage,toastStyle,autoShowTextInput,titleText,toastBGColor,toastTextColor,textInputButtonImage,titleTextColor,showInputOptions,noPhotoOption,titleTextFont,allowSendingEmptyMessage,dontShowLoadingAnimation,sendButtonColor,doneButtonColor,userChatBubble,userTextColor,otherChatBubble,otherTextColor,overlayTransitionStyle,inputHintText,userProfileImage,otherProfileImage,showOtherName,showUserName,otherName,userName,messageTextFont,inputTextFont,notificationCenterMode;
+@synthesize disableTransparentOverlay,headerViewColor,backgroundViewColor,voiceInputEnabled,imageInputEnabled,closeButtonImage,toastStyle,autoShowTextInput,titleText,toastBGColor,toastTextColor,textInputButtonImage,titleTextColor,showInputOptions,noPhotoOption,titleTextFont,allowSendingEmptyMessage,dontShowLoadingAnimation,sendButtonColor,doneButtonColor,userChatBubble,userTextColor,otherChatBubble,otherTextColor,overlayTransitionStyle,inputHintText,userProfileImage,otherProfileImage,showOtherName,showUserName,otherName,userName,messageTextFont,inputTextFont,notificationCenterMode,customFontName,doneButtonFont,doneButtonText,dismissesInputOnScroll,alwaysPollForMessages,pollingTimeNotOnChatWindow,pollingTimeOnChatWindow/*,cancelButtonText,cancelButtonFont,cancelButtonColor*/;
 
 + (KonotorUIParameters*) sharedInstance
 {
     if(konotorUIParameters==nil){
         konotorUIParameters=[[KonotorUIParameters alloc] init];
-        konotorUIParameters.voiceInputEnabled=YES;
+        konotorUIParameters.voiceInputEnabled=NO;
         konotorUIParameters.imageInputEnabled=YES;
         konotorUIParameters.toastStyle=KonotorToastStyleDefault;
         konotorUIParameters.toastBGColor=[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1.0];
@@ -325,6 +382,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.actionButtonLabelColor=[UIColor whiteColor];
         konotorUIParameters.actionButtonColor=[UIColor colorWithRed:0 green:0.5 blue:0 alpha:1];
         konotorUIParameters.backgroundViewColor=nil;
+        konotorUIParameters.headerViewColor=[UIColor colorWithRed:0.97 green:0.97 blue:0.97 alpha:1.0];
 
         konotorUIParameters.titleTextColor=nil;
         konotorUIParameters.showInputOptions=YES;
@@ -347,7 +405,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.userProfileImage=nil;
         konotorUIParameters.otherProfileImage=nil;
         
-        konotorUIParameters.overlayTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        konotorUIParameters.overlayTransitionStyle=UIModalTransitionStyleCoverVertical;
         konotorUIParameters.inputHintText=nil;
         
         konotorUIParameters.showUserName=NO;
@@ -357,8 +415,17 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.userName=nil;
         
         konotorUIParameters.notificationCenterMode=NO;
-
-
+        
+        konotorUIParameters.customFontName=nil;
+        konotorUIParameters.doneButtonFont=nil;
+        
+        konotorUIParameters.doneButtonText=@"Done";
+        konotorUIParameters.dismissesInputOnScroll=NO;
+        
+        konotorUIParameters.pollingTimeOnChatWindow=10;
+        konotorUIParameters.pollingTimeNotOnChatWindow=-1;
+        konotorUIParameters.alwaysPollForMessages=NO;
+        
     }
     return konotorUIParameters;
 }

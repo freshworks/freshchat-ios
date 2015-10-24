@@ -12,7 +12,7 @@
 
 #define KONOTOR_TEXTINPUT_TEXTVIEW_TAG 201
 #define KONOTOR_TEXTINPUT_SENDBUTTON_TAG 202
-
+#define KONOTOR_TEXTINPUT_CANCELBUTTON_TAG 203
 
 @interface KonotorTextInputOverlay : NSObject <UITextViewDelegate>
 

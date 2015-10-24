@@ -36,6 +36,8 @@
 @property (weak, nonatomic) IBOutlet UITextView *input;
 @property (weak, nonatomic) IBOutlet UIButton *picInput;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
+@property (nonatomic) BOOL showingInTab;
+@property (nonatomic) float tabBarHeight;
 
 - (void) setupNavigationController;
 - (void) refreshView;
@@ -71,6 +73,10 @@ enum KonotorToastStyle{
 @property (strong, nonatomic) UIFont* titleTextFont;
 @property (strong, nonatomic) UIFont* messageTextFont;
 @property (strong, nonatomic) UIFont* inputTextFont;
+@property (strong, nonatomic) NSString* customFontName;
+@property (strong, nonatomic) UIFont* doneButtonFont;
+@property (strong, nonatomic) NSString* doneButtonText;
+@property (nonatomic) BOOL dismissesInputOnScroll;
 @property (nonatomic) BOOL showInputOptions;
 @property (nonatomic) BOOL messageSharingEnabled;
 @property (nonatomic) BOOL noPhotoOption;
@@ -94,6 +100,10 @@ enum KonotorToastStyle{
 
 @property (nonatomic) BOOL notificationCenterMode;
 
+@property (nonatomic) int pollingTimeOnChatWindow;
+@property (nonatomic) int pollingTimeNotOnChatWindow;
+@property (nonatomic) BOOL alwaysPollForMessages;
+
 
 @property (nonatomic) enum UIModalTransitionStyle overlayTransitionStyle;
 
@@ -101,7 +111,5 @@ enum KonotorToastStyle{
 
 + (KonotorUIParameters*) sharedInstance;
 - (void) setToastStyle:(enum KonotorToastStyle) toastStyle backgroundColor:(UIColor*) bgColor textColor: (UIColor*) textColor;
-//- (void) disableMessageSharing;
-//- (void) enableMessageSharing;
 
 @end

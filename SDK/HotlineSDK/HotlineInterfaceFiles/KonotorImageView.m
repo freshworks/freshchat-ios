@@ -23,14 +23,13 @@
         if(YES)
 #endif
         {
-        screenHeight=[UIScreen mainScreen].bounds.size.height;
-        screenWidth=[UIScreen mainScreen].bounds.size.width;
-    }
-    else{
-        screenHeight=[UIScreen mainScreen].bounds.size.width;
-        screenWidth=[UIScreen mainScreen].bounds.size.height;
-        
-    }
+            screenHeight=[UIScreen mainScreen].bounds.size.height;
+            screenWidth=[UIScreen mainScreen].bounds.size.width;
+        }
+        else{
+            screenHeight=[UIScreen mainScreen].bounds.size.width;
+            screenWidth=[UIScreen mainScreen].bounds.size.height;
+        }
     [self setFrame:CGRectMake(0,0, screenWidth, screenHeight)];
     [backgroundView setFrame:CGRectMake(0,0, screenWidth, screenHeight)];
     
@@ -64,17 +63,19 @@
     float screenHeight, screenWidth, height, width;
     height=imgHeight;width=imgWidth;
     
+    float adjustHeight=[KonotorFeedbackScreen sharedInstance].conversationViewController.showingInTab?([KonotorFeedbackScreen sharedInstance].conversationViewController.tabBarHeight):0;
+    
     [KonotorTextInputOverlay dismissInput];
     
     [[sourceViewController navigationController] setNavigationBarHidden:YES animated:NO];
 
     
     if(![KonotorUtility KonotorIsInterfaceLandscape:(sourceViewController)]){
-        screenHeight=[UIScreen mainScreen].bounds.size.height;
+        screenHeight=[UIScreen mainScreen].bounds.size.height-adjustHeight;
         screenWidth=[UIScreen mainScreen].bounds.size.width;
     }
     else{
-        screenHeight=[UIScreen mainScreen].bounds.size.width;
+        screenHeight=[UIScreen mainScreen].bounds.size.width-adjustHeight;
         screenWidth=[UIScreen mainScreen].bounds.size.height;
         
     }
