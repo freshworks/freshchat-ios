@@ -1374,26 +1374,7 @@ NSString* otherName=nil,*userName=nil;
 
 }
 
-- (void) setAttributedStringForMessageView:(UITextView*)messageText message:(KonotorMessageData*)currentMessage sender:(BOOL)isSenderOther
-{
-    NSString *htmlString = currentMessage.picCaption;
-    NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:KONOTOR_MESSAGETEXT_FONT,NSFontAttributeName,nil];
-    NSMutableAttributedString* attributedString=nil;
-    attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-    [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
-    if(isSenderOther){
-        [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_OTHERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
-    }
-    else{
-        [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_USERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
-    }
-    
-    if([messageText respondsToSelector:@selector(setAttributedText:)])
-        messageText.attributedText = attributedString;
-    else
-        [messageText setText:[attributedString string]];
 
-}
 
 - (void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)KONOTOR_SHOW_SENDERNAME sender:(BOOL)isSenderOther textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY
 {
