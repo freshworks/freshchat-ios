@@ -44,9 +44,10 @@
     }
     
     if (params) {
+        [string appendString:@"?"];
         for (int i=0; i<params.count; i++) {
             NSString *param = params[i];
-            [string appendString:[NSString stringWithFormat:@"?%@",param]];
+            [string appendString:[NSString stringWithFormat:@"%@&",param]];
         }
     }
     
