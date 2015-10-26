@@ -32,7 +32,7 @@
         self.Button1 = [self createPromptButton:@"Button" withKey:key];
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.Button1];
-        
+        [self setBackgroundColor:[UIColor whiteColor]];
         [self addSpacersInView:self];
     }
     return self;
@@ -54,7 +54,7 @@
 -(UIImageView *)createImageView{
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
-    [imageView.image drawInRect:CGRectMake(0,0,100,100)];
+    [imageView.image drawInRect:CGRectMake(0,0,75,75)];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     return imageView;
 }

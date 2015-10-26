@@ -12,6 +12,7 @@
 #import "FDSecureStore.h"
 #import "KonotorFeedbackScreen.h"
 #import "HLMacros.h"
+#import "HLTheme.h"
 //#import "FDConstants.h"
 #import "FDLocalNotification.h"
 
@@ -77,7 +78,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [self setNavigationItem];
     [self registerAppAudioCategory];
-    //[self theming];
+    [self theming];
     [self setSubviews];
     [self fixAudioPlayback];
     [self handleArticleVoteAfterSometime];
@@ -102,11 +103,17 @@
     [self resetAudioPlayback];
 }
 
+-(void)theming{
+    self.view.backgroundColor = [[HLTheme sharedInstance] backgroundColorSDK];
+}
+
 -(void)setNavigationItem{
+    [self.parentViewController.navigationItem setTitle:@"Solution Article"];
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
     self.parentViewController.navigationItem.leftBarButtonItem.title = self.categoryTitle;
+    [self.parentViewController.navigationController setNavigationBarHidden:NO];
 }
 
 -(void)setSubviews{
@@ -227,7 +234,7 @@
 }
 
 -(void)handleArticleVotePrompt{
-    if (self.webView.scrollView.contentOffset.y >= (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)-20) {
+    if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
         if (!isArticleVoted) {
             [self showArticleRatingPrompt];
@@ -257,7 +264,6 @@
 -(void)showContactUsPrompt{
     [UIView animateWithDuration:.5 animations:^{
         [self.contactUsPromptView setHidden:NO];
-        [self.articleVotePromptView setHidden:YES];
         [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
         [self.view layoutIfNeeded];
     }];
@@ -279,6 +285,7 @@
 }
 
 -(void)noButtonClicked:(id)sender{
+    [self hideArticleRatingPrompt];
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");

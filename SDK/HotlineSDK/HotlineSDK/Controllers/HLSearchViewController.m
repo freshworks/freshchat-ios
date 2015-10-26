@@ -45,14 +45,15 @@
 -(void)setupTap{
     self.recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
     [self.recognizer setNumberOfTapsRequired:1];
-    [self.view addGestureRecognizer:self.recognizer];
+    if(self.searchResults==0){
+            [self.view addGestureRecognizer:self.recognizer];
+    }
 }
 
 - (void)handleTapBehind:(UITapGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
-        [self.view resignFirstResponder];
         if (self.searchResults==0) {
             CGPoint location = [sender locationInView:nil]; //Passing nil gives us coordinates in the window
             
@@ -189,18 +190,18 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    [self dismissModalViewControllerAnimated:NO];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     NSInteger searchStringLength = searchText.length;
     if (searchStringLength!=0) {
-        [self.view removeGestureRecognizer:self.recognizer];
-        self.tableView.alpha = 1.0;
-        self.tableView.tableFooterView.backgroundColor = [UIColor whiteColor];
+        self.tableView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         [self filterArticlesForSearchTerm:searchText];
+        [self.view removeGestureRecognizer:self.recognizer];
     }else{
         [self.view addGestureRecognizer:self.recognizer];
+        self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
         self.searchResults = nil;
         [self.tableView reloadData];
     }
