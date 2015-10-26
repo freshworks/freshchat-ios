@@ -25,8 +25,10 @@
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
     request.HTTPMethod = HTTP_METHOD_GET;
-    NSString *URLParams = [NSString stringWithFormat:@"%@&%@",HOTLINE_REQUEST_PARAMS,@"deep=true"];
-    [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:URLParams];
+    NSString *appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES,appID];
+    [request setRelativePath:path andURLParams:@[token, @"deep=true"]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         [self importSolutions:responseObject];
         [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
@@ -64,11 +66,12 @@
 
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    NSString *URLString = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,categoryID,articleID];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    NSString *appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,appID,categoryID,articleID];
     request.HTTPMethod = HTTP_METHOD_PUT;
-    NSString *URLParams = [NSString stringWithFormat:@"%@&%@",HOTLINE_REQUEST_PARAMS,@"platform=ios"];
-    [request setRelativePath:URLString andURLParams:URLParams];
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSDictionary *voteInfo;
     if (vote) {
         voteInfo = @{ @"article": @{ @"upvote" : @"1", @"downvote" : @"-1" } };
@@ -91,7 +94,10 @@
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
     request.HTTPMethod = HTTP_METHOD_GET;
-    [request setRelativePath:HOTLINE_API_CATEGORIES andURLParams:HOTLINE_REQUEST_PARAMS];
+    NSString *appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES,appID];
+    [request setRelativePath:path andURLParams:@[token]];
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         __block BOOL canAbortRequest = NO;
@@ -115,7 +121,9 @@
             
             NSDictionary *categoryInfo = categories[i];
             NSString *categoryID = categoryInfo[@"categoryId"];
-            [request setRelativePath:[NSString stringWithFormat:HOTLINE_API_ARTICLES,categoryID] andURLParams:HOTLINE_REQUEST_PARAMS];
+            NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLES,appID, categoryID];
+            NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+            [request setRelativePath:path andURLParams:@[token]];
             [apiClient request:request withHandler:^(id responseObject, NSError *error) {
                 if (!error) {
                     [solutions addObject:@{ @"category" : categoryInfo, @"articles" : responseObject[@"articles"]}];

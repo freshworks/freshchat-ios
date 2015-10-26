@@ -36,7 +36,7 @@
     [self setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 }
 
--(void)setRelativePath:(NSString *)path andURLParams:(NSString *)params{
+-(void)setRelativePath:(NSString *)path andURLParams:(NSArray *)params{
     NSMutableString *string = [NSMutableString new];
 
     if (path) {
@@ -44,7 +44,10 @@
     }
     
     if (params) {
-        [string appendString:[NSString stringWithFormat:@"?%@",params]];
+        for (int i=0; i<params.count; i++) {
+            NSString *param = params[i];
+            [string appendString:[NSString stringWithFormat:@"?%@",param]];
+        }
     }
     
     self.URL = [NSURL URLWithString:string relativeToURL:self.baseURL];
