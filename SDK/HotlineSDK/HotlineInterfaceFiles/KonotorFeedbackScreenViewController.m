@@ -36,9 +36,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
     return YES;
 }
 
-
-- (NSUInteger) supportedInterfaceOrientations
-{
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations{
     return UIInterfaceOrientationMaskAll;
 }
 
