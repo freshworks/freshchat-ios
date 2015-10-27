@@ -7,6 +7,8 @@
 //
 
 #import "FDMessageController.h"
+#import "FDMessageCell.h"
+#import "Konotor.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -23,8 +25,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     self.navigationItem.leftBarButtonItem = closeButton;
-    self.messages = @[@"Welcome to the conversations related to billing", @"how do i book using credit card",
-                      @"you can use this link goo.le/d35Gfac"];
+    self.messages = @[@"Hello!",@"Welcome to the", @"how do i book using credit card",
+                      @"you can use this link http://goo.le/d35Gfac"];
 }
 
 -(void)closeButton:(id)sender{
@@ -34,6 +36,7 @@
 -(void)setSubviews{
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
@@ -44,13 +47,19 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"FDMessageCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        [cell initCell];
     }
     
     if (indexPath.row < self.messages.count) {
-        cell.textLabel.text  = self.messages[indexPath.row];
+        //cell.textLabel.text  = self.messages[indexPath.row];
+        KonotorMessageData* message=[[KonotorMessageData alloc] init];
+        message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
+        message.text=self.messages[indexPath.row];
+        [cell drawMessageViewForMessage:message parentView:self.view];
+        
     }
     return cell;
 }
@@ -58,5 +67,14 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.messages.count;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    KonotorMessageData* message=[[KonotorMessageData alloc] init];
+    message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
+    message.text=self.messages[indexPath.row];
+    float height=[FDMessageCell getHeightForMessage:message parentView:self.view];
+    return height;
+}
+
 
 @end

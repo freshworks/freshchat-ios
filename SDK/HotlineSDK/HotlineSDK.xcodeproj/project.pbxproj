@@ -72,6 +72,8 @@
 		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; };
 		35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
+		916593D71BDF84EC0051D6E1 /* FDAudioMessageUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 916593D61BDF84EC0051D6E1 /* FDAudioMessageUnit.m */; settings = {ASSET_TAGS = (); }; };
+		916593DA1BDFACA20051D6E1 /* FDActionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 916593D91BDFACA20051D6E1 /* FDActionButton.m */; settings = {ASSET_TAGS = (); }; };
 		CE10645A1BC2779300922494 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE1064591BC2779300922494 /* Info.plist */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
 		CE10649E1BC5601B00922494 /* FDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064991BC5601B00922494 /* FDAlertView.m */; };
@@ -272,6 +274,10 @@
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		916593D51BDF84EC0051D6E1 /* FDAudioMessageUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAudioMessageUnit.h; sourceTree = "<group>"; };
+		916593D61BDF84EC0051D6E1 /* FDAudioMessageUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAudioMessageUnit.m; sourceTree = "<group>"; };
+		916593D81BDFACA20051D6E1 /* FDActionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDActionButton.h; sourceTree = "<group>"; };
+		916593D91BDFACA20051D6E1 /* FDActionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDActionButton.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE1064951BC55FDB00922494 /* FDVotingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDVotingManager.h; sourceTree = "<group>"; };
 		CE1064961BC55FDB00922494 /* FDVotingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDVotingManager.m; sourceTree = "<group>"; };
@@ -376,6 +382,10 @@
 				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
 				353AA00E1BDF7FC8008CDAB2 /* FDMessageCell.h */,
 				353AA00F1BDF7FC8008CDAB2 /* FDMessageCell.m */,
+				916593D51BDF84EC0051D6E1 /* FDAudioMessageUnit.h */,
+				916593D61BDF84EC0051D6E1 /* FDAudioMessageUnit.m */,
+				916593D81BDFACA20051D6E1 /* FDActionButton.h */,
+				916593D91BDFACA20051D6E1 /* FDActionButton.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -837,7 +847,9 @@
 				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
 				35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */,
 				35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */,
+				916593D71BDF84EC0051D6E1 /* FDAudioMessageUnit.m in Sources */,
 				35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */,
+				916593DA1BDFACA20051D6E1 /* FDActionButton.m in Sources */,
 				35591AFF1B9EDBBC00BC0B60 /* KonotorConversationViewController.m in Sources */,
 				CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */,
 				CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */,
