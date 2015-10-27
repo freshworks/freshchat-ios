@@ -43,8 +43,7 @@
 
 +(void)presentFeedback:(UIViewController *)controller{
     UINavigationController *navigationController = [[UINavigationController alloc]init];
-    FDMessageController *messageController = [FDMessageController new];
-    navigationController.viewControllers = @[messageController];
+    navigationController.viewControllers = @[containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 

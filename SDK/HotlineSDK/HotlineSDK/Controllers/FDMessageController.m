@@ -12,29 +12,38 @@
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
-@property(nonatomic, strong)UITableView *tableView;
-@property(nonatomic, strong)NSArray *messages;
+@property(nonatomic, strong) UITableView *tableView;
+@property(nonatomic, strong) NSArray *messages;
+@property(nonatomic, strong) NSString *conversation;
 
 @end
 
 @implementation FDMessageController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self setSubviews];
-    self.view.backgroundColor = [UIColor whiteColor];
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    self.navigationItem.leftBarButtonItem = closeButton;
-    self.messages = @[@"Hello!",@"Welcome to the", @"how do i book using credit card",
-                      @"you can use this link http://goo.le/d35Gfac"];
+-(instancetype)initWithConversation:(NSString *)conversation{
+    self = [super init];
+    if (self) {
+        self.conversation = conversation;
+    }
+    return self;
 }
 
--(void)closeButton:(id)sender{
-    [self dismissViewControllerAnimated:YES completion:nil];
+-(void)willMoveToParentViewController:(UIViewController *)parent{
+    parent.title = self.conversation;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self setSubviews];
+    [self updateMessages];
+}
+
+-(void)updateMessages{
+    self.messages = @[@"Welcome to the conversations related to billing",
+                      @"how do i book using card",
+                      @"you can use this link http://goo.le/d35Gfac"];
 }
 
 -(void)setSubviews{
     self.tableView = [[UITableView alloc]init];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
