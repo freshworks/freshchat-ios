@@ -13,7 +13,7 @@
 #import "HLCategoriesListController.h"
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
-#import "FDMessageController.h"
+#import "FDConversationController.h"
 
 @interface Hotline ()
 
@@ -42,9 +42,10 @@
 }
 
 +(void)presentFeedback:(UIViewController *)controller{
+    FDConversationController *conversationController = [FDConversationController new];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:conversationController];
     UINavigationController *navigationController = [[UINavigationController alloc]init];
-    FDMessageController *messageController = [FDMessageController new];
-    navigationController.viewControllers = @[messageController];
+    navigationController.viewControllers = @[containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 

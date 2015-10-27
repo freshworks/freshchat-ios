@@ -1,5 +1,5 @@
 //
-//  FDMessageController.h
+//  FDConversationController.h
 //  HotlineSDK
 //
 //  Created by Aravinth Chandran on 27/10/15.
@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HLListViewController.h"
 
-@interface FDMessageController : UIViewController
-
--(instancetype)initWithConversation:(NSString *)conversation;
+@interface FDConversationController : HLListViewController
 
 @end
