@@ -17,5 +17,6 @@
 -(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void) showFeedbackScreen;
 +(void) presentSolutions:(UIViewController *)controller;
++(void)presentFeedback:(UIViewController *)controller;
 
 @end

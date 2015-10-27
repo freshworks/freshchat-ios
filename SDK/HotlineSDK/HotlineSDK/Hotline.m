@@ -13,6 +13,7 @@
 #import "HLCategoriesListController.h"
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
+#import "FDMessageController.h"
 
 @interface Hotline ()
 
@@ -40,6 +41,12 @@
     return self;
 }
 
++(void)presentFeedback:(UIViewController *)controller{
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    FDMessageController *messageController = [FDMessageController new];
+    navigationController.viewControllers = @[messageController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
+}
 
 +(void)showFeedbackScreen{
     [KonotorFeedbackScreen showFeedbackScreen];

@@ -17,7 +17,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (IBAction)showFAQ:(id)sender {
@@ -25,8 +24,7 @@
 }
 
 - (IBAction)conversations:(id)sender {
-    [Hotline showFeedbackScreen];
-
+    [Hotline presentFeedback:self];
 }
 
 - (IBAction)settings:(id)sender {
