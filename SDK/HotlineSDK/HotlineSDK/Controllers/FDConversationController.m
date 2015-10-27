@@ -9,6 +9,7 @@
 #import "FDConversationController.h"
 #import "FDMessageController.h"
 #import "HLContainerController.h"
+#import "FDBadgeView.h"
 
 @interface FDConversationController ()
 
@@ -48,6 +49,13 @@
     if (indexPath.row < self.conversations.count) {
         cell.textLabel.text  = self.conversations[indexPath.row];
         cell.detailTextLabel.text = [NSString stringWithFormat:@"This deals with %@",self.conversations[indexPath.row]];
+        NSInteger unreadCount = arc4random() % 10;
+        if (unreadCount) {
+            FDBadgeView *badgeView = [[FDBadgeView alloc]initWithFrame:CGRectZero andBadgeNumber:unreadCount];
+            [badgeView badgeButtonBackgroundColor:[UIColor redColor]];
+            [badgeView badgeButtonTitleColor:[UIColor whiteColor]];
+            cell.accessoryView = badgeView.badgeButton;
+        }
     }
     return cell;
 }
@@ -63,6 +71,10 @@
         HLContainerController *container = [[HLContainerController alloc]initWithController:messageController];
         [self.navigationController pushViewController:container animated:YES];
     }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 50;
 }
 
 @end

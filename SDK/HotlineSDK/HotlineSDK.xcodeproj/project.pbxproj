@@ -72,6 +72,7 @@
 		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; };
 		35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */; };
 		35FBC4A21BDF9192001A9163 /* FDConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FBC4A11BDF9192001A9163 /* FDConversationController.m */; settings = {ASSET_TAGS = (); }; };
+		35FBC4A61BDFA38A001A9163 /* FDBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FBC4A51BDFA38A001A9163 /* FDBadgeView.m */; settings = {ASSET_TAGS = (); }; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
 		CE10645A1BC2779300922494 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE1064591BC2779300922494 /* Info.plist */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
@@ -270,6 +271,8 @@
 		35ED5ED21BB3E92800E0052D /* HLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLConstants.h; sourceTree = "<group>"; };
 		35FBC4A01BDF9192001A9163 /* FDConversationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDConversationController.h; sourceTree = "<group>"; };
 		35FBC4A11BDF9192001A9163 /* FDConversationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDConversationController.m; sourceTree = "<group>"; };
+		35FBC4A41BDFA38A001A9163 /* FDBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBadgeView.h; sourceTree = "<group>"; };
+		35FBC4A51BDFA38A001A9163 /* FDBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBadgeView.m; sourceTree = "<group>"; };
 		35FE04421BC4D1DD00EAA8E0 /* FDReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachabilityManager.h; sourceTree = "<group>"; };
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -460,6 +463,7 @@
 				35591B251B9EDCB700BC0B60 /* Hotline.m */,
 				35591B271B9EDCB700BC0B60 /* Konotor.h */,
 				35591B281B9EDCB700BC0B60 /* Konotor.m */,
+				35FBC4A31BDFA38A001A9163 /* View */,
 				3533F0C31BB0435B000B2D9A /* Utilities */,
 				3533F0B41BB01D38000B2D9A /* Controllers */,
 				359E3E5F1BA6D20600B933C5 /* Model */,
@@ -625,6 +629,15 @@
 				35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */,
 			);
 			path = DataUpdater;
+			sourceTree = "<group>";
+		};
+		35FBC4A31BDFA38A001A9163 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				35FBC4A41BDFA38A001A9163 /* FDBadgeView.h */,
+				35FBC4A51BDFA38A001A9163 /* FDBadgeView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		843DD249178594180053E19E = {
@@ -847,6 +860,7 @@
 				CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */,
 				CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */,
 				35591B001B9EDBBC00BC0B60 /* KonotorEventHandler.m in Sources */,
+				35FBC4A61BDFA38A001A9163 /* FDBadgeView.m in Sources */,
 				CE10649F1BC5601B00922494 /* FDPromptView.m in Sources */,
 				35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */,
 				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
