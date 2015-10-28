@@ -119,7 +119,7 @@ NSString* otherName=nil,*userName=nil;
     userName=[konotorUIOptions userName];
     if(!userName) userName=@"You";
     
-    [Konotor MarkAllMessagesAsRead];
+    [Konotor markAllMessagesAsRead];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
     [self registerForKeyboardNotifications];
     
@@ -1129,7 +1129,7 @@ NSString* otherName=nil,*userName=nil;
 - (void) refreshView
 {
     [self.tableView reloadData];
-    [Konotor MarkAllMessagesAsRead];
+    [Konotor markAllMessagesAsRead];
     
     int lastSpot=loading?numberOfMessagesShown:(numberOfMessagesShown-1);
     
@@ -1156,7 +1156,7 @@ NSString* otherName=nil,*userName=nil;
 - (void) refreshView:(id) spot
 {
     [self.tableView reloadData];
-    [Konotor MarkAllMessagesAsRead];
+    [Konotor markAllMessagesAsRead];
     
     notificationCenterMode=[KonotorUIParameters sharedInstance].notificationCenterMode;
     

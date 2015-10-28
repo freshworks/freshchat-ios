@@ -167,35 +167,32 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 +(void)markAllMessagesAsRead{
-    dispatch_async(dispatch_get_main_queue(), ^{[KonotorMessage MarkAllMessagesAsReadA];});
-}
-
-+(void) MarkAllMessagesAsReadA{
-    NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO"];
-    request.predicate = predicate;
-    
-    NSArray *array = [context executeFetchRequest:request error:&pError];
-    if([array count]==0){
-        [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
-        return;
-    }else{
-        for(int i=0;i<[array count];i++){
-            KonotorMessage *message = [array objectAtIndex:i];
-            if(message){
-                if(![[message marketingId] isEqualToNumber:[NSNumber numberWithInt:0]]){
-                    [message MarkMarketingMessageAsRead];
-                }else{
-                     [message markAsReadwithNotif:NO];
+    [context performBlock:^{
+        NSError *pError;
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO"];
+        request.predicate = predicate;
+        NSArray *array = [context executeFetchRequest:request error:&pError];
+        if([array count]==0){
+            [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
+            return;
+        }else{
+            for(int i=0;i<[array count];i++){
+                KonotorMessage *message = [array objectAtIndex:i];
+                if(message){
+                    if(![[message marketingId] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                        [message MarkMarketingMessageAsRead];
+                    }else{
+                        [message markAsReadwithNotif:NO];
+                    }
                 }
             }
+            [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
         }
-        [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
-    }
+    }];
 }
 
 +(void) markMarketingMessageAsClicked:(NSNumber *) marketingId{
@@ -303,33 +300,27 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 +(void)uploadAllUnuploadedMessages{
-    NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
-    [request setEntity:entityDescription];
-    
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isMarkedForUpload == YES AND uploadStatus == 0"];
-    
-    [request setPredicate:predicate];
-    //NSLog(@"%@",[predicate description]);
-    
-    NSArray *array = [context executeFetchRequest:request error:&pError];
-    
-    if([array count]==0){
-        return;
-    }else{
-        for(int i=0;i<[array count];i++){
-            KonotorMessage *message = [array objectAtIndex:i];
-            if(message){
-                KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
-                [KonotorWebServices UploadMessage:message toConversation:convo];
+    [context performBlock:^{
+        NSError *pError;
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isMarkedForUpload == YES AND uploadStatus == 0"];
+        [request setPredicate:predicate];
+        NSArray *array = [context executeFetchRequest:request error:&pError];
+        if([array count]==0){
+            return;
+        }else{
+            for(int i=0;i<[array count];i++){
+                KonotorMessage *message = [array objectAtIndex:i];
+                if(message){
+                    KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
+                    [KonotorWebServices UploadMessage:message toConversation:convo];
+                }
             }
         }
-    }
-
-    
+    }];
 }
 
 +(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId{

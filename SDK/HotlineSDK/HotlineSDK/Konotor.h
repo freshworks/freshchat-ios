@@ -83,7 +83,9 @@ enum KonotorMessageUploadStatus
 +(void) sendAllUnsentMessages;
 
 +(void)MarkMessageAsRead:(NSString *) messageID;
-+(void) MarkAllMessagesAsRead;
+
++(void)markAllMessagesAsRead;
+
 +(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId;
 
 +(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType;

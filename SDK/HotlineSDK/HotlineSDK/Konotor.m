@@ -146,18 +146,10 @@ static id <KonotorDelegate> _delegate;
     
 }
 
-+(void) sendAllUnsentMessages
-{
-    dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       
-                       if(KONOTOR_APP_INIT_DONE)
-                       {
-                           [KonotorMessage uploadAllUnuploadedMessages];
-
-                       }
-                   });
-    
++(void) sendAllUnsentMessages{
+    if(KONOTOR_APP_INIT_DONE){
+        [KonotorMessage uploadAllUnuploadedMessages];
+    }
 }
 
 
@@ -305,7 +297,7 @@ static id <KonotorDelegate> _delegate;
         [KonotorMessage markMarketingMessageAsClicked:marketingId ];
     }
 }
-+(void) MarkAllMessagesAsRead
++(void)markAllMessagesAsRead
 {
     [KonotorMessage markAllMessagesAsRead];
 
