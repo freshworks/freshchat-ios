@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 350EFDEC1BD673DD00F3410B /* FDIndexManager.m */; settings = {ASSET_TAGS = (); }; };
+		350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 350EFDEC1BD673DD00F3410B /* FDIndexManager.m */; };
 		3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3528BA301BC86076008F6C38 /* HLServiceRequest.m */; };
 		3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B61BB01D38000B2D9A /* HLArticlesController.m */; };
 		3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B81BB01D38000B2D9A /* HLContainerController.m */; };
@@ -75,16 +75,17 @@
 		CE10649E1BC5601B00922494 /* FDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064991BC5601B00922494 /* FDAlertView.m */; };
 		CE10649F1BC5601B00922494 /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE10649B1BC5601B00922494 /* FDPromptView.m */; };
 		CE1064A01BC5601B00922494 /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */; };
+		CE754A3F1BDF856A004B6635 /* FDCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE754A3E1BDF856A004B6635 /* FDCategoryTableViewCell.m */; };
 		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; };
 		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; };
-		CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D051BCD286F006F2E66 /* FDRanking.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D291BCD4E79006F2E66 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D281BCD4E79006F2E66 /* FDIndex.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D361BCEA4F3006F2E66 /* FDSearchBar.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
-		CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D451BD133AF006F2E66 /* FDButton.m */; settings = {ASSET_TAGS = (); }; };
+		CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D051BCD286F006F2E66 /* FDRanking.m */; };
+		CE9D4D291BCD4E79006F2E66 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D281BCD4E79006F2E66 /* FDIndex.m */; };
+		CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */; };
+		CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */; };
+		CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */; };
+		CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D361BCEA4F3006F2E66 /* FDSearchBar.m */; };
+		CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */; };
+		CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D451BD133AF006F2E66 /* FDButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -275,6 +276,8 @@
 		CE10649B1BC5601B00922494 /* FDPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPromptView.m; sourceTree = "<group>"; };
 		CE10649C1BC5601B00922494 /* FDYesNoPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDYesNoPromptView.h; sourceTree = "<group>"; };
 		CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDYesNoPromptView.m; sourceTree = "<group>"; };
+		CE754A3D1BDF856A004B6635 /* FDCategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCategoryTableViewCell.h; sourceTree = "<group>"; };
+		CE754A3E1BDF856A004B6635 /* FDCategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCategoryTableViewCell.m; sourceTree = "<group>"; };
 		CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryGridViewController.h; sourceTree = "<group>"; };
 		CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryGridViewController.m; sourceTree = "<group>"; };
 		CE80CBCE1BB2B6C500B1C74B /* HLGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLGridViewCell.h; sourceTree = "<group>"; };
@@ -348,6 +351,8 @@
 				CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */,
 				CE9D4D391BCFC362006F2E66 /* FDTableViewCell.h */,
 				CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */,
+				CE754A3D1BDF856A004B6635 /* FDCategoryTableViewCell.h */,
+				CE754A3E1BDF856A004B6635 /* FDCategoryTableViewCell.m */,
 				CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */,
 				CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */,
 				CE1064981BC5601B00922494 /* FDAlertView.h */,
@@ -837,6 +842,7 @@
 				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
 				CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */,
+				CE754A3F1BDF856A004B6635 /* FDCategoryTableViewCell.m in Sources */,
 				35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */,
 				35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */,
 				CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */,

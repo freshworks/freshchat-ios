@@ -62,7 +62,7 @@
 }
 
 +(void)presentSolutions:(UIViewController *)controller{
-    HLCategoryGridViewController *categoryController = [[HLCategoryGridViewController alloc]init];
+    HLCategoriesListController *categoryController = [[HLCategoriesListController alloc]init];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:categoryController];
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     navigationController.viewControllers = @[containerController];

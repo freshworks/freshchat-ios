@@ -17,6 +17,7 @@
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
+#import "FDCategoryTableViewCell.h"
 
 @interface HLCategoriesListController ()
 
@@ -96,14 +97,16 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLCategoriesCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDCategoryTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
     if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
-        cell.textLabel.text  = category.title;
+        cell.titleLabel.text  = category.title;
+        cell.detailLabel.text = category.categoryDescription;
+        cell.imgView.image = [UIImage imageWithData:category.icon];
     }
     return cell;
 }
@@ -119,6 +122,10 @@
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
         [self.navigationController pushViewController:container animated:YES];
     }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 100;
 }
 
 @end
