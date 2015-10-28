@@ -27,18 +27,6 @@ static NSInteger networkIndicator = 0;
         }
     }
     
-    /*void *addr[2];
-     int nframes = backtrace(addr, sizeof(addr)/sizeof(*addr));
-     if (nframes > 1)
-     {
-     char **syms = backtrace_symbols(addr, nframes);
-     //NSLog(@"caller: %s and set value to %d", __func__, syms[1],networkIndicator);
-     free(syms);
-     }
-     else
-     {
-     NSLog(@"%s: *** Failed to generate backtrace.", __func__);
-     }*/
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(networkIndicator > 0)];
 }
 
@@ -109,27 +97,6 @@ static NSInteger networkIndicator = 0;
     return returnPath;
 }
 
-
-
-
-
-+(NSURL *) getRedirectURLWithString:(NSString *) url
-{
-    NSURL *originalUrl=[NSURL URLWithString:url];
-    return [KonotorNetworkUtil getRedirectURLWithURL:originalUrl];
-}
-
-+(NSURL *) getRedirectURLWithURL:(NSURL *) url
-{
-    NSURL *originalUrl=url;
-    NSData *data=nil;
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:originalUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
-    NSURLResponse *response;
-    NSError *error;
-    data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSURL *LastURL=[response URL];
-    return LastURL;
-}
 @end
 
 
@@ -176,77 +143,6 @@ static NSInteger networkIndicator = 0;
     
     return [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] ;
 }
-+(NSString*) TruncateString:(NSString *)origString withClipLength:(int) clipLength
-{
-    if(!origString)
-        return  nil;
-    
-    if([origString length]>clipLength )
-    {
-        NSString *truncatedString = [NSString stringWithFormat:@"\"%@...\"",[origString substringToIndex:clipLength]];
-        return truncatedString;
-    }
-    
-    return origString;
-}
-/*+(NSString *) GetSHAHashForKey:(NSString *)hashkey withSecret:(NSString *)secret
-{
-    
-    NSString *key = secret;
-    NSString *data = hashkey;
-    
-    
-    
-    const char *cKey  = [key cStringUsingEncoding:NSASCIIStringEncoding];
-    const char *cData = [data cStringUsingEncoding:NSASCIIStringEncoding];
-    
-    unsigned char cHMAC[CC_SHA256_DIGEST_LENGTH];
-    
-    CCHmac(kCCHmacAlgSHA256, cKey, strlen(cKey), cData, strlen(cData), cHMAC);
-    
-    NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC
-                                          length:sizeof(cHMAC)];
-    
-    
-    NSString *hash=[HMAC description];
-    hash = [hash stringByReplacingOccurrencesOfString:@" " withString:@""];
-    hash = [hash stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    hash = [hash stringByReplacingOccurrencesOfString:@">" withString:@""];
-    return hash;
-    
-    return hash;
-    
-    
-    
-}*/
-
-+ (NSString*) reversingName:(NSString *)myNameText
-{
-    int len = (int)[myNameText length];
-    NSMutableString *reverseName = [[NSMutableString alloc] initWithCapacity:len];
-    for(int i=(len-1);i>=0;i--)
-    {
-        [reverseName appendString:[NSString stringWithFormat:@"%c",[myNameText characterAtIndex:i]]];
-    }
-    return reverseName;
-}
-
-/*+(NSString *) ReturnURIForObject :( NSManagedObject *) object
-{
-    if(object)
-    {
-        NSURL *moURI = [[object objectID] URIRepresentation];
-        
-        if(moURI)
-        {
-            return [moURI absoluteString];
-        }
-    }
-    
-    return nil;
-}*/
-
-
 
 AFKonotorHTTPClient *pKonotorSingle = nil;
 
