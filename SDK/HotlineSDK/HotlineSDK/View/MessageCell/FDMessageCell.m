@@ -68,7 +68,7 @@
     messageTextView=[[UITextView alloc] initWithFrame:CGRectZero];
     [messageTextView setFont:KONOTOR_MESSAGETEXT_FONT];
     [messageTextView setBackgroundColor:[UIColor clearColor]];
-    [messageTextView setDataDetectorTypes:UIDataDetectorTypeLink];
+    [messageTextView setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
     [messageTextView setTextAlignment:NSTextAlignmentLeft];
     [messageTextView setTextColor:[UIColor blackColor]];
     [messageTextView setEditable:NO];
@@ -272,10 +272,7 @@
         [audioItem.mediaProgressBar setHidden:YES];
         [audioItem.audioPlayButton setHidden:YES];
         
-        [messageTextView setText:nil];
-        [messageTextView setDataDetectorTypes:UIDataDetectorTypeNone];
         [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
-        [messageTextView setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
         
         CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:currentMessage.text withFont:KONOTOR_MESSAGETEXT_FONT];
         float msgHeight=sizer.height;
@@ -364,10 +361,7 @@
         case KonotorMessageTypePicture:
         {
             [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
-            if([timeField respondsToSelector:@selector(textContainerInset)])
-                timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
-            else
-                [timeField setContentOffset:CGPointMake(0, 4)];
+            timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
             
             break;
         }
@@ -380,17 +374,11 @@
             if((KONOTOR_SHOW_TIMESTAMP)&&(KONOTOR_SHOW_SENDERNAME))
             {
                 
-                if([timeField respondsToSelector:@selector(textContainerInset)])
-                    [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-                else
-                    [timeField setContentOffset:CGPointMake(0, 10)];
+                [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
             }
             else{
                 
-                if([timeField respondsToSelector:@selector(textContainerInset)])
-                    [timeField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
-                else
-                    [timeField setContentOffset:CGPointMake(0, 4)];
+                [timeField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
             }
             
         }
@@ -403,10 +391,8 @@
         default:
         {
             [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), txtSize.width + 16, KONOTOR_TIMEFIELD_HEIGHT+4)];
-            if([timeField respondsToSelector:@selector(textContainerInset)])
-                timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
-            else
-                [timeField setContentOffset:CGPointMake(0, 4)];
+            timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
+            [timeField setContentOffset:CGPointMake(0, 4)];
             
             break;
         }
@@ -419,8 +405,6 @@
 - (void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)KONOTOR_SHOW_SENDERNAME sender:(BOOL)isSenderOther textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY
 {
     
-    CGRect txtMsgFrame=messageText.frame;
-    
     float messageTextBoxX=messageTextFrame.origin.x;
     float messageTextBoxY=messageTextFrame.origin.y;
     float messageTextBoxWidth=messageTextFrame.size.width;
@@ -429,22 +413,14 @@
     float messageContentViewY=messageContentFrame.origin.y;
     float messageContentViewWidth=messageContentFrame.size.width;
     
-    txtMsgFrame.origin.x=messageTextBoxX;
-    txtMsgFrame.origin.y=messageTextBoxY+textViewY;
     
-    txtMsgFrame.size.width=messageTextBoxWidth;
+    messageText.frame=CGRectMake(messageTextBoxX, messageTextBoxY+textViewY, messageTextBoxWidth, msgHeight);
     
-    txtMsgFrame.size.height=msgHeight;
+    msgHeight=msgHeight+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
-    messageText.frame=txtMsgFrame;
-    
-    txtMsgFrame.size.height=msgHeight+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
-    
-    txtMsgFrame.size.height+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
-    txtMsgFrame.origin.y=messageContentViewY;
-    txtMsgFrame.origin.x=messageContentViewX;
-    txtMsgFrame.size.width=messageContentViewWidth;
-    messageBackground.frame=txtMsgFrame;
+    msgHeight+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
+  
+    messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
     
 }
 
