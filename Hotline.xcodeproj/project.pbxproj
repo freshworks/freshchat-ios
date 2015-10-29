@@ -29,6 +29,7 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; };
@@ -168,6 +169,8 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
+		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 				356F19EF1B9DBF14002F1E2A /* AppDelegate.m */,
 				356F19F11B9DBF14002F1E2A /* ViewController.h */,
 				356F19F21B9DBF14002F1E2A /* ViewController.m */,
+				35D707141BE2498B0035FD74 /* FDSettingsController.h */,
+				35D707151BE2498B0035FD74 /* FDSettingsController.m */,
 				356F19F41B9DBF14002F1E2A /* Main.storyboard */,
 				356F19F71B9DBF14002F1E2A /* Images.xcassets */,
 				356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */,
@@ -651,6 +656,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */,
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
 				356F19ED1B9DBF14002F1E2A /* main.m in Sources */,
