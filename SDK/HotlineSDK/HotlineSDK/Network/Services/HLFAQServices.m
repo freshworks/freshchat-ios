@@ -31,6 +31,7 @@
     [request setRelativePath:path andURLParams:@[token, @"deep=true"]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         [self importSolutions:responseObject];
+        [FDIndexManager setIndexingCompleted:NO];
         [FDIndexManager updateIndex];
         [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
     }];
