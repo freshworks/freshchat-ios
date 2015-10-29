@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "FDMessageCell.h"
 
 enum FDAudioMessageMediaState {
     FDAudioMessageMediaStatePlaying = 1,
@@ -15,6 +16,10 @@ enum FDAudioMessageMediaState {
 };
 
 @class FDMessage;
+
+#define KONOTOR_AUDIOMESSAGE_HEIGHT 44
+#define KONOTOR_PLAYBUTTON_DIMENSION 40
+
 
 @interface FDAudioMessageUnit : NSObject
 
@@ -28,6 +33,7 @@ enum FDAudioMessageMediaState {
 - (void) startAnimating;
 - (void) stopAnimating;
 - (void) setHidden:(BOOL)hidden;
-
+- (void) setUpView;
+- (void) displayMessage:(KonotorMessageData*) message;
 
 @end

@@ -44,8 +44,7 @@
   
     [senderNameLabel setEditable:NO];
     [senderNameLabel setScrollEnabled:NO];
-    if([senderNameLabel respondsToSelector:@selector(setSelectable:)])
-        [senderNameLabel setSelectable:NO];
+    [senderNameLabel setSelectable:NO];
     [self.contentView addSubview:senderNameLabel];
     
     /* setup SentTime field*/
@@ -57,8 +56,7 @@
         [messageSentTimeLabel setTextAlignment:NSTextAlignmentLeft];
         [messageSentTimeLabel setTextColor:[UIColor darkGrayColor]];
         [messageSentTimeLabel setEditable:NO];
-        if([messageSentTimeLabel respondsToSelector:@selector(setSelectable:)])
-            [messageSentTimeLabel setSelectable:NO];
+        [messageSentTimeLabel setSelectable:NO];
         [messageSentTimeLabel setScrollEnabled:NO];
         [self.contentView addSubview:messageSentTimeLabel];
     }
@@ -78,19 +76,10 @@
     
     
     /* setup audio message elements*/
-
-    audioItem=[[FDAudioMessageUnit alloc] init];
-    audioItem.audioPlayButton=[[UIButton alloc] initWithFrame:CGRectZero];
-    [audioItem.audioPlayButton setImage:[UIImage imageNamed:@"konotor_play.png"] forState:UIControlStateNormal];
-    [audioItem.audioPlayButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
-    [audioItem.audioPlayButton setBackgroundColor:[UIColor blackColor]];
-    audioItem.audioPlayButton.layer.cornerRadius=15;
-    [audioItem.audioPlayButton addTarget:self action:@selector(playMedia:) forControlEvents:UIControlEventTouchUpInside];
-    [messageTextView addSubview:audioItem.audioPlayButton];
     
-    audioItem.mediaProgressBar=[[UISlider alloc] initWithFrame:CGRectZero];
-    [audioItem.mediaProgressBar setMinimumTrackImage:[UIImage imageNamed:@"konotor_progress_blue.png"] forState:UIControlStateNormal];
-    [audioItem.mediaProgressBar setMaximumTrackImage:[UIImage imageNamed:@"konotor_progress_black.png"] forState:UIControlStateNormal];
+    audioItem=[[FDAudioMessageUnit alloc] init];
+    [audioItem setUpView];
+    [messageTextView addSubview:audioItem.audioPlayButton];
     [messageTextView addSubview:audioItem.mediaProgressBar];
     
     
@@ -119,15 +108,6 @@
     [actionButton setActionUrlString:nil];
     [self.contentView addSubview:actionButton];
     
-/* Factor in elsewhere
-        KonotorMediaUIButton* playButton=(KonotorMediaUIButton*)[cell.contentView viewWithTag:KONOTOR_PLAYBUTTON_TAG];
-        playButton.frame=CGRectMake(messageTextBoxWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PLAYBUTTON_DIMENSION,KONOTOR_AUDIOMESSAGE_HEIGHT/2-KONOTOR_PLAYBUTTON_DIMENSION/2,KONOTOR_PLAYBUTTON_DIMENSION,KONOTOR_PLAYBUTTON_DIMENSION);
-        playButton.mediaProgressBar.frame=CGRectMake(KONOTOR_HORIZONTAL_PADDING, KONOTOR_AUDIOMESSAGE_HEIGHT/2-playButton.mediaProgressBar.currentThumbImage.size.height/2, messageTextBoxWidth-KONOTOR_PLAYBUTTON_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING, playButton.mediaProgressBar.currentThumbImage.size.height);
-        playButton.mediaProgressBar.frame=CGRectMake(KONOTOR_HORIZONTAL_PADDING, KONOTOR_AUDIOMESSAGE_HEIGHT/2-playButton.mediaProgressBar.bounds.size.height/2, messageTextBoxWidth-KONOTOR_PLAYBUTTON_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING, playButton.mediaProgressBar.bounds.size.height);
-        
-    */
-    
-    // Configure the cell...
 }
 
 
@@ -285,6 +265,21 @@
         [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
         
     }
+    else if([currentMessage messageType].integerValue==KonotorMessageTypeAudio){
+        [messageTextView setText:@""];
+        
+        float msgHeight=KONOTOR_AUDIOMESSAGE_HEIGHT;
+        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:(KONOTOR_SHOW_TIMESTAMP?(KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING):KONOTOR_VERTICAL_PADDING));
+        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showsSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+        
+        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
+        
+        [audioItem displayMessage:currentMessage];
+        
+        [messagePictureImageView setHidden:YES];
+        [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
+
+    }
     
   /* fix this
    if(showsProfile){
@@ -309,6 +304,7 @@
     self.tag=[currentMessage.messageId hash];
         
 }
+
 
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView
 {
@@ -337,6 +333,10 @@
             cellHeight= height+extraHeight;
         }
         
+    }
+    else if([currentMessage messageType].integerValue==KonotorMessageTypeAudio){
+        cellHeight=KONOTOR_AUDIOMESSAGE_HEIGHT+KONOTOR_VERTICAL_PADDING+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+;
     }
 
     return cellHeight;

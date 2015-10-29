@@ -28,6 +28,8 @@
 #define KONOTOR_TIMEFIELD_HEIGHT 16
 
 
+@class FDAudioMessageUnit;
+
 @interface FDMessageCell : UITableViewCell
 
 /* customization options */
