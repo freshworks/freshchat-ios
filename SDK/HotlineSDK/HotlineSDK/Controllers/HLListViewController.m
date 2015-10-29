@@ -45,15 +45,8 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|" options:0 metrics:nil views:views]];
 }
 
--(void)handleTapGesture: (UIGestureRecognizer*) recognizer
-{
+-(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
     [KonotorFeedbackScreen showFeedbackScreen];
-}
-
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView{
-    return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
