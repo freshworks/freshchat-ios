@@ -33,6 +33,7 @@
 		3575C4861BE2159E000C3D02 /* TextViewInner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4821BE2159E000C3D02 /* TextViewInner@3x.png */; };
 		3575C4871BE2159E000C3D02 /* TextViewOuter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4831BE2159E000C3D02 /* TextViewOuter@2x.png */; };
 		3575C4881BE2159E000C3D02 /* TextViewOuter@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4841BE2159E000C3D02 /* TextViewOuter@3x.png */; };
+		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; };
@@ -176,6 +177,7 @@
 		3575C4821BE2159E000C3D02 /* TextViewInner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewInner@3x.png"; sourceTree = "<group>"; };
 		3575C4831BE2159E000C3D02 /* TextViewOuter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewOuter@2x.png"; sourceTree = "<group>"; };
 		3575C4841BE2159E000C3D02 /* TextViewOuter@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewOuter@3x.png"; sourceTree = "<group>"; };
+		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				356F19F41B9DBF14002F1E2A /* Main.storyboard */,
 				356F19F71B9DBF14002F1E2A /* Images.xcassets */,
 				356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */,
+				35D707311BE2C1AE0035FD74 /* Utilities */,
 				356F1BA11B9DD1EC002F1E2A /* Resources */,
 				356F1A201B9DC4D8002F1E2A /* Framework */,
 				356F19EA1B9DBF14002F1E2A /* Supporting Files */,
@@ -378,6 +381,14 @@
 			);
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
+		};
+		35D707311BE2C1AE0035FD74 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
 		};
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
@@ -668,6 +679,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
+				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
 				356F19ED1B9DBF14002F1E2A /* main.m in Sources */,
 			);
