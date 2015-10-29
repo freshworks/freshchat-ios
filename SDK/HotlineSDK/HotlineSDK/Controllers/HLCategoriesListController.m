@@ -17,7 +17,7 @@
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
-#import "FDCategoryTableViewCell.h"
+#import "FDCategoryListViewCell.h"
 #import "FDMarginalView.h"
 
 @interface HLCategoriesListController ()
@@ -98,9 +98,9 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLCategoriesCell";
-    FDCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDCategoryListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDCategoryTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[FDCategoryListViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
     if (indexPath.row < self.categories.count) {

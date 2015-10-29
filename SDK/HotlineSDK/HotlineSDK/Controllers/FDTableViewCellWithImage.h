@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HLTheme.h"
 
-@interface FDCategoryTableViewCell : UITableViewCell
+@interface FDTableViewCellWithImage : UITableViewCell
 
 @property (strong, nonatomic) UIImageView *imgView;
 @property (strong, nonatomic) UILabel *titleLabel;

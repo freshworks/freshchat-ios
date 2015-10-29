@@ -6,10 +6,10 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-#import "FDCategoryTableViewCell.h"
+#import "FDTableViewCellWithImage.h"
 
 
-@implementation FDCategoryTableViewCell
+@implementation FDTableViewCellWithImage
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
