@@ -29,4 +29,6 @@
 /* Contact Us prompt */
 "Contact Us Prompt Button"="Still need help? Contact Us ";
 
-
+/* Message UI */
+"Message Placeholder Text"="Message";
+"Send Button Text"="send";

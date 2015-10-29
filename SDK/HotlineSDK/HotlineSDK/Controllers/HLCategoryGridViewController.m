@@ -92,7 +92,7 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE];
 
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
 

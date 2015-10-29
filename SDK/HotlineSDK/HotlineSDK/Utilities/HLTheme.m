@@ -232,4 +232,12 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
+-(UIColor *)inputTextFontColor{
+    return [UIColor blackColor];
+}
+
+-(UIColor *)sendButtonColor{
+    return [UIColor blueColor];
+}
+
 @end

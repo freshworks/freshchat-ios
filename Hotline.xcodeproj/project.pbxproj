@@ -29,6 +29,10 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		3575C4851BE2159E000C3D02 /* TextViewInner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4811BE2159E000C3D02 /* TextViewInner@2x.png */; };
+		3575C4861BE2159E000C3D02 /* TextViewInner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4821BE2159E000C3D02 /* TextViewInner@3x.png */; };
+		3575C4871BE2159E000C3D02 /* TextViewOuter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4831BE2159E000C3D02 /* TextViewOuter@2x.png */; };
+		3575C4881BE2159E000C3D02 /* TextViewOuter@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3575C4841BE2159E000C3D02 /* TextViewOuter@3x.png */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; };
@@ -168,6 +172,10 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		3575C4811BE2159E000C3D02 /* TextViewInner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewInner@2x.png"; sourceTree = "<group>"; };
+		3575C4821BE2159E000C3D02 /* TextViewInner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewInner@3x.png"; sourceTree = "<group>"; };
+		3575C4831BE2159E000C3D02 /* TextViewOuter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewOuter@2x.png"; sourceTree = "<group>"; };
+		3575C4841BE2159E000C3D02 /* TextViewOuter@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextViewOuter@3x.png"; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
@@ -395,6 +403,10 @@
 			isa = PBXGroup;
 			children = (
 				CE10648B1BC54C9300922494 /* loading.png */,
+				3575C4811BE2159E000C3D02 /* TextViewInner@2x.png */,
+				3575C4821BE2159E000C3D02 /* TextViewInner@3x.png */,
+				3575C4831BE2159E000C3D02 /* TextViewOuter@2x.png */,
+				3575C4841BE2159E000C3D02 /* TextViewOuter@3x.png */,
 				CE1064A11BC6780700922494 /* message.png */,
 				35ED5EDF1BB3EA4600E0052D /* konotor_back.png */,
 				35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */,
@@ -621,17 +633,21 @@
 				355AE77C1B9DD42400E8999C /* MHModel.bundle in Resources */,
 				35ED5F241BB3EA4600E0052D /* konotor_stop@2x.png in Resources */,
 				35ED5F101BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png in Resources */,
+				3575C4871BE2159E000C3D02 /* TextViewOuter@2x.png in Resources */,
 				35ED5F171BB3EA4600E0052D /* konotor_play.png in Resources */,
 				CE9D4D311BCE7341006F2E66 /* KonotorModels.bundle in Resources */,
 				35ED5F141BB3EA4600E0052D /* konotor_mic@2x.png in Resources */,
 				35ED5F161BB3EA4600E0052D /* konotor_placeholder@2x.png in Resources */,
 				356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */,
+				3575C4881BE2159E000C3D02 /* TextViewOuter@3x.png in Resources */,
 				35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */,
 				35ED5F271BB3EA4600E0052D /* konotor_uploading.png in Resources */,
 				CE10648C1BC54C9300922494 /* loading.png in Resources */,
 				35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */,
 				35ED5F181BB3EA4600E0052D /* konotor_play@2x.png in Resources */,
+				3575C4851BE2159E000C3D02 /* TextViewInner@2x.png in Resources */,
 				35ED5F1A1BB3EA4600E0052D /* konotor_profile@2x.png in Resources */,
+				3575C4861BE2159E000C3D02 /* TextViewInner@3x.png in Resources */,
 				35ED5F1F1BB3EA4600E0052D /* konotor_sent.png in Resources */,
 				35ED5F221BB3EA4600E0052D /* konotor_share@2x.png in Resources */,
 			);
