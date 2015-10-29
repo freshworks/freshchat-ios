@@ -12,6 +12,7 @@
 
 /* Categories List View Controller */
 "CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE"="Close";
+"CATEGORIES_LIST_VIEW_FOOTER_LABEL"="Contact Us";
 
 /* Articles List View Controller */
 "ARTICLE_LIST_VIEW_TITLE"="Article List";

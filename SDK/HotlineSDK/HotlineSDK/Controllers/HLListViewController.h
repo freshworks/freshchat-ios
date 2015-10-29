@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FDMarginalView.h"
 
-@interface HLListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface HLListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property(nonatomic, strong)UITableView *tableView;
+@property (nonatomic, retain)FDMarginalView *footerView;
 
 @end

@@ -140,6 +140,7 @@
         FDArticleContent *article = self.searchResults[indexPath.row];
         articlesDetailController.articleDescription = article.articleDescription;
         articlesDetailController.articleID = article.articleID;
+        articlesDetailController.articleTitle = article.title;
         [self.navigationController setNavigationBarHidden:NO];
         [self.navigationController pushViewController:articlesDetailController animated:YES];
     }

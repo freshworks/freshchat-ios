@@ -88,6 +88,7 @@
         HLArticle *article = self.articles[indexPath.row];
         HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
         articleDetailController.articleID = article.articleID;
+        articleDetailController.articleTitle = article.title;
         articleDetailController.articleDescription = article.articleDescription;
         articleDetailController.categoryTitle = self.category.title;
         articleDetailController.categoryID = self.category.categoryID;

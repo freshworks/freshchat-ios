@@ -14,6 +14,7 @@
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
 -(UIColor *)searchBarInnerBackgroundColor;
 -(UIColor *)gridViewItemBackgroundColor;
++(UIColor *)colorWithHex:(NSString *)value;
 
 //Search Bar
 -(UIFont *)searchBarFont;
