@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="15B22c" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="14F27" minimumToolsVersion="Xcode 4.3">
     <entity name="FDIndex" representedClassName="FDIndex" syncable="YES">
         <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="descMatches" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="keyWord" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="keyWord" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="titleMatches" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="HLArticle" representedClassName="HLArticle" syncable="YES">
@@ -102,7 +102,6 @@
         <relationship name="hasProperties" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorCustomProperty" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FDIndex" positionX="-288" positionY="135" width="128" height="105"/>
         <element name="HLArticle" positionX="-326" positionY="549" width="128" height="148"/>
         <element name="HLCategory" positionX="-495" positionY="420" width="128" height="163"/>
         <element name="KonotorApp" positionX="54" positionY="135" width="128" height="195"/>
@@ -112,5 +111,6 @@
         <element name="KonotorMessageBinary" positionX="27" positionY="-18" width="128" height="105"/>
         <element name="KonotorShareMessageEvent" positionX="223" positionY="488" width="128" height="88"/>
         <element name="KonotorUser" positionX="-414" positionY="162" width="128" height="165"/>
+        <element name="FDIndex" positionX="-342" positionY="117" width="128" height="105"/>
     </elements>
 </model>

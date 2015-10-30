@@ -79,10 +79,10 @@
 		CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE754A411BE0D424004B6635 /* FDMarginalView.m */; };
 		CE80CA1B1BE23FFA00473E49 /* FDCategoryListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA1A1BE23FFA00473E49 /* FDCategoryListViewCell.m */; };
 		CE80CA1E1BE2439900473E49 /* FDChannelListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA1D1BE2439900473E49 /* FDChannelListViewCell.m */; };
+		CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA621BE36B6500473E49 /* FDIndex.m */; };
 		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; };
 		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; };
 		CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D051BCD286F006F2E66 /* FDRanking.m */; };
-		CE9D4D291BCD4E79006F2E66 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D281BCD4E79006F2E66 /* FDIndex.m */; };
 		CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */; };
 		CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */; };
 		CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */; };
@@ -287,14 +287,14 @@
 		CE80CA1A1BE23FFA00473E49 /* FDCategoryListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCategoryListViewCell.m; sourceTree = "<group>"; };
 		CE80CA1C1BE2439900473E49 /* FDChannelListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDChannelListViewCell.h; sourceTree = "<group>"; };
 		CE80CA1D1BE2439900473E49 /* FDChannelListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDChannelListViewCell.m; sourceTree = "<group>"; };
+		CE80CA611BE36B6500473E49 /* FDIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndex.h; sourceTree = "<group>"; };
+		CE80CA621BE36B6500473E49 /* FDIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndex.m; sourceTree = "<group>"; };
 		CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryGridViewController.h; sourceTree = "<group>"; };
 		CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryGridViewController.m; sourceTree = "<group>"; };
 		CE80CBCE1BB2B6C500B1C74B /* HLGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLGridViewCell.h; sourceTree = "<group>"; };
 		CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLGridViewCell.m; sourceTree = "<group>"; };
 		CE9D4D041BCD286F006F2E66 /* FDRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDRanking.h; sourceTree = "<group>"; };
 		CE9D4D051BCD286F006F2E66 /* FDRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDRanking.m; sourceTree = "<group>"; };
-		CE9D4D271BCD4E79006F2E66 /* FDIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndex.h; sourceTree = "<group>"; };
-		CE9D4D281BCD4E79006F2E66 /* FDIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndex.m; sourceTree = "<group>"; };
 		CE9D4D2A1BCE55FF006F2E66 /* FDArticleContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleContent.h; sourceTree = "<group>"; };
 		CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDArticleContent.m; sourceTree = "<group>"; };
 		CE9D4D2D1BCE576A006F2E66 /* FDUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDUtilities.h; sourceTree = "<group>"; };
@@ -562,10 +562,10 @@
 		359E3E5F1BA6D20600B933C5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CE9D4D271BCD4E79006F2E66 /* FDIndex.h */,
-				CE9D4D281BCD4E79006F2E66 /* FDIndex.m */,
 				358DD4C01BB00EB700B36E4E /* HLArticle.h */,
 				358DD4C11BB00EB700B36E4E /* HLArticle.m */,
+				CE80CA611BE36B6500473E49 /* FDIndex.h */,
+				CE80CA621BE36B6500473E49 /* FDIndex.m */,
 				CE9D4D2A1BCE55FF006F2E66 /* FDArticleContent.h */,
 				CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */,
 				358DD4C21BB00EB700B36E4E /* HLCategory.h */,
@@ -868,13 +868,13 @@
 				3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */,
 				35591B071B9EDBBC00BC0B60 /* KonotorUITextView.m in Sources */,
 				CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */,
-				CE9D4D291BCD4E79006F2E66 /* FDIndex.m in Sources */,
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
 				CE10649E1BC5601B00922494 /* FDAlertView.m in Sources */,
 				CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */,
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,
 				CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */,
 				35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */,
+				CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */,
 				CE1064A01BC5601B00922494 /* FDYesNoPromptView.m in Sources */,
 				CE80CA1E1BE2439900473E49 /* FDChannelListViewCell.m in Sources */,
 				CE80CA1B1BE23FFA00473E49 /* FDCategoryListViewCell.m in Sources */,
