@@ -228,7 +228,7 @@ AFKonotorHTTPClient *pKonotorSingle = nil;
     [properties setValue:@"Apple" forKey:@"brand"];
 
     [properties setValue:@"Apple" forKey:@"manufacturer"];
-    [properties setValue:[device systemName] forKey:@"os"];
+    [properties setValue:@"iPhone OS" forKey:@"os"];
     [properties setValue:[device systemVersion] forKey:@"os_version"];
     [properties setValue:[device model] forKey:@"model"];
     
