@@ -17,6 +17,16 @@
 
 @synthesize isSenderOther,showsProfile,showsSenderName,customFontName,showsTimeStamp,showsUploadStatus,sentImage,sendingImage;
 
++ (NSMutableAttributedString*) getAttributedStringWithText:(NSString*) messageText font:(UIFont*)font
+{
+    NSString *htmlString = messageText;
+    NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:font,NSFontAttributeName,nil];
+    NSMutableAttributedString* attributedString=nil;
+    attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+    [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
+    return attributedString;
+}
+
 - (void) initCell{
     
     /* customization options to be moved out*/
@@ -99,7 +109,7 @@
     }
     
     /* setup message picture view */
-    messagePictureImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
+    messagePictureImageView=[[FDPictureMessageUnit alloc] initWithFrame:CGRectZero];
     [messageTextView addSubview:messagePictureImageView];
     
     /* setup action button view */
@@ -247,14 +257,19 @@
     [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue];
     
     
-    if([currentMessage messageType].integerValue==KonotorMessageTypeText)
+    if(([currentMessage messageType].integerValue==KonotorMessageTypeText)||([currentMessage messageType].integerValue==KonotorMessageTypeHTML))
     {
         [audioItem.mediaProgressBar setHidden:YES];
         [audioItem.audioPlayButton setHidden:YES];
         
-        [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
+        NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
         
-        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:currentMessage.text withFont:KONOTOR_MESSAGETEXT_FONT];
+        NSString *simpleString=[messageText string];
+        
+        messageTextView.attributedText=messageText;
+     //   [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
+        
+        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         float msgHeight=sizer.height;
         float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(showsTimeStamp?KONOTOR_TIMEFIELD_HEIGHT:0);
         float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(showsTimeStamp?KONOTOR_TIMEFIELD_HEIGHT:0);
@@ -274,12 +289,61 @@
         
         [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
-        [audioItem displayMessage:currentMessage];
+        [audioItem displayMessage:(FDMessage*)currentMessage];
         
         [messagePictureImageView setHidden:YES];
         [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
 
     }
+    else if(([currentMessage messageType].integerValue==KonotorMessageTypePicture)||([currentMessage messageType].integerValue==KonotorMessageTypePictureV2))
+    {
+        if((![currentMessage picData])&&(([[currentMessage picUrl] isEqualToString:@""])|| ([currentMessage picUrl]==nil))&&((currentMessage.text==nil)||([currentMessage.text isEqualToString:@""])))
+            currentMessage.text=@"Error loading picture message.Image Not Found";
+            
+        CGSize picSize=[FDPictureMessageUnit getSizeForImageFromMessage:currentMessage];
+        
+        float height=picSize.height;
+        
+        float txtheight=0.0;
+        
+        [messagePictureImageView setUpPictureMessageInteractionsForMessage:currentMessage];
+        
+        if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
+           
+            NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
+           
+            if(isSenderOther){
+                [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_OTHERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
+            }
+            else{
+                [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_USERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
+            }
+            
+            messageTextView.attributedText = attributedString;
+            
+            txtheight=[messageTextView sizeThatFits:CGSizeMake(messageTextBoxWidth, 1000)].height-16;
+            
+            [messageTextView setTextContainerInset:UIEdgeInsetsMake(height+10, 0, 0, 0)];
+            
+        }
+        
+        
+        float msgHeight=16+height+txtheight;
+        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
+        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showsSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+        
+        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
+        
+        
+        [audioItem setHidden:YES];
+        [messagePictureImageView setHidden:NO];
+        
+        messagePictureImageView.layer.cornerRadius=10.0;
+        messagePictureImageView.layer.masksToBounds=YES;
+        [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
+        
+    }
+
     
   /* fix this
    if(showsProfile){
@@ -306,6 +370,7 @@
 }
 
 
+
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView
 {
     BOOL KONOTOR_SHOWPROFILEIMAGE=NO;
@@ -323,8 +388,12 @@
     
     float cellHeight=0;
     
-    if([currentMessage messageType].integerValue==KonotorMessageTypeText){
-        float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:[currentMessage text] withFont:KONOTOR_MESSAGETEXT_FONT];
+    if(([currentMessage messageType].integerValue==KonotorMessageTypeText)||([currentMessage messageType].integerValue==KonotorMessageTypeHTML)){
+        NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
+        
+        NSString *simpleString=[messageText string];
+        
+        float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         if(KONOTOR_SHOWPROFILEIMAGE){
             cellHeight= MAX(height+extraHeight,
                             minimumHeight);
@@ -338,7 +407,28 @@
         cellHeight=KONOTOR_AUDIOMESSAGE_HEIGHT+KONOTOR_VERTICAL_PADDING+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
 ;
     }
+    else if(([currentMessage messageType].integerValue==KonotorMessageTypePicture)||([currentMessage messageType].integerValue==KonotorMessageTypePictureV2)){
+        
+        if((![currentMessage picData])&&(([[currentMessage picUrl] isEqualToString:@""])|| ([currentMessage picUrl]==nil))&&((currentMessage.text==nil)||([currentMessage.text isEqualToString:@""])))
+            currentMessage.text=@"Error loading picture message.Image Not Found";
+        
+        CGSize picSize=[FDPictureMessageUnit getSizeForImageFromMessage:currentMessage];
+        
+        float height=picSize.height;
+        float txtheight=0.0;
+        
+        if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
+            
+            NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
+            
+            txtheight=[attributedString boundingRectWithSize:CGSizeMake(width, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil].size.height;
+        }
+        cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
 
+    }
+    
+        
+    
     return cellHeight;
 }
 

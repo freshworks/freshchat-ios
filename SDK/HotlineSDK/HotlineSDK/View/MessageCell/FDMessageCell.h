@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "FDAudioMessageUnit.h"
+#import "FDPictureMessageUnit.h"
 #import "FDActionButton.h"
 #import "Konotor.h"
+
 
 #define KONOTOR_TEXTMESSAGE_MAXWIDTH 260.0
 #define KONOTOR_MESSAGETEXT_FONT ([UIFont systemFontOfSize:16.0])
@@ -27,8 +29,12 @@
 #define KONOTOR_USERNAMEFIELD_HEIGHT 18
 #define KONOTOR_TIMEFIELD_HEIGHT 16
 
+#define KONOTOR_IMAGE_MAXHEIGHT 300
+#define KONOTOR_IMAGE_MAXWIDTH 240
+
 
 @class FDAudioMessageUnit;
+@class FDPictureMessageUnit;
 
 @interface FDMessageCell : UITableViewCell
 
@@ -54,7 +60,7 @@
 @property (strong, nonatomic) UITextView* senderNameLabel;
 @property (strong, nonatomic) UITextView* messageSentTimeLabel;
 @property (strong, nonatomic) UIImageView* uploadStatusImageView;
-@property (strong, nonatomic) UIImageView* messagePictureImageView;
+@property (strong, nonatomic) FDPictureMessageUnit* messagePictureImageView;
 @property (strong, nonatomic) FDActionButton* messageActionButton;
 
 - (void) initCell;

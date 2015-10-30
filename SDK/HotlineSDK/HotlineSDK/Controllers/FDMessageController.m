@@ -121,7 +121,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (indexPath.row < self.messages.count) {
         //cell.textLabel.text  = self.messages[indexPath.row];
         KonotorMessageData* message=[[KonotorMessageData alloc] init];
-        message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
+        message.messageType=[NSNumber numberWithInt:KonotorMessageTypePicture];
+        message.picThumbUrl=@"http://www.britishairways.com/assets/images/destinations/components/mainCarousel/orlando/US-ORL-DISNEY-CASTLE-WALK-760x350.jpg";
+        message.picThumbWidth=[NSNumber numberWithFloat:300.0];
+        message.picThumbHeight=[NSNumber numberWithFloat:150.0];
         message.text=self.messages[indexPath.row];
         [cell drawMessageViewForMessage:message parentView:self.view];
         
@@ -135,7 +138,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     KonotorMessageData* message=[[KonotorMessageData alloc] init];
-    message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
+    message.messageType=[NSNumber numberWithInt:KonotorMessageTypePicture];
+    message.picThumbUrl=@"http://www.britishairways.com/assets/images/destinations/components/mainCarousel/orlando/US-ORL-DISNEY-CASTLE-WALK-760x350.jpg";
+    message.picThumbWidth=[NSNumber numberWithFloat:300.0];
+    message.picThumbHeight=[NSNumber numberWithFloat:150.0];
     message.text=self.messages[indexPath.row];
     float height=[FDMessageCell getHeightForMessage:message parentView:self.view];
     return height;

@@ -35,6 +35,6 @@ enum FDAudioMessageMediaState {
 - (void) stopAnimating;
 - (void) setHidden:(BOOL)hidden;
 - (void) setUpView;
-- (void) displayMessage:(KonotorMessageData*) message;
+- (void) displayMessage:(FDMessage*) message;
 
 @end
