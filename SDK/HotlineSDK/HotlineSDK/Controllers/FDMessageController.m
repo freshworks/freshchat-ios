@@ -47,7 +47,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)updateMessages{
     self.messages = @[@"Welcome to the conversations related to billing",
-                      @"how do i book using card",
+                      @"how do i book using card. I should <a href=\"http://yahoo.com\">Yahoo</a> this already!",
                       @"you can use this link http://goo.le/d35Gfac"];
 }
 
