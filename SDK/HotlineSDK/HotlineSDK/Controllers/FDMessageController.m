@@ -20,6 +20,8 @@
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewBottomConstraint;
 @property (strong, nonatomic) UIView *bottomView;
 @property (nonatomic) CGFloat keyboardHeight;
+@property (nonatomic)BOOL isKeyboardOpen;
+
 
 @end
 
@@ -51,8 +53,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)setSubviews{
     self.tableView = [[UITableView alloc]init];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -147,6 +150,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{
+    self.isKeyboardOpen = YES;
+
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
@@ -157,6 +162,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyboardOpen = NO;
+
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.keyboardHeight = 0.0;
     self.bottomViewBottomConstraint.constant = 0.0;
@@ -166,13 +173,21 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }];
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
+    CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
+    NSInteger keyboardOffsetFromBottom = self.view.frame.size.height - absoluteFingerLocation.y;
+    
+    if (self.isKeyboardOpen && scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged && absoluteFingerLocation.y >= (self.view.frame.size.height - self.keyboardHeight)) {
+        self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
+    }
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     if (self.keyboardHeight > 0) {
         [self scrollTableViewToLastCell];
     }
 }
-
-
 
 -(void)localNotificationSubscription{
     
@@ -207,6 +222,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     
 }
 
+
+#pragma Growing text view delegates
 
 - (void)growingTextView:(FDGrowingTextView *)growingTextView willChangeHeight:(float)height{
     if (height > self.bottomViewHeightConstraint.constant) {
@@ -244,4 +261,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
+
+
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "FDMessageCell.h"
+#import "Konotor.h"
 
 enum FDAudioMessageMediaState {
     FDAudioMessageMediaStatePlaying = 1,
