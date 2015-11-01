@@ -345,24 +345,17 @@
     }
 
     
-  /* fix this
    if(showsProfile){
-        UIImageView* profileImage=(UIImageView*)[self.contentView viewWithTag:KONOTOR_PROFILEIMAGE_TAG];
-        if(profileImage)
-            [profileImage setHidden:NO];
+        [profileImageView setHidden:NO];
         if(isSenderOther)
-            [profileImage setImage:otherImage];
+            [profileImageView setImage:[UIImage imageNamed:@"konotor_supportprofile"]];
         else
-            [profileImage setImage:meImage];
-        [profileImage setFrame:CGRectMake(profileX,messageBackground.frame.origin.y+messageBackground.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION)];
+            [profileImageView setImage:[UIImage imageNamed:@"konotor_profile"]];
+        [profileImageView setFrame:CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION)];
     }
     else{
-        UIImageView* profileImage=(UIImageView*)[cell.contentView viewWithTag:KONOTOR_PROFILEIMAGE_TAG];
-        if(profileImage)
-            [profileImage setHidden:YES];
+        [profileImageView setHidden:YES];
     }
-   */
-    
     [self setBackgroundColor:[UIColor clearColor]];
     [self.contentView setClipsToBounds:YES];
     self.tag=[currentMessage.messageId hash];
