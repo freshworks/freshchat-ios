@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FDGrowingTextView.h"
 
 @protocol FDInputToolbarViewDelegate <NSObject>
 
@@ -16,11 +15,10 @@
 
 @end
 
-@interface FDInputToolbarView : UIView
+@interface FDInputToolbarView : UIView 
 
-@property (strong, nonatomic, readonly) FDGrowingTextView *textView;
 
--(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate, FDGrowingTextViewDelegate>)delegate;
+-(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate, UITextViewDelegate>)delegate;
 -(void)enableSendButton:(BOOL)state;
 -(void)showAttachButton:(BOOL)state;
 

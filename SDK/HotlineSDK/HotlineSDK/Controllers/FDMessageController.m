@@ -29,6 +29,9 @@
 
 static CGFloat TOOLBAR_HEIGHT = 40;
 
+BOOL firstWordOnLine=YES;
+
+
 -(instancetype)initWithConversation:(NSString *)conversation{
     self = [super init];
     if (self) {
@@ -121,7 +124,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (indexPath.row < self.messages.count) {
         //cell.textLabel.text  = self.messages[indexPath.row];
         KonotorMessageData* message=[[KonotorMessageData alloc] init];
-        message.messageType=[NSNumber numberWithInt:KonotorMessageTypePicture];
+        message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
         message.picThumbUrl=@"http://www.britishairways.com/assets/images/destinations/components/mainCarousel/orlando/US-ORL-DISNEY-CASTLE-WALK-760x350.jpg";
         message.picThumbWidth=[NSNumber numberWithFloat:300.0];
         message.picThumbHeight=[NSNumber numberWithFloat:150.0];
@@ -138,7 +141,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     KonotorMessageData* message=[[KonotorMessageData alloc] init];
-    message.messageType=[NSNumber numberWithInt:KonotorMessageTypePicture];
+    message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
     message.picThumbUrl=@"http://www.britishairways.com/assets/images/destinations/components/mainCarousel/orlando/US-ORL-DISNEY-CASTLE-WALK-760x350.jpg";
     message.picThumbWidth=[NSNumber numberWithFloat:300.0];
     message.picThumbHeight=[NSNumber numberWithFloat:150.0];
@@ -231,25 +234,37 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 #pragma Growing text view delegates
 
-- (void)growingTextView:(FDGrowingTextView *)growingTextView willChangeHeight:(float)height{
+- (void) textViewDidChange:(UITextView *)inputTextView
+{
+    CGSize txtSize = [inputTextView sizeThatFits:CGSizeMake(inputTextView.frame.size.width, 140)];
+    float height=txtSize.height;
+    
+    if((height)>=67){
+        height=67;
+        if(firstWordOnLine==YES)
+            firstWordOnLine=NO;
+        else
+            inputTextView.scrollEnabled=YES;
+    }
+    else{
+        inputTextView.scrollEnabled=NO;
+    }
+    
     if (height > self.bottomViewHeightConstraint.constant) {
-        self.bottomViewHeightConstraint.constant = height;
+        self.bottomViewHeightConstraint.constant = height+10; //Fix this
         self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     }
-    [self scrollTableViewToLastCell];
-}
-
-- (void)growingTextViewDidChange:(FDGrowingTextView *)growingTextView {
-    if ([growingTextView.text isEqualToString:@""]) {
-        
-        //Reset toolbar height when there is no text
-        self.bottomViewHeightConstraint.constant = TOOLBAR_HEIGHT;
-        self.bottomViewBottomConstraint.constant = -self.keyboardHeight;
+    else{
+        self.bottomViewHeightConstraint.constant = height+10; //Fix this
+        self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     }
-}
+    
 
-- (void)growingTextViewDidBeginEditing:(FDGrowingTextView *)growingTextView {
+    
+    inputTextView.frame=CGRectMake(inputTextView.frame.origin.x,inputTextView.frame.origin.y,inputTextView.frame.size.width,height);
+    
     [self scrollTableViewToLastCell];
+
 }
 
 -(void)dealloc{

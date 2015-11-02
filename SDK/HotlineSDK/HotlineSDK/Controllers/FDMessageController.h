@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FDInputToolbarView.h"
 
-@interface FDMessageController : UIViewController <FDInputToolbarViewDelegate, FDGrowingTextViewDelegate>
+@interface FDMessageController : UIViewController <FDInputToolbarViewDelegate, UITextViewDelegate>
 
 -(instancetype)initWithConversation:(NSString *)conversation;
 

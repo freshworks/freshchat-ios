@@ -45,7 +45,6 @@
 		35591B961B9EDD0700BC0B60 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B8D1B9EDD0700BC0B60 /* UIImageView+AFNetworking.m */; };
 		35591BAA1B9EDF8C00BC0B60 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B241B9EDCB700BC0B60 /* Hotline.h */; };
 		35591BAB1B9EDF9200BC0B60 /* Konotor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B271B9EDCB700BC0B60 /* Konotor.h */; };
-		3575C47E1BE1EF25000C3D02 /* FDGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3575C4791BE1EF25000C3D02 /* FDGrowingTextView.m */; };
 		3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */; };
 		3575C4801BE1EF25000C3D02 /* FDTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 3575C47D1BE1EF25000C3D02 /* FDTextViewInternal.m */; };
 		358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C11BB00EB700B36E4E /* HLArticle.m */; };
@@ -200,8 +199,6 @@
 		35591B8B1B9EDD0700BC0B60 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		35591B8C1B9EDD0700BC0B60 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		35591B8D1B9EDD0700BC0B60 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		3575C4781BE1EF25000C3D02 /* FDGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDGrowingTextView.h; sourceTree = "<group>"; };
-		3575C4791BE1EF25000C3D02 /* FDGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDGrowingTextView.m; sourceTree = "<group>"; };
 		3575C47A1BE1EF25000C3D02 /* FDInputToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDInputToolbarView.h; sourceTree = "<group>"; };
 		3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDInputToolbarView.m; sourceTree = "<group>"; };
 		3575C47C1BE1EF25000C3D02 /* FDTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTextViewInternal.h; sourceTree = "<group>"; };
@@ -528,8 +525,6 @@
 		3575C4771BE1EF25000C3D02 /* InputToolbarView */ = {
 			isa = PBXGroup;
 			children = (
-				3575C4781BE1EF25000C3D02 /* FDGrowingTextView.h */,
-				3575C4791BE1EF25000C3D02 /* FDGrowingTextView.m */,
 				3575C47A1BE1EF25000C3D02 /* FDInputToolbarView.h */,
 				3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */,
 				3575C47C1BE1EF25000C3D02 /* FDTextViewInternal.h */,
@@ -951,7 +946,6 @@
 				35DCCB4F1BE002960039EFDD /* FDButton.m in Sources */,
 				35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */,
 				35DCCB521BE002960039EFDD /* FDAlertView.m in Sources */,
-				3575C47E1BE1EF25000C3D02 /* FDGrowingTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

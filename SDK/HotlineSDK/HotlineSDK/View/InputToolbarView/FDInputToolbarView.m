@@ -11,10 +11,12 @@
 #import "HLTheme.h"
 #import "HLMacros.h"
 
+
 @interface FDInputToolbarView ()
 
 @property (strong, nonatomic) FDButton             *sendButton;
 @property (strong, nonatomic) FDButton             *attachButton;
+@property (strong, nonatomic) UITextView           *inputTextView;
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
@@ -26,38 +28,26 @@
 
 @implementation FDInputToolbarView
 
-@synthesize textView, innerImageView, outerImageView, sendButton, attachButton, attachButtonWidthConstraint;
+@synthesize innerImageView, outerImageView,inputTextView, sendButton, attachButton, attachButtonWidthConstraint;
 
--(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate, FDGrowingTextViewDelegate>)delegate{
+-(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate, UITextViewDelegate>)delegate{
     self = [super init];
     if (self) {
         
         self.delegate = delegate;
         self.theme = [HLTheme sharedInstance];
-        textView = [[FDGrowingTextView alloc] init];
-        textView.internalTextView.inputAccessoryView = nil;
-        textView.textColor = [self.theme inputTextFontColor];
-        textView.tintColor = [self.theme inputTextFontColor];
-        textView.minNumberOfLines = 1;
-        textView.maxNumberOfLines = 4;
-        textView.animateHeightChange = NO;
-        textView.animationDuration=0;
-        textView.backgroundColor = [UIColor clearColor];
-        textView.returnKeyType = UIReturnKeyDefault;
-        textView.font = [UIFont systemFontOfSize:14.0f];
-        textView.delegate = delegate;
-        textView.placeholder = HLLocalizedString(@"Message Placeholder Text");
-        [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [textView.internalTextView setTranslatesAutoresizingMaskIntoConstraints:NO];
         
-        UIImage *innerTextViewImage = [UIImage imageNamed:INPUT_BAR_INNER_TEXT_VIEW_IMAGE];
-        UIImage *outerTextViewImage = [UIImage imageNamed:INPUT_BAR_OUTER_TEXT_VIEW_IMAGE];
+        self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
         
-        innerImageView = [[UIImageView alloc] initWithImage:[innerTextViewImage stretchableImageWithLeftCapWidth:13 topCapHeight:22]];
-        innerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        outerImageView = [[UIImageView alloc] initWithImage:[outerTextViewImage stretchableImageWithLeftCapWidth:13 topCapHeight:22]];
-        outerImageView.translatesAutoresizingMaskIntoConstraints = NO;
+   
+        inputTextView=[[UITextView alloc] init];
+        [inputTextView setTextColor:[self.theme inputTextFontColor]];
+        inputTextView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
+        inputTextView.layer.cornerRadius=10.0;
+        inputTextView.layer.borderWidth=1.0;
+        [inputTextView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        inputTextView.delegate=delegate;
+
         
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -71,10 +61,7 @@
         [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
-        //View hierarchy
-        [outerImageView addSubview:innerImageView];
-        [self addSubview:outerImageView];
-        [self addSubview:textView];
+        [self addSubview:inputTextView];
         [self addSubview:attachButton];
         [self addSubview:sendButton];
     }
@@ -90,16 +77,14 @@
 }
 
 -(void)layoutSubviews{
-    NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(attachButton, outerImageView, sendButton, innerImageView)];
-    views[@"internalTextView"] = textView.internalTextView;
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[outerImageView]|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[outerImageView]|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[sendButton(27)]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[attachButton]" options:0 metrics:nil views:views]];
-    [outerImageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[innerImageView]|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton]-[innerImageView]-[sendButton(63)]-5-|" options:0 metrics:nil views:views]];
-    [textView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[internalTextView]|" options:0 metrics:nil views:views]];
-    [textView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[internalTextView]|" options:0 metrics:nil views:views]];
+    NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(attachButton,inputTextView, sendButton)];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[inputTextView]-5-|" options:0 metrics:nil views:views]];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(27)]-5-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton]|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton]-[inputTextView]-[sendButton(54)]-5-|" options:0 metrics:nil views:views]];
+    
     
     attachButtonWidthConstraint = [NSLayoutConstraint constraintWithItem:attachButton
                                                                attribute:NSLayoutAttributeWidth
@@ -115,37 +100,6 @@
     
     [self addConstraint:attachButtonWidthConstraint];
 
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:textView
-                                                              attribute:NSLayoutAttributeLeading
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:innerImageView
-                                                              attribute:NSLayoutAttributeLeading
-                                                             multiplier:1.0
-                                                               constant:1.0]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:textView
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:innerImageView
-                                                              attribute:NSLayoutAttributeHeight
-                                                             multiplier:1.0
-                                                               constant:0.0]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:textView
-                                                              attribute:NSLayoutAttributeTop
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:innerImageView
-                                                              attribute:NSLayoutAttributeTop
-                                                             multiplier:1.0
-                                                               constant:5.0]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:textView
-                                                              attribute:NSLayoutAttributeTrailing
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:innerImageView
-                                                              attribute:NSLayoutAttributeTrailing
-                                                             multiplier:1.0
-                                                               constant:0.0]];
     
     [super layoutSubviews];
 }
@@ -162,5 +116,10 @@
 -(void)showAttachButton:(BOOL)state{
     self.canShowAttachButton = state;
 }
+
+
+
+
+
 
 @end
