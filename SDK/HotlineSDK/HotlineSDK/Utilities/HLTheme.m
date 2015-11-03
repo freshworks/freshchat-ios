@@ -167,10 +167,34 @@
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
+-(UIFont *)tableViewCellTitleFont{
+    return [self getFontWithKey:@"TableView.Title" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)tableViewCellTitleFontColor{
+    UIColor *color = [self getColorForKeyPath:@"TableView.TitleFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+-(UIFont *)tableViewCellDetailFont{
+    return [self getFontWithKey:@"TableView.Detail" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)tableViewCellDetailFontColor{
+    UIColor *color = [self getColorForKeyPath:@"TableView.DetailFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
 -(UIColor *)tableViewCellBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellBackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
+
+-(UIColor *)tableViewCellImageBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"TableView.ImageViewBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
@@ -180,25 +204,6 @@
 -(UIColor *)timeDetailTextColor {
     UIColor *color = [self getColorForKeyPath:@"TableView.TimeDetailTextColor"];
     return color ? color : [UIColor lightGrayColor];
-}
-
--(UIFont *)tableViewSectionHeaderFont{
-    return [self getFontWithKey:@"TableView.SectionHeaderTitle" andDefaultSize:FD_FONT_SIZE_NORMAL];
-}
-
--(UIColor *)tableViewSectionHeaderFontColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.SectionHeaderTitleColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
-
--(UIColor *)tableViewSectionHeaderBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.SectionHeaderBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BACKGROUND_COLOR];
-}
-
--(CGFloat)tableViewSectionHeaderHeight {
-    CGFloat height = [[self.themePreferences valueForKeyPath:@"TableView.SectionHeaderHeight"] floatValue];
-    return height ? height : 20.0f;
 }
 
 #pragma mark - Overall SDK
@@ -231,5 +236,77 @@
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.NoItemsFoundMessageColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
+
+#pragma mark - Grid View
+
+-(UIColor *)itemBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"GridView.ItemBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)itemSeparatorColor{
+    UIColor *color = [self getColorForKeyPath:@"GridView.ItemSeparatorColor"];
+    return color ? color : [UIColor lightGrayColor];
+}
+
+-(UIFont *)contactUsFont{
+    return [self getFontWithKey:@"GridView.ContactUs" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)contactUsFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridView.ContactUsFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+#pragma mark - Grid View Cell
+
+-(UIFont *)categoryTitleFont{
+    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)categoryTitleFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.CategoryTitleFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+-(UIColor *)imageViewItemBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewbackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+#pragma mark - Conversation List View
+
+-(UIColor *)conversationListViewBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationListView.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
+}
+
+-(UIFont *)channelTitleFont{
+    return [self getFontWithKey:@"GridView.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)channelTitleFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridView.ChannelTitleFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+-(UIFont *)channelDescriptionFont{
+    return [self getFontWithKey:@"GridView.ChannelDescription" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)channelDescriptionFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridView.ChannelDescriptionFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+-(UIFont *)lastUpdatedFont{
+    return [self getFontWithKey:@"GridView.LastUpdated" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)lastUpdatedFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridView.LastUpdatedFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
 
 @end

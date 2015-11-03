@@ -8,7 +8,6 @@
 
 #import "FDTableViewCellWithImage.h"
 
-
 @implementation FDTableViewCellWithImage
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -25,16 +24,20 @@
         }
         
         self.titleLabel = [[UILabel alloc] init];
-        self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+        self.titleLabel.font = [self.theme tableViewCellDetailFont];
+        self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
         self.imgView=[[UIImageView alloc] init];
-        self.imgView.backgroundColor=[UIColor clearColor];
+        self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
         [self.imgView.layer setCornerRadius:8.0f];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         [self.imgView setImage:[UIImage imageNamed:@"loading.png"]];
         
+        self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         [self.detailLabel setNumberOfLines:0];
+        self.detailLabel.font = [self.theme tableViewCellDetailFont];
+        self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
         [self.detailLabel setLineBreakMode:NSLineBreakByWordWrapping];
 
         

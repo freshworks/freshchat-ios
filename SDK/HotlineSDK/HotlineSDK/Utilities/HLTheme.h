@@ -26,9 +26,14 @@
 
 //Table View
 -(UIFont *)tableViewCellFont;
--(UIColor *)tableViewCellBackgroundColor;
--(UIColor *)tableViewCellSeparatorColor;
 -(UIColor *)tableViewCellFontColor;
+-(UIFont *)tableViewCellTitleFont;
+-(UIColor *)tableViewCellTitleFontColor;
+-(UIFont *)tableViewCellDetailFont;
+-(UIColor *)tableViewCellDetailFontColor;
+-(UIColor *)tableViewCellBackgroundColor;
+-(UIColor *)tableViewCellImageBackgroundColor;
+-(UIColor *)tableViewCellSeparatorColor;
 -(UIColor *)timeDetailTextColor;
 -(UIFont *)conversationsTimeDetailFont;
 
@@ -53,5 +58,26 @@
 -(UIFont *)dialogueButtonFont;
 -(UIColor *)dialogueButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
+
+//Grid View
+
+-(UIColor *)itemBackgroundColor;
+-(UIColor *)itemSeparatorColor;
+-(UIFont *)contactUsFont;
+-(UIColor *)contactUsFontColor;
+
+//Grid View Cell
+-(UIFont *)categoryTitleFont;
+-(UIColor *)categoryTitleFontColor;
+-(UIColor *)imageViewItemBackgroundColor;
+
+//Conversation List View
+-(UIColor *)conversationListViewBackgroundColor;
+-(UIFont *)channelTitleFont;
+-(UIColor *)channelTitleFontColor;
+-(UIFont *)channelDescriptionFontl;
+-(UIColor *)channelDescriptionFontColor;
+-(UIFont *)lastUpdatedFont;
+-(UIColor *)lastUpdatedFontColor;
 
 @end

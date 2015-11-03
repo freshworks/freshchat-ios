@@ -12,6 +12,7 @@
 @interface HLGridViewCell()
 
 @property (nonatomic,strong) UIView *view;
+@property (nonatomic, strong) HLTheme *theme;
 
 @end
 
@@ -22,8 +23,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
+        self.theme = [HLTheme sharedInstance];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        self.imageView.backgroundColor = [[HLTheme sharedInstance] gridViewItemBackgroundColor];
+        self.imageView.backgroundColor = [self.theme gridViewItemBackgroundColor];
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         
@@ -36,6 +38,8 @@
         self.label = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, self.bounds.size.width, 40)];
         self.label.lineBreakMode=NSLineBreakByWordWrapping;
         self.label.textAlignment = NSTextAlignmentCenter;
+        self.label.backgroundColor = [self.theme imageViewItemBackgroundColor];
+        self.label.textColor = [self.theme categoryTitleFontColor];
         [self.label  setNumberOfLines:0];
         [self.label sizeToFit];
         self.label.translatesAutoresizingMaskIntoConstraints = NO;

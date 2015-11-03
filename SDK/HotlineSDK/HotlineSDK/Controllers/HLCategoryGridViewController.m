@@ -219,8 +219,9 @@
     if (indexPath.row < self.categories.count){
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
+        cell.backgroundColor = [[HLTheme sharedInstance] itemBackgroundColor];
         cell.layer.borderWidth=0.0f;
-        cell.layer.borderColor=[UIColor grayColor].CGColor;
+        cell.layer.borderColor=[[HLTheme sharedInstance] itemSeparatorColor].CGColor;
         if (!category.icon){
             cell.imageView.image=[UIImage imageNamed:@"loading.png"];
         }else{
