@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "KonotorDataManager.h"
+#import "HLChannel.h"
+#import "KonotorMessageBinary.h"
 #import <ImageIO/ImageIO.h>
 #import <UIKit/UIImage.h>
 
@@ -16,49 +18,55 @@
 
 @interface KonotorMessage : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * messageType;
-@property (nonatomic, retain) NSString * messageUserId;
-@property (nonatomic, retain) NSString * messageAlias;
-@property (nonatomic, retain) NSNumber * bytes;
-@property (nonatomic, retain) NSNumber * durationInSecs;
-@property (nonatomic, retain) NSNumber * picHeight,*picThumbHeight;
-@property (nonatomic, retain) NSNumber * picWidth, *picThumbWidth;
-@property (nonatomic, retain) NSString * picCaption;
-
-@property (nonatomic, retain) NSNumber * read;
-@property (nonatomic, retain) NSNumber * createdMillis;
-@property (nonatomic) BOOL isMarkedForUpload;
-@property (nonatomic, retain) NSNumber * uploadStatus;
-@property (nonatomic, retain) NSManagedObject *hasMessageBinary;
-@property (nonatomic, retain) KonotorConversation *belongsToConversation;
+@property (nullable, nonatomic, retain) NSString *actionLabel;
+@property (nullable, nonatomic, retain) NSString *actionURL;
+@property (nullable, nonatomic, retain) NSString *audioURL;
+@property (nullable, nonatomic, retain) NSNumber *bytes;
+@property (nullable, nonatomic, retain) NSNumber *createdMillis;
+@property (nullable, nonatomic, retain) NSNumber *durationInSecs;
 @property (nonatomic) BOOL isDownloading;
+@property (nonatomic) BOOL isMarkedForUpload;
+@property (nullable, nonatomic, retain) NSNumber *marketingId;
+@property (nullable, nonatomic, retain) NSString *messageAlias;
 @property (nonatomic) BOOL messageRead;
-@property (nonatomic, retain) NSString *audioURL;
-//@property (nonatomic, retain) NSString *marketingId;
-@property (nonatomic, retain) NSNumber *marketingId;
-@property (nonatomic, retain) NSString *text;
-@property (nonatomic, retain) NSString *picUrl;
-@property (nonatomic, retain) NSString *picThumbUrl;
-@property (nonatomic, retain) NSString *actionLabel, *actionURL;
 
-+(NSArray *)getAllMessagesForDefaultConversation;
-+(NSArray *)getAllMessagesForConversation: (NSString* )conversationID;
-+(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId;
-+(KonotorMessage *)createNewMessage: (KonotorMessage *)message;
--(NSString *)getJSON;
+@property (nullable, nonatomic, retain) NSNumber *messageType;
+@property (nullable, nonatomic, retain) NSString *messageUserId;
+@property (nullable, nonatomic, retain) NSString *picCaption;
+@property (nullable, nonatomic, retain) NSNumber *picHeight;
+@property (nullable, nonatomic, retain) NSNumber *picThumbHeight;
+@property (nullable, nonatomic, retain) NSString *picThumbUrl;
+@property (nullable, nonatomic, retain) NSNumber *picThumbWidth;
+@property (nullable, nonatomic, retain) NSString *picUrl;
+@property (nullable, nonatomic, retain) NSNumber *picWidth;
+@property (nullable, nonatomic, retain) NSNumber *read;
+@property (nullable, nonatomic, retain) NSString *text;
+@property (nullable, nonatomic, retain) NSNumber *uploadStatus;
+@property (nullable, nonatomic, retain) HLChannel *belongsToChannel;
+@property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
+@property (nullable, nonatomic, retain) KonotorMessageBinary *hasMessageBinary;
+
+
+//@property (nonatomic, retain) NSString *marketingId;
++(NSArray *) getAllMessagesForDefaultConversation;
++(NSArray *) getAllMessagesForConversation: (NSString* )conversationID;
++(KonotorMessage *) retriveMessageForMessageId: (NSString *)messageId;
+-(NSString *) getJSON;
 +(NSString *)generateMessageID;
--(void)associateMessageToConversation: (KonotorConversation *)conversation;
++(KonotorMessage *)createNewMessage: (KonotorMessage *)message;
+-(void) associateMessageToConversation: (KonotorConversation *)conversation;
 +(NSString *)saveTextMessageInCoreData : (NSString *)text;
-+(NSString *)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *)caption;
-+(void)insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage;
++(NSString*)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption;
++(void) insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage;
 +(void)updateWelcomeMessageText:(NSString*)text;
 +(void)uploadAllUnuploadedMessages;
--(void)markAsReadwithNotif:(BOOL) notif;
--(void)markAsUnread;
++(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId;
+-(void) markAsReadwithNotif:(BOOL) notif;
+-(void) markAsUnread;
 +(void)markAllMessagesAsRead;
-+(void)markMarketingMessageAsClicked:(NSNumber *) marketingId;
-+(BOOL)setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
-+(BOOL)setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
--(BOOL)isMarketingMessage;
++(void) markMarketingMessageAsClicked:(NSNumber *) marketingId;
++(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
++(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
+-(BOOL) isMarketingMessage;
 
 @end

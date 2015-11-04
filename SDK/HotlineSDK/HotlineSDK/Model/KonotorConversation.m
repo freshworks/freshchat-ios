@@ -19,12 +19,17 @@
 @implementation KonotorConversation
 
 @dynamic conversationAlias;
-@dynamic hasMessages;
+@dynamic conversationHostUserAlias;
+@dynamic conversationHostUserId;
 @dynamic createdMillis;
-@dynamic updatedMillis;
+@dynamic status;
 @dynamic unreadMessagesCount;
+@dynamic updatedMillis;
+@dynamic belongsToChannel;
+@dynamic hasMessages;
 
 NSMutableDictionary* gkConversationIdConversationMap;
+
 -(void) incrementUnreadCount
 {
     int unread = [[self unreadMessagesCount]intValue];
@@ -347,6 +352,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
     
     
 }
+
 +(KonotorConversation *)CreateNewConversation:(KonotorConversation *)conversation
 {
     KonotorConversation *newConversation = (KonotorConversation *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];

@@ -15,6 +15,7 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 
 #define HOTLINE_ARTICLE_ENTITY @"HLArticle"
 #define HOTLINE_CATEGORY_ENTITY @"HLCategory"
+#define HOTLINE_CHANNEL_ENTITY @"HLChannel"
 #define HOTLINE_INDEX_ENTITY @"FDIndex"
 #define ARTICLE_TITLE @"articleTitle"
 #define ARTICLE_DESCRIPTION @"articleDescription"
@@ -32,5 +33,8 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 -(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
+-(void)fetchAllChannels:(void(^)(NSArray *channels, NSError *error))handler;
+-(void)deleteAllChannels:(void(^)(NSError *error))handler;
+-(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler;
 
 @end

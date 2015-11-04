@@ -14,6 +14,7 @@
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
 #import "FDConversationController.h"
+#import "HLChannelViewController.h"
 
 @interface Hotline ()
 
@@ -42,8 +43,8 @@
 }
 
 +(void)presentFeedback:(UIViewController *)controller{
-    FDConversationController *conversationController = [FDConversationController new];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:conversationController];
+    HLChannelViewController *channelViewController = [HLChannelViewController new];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:channelViewController];
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     navigationController.viewControllers = @[containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];

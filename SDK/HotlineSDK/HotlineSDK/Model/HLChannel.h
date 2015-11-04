@@ -1,0 +1,45 @@
+//
+//  HLChannel.h
+//  Hotline
+//
+//  Created by user on 03/11/15.
+//  Copyright © 2015 Freshdesk. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+@class KonotorConversation, KonotorMessage;
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface HLChannel : NSManagedObject
+
+@property (nullable, nonatomic, retain) NSNumber *channelID;
+@property (nullable, nonatomic, retain) NSDate *created;
+@property (nullable, nonatomic, retain) NSNumber *isDeletedInServer;
+@property (nullable, nonatomic, retain) NSData *icon;
+@property (nullable, nonatomic, retain) NSString *iconURL;
+@property (nullable, nonatomic, retain) NSDate *lastUpdated;
+@property (nullable, nonatomic, retain) NSString *name;
+@property (nullable, nonatomic, retain) NSNumber *position;
+@property (nullable, nonatomic, retain) NSSet<KonotorConversation *> *hasConversations;
+@property (nullable, nonatomic, retain) KonotorMessage *hasWelcomeMessage;
+
++(HLChannel *)getWithID:(NSNumber *)channelID inContext:(NSManagedObjectContext *)context;
++(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context;
++(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo;
+
+@end
+
+@interface HLChannel (CoreDataGeneratedAccessors)
+
+- (void)addHasConversationsObject:(KonotorConversation *)value;
+- (void)removeHasConversationsObject:(KonotorConversation *)value;
+- (void)addHasConversations:(NSSet<KonotorConversation *> *)values;
+- (void)removeHasConversations:(NSSet<KonotorConversation *> *)values;
+
+@end
+
+NS_ASSUME_NONNULL_END
+

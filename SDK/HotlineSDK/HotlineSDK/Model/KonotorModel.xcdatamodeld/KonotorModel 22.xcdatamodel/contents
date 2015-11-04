@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="14E46" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="14F27" minimumToolsVersion="Xcode 4.3">
     <entity name="FDIndex" representedClassName="FDIndex" syncable="YES">
         <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="descMatches" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -25,6 +25,18 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="articles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HLArticle" inverseName="category" inverseEntity="HLArticle" syncable="YES"/>
     </entity>
+    <entity name="HLChannel" representedClassName="HLChannel" syncable="YES">
+        <attribute name="channelID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="iconURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isDeletedInServer" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="hasConversations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="KonotorConversation" inverseName="belongsToChannel" inverseEntity="KonotorConversation" syncable="YES"/>
+        <relationship name="hasWelcomeMessage" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="KonotorMessage" inverseName="belongsToChannel" inverseEntity="KonotorMessage" syncable="YES"/>
+    </entity>
     <entity name="KonotorApp" representedClassName="KonotorApp" syncable="YES">
         <attribute name="appID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="appKey" optional="YES" attributeType="String" syncable="YES"/>
@@ -45,6 +57,7 @@
         <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="unreadMessagesCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="updatedMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HLChannel" inverseName="hasConversations" inverseEntity="HLChannel" syncable="YES"/>
         <relationship name="hasMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="KonotorMessage" inverseName="belongsToConversation" inverseEntity="KonotorMessage" syncable="YES"/>
     </entity>
     <entity name="KonotorCustomProperty" representedClassName="KonotorCustomProperty" syncable="YES">
@@ -77,6 +90,7 @@
         <attribute name="read" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HLChannel" inverseName="hasWelcomeMessage" inverseEntity="HLChannel" syncable="YES"/>
         <relationship name="belongsToConversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorConversation" inverseName="hasMessages" inverseEntity="KonotorConversation" syncable="YES"/>
         <relationship name="hasMessageBinary" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorMessageBinary" inverseName="belongsToMessage" inverseEntity="KonotorMessageBinary" syncable="YES"/>
     </entity>
@@ -102,15 +116,16 @@
         <relationship name="hasProperties" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorCustomProperty" syncable="YES"/>
     </entity>
     <elements>
+        <element name="FDIndex" positionX="-288" positionY="135" width="128" height="105"/>
         <element name="HLArticle" positionX="-326" positionY="549" width="128" height="148"/>
         <element name="HLCategory" positionX="-495" positionY="420" width="128" height="165"/>
+        <element name="HLChannel" positionX="97" positionY="602" width="128" height="193"/>
         <element name="KonotorApp" positionX="54" positionY="135" width="128" height="195"/>
-        <element name="KonotorConversation" positionX="-108" positionY="402" width="128" height="165"/>
+        <element name="KonotorConversation" positionX="-108" positionY="402" width="128" height="178"/>
         <element name="KonotorCustomProperty" positionX="-171" positionY="126" width="128" height="105"/>
-        <element name="KonotorMessage" positionX="304" positionY="3" width="128" height="420"/>
+        <element name="KonotorMessage" positionX="304" positionY="3" width="128" height="433"/>
         <element name="KonotorMessageBinary" positionX="27" positionY="-18" width="128" height="105"/>
         <element name="KonotorShareMessageEvent" positionX="223" positionY="488" width="128" height="88"/>
         <element name="KonotorUser" positionX="-414" positionY="162" width="128" height="165"/>
-        <element name="FDIndex" positionX="-288" positionY="135" width="128" height="105"/>
     </elements>
 </model>

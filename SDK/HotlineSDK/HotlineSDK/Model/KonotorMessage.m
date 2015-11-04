@@ -22,23 +22,32 @@
 
 @implementation KonotorMessage
 
+@dynamic actionLabel;
+@dynamic actionURL;
+@dynamic audioURL;
+@dynamic bytes;
+@dynamic createdMillis;
+@dynamic durationInSecs;
+@dynamic isDownloading;
+@dynamic isMarkedForUpload;
+@dynamic marketingId;
+@dynamic messageAlias;
+@dynamic messageRead;
 @dynamic messageType;
 @dynamic messageUserId;
-@dynamic bytes;
-@dynamic durationInSecs;
+@dynamic picCaption;
+@dynamic picHeight;
+@dynamic picThumbHeight;
+@dynamic picThumbUrl;
+@dynamic picThumbWidth;
+@dynamic picUrl;
+@dynamic picWidth;
 @dynamic read;
-@dynamic isMarkedForUpload,messageRead;
-@dynamic uploadStatus;
-@dynamic hasMessageBinary;
-@dynamic belongsToConversation;
-@dynamic messageAlias;
-@dynamic isDownloading;
-@dynamic audioURL;
 @dynamic text;
-@dynamic createdMillis;
-@dynamic marketingId;
-@dynamic picHeight,picWidth,picThumbHeight,picThumbWidth,picUrl,picThumbUrl,picCaption;
-@dynamic actionLabel,actionURL;
+@dynamic uploadStatus;
+@dynamic belongsToChannel;
+@dynamic belongsToConversation;
+@dynamic hasMessageBinary;
 
 NSMutableDictionary *gkMessageIdMessageMap;
 

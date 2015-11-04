@@ -217,4 +217,43 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
+-(void)fetchAllChannels:(void(^)(NSArray *channels, NSError *error))handler{
+    NSManagedObjectContext *backgroundContext = self.backgroundContext;
+    NSManagedObjectContext *mainContext = self.mainObjectContext;
+    [backgroundContext performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        request.sortDescriptors = @[position];
+        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+        NSMutableArray *fetchedChannels = [NSMutableArray new];
+        [mainContext performBlock:^{
+            for (int i=0; i< results.count; i++) {
+                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
+                [fetchedChannels addObject:newSolution];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(fetchedChannels,nil);
+            });
+        }];
+    }];
+}
+
+-(void)deleteAllChannels:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CHANNEL_ENTITY handler:handler];
+}
+
+-(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
+    NSManagedObjectContext *context = self.backgroundContext;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    request.resultType = NSCountResultType;
+    request.includesSubentities = NO;
+    request.includesPropertyValues = NO;
+    [context performBlock:^{
+        NSUInteger count = [[context executeFetchRequest:request error:NULL].lastObject integerValue];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (handler) handler(count == 0);
+        });
+    }];
+}
+
 @end
