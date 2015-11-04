@@ -50,9 +50,6 @@
     });
     channel.icon = imageData;
     
-    KonotorMessage *welcomeMessage =(KonotorMessage *) channelInfo[@"welcomeMessage"];
-    channel.hasWelcomeMessage = welcomeMessage;
-    
     return channel;
 }
 
