@@ -56,7 +56,13 @@
                 }else{
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
+                
+                //Delete category with no articles
+                if (category.articles.count == 0)[context deleteObject:category];
+
             }else{
+                
+                //Delete diabled categories
                 if (category) [context deleteObject:category];
             }
         }
