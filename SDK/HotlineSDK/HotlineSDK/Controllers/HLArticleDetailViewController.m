@@ -82,14 +82,15 @@
     [self theming];
     [self setSubviews];
     [self fixAudioPlayback];
-    [self handleArticleVoteAfterSometime];
     [self localNotificationSubscription];
+    [self handleArticleVoteAfterSometime];
 }
 
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil queue:nil usingBlock:^(NSNotification *note) {
         [weakSelf.webView loadHTMLString:self.embedHTML baseURL:nil];
+        [self handleArticleVoteAfterSometime];
     }];
 }
 
@@ -127,21 +128,6 @@
     [self.view addSubview:self.webView];
     [self.webView setBackgroundColor:[UIColor whiteColor]];
     
-    FDMarginalView *headerView = [[FDMarginalView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
-    headerView.translatesAutoresizingMaskIntoConstraints = NO;
-    headerView.marginalLabel.text = self.articleTitle;
-    headerView.marginalLabel.textColor = [UIColor blackColor];
-    headerView.marginalLabel.font = [UIFont fontWithName:@"Helvetica" size:15];
-    headerView.marginalLabel.textAlignment = UITextAlignmentLeft;
-    [headerView.marginalLabel sizeToFit];
-    [headerView setBackgroundColor:[HLTheme colorWithHex:@"E2E2D8"]];
-    [self.view addSubview:headerView];
-    
-    UIView *horizontalLine = [UIView new];
-    horizontalLine.backgroundColor = [UIColor blackColor];
-    horizontalLine.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:horizontalLine];
-    
     //Article Vote Prompt View
     self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"Article Vote Prompt"];
     self.articleVotePromptView.delegate = self;
@@ -170,15 +156,11 @@
                                                                   multiplier:1.0
                                                                     constant:ALERT_PROMPT_VIEW_HEIGHT];
     
-    NSDictionary *views = @{@"webView" : self.webView, @"articleVotePromptView" : self.articleVotePromptView, @"contactUsVotePromptView" : self.contactUsPromptView, @"horizontalLine" : horizontalLine, @"topLayoutGuide" : self.topLayoutGuide, @"headerView" : headerView };
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[headerView]|"
-                                                                      options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontalLine]|"
-                                                                      options:0 metrics:nil views:views]];
+    NSDictionary *views = @{@"webView" : self.webView, @"articleVotePromptView" : self.articleVotePromptView, @"contactUsVotePromptView" : self.contactUsPromptView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[articleVotePromptView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contactUsVotePromptView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide][headerView(30)][horizontalLine(1)][webView][articleVotePromptView][contactUsVotePromptView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView][articleVotePromptView][contactUsVotePromptView]|" options:0 metrics:nil views:views]];
     
     [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:0];
     [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:0];
