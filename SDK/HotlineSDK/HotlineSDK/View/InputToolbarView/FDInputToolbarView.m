@@ -11,7 +11,6 @@
 #import "HLTheme.h"
 #import "HLMacros.h"
 
-
 @interface FDInputToolbarView ()
 
 @property (strong, nonatomic) FDButton             *sendButton;
@@ -38,17 +37,15 @@
         self.theme = [HLTheme sharedInstance];
         
         self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
-        
    
         inputTextView=[[UITextView alloc] init];
         [inputTextView setTextColor:[self.theme inputTextFontColor]];
         inputTextView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
-        inputTextView.layer.cornerRadius=10.0;
+        inputTextView.layer.cornerRadius=5.0;
         inputTextView.layer.borderWidth=1.0;
         [inputTextView setTranslatesAutoresizingMaskIntoConstraints:NO];
         inputTextView.delegate=delegate;
 
-        
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
         UIImage *attachmentImage = [UIImage imageNamed:INPUT_BAR_ATTACHMENT_IMAGE];
@@ -99,8 +96,6 @@
     }
     
     [self addConstraint:attachButtonWidthConstraint];
-
-    
     [super layoutSubviews];
 }
 
@@ -116,10 +111,5 @@
 -(void)showAttachButton:(BOOL)state{
     self.canShowAttachButton = state;
 }
-
-
-
-
-
 
 @end

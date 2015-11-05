@@ -111,7 +111,6 @@ BOOL firstWordOnLine=YES;
     [self.bottomView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bottomInputView]|" options:0 metrics:nil views:views]];
 }
 
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"FDMessageCell";
     FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -234,8 +233,7 @@ BOOL firstWordOnLine=YES;
 
 #pragma Growing text view delegates
 
-- (void) textViewDidChange:(UITextView *)inputTextView
-{
+- (void) textViewDidChange:(UITextView *)inputTextView{
     CGSize txtSize = [inputTextView sizeThatFits:CGSizeMake(inputTextView.frame.size.width, 140)];
     float height=txtSize.height;
     
@@ -258,13 +256,8 @@ BOOL firstWordOnLine=YES;
         self.bottomViewHeightConstraint.constant = height+10; //Fix this
         self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     }
-    
-
-    
     inputTextView.frame=CGRectMake(inputTextView.frame.origin.x,inputTextView.frame.origin.y,inputTextView.frame.size.width,height);
-    
     [self scrollTableViewToLastCell];
-
 }
 
 -(void)dealloc{
