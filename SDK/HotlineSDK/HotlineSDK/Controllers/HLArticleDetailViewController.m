@@ -109,7 +109,6 @@
 }
 
 -(void)setNavigationItem{
-    [self.parentViewController.navigationItem setTitle:@"Solution Article"];
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
