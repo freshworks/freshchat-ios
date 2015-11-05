@@ -25,8 +25,8 @@
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
     request.HTTPMethod = HTTP_METHOD_GET;
-    NSString *appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
-    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    NSString *appID = @"4a10bd32-f0a5-4ac4-b95e-a88d405d0650";
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"3b649759-435e-4111-a504-c02335b9f999"];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES,appID];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
