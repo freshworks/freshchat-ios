@@ -7,10 +7,12 @@
 //
 
 #import "HLGridViewCell.h"
+#import "HLTheme.h"
 
 @interface HLGridViewCell()
 
 @property (nonatomic,strong) UIView *view;
+@property (nonatomic, strong) HLTheme *theme;
 
 @end
 
@@ -21,13 +23,25 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
-        self.imageView.backgroundColor = [UIColor blueColor];
+        self.theme = [HLTheme sharedInstance];
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.imageView.backgroundColor = [self.theme gridViewItemBackgroundColor];
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         
-        self.label = [[UILabel alloc] init];
-        self.label.text = @"Test text";
-        self.label.textColor = [UIColor brownColor];
+        CGSize maximumLabelSize = CGSizeMake(296, FLT_MAX);
+        CGSize expectedLabelSize = [self.label.text sizeWithFont:[[HLTheme sharedInstance] tableViewCellFont] constrainedToSize:maximumLabelSize lineBreakMode:self.label.lineBreakMode];
+        //adjust the label the the new height.
+        CGRect newFrame = self.label.frame;
+        newFrame.size.height = expectedLabelSize.height;
+        self.label.frame = newFrame;
+        self.label = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, self.bounds.size.width, 40)];
+        self.label.lineBreakMode=NSLineBreakByWordWrapping;
+        self.label.textAlignment = NSTextAlignmentCenter;
+        self.label.backgroundColor = [self.theme imageViewItemBackgroundColor];
+        self.label.textColor = [self.theme categoryTitleFontColor];
+        [self.label  setNumberOfLines:0];
+        [self.label sizeToFit];
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.label];
         
@@ -37,6 +51,17 @@
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView]-[label]-|" options:0 metrics:nil views:views]];
     }
     return self;
+}
+
+-(void)prepareForReuse{
+    [super prepareForReuse];
+    self.imageView.image=[UIImage imageNamed:@"loading.png"];
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    self.label.preferredMaxLayoutWidth = self.bounds.size.width;
+    [self.view layoutIfNeeded];
 }
 
 @end

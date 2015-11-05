@@ -13,18 +13,24 @@
 extern NSString * const DataManagerDidSaveNotification;
 extern NSString * const DataManagerDidSaveFailedNotification;
 
-@interface KonotorDataManager : NSObject {
-}
+#define HOTLINE_ARTICLE_ENTITY @"HLArticle"
+#define HOTLINE_CATEGORY_ENTITY @"HLCategory"
+#define HOTLINE_INDEX_ENTITY @"FDIndex"
+#define ARTICLE_TITLE @"articleTitle"
+#define ARTICLE_DESCRIPTION @"articleDescription"
+
+@interface KonotorDataManager : NSObject
 
 @property (nonatomic, readonly, retain) NSManagedObjectModel *objectModel;
 @property (nonatomic, readonly, retain) NSManagedObjectContext *mainObjectContext;
 @property (nonatomic, readonly, retain) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong) NSManagedObjectContext *backgroundContext;
 
-+ (KonotorDataManager*)sharedInstance;
-- (BOOL)save;
-- (NSManagedObjectContext*)managedObjectContext;
--(void)deleteAllSolutions;
++(KonotorDataManager*)sharedInstance;
+-(BOOL)save;
+-(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler;
+-(void)deleteAllIndices:(void(^)(NSError *error))handler;
+-(void)deleteAllSolutions:(void(^)(NSError *error))handler;
+-(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
 
 @end
-
-

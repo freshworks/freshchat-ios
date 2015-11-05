@@ -19,16 +19,20 @@
 @property (nonatomic, retain) NSNumber * position;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSSet *articles;
+@property (nonatomic, retain) NSString *iconURL;
+@property (nonatomic, retain) NSDate * lastUpdatedTime;
+
 @end
 
 @interface HLCategory (CoreDataGeneratedAccessors)
+
++ (HLCategory *)getWithID:(NSNumber *)categoryID inContext:(NSManagedObjectContext *)context;
++ (HLCategory *)createWithInfo:(NSDictionary *)categoryInfo inContext:(NSManagedObjectContext *)context;
 
 - (void)addArticlesObject:(HLArticle *)value;
 - (void)removeArticlesObject:(HLArticle *)value;
 - (void)addArticles:(NSSet *)values;
 - (void)removeArticles:(NSSet *)values;
-
-+(HLCategory *)categoryWithInfo:(NSDictionary *)categoryInfo inManagedObjectContext:(NSManagedObjectContext *)context;
-
+- (void)updateWithInfo:(NSDictionary *)categoryInfo;
 
 @end

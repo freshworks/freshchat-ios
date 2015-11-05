@@ -8,6 +8,7 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 
+
 NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
 NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
 
@@ -37,12 +38,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 - (void)dealloc {
 	[self save];
-    
-	//[_persistentStoreCoordinator release];
-	//[_mainObjectContext release];
-	//[_objectModel release];
-    
-	//[super dealloc];
 }
 
 - (NSManagedObjectModel*)objectModel {
@@ -50,16 +45,12 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 		return _objectModel;
     
 	NSBundle *bundle = [NSBundle mainBundle];
-	if (kDataManagerBundleName)
-    {
-        
-        
+	if (kDataManagerBundleName){
         NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KonotorModels" ofType:@"bundle"];
 		bundle = [NSBundle bundleWithPath:bundlePath];
 	}
 	NSString *modelPath = [bundle pathForResource:kDataManagerModelName ofType:@"momd"];
 	_objectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:modelPath]];
-    
 	return _objectModel;
 }
 
@@ -100,17 +91,13 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     
 	// Create the main context only on the main thread
 	if (![NSThread isMainThread]) {
-		[self performSelectorOnMainThread:@selector(mainObjectContext)
-                               withObject:nil
-                            waitUntilDone:YES];
+		[self performSelectorOnMainThread:@selector(mainObjectContext) withObject:nil waitUntilDone:YES];
 		return _mainObjectContext;
 	}
-    
 	_mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	[_mainObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
-    [_mainObjectContext setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
-
-    
+    _mainObjectContext.undoManager = nil;
+    _mainObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
+    _mainObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
 	return _mainObjectContext;
 }
 
@@ -157,22 +144,76 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 	return SharedDocumentsPath;
 }
 
-- (NSManagedObjectContext*)managedObjectContext {
-	NSManagedObjectContext *ctx = [[NSManagedObjectContext alloc] init];
-	[ctx setPersistentStoreCoordinator:self.persistentStoreCoordinator];
-    
-	return ctx;
+-(NSManagedObjectContext *)backgroundContext{
+    if (!_backgroundContext) {
+        _backgroundContext = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        _backgroundContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
+        _backgroundContext.undoManager = nil;
+    }
+    return _backgroundContext;
 }
 
--(void)deleteAllSolutions{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"HLCategory"];
-    [self.mainObjectContext performBlockAndWait:^{
-        NSArray *results = [self.mainObjectContext executeFetchRequest:request error:nil];
-        for (int i=0; i<[results count]; i++) {
-            id entry = results[i];
-            [self.mainObjectContext deleteObject:entry];
+/* Execute fetch request on the background context (I/O)
+   fetch objects from updated PSC from main context (non I/O)
+   controllers can safely call this method without blocking UI.
+   returned managed objects are managed by the Main context.  */
+
+-(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler{
+    NSManagedObjectContext *backgroundContext = self.backgroundContext;
+    NSManagedObjectContext *mainContext = self.mainObjectContext;
+    [backgroundContext performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        request.sortDescriptors = @[position];
+        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+        NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        [mainContext performBlock:^{
+            for (int i=0; i< results.count; i++) {
+                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
+                [fetchedSolutions addObject:newSolution];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(fetchedSolutions,nil);
+            });
+        }];
+    }];
+}
+
+-(void)deleteAllSolutions:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CATEGORY_ENTITY handler:handler];
+}
+
+-(void)deleteAllIndices:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_INDEX_ENTITY handler:handler];
+}
+
+-(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler{
+    NSManagedObjectContext *context = self.backgroundContext;
+    [context performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
+        NSArray *results = [context executeFetchRequest:request error:nil];
+        for (int i=0; i<results.count; i++) {
+            NSManagedObject *object = results[i];
+            [context deleteObject:object];
         }
-        [self save];
+        [context save:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (handler) handler(nil);
+        });
+    }];
+}
+
+-(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler{
+    NSManagedObjectContext *context = self.backgroundContext;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+    request.resultType = NSCountResultType;
+    request.includesSubentities = NO;
+    request.includesPropertyValues = NO;
+    [context performBlock:^{
+        NSUInteger count = [[context executeFetchRequest:request error:NULL].lastObject integerValue];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (handler) handler(count == 0);
+        });
     }];
 }
 

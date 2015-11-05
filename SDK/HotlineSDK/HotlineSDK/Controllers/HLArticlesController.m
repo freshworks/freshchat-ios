@@ -10,12 +10,16 @@
 #import "WebServices.h"
 #import "HLFAQServices.h"
 #import "HLArticle.h"
+#import "HLMacros.h"
+#import "HLTheme.h"
+#import "HLSearchViewController.h"
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 
 @interface HLArticlesController ()
 
 @property(nonatomic, strong)HLCategory *category;
+@property(nonatomic, strong)NSArray *articles;
 
 @end
 
@@ -31,13 +35,34 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = @"Article List";
+    parent.title = self.category.title;
     [self updateDataSource];
+    [self setNavigationItem];
 }
 
 -(void)updateDataSource{
-    self.dataSource = [NSArray arrayWithArray:[self.category.articles allObjects]];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+    NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    self.articles = sortedArticles;
     [self.tableView reloadData];
+}
+
+-(void)setNavigationItem{
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
+    
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
+    
+    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+}
+
+-(void)searchButtonAction:(id)sender{
+    HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
+    navController.navigationBarHidden = YES;
+    self.providesPresentationContextTransitionStyle = YES;
+    self.definesPresentationContext = YES;
+    [navController setModalPresentationStyle:UIModalPresentationCustom];
+    [self presentViewController:navController animated:NO completion:nil];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -46,16 +71,30 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    HLArticle *article = self.dataSource[indexPath.row];
-    cell.textLabel.text  = article.title;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    if (indexPath.row < self.articles.count) {
+        HLArticle *article = self.articles[indexPath.row];
+        cell.textLabel.text  = article.title;
+    }
     return cell;
 }
 
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
+    return self.articles.count;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
-    articleDetailController.articleDescription = @"Article Desciption";
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
-    [self.navigationController pushViewController:container animated:YES];
+    if (indexPath.row < self.articles.count) {
+        HLArticle *article = self.articles[indexPath.row];
+        HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
+        articleDetailController.articleID = article.articleID;
+        articleDetailController.articleTitle = article.title;
+        articleDetailController.articleDescription = article.articleDescription;
+        articleDetailController.categoryTitle = self.category.title;
+        articleDetailController.categoryID = self.category.categoryID;
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+        [self.navigationController pushViewController:container animated:YES];
+    }
 }
 
 @end

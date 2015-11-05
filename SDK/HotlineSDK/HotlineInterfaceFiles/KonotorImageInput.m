@@ -220,15 +220,9 @@ static KonotorImageInput* konotorImageInput=nil;
     [inputView setReturnKeyType:UIReturnKeyDone];
 
     [alertOptions addSubview:inputView];
-    
     [self registerForKeyboardNotifications];
-    
-#if KONOTOR_ENABLECAPTIONS
     [alertOptions addSubview:caption];
-#endif
-    
     [alertOptions addSubview:send];
-    
     [sourceView addSubview:alertOptionsBackground];
     
 }
@@ -345,16 +339,12 @@ static KonotorImageInput* konotorImageInput=nil;
     
 //    [(AppDelegate*)[[UIApplication sharedApplication] delegate] sendImage:button.photo forConversation:self.conversation participants:self.participants withSubject:self.conversation.subject withMetrics:nil withPhotoURL:self.conversation.photoURL];
     if(self.imagePicked){
-#if KONOTOR_ENABLECAPTIONS
         UITextField* caption=(UITextField*) [sourceView viewWithTag:KONOTOR_IMAGEINPUT_CAPTIONTEXT];
         if( caption && [caption.text isEqualToString:@"Tap to edit..."])
-#endif
             [Konotor uploadImage:self.imagePicked];
         
-#if KONOTOR_ENABLECAPTIONS
         else
             [Konotor uploadImage:self.imagePicked withCaption:caption.text];
-#endif
     }
     [self cleanUpImageSelection];
     [KonotorFeedbackScreen refreshMessages];

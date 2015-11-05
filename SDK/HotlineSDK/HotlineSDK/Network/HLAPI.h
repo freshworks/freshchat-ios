@@ -8,5 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-#define HOTLINE_API_CATEGORIES @"https://demo3453732.mockable.io/app/0e611e03-572a-4c49-82a9-e63ae6a3758e/category"
-#define HOTLINE_API_ARTICLES @"https://demo3453732.mockable.io/app/0e611e03-572a-4c49-82a9-e63ae6a3758e/category/1/articles"
+#define HTTP_METHOD_GET @"GET"
+#define HTTP_METHOD_PUT @"PUT"
+
+#define HOTLINE_USER_DOMAIN @"https://hline.pagekite.me"
+
+#define HOTLINE_REQUEST_PARAMS @"t=%@"
+
+#define HOTLINE_API_ARTICLE_VOTE @"/app/services/app/%@/faq/category/%@/article/%@"
+
+#define HOTLINE_API_CATEGORIES @"/app/services/app/%@/faq/category"
+
+#define HOTLINE_API_ARTICLES @"/app/services/app/%@/faq/category/%@/article"

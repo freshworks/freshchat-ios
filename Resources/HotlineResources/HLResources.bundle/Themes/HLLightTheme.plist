@@ -74,6 +74,29 @@
 		<key>FontSize</key>
 		<string>15.0f</string>
 	</dict>
+	<key>ConversationListView</key>
+	<dict>
+		<key>BackgroundColor</key>
+		<string>FFFFFF</string>
+		<key>ChannelTitleFontColor</key>
+		<string>222222</string>
+		<key>ChannelTitleFontName</key>
+		<string>HelveticaNeue</string>
+		<key>ChannelTitleFontSize</key>
+		<string>15.0f</string>
+		<key>ChannelDescriptionFontColor</key>
+		<string>222222</string>
+		<key>ChannelDescriptionFontName</key>
+		<string>HelveticaNeue</string>
+		<key>ChannelDescriptionFontSize</key>
+		<string>15.0f</string>
+		<key>LastUpdatedTimeFontColor</key>
+		<string>222222</string>
+		<key>LastUpdatedTimeFontName</key>
+		<string>HelveticaNeue</string>
+		<key>LastUpdatedTimeFontSize</key>
+		<string>15.0f</string>
+	</dict>
 	<key>NavigationBar</key>
 	<dict>
 		<key>BackgroundColor</key>
@@ -125,7 +148,7 @@
 		<key>InnerBackgroundColor</key>
 		<string>FFFFFF</string>
 		<key>OuterBackgroundColor</key>
-		<string>C9C9CE</string>
+		<string>F8F8F8</string>
 		<key>CursorColor</key>
 		<string>0079FF</string>
 	</dict>
@@ -135,28 +158,58 @@
 		<string>FFFFFF</string>
 		<key>CellSeparatorColor</key>
 		<string>C8C8C8</string>
-		<key>FontColor</key>
+		<key>TitleFontColor</key>
 		<string>222222</string>
-		<key>FontName</key>
+		<key>TitleFontName</key>
 		<string>HelveticaNeue</string>
-		<key>FontSize</key>
+		<key>TitleFontSize</key>
 		<string>15.0f</string>
-		<key>SectionHeaderBackgroundColor</key>
-		<string>EFEFF4</string>
-		<key>SectionHeaderFontColor</key>
-		<string>676767</string>
-		<key>SectionHeaderFontName</key>
-		<string>HelveticaNeue</string>
-		<key>SectionHeaderHeight</key>
-		<string>20.0f</string>
-		<key>SectionHeaderTitleColor</key>
+		<key>DetailFontColor</key>
 		<string>222222</string>
-		<key>SectionHeaderTitleFont</key>
+		<key>DetailFontName</key>
 		<string>HelveticaNeue</string>
-		<key>SectionHeaderTitleFontSize</key>
-		<string>13.0f</string>
+		<key>DetailFontSize</key>
+		<string>15.0f</string>
+		<key>ContactUsFontName</key>
+		<string>HelveticaNeue</string>
+		<key>ContactUsFontColor</key>
+		<string>222222</string>
+		<key>ContactUsFontSize</key>
+		<string>15.0f</string>
 		<key>TimeDetailTextColor</key>
 		<string>D3D3D3</string>
+		<key>ImageViewBackgroundColor</key>
+		<string>FFFFFF</string>
+	</dict>
+	<key>GridView</key>
+	<dict>
+		<key>ItemBackgroundColor</key>
+		<string>FFFFFF</string>
+		<key>ItemSeparatorColor</key>
+		<string>C8C8C8</string>
+		<key>CategoryTitleFontColor</key>
+		<string>222222</string>
+		<key>CategoryTitleFontName</key>
+		<string>HelveticaNeue</string>
+		<key>CategoryTitleFontSize</key>
+		<string>15.0f</string>
+		<key>ContactUsFontName</key>
+		<string>HelveticaNeue</string>
+		<key>ContactUsFontColor</key>
+		<string>222222</string>
+		<key>ContactUsFontSize</key>
+		<string>15.0f</string>
+	</dict>
+	<key>GridViewCell</key>
+	<dict>
+		<key>CategoryTitleFontColor</key>
+		<string>222222</string>
+		<key>CategoryTitleFontName</key>
+		<string>HelveticaNeue</string>
+		<key>CategoryTitleFontSize</key>
+		<string>15.0f</string>
+		<key>ImageViewBackgroundColor</key>
+		<string>FFFFFF</string>
 	</dict>
 </dict>
 </plist>
