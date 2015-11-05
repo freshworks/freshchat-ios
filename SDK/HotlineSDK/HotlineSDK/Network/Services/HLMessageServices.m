@@ -31,14 +31,18 @@
 }
 
 -(void)importChannels:(NSDictionary *)responseObject{
-    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
         NSArray *channels = (NSArray *)responseObject;
         HLChannel *channel = nil;
         for(int i=0; i<channels.count; i++){
             NSDictionary *channelInfo = channels[i];
             channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
-            if (channel) {
+            BOOL isChannelDeleted = [channelInfo[@"deleted"]boolValue];
+            if (isChannelDeleted) {
+                if (channel) [context deleteObject:channel];
+            }else{
+                if (channel) {
                     NSDate *updateTime = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
                     if ([channel.lastUpdated compare:updateTime] == NSOrderedAscending) {
                         [HLChannel updateChannel:channel withInfo:channelInfo];
@@ -48,6 +52,7 @@
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
             }
+        }
         [context save:nil];
         [self postNotification];
     }];

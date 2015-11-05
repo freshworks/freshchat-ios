@@ -49,6 +49,7 @@
         imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
     });
     channel.icon = imageData;
+    channel.hasWelcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
     
     return channel;
 }

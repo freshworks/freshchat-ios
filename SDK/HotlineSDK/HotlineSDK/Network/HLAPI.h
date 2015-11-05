@@ -19,6 +19,6 @@
 
 #define HOTLINE_API_CATEGORIES @"/app/services/app/0e611e03-572a-4c49-82a9-e63ae6a3758e/faq/category"
 
-#define HOTLINE_API_CHANNELS @"http://channels.getsandbox.com/getChannels"
+#define HOTLINE_API_CHANNELS @"http://ioschannels.getsandbox.com/getchannels"
 
 #define HOTLINE_API_ARTICLES @"/app/services/app/0e611e03-572a-4c49-82a9-e63ae6a3758e/faq/category/%@/article"
