@@ -240,12 +240,19 @@
 -(void)handleArticleVotePrompt{
     if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
+        BOOL articleVote = [self.votingManager getArticleVoteFor:self.articleID];
         if (!isArticleVoted) {
             [self showArticleRatingPrompt];
+        }
+        else{
+            if (articleVote == NO) {
+                [self showContactUsPrompt];
+            }
         }
     }
     else if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){
         [self hideArticleRatingPrompt];
+        [self hideContactUsPrompt];
     }
 }
 

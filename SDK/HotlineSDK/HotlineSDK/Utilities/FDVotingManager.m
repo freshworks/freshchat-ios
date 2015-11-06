@@ -46,28 +46,38 @@
 
 -(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
     NSLog(@"Article Downvoted");
-    [self storeArticleVoteLocallyForArticleID:articleID];
+    [self storeArticleVote:NO LocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service vote:NO forArticleID:articleID inCategoryID:categoryID];
 }
 
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
     NSLog(@"Article Upvoted");
-    [self storeArticleVoteLocallyForArticleID:articleID];
+    [self storeArticleVote:YES LocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service vote:YES forArticleID:articleID inCategoryID:categoryID];
 }
 
 -(BOOL)isArticleVoted:(NSNumber *)articleID{
     NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
+    if ([self.votedArticlesDictionary valueForKey:articleIDString]) {
+        return YES;
+    }
+    else{
+        return NO;
+    }
+}
+
+-(BOOL)getArticleVoteFor:(NSNumber *)articleID{
+    NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
     BOOL isArticleVoted = [[self.votedArticlesDictionary valueForKey:articleIDString] boolValue];
     return isArticleVoted;
 }
 
--(void)storeArticleVoteLocallyForArticleID:(NSNumber *)articleID{
+-(void)storeArticleVote:(BOOL)vote LocallyForArticleID:(NSNumber *)articleID{
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
-    [self.votedArticlesDictionary setValue:@YES forKey:articleIDString];
+    [self.votedArticlesDictionary setValue:@(vote) forKey:articleIDString];
     [secureStore setObject:self.votedArticlesDictionary forKey:MOBIHELP_DEFAULTS_VOTED_ARTICLES];
 }
 
