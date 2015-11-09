@@ -16,6 +16,8 @@
 
 @class KonotorConversation;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface KonotorMessage : NSManagedObject
 
 @property (nullable, nonatomic, retain) NSString *actionLabel;
@@ -66,5 +68,7 @@
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 -(BOOL) isMarketingMessage;
+
+NS_ASSUME_NONNULL_END
 
 @end

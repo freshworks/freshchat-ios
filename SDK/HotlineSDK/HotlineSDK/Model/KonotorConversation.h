@@ -13,6 +13,8 @@
 
 @interface KonotorConversation : NSManagedObject
 
+NS_ASSUME_NONNULL_BEGIN
+
 @property (nullable, nonatomic, retain) NSString *conversationAlias;
 @property (nullable, nonatomic, retain) NSString *conversationHostUserAlias;
 @property (nullable, nonatomic, retain) NSString *conversationHostUserId;
@@ -39,5 +41,7 @@
 - (void)removeHasMessagesObject:(KonotorMessage *)value;
 - (void)addHasMessages:(NSSet<KonotorMessage *> *)values;
 - (void)removeHasMessages:(NSSet<KonotorMessage *> *)values;
+
+NS_ASSUME_NONNULL_END
 
 @end
