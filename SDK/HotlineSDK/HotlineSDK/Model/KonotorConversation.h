@@ -11,7 +11,6 @@
 #import "KonotorUser.h"
 #import "HLChannel.h"
 
-
 @interface KonotorConversation : NSManagedObject
 
 @property (nullable, nonatomic, retain) NSString *conversationAlias;

@@ -11,11 +11,11 @@
 #import "KonotorConversation.h"
 
 @interface KonotorUserData : NSObject
+
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *userAlias;
 @property (strong, nonatomic) NSString *appGeneratedUserID;
-
 
 @end
 
@@ -34,8 +34,6 @@
 +(NSString *) GetUserAlias;
 +(BOOL) UserCreatedOnServer;
 +(KonotorUser *) GetCurrentlyLoggedInUser;
-//+(BOOL) CreateUserOnServerIfNotPresent;
-
 +(BOOL) CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:(SEL)SuccessSelector withObject:(id) successObject withSuccessParameter:(id) successParameter
                                                            ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParameter:(id) failureParameter;
 
