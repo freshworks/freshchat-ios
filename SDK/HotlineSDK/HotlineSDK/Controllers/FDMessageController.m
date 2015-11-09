@@ -9,6 +9,7 @@
 #import "FDMessageController.h"
 #import "FDMessageCell.h"
 #import "Konotor.h"
+#import "KonotorImageInput.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -20,17 +21,15 @@
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewBottomConstraint;
 @property (strong, nonatomic) UIView *bottomView;
 @property (nonatomic) CGFloat keyboardHeight;
-@property (nonatomic)BOOL isKeyboardOpen;
-
+@property (nonatomic) BOOL isKeyboardOpen;
 
 @end
 
 @implementation FDMessageController
 
+static BOOL promptForPush=YES;
 static CGFloat TOOLBAR_HEIGHT = 40;
-
 BOOL firstWordOnLine=YES;
-
 
 -(instancetype)initWithConversation:(NSString *)conversation{
     self = [super init];
@@ -150,11 +149,43 @@ BOOL firstWordOnLine=YES;
 }
 
 -(void)inputToolbarAttachmentButtonPressed:(id)sender{
-    
+    [KonotorImageInput showInputOptions:self];
 }
 
 -(void)inputToolbarSendButtonPressed:(id)sender{
-    
+    NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *toSend = [self.inputToolbar.inputTextView.text stringByTrimmingCharactersInSet:trimChars];
+    if((![KonotorUIParameters sharedInstance].allowSendingEmptyMessage)&&[toSend isEqualToString:@""]){
+        UIAlertView* alertNilString=[[UIAlertView alloc] initWithTitle:@"Empty Message" message:@"You cannot send an empty message. Please type a message to send." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alertNilString show];
+    }else{
+        [Konotor uploadTextFeedback:toSend];
+        BOOL notificationEnabled=NO;
+#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=80000)
+        if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+            notificationEnabled=[[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+        }
+        else
+#endif
+        {
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
+            UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+            if(types != UIRemoteNotificationTypeNone) notificationEnabled=YES;
+#endif
+        }
+        
+        if (!notificationEnabled) {
+            if(promptForPush){
+                UIAlertView* pushDisabledAlert=[[UIAlertView alloc] initWithTitle:@"Modify Push Setting" message:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [pushDisabledAlert show];
+                promptForPush=NO;
+            }
+        }
+        self.inputToolbar.inputTextView.text = @"";
+        [self textViewDidChange:self.inputToolbar.inputTextView];
+        
+    }
+    [KonotorFeedbackScreen performSelector:@selector(refreshMessages) withObject:nil afterDelay:0.0];
 }
 
 -(void) keyboardWillShow:(NSNotification *)note{
@@ -236,13 +267,13 @@ BOOL firstWordOnLine=YES;
 - (void) textViewDidChange:(UITextView *)inputTextView{
     CGSize txtSize = [inputTextView sizeThatFits:CGSizeMake(inputTextView.frame.size.width, 140)];
     float height=txtSize.height;
-    
     if((height)>=67){
         height=67;
-        if(firstWordOnLine==YES)
+        if(firstWordOnLine==YES){
             firstWordOnLine=NO;
-        else
+        }else{
             inputTextView.scrollEnabled=YES;
+        }
     }
     else{
         inputTextView.scrollEnabled=NO;
@@ -260,10 +291,6 @@ BOOL firstWordOnLine=YES;
     [self scrollTableViewToLastCell];
 }
 
--(void)dealloc{
-    [self localNotificationUnSubscription];
-}
-
 -(void)scrollTableViewToLastCell{
     NSInteger lastCellIndex =  self.messages.count - 1;
     if (lastCellIndex >0 ) {
@@ -276,5 +303,8 @@ BOOL firstWordOnLine=YES;
     }
 }
 
+-(void)dealloc{
+    [self localNotificationUnSubscription];
+}
 
 @end

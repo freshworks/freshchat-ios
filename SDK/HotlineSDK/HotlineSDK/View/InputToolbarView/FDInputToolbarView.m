@@ -15,7 +15,6 @@
 
 @property (strong, nonatomic) FDButton             *sendButton;
 @property (strong, nonatomic) FDButton             *attachButton;
-@property (strong, nonatomic) UITextView           *inputTextView;
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;

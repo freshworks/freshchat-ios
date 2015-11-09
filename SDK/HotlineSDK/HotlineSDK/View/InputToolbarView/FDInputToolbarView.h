@@ -15,8 +15,9 @@
 
 @end
 
-@interface FDInputToolbarView : UIView 
+@interface FDInputToolbarView : UIView
 
+@property (strong, nonatomic) UITextView *inputTextView;
 
 -(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate, UITextViewDelegate>)delegate;
 -(void)enableSendButton:(BOOL)state;

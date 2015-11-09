@@ -14,8 +14,6 @@
 
 @interface FDUtilities : NSObject
 
-//Utilities
-+(BOOL)isValidEmail:(NSString *)email;
 +(NSString *)base64EncodedStringFromString:(NSString *)string;
 +(NSString *)sanitizeStringForUTF8:(NSString *)string;
 +(NSString *)sanitizeStringForNewLineCharacter:(NSString *)string;

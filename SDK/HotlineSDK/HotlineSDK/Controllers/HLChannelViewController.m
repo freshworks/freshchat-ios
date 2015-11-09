@@ -15,10 +15,9 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 
-
 @interface HLChannelViewController ()
 
-@property (nonatomic, strong)NSArray *channels;
+@property (nonatomic, strong) NSArray *channels;
 
 @end
 
@@ -26,7 +25,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
+    parent.title = @"Channels";
     [self setNavigationItem];
     [self updateChannels];
     [self localNotificationSubscription];
@@ -46,7 +45,6 @@
 }
 
 -(void)setNavigationItem{
-    
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
@@ -86,7 +84,7 @@
     return cell;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
+-(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
     return self.channels.count;
 }
 
@@ -101,12 +99,5 @@
 -(void)closeButton:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 
 @end

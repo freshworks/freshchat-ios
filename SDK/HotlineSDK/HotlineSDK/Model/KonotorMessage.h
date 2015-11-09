@@ -46,7 +46,6 @@
 @property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
 @property (nullable, nonatomic, retain) KonotorMessageBinary *hasMessageBinary;
 
-
 //@property (nonatomic, retain) NSString *marketingId;
 +(NSArray *) getAllMessagesForDefaultConversation;
 +(NSArray *) getAllMessagesForConversation: (NSString* )conversationID;
@@ -60,7 +59,6 @@
 +(void) insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage;
 +(void)updateWelcomeMessageText:(NSString*)text;
 +(void)uploadAllUnuploadedMessages;
-+(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId;
 -(void) markAsReadwithNotif:(BOOL) notif;
 -(void) markAsUnread;
 +(void)markAllMessagesAsRead;
