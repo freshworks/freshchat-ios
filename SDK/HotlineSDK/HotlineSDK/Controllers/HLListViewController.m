@@ -23,21 +23,18 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    _footerView = [[FDMarginalView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44)];
-    
-    _footerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    
-    _footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    _footerView.marginalLabel.textColor = [UIColor blackColor];
-    _footerView.marginalLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _footerView.marginalLabel.backgroundColor = [UIColor clearColor];
-    _footerView.marginalLabel.userInteractionEnabled=YES;
+    self.footerView = [[FDMarginalView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44)];
+    self.footerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
+    self.footerView.marginalLabel.textColor = [UIColor blackColor];
+    self.footerView.marginalLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.footerView.marginalLabel.backgroundColor = [UIColor clearColor];
+    self.footerView.marginalLabel.userInteractionEnabled=YES;
     UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [_footerView.marginalLabel addGestureRecognizer: tapGesture];
-    _footerView.backgroundColor = [UIColor lightGrayColor];
+    [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
+    self.footerView.backgroundColor = [UIColor colorWithRed:0.08 green:0.46 blue:1 alpha:1];
     
-    self.tableView.tableFooterView = _footerView;
-    
+    self.tableView.tableFooterView = self.footerView;
     [self.view addSubview:self.tableView];
     
     NSDictionary *views = @{@"tableView" : self.tableView };

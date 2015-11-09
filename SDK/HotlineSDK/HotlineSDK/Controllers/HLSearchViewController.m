@@ -19,6 +19,7 @@
 #import "FDTableViewCell.h"
 #import "FDArticleContent.h"
 #import "FDSearchBar.h"
+#import "HLContainerController.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 
@@ -26,7 +27,7 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) UIView *trialView;
-@property (strong,nonatomic) UITapGestureRecognizer *recognizer;
+@property (strong, nonatomic) UITapGestureRecognizer *recognizer;
 @end
 
 @implementation HLSearchViewController
@@ -37,30 +38,25 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self checkNavigationBar];
     [self setupTap];
     self.view.userInteractionEnabled=YES;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 -(void)setupTap{
     self.recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
     [self.recognizer setNumberOfTapsRequired:1];
-    if(self.searchResults==0){
-            [self.view addGestureRecognizer:self.recognizer];
+    if(self.searchResults.count == 0){
+        [self.view addGestureRecognizer:self.recognizer];
     }
 }
 
-- (void)handleTapBehind:(UITapGestureRecognizer *)sender
-{
-    if (sender.state == UIGestureRecognizerStateEnded)
-    {
-        if (self.searchResults==0) {
+- (void)handleTapBehind:(UITapGestureRecognizer *)sender{
+    if (sender.state == UIGestureRecognizerStateEnded){
+        if (self.searchResults.count == 0) {
             CGPoint location = [sender locationInView:nil]; //Passing nil gives us coordinates in the window
-            
-            UIWindow *mainWindow = [[[UIApplication sharedApplication]
-                                     delegate] window];
-            CGPoint pointInSubview = [self.view convertPoint:location
-                                                    fromView:mainWindow];
+            UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+            CGPoint pointInSubview = [self.view convertPoint:location fromView:mainWindow];
             if (!CGRectContainsPoint(self.searchBar.bounds, pointInSubview)) {
                 // Remove the recognizer first so it's view.window is valid.
                 [self.view removeGestureRecognizer:sender];
@@ -70,27 +66,23 @@
     }
 }
 
-
 -(void)setupSubviews{
     self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.searchBar.hidden = NO;
     self.searchBar.delegate = self;
     self.searchBar.placeholder = HLLocalizedString(@"Search Placeholder");
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.searchBar becomeFirstResponder];
     [self.view addSubview:self.searchBar];
     
-    [self.searchBar becomeFirstResponder];
-    
     UIView *mainSubView = [self.searchBar.subviews lastObject];
-    
     for (id subview in mainSubView.subviews) {
         if ([subview isKindOfClass:[UITextField class]]) {
             UITextField *textField = (UITextField *)subview;
             textField.backgroundColor = [[HLTheme sharedInstance] searchBarInnerBackgroundColor];
         }
     }
-    
-    self.searchBar.hidden = NO;
     
     self.tableView = [[UITableView alloc] init];
     self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
@@ -105,7 +97,8 @@
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[trial]|"
                                                                       options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial]|"
+                                                                      options:0 metrics:nil views:views]];
 }
 
 #pragma mark - TableView DataSource
@@ -136,13 +129,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.searchResults.count) {
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
         HLArticleDetailViewController *articlesDetailController = [[HLArticleDetailViewController alloc]init];
         FDArticleContent *article = self.searchResults[indexPath.row];
         articlesDetailController.articleDescription = article.articleDescription;
         articlesDetailController.articleID = article.articleID;
         articlesDetailController.articleTitle = article.title;
-        [self.navigationController setNavigationBarHidden:NO];
-        [self.navigationController pushViewController:articlesDetailController animated:YES];
+        HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController];
+        [self.navigationController pushViewController:containerController animated:YES];
     }
 }
 
@@ -160,8 +154,7 @@
                 [self reloadSearchResults];
             }
         }];
-    }
-    else{
+    }else{
         [self fetchAllArticles];
     }
 }
@@ -181,12 +174,8 @@
     });
 }
 
--(void)checkNavigationBar{
-    [self.navigationController setNavigationBarHidden:YES];
-}
-
 -(void)viewWillLayoutSubviews{
-    self.searchBar.frame= CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
 }
 
 
@@ -208,16 +197,12 @@
     }
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-       shouldReceiveTouch:(UITouch *)touch {
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     return YES;
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES]; 
 }
-
-
 
 @end

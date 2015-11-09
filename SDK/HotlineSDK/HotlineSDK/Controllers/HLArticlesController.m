@@ -49,18 +49,18 @@
 
 -(void)setNavigationItem{
     UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
-    
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self.navigationController
+                                                                  action:@selector(popViewControllerAnimated:)];
+    self.parentViewController.navigationItem.leftBarButtonItem = backButton;
 }
 
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
-    navController.navigationBarHidden = YES;
-    self.providesPresentationContextTransitionStyle = YES;
-    self.definesPresentationContext = YES;
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
 }
@@ -79,7 +79,7 @@
     return cell;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
+-(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
     return self.articles.count;
 }
 

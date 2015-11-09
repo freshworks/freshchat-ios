@@ -111,10 +111,13 @@
 
 -(void)setNavigationItem{
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
-    self.parentViewController.navigationItem.leftBarButtonItem.title = self.categoryTitle;
-    [self.parentViewController.navigationController setNavigationBarHidden:NO];
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self.navigationController
+                                                                  action:@selector(popViewControllerAnimated:)];
+    self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
+    self.parentViewController.navigationItem.leftBarButtonItem = backButton;
 }
 
 -(void)setSubviews{
@@ -231,7 +234,7 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-        [self handleArticleVotePrompt];
+    [self handleArticleVotePrompt];
 }
 
 -(void)handleArticleVotePrompt{
