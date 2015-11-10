@@ -15,13 +15,14 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
-@property (nonatomic, strong) NSString *conversation;
+@property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewBottomConstraint;
 @property (strong, nonatomic) UIView *bottomView;
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) BOOL isKeyboardOpen;
+@property (nonatomic) BOOL isModalPresentationPreferred;
 
 @end
 
@@ -31,20 +32,33 @@ static BOOL promptForPush=YES;
 static CGFloat TOOLBAR_HEIGHT = 40;
 BOOL firstWordOnLine=YES;
 
--(instancetype)initWithConversation:(NSString *)conversation{
+-(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
-        self.conversation = conversation;
+        self.channel = channel;
+        self.isModalPresentationPreferred = isModal;
     }
     return self;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = self.conversation;
+    parent.title = @"Messages";
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
     [self updateMessages];
+    [self setNavigationItem];
     [self localNotificationSubscription];
+}
+
+-(void)setNavigationItem{
+    if(self.isModalPresentationPreferred){
+        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
+    }
+}
+
+-(void)closeButton:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)updateMessages{
@@ -190,7 +204,6 @@ BOOL firstWordOnLine=YES;
 
 -(void) keyboardWillShow:(NSNotification *)note{
     self.isKeyboardOpen = YES;
-
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
@@ -202,7 +215,6 @@ BOOL firstWordOnLine=YES;
 
 -(void) keyboardWillHide:(NSNotification *)note{
     self.isKeyboardOpen = NO;
-
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.keyboardHeight = 0.0;
     self.bottomViewBottomConstraint.constant = 0.0;

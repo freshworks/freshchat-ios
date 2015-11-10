@@ -13,8 +13,9 @@
 #import "HLCategoriesListController.h"
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
-#import "FDConversationController.h"
 #import "HLChannelViewController.h"
+#import "KonotorDataManager.h"
+#import "FDMessageController.h"
 
 @interface Hotline ()
 
@@ -43,11 +44,20 @@
 }
 
 +(void)presentFeedback:(UIViewController *)controller{
-    HLChannelViewController *channelViewController = [HLChannelViewController new];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:channelViewController];
-    UINavigationController *navigationController = [[UINavigationController alloc]init];
-    navigationController.viewControllers = @[containerController];
-    [controller presentViewController:navigationController animated:YES completion:nil];
+    [[KonotorDataManager sharedInstance]fetchAllChannels:^(NSArray *channels, NSError *error) {
+        if (!error) {
+            HLContainerController *preferredController = nil;
+            if (channels.count == 1) {
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:nil andPresentModally:YES];
+                preferredController = [[HLContainerController alloc]initWithController:messageController];
+            }else{
+                HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
+                preferredController = [[HLContainerController alloc]initWithController:channelViewController];
+            }
+            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
+            [controller presentViewController:navigationController animated:YES completion:nil];
+        }
+    }];
 }
 
 +(void)showFeedbackScreen{

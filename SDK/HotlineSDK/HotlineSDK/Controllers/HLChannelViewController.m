@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) NSArray *channels;
 
+
 @end
 
 @implementation HLChannelViewController
@@ -90,7 +91,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.channels.count) {
-        FDMessageController *conversationController = [[FDMessageController alloc]initWithConversation:nil];
+        FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:nil andPresentModally:NO];
         HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
         [self.navigationController pushViewController:container animated:YES];
     }
