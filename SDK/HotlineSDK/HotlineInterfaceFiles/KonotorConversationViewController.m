@@ -923,47 +923,6 @@ NSString* otherName=nil,*userName=nil;
 }
 
 
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSDictionary* info = [aNotification userInfo];
-    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
-    float adjustHeight=[KonotorFeedbackScreen sharedInstance].conversationViewController.showingInTab?([KonotorFeedbackScreen sharedInstance].conversationViewController.tabBarHeight):0;
-    keyboardSize.height-=adjustHeight;
-    
-    float verticalInsetAdjustment=10-([Konotor isPoweredByHidden]?14:0);
-    
-    [self adjustTableViewWithInset:(keyboardSize.height-verticalInsetAdjustment)];
-}
-
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    UIEdgeInsets contentInsets = self.tableView.contentInset;
-    contentInsets=UIEdgeInsetsMake(contentInsets.top, contentInsets.left,6 , contentInsets.right);
-    self.tableView.contentInset = contentInsets;
-    self.tableView.scrollIndicatorInsets = contentInsets;
-    int lastSpot=loading?numberOfMessagesShown:(numberOfMessagesShown-1);
-    
-    if([KonotorUIParameters sharedInstance].notificationCenterMode) lastSpot=0;
-    
-    if(lastSpot<0) return;
-    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
-    @try {
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-    }
-    @catch (NSException *exception ) {
-        indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
-        @try{
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-        }
-        @catch(NSException *exception){
-            
-        }
-
-    }
-}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1179,7 +1138,34 @@ NSString* otherName=nil,*userName=nil;
     }
 }
 
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    showingAlert=NO;
+}
 
+#pragma mark Konotor delegates
+
+- (void) didFinishPlaying:(NSString *)messageID
+{
+    for(UITableViewCell* cell in [self.tableView visibleCells]){
+        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
+        if([button.messageID isEqualToString:messageID])
+        {
+            [button stopAnimating];
+        }
+    }
+    
+}
+
+- (void) didStartPlaying:(NSString *)messageID
+{
+    for(UITableViewCell* cell in [self.tableView visibleCells]){
+        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
+        if([button.messageID isEqualToString:messageID])
+        {
+            [button startAnimating];
+        }
+    }
+}
 
 - (void) didFinishDownloadingMessages{
     if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
@@ -1208,21 +1194,7 @@ NSString* otherName=nil,*userName=nil;
     }
 }
 
--(void) didEncounterErrorWhileDownloadingConversations
-{
-    if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
-        loading=NO;
-        [self refreshView];
-    }
-}
-
-- (void) didEncounterErrorWhileDownloading:(NSString *)messageID
-{
-    //Show Toast
-}
-
-- (void) didEncounterErrorWhileUploading:(NSString *)messageID
-{
+- (void) didEncounterErrorWhileUploading:(NSString *)messageID{
     if(!showingAlert){
         UIAlertView* konotorAlert=[[UIAlertView alloc] initWithTitle:@"Message not sent" message:@"We could not send your message(s) at this time. Check your internet or try later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [konotorAlert show];
@@ -1230,35 +1202,20 @@ NSString* otherName=nil,*userName=nil;
     }
 }
 
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    showingAlert=NO;
+- (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
+    //Show Toast
 }
 
-- (void) didStartPlaying:(NSString *)messageID
-{
-    for(UITableViewCell* cell in [self.tableView visibleCells]){
-        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
-        if([button.messageID isEqualToString:messageID])
-        {
-            [button startAnimating];
-        }
+
+-(void) didEncounterErrorWhileDownloadingConversations{
+    if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
+        loading=NO;
+        [self refreshView];
     }
 }
 
-- (void) didFinishPlaying:(NSString *)messageID
-{
-    for(UITableViewCell* cell in [self.tableView visibleCells]){
-        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
-        if([button.messageID isEqualToString:messageID])
-        {
-            [button stopAnimating];
-        }
-    }
-    
-}
 
--(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL) showScreen
-{
+-(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL) showScreen{
     NSString* marketingId=((NSString*)[userInfo objectForKey:@"kon_message_marketingid"]);
     NSString* url=[userInfo valueForKey:@"kon_m_url"];
     if(showScreen&&marketingId&&([marketingId longLongValue]!=0))
@@ -1315,6 +1272,7 @@ NSString* otherName=nil,*userName=nil;
     }
 }
 
+
 -(void) openActionUrl:(id) sender
 {
     KonotorActionButton* button=(KonotorActionButton*)sender;
@@ -1332,6 +1290,8 @@ NSString* otherName=nil,*userName=nil;
         }
     }
 }
+
+////
 
 - (void) setStyleForActionButton:(KonotorActionButton*)actionButton
 {
@@ -1496,5 +1456,49 @@ NSString* otherName=nil,*userName=nil;
 
 }
 
+
+#pragma mark Keyboard Notifications
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    float adjustHeight=[KonotorFeedbackScreen sharedInstance].conversationViewController.showingInTab?([KonotorFeedbackScreen sharedInstance].conversationViewController.tabBarHeight):0;
+    keyboardSize.height-=adjustHeight;
+    
+    float verticalInsetAdjustment=10-([Konotor isPoweredByHidden]?14:0);
+    
+    [self adjustTableViewWithInset:(keyboardSize.height-verticalInsetAdjustment)];
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIEdgeInsets contentInsets = self.tableView.contentInset;
+    contentInsets=UIEdgeInsetsMake(contentInsets.top, contentInsets.left,6 , contentInsets.right);
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+    int lastSpot=loading?numberOfMessagesShown:(numberOfMessagesShown-1);
+    
+    if([KonotorUIParameters sharedInstance].notificationCenterMode) lastSpot=0;
+    
+    if(lastSpot<0) return;
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
+    @try {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
+    @catch (NSException *exception ) {
+        indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
+        @try{
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        }
+        @catch(NSException *exception){
+            
+        }
+        
+    }
+}
 
 @end

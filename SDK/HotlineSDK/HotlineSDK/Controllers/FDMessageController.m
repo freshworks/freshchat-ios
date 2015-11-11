@@ -23,20 +23,29 @@
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) BOOL isKeyboardOpen;
 @property (nonatomic) BOOL isModalPresentationPreferred;
+@property (nonatomic, strong) UIImage *sentImage;
 
 @end
 
 @implementation FDMessageController
 
-static BOOL promptForPush=YES;
-static CGFloat TOOLBAR_HEIGHT = 40;
+static BOOL loading = NO;
+static BOOL showingAlert = NO;
+static BOOL promptForPush = YES;
 BOOL firstWordOnLine=YES;
+
+static int messageCount = 0;
+static int messageCount_prev = 0;
+static CGFloat TOOLBAR_HEIGHT = 40;
+static int numberOfMessagesShown = 25;
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
         self.channel = channel;
         self.isModalPresentationPreferred = isModal;
+        [Konotor setDelegate:self];
+        self.sentImage=[UIImage imageNamed:@"konotor_sent.png"];
     }
     return self;
 }
@@ -62,9 +71,7 @@ BOOL firstWordOnLine=YES;
 }
 
 -(void)updateMessages{
-    self.messages = @[@"Welcome to the conversations related to billing",
-                      @"how do i book using card. I should <a href=\"http://yahoo.com\">Yahoo</a> this already!",
-                      @"you can use this link http://goo.le/d35Gfac"];
+    self.messages = [Konotor getAllMessagesForDefaultConversation];
 }
 
 -(void)setSubviews{
@@ -134,13 +141,7 @@ BOOL firstWordOnLine=YES;
     }
     
     if (indexPath.row < self.messages.count) {
-        //cell.textLabel.text  = self.messages[indexPath.row];
-        KonotorMessageData* message=[[KonotorMessageData alloc] init];
-        message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
-        message.picThumbUrl=@"http://www.britishairways.com/assets/images/destinations/components/mainCarousel/orlando/US-ORL-DISNEY-CASTLE-WALK-760x350.jpg";
-        message.picThumbWidth=[NSNumber numberWithFloat:300.0];
-        message.picThumbHeight=[NSNumber numberWithFloat:150.0];
-        message.text=self.messages[indexPath.row];
+        KonotorMessageData *message = self.messages[indexPath.row];
         [cell drawMessageViewForMessage:message parentView:self.view];
         
     }
@@ -148,21 +149,26 @@ BOOL firstWordOnLine=YES;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.messages.count;
+    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+    self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    messageCount=(int)[self.messages count];
+    if((numberOfMessagesShown>messageCount)||(messageCount<=KONOTOR_MESSAGESPERPAGE)||((messageCount-numberOfMessagesShown)<3))
+        numberOfMessagesShown=messageCount;
+    if(!loading){
+        return numberOfMessagesShown;
+    }else{
+        return numberOfMessagesShown+1;
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    KonotorMessageData* message=[[KonotorMessageData alloc] init];
-    message.messageType=[NSNumber numberWithInt:KonotorMessageTypeText];
-    message.picThumbUrl=@"http://www.britishairways.com/assets/images/destinations/components/mainCarousel/orlando/US-ORL-DISNEY-CASTLE-WALK-760x350.jpg";
-    message.picThumbWidth=[NSNumber numberWithFloat:300.0];
-    message.picThumbHeight=[NSNumber numberWithFloat:150.0];
-    message.text=self.messages[indexPath.row];
-    float height=[FDMessageCell getHeightForMessage:message parentView:self.view];
+    KonotorMessageData *message = self.messages[indexPath.row];
+    float height = [FDMessageCell getHeightForMessage:message parentView:self.view];
     return height;
 }
 
 -(void)inputToolbarAttachmentButtonPressed:(id)sender{
+    [self.view endEditing:YES];
     [KonotorImageInput showInputOptions:self];
 }
 
@@ -199,45 +205,7 @@ BOOL firstWordOnLine=YES;
         [self textViewDidChange:self.inputToolbar.inputTextView];
         
     }
-    [KonotorFeedbackScreen performSelector:@selector(refreshMessages) withObject:nil afterDelay:0.0];
-}
-
--(void) keyboardWillShow:(NSNotification *)note{
-    self.isKeyboardOpen = YES;
-    CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
-    CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
-    self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
-    self.keyboardHeight = keyboardCoveredHeight;
-    [self scrollTableViewToLastCell];
-    [self.view layoutIfNeeded];
-}
-
--(void) keyboardWillHide:(NSNotification *)note{
-    self.isKeyboardOpen = NO;
-    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    self.keyboardHeight = 0.0;
-    self.bottomViewBottomConstraint.constant = 0.0;
-    [self.view layoutIfNeeded];
-    [UIView animateWithDuration:animationDuration animations:^{
-        [self.view layoutIfNeeded];
-    }];
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
-    CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
-    NSInteger keyboardOffsetFromBottom = self.view.frame.size.height - absoluteFingerLocation.y;
-    
-    if (self.isKeyboardOpen && scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged && absoluteFingerLocation.y >= (self.view.frame.size.height - self.keyboardHeight)) {
-        self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
-    }
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    if (self.keyboardHeight > 0) {
-        [self scrollTableViewToLastCell];
-    }
+    [self refreshView];
 }
 
 -(void)localNotificationSubscription{
@@ -273,8 +241,31 @@ BOOL firstWordOnLine=YES;
     
 }
 
+#pragma mark Keyboard delegate
 
-#pragma Growing text view delegates
+-(void) keyboardWillShow:(NSNotification *)note{
+    self.isKeyboardOpen = YES;
+    CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
+    CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
+    self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
+    self.keyboardHeight = keyboardCoveredHeight;
+    [self scrollTableViewToLastCell];
+    [self.view layoutIfNeeded];
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyboardOpen = NO;
+    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    self.keyboardHeight = 0.0;
+    self.bottomViewBottomConstraint.constant = 0.0;
+    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+#pragma mark Growing text view delegates
 
 - (void) textViewDidChange:(UITextView *)inputTextView{
     CGSize txtSize = [inputTextView sizeThatFits:CGSizeMake(inputTextView.frame.size.width, 140)];
@@ -304,19 +295,170 @@ BOOL firstWordOnLine=YES;
 }
 
 -(void)scrollTableViewToLastCell{
-    NSInteger lastCellIndex =  self.messages.count - 1;
-    if (lastCellIndex >0 ) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastCellIndex inSection:0];
-        NSUInteger noOfRows = [self.tableView numberOfRowsInSection:indexPath.section];
-        if (noOfRows==0) {
-            [self.tableView reloadData];
+//    NSInteger lastCellIndex =  self.messages.count - 1;
+//    if (lastCellIndex >0 ) {
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastCellIndex inSection:0];
+//        NSUInteger noOfRows = [self.tableView numberOfRowsInSection:indexPath.section];
+//        if (noOfRows==0) {
+//            [self.tableView reloadData];
+//        }
+//        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//    }
+}
+
+#pragma mark Konotor delegates
+
+- (void) didFinishPlaying:(NSString *)messageID{
+    for(UITableViewCell* cell in [self.tableView visibleCells]){
+        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
+        if([button.messageID isEqualToString:messageID]){
+            [button stopAnimating];
         }
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
+- (void) didStartPlaying:(NSString *)messageID{
+    for(UITableViewCell* cell in [self.tableView visibleCells]){
+        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
+        if([button.messageID isEqualToString:messageID]){
+            [button startAnimating];
+        }
+    }
+}
+
+- (void) didFinishDownloadingMessages{
+    if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
+        loading=NO;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
+        [self refreshView];
+    }
+}
+
+- (void) didFinishUploading:(NSString *)messageID{
+    for(UITableViewCell* cell in [self.tableView visibleCells]){
+        if([messageID hash]==cell.tag){
+            UIImageView* uploadStatus=(UIImageView*)[cell.contentView viewWithTag:KONOTOR_UPLOADSTATUS_TAG];
+            [uploadStatus setImage:self.sentImage];
+            for(int i=messageCount-1;i>=0;i--){
+                if([(NSString*)[(KonotorMessageData*)[self.messages objectAtIndex:i] messageId] isEqualToString:messageID]){
+                    [(KonotorMessageData*)[self.messages objectAtIndex:i] setUploadStatus:([NSNumber numberWithInt:MessageUploaded])];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+- (void) didEncounterErrorWhileUploading:(NSString *)messageID{
+    if(!showingAlert){
+        UIAlertView* konotorAlert=[[UIAlertView alloc] initWithTitle:@"Message not sent" message:@"We could not send your message(s) at this time. Check your internet or try later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [konotorAlert show];
+        showingAlert=YES;
+    }
+}
+
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    showingAlert=NO;
+}
+
+
+- (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
+    //Show Toast
+}
+
+-(void) didEncounterErrorWhileDownloadingConversations{
+    if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
+        loading=NO;
+        [self refreshView];
+    }
+}
+
+-(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL) showScreen{
+    NSString* marketingId=((NSString*)[userInfo objectForKey:@"kon_message_marketingid"]);
+    NSString* url=[userInfo valueForKey:@"kon_m_url"];
+    if(showScreen&&marketingId&&([marketingId longLongValue]!=0))
+        [Konotor MarkMarketingMessageAsClicked:[NSNumber numberWithLongLong:[marketingId longLongValue]]];
+    if(showScreen&&(url!=nil)){
+        @try{
+            NSURL *clickUrl=[NSURL URLWithString:url];
+            if([[UIApplication sharedApplication] canOpenURL:clickUrl]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:clickUrl];
+                });
+            }
+        }
+        @catch(NSException *e){
+            NSLog(@"%@",e);
+        }
+        [Konotor DownloadAllMessages];
+        return YES;
+    }else{
+        if(!([(NSString*)[userInfo valueForKey:@"source"] isEqualToString:@"konotor"])){
+            return NO;
+        }
+        loading = YES;
+        [Konotor DownloadAllMessages];
+        
+        [self.tableView reloadData];
+        return YES;
+    }
+    return YES;
+}
+
+- (void) refreshView{
+    [self.tableView reloadData];
+    [Konotor markAllMessagesAsRead];
+    int lastSpot=loading?numberOfMessagesShown:(numberOfMessagesShown-1);
+    if([KonotorUIParameters sharedInstance].notificationCenterMode) lastSpot=0;
+    if(lastSpot<0) return;
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
+    @try {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
+    @catch (NSException *exception ) {
+        indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
+        @try{
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        }
+        @catch(NSException *exception){
+            
+        }
+    }
+    messageCount_prev=(int)[[Konotor getAllMessagesForDefaultConversation] count];
+    self.messages = [Konotor getAllMessagesForDefaultConversation];
+}
+
+
+#pragma Scrollview delegates
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
+    CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
+    NSInteger keyboardOffsetFromBottom = self.view.frame.size.height - absoluteFingerLocation.y;
+    
+    if (self.isKeyboardOpen && scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged && absoluteFingerLocation.y >= (self.view.frame.size.height - self.keyboardHeight)) {
+        self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
+    }
+}
+
+- (void) scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self.view endEditing:YES];
+}
+
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    if (self.keyboardHeight > 0) {
+        [self scrollTableViewToLastCell];
     }
 }
 
 -(void)dealloc{
     [self localNotificationUnSubscription];
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    KonotorMessageData *message = self.messages[indexPath.row];
+    NSLog(@"Message type :%@",message.messageType);
 }
 
 @end
