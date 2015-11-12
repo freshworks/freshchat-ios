@@ -50,7 +50,7 @@ static BOOL INDEX_INPROGRESS = NO;
                     }
                     INDEX_INPROGRESS = NO;
                     [self setIndexingCompleted:YES];
-                    [datamanager save];
+                    [datamanager.backgroundContext save:nil];
                 }
             }else{
                 FDLog(@"Failed to create index. %@",error);
