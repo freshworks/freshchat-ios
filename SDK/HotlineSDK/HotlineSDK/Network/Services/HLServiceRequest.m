@@ -23,7 +23,7 @@
     if (self) {
         self.baseURL = baseURL;
         self.stringEncoding = NSUTF8StringEncoding;
-        self.timeoutInterval = 30;
+        self.timeoutInterval = 60;
         [self setDefaultHTTPHeaders];
     }
     return self;
@@ -36,7 +36,7 @@
     [self setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 }
 
--(void)setRelativePath:(NSString *)path andURLParams:(NSString *)params{
+-(void)setRelativePath:(NSString *)path andURLParams:(NSArray *)params{
     NSMutableString *string = [NSMutableString new];
 
     if (path) {
@@ -44,7 +44,11 @@
     }
     
     if (params) {
-        [string appendString:[NSString stringWithFormat:@"?%@",params]];
+        [string appendString:@"?"];
+        for (int i=0; i<params.count; i++) {
+            NSString *param = params[i];
+            [string appendString:[NSString stringWithFormat:@"%@&",param]];
+        }
     }
     
     self.URL = [NSURL URLWithString:string relativeToURL:self.baseURL];

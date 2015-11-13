@@ -30,31 +30,37 @@
         [self addSubview:self.iconView];
         
         self.Button1 = [self createPromptButton:@"Button" withKey:key];
+        self.Button1.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.Button1.titleLabel.numberOfLines = 0;
+        self.Button1.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.Button1];
-        
+        [self setBackgroundColor:[UIColor whiteColor]];
         [self addSpacersInView:self];
+        [self setupConstraints];
     }
     return self;
 }
 
--(void)layoutSubviews{
-    
+-(void)setupConstraints{
     self.buttonLabelWidth = [self getDesiredWidthFor:self.Button1];
     self.views = @{@"Button1" : self.Button1, @"iconView" : self.iconView, @"leftSpacer" : self.leftSpacer, @"rightSpacer" : self.rightSpacer};
     self.metrics = @{ @"buttonLabelWidth" : @(self.buttonLabelWidth),  @"buttonSpacing" : @(BUTTON_SPACING) };
     
-    [self addConstraint:@"H:|[leftSpacer][iconView][Button1(buttonLabelWidth)][rightSpacer]|" InView:self];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[iconView]-[Button1]|" options:NSLayoutFormatAlignAllCenterY metrics:self.metrics views:self.views]];
     [self addConstraint:@"V:|[iconView]|" InView:self];
     [self addConstraint:@"V:|[Button1]|" InView:self];
-    [super layoutSubviews];
+}
 
+-(void)layoutSubviews{
+    [self setupConstraints];
+    [super layoutSubviews];
 }
 
 -(UIImageView *)createImageView{
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+    UIImageView *imageView = [[UIImageView alloc] init];
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
-    [imageView.image drawInRect:CGRectMake(0,0,100,100)];
+    [imageView.image drawInRect:CGRectMake(0,0,75,75)];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     return imageView;
 }

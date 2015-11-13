@@ -17,6 +17,8 @@
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
+#import "FDCategoryListViewCell.h"
+#import "FDMarginalView.h"
 
 @interface HLCategoriesListController ()
 
@@ -67,9 +69,6 @@
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
-    navController.navigationBarHidden = YES;
-    self.providesPresentationContextTransitionStyle = YES;
-    self.definesPresentationContext = YES;
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
 }
@@ -96,14 +95,16 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLCategoriesCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDCategoryListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDCategoryListViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
     if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
-        cell.textLabel.text  = category.title;
+        cell.titleLabel.text  = category.title;
+        cell.detailLabel.text = category.categoryDescription;
+        cell.imgView.image = [UIImage imageWithData:category.icon];
     }
     return cell;
 }
@@ -119,6 +120,10 @@
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
         [self.navigationController pushViewController:container animated:YES];
     }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 100;
 }
 
 @end

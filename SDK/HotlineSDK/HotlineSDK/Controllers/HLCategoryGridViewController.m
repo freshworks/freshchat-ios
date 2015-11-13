@@ -21,6 +21,7 @@
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
+#import "KonotorFeedbackScreen.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
 
@@ -107,11 +108,9 @@
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
-    navController.navigationBarHidden = YES;
-    self.providesPresentationContextTransitionStyle = YES;
-    self.definesPresentationContext = YES;
     [navController setModalPresentationStyle:UIModalPresentationCustom];
-    [self presentViewController:navController animated:NO completion:nil];
+    [self.navigationController presentViewController:navController animated:NO completion:nil];
+    
 }
 
 -(void)updateCategories{
@@ -161,16 +160,41 @@
     [self.view addSubview:self.collectionView];
     
     NSDictionary *views = @{ @"collectionView" : self.collectionView};
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|"
-                                                                      options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:0 metrics:nil views:views]];
-    
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
+    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter  withReuseIdentifier:@"footer"];
 }
 
-#pragma mark - Collection view delegat0e
+#pragma mark - Collection view delegate
+
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    UICollectionReusableView *footer = [self.collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"footer" forIndexPath:indexPath];
+    UILabel* marginalLabel = [[UILabel alloc] initWithFrame:CGRectInset(self.collectionView.bounds, 60.0f, 0.0f)];
+    marginalLabel.textAlignment = UITextAlignmentCenter;
+    marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
+    marginalLabel.font = [[HLTheme sharedInstance] talkToUsButtonFont];
+    marginalLabel.translatesAutoresizingMaskIntoConstraints=NO;
+    [footer addSubview:marginalLabel];
+    [footer setBackgroundColor:[UIColor colorWithRed:0.08 green:0.46 blue:1 alpha:1]];
+    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [footer addGestureRecognizer: tapGesture];
+    NSDictionary *views = @{ @"label" : marginalLabel };
+    [footer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[label]|" options:0 metrics:nil views:views]];
+    [footer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:nil views:views]];
+    return footer;
+    
+}
+
+-(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
+    [KonotorFeedbackScreen showFeedbackScreen];
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+    return CGSizeMake(self.collectionView.bounds.size.width, 44);
+}
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return 1;
@@ -189,9 +213,9 @@
     if (indexPath.row < self.categories.count){
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
-        cell.label.numberOfLines =0;
+        cell.backgroundColor = [[HLTheme sharedInstance] itemBackgroundColor];
         cell.layer.borderWidth=0.0f;
-        cell.layer.borderColor=[UIColor grayColor].CGColor;
+        cell.layer.borderColor=[[HLTheme sharedInstance] itemSeparatorColor].CGColor;
         if (!category.icon){
             cell.imageView.image=[UIImage imageNamed:@"loading.png"];
         }else{

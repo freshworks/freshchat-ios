@@ -12,6 +12,8 @@
 #import "FDSecureStore.h"
 #import "KonotorFeedbackScreen.h"
 #import "HLMacros.h"
+#import "HLTheme.h"
+#import "FDMarginalView.h"
 //#import "FDConstants.h"
 #import "FDLocalNotification.h"
 
@@ -77,17 +79,18 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [self setNavigationItem];
     [self registerAppAudioCategory];
-    //[self theming];
+    [self theming];
     [self setSubviews];
     [self fixAudioPlayback];
-    [self handleArticleVoteAfterSometime];
     [self localNotificationSubscription];
+    [self handleArticleVoteAfterSometime];
 }
 
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil queue:nil usingBlock:^(NSNotification *note) {
         [weakSelf.webView loadHTMLString:self.embedHTML baseURL:nil];
+        [self handleArticleVoteAfterSometime];
     }];
 }
 
@@ -99,19 +102,22 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-//    [self resetAudioPlayback];
+    [self resetAudioPlayback];
 }
 
-//-(void)theming{
-//    self.view.backgroundColor = [self.theme backgroundColorSDK];
-//}
+-(void)theming{
+    self.view.backgroundColor = [[HLTheme sharedInstance] backgroundColorSDK];
+}
 
 -(void)setNavigationItem{
-    [self.navigationItem setTitle:@"Solution Article"];
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    [self.parentViewController.navigationItem setRightBarButtonItem:barButton animated:YES];
-    self.parentViewController.navigationItem.leftBarButtonItem.title = self.categoryTitle;
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self.navigationController
+                                                                  action:@selector(popViewControllerAnimated:)];
+    self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
+    self.parentViewController.navigationItem.leftBarButtonItem = backButton;
 }
 
 -(void)setSubviews{
@@ -153,7 +159,7 @@
                                                                   multiplier:1.0
                                                                     constant:ALERT_PROMPT_VIEW_HEIGHT];
     
-    NSDictionary *views = @{@"webView" : self.webView, @"articleVotePromptView" : self.articleVotePromptView, @"contactUsVotePromptView" : self.contactUsPromptView };
+    NSDictionary *views = @{@"webView" : self.webView, @"articleVotePromptView" : self.articleVotePromptView, @"contactUsVotePromptView" : self.contactUsPromptView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[articleVotePromptView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contactUsVotePromptView]|" options:0 metrics:nil views:views]];
@@ -228,18 +234,25 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-        [self handleArticleVotePrompt];
+    [self handleArticleVotePrompt];
 }
 
 -(void)handleArticleVotePrompt{
-    if (self.webView.scrollView.contentOffset.y >= (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)-20) {
+    if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
+        BOOL articleVote = [self.votingManager getArticleVoteFor:self.articleID];
         if (!isArticleVoted) {
             [self showArticleRatingPrompt];
+        }
+        else{
+            if (articleVote == NO) {
+                [self showContactUsPrompt];
+            }
         }
     }
     else if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){
         [self hideArticleRatingPrompt];
+        [self hideContactUsPrompt];
     }
 }
 
@@ -262,7 +275,6 @@
 -(void)showContactUsPrompt{
     [UIView animateWithDuration:.5 animations:^{
         [self.contactUsPromptView setHidden:NO];
-        [self.articleVotePromptView setHidden:YES];
         [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
         [self.view layoutIfNeeded];
     }];
@@ -284,6 +296,7 @@
 }
 
 -(void)noButtonClicked:(id)sender{
+    [self hideArticleRatingPrompt];
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");

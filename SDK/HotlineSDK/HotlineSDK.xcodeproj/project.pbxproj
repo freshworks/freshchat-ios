@@ -88,12 +88,23 @@
 		CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED061BE90479000E8434 /* HLMessageServices.m */; };
 		CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */; };
 		CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */; };
+		CE10649E1BC5601B00922494 /* FDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064991BC5601B00922494 /* FDAlertView.m */; };
+		CE10649F1BC5601B00922494 /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE10649B1BC5601B00922494 /* FDPromptView.m */; };
+		CE1064A01BC5601B00922494 /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */; };
+		CE754A3F1BDF856A004B6635 /* FDTableViewCellWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = CE754A3E1BDF856A004B6635 /* FDTableViewCellWithImage.m */; };
+		CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE754A411BE0D424004B6635 /* FDMarginalView.m */; };
+		CE80CA1B1BE23FFA00473E49 /* FDCategoryListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA1A1BE23FFA00473E49 /* FDCategoryListViewCell.m */; };
+		CE80CA1E1BE2439900473E49 /* FDChannelListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA1D1BE2439900473E49 /* FDChannelListViewCell.m */; };
+		CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA621BE36B6500473E49 /* FDIndex.m */; };
 		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; };
+		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; };
 		CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D051BCD286F006F2E66 /* FDRanking.m */; };
-		CE9D4D291BCD4E79006F2E66 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D281BCD4E79006F2E66 /* FDIndex.m */; };
 		CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */; };
 		CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */; };
 		CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */; };
+		CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D361BCEA4F3006F2E66 /* FDSearchBar.m */; };
+		CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */; };
+		CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D451BD133AF006F2E66 /* FDButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -314,12 +325,26 @@
 		CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLChannelViewController.m; sourceTree = "<group>"; };
 		CE55ED0B1BE9FD4B000E8434 /* FDChannelUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDChannelUpdater.h; sourceTree = "<group>"; };
 		CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDChannelUpdater.m; sourceTree = "<group>"; };
+		CE1064981BC5601B00922494 /* FDAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAlertView.h; sourceTree = "<group>"; };
+		CE1064991BC5601B00922494 /* FDAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAlertView.m; sourceTree = "<group>"; };
+		CE10649A1BC5601B00922494 /* FDPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPromptView.h; sourceTree = "<group>"; };
+		CE10649B1BC5601B00922494 /* FDPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPromptView.m; sourceTree = "<group>"; };
+		CE10649C1BC5601B00922494 /* FDYesNoPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDYesNoPromptView.h; sourceTree = "<group>"; };
+		CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDYesNoPromptView.m; sourceTree = "<group>"; };
+		CE754A3D1BDF856A004B6635 /* FDTableViewCellWithImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTableViewCellWithImage.h; sourceTree = "<group>"; };
+		CE754A3E1BDF856A004B6635 /* FDTableViewCellWithImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTableViewCellWithImage.m; sourceTree = "<group>"; };
+		CE754A401BE0D424004B6635 /* FDMarginalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMarginalView.h; sourceTree = "<group>"; };
+		CE754A411BE0D424004B6635 /* FDMarginalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMarginalView.m; sourceTree = "<group>"; };
+		CE80CA191BE23FFA00473E49 /* FDCategoryListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCategoryListViewCell.h; sourceTree = "<group>"; };
+		CE80CA1A1BE23FFA00473E49 /* FDCategoryListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCategoryListViewCell.m; sourceTree = "<group>"; };
+		CE80CA1C1BE2439900473E49 /* FDChannelListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDChannelListViewCell.h; sourceTree = "<group>"; };
+		CE80CA1D1BE2439900473E49 /* FDChannelListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDChannelListViewCell.m; sourceTree = "<group>"; };
+		CE80CA611BE36B6500473E49 /* FDIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndex.h; sourceTree = "<group>"; };
+		CE80CA621BE36B6500473E49 /* FDIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndex.m; sourceTree = "<group>"; };
 		CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryGridViewController.h; sourceTree = "<group>"; };
 		CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryGridViewController.m; sourceTree = "<group>"; };
 		CE9D4D041BCD286F006F2E66 /* FDRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDRanking.h; sourceTree = "<group>"; };
 		CE9D4D051BCD286F006F2E66 /* FDRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDRanking.m; sourceTree = "<group>"; };
-		CE9D4D271BCD4E79006F2E66 /* FDIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndex.h; sourceTree = "<group>"; };
-		CE9D4D281BCD4E79006F2E66 /* FDIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndex.m; sourceTree = "<group>"; };
 		CE9D4D2A1BCE55FF006F2E66 /* FDArticleContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleContent.h; sourceTree = "<group>"; };
 		CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDArticleContent.m; sourceTree = "<group>"; };
 		CE9D4D2D1BCE576A006F2E66 /* FDUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDUtilities.h; sourceTree = "<group>"; };
@@ -373,8 +398,24 @@
 				353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */,
 				CE9D4D321BCE91BE006F2E66 /* HLSearchViewController.h */,
 				CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */,
+				CE9D4D391BCFC362006F2E66 /* FDTableViewCell.h */,
+				CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */,
+				CE754A3D1BDF856A004B6635 /* FDTableViewCellWithImage.h */,
+				CE754A3E1BDF856A004B6635 /* FDTableViewCellWithImage.m */,
+				CE80CA191BE23FFA00473E49 /* FDCategoryListViewCell.h */,
+				CE80CA1A1BE23FFA00473E49 /* FDCategoryListViewCell.m */,
+				CE80CA1C1BE2439900473E49 /* FDChannelListViewCell.h */,
+				CE80CA1D1BE2439900473E49 /* FDChannelListViewCell.m */,
 				CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */,
 				CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */,
+				CE754A401BE0D424004B6635 /* FDMarginalView.h */,
+				CE754A411BE0D424004B6635 /* FDMarginalView.m */,
+				CE1064981BC5601B00922494 /* FDAlertView.h */,
+				CE1064991BC5601B00922494 /* FDAlertView.m */,
+				CE10649A1BC5601B00922494 /* FDPromptView.h */,
+				CE10649B1BC5601B00922494 /* FDPromptView.m */,
+				CE10649C1BC5601B00922494 /* FDYesNoPromptView.h */,
+				CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */,
 				3533F0B71BB01D38000B2D9A /* HLContainerController.h */,
 				3533F0B81BB01D38000B2D9A /* HLContainerController.m */,
 				35D158B61BB2966B009CFEDF /* HLListViewController.h */,
@@ -573,10 +614,10 @@
 		359E3E5F1BA6D20600B933C5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CE9D4D271BCD4E79006F2E66 /* FDIndex.h */,
-				CE9D4D281BCD4E79006F2E66 /* FDIndex.m */,
 				358DD4C01BB00EB700B36E4E /* HLArticle.h */,
 				358DD4C11BB00EB700B36E4E /* HLArticle.m */,
+				CE80CA611BE36B6500473E49 /* FDIndex.h */,
+				CE80CA621BE36B6500473E49 /* FDIndex.m */,
 				CE9D4D2A1BCE55FF006F2E66 /* FDArticleContent.h */,
 				CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */,
 				CE55ED021BE8E643000E8434 /* HLChannel.h */,
@@ -930,6 +971,8 @@
 				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
 				91BBEAA21BE393DB00F55009 /* FDPictureMessageUnit.m in Sources */,
+				CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */,
+				CE754A3F1BDF856A004B6635 /* FDTableViewCellWithImage.m in Sources */,
 				35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */,
 				35DCCB571BE002E50039EFDD /* KonotorDataManager.m in Sources */,
 				353AA00D1BDF7B4F008CDAB2 /* FDMessageController.m in Sources */,
@@ -945,8 +988,8 @@
 				3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */,
 				35591B071B9EDBBC00BC0B60 /* KonotorUITextView.m in Sources */,
 				CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */,
-				CE9D4D291BCD4E79006F2E66 /* FDIndex.m in Sources */,
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
+				CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */,
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,
 				3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */,
 				CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */,
@@ -956,6 +999,9 @@
 				35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */,
 				35DCCB521BE002960039EFDD /* FDAlertView.m in Sources */,
 				CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */,
+				CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */,
+				CE80CA1E1BE2439900473E49 /* FDChannelListViewCell.m in Sources */,
+				CE80CA1B1BE23FFA00473E49 /* FDCategoryListViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

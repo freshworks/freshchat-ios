@@ -25,7 +25,7 @@
 
 @implementation Hotline
 
-+(id)sharedInstance{
++(instancetype)sharedInstance{
     static Hotline *sharedInstance = nil;
     static dispatch_once_t oncetoken;
     dispatch_once(&oncetoken,^{
@@ -80,11 +80,15 @@
     [Konotor setUnreadWelcomeMessage:text];
 }
 
-+(void)presentSolutions:(UIViewController *)controller{
-    HLCategoryGridViewController *categoryController = [[HLCategoryGridViewController alloc]init];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:categoryController];
-    UINavigationController *navigationController = [[UINavigationController alloc]init];
-    navigationController.viewControllers = @[containerController];
+-(void)presentSolutions:(UIViewController *)controller{
+    UIViewController *preferedController = nil;
+    if (self.dispalySolutionAsGrid) {
+        preferedController = [[HLCategoryGridViewController alloc]init];
+    }else{
+        preferedController = [[HLCategoriesListController alloc]init];
+    }
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 

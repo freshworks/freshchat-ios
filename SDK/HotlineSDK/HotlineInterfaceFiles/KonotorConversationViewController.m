@@ -1456,9 +1456,6 @@ NSString* otherName=nil,*userName=nil;
 
 }
 
-
-#pragma mark Keyboard Notifications
-
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {

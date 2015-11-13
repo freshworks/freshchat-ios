@@ -17,6 +17,6 @@
 
 -(instancetype)initWithBaseURL:(NSURL *)baseURL;
 
--(void)setRelativePath:(NSString *)path andURLParams:(NSString *)params;
+-(void)setRelativePath:(NSString *)path andURLParams:(NSArray *)params;
 
 @end

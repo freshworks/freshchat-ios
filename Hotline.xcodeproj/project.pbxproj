@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3512724A1BF5FB5D008E2B04 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 351272491BF5FB5D008E2B04 /* KonotorModels.bundle */; };
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
 		355AE77B1B9DD42400E8999C /* MHLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 355AE7771B9DD42400E8999C /* MHLocalizable.strings */; };
 		355AE77C1B9DD42400E8999C /* MHModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 355AE7791B9DD42400E8999C /* MHModel.bundle */; };
@@ -29,6 +30,7 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
@@ -68,9 +70,10 @@
 		35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */; };
 		35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */; };
 		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; };
+		35FEE97E1BF083630009568C /* BackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FEE97D1BF083630009568C /* BackArrow.png */; };
 		CE10648C1BC54C9300922494 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = CE10648B1BC54C9300922494 /* loading.png */; };
 		CE1064A21BC6780700922494 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1064A11BC6780700922494 /* message.png */; };
-		CE55ED011BE8E5C1000E8434 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE55ED001BE8E5C1000E8434 /* KonotorModels.bundle */; };
+		CE80CA511BE36A9900473E49 /* (null) in Resources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +143,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		351272491BF5FB5D008E2B04 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		355AE7781B9DD42400E8999C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MHLocalizable.strings; sourceTree = "<group>"; };
 		355AE7791B9DD42400E8999C /* MHModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MHModel.bundle; sourceTree = "<group>"; };
@@ -169,6 +173,8 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
+		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
@@ -208,9 +214,9 @@
 		35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
 		35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorConversationViewController.xib; sourceTree = "<group>"; };
 		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
+		35FEE97D1BF083630009568C /* BackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow.png; sourceTree = "<group>"; };
 		CE10648B1BC54C9300922494 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		CE1064A11BC6780700922494 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
-		CE55ED001BE8E5C1000E8434 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,6 +303,8 @@
 				356F19EF1B9DBF14002F1E2A /* AppDelegate.m */,
 				356F19F11B9DBF14002F1E2A /* ViewController.h */,
 				356F19F21B9DBF14002F1E2A /* ViewController.m */,
+				35D707141BE2498B0035FD74 /* FDSettingsController.h */,
+				35D707151BE2498B0035FD74 /* FDSettingsController.m */,
 				356F19F41B9DBF14002F1E2A /* Main.storyboard */,
 				356F19F71B9DBF14002F1E2A /* Images.xcassets */,
 				356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */,
@@ -385,7 +393,7 @@
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
 			children = (
-				CE55ED001BE8E5C1000E8434 /* KonotorModels.bundle */,
+				351272491BF5FB5D008E2B04 /* KonotorModels.bundle */,
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 				35ED5EDE1BB3EA4600E0052D /* Konotor-Images */,
@@ -407,6 +415,7 @@
 			children = (
 				CE10648B1BC54C9300922494 /* loading.png */,
 				CE1064A11BC6780700922494 /* message.png */,
+				35FEE97D1BF083630009568C /* BackArrow.png */,
 				35ED5EDF1BB3EA4600E0052D /* konotor_back.png */,
 				35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */,
 				35ED5EE11BB3EA4600E0052D /* konotor_cam.png */,
@@ -615,6 +624,7 @@
 				35ED5F0B1BB3EA4600E0052D /* konotor_cancel.png in Resources */,
 				35ED5F0C1BB3EA4600E0052D /* konotor_cancel@2x.png in Resources */,
 				35ED5F0F1BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png in Resources */,
+				CE80CA511BE36A9900473E49 /* (null) in Resources */,
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
 				35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */,
 				35ED5F231BB3EA4600E0052D /* konotor_stop.png in Resources */,
@@ -622,8 +632,8 @@
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
 				35ED5F191BB3EA4600E0052D /* konotor_profile.png in Resources */,
-				CE55ED011BE8E5C1000E8434 /* KonotorModels.bundle in Resources */,
 				35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */,
+				3512724A1BF5FB5D008E2B04 /* KonotorModels.bundle in Resources */,
 				35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
@@ -643,6 +653,7 @@
 				CE10648C1BC54C9300922494 /* loading.png in Resources */,
 				35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */,
 				35ED5F181BB3EA4600E0052D /* konotor_play@2x.png in Resources */,
+				35FEE97E1BF083630009568C /* BackArrow.png in Resources */,
 				35ED5F1A1BB3EA4600E0052D /* konotor_profile@2x.png in Resources */,
 				35ED5F1F1BB3EA4600E0052D /* konotor_sent.png in Resources */,
 				35ED5F221BB3EA4600E0052D /* konotor_share@2x.png in Resources */,
@@ -679,6 +690,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */,
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
 				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,

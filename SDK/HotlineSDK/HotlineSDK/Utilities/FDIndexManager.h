@@ -11,5 +11,6 @@
 @interface FDIndexManager : NSObject
 
 +(void)updateIndex;
++(void)setIndexingCompleted:(BOOL)state;
 
 @end

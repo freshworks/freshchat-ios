@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;
 @property (strong, nonatomic) NSString *categoryTitle;
+@property (strong,nonatomic) NSString *articleTitle;
 @property (strong,nonatomic) NSNumber *categoryID;
 
 @end

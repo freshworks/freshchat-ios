@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "HotlineSDK/Hotline.h"
+#import "FDSettingsController.h"
 
 @interface ViewController ()
 
@@ -20,7 +21,7 @@
 }
 
 - (IBAction)showFAQ:(id)sender {
-    [Hotline presentSolutions:self];
+    [[Hotline sharedInstance] presentSolutions:self];
 }
 
 - (IBAction)conversations:(id)sender {
@@ -28,7 +29,10 @@
 }
 
 - (IBAction)settings:(id)sender {
-    NSLog(@"Settings");
+    FDSettingsController *settings = [FDSettingsController new];
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    navigationController.viewControllers = @[settings];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

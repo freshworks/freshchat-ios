@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FDMarginalView.h"
 
 @interface HLCategoryGridViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UISearchDisplayDelegate>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *searchResults;
+@property (nonatomic, retain)FDMarginalView *footerView;
 
 @end

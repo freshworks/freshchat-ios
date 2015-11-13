@@ -1,9 +1,9 @@
 //
 //  FDIndex.m
-//  FreshdeskSDK
+//  Hotline
 //
-//  Created by kirthikas on 29/01/15.
-//  Copyright (c) 2015 Freshdesk. All rights reserved.
+//  Created by user on 30/10/15.
+//  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
 #import "FDIndex.h"

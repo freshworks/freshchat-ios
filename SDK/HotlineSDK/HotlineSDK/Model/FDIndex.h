@@ -1,9 +1,9 @@
 //
 //  FDIndex.h
-//  FreshdeskSDK
+//  Hotline
 //
-//  Created by kirthikas on 29/01/15.
-//  Copyright (c) 2015 Freshdesk. All rights reserved.
+//  Created by user on 30/10/15.
+//  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,7 +13,7 @@
 #define MOBIHELP_DB_INDEX_TITLE_MATCHES @"titleMatches"
 #define MOBIHELP_DB_INDEX_DESC_MATCHES  @"descMatches"
 
-
+NS_ASSUME_NONNULL_BEGIN
 
 @interface FDIndex : NSManagedObject
 
@@ -24,5 +24,7 @@
 
 +(NSMutableArray *)indexWithInfo:(NSDictionary *)indexInfo inManagedObjectContext:(NSManagedObjectContext *)context withArticleID:(NSNumber *)articleID;
 
-
 @end
+
+NS_ASSUME_NONNULL_END
+
