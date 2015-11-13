@@ -262,12 +262,12 @@
         [audioItem.mediaProgressBar setHidden:YES];
         [audioItem.audioPlayButton setHidden:YES];
         
-        NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
+     //   NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
         
-        NSString *simpleString=[messageText string];
+        NSString *simpleString=currentMessage.text;//[messageText string];
         
-        messageTextView.attributedText=messageText;
-     //   [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
+       // messageTextView.attributedText=messageText;
+        [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
         
         CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         float msgHeight=sizer.height;
@@ -382,9 +382,10 @@
     float cellHeight=0;
     
     if(([currentMessage messageType].integerValue==KonotorMessageTypeText)||([currentMessage messageType].integerValue==KonotorMessageTypeHTML)){
-        NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
-        
-        NSString *simpleString=[messageText string];
+       // NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
+
+        NSString *simpleString=currentMessage.text; //[messageText string];
+      
         
         float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         if(KONOTOR_SHOWPROFILEIMAGE){
