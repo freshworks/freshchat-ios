@@ -56,6 +56,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self updateMessages];
     [self setNavigationItem];
     [self localNotificationSubscription];
+    [self scrollTableViewToLastCell];
 }
 
 -(void)setNavigationItem{
