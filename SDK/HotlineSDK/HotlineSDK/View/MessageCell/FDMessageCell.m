@@ -155,7 +155,7 @@
             [tempView2 setText:strDate];
             CGSize txtTimeSize = [tempView2 sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
             CGFloat msgWidth = txtSize.width + 4 * KONOTOR_HORIZONTAL_PADDING;
-            CGFloat timeWidth = (txtTimeSize.width +  4 * KONOTOR_HORIZONTAL_PADDING);
+            CGFloat timeWidth = (txtTimeSize.width +  4 * KONOTOR_HORIZONTAL_PADDING)+16;
             
             if (msgWidth < timeWidth){
                 messageContentViewWidth = timeWidth;
