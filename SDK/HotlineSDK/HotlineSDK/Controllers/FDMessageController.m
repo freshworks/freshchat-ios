@@ -37,7 +37,6 @@ BOOL firstWordOnLine=YES;
 static int messageCount = 0;
 static int messageCount_prev = 0;
 static CGFloat TOOLBAR_HEIGHT = 40;
-static int numberOfMessagesShown = 25;
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -288,15 +287,6 @@ static int numberOfMessagesShown = 25;
 }
 
 -(void)scrollTableViewToLastCell{
-//    NSInteger lastCellIndex =  self.messages.count - 1;
-//    if (lastCellIndex >0 ) {
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastCellIndex inSection:0];
-//        NSUInteger noOfRows = [self.tableView numberOfRowsInSection:indexPath.section];
-//        if (noOfRows==0) {
-//            [self.tableView reloadData];
-//        }
-//        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    }
     int lastSpot=loading?messageCount:(messageCount-1);
     
     if(lastSpot<0) return;
@@ -313,7 +303,6 @@ static int numberOfMessagesShown = 25;
             
         }
     }
-
 }
 
 #pragma mark Konotor delegates
@@ -445,10 +434,8 @@ static int numberOfMessagesShown = 25;
 
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
- //   if (self.keyboardHeight > 0) {
     [self.tableView reloadData];
     [self scrollTableViewToLastCell];
- //   }
 }
 
 -(void)dealloc{
