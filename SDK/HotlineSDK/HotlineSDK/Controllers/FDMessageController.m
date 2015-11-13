@@ -71,7 +71,9 @@ static int numberOfMessagesShown = 25;
 }
 
 -(void)updateMessages{
-    self.messages = [Konotor getAllMessagesForDefaultConversation];
+    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+    self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    messageCount=(int)[self.messages count];
 }
 
 -(void)setSubviews{
@@ -149,16 +151,7 @@ static int numberOfMessagesShown = 25;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
-    messageCount=(int)[self.messages count];
-    if((numberOfMessagesShown>messageCount)||(messageCount<=KONOTOR_MESSAGESPERPAGE)||((messageCount-numberOfMessagesShown)<3))
-        numberOfMessagesShown=messageCount;
-    if(!loading){
-        return numberOfMessagesShown;
-    }else{
-        return numberOfMessagesShown+1;
-    }
+    return self.messages.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -250,8 +243,8 @@ static int numberOfMessagesShown = 25;
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
     self.keyboardHeight = keyboardCoveredHeight;
-    [self scrollTableViewToLastCell];
     [self.view layoutIfNeeded];
+    [self scrollTableViewToLastCell];
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
@@ -304,6 +297,23 @@ static int numberOfMessagesShown = 25;
 //        }
 //        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 //    }
+    int lastSpot=loading?messageCount:(messageCount-1);
+    
+    if(lastSpot<0) return;
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
+    @try {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
+    @catch (NSException *exception ) {
+        indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
+        @try{
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        }
+        @catch(NSException *exception){
+            
+        }
+    }
+
 }
 
 #pragma mark Konotor delegates
@@ -406,26 +416,14 @@ static int numberOfMessagesShown = 25;
 }
 
 - (void) refreshView{
+    messageCount_prev=(int)[[Konotor getAllMessagesForDefaultConversation] count];
+    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+    self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    messageCount=(int)[self.messages count];
+    
     [self.tableView reloadData];
     [Konotor markAllMessagesAsRead];
-    int lastSpot=loading?numberOfMessagesShown:(numberOfMessagesShown-1);
-    if([KonotorUIParameters sharedInstance].notificationCenterMode) lastSpot=0;
-    if(lastSpot<0) return;
-    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
-    @try {
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-    }
-    @catch (NSException *exception ) {
-        indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
-        @try{
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-        }
-        @catch(NSException *exception){
-            
-        }
-    }
-    messageCount_prev=(int)[[Konotor getAllMessagesForDefaultConversation] count];
-    self.messages = [Konotor getAllMessagesForDefaultConversation];
+    [self scrollTableViewToLastCell];
 }
 
 
@@ -447,9 +445,10 @@ static int numberOfMessagesShown = 25;
 
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    if (self.keyboardHeight > 0) {
-        [self scrollTableViewToLastCell];
-    }
+ //   if (self.keyboardHeight > 0) {
+    [self.tableView reloadData];
+    [self scrollTableViewToLastCell];
+ //   }
 }
 
 -(void)dealloc{
