@@ -341,9 +341,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) didFinishUploading:(NSString *)messageID{
-    for(UITableViewCell* cell in [self.tableView visibleCells]){
+    for(FDMessageCell* cell in [self.tableView visibleCells]){
         if([messageID hash]==cell.tag){
-            UIImageView* uploadStatus=(UIImageView*)[cell.contentView viewWithTag:KONOTOR_UPLOADSTATUS_TAG];
+            UIImageView* uploadStatus=(UIImageView*)cell.uploadStatusImageView;
             [uploadStatus setImage:self.sentImage];
             for(int i=messageCount-1;i>=0;i--){
                 if([(NSString*)[(KonotorMessageData*)[self.messages objectAtIndex:i] messageId] isEqualToString:messageID]){
