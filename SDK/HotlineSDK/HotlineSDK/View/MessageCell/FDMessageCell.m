@@ -63,7 +63,7 @@
         messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
         [messageSentTimeLabel setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
         [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
-        [messageSentTimeLabel setTextAlignment:NSTextAlignmentLeft];
+        [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
         [messageSentTimeLabel setTextColor:[UIColor darkGrayColor]];
         [messageSentTimeLabel setEditable:NO];
         [messageSentTimeLabel setSelectable:NO];
@@ -141,7 +141,7 @@
         int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT]);
         
         //if message is single line, calculate larger width of the message text and date string
-        if (numLines == 1){
+        if (numLines >= 1){
             UITextView* tempView=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
             [tempView setText:messageText];
             [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
@@ -154,8 +154,8 @@
             [tempView2 setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
             [tempView2 setText:strDate];
             CGSize txtTimeSize = [tempView2 sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
-            CGFloat msgWidth = txtSize.width + 4 * KONOTOR_HORIZONTAL_PADDING;
-            CGFloat timeWidth = (txtTimeSize.width +  4 * KONOTOR_HORIZONTAL_PADDING)+16;
+            CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
+            CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
             
             if (msgWidth < timeWidth){
                 messageContentViewWidth = timeWidth;
@@ -218,7 +218,6 @@
     else
         [senderNameLabel setHidden:YES];
     
-    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth-15-6, KONOTOR_VERTICAL_PADDING+6, 15, 15)];
     if([currentMessage uploadStatus].integerValue==MessageUploaded)
         [uploadStatusImageView setImage:sentImage];
     else
@@ -254,7 +253,6 @@
     if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
         [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
     
-    [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue];
     
     
     if(([currentMessage messageType].integerValue==KonotorMessageTypeText)||([currentMessage messageType].integerValue==KonotorMessageTypeHTML))
@@ -271,8 +269,8 @@
         
         CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         float msgHeight=sizer.height;
-        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(showsTimeStamp?KONOTOR_TIMEFIELD_HEIGHT:0);
-        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(showsTimeStamp?KONOTOR_TIMEFIELD_HEIGHT:0);
+        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
+        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
         
         [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
@@ -284,8 +282,8 @@
         [messageTextView setText:@""];
         
         float msgHeight=KONOTOR_AUDIOMESSAGE_HEIGHT;
-        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:(KONOTOR_SHOW_TIMESTAMP?(KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING):KONOTOR_VERTICAL_PADDING));
-        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showsSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING);
+        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING;
         
         [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
@@ -329,8 +327,8 @@
         
         
         float msgHeight=16+height+txtheight;
-        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0);
-        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showsSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+        float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
+        float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING;
         
         [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
@@ -343,6 +341,8 @@
         [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
         
     }
+    
+    [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextView.frame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue];
     
    if(showsProfile){
        profileImageView.hidden = NO;
@@ -432,7 +432,7 @@
     
     float messageContentViewWidth=messageContentFrame.size.width;
     
-    float messageTextBoxX=messageTextFrame.origin.x;
+    float messageTextBoxX=messageTextFrame.origin.x-KONOTOR_HORIZONTAL_PADDING;
     float messageTextBoxY=messageTextFrame.origin.y;
     float messageTextBoxWidth=messageTextFrame.size.width;
     
@@ -445,7 +445,7 @@
             
         case KonotorMessageTypePicture:
         {
-            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
+            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
             
             break;
@@ -454,7 +454,7 @@
             
         case KonotorMessageTypeAudio:
         {
-            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?(KONOTOR_USERNAMEFIELD_HEIGHT+KONOTOR_AUDIOMESSAGE_HEIGHT):KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT)];
+            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?(KONOTOR_USERNAMEFIELD_HEIGHT+KONOTOR_AUDIOMESSAGE_HEIGHT):KONOTOR_AUDIOMESSAGE_HEIGHT), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT)];
             
             if((KONOTOR_SHOW_TIMESTAMP)&&(KONOTOR_SHOW_SENDERNAME))
             {
@@ -475,13 +475,16 @@
             
         default:
         {
-            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), txtSize.width + 16, KONOTOR_TIMEFIELD_HEIGHT+4)];
+            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
             [timeField setContentOffset:CGPointMake(0, 4)];
             
             break;
         }
     }
+    
+    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth-15-txtSize.width, messageTextBoxY+messageTextView.frame.size.height, 15, 15)];
+
     
 }
 
