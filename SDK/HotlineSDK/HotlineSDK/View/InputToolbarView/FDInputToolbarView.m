@@ -47,14 +47,14 @@
 
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *attachmentImage = [UIImage imageNamed:INPUT_BAR_ATTACHMENT_IMAGE];
+        UIImage *attachmentImage = [UIImage imageNamed:INPUT_BAR_ATTACHMENT_ICON];
         [attachButton setImage:attachmentImage forState:UIControlStateNormal];
         [attachButton addTarget:self action:@selector(attachmentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [sendButton setTitle:HLLocalizedString(@"Send Button Text") forState:UIControlStateNormal];
-        [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
+        UIImage *sendImage = [UIImage imageNamed:INPUT_BAR_SEND_ICON];
+        [sendButton setImage:sendImage forState:UIControlStateNormal];
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:inputTextView];
@@ -77,9 +77,9 @@
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[inputTextView]-5-|" options:0 metrics:nil views:views]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(27)]-5-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton]|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton]-[inputTextView]-[sendButton(54)]-5-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(20)]-8-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(20)]-8-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton(40)]-[inputTextView]-[sendButton(40)]-5-|" options:0 metrics:nil views:views]];
     
     
     attachButtonWidthConstraint = [NSLayoutConstraint constraintWithItem:attachButton
