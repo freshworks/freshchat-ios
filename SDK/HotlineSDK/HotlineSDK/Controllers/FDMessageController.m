@@ -207,7 +207,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardDidShowNotification
+                                                 name:UIKeyboardWillShowNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide:)
@@ -239,13 +239,16 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 #pragma mark Keyboard delegate
 
 -(void) keyboardWillShow:(NSNotification *)note{
+    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.isKeyboardOpen = YES;
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
     self.keyboardHeight = keyboardCoveredHeight;
-    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
     [self scrollTableViewToLastCell];
 }
 
