@@ -33,7 +33,7 @@
     sentImage=[UIImage imageNamed:@"konotor_sent"];
     sendingImage=[UIImage imageNamed:@"konotor_uploading"];
 
-    showsProfile=NO;
+    showsProfile=YES;
     showsSenderName=NO;
     customFontName=@"Helvetica";
     showsUploadStatus=YES;
@@ -343,26 +343,27 @@
         [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
         
     }
-
     
    if(showsProfile){
-        [profileImageView setHidden:NO];
-        if(isSenderOther)
-            [profileImageView setImage:[UIImage imageNamed:@"konotor_supportprofile"]];
-        else
-            [profileImageView setImage:[UIImage imageNamed:@"konotor_profile"]];
-        [profileImageView setFrame:CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION)];
+       profileImageView.hidden = NO;
+       if(isSenderOther){
+           profileImageView.image = [UIImage imageNamed:@"konotor_supportprofile"];
+       }else{
+           profileImageView.image = [UIImage imageNamed:@"konotor_profile"];
+       }
+       
+       profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
+
+       profileImageView.layer.cornerRadius = KONOTOR_PROFILEIMAGE_DIMENSION/2;
+       
+    }else{
+        profileImageView.hidden = YES;
     }
-    else{
-        [profileImageView setHidden:YES];
-    }
+     
     [self setBackgroundColor:[UIColor clearColor]];
     [self.contentView setClipsToBounds:YES];
     self.tag=[currentMessage.messageId hash];
-        
 }
-
-
 
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView
 {
