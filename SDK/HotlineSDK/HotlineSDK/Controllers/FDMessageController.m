@@ -143,15 +143,11 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     NSString *cellIdentifier = @"FDMessageCell";
     FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell initCell];
+        cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier];
     }
-    
     if (indexPath.row < self.messages.count) {
         KonotorMessageData *message = self.messages[indexPath.row];
         [cell drawMessageViewForMessage:message parentView:self.view];
-        
     }
     return cell;
 }

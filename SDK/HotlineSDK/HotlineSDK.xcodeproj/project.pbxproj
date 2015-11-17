@@ -82,7 +82,7 @@
 		35DCCB5F1BE005370039EFDD /* KonotorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */; };
 		35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
-		91BBEAA21BE393DB00F55009 /* FDPictureMessageUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageUnit.m */; };
+		91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
 		CE55ED041BE8E643000E8434 /* HLChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED031BE8E643000E8434 /* HLChannel.m */; };
 		CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED061BE90479000E8434 /* HLMessageServices.m */; };
@@ -306,8 +306,8 @@
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		91BBEAA01BE393DB00F55009 /* FDPictureMessageUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPictureMessageUnit.h; sourceTree = "<group>"; };
-		91BBEAA11BE393DB00F55009 /* FDPictureMessageUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPictureMessageUnit.m; sourceTree = "<group>"; };
+		91BBEAA01BE393DB00F55009 /* FDPictureMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPictureMessageView.h; sourceTree = "<group>"; };
+		91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPictureMessageView.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE1064951BC55FDB00922494 /* FDVotingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDVotingManager.h; sourceTree = "<group>"; };
 		CE1064961BC55FDB00922494 /* FDVotingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDVotingManager.m; sourceTree = "<group>"; };
@@ -694,8 +694,8 @@
 				35DCCB391BE002220039EFDD /* FDActionButton.m */,
 				35DCCB3A1BE002220039EFDD /* FDAudioMessageUnit.h */,
 				35DCCB3B1BE002220039EFDD /* FDAudioMessageUnit.m */,
-				91BBEAA01BE393DB00F55009 /* FDPictureMessageUnit.h */,
-				91BBEAA11BE393DB00F55009 /* FDPictureMessageUnit.m */,
+				91BBEAA01BE393DB00F55009 /* FDPictureMessageView.h */,
+				91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */,
 			);
 			path = MessageCell;
 			sourceTree = "<group>";
@@ -950,7 +950,7 @@
 				CE55ED041BE8E643000E8434 /* HLChannel.m in Sources */,
 				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
-				91BBEAA21BE393DB00F55009 /* FDPictureMessageUnit.m in Sources */,
+				91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */,
 				CE9D4D3B1BCFC363006F2E66 /* (null) in Sources */,
 				CE754A3F1BDF856A004B6635 /* FDTableViewCellWithImage.m in Sources */,
 				35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */,

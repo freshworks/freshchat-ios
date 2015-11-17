@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "FDAudioMessageUnit.h"
-#import "FDPictureMessageUnit.h"
+#import "FDPictureMessageView.h"
 #import "FDActionButton.h"
 #import "Konotor.h"
-
 
 #define KONOTOR_TEXTMESSAGE_MAXWIDTH 260.0
 #define KONOTOR_MESSAGETEXT_FONT ([UIFont systemFontOfSize:16.0])
@@ -34,7 +33,7 @@
 
 
 @class FDAudioMessageUnit;
-@class FDPictureMessageUnit;
+@class FDPictureMessageView;
 
 @interface FDMessageCell : UITableViewCell
 
@@ -48,8 +47,6 @@
 @property (strong, nonatomic) UIImage* sentImage;
 @property (strong, nonatomic) UIImage* sendingImage;
 
-
-
 /* message cell UI elements */
 @property (nonatomic) CGRect messageTextBoxRect;
 @property (nonatomic) CGRect messageContentViewRect;
@@ -60,12 +57,11 @@
 @property (strong, nonatomic) UITextView* senderNameLabel;
 @property (strong, nonatomic) UITextView* messageSentTimeLabel;
 @property (strong, nonatomic) UIImageView* uploadStatusImageView;
-@property (strong, nonatomic) FDPictureMessageUnit* messagePictureImageView;
+@property (strong, nonatomic) FDPictureMessageView* messagePictureImageView;
 @property (strong, nonatomic) FDActionButton* messageActionButton;
 
-- (void) initCell;
+- (instancetype) initWithReuseIdentifier:(NSString *)identifier;
 - (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
-
 
 @end

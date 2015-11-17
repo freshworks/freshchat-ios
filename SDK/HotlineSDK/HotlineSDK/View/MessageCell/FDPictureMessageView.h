@@ -10,8 +10,7 @@
 #import "FDMessageCell.h"
 #import "Konotor.h"
 
-
-@interface FDPictureMessageUnit : UIImageView
+@interface FDPictureMessageView : UIImageView
 
 @property (strong, nonatomic) KonotorMessageData* message;
 

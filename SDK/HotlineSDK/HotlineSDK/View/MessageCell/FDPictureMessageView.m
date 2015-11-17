@@ -6,46 +6,16 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-#import "FDPictureMessageUnit.h"
+#import "FDPictureMessageView.h"
 #import "KonotorUI.h"
 
-@implementation FDPictureMessageUnit
+@implementation FDPictureMessageView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
-
-+ (CGSize) getSizeForImageFromMessage:(KonotorMessageData*) message
-{
-    CGSize picSize=CGSizeZero;
-    
-    float height=MIN([[message picThumbHeight] floatValue],KONOTOR_IMAGE_MAXHEIGHT);
-    float imgwidth=[[message picThumbWidth] floatValue];
-    if(height!=[[message picThumbHeight] floatValue]){
-        imgwidth=[[message picThumbWidth] floatValue]*(height/[[message picThumbHeight] floatValue]);
-    }
-    if(imgwidth>KONOTOR_IMAGE_MAXWIDTH)
-    {
-        imgwidth=KONOTOR_IMAGE_MAXWIDTH;
-        height=[[message picThumbHeight] floatValue]*(imgwidth/[[message picThumbWidth] floatValue]);
-    }
-    picSize.width=imgwidth;
-    picSize.height=height;
-    
-    return picSize;
-}
-
-- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)currentMessage
-{
+- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)currentMessage{
     self.message=currentMessage;
     [self setHidden:NO];
     
-    CGSize picSize=[FDPictureMessageUnit getSizeForImageFromMessage:currentMessage];
+    CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:currentMessage];
     
     float height=picSize.height;
     float imgwidth=picSize.width;
@@ -168,5 +138,23 @@
     }
 }
 
++ (CGSize) getSizeForImageFromMessage:(KonotorMessageData*) message{
+    CGSize picSize=CGSizeZero;
+    
+    float height=MIN([[message picThumbHeight] floatValue],KONOTOR_IMAGE_MAXHEIGHT);
+    float imgwidth=[[message picThumbWidth] floatValue];
+    if(height!=[[message picThumbHeight] floatValue]){
+        imgwidth=[[message picThumbWidth] floatValue]*(height/[[message picThumbHeight] floatValue]);
+    }
+    if(imgwidth>KONOTOR_IMAGE_MAXWIDTH)
+    {
+        imgwidth=KONOTOR_IMAGE_MAXWIDTH;
+        height=[[message picThumbHeight] floatValue]*(imgwidth/[[message picThumbWidth] floatValue]);
+    }
+    picSize.width=imgwidth;
+    picSize.height=height;
+    
+    return picSize;
+}
 
 @end
