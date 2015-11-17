@@ -63,6 +63,12 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if(self.isModalPresentationPreferred){
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
+    }else{
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self.navigationController
+                                                                      action:@selector(popViewControllerAnimated:)];
+        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
     }
 }
 
@@ -428,11 +434,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
     }
 }
-
-- (void) scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    [self.view endEditing:YES];
-}
-
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
