@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
-		355AE77B1B9DD42400E8999C /* MHLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 355AE7771B9DD42400E8999C /* MHLocalizable.strings */; };
-		355AE77C1B9DD42400E8999C /* MHModel.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 355AE7791B9DD42400E8999C /* MHModel.bundle */; };
-		355AE77D1B9DD42400E8999C /* MHResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 355AE77A1B9DD42400E8999C /* MHResources.bundle */; };
 		356F19ED1B9DBF14002F1E2A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EC1B9DBF14002F1E2A /* main.m */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
 		356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19F21B9DBF14002F1E2A /* ViewController.m */; };
@@ -142,9 +139,6 @@
 
 /* Begin PBXFileReference section */
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
-		355AE7781B9DD42400E8999C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MHLocalizable.strings; sourceTree = "<group>"; };
-		355AE7791B9DD42400E8999C /* MHModel.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MHModel.bundle; sourceTree = "<group>"; };
-		355AE77A1B9DD42400E8999C /* MHResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MHResources.bundle; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F19EB1B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		356F19EC1B9DBF14002F1E2A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -257,24 +251,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		355AE7751B9DD42400E8999C /* MobihelpResources */ = {
-			isa = PBXGroup;
-			children = (
-				355AE7761B9DD42400E8999C /* MHLocalization */,
-				355AE7791B9DD42400E8999C /* MHModel.bundle */,
-				355AE77A1B9DD42400E8999C /* MHResources.bundle */,
-			);
-			path = MobihelpResources;
-			sourceTree = "<group>";
-		};
-		355AE7761B9DD42400E8999C /* MHLocalization */ = {
-			isa = PBXGroup;
-			children = (
-				355AE7771B9DD42400E8999C /* MHLocalizable.strings */,
-			);
-			path = MHLocalization;
-			sourceTree = "<group>";
-		};
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
@@ -373,7 +349,6 @@
 			isa = PBXGroup;
 			children = (
 				35ED5ED91BB3EA4600E0052D /* HotlineResources */,
-				355AE7751B9DD42400E8999C /* MobihelpResources */,
 			);
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
@@ -599,7 +574,6 @@
 				35ED5F1E1BB3EA4600E0052D /* konotor_progress_blue@2x.png in Resources */,
 				35ED5F1C1BB3EA4600E0052D /* konotor_progress_black@2x.png in Resources */,
 				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
-				355AE77D1B9DD42400E8999C /* MHResources.bundle in Resources */,
 				35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */,
 				35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */,
 				35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */,
@@ -623,11 +597,9 @@
 				35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
-				355AE77B1B9DD42400E8999C /* MHLocalizable.strings in Resources */,
 				35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */,
 				35ED5F111BB3EA4600E0052D /* konotor_cross.png in Resources */,
 				35ED5F211BB3EA4600E0052D /* konotor_share.png in Resources */,
-				355AE77C1B9DD42400E8999C /* MHModel.bundle in Resources */,
 				35ED5F241BB3EA4600E0052D /* konotor_stop@2x.png in Resources */,
 				35ED5F101BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				35ED5F171BB3EA4600E0052D /* konotor_play.png in Resources */,
@@ -691,14 +663,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		355AE7771B9DD42400E8999C /* MHLocalizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				355AE7781B9DD42400E8999C /* en */,
-			);
-			name = MHLocalizable.strings;
-			sourceTree = "<group>";
-		};
 		356F19F41B9DBF14002F1E2A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

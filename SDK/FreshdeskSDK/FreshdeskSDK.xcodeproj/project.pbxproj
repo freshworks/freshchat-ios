@@ -22,21 +22,10 @@
 
 /* Begin PBXBuildFile section */
 		351432761AD67A9800050DD3 /* FDTicketContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 351432751AD67A9800050DD3 /* FDTicketContent.m */; };
-		3538D01C1B060221005DCB30 /* FDInputToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3538D01B1B060221005DCB30 /* FDInputToolbarView.m */; };
 		35A09B411B1598CD00368B5B /* FDUserInfoForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A09B401B1598CD00368B5B /* FDUserInfoForm.m */; };
-		35CD78DD1B300B2700F94044 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35CD78DC1B300B2700F94044 /* FDKeyChainStore.m */; };
 		35D399481AEE47D300712204 /* FDTicketStateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D399471AEE47D300712204 /* FDTicketStateHandler.m */; };
-		35D3994F1AEE482200712204 /* FDClosedPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D3994A1AEE482200712204 /* FDClosedPromptView.m */; };
-		35D399501AEE482200712204 /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D3994C1AEE482200712204 /* FDPromptView.m */; };
-		35D399511AEE482200712204 /* FDResolvedPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D3994E1AEE482200712204 /* FDResolvedPromptView.m */; };
 		35D399541AEE483B00712204 /* FDBorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D399531AEE483B00712204 /* FDBorderedButton.m */; };
 		3C8C874A19F66C5A0057BF70 /* FDConvTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8C874919F65ED10057BF70 /* FDConvTableViewCell.m */; };
-		3C9A6EB21A0BA6B9002F8BC9 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9A6EB11A0BA6B9002F8BC9 /* FDDataUpdaterWithInterval.m */; };
-		3C9A6EB51A0BB456002F8BC9 /* FDConfigUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9A6EB41A0BB456002F8BC9 /* FDConfigUpdater.m */; };
-		3C9A6EB81A0BD750002F8BC9 /* FDTicketsUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9A6EB71A0BD750002F8BC9 /* FDTicketsUpdater.m */; };
-		3C9A6EBC1A0C1395002F8BC9 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9A6EBB1A0C1395002F8BC9 /* FDSolutionUpdater.m */; };
-		AD0CFE2C19C990180036A575 /* FDProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0CFE2B19C990180036A575 /* FDProgressHUD.m */; };
-		AD1BAF6619505C25000C9E39 /* FDFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1BAF6519505C25000C9E39 /* FDFooterView.m */; };
 		AD1EE8EA19236B250067255F /* FDBreadCrumb.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1EE8E919236B250067255F /* FDBreadCrumb.m */; };
 		AD1EE8F11924A2AE0067255F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1EE8F01924A2AE0067255F /* CoreTelephony.framework */; };
 		AD1EE8F41924B46E0067255F /* FDCustomData.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1EE8F31924B46E0067255F /* FDCustomData.m */; };
@@ -51,7 +40,6 @@
 		AD3E3AA01A237361001DC1EC /* FDSTTweetTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3E3A9E1A237361001DC1EC /* FDSTTweetTextStorage.m */; };
 		ADC0743619F01C1A00397AB0 /* FDPlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC0743519F01C1A00397AB0 /* FDPlaceholderTextView.m */; };
 		ADF7E0DD19FE91D4004987C5 /* FDAttachmentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADF7E0DC19FE91D4004987C5 /* FDAttachmentImageViewController.m */; };
-		CE03D11A1A8389B5002D3FDB /* FDRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE03D1191A8389B5002D3FDB /* FDRanking.m */; };
 		CE05FED61B3D649800A62B48 /* FDTag.m in Sources */ = {isa = PBXBuildFile; fileRef = CE05FED51B3D649800A62B48 /* FDTag.m */; };
 		CE0EA2941B58E43800FDEC0C /* MobiHelp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0EA28F1B58E43800FDEC0C /* MobiHelp.xcdatamodeld */; };
 		CE0EA2951B58E43800FDEC0C /* MobiHelp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0EA28F1B58E43800FDEC0C /* MobiHelp.xcdatamodeld */; };
@@ -62,9 +50,7 @@
 		CEFFDCFD1A7A1E6800B51973 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFFDCFC1A7A1E6800B51973 /* FDIndex.m */; };
 		D00D787B19969342002602B9 /* FDBaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D00D787A19969342002602B9 /* FDBaseQueue.m */; };
 		D01A8CD21979968F0001F5D2 /* FDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D01A8CD11979968F0001F5D2 /* FDButton.m */; };
-		D01A8CD5197996A50001F5D2 /* FDBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D01A8CD4197996A50001F5D2 /* FDBarButtonItem.m */; };
 		D023E79919585A470095B346 /* FDTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = D023E79719585A470095B346 /* FDTheme.m */; };
-		D0366A621934853D005B1964 /* FDFolderListHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0366A611934853D005B1964 /* FDFolderListHeaderView.m */; };
 		D03861C319CAD08300948FD3 /* FDHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D03861B319CAD08300948FD3 /* FDHTTPSessionManager.m */; };
 		D03861C419CAD08300948FD3 /* FDNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D03861B619CAD08300948FD3 /* FDNetworkReachabilityManager.m */; };
 		D03861C519CAD08300948FD3 /* FDSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = D03861B819CAD08300948FD3 /* FDSecurityPolicy.m */; };
@@ -87,13 +73,10 @@
 		D088D07A1938961700B69875 /* FDTicket.m in Sources */ = {isa = PBXBuildFile; fileRef = D088D0791938961700B69875 /* FDTicket.m */; };
 		D09F9B821A23ACD400226FE4 /* MobihelpAppState.m in Sources */ = {isa = PBXBuildFile; fileRef = D09F9B811A23ACD400226FE4 /* MobihelpAppState.m */; };
 		D0A0E561190E3F02004D3B86 /* MobiHelpDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A0E560190E3F02004D3B86 /* MobiHelpDatabase.m */; };
-		D0A4B2401997407600D8AFE3 /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A4B23F1997407600D8AFE3 /* FDReachability.m */; };
 		D0A747581A02BDA300B55A6F /* FDFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A747571A02BDA300B55A6F /* FDFolder.m */; };
 		D0AE0E33194C8B4E00310C65 /* FDDateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AE0E32194C8B4E00310C65 /* FDDateUtil.m */; };
 		D0B09C2819B20181001AA0A9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06233471910F68A00ED0DA1 /* CoreFoundation.framework */; };
 		D0B09C2E19B20181001AA0A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0B09C2C19B20181001AA0A9 /* InfoPlist.strings */; };
-		D0BE5E66196120A200F044E8 /* FDGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BE5E63196120A200F044E8 /* FDGrowingTextView.m */; };
-		D0BE5E68196120A200F044E8 /* FDTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BE5E65196120A200F044E8 /* FDTextViewInternal.m */; };
 		D0BE5E6A196120BC00F044E8 /* FDMessagingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BE5E5F1961207D00F044E8 /* FDMessagingCell.m */; };
 		D0C2B9151934CA8600B4126F /* FDArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C2B9141934CA8600B4126F /* FDArticle.m */; };
 		D0C50E021A02441D0086BE14 /* FDNoteContent.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C50E011A02441D0086BE14 /* FDNoteContent.m */; };
@@ -127,37 +110,15 @@
 /* Begin PBXFileReference section */
 		351432741AD67A9800050DD3 /* FDTicketContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTicketContent.h; sourceTree = "<group>"; };
 		351432751AD67A9800050DD3 /* FDTicketContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTicketContent.m; sourceTree = "<group>"; };
-		3538D01A1B060221005DCB30 /* FDInputToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDInputToolbarView.h; sourceTree = "<group>"; };
-		3538D01B1B060221005DCB30 /* FDInputToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDInputToolbarView.m; sourceTree = "<group>"; };
 		35A09B3F1B1598CD00368B5B /* FDUserInfoForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FDUserInfoForm.h; path = FreshdeskSDK/View/FDUserInfoForm.h; sourceTree = SOURCE_ROOT; };
 		35A09B401B1598CD00368B5B /* FDUserInfoForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDUserInfoForm.m; path = FreshdeskSDK/View/FDUserInfoForm.m; sourceTree = SOURCE_ROOT; };
-		35CD78DB1B300B2700F94044 /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
-		35CD78DC1B300B2700F94044 /* FDKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDKeyChainStore.m; sourceTree = "<group>"; };
 		35D399461AEE47D300712204 /* FDTicketStateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTicketStateHandler.h; sourceTree = "<group>"; };
 		35D399471AEE47D300712204 /* FDTicketStateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTicketStateHandler.m; sourceTree = "<group>"; };
-		35D399491AEE482200712204 /* FDClosedPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDClosedPromptView.h; sourceTree = "<group>"; };
-		35D3994A1AEE482200712204 /* FDClosedPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDClosedPromptView.m; sourceTree = "<group>"; };
-		35D3994B1AEE482200712204 /* FDPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPromptView.h; sourceTree = "<group>"; };
-		35D3994C1AEE482200712204 /* FDPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPromptView.m; sourceTree = "<group>"; };
-		35D3994D1AEE482200712204 /* FDResolvedPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDResolvedPromptView.h; sourceTree = "<group>"; };
-		35D3994E1AEE482200712204 /* FDResolvedPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDResolvedPromptView.m; sourceTree = "<group>"; };
 		35D399521AEE483B00712204 /* FDBorderedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBorderedButton.h; sourceTree = "<group>"; };
 		35D399531AEE483B00712204 /* FDBorderedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBorderedButton.m; sourceTree = "<group>"; };
 		3C8C874819F65E0F0057BF70 /* FDConvTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDConvTableViewCell.h; sourceTree = "<group>"; };
 		3C8C874919F65ED10057BF70 /* FDConvTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDConvTableViewCell.m; sourceTree = "<group>"; };
-		3C9A6EAF1A0BA4ED002F8BC9 /* FDDataUpdaterWithInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FDDataUpdaterWithInterval.h; path = FreshdeskSDK/DataServices/FDDataUpdaterWithInterval.h; sourceTree = SOURCE_ROOT; };
-		3C9A6EB11A0BA6B9002F8BC9 /* FDDataUpdaterWithInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDataUpdaterWithInterval.m; sourceTree = "<group>"; };
-		3C9A6EB31A0BB2E4002F8BC9 /* FDConfigUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDConfigUpdater.h; sourceTree = "<group>"; };
-		3C9A6EB41A0BB456002F8BC9 /* FDConfigUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDConfigUpdater.m; sourceTree = "<group>"; };
-		3C9A6EB71A0BD750002F8BC9 /* FDTicketsUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTicketsUpdater.m; sourceTree = "<group>"; };
-		3C9A6EB91A0C1347002F8BC9 /* FDTicketsUpdater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDTicketsUpdater.h; sourceTree = "<group>"; };
-		3C9A6EBA1A0C1395002F8BC9 /* FDSolutionUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSolutionUpdater.h; sourceTree = "<group>"; };
-		3C9A6EBB1A0C1395002F8BC9 /* FDSolutionUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSolutionUpdater.m; sourceTree = "<group>"; };
 		3C9A6EBD1A0CA839002F8BC9 /* FDConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDConstants.h; sourceTree = "<group>"; };
-		AD0CFE2A19C990180036A575 /* FDProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDProgressHUD.h; sourceTree = "<group>"; };
-		AD0CFE2B19C990180036A575 /* FDProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDProgressHUD.m; sourceTree = "<group>"; };
-		AD1BAF6419505C25000C9E39 /* FDFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDFooterView.h; sourceTree = "<group>"; };
-		AD1BAF6519505C25000C9E39 /* FDFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFooterView.m; sourceTree = "<group>"; };
 		AD1EE8E819236B250067255F /* FDBreadCrumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBreadCrumb.h; sourceTree = "<group>"; };
 		AD1EE8E919236B250067255F /* FDBreadCrumb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBreadCrumb.m; sourceTree = "<group>"; };
 		AD1EE8F01924A2AE0067255F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -186,8 +147,6 @@
 		ADC0743519F01C1A00397AB0 /* FDPlaceholderTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPlaceholderTextView.m; sourceTree = "<group>"; };
 		ADF7E0DB19FE91D4004987C5 /* FDAttachmentImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAttachmentImageViewController.h; sourceTree = "<group>"; };
 		ADF7E0DC19FE91D4004987C5 /* FDAttachmentImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAttachmentImageViewController.m; sourceTree = "<group>"; };
-		CE03D1181A8389B5002D3FDB /* FDRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDRanking.h; sourceTree = "<group>"; };
-		CE03D1191A8389B5002D3FDB /* FDRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDRanking.m; sourceTree = "<group>"; };
 		CE05FED41B3D649800A62B48 /* FDTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTag.h; sourceTree = "<group>"; };
 		CE05FED51B3D649800A62B48 /* FDTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTag.m; sourceTree = "<group>"; };
 		CE0EA2901B58E43800FDEC0C /* MobiHelp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MobiHelp.xcdatamodel; sourceTree = "<group>"; };
@@ -209,12 +168,8 @@
 		D00D787A19969342002602B9 /* FDBaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBaseQueue.m; sourceTree = "<group>"; };
 		D01A8CD01979968F0001F5D2 /* FDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDButton.h; sourceTree = "<group>"; };
 		D01A8CD11979968F0001F5D2 /* FDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDButton.m; sourceTree = "<group>"; };
-		D01A8CD3197996A50001F5D2 /* FDBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBarButtonItem.h; sourceTree = "<group>"; };
-		D01A8CD4197996A50001F5D2 /* FDBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBarButtonItem.m; sourceTree = "<group>"; };
 		D023E79719585A470095B346 /* FDTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTheme.m; sourceTree = "<group>"; };
 		D023E79819585A470095B346 /* FDTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTheme.h; sourceTree = "<group>"; };
-		D0366A601934853D005B1964 /* FDFolderListHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDFolderListHeaderView.h; sourceTree = "<group>"; };
-		D0366A611934853D005B1964 /* FDFolderListHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFolderListHeaderView.m; sourceTree = "<group>"; };
 		D03861B219CAD08300948FD3 /* FDHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDHTTPSessionManager.h; sourceTree = "<group>"; };
 		D03861B319CAD08300948FD3 /* FDHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDHTTPSessionManager.m; sourceTree = "<group>"; };
 		D03861B419CAD08300948FD3 /* FDNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDNetworking.h; sourceTree = "<group>"; };
@@ -257,8 +212,6 @@
 		D09F9B811A23ACD400226FE4 /* MobihelpAppState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobihelpAppState.m; sourceTree = "<group>"; };
 		D0A0E55F190E3F02004D3B86 /* MobiHelpDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobiHelpDatabase.h; sourceTree = "<group>"; };
 		D0A0E560190E3F02004D3B86 /* MobiHelpDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobiHelpDatabase.m; sourceTree = "<group>"; };
-		D0A4B23E1997407600D8AFE3 /* FDReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachability.h; sourceTree = "<group>"; };
-		D0A4B23F1997407600D8AFE3 /* FDReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachability.m; sourceTree = "<group>"; };
 		D0A747561A02BDA300B55A6F /* FDFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDFolder.h; sourceTree = "<group>"; };
 		D0A747571A02BDA300B55A6F /* FDFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFolder.m; sourceTree = "<group>"; };
 		D0AE0E31194C8B4E00310C65 /* FDDateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDDateUtil.h; sourceTree = "<group>"; };
@@ -269,10 +222,6 @@
 		D0B09C2F19B20181001AA0A9 /* MHModel-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MHModel-Prefix.pch"; sourceTree = "<group>"; };
 		D0BE5E5E1961207D00F044E8 /* FDMessagingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMessagingCell.h; sourceTree = "<group>"; };
 		D0BE5E5F1961207D00F044E8 /* FDMessagingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMessagingCell.m; sourceTree = "<group>"; };
-		D0BE5E62196120A200F044E8 /* FDGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDGrowingTextView.h; sourceTree = "<group>"; };
-		D0BE5E63196120A200F044E8 /* FDGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDGrowingTextView.m; sourceTree = "<group>"; };
-		D0BE5E64196120A200F044E8 /* FDTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTextViewInternal.h; sourceTree = "<group>"; };
-		D0BE5E65196120A200F044E8 /* FDTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTextViewInternal.m; sourceTree = "<group>"; };
 		D0C2B9131934CA8600B4126F /* FDArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticle.h; sourceTree = "<group>"; };
 		D0C2B9141934CA8600B4126F /* FDArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDArticle.m; sourceTree = "<group>"; };
 		D0C50E001A02441D0086BE14 /* FDNoteContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDNoteContent.h; sourceTree = "<group>"; };
@@ -339,30 +288,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		35CD78DA1B300B2700F94044 /* UICKeyChainStore-2.0.6 */ = {
-			isa = PBXGroup;
-			children = (
-				35CD78DB1B300B2700F94044 /* FDKeyChainStore.h */,
-				35CD78DC1B300B2700F94044 /* FDKeyChainStore.m */,
-			);
-			path = "UICKeyChainStore-2.0.6";
-			sourceTree = "<group>";
-		};
-		3C9A6EB01A0BA4FD002F8BC9 /* DataServices */ = {
-			isa = PBXGroup;
-			children = (
-				3C9A6EAF1A0BA4ED002F8BC9 /* FDDataUpdaterWithInterval.h */,
-				3C9A6EB11A0BA6B9002F8BC9 /* FDDataUpdaterWithInterval.m */,
-				3C9A6EB31A0BB2E4002F8BC9 /* FDConfigUpdater.h */,
-				3C9A6EB41A0BB456002F8BC9 /* FDConfigUpdater.m */,
-				3C9A6EB91A0C1347002F8BC9 /* FDTicketsUpdater.h */,
-				3C9A6EB71A0BD750002F8BC9 /* FDTicketsUpdater.m */,
-				3C9A6EBA1A0C1395002F8BC9 /* FDSolutionUpdater.h */,
-				3C9A6EBB1A0C1395002F8BC9 /* FDSolutionUpdater.m */,
-			);
-			path = DataServices;
-			sourceTree = "<group>";
-		};
 		AD3C7CBF19069882009919CD = {
 			isa = PBXGroup;
 			children = (
@@ -409,7 +334,6 @@
 				AD3C7CD219069882009919CD /* Mobihelp.m */,
 				D075F9941987D78F000C8CDB /* MobihelpConfig.m */,
 				D03E0D901978EFB600B19125 /* FDKit */,
-				3C9A6EB01A0BA4FD002F8BC9 /* DataServices */,
 				D0DE0175191E473600EAE2E1 /* Network */,
 				AD3C7D301906A2AF009919CD /* Controller */,
 				AD3C7D2F1906A2AA009919CD /* View */,
@@ -464,8 +388,6 @@
 				D0AE0E32194C8B4E00310C65 /* FDDateUtil.m */,
 				CED46B7B1A5D667100C8E721 /* FDQueue.h */,
 				CED46B7C1A5D667100C8E721 /* FDQueue.m */,
-				CE03D1181A8389B5002D3FDB /* FDRanking.h */,
-				CE03D1191A8389B5002D3FDB /* FDRanking.m */,
 				CEE120321B4273E700C95A7F /* FDArticleLauncher.h */,
 				CEE120331B4273E800C95A7F /* FDArticleLauncher.m */,
 			);
@@ -515,20 +437,8 @@
 				35A09B401B1598CD00368B5B /* FDUserInfoForm.m */,
 				D03F6611193DFC19002B06DB /* FDBadgeView.h */,
 				D03F6612193DFC19002B06DB /* FDBadgeView.m */,
-				3538D01A1B060221005DCB30 /* FDInputToolbarView.h */,
-				3538D01B1B060221005DCB30 /* FDInputToolbarView.m */,
-				35D399491AEE482200712204 /* FDClosedPromptView.h */,
-				35D3994A1AEE482200712204 /* FDClosedPromptView.m */,
-				35D3994B1AEE482200712204 /* FDPromptView.h */,
-				35D3994C1AEE482200712204 /* FDPromptView.m */,
-				35D3994D1AEE482200712204 /* FDResolvedPromptView.h */,
-				35D3994E1AEE482200712204 /* FDResolvedPromptView.m */,
 				D0EE1A251998D7B900F759AF /* FDRatingAlertHandler.h */,
 				D0EE1A261998D7B900F759AF /* FDRatingAlertHandler.m */,
-				AD1BAF6419505C25000C9E39 /* FDFooterView.h */,
-				AD1BAF6519505C25000C9E39 /* FDFooterView.m */,
-				D0366A601934853D005B1964 /* FDFolderListHeaderView.h */,
-				D0366A611934853D005B1964 /* FDFolderListHeaderView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -567,16 +477,6 @@
 				AD3E3A9E1A237361001DC1EC /* FDSTTweetTextStorage.m */,
 			);
 			name = LinkLabel;
-			sourceTree = "<group>";
-		};
-		ADCB81EB193622D900866DCB /* ProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				AD0CFE2A19C990180036A575 /* FDProgressHUD.h */,
-				AD0CFE2B19C990180036A575 /* FDProgressHUD.m */,
-			);
-			name = ProgressHUD;
-			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
 		D03861AD19CAD08300948FD3 /* AFNetworking-2.4.1 */ = {
@@ -620,8 +520,6 @@
 				3C8C874919F65ED10057BF70 /* FDConvTableViewCell.m */,
 				D03E0D911978EFB600B19125 /* FDNavigationBar.h */,
 				D03E0D921978EFB600B19125 /* FDNavigationBar.m */,
-				D01A8CD3197996A50001F5D2 /* FDBarButtonItem.h */,
-				D01A8CD4197996A50001F5D2 /* FDBarButtonItem.m */,
 				ADC0743419F01C1A00397AB0 /* FDPlaceholderTextView.h */,
 				ADC0743519F01C1A00397AB0 /* FDPlaceholderTextView.m */,
 			);
@@ -669,36 +567,12 @@
 			path = BubbleCells;
 			sourceTree = "<group>";
 		};
-		D0BE5E61196120A200F044E8 /* GrowingTextView */ = {
-			isa = PBXGroup;
-			children = (
-				D0BE5E62196120A200F044E8 /* FDGrowingTextView.h */,
-				D0BE5E63196120A200F044E8 /* FDGrowingTextView.m */,
-				D0BE5E64196120A200F044E8 /* FDTextViewInternal.h */,
-				D0BE5E65196120A200F044E8 /* FDTextViewInternal.m */,
-			);
-			path = GrowingTextView;
-			sourceTree = "<group>";
-		};
-		D0BE5E6C196120E700F044E8 /* Reachability */ = {
-			isa = PBXGroup;
-			children = (
-				D0A4B23E1997407600D8AFE3 /* FDReachability.h */,
-				D0A4B23F1997407600D8AFE3 /* FDReachability.m */,
-			);
-			path = Reachability;
-			sourceTree = "<group>";
-		};
 		D0DE014E191E44D300EAE2E1 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				35CD78DA1B300B2700F94044 /* UICKeyChainStore-2.0.6 */,
 				AD7D079E1A25E4AF00DBA136 /* LinkLabel */,
 				D03861AD19CAD08300948FD3 /* AFNetworking-2.4.1 */,
-				D0BE5E6C196120E700F044E8 /* Reachability */,
-				D0BE5E61196120A200F044E8 /* GrowingTextView */,
 				D0BE5E5D1961207D00F044E8 /* BubbleCells */,
-				ADCB81EB193622D900866DCB /* ProgressHUD */,
 			);
 			path = Vendor;
 			sourceTree = "<group>";
@@ -856,19 +730,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C8C874A19F66C5A0057BF70 /* FDConvTableViewCell.m in Sources */,
-				3C9A6EB81A0BD750002F8BC9 /* FDTicketsUpdater.m in Sources */,
 				D03861C919CAD08300948FD3 /* FDURLSessionManager.m in Sources */,
 				D03E0D931978EFB600B19125 /* FDNavigationBar.m in Sources */,
 				ADC0743619F01C1A00397AB0 /* FDPlaceholderTextView.m in Sources */,
-				35D399501AEE482200712204 /* FDPromptView.m in Sources */,
 				D088D02619358FB700B69875 /* FDNoteListViewController.m in Sources */,
 				ADF7E0DD19FE91D4004987C5 /* FDAttachmentImageViewController.m in Sources */,
 				D075F9951987D78F000C8CDB /* MobihelpConfig.m in Sources */,
 				CE0EA2941B58E43800FDEC0C /* MobiHelp.xcdatamodeld in Sources */,
 				D0EE1A2419980BB600F759AF /* FDTextField.m in Sources */,
 				D0A0E561190E3F02004D3B86 /* MobiHelpDatabase.m in Sources */,
-				35CD78DD1B300B2700F94044 /* FDKeyChainStore.m in Sources */,
-				D01A8CD5197996A50001F5D2 /* FDBarButtonItem.m in Sources */,
 				D0A747581A02BDA300B55A6F /* FDFolder.m in Sources */,
 				D0AE0E33194C8B4E00310C65 /* FDDateUtil.m in Sources */,
 				D0BE5E6A196120BC00F044E8 /* FDMessagingCell.m in Sources */,
@@ -878,14 +748,12 @@
 				D01A8CD21979968F0001F5D2 /* FDButton.m in Sources */,
 				CEFFDCFD1A7A1E6800B51973 /* FDIndex.m in Sources */,
 				D03861C719CAD08300948FD3 /* FDURLRequestSerialization.m in Sources */,
-				AD0CFE2C19C990180036A575 /* FDProgressHUD.m in Sources */,
 				CE545A2C1B29A472002F22EB /* FDArticleContent.m in Sources */,
 				D0DE15D8197ADC4400734B8C /* FDSearchBar.m in Sources */,
 				AD3C7CD319069882009919CD /* Mobihelp.m in Sources */,
 				D0EE1B8B199A4D9200F759AF /* FDDeviceInfo.m in Sources */,
 				D03861C819CAD08300948FD3 /* FDURLResponseSerialization.m in Sources */,
 				AD3E3AA01A237361001DC1EC /* FDSTTweetTextStorage.m in Sources */,
-				AD1BAF6619505C25000C9E39 /* FDFooterView.m in Sources */,
 				D0DE017E191E473600EAE2E1 /* FDCoreDataImporter.m in Sources */,
 				CE2016431AC0566B002E14DE /* FDCoreDataCoordinator.m in Sources */,
 				D00D787B19969342002602B9 /* FDBaseQueue.m in Sources */,
@@ -893,44 +761,33 @@
 				D09F9B821A23ACD400226FE4 /* MobihelpAppState.m in Sources */,
 				D03861C519CAD08300948FD3 /* FDSecurityPolicy.m in Sources */,
 				D0416E73191902A200F3B735 /* FDArticleDetailViewController.m in Sources */,
-				35D3994F1AEE482200712204 /* FDClosedPromptView.m in Sources */,
 				D03861C419CAD08300948FD3 /* FDNetworkReachabilityManager.m in Sources */,
 				D083E5631A0187AA00D6CB53 /* FDNote.m in Sources */,
 				D0416E6D1918DF1000F3B735 /* FDArticleListViewController.m in Sources */,
 				D075F999198AE02F000C8CDB /* FDSecureStore.m in Sources */,
-				D0A4B2401997407600D8AFE3 /* FDReachability.m in Sources */,
 				D0EE1A271998D7B900F759AF /* FDRatingAlertHandler.m in Sources */,
-				3538D01C1B060221005DCB30 /* FDInputToolbarView.m in Sources */,
 				D0C50E021A02441D0086BE14 /* FDNoteContent.m in Sources */,
 				D03861C319CAD08300948FD3 /* FDHTTPSessionManager.m in Sources */,
 				35A09B411B1598CD00368B5B /* FDUserInfoForm.m in Sources */,
 				D061E2371A1CABCB00FA71C5 /* FDError.m in Sources */,
 				D0DE15D5197AB6BD00734B8C /* FDTableView.m in Sources */,
-				D0366A621934853D005B1964 /* FDFolderListHeaderView.m in Sources */,
 				D0C2B9151934CA8600B4126F /* FDArticle.m in Sources */,
 				CE05FED61B3D649800A62B48 /* FDTag.m in Sources */,
 				AD1EE8F41924B46E0067255F /* FDCustomData.m in Sources */,
-				D0BE5E68196120A200F044E8 /* FDTextViewInternal.m in Sources */,
 				D05112B01A1B55FA0057A96C /* FDNetworkManager.m in Sources */,
 				D0F2739719AAA43000D2813F /* FDCoreDataFetchManager.m in Sources */,
-				3C9A6EBC1A0C1395002F8BC9 /* FDSolutionUpdater.m in Sources */,
 				D0E8AF80191D2300006F833A /* FDTicketListViewController.m in Sources */,
 				D0DE15DB197AF01600734B8C /* FDTableViewCell.m in Sources */,
 				35D399541AEE483B00712204 /* FDBorderedButton.m in Sources */,
 				D0E8AF86191DD346006F833A /* FDNewTicketViewController.m in Sources */,
 				AD3E3A9F1A237361001DC1EC /* FDSTTweetLabel.m in Sources */,
-				3C9A6EB51A0BB456002F8BC9 /* FDConfigUpdater.m in Sources */,
 				35D399481AEE47D300712204 /* FDTicketStateHandler.m in Sources */,
-				3C9A6EB21A0BA6B9002F8BC9 /* FDDataUpdaterWithInterval.m in Sources */,
 				D023E79919585A470095B346 /* FDTheme.m in Sources */,
 				D088D07A1938961700B69875 /* FDTicket.m in Sources */,
-				CE03D11A1A8389B5002D3FDB /* FDRanking.m in Sources */,
-				D0BE5E66196120A200F044E8 /* FDGrowingTextView.m in Sources */,
 				D0E9FCB3190FD73400C026AA /* FDFolderListViewController.m in Sources */,
 				AD1EE8F71924CA040067255F /* FDUtilities.m in Sources */,
 				AD1EE8EA19236B250067255F /* FDBreadCrumb.m in Sources */,
 				CED46B7D1A5D667100C8E721 /* FDQueue.m in Sources */,
-				35D399511AEE482200712204 /* FDResolvedPromptView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
