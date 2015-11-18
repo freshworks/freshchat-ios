@@ -10,6 +10,7 @@
 #import "FDMessageCell.h"
 #import "Konotor.h"
 #import "KonotorImageInput.h"
+#import "Hotline.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -61,7 +62,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)setNavigationItem{
     if(self.isModalPresentationPreferred){
-        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
@@ -69,10 +70,20 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                                       target:self.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        
+        
+        UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
+        
+        self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
+
     }
 }
 
--(void)closeButton:(id)sender{
+-(void)FAQButtonAction:(id)sender{
+    [[Hotline sharedInstance]presentSolutions:self];
+}
+
+-(void)closeButtonAction:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

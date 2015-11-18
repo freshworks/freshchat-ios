@@ -11,6 +11,4 @@
 
 @interface HLChannelViewController : HLListViewController
 
--(instancetype)initWithModalStyle:(BOOL)isModal;
-
 @end
