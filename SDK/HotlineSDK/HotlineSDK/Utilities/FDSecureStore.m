@@ -26,27 +26,35 @@
     static FDSecureStore *sharedFDSecureStore = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedFDSecureStore = [[self alloc]init];
+        sharedFDSecureStore = [[self alloc]initWithPersistedStore:NO];
     });
     return sharedFDSecureStore;
 }
 
-#pragma mark - Lazy Instantiation
-
--(FDKeyChainStore *)secureStore{
-    if(!_secureStore){
-        NSString *appID = [[NSBundle mainBundle] infoDictionary][@"CFBundleIdentifier"];
-        NSString *serviceName = [NSString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
-        _secureStore = [FDKeyChainStore keyChainStoreWithService:serviceName];
-        [self prepareSecureStore];
-    }
-    return _secureStore;
++(instancetype)persistedStoreInstance{
+    static FDSecureStore *persistedSecureStore = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        persistedSecureStore = [[self alloc]initWithPersistedStore:YES];
+    });
+    return persistedSecureStore;
 }
 
--(void)prepareSecureStore{
-    if ([FDSecureStore isFirstLaunch]){
-        [self.secureStore removeAllItems];
+- (instancetype)initWithPersistedStore:(BOOL)canPersist{
+    self = [super init];
+    if (self) {
+        NSString *appID = [[NSBundle mainBundle] infoDictionary][@"CFBundleIdentifier"];
+        NSMutableString *serviceName = [NSMutableString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
+        if (canPersist) {
+            [serviceName appendString:@"-persistedStore"];
+        }else{
+            if ([FDSecureStore isFirstLaunch]){
+                [self.secureStore removeAllItems];
+            }
+        }
+        self.secureStore = [FDKeyChainStore keyChainStoreWithService:serviceName];
     }
+    return self;
 }
 
 +(BOOL)isFirstLaunch{
@@ -99,12 +107,12 @@
     return [self objectForKey:key] ? YES : NO;
 }
 
--(void)logStoreData{
-    FDLog(@"Secure Store Contents %@",self.secureStore);
-}
-
 -(void)clearStoreData{
     [self.secureStore removeAllItems];
+}
+
+-(NSString *)description{
+    return [NSString stringWithFormat:@"Secure Store Contents %@",self.secureStore];
 }
 
 @end

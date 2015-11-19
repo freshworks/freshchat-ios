@@ -16,6 +16,7 @@
 @interface FDSecureStore : NSObject
 
 +(instancetype)sharedInstance;
++(instancetype)persistedStoreInstance;
 
 -(void)setIntValue:(NSInteger)value forKey:(NSString *)key;
 -(NSInteger)intValueForKey:(NSString *)key;
@@ -31,9 +32,6 @@
 
 -(void)removeObjectWithKey:(NSString *)key;
 -(void)clearStoreData;
-
-//Test
--(void)logStoreData;
 
 @end
 
