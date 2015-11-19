@@ -16,7 +16,7 @@
 
 @dynamic channelID;
 @dynamic created;
-@dynamic isDeletedInServer;
+@dynamic isHidden;
 @dynamic icon;
 @dynamic iconURL;
 @dynamic lastUpdated;
@@ -41,7 +41,7 @@
     channel.position = channelInfo[@"position"];
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
-    channel.isDeletedInServer = channelInfo[@"deleted"];
+    channel.isHidden = channelInfo[@"hidden"];
     
     //Prefetch category icon
     __block NSData *imageData = nil;

@@ -7,7 +7,13 @@
 //
 
 #import "FDTableViewCellWithImage.h"
+#import "FDBadgeView.h"
+#import "FDButton.h"
 
 @interface FDChannelListViewCell : FDTableViewCellWithImage
+
+@property (nonatomic,strong) FDBadgeView *badgeView;
+@property (nonatomic,strong) UILabel *lastUpdatedLabel;
+@property (nonatomic,strong) UIImageView *accessoryButton;
 
 @end

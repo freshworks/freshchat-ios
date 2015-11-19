@@ -21,4 +21,4 @@
 
 #define HOTLINE_API_ARTICLE_VOTE @"/app/services/app/%@/faq/category/%@/article/%@"
 
-#define HOTLINE_API_CHANNELS @"http://ioschannels.getsandbox.com/getchannels"
+#define HOTLINE_API_CHANNELS @"/app/services/app/%@/channel"

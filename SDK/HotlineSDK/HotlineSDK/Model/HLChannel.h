@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSNumber *channelID;
 @property (nullable, nonatomic, retain) NSDate *created;
-@property (nullable, nonatomic, retain) NSNumber *isDeletedInServer;
+@property (nullable, nonatomic, retain) NSNumber *isHidden;
 @property (nullable, nonatomic, retain) NSData *icon;
 @property (nullable, nonatomic, retain) NSString *iconURL;
 @property (nullable, nonatomic, retain) NSDate *lastUpdated;
@@ -42,4 +42,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

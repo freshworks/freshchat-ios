@@ -14,25 +14,19 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.theme = [HLTheme sharedInstance];
-        
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        for (id view in [self.subviews[0] subviews]) {
-            if ([view isKindOfClass:[UIButton class]]) {
-                UIButton *accessoryButton = (UIButton *)view;
-                accessoryButton.backgroundColor = nil;
-            }
-        }
-        
+    
         self.titleLabel = [[UILabel alloc] init];
         self.titleLabel.font = [self.theme tableViewCellDetailFont];
         self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
-        self.imgView=[[UIImageView alloc] init];
+        self.imgView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
         [self.imgView.layer setCornerRadius:8.0f];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         [self.imgView setImage:[UIImage imageNamed:@"loading.png"]];
+        self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
+        self.imgView.layer.masksToBounds = YES;
         
         self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         [self.detailLabel setNumberOfLines:0];
@@ -50,11 +44,11 @@
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.detailLabel];
         
-        NSDictionary *views = @{ @"imageView" : self.imgView, @"label" : self.titleLabel,@"detail":self.detailLabel};
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[label]-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[detail]-|" options:0 metrics:nil views:views]];
+        NSDictionary *views = @{ @"imageView" : self.imgView, @"title" : self.titleLabel,@"subtitle":self.detailLabel};
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[title]-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[subtitle]-|" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[imageView(75)]" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[label]-[detail]-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[title]-[subtitle]-|" options:0 metrics:nil views:views]];
         
         [self setupTheme];
     }

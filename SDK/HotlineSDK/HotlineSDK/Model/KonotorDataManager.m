@@ -238,6 +238,28 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
+-(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler{
+    NSManagedObjectContext *backgroundContext = self.backgroundContext;
+    NSManagedObjectContext *mainContext = self.mainObjectContext;
+    [backgroundContext performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+        request.sortDescriptors = @[position];
+        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+        NSMutableArray *fetchedChannels = [NSMutableArray new];
+        [mainContext performBlock:^{
+            for (int i=0; i< results.count; i++) {
+                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
+                [fetchedChannels addObject:newSolution];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(fetchedChannels,nil);
+            });
+        }];
+    }];
+}
+
 -(void)deleteAllChannels:(void(^)(NSError *error))handler{
     [self deleteAllEntriesOfEntity:HOTLINE_CHANNEL_ENTITY handler:handler];
 }
