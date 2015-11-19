@@ -21,6 +21,7 @@
 +(void)assertMainThread;
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *)getUUID;
++(BOOL)isRegisteredDevice;
 
 @end
 

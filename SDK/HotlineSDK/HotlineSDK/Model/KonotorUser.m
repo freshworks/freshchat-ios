@@ -249,9 +249,10 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
         else
         {
             KonotorUser *pUser = (KonotorUser *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorUser" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
+            
+            pUser.userAlias = [FDUtilities getUUID];
 
-            [pUser setUserAlias:[FDUtilities getUUID]];
-            [pUser setIsUserCreatedOnServer:NO];
+            pUser.isUserCreatedOnServer = [FDUtilities isRegisteredDevice];
             
             [[KonotorDataManager sharedInstance]save];
             
