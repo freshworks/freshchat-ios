@@ -20,6 +20,7 @@
 +(NSString *)replaceSpecialCharacters:(NSString *)term with:(NSString *)replaceString;
 +(void)assertMainThread;
 +(UIImage *)imageWithColor:(UIColor *)color;
++(NSString *)getUUID;
 
 @end
 

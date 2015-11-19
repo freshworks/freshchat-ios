@@ -109,4 +109,14 @@
     return image;
 }
 
++(NSString *)getUUID{
+    FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
+    NSString *UUID = [secureStore objectForKey:MOBIHELP_DEFAULTS_DEVICE_UUID];
+    if (!UUID) {
+        UUID = [[NSUUID UUID]UUIDString];
+        [secureStore setObject:UUID forKey:MOBIHELP_DEFAULTS_DEVICE_UUID];
+    }
+    return UUID;
+}
+
 @end

@@ -12,6 +12,7 @@
 #import "WebServices.h"
 #import "KonotorApp.h"
 #import "KonotorUtil.h"
+#import "FDUtilities.h"
 
 @implementation KonotorUser
 
@@ -207,22 +208,6 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
     return nil;
 }
 
-
-+(NSString *) GenerateUUID
-{
-    
-    CFUUIDRef UUIDRef = CFUUIDCreate(kCFAllocatorDefault);
-    CFStringRef UUIDSRef = CFUUIDCreateString(kCFAllocatorDefault, UUIDRef);
-    NSString *strUUID = [NSString stringWithFormat:@"%@", UUIDSRef];
-    
-    if(strUUID)
-        return strUUID;
-    
-    return nil;
-    
-}
-
-
 +(KonotorUser *) GetCurrentlyLoggedInUser
 {
     if(!gCurrentUser)
@@ -265,7 +250,7 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
         {
             KonotorUser *pUser = (KonotorUser *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorUser" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
 
-            [pUser setUserAlias:[KonotorUser GenerateUUID]];
+            [pUser setUserAlias:[FDUtilities getUUID]];
             [pUser setIsUserCreatedOnServer:NO];
             
             [[KonotorDataManager sharedInstance]save];
