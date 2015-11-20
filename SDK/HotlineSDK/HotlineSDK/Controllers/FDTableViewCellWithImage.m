@@ -25,8 +25,6 @@
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         [self.imgView setImage:[UIImage imageNamed:@"loading.png"]];
-        self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
-        self.imgView.layer.masksToBounds = YES;
         
         self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         [self.detailLabel setNumberOfLines:0];

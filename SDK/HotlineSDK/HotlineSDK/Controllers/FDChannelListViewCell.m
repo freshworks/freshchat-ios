@@ -15,6 +15,9 @@
     if (self) {
         self.theme = [HLTheme sharedInstance];
         
+        self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
+        self.imgView.layer.masksToBounds = YES;
+        
         self.lastUpdatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         self.lastUpdatedLabel.font = [self.theme tableViewCellDetailFont];
         self.lastUpdatedLabel.textColor = [self.theme tableViewCellDetailFontColor];
