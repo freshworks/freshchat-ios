@@ -73,7 +73,6 @@
 		D03861C919CAD08300948FD3 /* FDURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D03861C019CAD08300948FD3 /* FDURLSessionManager.m */; };
 		D038D8A5195D889800BAC3D4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D038D8A4195D889800BAC3D4 /* Security.framework */; };
 		D03E0D931978EFB600B19125 /* FDNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D03E0D921978EFB600B19125 /* FDNavigationBar.m */; };
-		D03F6613193DFC19002B06DB /* FDBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03F6612193DFC19002B06DB /* FDBadgeView.m */; };
 		D0416E6D1918DF1000F3B735 /* FDArticleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0416E6C1918DF1000F3B735 /* FDArticleListViewController.m */; };
 		D0416E73191902A200F3B735 /* FDArticleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0416E72191902A200F3B735 /* FDArticleDetailViewController.m */; };
 		D05112B01A1B55FA0057A96C /* FDNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D05112AF1A1B55FA0057A96C /* FDNetworkManager.m */; };
@@ -231,8 +230,6 @@
 		D038D8A4195D889800BAC3D4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		D03E0D911978EFB600B19125 /* FDNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDNavigationBar.h; sourceTree = "<group>"; };
 		D03E0D921978EFB600B19125 /* FDNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDNavigationBar.m; sourceTree = "<group>"; };
-		D03F6611193DFC19002B06DB /* FDBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBadgeView.h; sourceTree = "<group>"; };
-		D03F6612193DFC19002B06DB /* FDBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBadgeView.m; sourceTree = "<group>"; };
 		D0416E6B1918DF1000F3B735 /* FDArticleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleListViewController.h; sourceTree = "<group>"; };
 		D0416E6C1918DF1000F3B735 /* FDArticleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDArticleListViewController.m; sourceTree = "<group>"; };
 		D0416E71191902A200F3B735 /* FDArticleDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleDetailViewController.h; sourceTree = "<group>"; };
@@ -513,8 +510,6 @@
 			children = (
 				35A09B3F1B1598CD00368B5B /* FDUserInfoForm.h */,
 				35A09B401B1598CD00368B5B /* FDUserInfoForm.m */,
-				D03F6611193DFC19002B06DB /* FDBadgeView.h */,
-				D03F6612193DFC19002B06DB /* FDBadgeView.m */,
 				3538D01A1B060221005DCB30 /* FDInputToolbarView.h */,
 				3538D01B1B060221005DCB30 /* FDInputToolbarView.m */,
 				35D399491AEE482200712204 /* FDClosedPromptView.h */,
@@ -889,7 +884,6 @@
 				D0DE017E191E473600EAE2E1 /* FDCoreDataImporter.m in Sources */,
 				CE2016431AC0566B002E14DE /* FDCoreDataCoordinator.m in Sources */,
 				D00D787B19969342002602B9 /* FDBaseQueue.m in Sources */,
-				D03F6613193DFC19002B06DB /* FDBadgeView.m in Sources */,
 				D09F9B821A23ACD400226FE4 /* MobihelpAppState.m in Sources */,
 				D03861C519CAD08300948FD3 /* FDSecurityPolicy.m in Sources */,
 				D0416E73191902A200F3B735 /* FDArticleDetailViewController.m in Sources */,
