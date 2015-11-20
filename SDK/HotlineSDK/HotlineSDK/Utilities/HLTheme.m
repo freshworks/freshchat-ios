@@ -246,7 +246,7 @@
 
 -(UIColor *)itemSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"GridView.ItemSeparatorColor"];
-    return color ? color : [UIColor lightGrayColor];
+    return color ? color : [HLTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 
 -(UIFont *)contactUsFont{
