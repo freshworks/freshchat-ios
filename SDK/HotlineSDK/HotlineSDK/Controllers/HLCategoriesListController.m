@@ -18,7 +18,6 @@
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
 #import "FDCategoryListViewCell.h"
-#import "FDMarginalView.h"
 
 @interface HLCategoriesListController ()
 

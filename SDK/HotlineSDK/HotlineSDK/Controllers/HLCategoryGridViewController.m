@@ -25,10 +25,10 @@
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
 
-@property (nonatomic,strong) NSArray *categories;
-@property (strong,nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UILabel  *noSolutionsLabel;
-@property (strong, nonatomic) FDSearchBar *searchBar;
+@property (nonatomic, strong) NSArray *categories;
+@property (nonatomic, strong) FDSearchBar *searchBar;
+@property (nonatomic, strong) FDMarginalView *footerView;
+@property (nonatomic, strong) UILabel  *noSolutionsLabel;
 
 @end
 
@@ -157,36 +157,27 @@
     self.collectionView.dataSource = self;
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     self.collectionView.backgroundColor = [UIColor whiteColor];
+    
+    self.footerView = [[FDMarginalView alloc] init];
+    self.footerView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
+    self.footerView.marginalLabel.userInteractionEnabled=YES;
+    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
+    
+    [self.view addSubview:self.footerView];
     [self.view addSubview:self.collectionView];
     
-    NSDictionary *views = @{ @"collectionView" : self.collectionView};
+    NSDictionary *views = @{ @"collectionView" : self.collectionView, @"footerView" : self.footerView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(40)]|" options:0 metrics:nil views:views]];
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
-    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter  withReuseIdentifier:@"footer"];
 }
 
 #pragma mark - Collection view delegate
-
--(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
-    UICollectionReusableView *footer = [self.collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"footer" forIndexPath:indexPath];
-    UILabel* marginalLabel = [[UILabel alloc] initWithFrame:CGRectInset(self.collectionView.bounds, 60.0f, 0.0f)];
-    marginalLabel.textAlignment = UITextAlignmentCenter;
-    marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    marginalLabel.font = [[HLTheme sharedInstance] talkToUsButtonFont];
-    marginalLabel.translatesAutoresizingMaskIntoConstraints=NO;
-    [footer addSubview:marginalLabel];
-    [footer setBackgroundColor:[UIColor colorWithRed:0.08 green:0.46 blue:1 alpha:1]];
-    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [footer addGestureRecognizer: tapGesture];
-    NSDictionary *views = @{ @"label" : marginalLabel };
-    [footer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[label]|" options:0 metrics:nil views:views]];
-    [footer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:nil views:views]];
-    return footer;
-    
-}
 
 -(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
     [KonotorFeedbackScreen showFeedbackScreen];

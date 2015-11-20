@@ -23,23 +23,20 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.footerView = [[FDMarginalView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), 44)];
-    self.footerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.footerView = [[FDMarginalView alloc] init];
+    self.footerView.translatesAutoresizingMaskIntoConstraints = NO;
     self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.footerView.marginalLabel.textColor = [UIColor blackColor];
-    self.footerView.marginalLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.footerView.marginalLabel.backgroundColor = [UIColor clearColor];
     self.footerView.marginalLabel.userInteractionEnabled=YES;
     UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
-    self.footerView.backgroundColor = [UIColor colorWithRed:0.08 green:0.46 blue:1 alpha:1];
-    
-    self.tableView.tableFooterView = self.footerView;
+
+    [self.view addSubview:self.footerView];
     [self.view addSubview:self.tableView];
     
-    NSDictionary *views = @{@"tableView" : self.tableView };
+    NSDictionary *views = @{@"tableView" : self.tableView, @"footerView" : self.footerView };
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][footerView(40)]|" options:0 metrics:nil views:views]];
 }
 
 -(void)handleTapGesture: (UIGestureRecognizer*) recognizer{

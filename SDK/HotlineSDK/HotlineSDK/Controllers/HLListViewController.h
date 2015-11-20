@@ -12,6 +12,6 @@
 @interface HLListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @property(nonatomic, strong)UITableView *tableView;
-@property (nonatomic, retain)FDMarginalView *footerView;
+@property (nonatomic, strong)FDMarginalView *footerView;
 
 @end
