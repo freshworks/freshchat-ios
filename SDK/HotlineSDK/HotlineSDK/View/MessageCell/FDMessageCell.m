@@ -323,7 +323,7 @@
         
     }
     
-    [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextView.frame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue];
+    [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextView.frame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue isAgentMessage:(BOOL)isSenderOther];
     
    if(showsProfile){
        profileImageView.hidden = NO;
@@ -406,15 +406,11 @@
     return cellHeight;
 }
 
-- (void) adjustPositionForTimeView:(UITextView*) timeField textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)KONOTOR_SHOW_SENDERNAME messageType:(enum KonotorMessageType) messageType{
+- (void) adjustPositionForTimeView:(UITextView*) timeField textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)KONOTOR_SHOW_SENDERNAME messageType:(enum KonotorMessageType) messageType isAgentMessage:(BOOL)isAgentMessage{
     
-    float messageContentViewWidth=messageContentFrame.size.width;
-    
-    float messageTextBoxX=messageTextFrame.origin.x-KONOTOR_HORIZONTAL_PADDING;
+    float messageTextBoxX=messageTextFrame.origin.x-KONOTOR_HORIZONTAL_PADDING-(isAgentMessage?0:15);
     float messageTextBoxY=messageTextFrame.origin.y;
     float messageTextBoxWidth=messageTextFrame.size.width;
-    
-    CGSize txtSize=[timeField sizeThatFits:CGSizeMake(messageContentViewWidth, 20)];
     
     switch (messageType) {
 
@@ -460,8 +456,7 @@
         }
     }
     
-    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth-15-txtSize.width, messageTextBoxY+messageTextView.frame.size.height, 15, 15)];
-
+    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height, 15, 15)];
     
 }
 
