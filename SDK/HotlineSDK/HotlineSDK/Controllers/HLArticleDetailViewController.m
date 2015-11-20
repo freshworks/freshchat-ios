@@ -70,7 +70,7 @@
 }
 
 -(NSBundle *)getHLResourceBundle{
-    NSBundle *HLResourceBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"MHResources" withExtension:@"bundle"]];
+    NSBundle *HLResourceBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
     return HLResourceBundle;
 }
 
