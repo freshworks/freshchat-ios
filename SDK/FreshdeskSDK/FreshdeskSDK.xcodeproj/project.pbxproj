@@ -22,7 +22,6 @@
 
 /* Begin PBXBuildFile section */
 		351432761AD67A9800050DD3 /* FDTicketContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 351432751AD67A9800050DD3 /* FDTicketContent.m */; };
-		3538D01C1B060221005DCB30 /* FDInputToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3538D01B1B060221005DCB30 /* FDInputToolbarView.m */; };
 		35A09B411B1598CD00368B5B /* FDUserInfoForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A09B401B1598CD00368B5B /* FDUserInfoForm.m */; };
 		35CD78DD1B300B2700F94044 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35CD78DC1B300B2700F94044 /* FDKeyChainStore.m */; };
 		35D399481AEE47D300712204 /* FDTicketStateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D399471AEE47D300712204 /* FDTicketStateHandler.m */; };
@@ -126,8 +125,6 @@
 /* Begin PBXFileReference section */
 		351432741AD67A9800050DD3 /* FDTicketContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTicketContent.h; sourceTree = "<group>"; };
 		351432751AD67A9800050DD3 /* FDTicketContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTicketContent.m; sourceTree = "<group>"; };
-		3538D01A1B060221005DCB30 /* FDInputToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDInputToolbarView.h; sourceTree = "<group>"; };
-		3538D01B1B060221005DCB30 /* FDInputToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDInputToolbarView.m; sourceTree = "<group>"; };
 		35A09B3F1B1598CD00368B5B /* FDUserInfoForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FDUserInfoForm.h; path = FreshdeskSDK/View/FDUserInfoForm.h; sourceTree = SOURCE_ROOT; };
 		35A09B401B1598CD00368B5B /* FDUserInfoForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDUserInfoForm.m; path = FreshdeskSDK/View/FDUserInfoForm.m; sourceTree = SOURCE_ROOT; };
 		35CD78DB1B300B2700F94044 /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
@@ -510,8 +507,6 @@
 			children = (
 				35A09B3F1B1598CD00368B5B /* FDUserInfoForm.h */,
 				35A09B401B1598CD00368B5B /* FDUserInfoForm.m */,
-				3538D01A1B060221005DCB30 /* FDInputToolbarView.h */,
-				3538D01B1B060221005DCB30 /* FDInputToolbarView.m */,
 				35D399491AEE482200712204 /* FDClosedPromptView.h */,
 				35D3994A1AEE482200712204 /* FDClosedPromptView.m */,
 				35D3994B1AEE482200712204 /* FDPromptView.h */,
@@ -894,7 +889,6 @@
 				D075F999198AE02F000C8CDB /* FDSecureStore.m in Sources */,
 				D0A4B2401997407600D8AFE3 /* FDReachability.m in Sources */,
 				D0EE1A271998D7B900F759AF /* FDRatingAlertHandler.m in Sources */,
-				3538D01C1B060221005DCB30 /* FDInputToolbarView.m in Sources */,
 				D0C50E021A02441D0086BE14 /* FDNoteContent.m in Sources */,
 				D03861C319CAD08300948FD3 /* FDHTTPSessionManager.m in Sources */,
 				35A09B411B1598CD00368B5B /* FDUserInfoForm.m in Sources */,
