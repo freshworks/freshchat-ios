@@ -7,20 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FDButton.h"
+
+@class FDInputToolbarView;
 
 @protocol FDInputToolbarViewDelegate <NSObject>
 
--(void)inputToolbarAttachmentButtonPressed:(id)sender;
--(void)inputToolbarSendButtonPressed:(id)sender;
+-(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender;
+-(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender;
+-(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender;
+-(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView;
 
 @end
 
 @interface FDInputToolbarView : UIView
 
-@property (strong, nonatomic) UITextView *inputTextView;
+@property (strong, nonatomic) NSString *text;
+@property (strong, nonatomic) FDButton *micButton;
+@property (strong, nonatomic) FDButton *sendButton;
+@property (strong, nonatomic) FDButton *attachButton;
+@property (strong, nonatomic) UITextView *textView;
 
 -(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate, UITextViewDelegate>)delegate;
--(void)enableSendButton:(BOOL)state;
 -(void)showAttachButton:(BOOL)state;
 
 @end

@@ -10,7 +10,7 @@
 #import "FDInputToolbarView.h"
 #import "HLChannel.h"
 
-@interface FDMessageController : UIViewController <FDInputToolbarViewDelegate, UITextViewDelegate>
+@interface FDMessageController : UIViewController <FDInputToolbarViewDelegate>
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal;
 

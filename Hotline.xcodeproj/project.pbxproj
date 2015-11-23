@@ -35,6 +35,10 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		35D3150B1C032E2800783CC3 /* Mic-Idle.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315071C032E2800783CC3 /* Mic-Idle.png */; };
+		35D3150C1C032E2800783CC3 /* Mic-Idle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315081C032E2800783CC3 /* Mic-Idle@2x.png */; };
+		35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315091C032E2800783CC3 /* Mic-Recording.png */; };
+		35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
@@ -185,6 +189,10 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		35D315071C032E2800783CC3 /* Mic-Idle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle.png"; sourceTree = "<group>"; };
+		35D315081C032E2800783CC3 /* Mic-Idle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle@2x.png"; sourceTree = "<group>"; };
+		35D315091C032E2800783CC3 /* Mic-Recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Recording.png"; sourceTree = "<group>"; };
+		35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Recording@2x.png"; sourceTree = "<group>"; };
 		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
@@ -427,6 +435,10 @@
 		35ED5EDE1BB3EA4600E0052D /* Konotor-Images */ = {
 			isa = PBXGroup;
 			children = (
+				35D315071C032E2800783CC3 /* Mic-Idle.png */,
+				35D315081C032E2800783CC3 /* Mic-Idle@2x.png */,
+				35D315091C032E2800783CC3 /* Mic-Recording.png */,
+				35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */,
 				3518BF8B1BFB6FC1003B558D /* Send.png */,
 				3518BF8C1BFB6FC1003B558D /* Send@2x.png */,
 				3518BF8D1BFB6FC1003B558D /* Send@3x.png */,
@@ -649,6 +661,7 @@
 				CE16D3291BFDAF750045F235 /* arrow.jpg in Resources */,
 				35ED5F0C1BB3EA4600E0052D /* konotor_cancel@2x.png in Resources */,
 				35ED5F0F1BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png in Resources */,
+				35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */,
 				CE80CA511BE36A9900473E49 /* (null) in Resources */,
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
 				35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */,
@@ -656,6 +669,7 @@
 				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
+				35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */,
 				35ED5F191BB3EA4600E0052D /* konotor_profile.png in Resources */,
 				35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */,
 				3518BF9C1BFB704C003B558D /* Upload@2x.png in Resources */,
@@ -675,9 +689,11 @@
 				3518BF8E1BFB6FC1003B558D /* Send.png in Resources */,
 				35ED5F141BB3EA4600E0052D /* konotor_mic@2x.png in Resources */,
 				35ED5F161BB3EA4600E0052D /* konotor_placeholder@2x.png in Resources */,
+				35D3150C1C032E2800783CC3 /* Mic-Idle@2x.png in Resources */,
 				356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */,
 				35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */,
 				35ED5F271BB3EA4600E0052D /* konotor_uploading.png in Resources */,
+				35D3150B1C032E2800783CC3 /* Mic-Idle.png in Resources */,
 				CE10648C1BC54C9300922494 /* loading.png in Resources */,
 				35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */,
 				35ED5F181BB3EA4600E0052D /* konotor_play@2x.png in Resources */,

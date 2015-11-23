@@ -70,13 +70,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                                       target:self.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        
-        
-        UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
-        
-        self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
-
     }
+    
+    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
+    self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
 }
 
 -(void)FAQButtonAction:(id)sender{
@@ -173,14 +170,19 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     return height;
 }
 
--(void)inputToolbarAttachmentButtonPressed:(id)sender{
+-(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
     [self.view endEditing:YES];
     [KonotorImageInput showInputOptions:self];
 }
 
--(void)inputToolbarSendButtonPressed:(id)sender{
+-(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
+    NSLog(@"Mic button pressed");
+}
+
+-(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
+    
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *toSend = [self.inputToolbar.inputTextView.text stringByTrimmingCharactersInSet:trimChars];
+    NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     if((![KonotorUIParameters sharedInstance].allowSendingEmptyMessage)&&[toSend isEqualToString:@""]){
         UIAlertView* alertNilString=[[UIAlertView alloc] initWithTitle:@"Empty Message" message:@"You cannot send an empty message. Please type a message to send." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alertNilString show];
@@ -207,12 +209,15 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                 promptForPush=NO;
             }
         }
-        self.inputToolbar.inputTextView.text = @"";
-        [self textViewDidChange:self.inputToolbar.inputTextView];
+        
+        self.inputToolbar.textView.text = @"";
+
+        [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
         
     }
     [self refreshView];
 }
+
 
 -(void)localNotificationSubscription{
     
@@ -274,21 +279,22 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }];
 }
 
-#pragma mark Growing text view delegates
+#pragma mark Text view delegates
 
-- (void) textViewDidChange:(UITextView *)inputTextView{
-    CGSize txtSize = [inputTextView sizeThatFits:CGSizeMake(inputTextView.frame.size.width, 140)];
+-(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{    
+    
+    CGSize txtSize = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, 140)];
     float height=txtSize.height;
     if((height)>=67){
         height=67;
         if(firstWordOnLine==YES){
             firstWordOnLine=NO;
         }else{
-            inputTextView.scrollEnabled=YES;
+            textView.scrollEnabled=YES;
         }
     }
     else{
-        inputTextView.scrollEnabled=NO;
+        textView.scrollEnabled=NO;
     }
     
     if (height > self.bottomViewHeightConstraint.constant) {
@@ -299,8 +305,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.bottomViewHeightConstraint.constant = height+10; //Fix this
         self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     }
-    inputTextView.frame=CGRectMake(inputTextView.frame.origin.x,inputTextView.frame.origin.y,inputTextView.frame.size.width,height);
+    textView.frame=CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,height);
     [self scrollTableViewToLastCell];
+   
 }
 
 -(void)scrollTableViewToLastCell{
