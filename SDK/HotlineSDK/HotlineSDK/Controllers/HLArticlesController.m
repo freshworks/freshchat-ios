@@ -56,6 +56,12 @@
                                                                   target:self.navigationController
                                                                   action:@selector(popViewControllerAnimated:)];
     self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+    
+    /*
+     Fix: setting bar button image, disables edge swipe swipe navigation
+     http://stackoverflow.com/questions/19054625
+     */
+    self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 -(void)searchButtonAction:(id)sender{

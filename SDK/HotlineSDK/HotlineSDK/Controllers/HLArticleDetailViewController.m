@@ -18,7 +18,7 @@
 
 #define HL_THEMES_DIR @"Themes"
 
-@interface HLArticleDetailViewController ()
+@interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UIWebView *webView;
 //@property (strong, nonatomic) FDTheme *theme;
@@ -117,6 +117,13 @@
                                                                   action:@selector(popViewControllerAnimated:)];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+    
+    if (self.parentViewController) {
+        self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }else{
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+
 }
 
 -(void)setSubviews{
