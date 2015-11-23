@@ -22,7 +22,6 @@
 
 @interface FDInputToolbarView : UIView
 
-@property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) FDButton *micButton;
 @property (strong, nonatomic) FDButton *sendButton;
 @property (strong, nonatomic) FDButton *attachButton;

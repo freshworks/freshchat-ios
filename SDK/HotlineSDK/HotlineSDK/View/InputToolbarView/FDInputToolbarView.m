@@ -25,10 +25,6 @@
 
 @synthesize innerImageView, outerImageView,textView, sendButton, attachButton, attachButtonWidthConstraint, micButton;
 
--(void)setText:(NSString *)text{
-    NSLog(@"%@",text);
-}
-
 -(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate{
     self = [super init];
     if (self) {
@@ -71,8 +67,6 @@
     }
     return self;
 }
-
-//TODO: can we add it directly as action parameter using delegate selector
 
 -(void)attachmentButtonAction:(id)sender{
     [self.delegate inputToolbar:self attachmentButtonPressed:sender];

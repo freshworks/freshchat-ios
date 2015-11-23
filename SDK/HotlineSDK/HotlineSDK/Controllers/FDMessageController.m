@@ -305,9 +305,13 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.bottomViewHeightConstraint.constant = height+10; //Fix this
         self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     }
-    textView.frame=CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,height);
-    [self scrollTableViewToLastCell];
-   
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        textView.frame=CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,height);
+        [self scrollTableViewToLastCell];
+
+    }];
+    
 }
 
 -(void)scrollTableViewToLastCell{
@@ -454,6 +458,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
+    [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];
 }
 
