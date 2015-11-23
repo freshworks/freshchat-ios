@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3551A4ED1C03525300348AE5 /* BackArrow_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3551A4EB1C03525300348AE5 /* BackArrow_2x.png */; };
+		3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3551A4EC1C03525300348AE5 /* BackArrow.png */; };
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
 		356F19ED1B9DBF14002F1E2A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EC1B9DBF14002F1E2A /* main.m */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
@@ -65,7 +67,6 @@
 		35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */; };
 		35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */; };
 		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; };
-		35FEE97E1BF083630009568C /* BackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FEE97D1BF083630009568C /* BackArrow.png */; };
 		CE10648C1BC54C9300922494 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = CE10648B1BC54C9300922494 /* loading.png */; };
 		CE1064A21BC6780700922494 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1064A11BC6780700922494 /* message.png */; };
 		CE80CA511BE36A9900473E49 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE80CA501BE36A9900473E49 /* KonotorModels.bundle */; };
@@ -138,6 +139,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3551A4EB1C03525300348AE5 /* BackArrow_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow_2x.png; sourceTree = "<group>"; };
+		3551A4EC1C03525300348AE5 /* BackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow.png; sourceTree = "<group>"; };
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F19EB1B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -204,7 +207,6 @@
 		35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
 		35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorConversationViewController.xib; sourceTree = "<group>"; };
 		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
-		35FEE97D1BF083630009568C /* BackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow.png; sourceTree = "<group>"; };
 		CE10648B1BC54C9300922494 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		CE1064A11BC6780700922494 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		CE80CA501BE36A9900473E49 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
@@ -376,9 +378,10 @@
 		35ED5EDE1BB3EA4600E0052D /* Konotor-Images */ = {
 			isa = PBXGroup;
 			children = (
+				3551A4EB1C03525300348AE5 /* BackArrow_2x.png */,
+				3551A4EC1C03525300348AE5 /* BackArrow.png */,
 				CE10648B1BC54C9300922494 /* loading.png */,
 				CE1064A11BC6780700922494 /* message.png */,
-				35FEE97D1BF083630009568C /* BackArrow.png */,
 				35ED5EDF1BB3EA4600E0052D /* konotor_back.png */,
 				35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */,
 				35ED5EE11BB3EA4600E0052D /* konotor_cam.png */,
@@ -576,6 +579,7 @@
 				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
 				35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */,
 				35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */,
+				3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */,
 				35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */,
 				35ED5F151BB3EA4600E0052D /* konotor_placeholder.png in Resources */,
 				35ED5F1B1BB3EA4600E0052D /* konotor_progress_black.png in Resources */,
@@ -589,6 +593,7 @@
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
 				35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */,
 				35ED5F231BB3EA4600E0052D /* konotor_stop.png in Resources */,
+				3551A4ED1C03525300348AE5 /* BackArrow_2x.png in Resources */,
 				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
@@ -611,7 +616,6 @@
 				CE10648C1BC54C9300922494 /* loading.png in Resources */,
 				35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */,
 				35ED5F181BB3EA4600E0052D /* konotor_play@2x.png in Resources */,
-				35FEE97E1BF083630009568C /* BackArrow.png in Resources */,
 				35ED5F1A1BB3EA4600E0052D /* konotor_profile@2x.png in Resources */,
 				35ED5F1F1BB3EA4600E0052D /* konotor_sent.png in Resources */,
 				35ED5F221BB3EA4600E0052D /* konotor_share@2x.png in Resources */,
