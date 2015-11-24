@@ -74,6 +74,13 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     
     UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
     self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
+    
+    if (self.parentViewController) {
+        self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }else{
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+
 }
 
 -(void)FAQButtonAction:(id)sender{
