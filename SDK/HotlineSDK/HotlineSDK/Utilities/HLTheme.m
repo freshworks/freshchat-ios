@@ -8,9 +8,6 @@
 
 #import "HLTheme.h"
 #import "FDThemeConstants.h"
-#define FD_COLOR_WHITE @"FFFFFF"
-#define FD_DIALOGUES_BUTTON_FONT_COLOR @"007AFF"
-#define FD_COLOR_BLACK @"000000"
 
 @interface HLTheme ()
 
@@ -116,21 +113,45 @@
 }
 
 -(UIFont *)dialogueTitleFont{
-    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:23];
-}
-    
--(UIColor *)dialogueButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BUTTON_FONT_COLOR];
+    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:14];
 }
 
--(UIFont *)dialogueButtonFont{
-    return [self getFontWithKey:@"Dialogues.Button" andDefaultSize:20];
+//Yes Button
+
+-(UIColor *)dialogueYesButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
 }
+
+-(UIFont *)dialogueYesButtonFont{
+    return [self getFontWithKey:@"Dialogues.YesButton" andDefaultSize:14];
+}
+
+-(UIColor *)dialogueYesButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
+}
+
+//No Button
+
+-(UIColor *)dialogueNoButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
+}
+
+-(UIColor *)dialogueNoButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
+}
+
+-(UIFont *)dialogueNoButtonFont{
+    return [self getFontWithKey:@"Dialogues.NoButton" andDefaultSize:14];
+}
+
 
 -(UIColor *)dialogueBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
 -(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {

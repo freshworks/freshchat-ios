@@ -18,6 +18,7 @@
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
 #import "FDCategoryListViewCell.h"
+#import "KonotorFeedbackScreen.h"
 
 @interface HLCategoriesListController ()
 
@@ -49,14 +50,28 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"search"];
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
+    UIImage *contactUsButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE")];
     
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
+    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchButton.frame = CGRectMake(0, 0, 44, 44);
+    [searchButton setImage:searchButtonImage forState:UIControlStateNormal];
+    [searchButton addTarget:self action:@selector(searchButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
+    
+    UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedItem.width = -20.0f; // or whatever you want
+    
+    UIButton *contactUsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    contactUsButton.frame = CGRectMake(272, 50, 24, 24);
+    [contactUsButton setImage:contactUsButtonImage forState:UIControlStateNormal];
+    [contactUsButton addTarget:self action:@selector(contactUsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *contactUsBarButton = [[UIBarButtonItem alloc] initWithCustomView:contactUsButton];
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
-    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
@@ -70,6 +85,10 @@
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
+}
+
+-(void)contactUsButtonAction:(id)sender{
+    [KonotorFeedbackScreen showFeedbackScreen];
 }
 
 -(void)localNotificationSubscription{

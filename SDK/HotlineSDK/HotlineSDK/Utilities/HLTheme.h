@@ -55,8 +55,12 @@
 -(UIColor *)getButtontextColorForKey:(NSString *)key;
 -(UIFont *)dialogueTitleFont;
 -(UIColor *)dialogueTitleTextColor;
--(UIFont *)dialogueButtonFont;
--(UIColor *)dialogueButtonTextColor;
+-(UIFont *)dialogueYesButtonFont;
+-(UIColor *)dialogueYesButtonTextColor;
+-(UIColor *)dialogueYesButtonBackgroundColor;
+-(UIColor *)dialogueNoButtonBackgroundColor;
+-(UIFont *)dialogueNoButtonFont;
+-(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
 
 //Grid View

@@ -34,7 +34,7 @@
     button.translatesAutoresizingMaskIntoConstraints = NO;
     buttonName = [NSString stringWithFormat:@" %@",buttonName];
     [button setTitle:HLLocalizedString([key stringByAppendingString:buttonName]) forState:UIControlStateNormal];
-    [button setTitleColor:[theme dialogueButtonTextColor] forState:UIControlStateNormal];
+    [button setTitleColor:[theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
     [button setTranslatesAutoresizingMaskIntoConstraints:NO];
     return button;
 }

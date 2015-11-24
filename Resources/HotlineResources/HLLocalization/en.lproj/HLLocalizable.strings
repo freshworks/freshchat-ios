@@ -8,6 +8,7 @@
 /* Grid View */
 "FAQ_TITLE_TEXT"="FAQs";
 "FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE"="SearchButton";
+"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE"="chat";
 "FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT"="Close";
 
 /* Categories List View Controller */
@@ -24,10 +25,10 @@
 
 /* Article UpVote DownVote */
 "Article Vote Prompt Label Text"="Was this helpful?";
-"Article Vote Prompt Yes"="YES";
-"Article Vote Prompt No"="NO";
+"Article Vote Prompt Yes"="Yes!";
+"Article Vote Prompt No"="No";
 
 /* Contact Us prompt */
 "Contact Us Prompt Button"="Still need help? Contact Us ";
-
+"THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
 

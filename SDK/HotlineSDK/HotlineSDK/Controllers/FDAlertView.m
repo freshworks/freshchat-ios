@@ -13,7 +13,6 @@
 @interface FDAlertView ()
 
 @property (nonatomic,strong) UIImageView* iconView;
-@property (nonatomic, strong) UIButton *Button1;
 @property CGFloat buttonLabelWidth;
 @property (weak, nonatomic) id <FDAlertViewDelegate> delegate;
 
@@ -25,14 +24,19 @@
     self = [super init];
     if (self) {
         self.delegate = delegate;
-        self.iconView = [self createImageView];
-        self.iconView.image = [UIImage imageNamed:@"message.png"];
-        [self addSubview:self.iconView];
+//        self.iconView = [self createImageView];
+//        self.iconView.image = [UIImage imageNamed:@"message.png"];
+//        [self addSubview:self.iconView];
+        
+        self.promptLabel = [self createPromptLabel];
+        self.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");
+        [self addSubview:self.promptLabel];
         
         self.Button1 = [self createPromptButton:@"Button" withKey:key];
         self.Button1.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.Button1.titleLabel.numberOfLines = 0;
         self.Button1.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [self.Button1 setTitleColor:[HLTheme colorWithHex:@"007AFF"] forState:UIControlStateNormal];
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.Button1];
         [self setBackgroundColor:[UIColor whiteColor]];
@@ -44,12 +48,12 @@
 
 -(void)setupConstraints{
     self.buttonLabelWidth = [self getDesiredWidthFor:self.Button1];
-    self.views = @{@"Button1" : self.Button1, @"iconView" : self.iconView, @"leftSpacer" : self.leftSpacer, @"rightSpacer" : self.rightSpacer};
+    self.views = @{@"Button1" : self.Button1, @"Prompt":self.promptLabel};
     self.metrics = @{ @"buttonLabelWidth" : @(self.buttonLabelWidth),  @"buttonSpacing" : @(BUTTON_SPACING) };
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[iconView]-[Button1]|" options:NSLayoutFormatAlignAllCenterY metrics:self.metrics views:self.views]];
-    [self addConstraint:@"V:|[iconView]|" InView:self];
-    [self addConstraint:@"V:|[Button1]|" InView:self];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[Button1]|" options:NSLayoutFormatAlignAllCenterY metrics:self.metrics views:self.views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[Prompt]|" options:0 metrics:self.metrics views:self.views]];
+    [self addConstraint:@"V:|[Prompt][Button1]|" InView:self];
 }
 
 -(void)layoutSubviews{

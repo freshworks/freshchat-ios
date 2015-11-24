@@ -31,14 +31,24 @@
 	</dict>
 	<key>Dialogues</key>
 	<dict>
-		<key>ButtonFontColor</key>
-		<string>007AFF</string>
-		<key>ButtonFontName</key>
-		<string>HelveticaNeue</string>
-		<key>ButtonFontSize</key>
-		<string>18</string>
-		<key>DialogueBackgroundColor</key>
+		<key>YesButtonFontColor</key>
 		<string>FFFFFF</string>
+		<key>YesButtonFontName</key>
+		<string>HelveticaNeue</string>
+		<key>YesButtonFontSize</key>
+		<string>18</string>
+		<key>YesButtonBackgroundColor</key>
+		<string>007AFF</string>
+		<key>NoButtonFontColor</key>
+		<string>007AFF</string>
+		<key>NoButtonFontName</key>
+		<string>HelveticaNeue</string>
+		<key>NoButtonFontSize</key>
+		<string>18</string>
+		<key>NoButtonBackgroundColor</key>
+		<string>D8D8D8</string>
+		<key>DialogueBackgroundColor</key>
+		<string>D8D8D8</string>
 		<key>DialogueLabelFontColor</key>
 		<string>000000</string>
 		<key>DialogueLabelFontName</key>
