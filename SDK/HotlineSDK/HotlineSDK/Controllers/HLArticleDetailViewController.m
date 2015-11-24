@@ -13,13 +13,12 @@
 #import "KonotorFeedbackScreen.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
-#import "FDMarginalView.h"
 //#import "FDConstants.h"
 #import "FDLocalNotification.h"
 
 #define HL_THEMES_DIR @"Themes"
 
-@interface HLArticleDetailViewController ()
+@interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UIWebView *webView;
 //@property (strong, nonatomic) FDTheme *theme;
@@ -70,7 +69,7 @@
 }
 
 -(NSBundle *)getHLResourceBundle{
-    NSBundle *HLResourceBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"MHResources" withExtension:@"bundle"]];
+    NSBundle *HLResourceBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
     return HLResourceBundle;
 }
 
@@ -118,6 +117,13 @@
                                                                   action:@selector(popViewControllerAnimated:)];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+    
+    if (self.parentViewController) {
+        self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }else{
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+
 }
 
 -(void)setSubviews{

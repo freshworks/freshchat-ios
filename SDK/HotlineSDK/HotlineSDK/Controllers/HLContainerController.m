@@ -28,6 +28,8 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
+    [self setNavigationBarConfig];
+
     self.containerView = [UIView new];
     self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.containerView];
@@ -52,13 +54,31 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView][footerView(20)]|" options:0 metrics:nil views:views]];
     
-    //Child controller
     self.childController.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self.containerView addSubview:self.childController.view];
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[childControllerView]|" options:0 metrics:nil views:views]];
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[childControllerView]|" options:0 metrics:nil views:views]];
+    
+    // This invokes the child controllers -willMoveToParentViewController:
     [self addChildViewController:self.childController];
 }
 
+-(void)setNavigationBarConfig{
+    
+    /*
+     
+     Made navigation bar to be opaque
+     
+     This will fix the view from being framed underneath the navigation bar and status bar.
+     http://stackoverflow.com/questions/18798792
+     
+     All setting to the navigation bar has to refer parent view controller since we are using
+     container controller
+     
+     */
+    
+    self.navigationController.navigationBar.translucent = NO;
+
+}
 
 @end

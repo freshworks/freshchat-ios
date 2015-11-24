@@ -109,6 +109,21 @@
     return image;
 }
 
++(BOOL)isRegisteredDevice{
+    FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
+    return [secureStore checkItemWithKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+}
+
++(NSString *)getUUID{
+    FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
+    NSString *UUID = [secureStore objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    if (!UUID) {
+        UUID = [[NSUUID UUID]UUIDString];
+        [secureStore setObject:UUID forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    }
+    return UUID;
+}
+
 + (NSString*) stringRepresentationForDate:(NSDate*) date{
     NSString* timeString;
     

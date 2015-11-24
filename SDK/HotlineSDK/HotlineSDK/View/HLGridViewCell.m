@@ -36,11 +36,11 @@
         newFrame.size.height = expectedLabelSize.height;
         self.label.frame = newFrame;
         self.label = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, self.bounds.size.width, 40)];
-        self.label.lineBreakMode=NSLineBreakByWordWrapping;
+        self.label.lineBreakMode=NSLineBreakByTruncatingTail;
         self.label.textAlignment = NSTextAlignmentCenter;
         self.label.backgroundColor = [self.theme imageViewItemBackgroundColor];
         self.label.textColor = [self.theme categoryTitleFontColor];
-        [self.label  setNumberOfLines:0];
+        [self.label  setNumberOfLines:2];
         [self.label sizeToFit];
         self.label.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.label];

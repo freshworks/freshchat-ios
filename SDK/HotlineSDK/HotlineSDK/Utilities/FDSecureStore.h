@@ -13,10 +13,12 @@
 
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
+#define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
 
 @interface FDSecureStore : NSObject
 
 +(instancetype)sharedInstance;
++(instancetype)persistedStoreInstance;
 
 -(void)setIntValue:(NSInteger)value forKey:(NSString *)key;
 -(NSInteger)intValueForKey:(NSString *)key;
@@ -32,9 +34,6 @@
 
 -(void)removeObjectWithKey:(NSString *)key;
 -(void)clearStoreData;
-
-//Test
--(void)logStoreData;
 
 @end
 
