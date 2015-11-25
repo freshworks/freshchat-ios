@@ -18,6 +18,7 @@
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
 #import "FDCategoryListViewCell.h"
+#import "KonotorUtil.h"
 
 @interface HLCategoriesListController ()
 

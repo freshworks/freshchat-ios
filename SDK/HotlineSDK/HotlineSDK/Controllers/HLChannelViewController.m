@@ -18,6 +18,7 @@
 #import "KonotorMessage.h"
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
+#import "KonotorUtil.h"
 
 @interface HLChannelViewController ()
 

@@ -22,6 +22,7 @@
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
 #import "KonotorFeedbackScreen.h"
+#import "KonotorUtil.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
 
