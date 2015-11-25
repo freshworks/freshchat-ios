@@ -17,6 +17,7 @@
 #import "Konotor.h"
 #import "KonotorCustomProperties.h"
 #import "KonotorShareMessageEvent.h"
+
 #define MESSAGE_NOT_UPLOADED 0
 #define MESSAGE_UPLOADING 1
 #define MESSAGE_UPLOADED 2
@@ -31,24 +32,18 @@
 
 @implementation KonotorWebServices
 
-
-
-+(void) HandlePropertyUploadExpiry:(id)parameter
-{
++(void) HandlePropertyUploadExpiry:(id)parameter{
     KonotorCustomProperty *prop = (KonotorCustomProperty *)parameter;
     [prop setUploadStatus:[NSNumber numberWithInt:PROPERTY_NOT_UPLOADED]];
 }
 
-+(void) UpdateAppVersion:(NSString *) appVersion
-{
++(void) UpdateAppVersion:(NSString *) appVersion{
     [KonotorUser setCustomUserProperty:appVersion forKey:@"app_version"];
 }
 
-+(void) UpdateSdkVersion: (NSString *) sdkVersion
-{
++(void) UpdateSdkVersion: (NSString *) sdkVersion{
     
-    if(![KonotorUser isUserCreatedOnServer])
-    {
+    if(![KonotorUser isUserCreatedOnServer]){
         return;
     }
     
@@ -58,9 +53,7 @@
     
     [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
     NSMutableDictionary *topLevel=[[NSMutableDictionary alloc]init];
-    
-    
-    
+
     NSData *pEncodedJSON;
     NSError *pError;
     pEncodedJSON = [NSJSONSerialization dataWithJSONObject:topLevel  options:NSJSONWritingPrettyPrinted error:&pError];
@@ -70,12 +63,9 @@
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:putPath parameters:nil];
     [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
     
-    
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id JSON)
-     
-     {
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id JSON){
          [KonotorApp UpdateSDKVersion:sdkVersion];
          [[KonotorDataManager sharedInstance]save];
          
@@ -83,8 +73,7 @@
          
          
      }
-    failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error)
-     {
+    failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
          
          [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
          
@@ -95,18 +84,14 @@
 
 }
 
-+(void) sendShareMessageEvent:(KonotorShareMessageEvent *)shareEvent
-{
++(void) sendShareMessageEvent:(KonotorShareMessageEvent *)shareEvent{
  
-    if(![KonotorUser isUserCreatedOnServer])
-    {
+    if(![KonotorUser isUserCreatedOnServer]){
         [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(UploadAllUnuploadedEvents) withObject:[KonotorCustomProperty class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
         return;
-        
     }
     
     NSUInteger bgtask = [KonotorUtil beginBackgroundExecutionWithExpirationHandler:@selector(HandleUserCreateExpiry:) withParameters:nil forObject:[KonotorWebServices class]];
-    
     
     NSString *pBasePath = [KonotorUtil GetBaseURL];
     
@@ -122,8 +107,6 @@
     [dict setObject:shareEvent.shareType forKey:@"type"];
     [dict setObject: [KonotorUser GetUserAlias] forKey:@"userAlias"];
     
-    
-    
     NSData *pEncodedJSON;
     NSError *pError;
     pEncodedJSON = [NSJSONSerialization dataWithJSONObject:dict  options:NSJSONWritingPrettyPrinted error:&pError];
@@ -134,64 +117,36 @@
     [request setHTTPBody:pEncodedJSON];
     [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
     
-    
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     
-    
-    
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id JSON)
-     
-     {
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id JSON){
          [shareEvent setUploadStatus:[NSNumber numberWithInt:EVENT_UPLOADED]];
-         
-         
-         
          [[KonotorDataManager sharedInstance]save];
-         
          [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
          [KonotorUtil EndBackgroundExecutionForTask:bgtask];
-
-         
-         
      }
-     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error)
-     {
-         
+     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
          [shareEvent setUploadStatus:[NSNumber numberWithInt:EVENT_NOT_UPLOADED]];
          [[KonotorDataManager sharedInstance]save];
-         
-         
          [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
          [KonotorUtil EndBackgroundExecutionForTask:bgtask];
-
-         
-         
-         
      }];
-    
-    
-    
     [operation start];
     [shareEvent setUploadStatus:[NSNumber numberWithInt:EVENT_UPLOADING]];
     [[KonotorDataManager sharedInstance]save];
-    
-    
 }
 
 
-+(void) UpdateUserPropertiesWithDictionary:(NSDictionary *) dict withProperty:(KonotorCustomProperty *)prop
-{
++(void) UpdateUserPropertiesWithDictionary:(NSDictionary *) dict withProperty:(KonotorCustomProperty *)prop{
     KonotorCustomProperty *property = prop;
-    if(![property serializedData])
-    {
+    if(![property serializedData]){
         NSData *dictData = [NSKeyedArchiver archivedDataWithRootObject:dict];
         [property setSerializedData:dictData];
     
         [[KonotorDataManager sharedInstance]save];
     }
 
-    if(![KonotorUser isUserCreatedOnServer])
-    {
+    if(![KonotorUser isUserCreatedOnServer]){
         [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(UploadAllUnuploadedProperties) withObject:[KonotorCustomProperty class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
         return;
         
@@ -206,13 +161,9 @@
     [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
     NSMutableDictionary *topLevel=[[NSMutableDictionary alloc]init];
     
-    
-    
-
     [topLevel setObject:dict forKey:@"user"];
     
     [[KonotorDataManager sharedInstance]save];
-    
     
     NSData *pEncodedJSON;
     NSError *pError;
@@ -260,88 +211,14 @@
     [operation start];
     [property setUploadStatus:[NSNumber numberWithInt:PROPERTY_UPLOADING]];
     [[KonotorDataManager sharedInstance]save];
-
-    
-    
-    
-
 }
 
-+(void) HandleUserCreateExpiry:(id)parameter
-{
++(void) HandleUserCreateExpiry:(id)parameter{
     return;
 }
 
-/*+(BOOL) CreateUser: (NSString *) UserID
-{
-    UIBackgroundTaskIdentifier bgtask = [KonotorUtil beginBackgroundExecutionWithExpirationHandler:@selector(HandleUserCreateExpiry:) withParameters:nil forObject:[KonotorWebServices class]];
 
-    
-    NSString *pBasePath = [KonotorUtil GetBaseURL];
-    NSURLResponse *response = nil;
-
-    NSError *error;
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
-    //[httpClient setDefaultHeader:@"Accept" value:@"application/json"];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    
-    [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    NSMutableDictionary *topLevel=[[NSMutableDictionary alloc]init];
-    NSMutableDictionary *sublevel=[[NSMutableDictionary alloc]init];
-    NSDictionary *meta = [KonotorUtil deviceInfoProperties];
-    
-    [sublevel setObject:UserID forKey:@"alias"];
-    [sublevel setObject:meta forKey:@"meta"];
-    [topLevel setObject:sublevel forKey:@"user"];
-    
-    
-    
-    NSData *pEncodedJSON;
-    NSError *pError;
-    pEncodedJSON = [NSJSONSerialization dataWithJSONObject:topLevel  options:NSJSONWritingPrettyPrinted error:&pError];
-    NSString *postPath = [NSString stringWithFormat:@"services/app/%@/user?t=%@", [KonotorApp GetAppID],[KonotorApp GetAppKey]];
-    
-    
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"POST" path:postPath parameters:nil];
-    [request setHTTPBody:pEncodedJSON];
-    [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
-    
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-
-    //AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    //[operation start];
-    
-    //[operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id JSON)
-    
-    if(error || ![KonotorNetworkUtil isSuccessResponseCode:response])
-    {
-        [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-        [KonotorUtil EndBackgroundExecutionForTask:bgtask];
-
-        return NO;
-
-       
-    }
-    
-    else
-     {
-         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-         [KonotorUser UserCreatedOnServer];
-         [KonotorUtil EndBackgroundExecutionForTask:bgtask];
-
-         return YES;
-         
-                  
-     }
-      
-     
-     //];
-    
-    
-}*/
-
-+(void) DAUCall
-{
++(void) DAUCall{
     
     if(![KonotorUser isUserCreatedOnServer])
         return;
@@ -368,25 +245,19 @@
          
      }];
     [operation start];
-    
-    
-    
 }
 
 
-+(void) AddPushDeviceToken: (NSString *) deviceToken
-{
++(void) AddPushDeviceToken: (NSString *) deviceToken{
     NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-
     
     NSString *app = [KonotorApp GetAppID];
     NSString *user = [KonotorUser GetUserAlias];
     NSString *token = [KonotorApp GetAppKey];
     
-    if (!user || ![KonotorUser isUserCreatedOnServer] )
-    {
+    if (!user || ![KonotorUser isUserCreatedOnServer] ){
         return;
     }
     
@@ -404,46 +275,26 @@
      }];
     [operation start];
 
-    
-
 }
 
 
-+(void) HandleMessageUploadExpiry:(id)parameter
-{
++(void) HandleMessageUploadExpiry:(id)parameter{
     return;
 }
 
-+(void) UploadMessage : (KonotorMessage *)pMessage toConversation: (KonotorConversation *) conversationToUploadTo
-{
++(void) UploadMessage : (KonotorMessage *)pMessage toConversation: (KonotorConversation *) conversationToUploadTo{
     
-    
-
-    //Commenting synch to convert to aysnch.
-    /*if(![KonotorUser  CreateUserOnServerIfNotPresent])
-    {
-        [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:[pMessage messageAlias]];
-        [KonotorUtil EndBackgroundExecutionForTask:bgtask];
-        return;
-    }*/
-    
-    if(![pMessage isMarkedForUpload])
-    {
+    if(![pMessage isMarkedForUpload]){
         [pMessage setIsMarkedForUpload:YES];
         [[KonotorDataManager sharedInstance]save];
     }
     
-    if(![KonotorUser isUserCreatedOnServer])
-    {
+    if(![KonotorUser isUserCreatedOnServer]){
         [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(UploadAllUnuploadedMessages) withObject:[KonotorMessage class] withSuccessParameter:nil ifFailure:@selector(UploadFailedNotifcation:) withObject:[Konotor class] withFailureParameter:[pMessage messageAlias]];
         return;
-
     }
-
     
     UIBackgroundTaskIdentifier bgtask = [KonotorUtil beginBackgroundExecutionWithExpirationHandler:@selector(HandleMessageUploadExpiry:) withParameters:nil forObject:[KonotorWebServices class]];
-    
-   
     
     NSString *app = [KonotorApp GetAppID];
     NSString *user = [KonotorUser GetUserAlias];
@@ -478,7 +329,6 @@
     NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@",@"services/app/",app,@"/user/",user,@"/feedback/message?t=",token];
     
     NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock: ^(id <AFKonotorMultipartFormData>formData) {
-        
         
         [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding]  name:@"message"];
         
@@ -519,8 +369,7 @@
     }];
     
     
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject)
-     {
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
          [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
                   
          [pMessage setUploadStatus:[NSNumber numberWithInt:MESSAGE_UPLOADED]];
@@ -530,8 +379,7 @@
          
          
      }
-    failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error)
-     {
+    failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
          [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
          [pMessage setUploadStatus:[NSNumber numberWithInt:MESSAGE_NOT_UPLOADED]];
 
@@ -544,12 +392,7 @@
          
      }];
     [operation start];
-    
-
-                                    
 
 }
-
-
 
 @end
