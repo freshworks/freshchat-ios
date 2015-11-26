@@ -90,7 +90,7 @@ static NSInteger networkIndicator = 0;
 @implementation KonotorUtil
 
 +(NSString *) GetBaseURL{
-    return KONOTORURL;
+    return @"http://hline.pagekite.me/app/";
 }
 
 AFKonotorHTTPClient *pKonotorSingle = nil;

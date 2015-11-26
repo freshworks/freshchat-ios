@@ -22,8 +22,7 @@
 
 -(void)konotorIntegration{
     Hotline *hotlineSDK = [Hotline sharedInstance];
-    [hotlineSDK InitWithAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e" AppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093" withDelegate:nil];
-    [Hotline setSecretKey:@"468f1bb16e270cdbd73f7ef9054b9a8d"];
+    [hotlineSDK InitWithAppID:@"4a10bd32-f0a5-4ac4-b95e-a88d405d0650" AppKey:@"3b649759-435e-4111-a504-c02335b9f999" withDelegate:nil];
     [Hotline setUnreadWelcomeMessage:@"Welcome to Whatsfab! Get 10% off on your first purchase using the special code NOOB20. \nWe're here if you have any questions!"];
 }
 
