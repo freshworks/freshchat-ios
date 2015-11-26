@@ -10,9 +10,6 @@
 		3518BF8E1BFB6FC1003B558D /* Send.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF8B1BFB6FC1003B558D /* Send.png */; };
 		3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF8C1BFB6FC1003B558D /* Send@2x.png */; };
 		3518BF901BFB6FC1003B558D /* Send@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF8D1BFB6FC1003B558D /* Send@3x.png */; };
-		3518BF9B1BFB704C003B558D /* Upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF981BFB704C003B558D /* Upload.png */; };
-		3518BF9C1BFB704C003B558D /* Upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF991BFB704C003B558D /* Upload@2x.png */; };
-		3518BF9D1BFB704C003B558D /* Upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF9A1BFB704C003B558D /* Upload@3x.png */; };
 		3551A4ED1C03525300348AE5 /* BackArrow_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3551A4EB1C03525300348AE5 /* BackArrow_2x.png */; };
 		3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3551A4EC1C03525300348AE5 /* BackArrow.png */; };
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
@@ -78,6 +75,9 @@
 		35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */; };
 		35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */; };
 		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; };
+		35F398031C07468700FC9B2C /* Upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398001C07468700FC9B2C /* Upload.png */; };
+		35F398041C07468700FC9B2C /* Upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398011C07468700FC9B2C /* Upload@2x.png */; };
+		35F398051C07468700FC9B2C /* Upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398021C07468700FC9B2C /* Upload@3x.png */; };
 		CE10648C1BC54C9300922494 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = CE10648B1BC54C9300922494 /* loading.png */; };
 		CE1064A21BC6780700922494 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1064A11BC6780700922494 /* message.png */; };
 		CE16D3291BFDAF750045F235 /* arrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE16D3281BFDAF750045F235 /* arrow.jpg */; };
@@ -155,9 +155,6 @@
 		3518BF8B1BFB6FC1003B558D /* Send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Send.png; sourceTree = "<group>"; };
 		3518BF8C1BFB6FC1003B558D /* Send@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Send@2x.png"; sourceTree = "<group>"; };
 		3518BF8D1BFB6FC1003B558D /* Send@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Send@3x.png"; sourceTree = "<group>"; };
-		3518BF981BFB704C003B558D /* Upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Upload.png; sourceTree = "<group>"; };
-		3518BF991BFB704C003B558D /* Upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@2x.png"; sourceTree = "<group>"; };
-		3518BF9A1BFB704C003B558D /* Upload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@3x.png"; sourceTree = "<group>"; };
 		3551A4EB1C03525300348AE5 /* BackArrow_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow_2x.png; sourceTree = "<group>"; };
 		3551A4EC1C03525300348AE5 /* BackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow.png; sourceTree = "<group>"; };
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
@@ -231,6 +228,9 @@
 		35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
 		35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorConversationViewController.xib; sourceTree = "<group>"; };
 		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
+		35F398001C07468700FC9B2C /* Upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Upload.png; sourceTree = "<group>"; };
+		35F398011C07468700FC9B2C /* Upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@2x.png"; sourceTree = "<group>"; };
+		35F398021C07468700FC9B2C /* Upload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@3x.png"; sourceTree = "<group>"; };
 		CE10648B1BC54C9300922494 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		CE1064A11BC6780700922494 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		CE16D3281BFDAF750045F235 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arrow.jpg; sourceTree = "<group>"; };
@@ -412,6 +412,9 @@
 		35ED5EDE1BB3EA4600E0052D /* Konotor-Images */ = {
 			isa = PBXGroup;
 			children = (
+				35F398001C07468700FC9B2C /* Upload.png */,
+				35F398011C07468700FC9B2C /* Upload@2x.png */,
+				35F398021C07468700FC9B2C /* Upload@3x.png */,
 				35D315071C032E2800783CC3 /* Mic-Idle.png */,
 				35D315081C032E2800783CC3 /* Mic-Idle@2x.png */,
 				35D315091C032E2800783CC3 /* Mic-Recording.png */,
@@ -419,9 +422,6 @@
 				3518BF8B1BFB6FC1003B558D /* Send.png */,
 				3518BF8C1BFB6FC1003B558D /* Send@2x.png */,
 				3518BF8D1BFB6FC1003B558D /* Send@3x.png */,
-				3518BF981BFB704C003B558D /* Upload.png */,
-				3518BF991BFB704C003B558D /* Upload@2x.png */,
-				3518BF9A1BFB704C003B558D /* Upload@3x.png */,
 				3551A4EB1C03525300348AE5 /* BackArrow_2x.png */,
 				3551A4EC1C03525300348AE5 /* BackArrow.png */,
 				CE10648B1BC54C9300922494 /* loading.png */,
@@ -624,9 +624,7 @@
 				35ED5F1C1BB3EA4600E0052D /* konotor_progress_black@2x.png in Resources */,
 				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
 				CE16D3321BFDE2530045F235 /* KonotorModels.bundle in Resources */,
-				355AE77D1B9DD42400E8999C /* MHResources.bundle in Resources */,
 				35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */,
-				3518BF9B1BFB704C003B558D /* Upload.png in Resources */,
 				35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */,
 				3518BF901BFB6FC1003B558D /* Send@3x.png in Resources */,
 				3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */,
@@ -652,11 +650,10 @@
 				35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */,
 				35ED5F191BB3EA4600E0052D /* konotor_profile.png in Resources */,
 				35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */,
-				3518BF9C1BFB704C003B558D /* Upload@2x.png in Resources */,
 				35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */,
 				3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */,
-				3518BF9D1BFB704C003B558D /* Upload@3x.png in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
+				35F398031C07468700FC9B2C /* Upload.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
 				35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */,
 				35ED5F111BB3EA4600E0052D /* konotor_cross.png in Resources */,
@@ -676,6 +673,8 @@
 				35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */,
 				35ED5F181BB3EA4600E0052D /* konotor_play@2x.png in Resources */,
 				35ED5F1A1BB3EA4600E0052D /* konotor_profile@2x.png in Resources */,
+				35F398051C07468700FC9B2C /* Upload@3x.png in Resources */,
+				35F398041C07468700FC9B2C /* Upload@2x.png in Resources */,
 				35ED5F1F1BB3EA4600E0052D /* konotor_sent.png in Resources */,
 				35ED5F221BB3EA4600E0052D /* konotor_share@2x.png in Resources */,
 			);
