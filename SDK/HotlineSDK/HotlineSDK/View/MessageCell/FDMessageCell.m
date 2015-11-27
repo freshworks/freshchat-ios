@@ -289,7 +289,7 @@
         
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
            
-            NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
+      /*      NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
            
             if(isSenderOther){
                 [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_OTHERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
@@ -298,9 +298,16 @@
                 [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_USERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
             }
             
-            messageTextView.attributedText = attributedString;
+            messageTextView.attributedText = attributedString;*/
             
-            txtheight=[messageTextView sizeThatFits:CGSizeMake(messageTextBoxWidth, 1000)].height-16;
+            NSString *simpleString=currentMessage.text;
+            
+            
+            [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
+            CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
+
+            
+            txtheight=sizer.height-16;
             
             [messageTextView setTextContainerInset:UIEdgeInsetsMake(height+10, 0, 0, 0)];
             
@@ -397,9 +404,11 @@
         
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
             
-            NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
+           // NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
+           // txtheight=[attributedString boundingRectWithSize:CGSizeMake(width, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil].size.height;
             
-            txtheight=[attributedString boundingRectWithSize:CGSizeMake(width, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil].size.height;
+            NSString *simpleString=currentMessage.text;
+            txtheight=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     }
