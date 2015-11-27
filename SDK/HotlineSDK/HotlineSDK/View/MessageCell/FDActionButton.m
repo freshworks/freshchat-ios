@@ -72,7 +72,7 @@
     if(actionUrlString!=nil){
         self.actionUrlString=actionUrlString;
         [self setFrame:CGRectMake(buttonXCenterAlign,
-                                          messageOriginY+messageFrameHeight-verticalPadding,
+                                          messageOriginY+messageFrameHeight,
                                           buttonWidth,
                                           KONOTOR_ACTIONBUTTON_HEIGHT)];
         [self setHidden:NO];

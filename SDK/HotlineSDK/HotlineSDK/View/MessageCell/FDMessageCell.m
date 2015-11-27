@@ -104,10 +104,10 @@
     [messageTextView addSubview:messagePictureImageView];
     
     /* setup action button view */
-    FDActionButton* actionButton=[FDActionButton buttonWithType:UIButtonTypeCustom];
-    [actionButton setUpStyle];
-    [actionButton setActionUrlString:nil];
-    [self.contentView addSubview:actionButton];
+    messageActionButton=[FDActionButton buttonWithType:UIButtonTypeCustom];
+    [messageActionButton setUpStyle];
+    [messageActionButton setActionUrlString:nil];
+    [self.contentView addSubview:messageActionButton];
 }
 
 - (float) getWidthForMessage:(KonotorMessageData*)message{
@@ -233,6 +233,7 @@
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
+    messageActionButton.actionUrlString=actionUrl;
     
     if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
         [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
@@ -412,13 +413,15 @@
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     }
+    if((currentMessage.actionURL!=nil)&&(![currentMessage.actionURL isEqualToString:@""]))
+        cellHeight+=KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PADDING*2;
     return cellHeight;
 }
 
 - (void) adjustPositionForTimeView:(UITextView*) timeField textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)KONOTOR_SHOW_SENDERNAME messageType:(enum KonotorMessageType) messageType isAgentMessage:(BOOL)isAgentMessage{
     
     float messageTextBoxX=messageTextFrame.origin.x-KONOTOR_HORIZONTAL_PADDING-(isAgentMessage?0:15);
-    float messageTextBoxY=messageTextFrame.origin.y;
+    float messageTextBoxY=messageTextFrame.origin.y+(self.messageActionButton.isHidden?0:(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING));
     float messageTextBoxWidth=messageTextFrame.size.width;
     
     switch (messageType) {
@@ -484,7 +487,7 @@
     
     msgHeight=msgHeight+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
-    msgHeight+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+5*KONOTOR_VERTICAL_PADDING):0;
+    msgHeight+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING):0;
   
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }
