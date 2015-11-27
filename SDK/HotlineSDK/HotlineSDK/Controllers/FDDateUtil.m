@@ -29,6 +29,13 @@
     return [[FDDateUtil getDateFormatter] stringFromDate:[NSDate date]];
 }
 
++(NSString *)getStringFromDate:(NSDate *)date{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm a"];
+    NSString *stringFromDate = [formatter stringFromDate:date];
+    return stringFromDate;
+}
+
 +(NSDate *)getRFC3339DateFromString:(NSString *)pdateString{
     NSMutableString* dateString = [pdateString mutableCopy];
     NSRange range = [dateString rangeOfString:@":" options:NSBackwardsSearch];
