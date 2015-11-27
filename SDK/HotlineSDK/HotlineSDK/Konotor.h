@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <UIKit/UIImage.h>
+#import "KonotorConversation.h"
 
 @protocol KonotorDelegate <NSObject>
 
@@ -77,7 +78,7 @@ enum KonotorMessageUploadStatus
 
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)messageID;
-+(void) uploadTextFeedback:(NSString *)textFeedback;
++(void) uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation;
 +(void) uploadImage:(UIImage *) image;
 +(void) uploadImage:(UIImage *) image withCaption:(NSString*) caption;
 

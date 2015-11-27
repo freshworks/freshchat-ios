@@ -186,15 +186,20 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     NSLog(@"Mic button pressed");
 }
 
+-(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
+    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:nil
+                                        cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
+}
+
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
-    
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     if((![KonotorUIParameters sharedInstance].allowSendingEmptyMessage)&&[toSend isEqualToString:@""]){
-        UIAlertView* alertNilString=[[UIAlertView alloc] initWithTitle:@"Empty Message" message:@"You cannot send an empty message. Please type a message to send." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alertNilString show];
+        [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
     }else{
-        [Konotor uploadTextFeedback:toSend];
+        KonotorConversation *conversation  = self.channel.conversations.allObjects[0];
+        [Konotor uploadTextFeedback:toSend onConversation:conversation];
         BOOL notificationEnabled=NO;
 #if(__IPHONE_OS_VERSION_MAX_ALLOWED >=80000)
         if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
@@ -211,16 +216,13 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         
         if (!notificationEnabled) {
             if(promptForPush){
-                UIAlertView* pushDisabledAlert=[[UIAlertView alloc] initWithTitle:@"Modify Push Setting" message:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [pushDisabledAlert show];
+                [self showAlertWithTitle:@"Modify Push Setting" andMessage:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center"];
                 promptForPush=NO;
             }
         }
         
         self.inputToolbar.textView.text = @"";
-
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
-        
     }
 }
 
@@ -377,8 +379,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
             UIImageView* uploadStatus=(UIImageView*)cell.uploadStatusImageView;
             [uploadStatus setImage:self.sentImage];
             for(int i=messageCount-1;i>=0;i--){
-                if([(NSString*)[(KonotorMessageData*)[self.messages objectAtIndex:i] messageId] isEqualToString:messageID]){
-                    [(KonotorMessageData*)[self.messages objectAtIndex:i] setUploadStatus:([NSNumber numberWithInt:MessageUploaded])];
+                KonotorMessageData *message = self.messages[i];
+                if([message.messageId isEqualToString:messageID]){
+                    message.uploadStatus = @(MessageUploaded);
                     break;
                 }
             }
@@ -388,8 +391,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
     if(!showingAlert){
-        UIAlertView* konotorAlert=[[UIAlertView alloc] initWithTitle:@"Message not sent" message:@"We could not send your message(s) at this time. Check your internet or try later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [konotorAlert show];
+        [self showAlertWithTitle:@"Message not sent" andMessage:@"We could not send your message(s) at this time. Check your internet or try later."];
         showingAlert=YES;
     }
 }

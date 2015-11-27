@@ -202,7 +202,7 @@ static BOOL firstWordOnLine=YES;
         [alertNilString show];
     }
     else{
-        [Konotor uploadTextFeedback:toSend];
+        [Konotor uploadTextFeedback:toSend onConversation:nil];
         
         BOOL notificationEnabled=NO;
         

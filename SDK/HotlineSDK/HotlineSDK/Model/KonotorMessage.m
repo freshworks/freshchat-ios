@@ -110,7 +110,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     [message setMessageUserId:[KonotorUser GetUserAlias]];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
-    [message setMessageType:[NSNumber numberWithInt:1]];
+    [message setMessageType:@1];
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];

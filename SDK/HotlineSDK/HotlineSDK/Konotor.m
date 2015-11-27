@@ -245,17 +245,13 @@ static id <KonotorDelegate> _delegate;
     return [KonotorAudioPlayer currentPlaying:nil set:NO ];
 }
 
-+(void) uploadTextFeedback:(NSString *)textFeedback
-{
++(void) uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation{
     NSString *messageID = [KonotorMessage saveTextMessageInCoreData:textFeedback];
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
-    
-    if(messageID)
-    {
-        [KonotorWebServices UploadMessage:message toConversation:nil];
+    if(messageID){
+        [KonotorWebServices UploadMessage:message toConversation:conversation];
     }
     [[Konotor delegate] didStartUploadingNewMessage];
-
 }
 
 
@@ -441,19 +437,13 @@ static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void)UploadFinishedNotifcation: (NSString *) messageID
-{
-    if([Konotor delegate])
-    {
-        if([[Konotor delegate] respondsToSelector:@selector(didFinishUploading:) ])
-        {
-            
++(void)UploadFinishedNotifcation: (NSString *) messageID{
+    if([Konotor delegate]){
+        if([[Konotor delegate] respondsToSelector:@selector(didFinishUploading:) ]){
             [[Konotor delegate] didFinishUploading:messageID];
         }
     }
-    
 }
-
 
 +(void)UploadFailedNotifcation: (NSString *) messageID
 {
