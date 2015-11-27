@@ -403,7 +403,7 @@ KonotorAlertView *pAlert;
     
     else
     {
-        [KonotorWebServices UploadMessage:message toConversation:conversation];
+        [KonotorWebServices uploadMessage:message toConversation:conversation];
         return YES;
         
     }
@@ -441,7 +441,7 @@ KonotorAlertView *pAlert;
     
     else
     {
-        [KonotorWebServices UploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation]];
+        [KonotorWebServices uploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation]];
         gkAudioRecorder = nil;
 
     }

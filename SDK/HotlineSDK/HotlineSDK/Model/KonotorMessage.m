@@ -104,10 +104,10 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
 }
 
-+(NSString *)saveTextMessageInCoreData : (NSString *)text{
++(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     [message setMessageUserId:[KonotorUser GetUserAlias]];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:@1];
@@ -115,7 +115,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     [datamanager save];
-    return message.messageAlias;
+    return message;
 }
 
 +(NSString*)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption{
@@ -186,20 +186,20 @@ NSMutableDictionary *gkMessageIdMessageMap;
         request.predicate = predicate;
         NSArray *array = [context executeFetchRequest:request error:&pError];
         if([array count]==0){
-            [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
+            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
             return;
         }else{
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
-                    if(![[message marketingId] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                    if(![[message marketingId] isEqualToNumber:@0]){
                         [message MarkMarketingMessageAsRead];
                     }else{
                         [message markAsReadwithNotif:NO];
                     }
                 }
             }
-            [KonotorMessage PostUnreadCountNotifWithNumber:[NSNumber numberWithInt:0]];
+            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
         }
     }];
 }
@@ -325,7 +325,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
                     KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
-                    [KonotorWebServices UploadMessage:message toConversation:convo];
+                    [KonotorWebServices uploadMessage:message toConversation:convo];
                 }
             }
         }
@@ -350,7 +350,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageAlias == %@",messageId];
     [request setPredicate:predicate];
-    //NSLog(@"%@",[predicate description]);
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
     if([array count]==0){
@@ -373,13 +372,13 @@ NSMutableDictionary *gkMessageIdMessageMap;
     if(conversation){
         NSMutableSet *mutableSetOfExistingConversationsOnDisk = [conversation  mutableSetValueForKey:@"hasMessages"];
         [mutableSetOfExistingConversationsOnDisk addObject:self];
-        [self setValue:conversation forKey:@"belongsToConversation"];
+        self.belongsToConversation = conversation;
         [[KonotorDataManager sharedInstance]save];
     }
 }
 
 -(KonotorConversation *) parentConversation{
-    return [self valueForKeyPath:@"belongsToConversation"];
+    return self.belongsToConversation;
 }
 
 -(NSString *)getJSON{
@@ -408,7 +407,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 -(void) markAsReadwithNotif:(BOOL) notif{
     BOOL wasRead = [self messageRead];
  
-    if(![[self marketingId] isEqualToNumber:[NSNumber numberWithInt:0]]){
+    if(![[self marketingId] isEqualToNumber:@0]){
         [self MarkMarketingMessageAsRead];
     }else{
         [self setMessageRead:YES];
@@ -474,7 +473,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return newMessage;
 }
 
-+(NSArray *)getAllMessagesForConversation: (NSString* )conversationID;{
++(NSArray *)getAllMessagesForConversation:(NSString* )conversationID;{
     KonotorConversation *convo = [KonotorConversation RetriveConversationForConversationId:conversationID];
     if(convo){
         NSSet *pMessagesSet =[NSSet setWithSet:[convo valueForKeyPath:@"hasMessages"]];

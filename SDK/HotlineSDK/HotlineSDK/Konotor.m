@@ -229,40 +229,29 @@ static id <KonotorDelegate> _delegate;
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
-+(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID
-{
++(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID{
     
 }
 
-
-+(BOOL) StopPlayback
-{
++(BOOL) StopPlayback{
     return [KonotorAudioPlayer StopMessage];
 }
 
-+(NSString *)getCurrentPlayingMessageID
-{
++(NSString *)getCurrentPlayingMessageID{
     return [KonotorAudioPlayer currentPlaying:nil set:NO ];
 }
 
-+(void) uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation{
-    NSString *messageID = [KonotorMessage saveTextMessageInCoreData:textFeedback];
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
-    if(messageID){
-        [KonotorWebServices UploadMessage:message toConversation:conversation];
-    }
++(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation{
+    KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback];
+    [KonotorWebServices uploadMessage:message toConversation:conversation];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
-
-+(void) uploadImage:(UIImage *) image
-{
++(void) uploadImage:(UIImage *) image{
     NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:nil];
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
-    
-    if(messageID)
-    {
-        [KonotorWebServices UploadMessage:message toConversation:nil];
+    if(messageID){
+        [KonotorWebServices uploadMessage:message toConversation:nil];
     }
     [[Konotor delegate] didStartUploadingNewMessage];
 }
@@ -274,7 +263,7 @@ static id <KonotorDelegate> _delegate;
     
     if(messageID)
     {
-        [KonotorWebServices UploadMessage:message toConversation:nil];
+        [KonotorWebServices uploadMessage:message toConversation:nil];
     }
     [[Konotor delegate] didStartUploadingNewMessage];
 }

@@ -25,6 +25,7 @@
 @property (nonatomic) BOOL isKeyboardOpen;
 @property (nonatomic) BOOL isModalPresentationPreferred;
 @property (nonatomic, strong) UIImage *sentImage;
+@property (nonatomic,strong) KonotorConversation *conversation;
 
 @end
 
@@ -43,9 +44,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     self = [super init];
     if (self) {
         self.channel = channel;
+        self.conversation = channel.conversations.allObjects.lastObject;
         self.isModalPresentationPreferred = isModal;
-        [Konotor setDelegate:self];
         self.sentImage=[UIImage imageNamed:@"konotor_sent.png"];
+        [Konotor setDelegate:self];
     }
     return self;
 }
@@ -187,7 +189,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
-    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:nil
+    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
                                         cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
 }
@@ -195,34 +197,36 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
-    if((![KonotorUIParameters sharedInstance].allowSendingEmptyMessage)&&[toSend isEqualToString:@""]){
+    if([toSend isEqualToString:@""]){
         [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
     }else{
-        KonotorConversation *conversation  = self.channel.conversations.allObjects[0];
-        [Konotor uploadTextFeedback:toSend onConversation:conversation];
-        BOOL notificationEnabled=NO;
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=80000)
-        if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
-            notificationEnabled=[[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
-        }
-        else
-#endif
-        {
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
-            UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-            if(types != UIRemoteNotificationTypeNone) notificationEnabled=YES;
-#endif
-        }
-        
-        if (!notificationEnabled) {
-            if(promptForPush){
-                [self showAlertWithTitle:@"Modify Push Setting" andMessage:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center"];
-                promptForPush=NO;
-            }
-        }
-        
+        [Konotor uploadTextFeedback:toSend onConversation:self.conversation];
+        [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
+    }
+}
+
+-(void)checkPushNotificationState{
+    BOOL notificationEnabled = NO;
+#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=80000)
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        notificationEnabled=[[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+    }
+    else
+#endif
+    {
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
+        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        if(types != UIRemoteNotificationTypeNone) notificationEnabled=YES;
+#endif
+    }
+    
+    if (!notificationEnabled) {
+        if(promptForPush){
+            [self showAlertWithTitle:@"Modify Push Setting" andMessage:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center"];
+            promptForPush=NO;
+        }
     }
 }
 
@@ -445,16 +449,14 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) refreshView{
-    messageCount_prev=(int)[[Konotor getAllMessagesForDefaultConversation] count];
+    messageCount_prev = (int)[Konotor getAllMessagesForDefaultConversation].count;
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
-    messageCount=(int)[self.messages count];
-    
+    messageCount=(int)self.messages.count;
     [self.tableView reloadData];
     [Konotor markAllMessagesAsRead];
     [self scrollTableViewToLastCell];
 }
-
 
 #pragma Scrollview delegates
 

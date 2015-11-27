@@ -252,15 +252,16 @@
     return;
 }
 
-+(void) UploadMessage : (KonotorMessage *)pMessage toConversation: (KonotorConversation *) conversationToUploadTo{
-    
+
++(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversationToUploadTo{
+
     if(![pMessage isMarkedForUpload]){
-        [pMessage setIsMarkedForUpload:YES];
+        pMessage.isMarkedForUpload = YES;
         [[KonotorDataManager sharedInstance]save];
     }
     
     if(![KonotorUser isUserCreatedOnServer]){
-        [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(UploadAllUnuploadedMessages) withObject:[KonotorMessage class] withSuccessParameter:nil ifFailure:@selector(UploadFailedNotifcation:) withObject:[Konotor class] withFailureParameter:[pMessage messageAlias]];
+        [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(UploadAllUnuploadedMessages) withObject:[KonotorMessage class] withSuccessParameter:nil ifFailure:@selector(UploadFailedNotifcation:) withObject:[Konotor class] withFailureParameter:pMessage.messageAlias];
         return;
     }
     
@@ -270,7 +271,7 @@
     NSString *user = [KonotorUser GetUserAlias];
     NSString *token = [KonotorApp GetAppKey];
 
-    __block NSString *messageAlias = [pMessage messageAlias];
+    __block NSString *messageAlias = pMessage.messageAlias;
 
     if(conversationToUploadTo == nil){
         KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
@@ -322,12 +323,14 @@
     [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
     
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        //NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
-    }];
-    
+
     [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
-        NSLog(@"Response ");
+
+        NSDictionary* reponseData = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
+        
+        //Get the message from DB and update the conversation ID.
+        //if the channel
+
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         [[KonotorDataManager sharedInstance]save];
@@ -342,6 +345,7 @@
         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];
      }];
+    
     [operation start];
 }
 
