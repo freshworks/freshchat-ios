@@ -27,6 +27,8 @@
 -(BOOL) handleRemoteNotification:(NSDictionary*)userInfo;
 -(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen;
 
+-(void) didStartUploadingNewMessage;
+
 @end
 
 enum KonotorMessageType {

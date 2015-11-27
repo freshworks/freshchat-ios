@@ -226,6 +226,7 @@ static id <KonotorDelegate> _delegate;
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID
 {
     [KonotorAudioRecorder SendRecordingWithMessageID:MessageID];
+    [[Konotor delegate] didStartUploadingNewMessage];
 }
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID
@@ -253,6 +254,7 @@ static id <KonotorDelegate> _delegate;
     {
         [KonotorWebServices UploadMessage:message toConversation:nil];
     }
+    [[Konotor delegate] didStartUploadingNewMessage];
 
 }
 
@@ -266,7 +268,7 @@ static id <KonotorDelegate> _delegate;
     {
         [KonotorWebServices UploadMessage:message toConversation:nil];
     }
-
+    [[Konotor delegate] didStartUploadingNewMessage];
 }
 
 +(void) uploadImage:(UIImage *) image withCaption:(NSString *)caption
@@ -278,6 +280,7 @@ static id <KonotorDelegate> _delegate;
     {
         [KonotorWebServices UploadMessage:message toConversation:nil];
     }
+    [[Konotor delegate] didStartUploadingNewMessage];
 }
 
 

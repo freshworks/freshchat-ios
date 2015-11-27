@@ -222,7 +222,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
         
     }
-    [self refreshView];
 }
 
 
@@ -358,6 +357,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
             [button startAnimating];
         }
     }
+}
+
+- (void) didStartUploadingNewMessage{
+    [self refreshView];
 }
 
 - (void) didFinishDownloadingMessages{

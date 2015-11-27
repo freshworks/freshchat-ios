@@ -78,6 +78,8 @@ static KonotorEventHandler* eventHandler=nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
 }
 
+- (void) didStartUploadingNewMessage{
+}
 
 + (KonotorEventHandler*) sharedInstance
 {
