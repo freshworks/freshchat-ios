@@ -24,7 +24,6 @@
 
 @property (nonatomic, strong) NSMutableArray *channels;
 
-
 @end
 
 @implementation HLChannelViewController
@@ -107,8 +106,8 @@
         cell.imgView.layer.cornerRadius = cell.imgView.frame.size.width / 2;
         cell.imgView.layer.masksToBounds = YES;
         cell.titleLabel.text  = channel.name;
-        cell.detailLabel.text = channel.hasWelcomeMessage.text;
-        NSInteger unreadCount = [self getUnreadCountForConversation:channel.hasConversations];
+        cell.detailLabel.text = channel.welcomeMessage.text;
+        NSInteger unreadCount = [self getUnreadCountForConversation:channel.conversations];
         [cell.badgeView updateBadgeCount:1];
         cell.lastUpdatedLabel.text= [FDDateUtil itemCreatedDurationSinceDate:channel.lastUpdated];
     }

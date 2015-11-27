@@ -22,8 +22,8 @@
 @dynamic lastUpdated;
 @dynamic name;
 @dynamic position;
-@dynamic hasConversations;
-@dynamic hasWelcomeMessage;
+@dynamic conversations;
+@dynamic welcomeMessage;
 
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     HLChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:context];
@@ -49,7 +49,7 @@
         imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
     });
     channel.icon = imageData;
-    channel.hasWelcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+    channel.welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
     
     return channel;
 }

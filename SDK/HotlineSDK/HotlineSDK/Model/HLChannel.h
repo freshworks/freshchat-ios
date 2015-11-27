@@ -23,8 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSDate *lastUpdated;
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSNumber *position;
-@property (nullable, nonatomic, retain) NSSet<KonotorConversation *> *hasConversations;
-@property (nullable, nonatomic, retain) KonotorMessage *hasWelcomeMessage;
+@property (nullable, nonatomic, retain) NSSet<KonotorConversation *> *conversations;
+@property (nullable, nonatomic, retain) KonotorMessage *welcomeMessage;
 
 +(HLChannel *)getWithID:(NSNumber *)channelID inContext:(NSManagedObjectContext *)context;
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context;
@@ -34,10 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HLChannel (CoreDataGeneratedAccessors)
 
-- (void)addHasConversationsObject:(KonotorConversation *)value;
-- (void)removeHasConversationsObject:(KonotorConversation *)value;
-- (void)addHasConversations:(NSSet<KonotorConversation *> *)values;
-- (void)removeHasConversations:(NSSet<KonotorConversation *> *)values;
+- (void)addConversationsObject:(KonotorConversation *)value;
+- (void)removeConversationsObject:(KonotorConversation *)value;
+- (void)addConversations:(NSSet<KonotorConversation *> *)values;
+- (void)removeConversations:(NSSet<KonotorConversation *> *)values;
 
 @end
 
