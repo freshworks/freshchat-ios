@@ -13,6 +13,7 @@
 #import "KonotorMessageBinary.h"
 #import <ImageIO/ImageIO.h>
 #import <UIKit/UIImage.h>
+#import "Konotor.h"
 
 @class KonotorConversation;
 
@@ -68,6 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 -(BOOL) isMarketingMessage;
++(KonotorMessageData *)getWelcomeMessageForChannel:(HLChannel *)channel;
 
 NS_ASSUME_NONNULL_END
 

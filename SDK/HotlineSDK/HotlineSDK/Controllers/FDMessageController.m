@@ -8,9 +8,10 @@
 
 #import "FDMessageController.h"
 #import "FDMessageCell.h"
-#import "Konotor.h"
 #import "KonotorImageInput.h"
 #import "Hotline.h"
+#import "KonotorMessage.h"
+#import "Konotor.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -91,12 +92,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)closeButtonAction:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)updateMessages{
-    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
-    messageCount=(int)[self.messages count];
 }
 
 -(void)setSubviews{
@@ -448,15 +443,39 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     return YES;
 }
 
-- (void) refreshView{
-    messageCount_prev = (int)[Konotor getAllMessagesForDefaultConversation].count;
+-(void)updateMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    
+    if (self.conversation) {
+        self.messages=[[Konotor getAllMessagesForConversation:self.conversation.conversationAlias]
+                       sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    }else{
+        KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
+        self.messages=[@[welcomeMsg] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    }
+    
+    messageCount=(int)[self.messages count];
+}
+
+- (void) refreshView{
+    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+    
+    if (self.conversation) {
+        self.messages=[[Konotor getAllMessagesForConversation:self.conversation.conversationAlias]
+                       sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+        
+    }else{
+        KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
+        self.messages=[@[welcomeMsg] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    }
+
     messageCount=(int)self.messages.count;
+    messageCount_prev = (int)self.messages.count;
     [self.tableView reloadData];
     [Konotor markAllMessagesAsRead];
     [self scrollTableViewToLastCell];
 }
+
 
 #pragma Scrollview delegates
 

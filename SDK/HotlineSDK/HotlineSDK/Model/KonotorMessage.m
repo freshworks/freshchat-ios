@@ -557,4 +557,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
         return YES;
 }
 
++(KonotorMessageData *)getWelcomeMessageForChannel:(HLChannel *)channel{
+    return [channel.welcomeMessage ReturnMessageDataFromManagedObject];
+}
+
+
 @end
