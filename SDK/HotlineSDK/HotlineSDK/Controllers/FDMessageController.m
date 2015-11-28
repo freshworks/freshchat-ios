@@ -27,6 +27,7 @@
 @property (nonatomic) BOOL isModalPresentationPreferred;
 @property (nonatomic, strong) UIImage *sentImage;
 @property (nonatomic,strong) KonotorConversation *conversation;
+@property (nonatomic, strong)KonotorImageInput *imageInput;
 
 @end
 
@@ -48,6 +49,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.conversation = channel.conversations.allObjects.lastObject;
         self.isModalPresentationPreferred = isModal;
         self.sentImage=[UIImage imageNamed:@"konotor_sent.png"];
+        self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
     return self;
@@ -176,7 +178,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
     [self.view endEditing:YES];
-    [KonotorImageInput showInputOptions:self];
+    [self.imageInput showInputOptions:self];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{

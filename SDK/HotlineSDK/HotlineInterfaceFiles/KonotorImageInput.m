@@ -10,36 +10,41 @@
 #import "KonotorFeedbackScreen.h"
 #import <QuartzCore/QuartzCore.h>
 
-static KonotorImageInput* konotorImageInput=nil;
+@interface KonotorImageInput ()
+
+@property (nonatomic, strong) KonotorConversation *conversation;
+@property (nonatomic, strong) HLChannel *channel;
+
+@end
 
 @implementation KonotorImageInput
+
 @synthesize sourceView,alertOptions,sourceViewController,imagePicked,popover;
 
-+ (KonotorImageInput*) sharedInstance
-{
-    if(konotorImageInput==nil){
-        konotorImageInput=[[KonotorImageInput alloc] init];
+- (instancetype)initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    self = [super init];
+    if (self) {
+        self.conversation = conversation;
+        self.channel = channel;
     }
-    return konotorImageInput;
+    return self;
 }
 
-
-+ (void) showInputOptions:(UIViewController*) viewController
-{
+- (void) showInputOptions:(UIViewController*) viewController{
     
     if([[KonotorUIParameters sharedInstance] noPhotoOption]){
-        konotorImageInput.sourceViewController=viewController;
-        konotorImageInput.sourceView=viewController.view;
-        [[KonotorImageInput sharedInstance] showImagePicker];
+        self.sourceViewController=viewController;
+        self.sourceView=viewController.view;
+        [self showImagePicker];
         return;
     }
     UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:@"Message Type" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Select Existing Image",@"New Image via Camera",nil];
-    inputOptions.delegate=[KonotorImageInput sharedInstance];
-    konotorImageInput.sourceViewController=viewController;
-    konotorImageInput.sourceView=viewController.view;
-    [inputOptions showInView:konotorImageInput.sourceView];
-
+    inputOptions.delegate = self;
+    self.sourceViewController=viewController;
+    self.sourceView=viewController.view;
+    [inputOptions showInView:self.sourceView];
 }
+
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -94,16 +99,16 @@ static KonotorImageInput* konotorImageInput=nil;
         [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
 }
 
-+ (void) rotateToOrientation:(UIInterfaceOrientation) orientation duration:(NSTimeInterval) duration
+- (void) rotateToOrientation:(UIInterfaceOrientation) orientation duration:(NSTimeInterval) duration
 {
-    if(konotorImageInput.imagePicked){
-        UIImage* img=[KonotorImageInput sharedInstance].imagePicked;
-        [[KonotorImageInput sharedInstance] dismissImageSelection];
+    if(self.imagePicked){
+        UIImage* img=self.imagePicked;
+        [self dismissImageSelection];
         
-        [KonotorImageInput sharedInstance].imagePicked=img;
+        self.imagePicked=img;
         
         NSDictionary* info=[[NSDictionary alloc] initWithObjectsAndKeys:img,UIImagePickerControllerOriginalImage,nil];
-        [[KonotorImageInput sharedInstance] imagePickerController:nil didFinishPickingMediaWithInfo:info];
+        [self imagePickerController:nil didFinishPickingMediaWithInfo:info];
  
     }
 }
@@ -230,18 +235,13 @@ static KonotorImageInput* konotorImageInput=nil;
 
 }
 
-- (void) dismissImageSelectionWithSelectedImage:(id) sender
-{
-    [Konotor uploadImage:self.imagePicked];
+- (void)dismissImageSelectionWithSelectedImage:(id) sender{
+    [Konotor uploadImage:self.imagePicked onConversation:self.conversation onChannel:self.channel];
     [self cleanUpImageSelection];
-    [KonotorFeedbackScreen refreshMessages];
     self.imagePicked=nil;
-
 }
 
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     if(popover){
         [popover dismissPopoverAnimated:YES];
         popover=nil;

@@ -86,51 +86,15 @@ static id <KonotorDelegate> _delegate;
     [KonotorApp UpdateAppAndSDKVersions];
 }
 
-+(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate
-{
++(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate{
     
-    /*NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *urlString = [defaults stringForKey:@"currentKonotorAppDetails"];
-    if(urlString)
-    {
-        NSURL *mouri = [NSURL URLWithString:urlString];
-        NSPersistentStoreCoordinator *coord = [[KonotorDataManager sharedInstance]persistentStoreCoordinator];
-        NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]managedObjectContext];
-        
-        KonotorApp *appData = (KonotorApp*)[context objectWithID:[coord managedObjectIDForURIRepresentation:mouri]];
-        [appData setAppID:AppID];
-        [appData setAppKey:AppKey];
-        
-        [[KonotorDataManager sharedInstance]save];
-
-    }
-    
-    else
-    {
-        KonotorApp *appData = (KonotorApp *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorApp" inManagedObjectContext:[[KonotorDataManager sharedInstance]managedObjectContext]];
-        
-        [appData setAppID:AppID];
-        [appData setAppKey:AppKey];
-        [[KonotorDataManager sharedInstance]save];
-        
-               
-        
-        NSURL *moURI = [[appData objectID] URIRepresentation];
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:[moURI absoluteString] forKey:@"currentKonotorAppDetails"];
-        [defaults synchronize];
-     }*/
-    
-    if(KONOTOR_APP_INIT_DONE)
-    {
+    if(KONOTOR_APP_INIT_DONE){
         return;
     }
     
 
-    if (![NSThread isMainThread])
-    {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
+    if (![NSThread isMainThread]){
+        dispatch_async(dispatch_get_main_queue(),^{
             [Konotor InitSequenceWithAppID:AppID AppKey:AppKey withDelegate:delegate];
         });
         
@@ -141,9 +105,6 @@ static id <KonotorDelegate> _delegate;
         [Konotor InitSequenceWithAppID:AppID AppKey:AppKey withDelegate:delegate];
                            
     }
-    
-
-    
 }
 
 +(void) sendAllUnsentMessages{
@@ -152,27 +113,18 @@ static id <KonotorDelegate> _delegate;
     }
 }
 
-
-+(void) PerformAllPendingTasks
-{
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-
-        if(KONOTOR_APP_INIT_DONE)
-        {
++(void) PerformAllPendingTasks{
+    dispatch_async(dispatch_get_main_queue(),^{
+        if(KONOTOR_APP_INIT_DONE){
             [KonotorShareMessageEvent UploadAllUnuploadedEvents];
             [KonotorCustomProperty UploadAllUnuploadedProperties];
             [KonotorMessage uploadAllUnuploadedMessages];
             [KonotorConversation DownloadAllMessages];
             [KonotorApp SendCachedTokenIfNotUpdated];
             [KonotorApp UpdateAppAndSDKVersions];
-
         }
     });
-
-    
 }
-
 
 +(BOOL) areConversationsDownloading
 {
@@ -247,21 +199,15 @@ static id <KonotorDelegate> _delegate;
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
-+(void) uploadImage:(UIImage *) image{
-    NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:nil];
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
-    if(messageID){
-        [KonotorWebServices uploadMessage:message toConversation:nil onChannel:nil];
-    }
-    [[Konotor delegate] didStartUploadingNewMessage];
++(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    [self uploadImage:image withCaption:nil onConversation:conversation onChannel:channel];
 }
 
-+(void) uploadImage:(UIImage *) image withCaption:(NSString *)caption{
++(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption];
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
-    
     if(messageID){
-        [KonotorWebServices uploadMessage:message toConversation:nil onChannel:nil];
+        [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
     }
     [[Konotor delegate] didStartUploadingNewMessage];
 }

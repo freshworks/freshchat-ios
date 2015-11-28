@@ -325,7 +325,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
                     KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
-                    [KonotorWebServices uploadMessage:message toConversation:convo onChannel:nil];
+                    if (convo) {
+                        [KonotorWebServices uploadMessage:message toConversation:convo onChannel:nil];
+                    }
                 }
             }
         }

@@ -76,11 +76,10 @@ enum KonotorMessageUploadStatus
 +(double) getCurrentPlayingAudioTime;
 +(NSString *)getCurrentPlayingMessageID;
 
-
-+(void) uploadVoiceRecordingWithMessageID: (NSString *)messageID;
++(void)uploadVoiceRecordingWithMessageID: (NSString *)messageID;
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void) uploadImage:(UIImage *) image;
-+(void) uploadImage:(UIImage *) image withCaption:(NSString*) caption;
++(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 
 +(void) DownloadAllMessages;
 +(void) sendAllUnsentMessages;

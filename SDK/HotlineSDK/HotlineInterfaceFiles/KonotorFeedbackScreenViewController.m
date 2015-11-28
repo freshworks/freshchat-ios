@@ -282,7 +282,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
 {
     UIInterfaceOrientation toInterfaceOrientation=(UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))?(UIInterfaceOrientationPortrait):(UIInterfaceOrientationLandscapeLeft);
     [KonotorVoiceInputOverlay rotateToOrientation:toInterfaceOrientation duration:0];
-    [KonotorImageInput rotateToOrientation:toInterfaceOrientation duration:0];
+//    [KonotorImageInput rotateToOrientation:toInterfaceOrientation duration:0];
     if(self.messagesView.fullImageView)
         [self.messagesView.fullImageView rotateToOrientation:toInterfaceOrientation duration:0];
 
@@ -302,7 +302,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 - (void) showImageInput
 {
-    [KonotorImageInput showInputOptions:self];
+//    [KonotorImageInput showInputOptions:self];
 
 }
 

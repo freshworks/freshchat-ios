@@ -20,8 +20,8 @@
 @property (strong, nonatomic) UIImage* imagePicked;
 @property (strong, nonatomic) UIPopoverController* popover;
 
-+ (KonotorImageInput*) sharedInstance;
-+ (void) showInputOptions:(UIViewController*) viewController;
-+ (void) rotateToOrientation:(UIInterfaceOrientation) orientation duration:(NSTimeInterval) duration;
+- (instancetype)initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+- (void) showInputOptions:(UIViewController*) viewController;
+- (void) rotateToOrientation:(UIInterfaceOrientation) orientation duration:(NSTimeInterval) duration;
 
 @end
