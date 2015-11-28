@@ -23,11 +23,13 @@
 
 -(NSURLSessionDataTask *)fetchAllCategories{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
     request.HTTPMethod = HTTP_METHOD_GET;
-    NSString *appID = @"4a10bd32-f0a5-4ac4-b95e-a88d405d0650";
-    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"3b649759-435e-4111-a504-c02335b9f999"];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES,appID];
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         [self importSolutions:responseObject];

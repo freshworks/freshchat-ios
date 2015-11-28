@@ -16,6 +16,8 @@
 #import "HLChannelViewController.h"
 #import "KonotorDataManager.h"
 #import "FDMessageController.h"
+#import "FDSecureStore.h"
+#import "HLMacros.h"
 
 @interface Hotline ()
 
@@ -70,11 +72,15 @@
 }
 
 -(void)InitWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setObject:AppID forKey:HOTLINE_DEFAULTS_APP_ID];
+    [store setObject:AppKey forKey:HOTLINE_DEFAULTS_APP_KEY];
     if (delegate) {
         [Konotor InitWithAppID:AppID AppKey:AppKey withDelegate:delegate];
     }else{
         [Konotor InitWithAppID:AppID AppKey:AppKey withDelegate:[KonotorEventHandler sharedInstance]];
     }
+    FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
 }
 
 +(void)setUnreadWelcomeMessage:(NSString *)text{
