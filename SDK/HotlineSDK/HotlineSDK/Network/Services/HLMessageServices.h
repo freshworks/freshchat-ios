@@ -11,7 +11,5 @@
 @interface HLMessageServices : NSObject
 
 -(NSURLSessionDataTask *)fetchAllChannels;
--(void)importChannels:(NSDictionary *)responseObject;
-
 
 @end

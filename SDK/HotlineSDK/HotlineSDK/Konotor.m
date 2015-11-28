@@ -20,6 +20,8 @@
 #import "WebServices.h"
 #import "KonotorShareMessageEvent.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "HLMacros.h"
+#import "HLMessageServices.h"
 
 
 extern  bool KONOTOR_APP_INIT_DONE;
@@ -114,8 +116,10 @@ static id <KonotorDelegate> _delegate;
 }
 
 +(void) PerformAllPendingTasks{
+    FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
         if(KONOTOR_APP_INIT_DONE){
+            [[[HLMessageServices alloc]init]fetchAllChannels];
             [KonotorShareMessageEvent UploadAllUnuploadedEvents];
             [KonotorCustomProperty UploadAllUnuploadedProperties];
             [KonotorMessage uploadAllUnuploadedMessages];
