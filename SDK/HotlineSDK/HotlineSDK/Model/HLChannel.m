@@ -50,7 +50,6 @@
     });
     channel.icon = imageData;
     channel.welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
-    
     return channel;
 }
 

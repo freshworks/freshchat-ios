@@ -124,7 +124,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     [message setMessageUserId:[KonotorUser GetUserAlias]];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
-    [message setMessageType:[NSNumber numberWithInt:3]];
+    [message setMessageType:@3];
     [message setMessageRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     [message setPicCaption:caption];
@@ -562,7 +562,17 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 +(NSArray *)getAllMesssageForChannel:(HLChannel *)channel{
-    return nil;
+    KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
+    NSManagedObjectContext *context = [datamanager mainObjectContext];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"belongsToChannel.channelID == %@",channel.channelID];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    NSMutableArray *messages = [[NSMutableArray alloc]init];
+    for (int i=0; i<matches.count; i++) {
+        KonotorMessageData *message = [matches[i] ReturnMessageDataFromManagedObject];
+        [messages addObject:message];
+    }
+    return messages;
 }
 
 @end

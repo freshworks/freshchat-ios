@@ -447,21 +447,20 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)updateMessages{
-    NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSMutableArray *messages = [NSMutableArray new];
-    if (self.channel.conversations.allObjects.lastObject) {
-        [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:self.channel.conversations.allObjects.lastObject.conversationAlias]mutableCopy]];;
-    }else{
-        [messages addObjectsFromArray:[[KonotorMessage getAllMesssageForChannel:self.channel]mutableCopy]];
-    }
-    
-    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-    [messages insertObject:welcomeMsg atIndex:0];
-    self.messages = [messages sortedArrayUsingDescriptors:@[desc]];
+    self.messages = [self fetchMessages];
     messageCount=(int)[self.messages count];
 }
 
-- (void) refreshView{
+- (void)refreshView{
+    self.messages = [self fetchMessages];
+    messageCount=(int)self.messages.count;
+    messageCount_prev = (int)self.messages.count;
+    [self.tableView reloadData];
+    [Konotor markAllMessagesAsRead];
+    [self scrollTableViewToLastCell];
+}
+
+-(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSMutableArray *messages = [NSMutableArray new];
     KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
@@ -472,16 +471,12 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         [messages addObjectsFromArray:[[KonotorMessage getAllMesssageForChannel:self.channel]mutableCopy]];
     }
     
-    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-    [messages insertObject:welcomeMsg atIndex:0];
-    self.messages = [messages sortedArrayUsingDescriptors:@[desc]];
-    messageCount=(int)self.messages.count;
-    messageCount_prev = (int)self.messages.count;
-    [self.tableView reloadData];
-    [Konotor markAllMessagesAsRead];
-    [self scrollTableViewToLastCell];
-}
+    //    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
+    //    [messages insertObject:welcomeMsg atIndex:0];
 
+    return [messages sortedArrayUsingDescriptors:@[desc]];
+    
+}
 
 #pragma Scrollview delegates
 
