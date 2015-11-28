@@ -13,7 +13,7 @@
 
 @interface KonotorWebServices : NSObject
 
-+(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversationToUploadTo;
++(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void) AddPushDeviceToken: (NSString *) deviceToken;
 +(void) DAUCall;
 +(void) UpdateUserPropertiesWithDictionary:(NSDictionary *) dict withProperty:(KonotorCustomProperty *)property;

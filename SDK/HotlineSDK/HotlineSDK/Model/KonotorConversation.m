@@ -64,7 +64,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             return conversation;
     }
     
-    
     if(!gkConversationIdConversationMap)
     {
         gkConversationIdConversationMap = [[ NSMutableDictionary alloc]init];
@@ -98,11 +97,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
             return conversation;
         }
     }
-    
-    
     return nil;
-    
-    
 }
 
 +(void) CreateDefaultConversation
@@ -126,18 +121,10 @@ NSMutableDictionary* gkConversationIdConversationMap;
     [[KonotorDataManager sharedInstance]save];
 }
 
-+(void) DownloadAllMessages
-{
++(void) DownloadAllMessages{
     NSString *pBasePath = [KonotorUtil GetBaseURL];
     
-    /*if(![KonotorUser  CreateUserOnServerIfNotPresent])
-    {
-     //add the delegate func to return failure here
-        return;
-    }*/
-    
-    if(![KonotorUser isUserCreatedOnServer])
-    {
+    if(![KonotorUser isUserCreatedOnServer]){
         [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(DownloadAllMessages) withObject:[KonotorConversation class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
         return;
 
@@ -168,25 +155,19 @@ NSMutableDictionary* gkConversationIdConversationMap;
     [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
     [KonotorApp updateConversationsDownloading:YES];
     
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error)
-     {
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
          NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
          int statusCode = (int)[httpResponse statusCode];
          
-         if(error || statusCode >= 400)
-         {
+         if(error || statusCode >= 400){
              [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
              [KonotorApp updateConversationsDownloading:NO];
 
              [Konotor performSelector:@selector(conversationsDownloadFailed)];
-
-             //NSLog(@"Download failed");
              return;
              
          }
-         
-         else
-         {
+         else {
              KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
              
              [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
@@ -197,9 +178,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
              
              NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
              
-             if(!toplevel)
-             {
-                 
+             if(!toplevel){
                  [KonotorApp updateConversationsDownloading:NO];
                  [Konotor performSelector:@selector(conversationsDownloaded)];
                  return;
@@ -212,8 +191,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
              if(lastmsgts)
                  [KonotorApp updateLastUpdatedConversations:lastmsgts];
                           
-             if(!pArrayOfConversations)
-             {
+             if(!pArrayOfConversations){
                  [KonotorApp updateConversationsDownloading:NO];
                  [Konotor performSelector:@selector(conversationsDownloaded)];
                  return;
@@ -228,16 +206,12 @@ NSMutableDictionary* gkConversationIdConversationMap;
              
              NSMutableSet *SetToWhichConversationsAreToBeAdded = [pUser mutableSetValueForKey:@"hasConversations"];
              
-             
-             for(KonotorConversation* conversationFromJSON in pArrayOfConversations)
-             {
+             for(KonotorConversation* conversationFromJSON in pArrayOfConversations){
                  
                  BOOL conversationFoundOnDisk = NO;
                  
-                 for(KonotorConversation *conversationFromDisk in ConversationArray)
-                 {
-                     if([[conversationFromJSON valueForKey:@"alias"] isEqualToString: conversationFromDisk.conversationAlias])
-                     {
+                 for(KonotorConversation *conversationFromDisk in ConversationArray){
+                     if([[conversationFromJSON valueForKey:@"alias"] isEqualToString: conversationFromDisk.conversationAlias]){
                          
                          conversationFoundOnDisk = YES;
                              
@@ -250,12 +224,10 @@ NSMutableDictionary* gkConversationIdConversationMap;
                          
                          NSMutableArray *messagesFromJSON = [conversationFromJSON valueForKey:@"messages"];
                          
-                         for(KonotorMessage *JSONMessage in messagesFromJSON)
-                         {
+                         for(KonotorMessage *JSONMessage in messagesFromJSON){
                              BOOL messageFoundOnDisk = NO;
                              
-                             for(KonotorMessage *DiskMessage in ExistingMessagesOnDisk)
-                             {
+                             for(KonotorMessage *DiskMessage in ExistingMessagesOnDisk){
                                  
                                  if([DiskMessage.messageAlias isEqualToString:[JSONMessage valueForKey:@"alias"]])
                                  {
@@ -265,8 +237,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                                  }
                              }
                              
-                             if(!messageFoundOnDisk)
-                             {
+                             if(!messageFoundOnDisk){
                                  
                                  //message not found on disk its a new message  add it to the conversation.
                                  KonotorMessage *messageToBeAdded = [KonotorMessage createNewMessage:JSONMessage];
@@ -275,8 +246,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
 
                                  [mutableSetOfExistingConversationsOnDisk addObject:messageToBeAdded];
                                  [messageToBeAdded setValue:conversationFromDisk forKey:@"belongsToConversation"];
-                                 
-                                 
                              }
                          }
                          
@@ -310,11 +279,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
              [KonotorApp updateConversationsDownloading:NO];
              [Konotor performSelector:@selector(conversationsDownloaded)];
          }//end of block of successful download of json of collections
-         
          [[KonotorDataManager sharedInstance]save];
      }];
-    
-
 }
 
 
@@ -403,9 +369,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
 
 }
 
-
-
-
 -(KonotorConversationData *) ReturnConversationDataFromManagedObject
 {
     KonotorConversationData *conversation = [[KonotorConversationData alloc]init];
@@ -414,6 +377,14 @@ NSMutableDictionary* gkConversationIdConversationMap;
     conversation.unreadMessagesCount = [self unreadMessagesCount];
     return conversation;
     
+}
+
++(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel{
+    KonotorConversation *newConversation = (KonotorConversation *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
+    newConversation.conversationAlias = conversationID;
+    newConversation.belongsToChannel = channel;    
+    [[KonotorDataManager sharedInstance]save];
+    return newConversation;
 }
 
 

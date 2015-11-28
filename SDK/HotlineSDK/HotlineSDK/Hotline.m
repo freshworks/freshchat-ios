@@ -48,7 +48,8 @@
         if (!error) {
             HLContainerController *preferredController = nil;
             if (channels.count == 1) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:nil andPresentModally:YES];
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
+                                                                                   andPresentModally:YES];
                 preferredController = [[HLContainerController alloc]initWithController:messageController];
             }else{
                 HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];

@@ -241,9 +241,9 @@ static id <KonotorDelegate> _delegate;
     return [KonotorAudioPlayer currentPlaying:nil set:NO ];
 }
 
-+(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation{
++(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback];
-    [KonotorWebServices uploadMessage:message toConversation:conversation];
+    [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
@@ -251,19 +251,17 @@ static id <KonotorDelegate> _delegate;
     NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:nil];
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
     if(messageID){
-        [KonotorWebServices uploadMessage:message toConversation:nil];
+        [KonotorWebServices uploadMessage:message toConversation:nil onChannel:nil];
     }
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
-+(void) uploadImage:(UIImage *) image withCaption:(NSString *)caption
-{
++(void) uploadImage:(UIImage *) image withCaption:(NSString *)caption{
     NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption];
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
     
-    if(messageID)
-    {
-        [KonotorWebServices uploadMessage:message toConversation:nil];
+    if(messageID){
+        [KonotorWebServices uploadMessage:message toConversation:nil onChannel:nil];
     }
     [[Konotor delegate] didStartUploadingNewMessage];
 }
@@ -322,6 +320,7 @@ static id <KonotorDelegate> _delegate;
 {
     return [KonotorConversation ReturnAllConversations];
 }
+
 
 +(NSArray *) getAllMessagesForConversation:(NSString *) conversationID
 {

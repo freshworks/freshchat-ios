@@ -253,8 +253,7 @@
 }
 
 
-+(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversationToUploadTo{
-
++(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
         [[KonotorDataManager sharedInstance]save];
@@ -272,19 +271,11 @@
     NSString *token = [KonotorApp GetAppKey];
 
     __block NSString *messageAlias = pMessage.messageAlias;
-
-    if(conversationToUploadTo == nil){
-        KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-        KonotorConversation *defaultConvo = (KonotorConversation *)[pUser valueForKeyPath:@"defaultConversation"];
-        [pMessage associateMessageToConversation:defaultConvo];
-    }else{
-        [pMessage associateMessageToConversation:conversationToUploadTo];
-    }
     
     if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING){
         return;
     }else{
-        [pMessage setUploadStatus:[NSNumber numberWithInt:MESSAGE_UPLOADING]];
+        pMessage.uploadStatus = @(MESSAGE_UPLOADING);
         [[KonotorDataManager sharedInstance]save];
     }
    
@@ -296,6 +287,12 @@
     NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock: ^(id <AFKonotorMultipartFormData>formData) {
         
         [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
+        [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding]
+                                    name:@"channelId"];
+        
+        if (conversation) {
+            [formData appendPartWithFormData:[conversation.conversationAlias dataUsingEncoding:NSUTF8StringEncoding] name:@"conversationId"];
+        }
         
         //if audio message add the binary audio also.
         if([[pMessage messageType]intValue]== 2){
@@ -311,10 +308,12 @@
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
             if(pBinary){
-                [formData appendPartWithFileData:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
+                [formData appendPartWithFileData:[pBinary binaryImage] name:@"picFile" fileName:@".jpg"
+                                        mimeType:@"application/octet-stream"];
                 
                 if([pBinary binaryThumbnail]){
-                    [formData appendPartWithFileData:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
+                    [formData appendPartWithFileData:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg"
+                                            mimeType:@"application/octet-stream"];
                 }
             }
         }
@@ -326,11 +325,17 @@
 
     [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
 
-        NSDictionary* reponseData = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
-        
-        //Get the message from DB and update the conversation ID.
-        //if the channel
+        NSDictionary* messageInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
 
+        if (!conversation) {
+            NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+            KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+            pMessage.belongsToConversation = newConversation;
+        }else{
+            pMessage.belongsToConversation = conversation;
+        }
+
+        pMessage.belongsToChannel = channel;
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         [[KonotorDataManager sharedInstance]save];
@@ -341,6 +346,7 @@
     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+        pMessage.belongsToChannel = channel;
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];

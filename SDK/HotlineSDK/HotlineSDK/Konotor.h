@@ -78,7 +78,7 @@ enum KonotorMessageUploadStatus
 
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)messageID;
-+(void) uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation;
++(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void) uploadImage:(UIImage *) image;
 +(void) uploadImage:(UIImage *) image withCaption:(NSString*) caption;
 

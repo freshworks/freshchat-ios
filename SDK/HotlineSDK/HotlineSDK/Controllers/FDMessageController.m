@@ -195,7 +195,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if([toSend isEqualToString:@""]){
         [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
     }else{
-        [Konotor uploadTextFeedback:toSend onConversation:self.conversation];
+        [Konotor uploadTextFeedback:toSend onConversation:self.channel.conversations.allObjects.lastObject onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
@@ -386,6 +386,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
             }
         }
     }
+    [self refreshView];
 }
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
@@ -405,6 +406,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void) didEncounterErrorWhileDownloadingConversations{
+    KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
+
     if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
         loading=NO;
         [self refreshView];
@@ -445,30 +448,33 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)updateMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    
-    if (self.conversation) {
-        self.messages=[[Konotor getAllMessagesForConversation:self.conversation.conversationAlias]
-                       sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+    NSMutableArray *messages = [NSMutableArray new];
+    if (self.channel.conversations.allObjects.lastObject) {
+        [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:self.channel.conversations.allObjects.lastObject.conversationAlias]mutableCopy]];;
     }else{
-        KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-        self.messages=[@[welcomeMsg] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+        [messages addObjectsFromArray:[[KonotorMessage getAllMesssageForChannel:self.channel]mutableCopy]];
     }
     
+    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
+    [messages insertObject:welcomeMsg atIndex:0];
+    self.messages = [messages sortedArrayUsingDescriptors:@[desc]];
     messageCount=(int)[self.messages count];
 }
 
 - (void) refreshView{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+    NSMutableArray *messages = [NSMutableArray new];
+    KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
     
-    if (self.conversation) {
-        self.messages=[[Konotor getAllMessagesForConversation:self.conversation.conversationAlias]
-                       sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
-        
+    if (conversation) {
+        [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:conversation.conversationAlias]mutableCopy]];;
     }else{
-        KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-        self.messages=[@[welcomeMsg] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+        [messages addObjectsFromArray:[[KonotorMessage getAllMesssageForChannel:self.channel]mutableCopy]];
     }
-
+    
+    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
+    [messages insertObject:welcomeMsg atIndex:0];
+    self.messages = [messages sortedArrayUsingDescriptors:@[desc]];
     messageCount=(int)self.messages.count;
     messageCount_prev = (int)self.messages.count;
     [self.tableView reloadData];

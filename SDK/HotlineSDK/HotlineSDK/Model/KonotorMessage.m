@@ -325,7 +325,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
                     KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
-                    [KonotorWebServices uploadMessage:message toConversation:convo];
+                    [KonotorWebServices uploadMessage:message toConversation:convo onChannel:nil];
                 }
             }
         }
@@ -561,5 +561,8 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return [channel.welcomeMessage ReturnMessageDataFromManagedObject];
 }
 
++(NSArray *)getAllMesssageForChannel:(HLChannel *)channel{
+    return nil;
+}
 
 @end

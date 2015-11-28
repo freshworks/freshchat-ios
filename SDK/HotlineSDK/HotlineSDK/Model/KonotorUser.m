@@ -151,7 +151,6 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
             
             [[KonotorDataManager sharedInstance]save];
             gCurrentUser = pUser;
-            [KonotorConversation CreateDefaultConversation];
             NSURL *moURI = [[pUser objectID] URIRepresentation];
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setObject:[moURI absoluteString] forKey:@"uriForCurrentlyLoggedInKonotorUser"];

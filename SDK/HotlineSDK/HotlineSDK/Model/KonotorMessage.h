@@ -70,6 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 -(BOOL) isMarketingMessage;
 +(KonotorMessageData *)getWelcomeMessageForChannel:(HLChannel *)channel;
++(NSArray *)getAllMesssageForChannel:(HLChannel *)channel;
 
 NS_ASSUME_NONNULL_END
 
