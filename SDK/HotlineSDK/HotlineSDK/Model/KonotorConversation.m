@@ -122,6 +122,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
 }
 
 +(void) DownloadAllMessages{
+    
     NSString *pBasePath = [KonotorUtil GetBaseURL];
     
     if(![KonotorUser isUserCreatedOnServer]){
@@ -181,11 +182,13 @@ NSMutableDictionary* gkConversationIdConversationMap;
              
              pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
              
-             NSNumber *lastmsgts = [KonotorConversation getLastMessageTimeStampOfTheseConversations:pArrayOfConversations];
+             NSNumber *lastUpdatedTime = [KonotorConversation getLastMessageTimeStampOfTheseConversations:pArrayOfConversations];
              
-             if(lastmsgts){
-                 [KonotorApp updateLastUpdatedConversations:lastmsgts];
+             if(lastUpdatedTime){
+                 [KonotorApp updateLastUpdatedConversations:lastUpdatedTime];
              }
+             
+             lastUpdatedTime = 0;
                           
              if(!pArrayOfConversations){
                  [KonotorApp updateConversationsDownloading:NO];
@@ -233,7 +236,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                                  //message not found on disk its a new message  add it to the conversation.
                                  KonotorMessage *messageToBeAdded = [KonotorMessage createNewMessage:JSONMessage];
                                  [conversationFromDisk incrementUnreadCount];
-                                 [messageToBeAdded setUploadStatus:[NSNumber numberWithInt:2]];
+                                 [messageToBeAdded setUploadStatus:@2];
 
                                  [mutableSetOfExistingConversationsOnDisk addObject:messageToBeAdded];
                                  [messageToBeAdded setValue:conversationFromDisk forKey:@"belongsToConversation"];
@@ -245,15 +248,15 @@ NSMutableDictionary* gkConversationIdConversationMap;
                      
                  }// end of loop iterating thru all collections from disk
                  
-                 if(!conversationFoundOnDisk) //collection not found on disk, add to disk.
-                 {
+                 //collection not found on disk, add to disk.
+                 if(!conversationFoundOnDisk){
                      KonotorConversation *newConversation = [KonotorConversation CreateNewConversation:conversationFromJSON];
 
                      NSMutableSet *ConversationtoWhichToBeAdded = [ newConversation mutableSetValueForKey:@"hasMessages"];
                      
                      for( KonotorMessage *newMessage in [conversationFromJSON valueForKey:@"messages"]){
                          KonotorMessage *messageToBeAdded = [KonotorMessage createNewMessage:newMessage];
-                         [messageToBeAdded setUploadStatus:[NSNumber numberWithInt:2]];
+                         [messageToBeAdded setUploadStatus:@2];
                          [newConversation incrementUnreadCount];
 
                          [ConversationtoWhichToBeAdded addObject:messageToBeAdded];
@@ -370,9 +373,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
     KonotorConversation *newConversation = (KonotorConversation *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
     newConversation.conversationAlias = conversationID;
     newConversation.belongsToChannel = channel;    
-    [[KonotorDataManager sharedInstance]save];
     return newConversation;
 }
-
 
 @end

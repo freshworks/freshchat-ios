@@ -408,8 +408,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void) didEncounterErrorWhileDownloadingConversations{
-    KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
-
     if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
         loading=NO;
         [self refreshView];
@@ -466,18 +464,16 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSMutableArray *messages = [NSMutableArray new];
     KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
+    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
+
+    if(welcomeMsg){
+        [messages insertObject:welcomeMsg atIndex:0];
+    }
     
     if (conversation) {
         [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:conversation.conversationAlias]mutableCopy]];;
-    }else{
-        [messages addObjectsFromArray:[[KonotorMessage getAllMesssageForChannel:self.channel]mutableCopy]];
     }
-    
-    //    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-    //    [messages insertObject:welcomeMsg atIndex:0];
-
     return [messages sortedArrayUsingDescriptors:@[desc]];
-    
 }
 
 #pragma Scrollview delegates

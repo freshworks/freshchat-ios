@@ -335,7 +335,6 @@
             pMessage.belongsToConversation = conversation;
         }
 
-        pMessage.belongsToChannel = channel;
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         [[KonotorDataManager sharedInstance]save];
@@ -346,7 +345,6 @@
     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-        pMessage.belongsToChannel = channel;
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];
