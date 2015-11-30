@@ -361,7 +361,7 @@
     BOOL KONOTOR_SHOWPROFILEIMAGE=NO;
     BOOL KONOTOR_SHOW_SENDERNAME=NO;
     
-    float maxTextWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
+    float maxTextWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH;
     float widthBufferIfNoProfileImage=5*KONOTOR_HORIZONTAL_PADDING;
     float maxAvailableWidth=parentView.frame.size.width-3*KONOTOR_HORIZONTAL_PADDING-(KONOTOR_SHOWPROFILEIMAGE?KONOTOR_PROFILEIMAGE_DIMENSION:widthBufferIfNoProfileImage);
     float width=MIN(maxAvailableWidth,maxTextWidth);
@@ -514,7 +514,7 @@
     CGSize size=[txtView sizeThatFits:CGSizeMake(width, 1000)];
     return size.height-16;
 }
-
+/*
 + (NSMutableAttributedString*) getAttributedStringWithText:(NSString*) messageText font:(UIFont*)font{
     NSString *htmlString = messageText;
     NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:font,NSFontAttributeName,nil];
@@ -522,6 +522,6 @@
     attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
     [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
     return attributedString;
-}
+}*/
 
 @end
