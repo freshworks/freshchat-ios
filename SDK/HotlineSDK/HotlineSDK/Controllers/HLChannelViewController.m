@@ -39,6 +39,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [self fetchUpdates];
+    self.footerView.hidden = YES;
 }
 
 -(void)updateChannels{
@@ -88,28 +89,15 @@
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
         }else{
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-            NSString *firstLetter = [channel.name substringToIndex:1];
-            firstLetter = [firstLetter uppercaseString];
-            label.text = firstLetter;
-            label.font = [UIFont boldSystemFontOfSize:16];
-            label.textColor = [UIColor whiteColor];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.backgroundColor = [UIColor lightGrayColor];
-            label.layer.cornerRadius = label.frame.size.height / 2.0f;
-            UIGraphicsBeginImageContext(label.frame.size);
-            [[label layer] renderInContext:UIGraphicsGetCurrentContext()];
-            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            cell.imgView.image = image;
+            cell.imgView.image = [FDChannelListViewCell generateImageForLabel:channel.name];
         }
-        cell.imgView.layer.cornerRadius = cell.imgView.frame.size.width / 2;
-        cell.imgView.layer.masksToBounds = YES;
+        cell.layer.borderWidth = 0.6;
+        cell.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
         cell.titleLabel.text  = channel.name;
         cell.detailLabel.text = channel.welcomeMessage.text;
         NSInteger unreadCount = [self getUnreadCountForConversation:channel.conversations];
-        [cell.badgeView updateBadgeCount:1];
-        cell.lastUpdatedLabel.text= [FDDateUtil itemCreatedDurationSinceDate:channel.lastUpdated];
+        [cell.badgeView updateBadgeCount:unreadCount];
+        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:channel.lastUpdated];
     }
     return cell;
 }
@@ -145,7 +133,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 90;
+    return 72;
 }
 
 -(void)closeButton:(id)sender{

@@ -104,6 +104,8 @@
         HLCategory *category =  self.categories[indexPath.row];
         cell.titleLabel.text  = category.title;
         cell.detailLabel.text = category.categoryDescription;
+        cell.layer.borderWidth = 0.6;
+        cell.layer.borderColor = [HLTheme colorWithHex:@"f2f2f2"].CGColor;
         cell.imgView.image = [UIImage imageWithData:category.icon];
     }
     return cell;
@@ -123,7 +125,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 100;
+    return 75;
 }
 
 @end

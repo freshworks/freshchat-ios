@@ -16,4 +16,6 @@
 @property (nonatomic,strong) UILabel *lastUpdatedLabel;
 @property (nonatomic,strong) UIImageView *accessoryButton;
 
++(UIImage *)generateImageForLabel:(NSString *)labelText;
+
 @end

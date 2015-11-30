@@ -16,5 +16,6 @@
 +(NSString *)itemCreatedDurationSinceDate:(NSDate*)date;
 +(NSString *)solutionsLastUpdatedWebFriendlyTime;
 +(NSString *)stringForUnixTime:(NSInteger)unixTime;
++(NSString *)getStringFromDate:(NSDate *)date;
 
 @end

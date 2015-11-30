@@ -161,15 +161,15 @@
 		<key>TitleFontColor</key>
 		<string>222222</string>
 		<key>TitleFontName</key>
-		<string>HelveticaNeue</string>
+		<string>HelveticaNeue-Medium</string>
 		<key>TitleFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
 		<key>DetailFontColor</key>
 		<string>222222</string>
 		<key>DetailFontName</key>
 		<string>HelveticaNeue</string>
 		<key>DetailFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
 		<key>ContactUsFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ContactUsFontColor</key>

@@ -9,6 +9,9 @@
 #import "HLListViewController.h"
 #import "KonotorFeedbackScreen.h"
 #import "HLMacros.h"
+#import "HLContainerController.h"
+#import "FDMessageController.h"
+#import "HLChannelViewController.h"
 
 @implementation HLListViewController
 
@@ -19,6 +22,7 @@
 
 -(void)setSubviews{
     self.tableView = [[UITableView alloc]init];
+    self.tableView.tableFooterView = [UIView new];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -40,7 +44,11 @@
 }
 
 -(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
-    [KonotorFeedbackScreen showFeedbackScreen];
+    HLContainerController *preferredController = nil;
+    HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
+    preferredController = [[HLContainerController alloc]initWithController:channelViewController];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

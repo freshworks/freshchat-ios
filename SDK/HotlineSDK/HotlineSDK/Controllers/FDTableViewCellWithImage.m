@@ -15,38 +15,36 @@
     if (self) {
         self.theme = [HLTheme sharedInstance];
     
-        self.titleLabel = [[UILabel alloc] init];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(57.5, 77, 61, 23.5)];
+        [self.titleLabel setNumberOfLines:2];
+        [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
         self.titleLabel.font = [self.theme tableViewCellDetailFont];
         self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
-        self.imgView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+        self.imgView=[[UIImageView alloc] initWithFrame:CGRectMake(21, 86, 13.9, 20.9)];
         self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
-        [self.imgView.layer setCornerRadius:8.0f];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.imgView setImage:[UIImage imageNamed:@"loading.png"]];
         
-        self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
-        [self.detailLabel setNumberOfLines:0];
+        self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(57, 98.5, 231.5, 16.9)];
+        [self.detailLabel setNumberOfLines:2];
         self.detailLabel.font = [self.theme tableViewCellDetailFont];
         self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
-        [self.detailLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
-        
         [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.detailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-
         
         [self.contentView addSubview:self.imgView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.detailLabel];
         
         NSDictionary *views = @{ @"imageView" : self.imgView, @"title" : self.titleLabel,@"subtitle":self.detailLabel};
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[title]-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[subtitle]-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[imageView(75)]" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[title]-[subtitle]-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(40)]-[title]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[imageView]-[subtitle]-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-13-[imageView(40)]" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[title]-10-[subtitle]" options:0 metrics:nil views:views]];
         
         [self setupTheme];
     }

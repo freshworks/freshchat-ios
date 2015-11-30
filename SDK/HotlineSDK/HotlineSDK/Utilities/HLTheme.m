@@ -8,9 +8,6 @@
 
 #import "HLTheme.h"
 #import "FDThemeConstants.h"
-#define FD_COLOR_WHITE @"FFFFFF"
-#define FD_DIALOGUES_BUTTON_FONT_COLOR @"007AFF"
-#define FD_COLOR_BLACK @"000000"
 
 @interface HLTheme ()
 
@@ -168,7 +165,7 @@
 }
 
 -(UIFont *)tableViewCellTitleFont{
-    return [self getFontWithKey:@"TableView.Title" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"TableView.Title" andDefaultSize:14];
 }
 
 -(UIColor *)tableViewCellTitleFontColor{
@@ -177,7 +174,7 @@
 }
 
 -(UIFont *)tableViewCellDetailFont{
-    return [self getFontWithKey:@"TableView.Detail" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"TableView.Detail" andDefaultSize:14];
 }
 
 -(UIColor *)tableViewCellDetailFontColor{
@@ -198,7 +195,7 @@
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
-    return color ? color : [UIColor lightGrayColor];
+    return color ? color : [HLTheme colorWithHex:FD_TABLEVIEW_SEPARATOR_COLOR];
 }
 
 -(UIColor *)timeDetailTextColor {
