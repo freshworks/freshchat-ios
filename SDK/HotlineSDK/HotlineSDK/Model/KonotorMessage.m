@@ -360,7 +360,8 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
     
     if([array count] >1){
-        NSLog(@"%@", @"Multiple Messages stored with the same message Id");
+        return array[0];
+        FDLog(@"%@", @"Multiple Messages stored with the same message Id");
     }else if([array count]==1){
         KonotorMessage *message = [array objectAtIndex:0];
         if(message){

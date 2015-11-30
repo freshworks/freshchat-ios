@@ -22,7 +22,7 @@
 
 -(void)konotorIntegration{
     Hotline *hotlineSDK = [Hotline sharedInstance];
-    [hotlineSDK InitWithAppID:@"b120cc8a-3585-4f46-b89f-6c5f54c0c7f2" AppKey:@"818ce610-019c-4049-8c91-808669978c7a" withDelegate:nil];
+    [hotlineSDK InitWithAppID:@"4a10bd32-f0a5-4ac4-b95e-a88d405d0650" AppKey:@"3b649759-435e-4111-a504-c02335b9f999" withDelegate:nil];
 }
 
 @end
