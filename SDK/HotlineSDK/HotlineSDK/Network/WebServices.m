@@ -328,9 +328,11 @@
         NSDictionary* messageInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
 
         if (!conversation) {
+            KonotorUser* user = [KonotorUser GetCurrentlyLoggedInUser];
             NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
             KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
             pMessage.belongsToConversation = newConversation;
+            [user addHasConversationsObject:newConversation];
         }else{
             pMessage.belongsToConversation = conversation;
         }

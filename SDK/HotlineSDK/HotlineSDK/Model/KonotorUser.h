@@ -10,6 +10,8 @@
 #import <CoreData/CoreData.h>
 #import "KonotorConversation.h"
 
+@class KonotorConversation;
+
 @interface KonotorUserData : NSObject
 
 @property (strong, nonatomic) NSString *name;
@@ -26,7 +28,7 @@
 @property (strong, retain) NSString *appSpecificIdentifier;
 @property (strong, retain) NSString *userAlias;
 @property (nonatomic) BOOL isUserCreatedOnServer;
-@property (nonatomic, strong) NSSet *hasConversations;
+@property (nonatomic, strong) NSSet<KonotorConversation *> *hasConversations;
 
 +(void)InitUser;
 +(BOOL)isUserPresent;
@@ -41,5 +43,7 @@
 +(void) setUserName: (NSString *) fullName;
 +(void) setUserEmail: (NSString *) email;
 +(void) setCustomUserProperty:(NSString *) value forKey: (NSString*) key;
+
+- (void)addHasConversationsObject:(KonotorConversation *)value;
 
 @end
