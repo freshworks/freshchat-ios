@@ -14,6 +14,7 @@
 #import "KonotorMessageBinary.h"
 #import "KonotorApp.h"
 #import "KonotorDataManager.h"
+#import "HLMacros.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -308,6 +309,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 +(void)uploadAllUnuploadedMessages{
+    FDLog(@"Uploading all unuploaded messages");
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
@@ -321,9 +323,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
             return;
         }else{
             for(int i=0;i<[array count];i++){
-                KonotorMessage *message = [array objectAtIndex:i];
+                KonotorMessage *message = array[i];
                 if(message){
-                    KonotorConversation *convo = [message valueForKey:@"belongsToConversation"];
+                    KonotorConversation *convo = message.belongsToConversation;
                     if (convo) {
                         [KonotorWebServices uploadMessage:message toConversation:convo onChannel:nil];
                     }

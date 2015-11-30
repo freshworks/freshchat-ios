@@ -95,17 +95,15 @@
         cell.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
         cell.titleLabel.text  = channel.name;
         cell.detailLabel.text = channel.welcomeMessage.text;
-        NSInteger unreadCount = [self getUnreadCountForConversation:channel.conversations];
+        NSInteger unreadCount = [self getUnreadCountForConversation:channel.conversations.allObjects.firstObject];
         [cell.badgeView updateBadgeCount:unreadCount];
         cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:channel.lastUpdated];
     }
     return cell;
 }
 
--(NSInteger)getUnreadCountForConversation:(NSSet *)conversations{
-    NSArray *conversationsArray = conversations.allObjects;
-    KonotorConversation *conversation = conversationsArray.firstObject;
-    NSInteger unreadCount = conversation.unreadMessagesCount;
+-(NSInteger)getUnreadCountForConversation:(KonotorConversation *)conversation{
+    NSInteger unreadCount = conversation;
     if (unreadCount==0) {
         return 0;
     }else{
@@ -113,8 +111,7 @@
     }
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
 

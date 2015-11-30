@@ -34,29 +34,22 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
 
 NSMutableDictionary* gkConversationIdConversationMap;
 
--(void) incrementUnreadCount
-{
-    int unread = [[self unreadMessagesCount]intValue];
+-(void)incrementUnreadCount{
+    int unread = self.unreadMessagesCount.intValue;
     unread++;
-    
-    [self setUnreadMessagesCount:[NSNumber numberWithInt:unread]];
+    self.unreadMessagesCount = @(unread);
     [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
-
     [[KonotorDataManager sharedInstance]save];
 }
--(void) decrementUnreadCount
-{
+
+-(void)decrementUnreadCount{
     int unread = [[self unreadMessagesCount]intValue];
-    if(unread > 0)
-    {
+    if(unread > 0){
         unread--;
     }
-    
     [self setUnreadMessagesCount:[NSNumber numberWithInt:unread]];
     [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
-
     [[KonotorDataManager sharedInstance]save];
-
 }
 
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId
@@ -286,28 +279,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
     
 }
 
-+(KonotorConversation *)CreateNewConversation:(KonotorConversation *)conversation
-{
-    KonotorConversation *newConversation = (KonotorConversation *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
-    
-    newConversation.conversationAlias = [conversation valueForKey:@"alias"];
-    
-    KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-
-    NSMutableSet *SetToWhichConversationsAreToBeAdded = [pUser mutableSetValueForKey:@"hasConversations"];
-
-    [SetToWhichConversationsAreToBeAdded addObject:newConversation];
-
-    [[KonotorDataManager sharedInstance]save];
-    return newConversation;
-    
-    
-
-}
-
-
-+(NSArray *) ReturnAllConversations
-{
++(NSArray *) ReturnAllConversations{
     
     KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
     if(pUser)
