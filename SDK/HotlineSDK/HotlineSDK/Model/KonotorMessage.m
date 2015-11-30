@@ -109,7 +109,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     [message setMessageUserId:[KonotorUser GetUserAlias]];
-    [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:@1];
     [message setMessageRead:YES];
     [message setText:text];
@@ -385,7 +384,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
 
 -(NSString *)getJSON{
     NSMutableDictionary *messageDict = [[NSMutableDictionary alloc]init];
-    [messageDict setObject:[self messageAlias] forKey:@"alias"];
     [messageDict setObject:[self messageType] forKey:@"messageType"];
     if([[self messageType] intValue ]== 1)
         [messageDict setObject:[self text] forKey:@"text"];
@@ -446,10 +444,10 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
 }
 
-+(KonotorMessage *)createNewMessage: (KonotorMessage *)message{
++(KonotorMessage *)createNewMessage:(NSDictionary *)message{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    newMessage.messageAlias = [message valueForKey:@"alias"];
+    newMessage.messageAlias = [[message valueForKey:@"messageId"]stringValue];
     newMessage.messageType = [message valueForKey:@"messageType"];
     newMessage.messageUserId = [message valueForKey:@"messageUserAlias"];
     newMessage.bytes = [message valueForKey:@"bytes"];

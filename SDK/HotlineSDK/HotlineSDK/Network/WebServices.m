@@ -339,6 +339,7 @@
 
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
+        pMessage.messageAlias = [messageInfo[@"messageId"]stringValue];
         [[KonotorDataManager sharedInstance]save];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];

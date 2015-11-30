@@ -12,6 +12,7 @@
 #import "Hotline.h"
 #import "KonotorMessage.h"
 #import "Konotor.h"
+#import "HLMacros.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -28,6 +29,8 @@
 @property (nonatomic, strong) UIImage *sentImage;
 @property (nonatomic,strong) KonotorConversation *conversation;
 @property (nonatomic, strong)KonotorImageInput *imageInput;
+@property (strong, nonatomic) NSTimer *pollingTimer;
+
 
 @end
 
@@ -63,6 +66,38 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self setNavigationItem];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
+    [KonotorConversation DownloadAllMessages];
+}
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self startPoller];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self cancelPoller];
+}
+
+-(void)startPoller{
+    if(![self.pollingTimer isValid]){
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(pollMessages:)
+                                                           userInfo:nil repeats:YES];
+        FDLog(@"Starting Poller");
+    }
+}
+
+-(void)cancelPoller{
+    if([self.pollingTimer isValid]){
+        [self.pollingTimer invalidate];
+        FDLog(@"Cancelled Poller");
+    }
+}
+
+-(void)pollMessages:(NSTimer *)timer{
+    [KonotorConversation DownloadAllMessages];
+    [self refreshView];
 }
 
 -(void)setNavigationItem{
@@ -202,6 +237,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     }
+    [self refreshView];
 }
 
 -(void)checkPushNotificationState{
@@ -254,11 +290,11 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
-
+    [self startPoller];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
-    
+    [self cancelPoller];
 }
 
 #pragma mark Keyboard delegate

@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(KonotorMessage *) retriveMessageForMessageId: (NSString *)messageId;
 -(NSString *) getJSON;
 +(NSString *)generateMessageID;
-+(KonotorMessage *)createNewMessage: (KonotorMessage *)message;
++(KonotorMessage *)createNewMessage:(NSDictionary *)message;
 -(void) associateMessageToConversation: (KonotorConversation *)conversation;
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text;
 +(NSString*)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption;

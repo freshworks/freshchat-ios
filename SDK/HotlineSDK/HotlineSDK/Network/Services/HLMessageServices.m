@@ -12,13 +12,12 @@
 #import "HLMacros.h"
 #import "FDSecureStore.h"
 #import "KonotorDataManager.h"
-#import "HLChannel.h"
 #import "HLAPI.h"
 #import "FDLocalNotification.h"
 
 @implementation HLMessageServices
 
--(NSURLSessionDataTask *)fetchAllChannels{
+-(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
@@ -29,13 +28,18 @@
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
-        [self importChannels:responseObject];
-        [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+        if (!error) {
+            [self importChannels:responseObject hanlder:handler];
+            [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+        }else{
+            if (handler) handler(nil, error);
+        }
     }];
     return task;
 }
 
--(void)importChannels:(NSDictionary *)responseObject{
+-(void)importChannels:(NSDictionary *)responseObject hanlder:(void (^)(NSArray *channels, NSError *error))handler;{
+    NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
         NSArray *channels = (NSArray *)responseObject;
@@ -54,9 +58,11 @@
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
+                [channelList addObject:channel];
             }
         }
         [context save:nil];
+        if (handler) handler(channelList,nil);
         [self postNotification];
     }];
 }

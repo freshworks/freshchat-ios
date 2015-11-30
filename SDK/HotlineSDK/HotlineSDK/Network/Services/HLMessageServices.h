@@ -7,9 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HLChannel.h"
 
 @interface HLMessageServices : NSObject
 
--(NSURLSessionDataTask *)fetchAllChannels;
+// fetches channel list, updates existing channels including hidden channels
+-(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler;
 
 @end

@@ -119,7 +119,7 @@ static id <KonotorDelegate> _delegate;
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
         if(KONOTOR_APP_INIT_DONE){
-            [[[HLMessageServices alloc]init]fetchAllChannels];
+//            [[[HLMessageServices alloc]init]fetchAllChannels:nil];
             [KonotorShareMessageEvent UploadAllUnuploadedEvents];
             [KonotorCustomProperty UploadAllUnuploadedProperties];
             [KonotorMessage uploadAllUnuploadedMessages];
