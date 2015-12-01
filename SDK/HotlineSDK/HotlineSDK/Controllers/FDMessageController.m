@@ -13,6 +13,7 @@
 #import "KonotorMessage.h"
 #import "Konotor.h"
 #import "HLMacros.h"
+#import "FDLocalNotification.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -68,7 +69,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self scrollTableViewToLastCell];
     [KonotorConversation DownloadAllMessages];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -283,6 +283,12 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                              selector: @selector(handleBecameActive:)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
+    
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil
+                                                      queue:nil usingBlock:^(NSNotification *note) {
+         [KonotorMessage uploadAllUnuploadedMessages];
+    }];
+
 }
 
 -(void)localNotificationUnSubscription{
