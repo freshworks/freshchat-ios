@@ -104,6 +104,10 @@ enum KonotorToastStyle{
 @property (nonatomic) int pollingTimeNotOnChatWindow;
 @property (nonatomic) BOOL alwaysPollForMessages;
 
+@property (nonatomic) UIEdgeInsets userChatBubbleInsets;
+@property (nonatomic) UIEdgeInsets otherChatBubbleInsets;
+
+
 
 @property (nonatomic) enum UIModalTransitionStyle overlayTransitionStyle;
 

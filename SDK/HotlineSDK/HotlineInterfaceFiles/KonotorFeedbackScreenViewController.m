@@ -366,7 +366,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 @implementation KonotorUIParameters
 
-@synthesize disableTransparentOverlay,headerViewColor,backgroundViewColor,voiceInputEnabled,imageInputEnabled,closeButtonImage,toastStyle,autoShowTextInput,titleText,toastBGColor,toastTextColor,textInputButtonImage,titleTextColor,showInputOptions,noPhotoOption,titleTextFont,allowSendingEmptyMessage,dontShowLoadingAnimation,sendButtonColor,doneButtonColor,userChatBubble,userTextColor,otherChatBubble,otherTextColor,overlayTransitionStyle,inputHintText,userProfileImage,otherProfileImage,showOtherName,showUserName,otherName,userName,messageTextFont,inputTextFont,notificationCenterMode,customFontName,doneButtonFont,doneButtonText,dismissesInputOnScroll,alwaysPollForMessages,pollingTimeNotOnChatWindow,pollingTimeOnChatWindow/*,cancelButtonText,cancelButtonFont,cancelButtonColor*/;
+@synthesize disableTransparentOverlay,headerViewColor,backgroundViewColor,voiceInputEnabled,imageInputEnabled,closeButtonImage,toastStyle,autoShowTextInput,titleText,toastBGColor,toastTextColor,textInputButtonImage,titleTextColor,showInputOptions,noPhotoOption,titleTextFont,allowSendingEmptyMessage,dontShowLoadingAnimation,sendButtonColor,doneButtonColor,userChatBubble,userTextColor,otherChatBubble,otherTextColor,overlayTransitionStyle,inputHintText,userProfileImage,otherProfileImage,showOtherName,showUserName,otherName,userName,messageTextFont,inputTextFont,notificationCenterMode,customFontName,doneButtonFont,doneButtonText,dismissesInputOnScroll,alwaysPollForMessages,pollingTimeNotOnChatWindow,pollingTimeOnChatWindow,otherChatBubbleInsets,userChatBubbleInsets/*,cancelButtonText,cancelButtonFont,cancelButtonColor*/;
 
 + (KonotorUIParameters*) sharedInstance
 {
@@ -396,10 +396,10 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.sendButtonColor=nil;
         konotorUIParameters.doneButtonColor=nil;
         
-        konotorUIParameters.otherTextColor=nil;
-        konotorUIParameters.otherChatBubble=nil;
-        konotorUIParameters.userTextColor=nil;
-        konotorUIParameters.userChatBubble=nil;
+        konotorUIParameters.otherTextColor=[UIColor blackColor];
+        konotorUIParameters.otherChatBubble=[UIImage imageNamed:@"messagebubble_left"];
+        konotorUIParameters.userTextColor=[UIColor darkGrayColor];
+        konotorUIParameters.userChatBubble=[UIImage imageNamed:@"messagebubble_right"];
         konotorUIParameters.userProfileImage=nil;
         konotorUIParameters.otherProfileImage=nil;
         
@@ -423,6 +423,9 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.pollingTimeOnChatWindow=10;
         konotorUIParameters.pollingTimeNotOnChatWindow=-1;
         konotorUIParameters.alwaysPollForMessages=NO;
+        
+        konotorUIParameters.otherChatBubbleInsets=UIEdgeInsetsMake(19, 24, 20, 15);
+        konotorUIParameters.userChatBubbleInsets=UIEdgeInsetsMake(20, 15, 19, 24);
         
     }
     return konotorUIParameters;

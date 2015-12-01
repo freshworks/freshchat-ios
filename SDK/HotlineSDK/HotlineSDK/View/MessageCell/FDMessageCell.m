@@ -207,21 +207,19 @@
     else
         [uploadStatusImageView setImage:sendingImage];
     
-    
-    UIEdgeInsets insets=UIEdgeInsetsMake(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_BOTTOM_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_RIGHT_INSET);
-    
+        
     KonotorUIParameters* interfaceOptions=[KonotorUIParameters sharedInstance];
     if(isSenderOther){
         senderNameLabel.text=@"Support";
         [uploadStatusImageView setImage:nil];
-        [chatCalloutImageView setImage:[((interfaceOptions.otherChatBubble==nil)?[UIImage imageNamed:@"konotor_chatbubble_ios7_other.png"]:interfaceOptions.otherChatBubble) resizableImageWithCapInsets:insets]];
+        [chatCalloutImageView setImage:[interfaceOptions.otherChatBubble resizableImageWithCapInsets:interfaceOptions.otherChatBubbleInsets]];
         [senderNameLabel setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERNAME_TEXT_COLOR:interfaceOptions.otherTextColor)];
         [messageTextView setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERMESSAGE_TEXT_COLOR:interfaceOptions.otherTextColor)];
         [messageSentTimeLabel setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERTIMESTAMP_COLOR:interfaceOptions.otherTextColor)];
     }
     else{
         senderNameLabel.text=@"You";
-        [chatCalloutImageView setImage:[((interfaceOptions.userChatBubble==nil)?[UIImage imageNamed:@"konotor_chatbubble_ios7_you.png"]:interfaceOptions.userChatBubble) resizableImageWithCapInsets:insets]];
+        [chatCalloutImageView setImage:[interfaceOptions.userChatBubble resizableImageWithCapInsets:interfaceOptions.userChatBubbleInsets]];
         [senderNameLabel setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERNAME_TEXT_COLOR:interfaceOptions.userTextColor)];
         [messageTextView setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERMESSAGE_TEXT_COLOR:interfaceOptions.userTextColor)];
         [messageSentTimeLabel setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERTIMESTAMP_COLOR:interfaceOptions.userTextColor)];
