@@ -105,7 +105,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
 }
 
-+(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text{
++(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
@@ -114,6 +114,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
+    message.belongsToConversation = conversation;
     [datamanager save];
     return message;
 }

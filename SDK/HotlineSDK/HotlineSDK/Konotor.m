@@ -198,7 +198,7 @@ static id <KonotorDelegate> _delegate;
 }
 
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
-    KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback];
+    KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
     [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
