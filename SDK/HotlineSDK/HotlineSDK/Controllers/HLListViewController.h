@@ -14,4 +14,6 @@
 @property(nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)FDMarginalView *footerView;
 
+-(BOOL)canDisplayFooterView;
+
 @end

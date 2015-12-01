@@ -37,6 +37,10 @@
     [self localNotificationSubscription];
 }
 
+-(BOOL)canDisplayFooterView{
+    return NO;
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [self fetchUpdates];
     self.footerView.hidden = YES;

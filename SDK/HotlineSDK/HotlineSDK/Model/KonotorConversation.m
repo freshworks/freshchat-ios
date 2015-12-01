@@ -118,7 +118,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
 }
 
 +(void) DownloadAllMessages{
-    
     FDLog(@"download message called");
     
     if (DOWNLOAD_IN_PROGRESS) {
@@ -131,34 +130,21 @@ NSMutableDictionary* gkConversationIdConversationMap;
         return;
     }
     
-    //    if([KonotorApp areConversationsDownloading]){
-    //        return;
-    //    }
-    
     [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
-
-    //    [KonotorApp updateConversationsDownloading:YES];
-
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
-    
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
         [KonotorConversation fetchAllMessagesInChannel:channels];
     }];
-    
 }
 
 + (void)fetchAllMessagesInChannel:(NSArray *)channels{
-    
-    
+
     NSString *pBasePath = [KonotorUtil GetBaseURL];
-    
     NSString *app = [KonotorApp GetAppID];
     NSString *user = [KonotorUser GetUserAlias];
     NSString *token = [KonotorApp GetAppKey];
     
     NSNumber* timestamp = [KonotorApp getLastUpdatedConversationsTimeStamp];
-   
-    timestamp = @0;
     
     NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",app,@"/user/",user,@"/conversation/v2?t=",token,@"&messageAfter=",timestamp];
 
