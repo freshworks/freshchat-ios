@@ -90,35 +90,39 @@
     }
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
+        KonotorConversation *conversation = channel.conversations.allObjects.firstObject;
+        KonotorMessageData *lastMessage = [self getLastMessageInConversation:conversation];
+        cell.titleLabel.text  = channel.name;
+        
+        if (lastMessage) {
+            cell.detailLabel.text = lastMessage.text;
+            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:channel.lastUpdated];
+        }else{
+            cell.detailLabel.text = channel.welcomeMessage.text;
+        }
+        
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
         }else{
             cell.imgView.image = [FDChannelListViewCell generateImageForLabel:channel.name];
         }
-        cell.layer.borderWidth = 0.6;
-        cell.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
-        cell.titleLabel.text  = channel.name;
-        cell.detailLabel.text = channel.welcomeMessage.text;
-        NSInteger unreadCount = [self getUnreadCountForConversation:channel.conversations.allObjects.firstObject];
+        
+        NSInteger unreadCount = conversation.unreadMessagesCount.integerValue;
         [cell.badgeView updateBadgeCount:unreadCount];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:channel.lastUpdated];
+
     }
     return cell;
 }
 
--(NSInteger)getUnreadCountForConversation:(KonotorConversation *)conversation{
-    NSInteger unreadCount = conversation;
-    if (unreadCount==0) {
-        return 0;
-    }else{
-        return unreadCount;
-    }
+-(KonotorMessageData *)getLastMessageInConversation:(KonotorConversation *)conversation{
+    NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+    NSArray *messages = [Konotor getAllMessagesForConversation:conversation.conversationAlias];
+    return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
-
 
 -(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
     return self.channels.count;
