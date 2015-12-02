@@ -11,7 +11,7 @@
 
 @implementation FDPictureMessageView
 
-- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)currentMessage{
+- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)currentMessage withMessageWidth:(float)messageWidth{
     self.message=currentMessage;
     [self setHidden:NO];
     
@@ -42,7 +42,7 @@
     
     if([currentMessage picThumbData]){
         UIImage *picture=[UIImage imageWithData:[currentMessage picThumbData]];
-        [self setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
+        [self setFrame:CGRectMake((messageWidth-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
         [self setImage:picture];
         
         if(![currentMessage picData]){
@@ -52,7 +52,7 @@
                 NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[[currentMessage picUrl] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(data){
-                        //  [Konotor setBinaryImage:data forMessageId:[currentMessage messageId]];
+                        [Konotor setBinaryImage:data forMessageId:[currentMessage messageId]];
                         currentMessage.picData=data;
                         self.layer.cornerRadius=10.0;
                         self.layer.masksToBounds=YES;
@@ -83,9 +83,9 @@
     }
     else{
         if(height>100)
-            [self setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-110)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, (height-100)/2, 110, 100)];
+            [self setFrame:CGRectMake((messageWidth-110)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, (height-100)/2, 110, 100)];
         else{
-            [self setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-height*110/100)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, height*110/100, height)];
+            [self setFrame:CGRectMake((messageWidth-height*110/100)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, height*110/100, height)];
         }
         [self setImage:[UIImage imageNamed:@"konotor_placeholder"]];
         
@@ -95,13 +95,13 @@
             NSData *thumbData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[[currentMessage picThumbUrl] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(thumbData){
-                    //   [Konotor setBinaryImageThumbnail:thumbData forMessageId:[currentMessage messageId]];
+                    [Konotor setBinaryImageThumbnail:thumbData forMessageId:[currentMessage messageId]];
                     currentMessage.picThumbData=thumbData;
                     UIImage *img = [[UIImage alloc] initWithData:thumbData];
                     
                     /* This is the main thread again, where we set the image to
                      be what we just fetched. */
-                    [self setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
+                    [self setFrame:CGRectMake((messageWidth-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
                     [self setImage:img];
                 }
             });
@@ -109,7 +109,7 @@
             NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[[currentMessage picUrl] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(data){
-                    //   [Konotor setBinaryImage:data forMessageId:[currentMessage messageId]];
+                    [Konotor setBinaryImage:data forMessageId:[currentMessage messageId]];
                     currentMessage.picData=data;
                     self.layer.cornerRadius=10.0;
                     self.layer.masksToBounds=YES;

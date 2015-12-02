@@ -14,7 +14,7 @@
 
 @property (strong, nonatomic) KonotorMessageData* message;
 
-- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)message;
+- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)message withMessageWidth:(float)messageWidth;
 + (CGSize) getSizeForImageFromMessage:(KonotorMessageData*) message;
 
 @end

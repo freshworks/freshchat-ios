@@ -153,6 +153,43 @@
             }
         }
     }
+    else if((([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2))&&((message.actionURL==nil)||(![message.actionURL isEqualToString:@""])))
+    {
+        NSString* messageText=message.text;
+        
+        //check if message occupies a single line
+        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT];
+        int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT]);
+        
+        //if message is single line, calculate larger width of the message text and date string
+        if (numLines >= 1){
+            UITextView* tempView=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+            [tempView setText:messageText];
+            [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
+            CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
+            
+            NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
+            NSString *strDate = [FDUtilities stringRepresentationForDate:date];
+            
+            UITextView* tempView2=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+            [tempView2 setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
+            [tempView2 setText:strDate];
+            CGSize txtTimeSize = [tempView2 sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
+            CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
+            CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
+            
+            if (msgWidth < timeWidth){
+                messageContentViewWidth = timeWidth;
+            }
+            else{
+                messageContentViewWidth = msgWidth;
+            }
+        }
+        CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:message];
+        if((picSize.width+16)>messageContentViewWidth)
+            messageContentViewWidth=MIN(picSize.width+16,KONOTOR_TEXTMESSAGE_MAXWIDTH);
+
+    }
     
     return messageContentViewWidth;
 }
@@ -244,11 +281,8 @@
         [audioItem.mediaProgressBar setHidden:YES];
         [audioItem.audioPlayButton setHidden:YES];
         
-     //   NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
         
-        NSString *simpleString=currentMessage.text;//[messageText string];
-        
-       // messageTextView.attributedText=messageText;
+        NSString *simpleString=currentMessage.text;
         [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
         
         CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
@@ -286,21 +320,10 @@
         
         float txtheight=0.0;
         
-        [messagePictureImageView setUpPictureMessageInteractionsForMessage:currentMessage];
+        [messagePictureImageView setUpPictureMessageInteractionsForMessage:currentMessage withMessageWidth:messageContentViewWidth];
         
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
            
-      /*      NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:messageTextView.font];
-           
-            if(isSenderOther){
-                [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_OTHERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
-            }
-            else{
-                [attributedString addAttribute:NSForegroundColorAttributeName value:KONOTOR_USERMESSAGE_TEXT_COLOR range:NSMakeRange(0, [attributedString length])];
-            }
-            
-            messageTextView.attributedText = attributedString;*/
-            
             NSString *simpleString=currentMessage.text;
             
             
@@ -313,6 +336,8 @@
             [messageTextView setTextContainerInset:UIEdgeInsetsMake(height+10, 0, 0, 0)];
             
         }
+        else
+            [messageTextView setText:@""];
         
         
         float msgHeight=16+height+txtheight;
