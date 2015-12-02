@@ -19,6 +19,7 @@
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
 #import "KonotorUtil.h"
+#import "FDUtilities.h"
 
 @interface HLChannelViewController ()
 
@@ -96,7 +97,9 @@
         
         if (lastMessage) {
             cell.detailLabel.text = lastMessage.text;
-            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:channel.lastUpdated];
+            NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
+            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+            
         }else{
             cell.detailLabel.text = channel.welcomeMessage.text;
         }
