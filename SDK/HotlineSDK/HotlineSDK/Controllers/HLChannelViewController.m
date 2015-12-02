@@ -86,17 +86,20 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLChannelsCell";
     FDChannelListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
     if (!cell) {
         cell = [[FDChannelListViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
         KonotorConversation *conversation = channel.conversations.allObjects.firstObject;
         KonotorMessageData *lastMessage = [self getLastMessageInConversation:conversation];
+        
         cell.titleLabel.text  = channel.name;
         
         if (lastMessage) {
-            cell.detailLabel.text = lastMessage.text;
+            cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
             NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
             cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
             
@@ -110,11 +113,44 @@
             cell.imgView.image = [FDChannelListViewCell generateImageForLabel:channel.name];
         }
         
-        NSInteger unreadCount = conversation.unreadMessagesCount.integerValue;
-        [cell.badgeView updateBadgeCount:unreadCount];
+        [cell.badgeView updateBadgeCount:conversation.unreadMessagesCount.integerValue];
 
     }
     return cell;
+}
+
+
+-(NSString *)getDetailDescriptionForMessage:(KonotorMessageData *)message{
+    
+    NSString *description = nil;
+
+    NSInteger messageType = message.messageType.integerValue;
+    
+    switch (messageType) {
+        case KonotorMessageTypeText:
+            description = message.text;
+            break;
+            
+        case KonotorMessageTypeAudio:
+            description = @"Audio message";
+            break;
+            
+        case KonotorMessageTypePicture:
+        case KonotorMessageTypePictureV2:{
+            if (message.text) {
+                description = message.text;
+            }else{
+                description = @"Picture message";
+            }
+            break;
+        }
+            
+        default:
+            description = message.text;
+            break;
+    }
+    
+    return description;
 }
 
 -(KonotorMessageData *)getLastMessageInConversation:(KonotorConversation *)conversation{
