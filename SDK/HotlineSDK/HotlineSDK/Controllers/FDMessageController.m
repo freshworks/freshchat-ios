@@ -37,6 +37,8 @@ BOOL firstWordOnLine=YES;
 
 static int messageCount = 0;
 static int messageCount_prev = 0;
+static int messagesDisplayedCount=20;
+static int loadmoreCount=20;
 static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
@@ -52,6 +54,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = @"Messages";
+    messagesDisplayedCount=20;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
     [self updateMessages];
@@ -95,6 +98,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
     messageCount=(int)[self.messages count];
+    if((messagesDisplayedCount>messageCount)||(messageCount<=KONOTOR_MESSAGESPERPAGE)||((messageCount-messagesDisplayedCount)<3))
+        messagesDisplayedCount=messageCount;
 }
 
 -(void)setSubviews{
@@ -161,18 +166,51 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier];
     }
     if (indexPath.row < self.messages.count) {
-        KonotorMessageData *message = self.messages[indexPath.row];
+        KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
         [cell drawMessageViewForMessage:message parentView:self.view];
+    }
+    if(indexPath.row==0 && messagesDisplayedCount<self.messages.count){
+        UITableViewCell* cell=[self getRefreshStatusCell];
+        
+        int oldnumber=messagesDisplayedCount;
+        messagesDisplayedCount+=loadmoreCount;
+        if(messagesDisplayedCount>messageCount) messagesDisplayedCount=messageCount;
+        [self performSelector:@selector(refreshView:) withObject:[NSNumber numberWithInt:oldnumber] afterDelay:0];
+        
+        return cell;
     }
     return cell;
 }
 
+- (UITableViewCell*) getRefreshStatusCell
+{
+    static NSString *CellIdentifier = @"KonotorRefreshCell";
+    
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(cell==nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    [cell setBackgroundColor:[UIColor clearColor]];
+    UIActivityIndicatorView* refreshIndicator=(UIActivityIndicatorView*)[cell viewWithTag:KONOTOR_REFRESHINDICATOR_TAG];
+    if(refreshIndicator==nil){
+        refreshIndicator=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [refreshIndicator setFrame:CGRectMake(self.view.frame.size.width/2-10, cell.contentView.frame.size.height/2-10, 20, 20)];
+        refreshIndicator.tag=KONOTOR_REFRESHINDICATOR_TAG;
+        [cell.contentView addSubview:refreshIndicator];
+    }
+    if(![refreshIndicator isAnimating])
+        [refreshIndicator startAnimating];
+    
+    return cell;
+
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.messages.count;
+    return messagesDisplayedCount;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    KonotorMessageData *message = self.messages[indexPath.row];
+    KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
     float height = [FDMessageCell getHeightForMessage:message parentView:self.view];
     return height;
 }
@@ -323,8 +361,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)scrollTableViewToLastCell{
-    int lastSpot=loading?messageCount:(messageCount-1);
-    
+    int lastSpot=loading?messagesDisplayedCount:(messagesDisplayedCount-1);
     if(lastSpot<0) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
     @try {
@@ -334,6 +371,24 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
         @try{
             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        }
+        @catch(NSException *exception){
+            
+        }
+    }
+}
+
+-(void)scrollTableViewToCell:(int)lastSpot{
+    
+    if(lastSpot<0) return;
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:(messagesDisplayedCount-lastSpot) inSection:0];
+    @try {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+    @catch (NSException *exception ) {
+        indexPath=[NSIndexPath indexPathForRow:(indexPath.row-1) inSection:0];
+        @try{
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
         }
         @catch(NSException *exception){
             
@@ -444,15 +499,26 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     return YES;
 }
 
-- (void) refreshView{
+- (void) refreshView
+{
+    [self refreshView:nil];
+}
+
+- (void) refreshView:(id)obj{
     messageCount_prev=(int)[[Konotor getAllMessagesForDefaultConversation] count];
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     self.messages=[[Konotor getAllMessagesForDefaultConversation] sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
     messageCount=(int)[self.messages count];
-    
+    if((messagesDisplayedCount>messageCount)||(messageCount<=KONOTOR_MESSAGESPERPAGE)||((messageCount-messagesDisplayedCount)<3))
+        messagesDisplayedCount=messageCount;
+
     [self.tableView reloadData];
     [Konotor markAllMessagesAsRead];
-    [self scrollTableViewToLastCell];
+    if(obj==nil)
+        [self scrollTableViewToLastCell];
+    else{
+        [self scrollTableViewToCell:((NSNumber*)obj).intValue];
+    }
 }
 
 
