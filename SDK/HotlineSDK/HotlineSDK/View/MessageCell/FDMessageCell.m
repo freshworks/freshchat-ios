@@ -491,7 +491,7 @@
         }
     }
     
-    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height, 15, 15)];
+    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height, 10, 10)];
     
 }
 

@@ -45,6 +45,7 @@
 		35591B961B9EDD0700BC0B60 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B8D1B9EDD0700BC0B60 /* UIImageView+AFNetworking.m */; };
 		35591BAA1B9EDF8C00BC0B60 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B241B9EDCB700BC0B60 /* Hotline.h */; };
 		35591BAB1B9EDF9200BC0B60 /* Konotor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B271B9EDCB700BC0B60 /* Konotor.h */; };
+		355F544E1C107787008FC1FA /* FDAttachmentImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 355F544D1C107787008FC1FA /* FDAttachmentImageController.m */; };
 		3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */; };
 		358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C11BB00EB700B36E4E /* HLArticle.m */; };
 		358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C31BB00EB700B36E4E /* HLCategory.m */; };
@@ -206,6 +207,8 @@
 		35591B8B1B9EDD0700BC0B60 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		35591B8C1B9EDD0700BC0B60 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		35591B8D1B9EDD0700BC0B60 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		355F544C1C107787008FC1FA /* FDAttachmentImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAttachmentImageController.h; sourceTree = "<group>"; };
+		355F544D1C107787008FC1FA /* FDAttachmentImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAttachmentImageController.m; sourceTree = "<group>"; };
 		3575C47A1BE1EF25000C3D02 /* FDInputToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDInputToolbarView.h; sourceTree = "<group>"; };
 		3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDInputToolbarView.m; sourceTree = "<group>"; };
 		358DD4C01BB00EB700B36E4E /* HLArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticle.h; sourceTree = "<group>"; };
@@ -477,6 +480,8 @@
 				35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */,
 				35591AF01B9EDBBC00BC0B60 /* KonotorImageInput.h */,
 				35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */,
+				355F544C1C107787008FC1FA /* FDAttachmentImageController.h */,
+				355F544D1C107787008FC1FA /* FDAttachmentImageController.m */,
 				35591AF21B9EDBBC00BC0B60 /* KonotorImageView.h */,
 				35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */,
 				35591AF41B9EDBBC00BC0B60 /* KonotorMediaUIButton.h */,
@@ -947,6 +952,7 @@
 				35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */,
 				35DCCB511BE002960039EFDD /* FDTableViewCell.m in Sources */,
 				35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */,
+				355F544E1C107787008FC1FA /* FDAttachmentImageController.m in Sources */,
 				CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */,
 				35DCCB3E1BE002220039EFDD /* FDActionButton.m in Sources */,
 				35591AFF1B9EDBBC00BC0B60 /* KonotorConversationViewController.m in Sources */,

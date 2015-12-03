@@ -20,8 +20,7 @@
 @property (strong, nonatomic) UIImage* imagePicked;
 @property (strong, nonatomic) UIPopoverController* popover;
 
-- (instancetype)initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+- (instancetype) initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 - (void) showInputOptions:(UIViewController*) viewController;
-- (void) rotateToOrientation:(UIInterfaceOrientation) orientation duration:(NSTimeInterval) duration;
 
 @end
