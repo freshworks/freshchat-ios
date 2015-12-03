@@ -101,6 +101,10 @@
     
     /* setup message picture view */
     messagePictureImageView=[[FDPictureMessageView alloc] initWithFrame:CGRectZero];
+    TapOnPictureRecognizer* tapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
+    tapGesture.numberOfTapsRequired=1;
+    [messagePictureImageView addGestureRecognizer:tapGesture];
+
     [messageTextView addSubview:messagePictureImageView];
     
     /* setup action button view */
@@ -108,6 +112,10 @@
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
     [self.contentView addSubview:messageActionButton];
+}
+
+-(void)tappedOnPicture:(id)gesture{
+    [self.delegate messageCell:self pictureTapped:self.messagePictureImageView.image];
 }
 
 - (float) getWidthForMessage:(KonotorMessageData*)message{
@@ -537,14 +545,5 @@
     CGSize size=[txtView sizeThatFits:CGSizeMake(width, 1000)];
     return size.height-16;
 }
-/*
-+ (NSMutableAttributedString*) getAttributedStringWithText:(NSString*) messageText font:(UIFont*)font{
-    NSString *htmlString = messageText;
-    NSDictionary* fontDict=[[NSDictionary alloc] initWithObjectsAndKeys:font,NSFontAttributeName,nil];
-    NSMutableAttributedString* attributedString=nil;
-    attributedString=[[NSMutableAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-    [attributedString addAttributes:fontDict range:NSMakeRange(0, [attributedString length])];
-    return attributedString;
-}*/
 
 @end

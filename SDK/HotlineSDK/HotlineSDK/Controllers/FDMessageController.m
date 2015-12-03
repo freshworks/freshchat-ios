@@ -15,7 +15,7 @@
 #import "HLMacros.h"
 #import "FDLocalNotification.h"
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
@@ -195,6 +195,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier];
+        cell.delegate = self;
     }
     if (indexPath.row < self.messages.count) {
         KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
@@ -613,6 +614,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     KonotorMessageData *message = self.messages[indexPath.row];
     NSLog(@"Message type :%@",message.messageType);
+}
+
+-(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
+    FDLog(@"Picture message tapped");
 }
 
 @end

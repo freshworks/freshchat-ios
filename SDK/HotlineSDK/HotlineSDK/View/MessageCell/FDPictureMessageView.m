@@ -34,8 +34,8 @@
     self.userInteractionEnabled=YES;
     NSArray* gestureRecognizers=[self gestureRecognizers];
     for(UIGestureRecognizer* gr in gestureRecognizers){
-        if([gr isKindOfClass:[TapOnPictureRecognizer class]])
-            [self removeGestureRecognizer:gr];
+//        if([gr isKindOfClass:[TapOnPictureRecognizer class]])
+//            [self removeGestureRecognizer:gr];
     }
   //  [self addGestureRecognizer:tapGesture];
     
@@ -70,8 +70,8 @@
                         self.userInteractionEnabled=YES;
                         NSArray* gestureRecognizers=[self gestureRecognizers];
                         for(UIGestureRecognizer* gr in gestureRecognizers){
-                            if([gr isKindOfClass:[TapOnPictureRecognizer class]])
-                                [self removeGestureRecognizer:gr];
+//                            if([gr isKindOfClass:[TapOnPictureRecognizer class]])
+//                                [self removeGestureRecognizer:gr];
                         }
                      //   [self addGestureRecognizer:tapGesture];
                         
@@ -127,8 +127,8 @@
                     self.userInteractionEnabled=YES;
                     NSArray* gestureRecognizers=[self gestureRecognizers];
                     for(UIGestureRecognizer* gr in gestureRecognizers){
-                        if([gr isKindOfClass:[TapOnPictureRecognizer class]])
-                            [self removeGestureRecognizer:gr];
+//                        if([gr isKindOfClass:[TapOnPictureRecognizer class]])
+//                            [self removeGestureRecognizer:gr];
                     }
                  //   [self addGestureRecognizer:tapGesture];
                     

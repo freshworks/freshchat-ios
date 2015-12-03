@@ -16,10 +16,6 @@
 #define KONOTOR_MESSAGETEXT_FONT ([UIFont systemFontOfSize:16.0])
 #define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
 
-#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_INSET 16
-#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET 14
-#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_RIGHT_INSET 28
-#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_BOTTOM_INSET 36
 #define KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING 10
 
 #define KONOTOR_HORIZONTAL_PADDING 5
@@ -34,6 +30,13 @@
 
 @class FDAudioMessageUnit;
 @class FDPictureMessageView;
+@class FDMessageCell;
+
+@protocol FDMessageCellDelegate <NSObject>
+
+-(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image;
+
+@end
 
 @interface FDMessageCell : UITableViewCell
 
@@ -59,6 +62,8 @@
 @property (strong, nonatomic) UIImageView* uploadStatusImageView;
 @property (strong, nonatomic) FDPictureMessageView* messagePictureImageView;
 @property (strong, nonatomic) FDActionButton* messageActionButton;
+
+@property (strong, nonatomic) id<FDMessageCellDelegate> delegate;
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier;
 - (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
