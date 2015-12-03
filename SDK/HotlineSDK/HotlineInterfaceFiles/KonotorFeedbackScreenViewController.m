@@ -424,8 +424,8 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.pollingTimeNotOnChatWindow=-1;
         konotorUIParameters.alwaysPollForMessages=NO;
         
-        konotorUIParameters.otherChatBubbleInsets=UIEdgeInsetsMake(19, 24, 20, 15);
-        konotorUIParameters.userChatBubbleInsets=UIEdgeInsetsMake(20, 15, 19, 24);
+        konotorUIParameters.otherChatBubbleInsets=UIEdgeInsetsMake(9, 12, 10, 7);
+        konotorUIParameters.userChatBubbleInsets=UIEdgeInsetsMake(10, 7, 9, 12);
         
     }
     return konotorUIParameters;
