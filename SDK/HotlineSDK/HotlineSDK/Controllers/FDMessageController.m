@@ -82,7 +82,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)startPoller{
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(pollMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(pollMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Starting Poller");
     }
@@ -97,7 +97,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)pollMessages:(NSTimer *)timer{
     [KonotorConversation DownloadAllMessages];
-    [self refreshView];
 }
 
 -(void)setNavigationItem{
@@ -217,7 +216,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
-    NSLog(@"Mic button pressed");
+    FDLog(@"Mic button pressed");
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -367,8 +366,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)scrollTableViewToLastCell{
     int lastSpot=loading?messageCount:(messageCount-1);
-    
+
     if(lastSpot<0) return;
+    
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
     @try {
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
@@ -379,7 +379,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
         }
         @catch(NSException *exception){
-            
         }
     }
 }
@@ -409,7 +408,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) didFinishDownloadingMessages{
-    if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
+    NSInteger count = [self fetchMessages].count;
+    if( loading || (count > messageCount_prev) ){
+        FDLog(@"Refreshing view to show new message");
         loading=NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
         [self refreshView];
@@ -450,7 +451,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void) didEncounterErrorWhileDownloadingConversations{
-    if((loading)||([[Konotor getAllMessagesForDefaultConversation] count]>messageCount_prev)){
+    NSInteger count = [self fetchMessages].count;
+    if((loading)||(count > messageCount_prev)){
         loading=NO;
         [self refreshView];
     }
@@ -515,6 +517,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (conversation) {
         [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:conversation.conversationAlias]mutableCopy]];;
     }
+    
     return [messages sortedArrayUsingDescriptors:@[desc]];
 }
 
