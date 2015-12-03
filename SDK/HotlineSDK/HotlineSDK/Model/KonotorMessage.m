@@ -119,7 +119,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return message;
 }
 
-+(NSString*)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption{
++(KonotorMessage* )savePictureMessageInCoreData:(UIImage *)image withCaption:(NSString *)caption onConversation:(nonnull KonotorConversation *)conversation{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
@@ -172,8 +172,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [messageBinary setBinaryThumbnail:thumbnailData];
     [messageBinary setValue:message forKey:@"belongsToMessage"];
     [message setValue:messageBinary forKey:@"hasMessageBinary"];
+    message.belongsToConversation = conversation;
     [datamanager save];
-    return message.messageAlias;
+    return message;
 }
 
 +(void)markAllMessagesAsRead{

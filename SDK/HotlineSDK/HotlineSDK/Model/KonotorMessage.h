@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(KonotorMessage *)createNewMessage:(NSDictionary *)message;
 -(void) associateMessageToConversation: (KonotorConversation *)conversation;
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation;
-+(NSString*)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption;
++(KonotorMessage *)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption onConversation:(KonotorConversation *)conversation;
 +(void) insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage;
 +(void)updateWelcomeMessageText:(NSString*)text;
 +(void)uploadAllUnuploadedMessages;

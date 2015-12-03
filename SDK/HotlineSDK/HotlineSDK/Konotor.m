@@ -208,11 +208,8 @@ static id <KonotorDelegate> _delegate;
 }
 
 +(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
-    NSString *messageID = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption];
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId: messageID];
-    if(messageID){
-        [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
-    }
+    KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
+    [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 

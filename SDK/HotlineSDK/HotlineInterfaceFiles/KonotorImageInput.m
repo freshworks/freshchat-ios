@@ -97,7 +97,7 @@
     [picker pushViewController:self.imageController animated:YES];
 }
 
--(void)attachmentController:(FDAttachmentImageViewController *)controller didFinishSelectingImage:(UIImage *)image{
+-(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image{
     [Konotor uploadImage:self.imagePicked onConversation:self.conversation onChannel:self.channel];
 }
 

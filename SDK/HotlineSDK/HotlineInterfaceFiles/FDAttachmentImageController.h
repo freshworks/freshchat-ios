@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class FDAttachmentImageViewController;
+@class FDAttachmentImageController;
 
 @protocol FDAttachmentImageControllerDelegate <NSObject>
 
 @required
 
--(void)attachmentController:(FDAttachmentImageViewController *)controller didFinishSelectingImage:(UIImage *)image;
+-(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image;
 
 @end
 
