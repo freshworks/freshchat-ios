@@ -14,13 +14,15 @@
 #import "Konotor.h"
 #import "HLMacros.h"
 #import "FDLocalNotification.h"
+#import "FDAudioMessageInputView.h"
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate,FDAudioInputDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
+@property (nonatomic,strong)  FDAudioMessageInputView *audioMessageInputView;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewBottomConstraint;
 @property (strong, nonatomic) UIView *bottomView;
@@ -166,6 +168,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     self.inputToolbar = [[FDInputToolbarView alloc]initWithDelegate:self];
     self.inputToolbar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.inputToolbar showAttachButton:YES];
+    
+    self.audioMessageInputView = [[FDAudioMessageInputView alloc] initWithDelegate:self];
+    self.audioMessageInputView.translatesAutoresizingMaskIntoConstraints = NO;
 
     //Initial Constraints
     NSDictionary *views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
@@ -253,7 +258,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
-    FDLog(@"Mic button pressed");
+    [self updateBottomViewWith:self.audioMessageInputView andHeight:TOOLBAR_HEIGHT];
+    NSLog(@"Mic button pressed");
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -618,6 +624,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
     FDLog(@"Picture message tapped");
+}
+
+-(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
+    [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
 }
 
 @end

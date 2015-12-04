@@ -90,4 +90,7 @@
 -(UIFont *)lastUpdatedFont;
 -(UIColor *)lastUpdatedFontColor;
 
+//Voice Recording Prompt
+-(UIFont *)voiceRecordingTimeLabelFont;
+
 @end

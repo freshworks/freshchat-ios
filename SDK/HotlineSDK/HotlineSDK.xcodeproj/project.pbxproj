@@ -86,6 +86,7 @@
 		91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
 		CE16D33B1BFDE3100045F235 /* HLChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE16D33A1BFDE3100045F235 /* HLChannel.m */; };
+		CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */; };
 		CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED061BE90479000E8434 /* HLMessageServices.m */; };
 		CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */; };
 		CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */; };
@@ -317,6 +318,8 @@
 		CE1064961BC55FDB00922494 /* FDVotingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDVotingManager.m; sourceTree = "<group>"; };
 		CE16D3391BFDE3100045F235 /* HLChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLChannel.h; sourceTree = "<group>"; };
 		CE16D33A1BFDE3100045F235 /* HLChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLChannel.m; sourceTree = "<group>"; };
+		CE2B272A1C11D51B00D9A253 /* FDAudioMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAudioMessageInputView.h; sourceTree = "<group>"; };
+		CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAudioMessageInputView.m; sourceTree = "<group>"; };
 		CE55ED051BE90479000E8434 /* HLMessageServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLMessageServices.h; sourceTree = "<group>"; };
 		CE55ED061BE90479000E8434 /* HLMessageServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLMessageServices.m; sourceTree = "<group>"; };
 		CE55ED081BE9E79B000E8434 /* HLChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLChannelViewController.h; sourceTree = "<group>"; };
@@ -563,6 +566,8 @@
 		3575C4771BE1EF25000C3D02 /* InputToolbarView */ = {
 			isa = PBXGroup;
 			children = (
+				CE2B272A1C11D51B00D9A253 /* FDAudioMessageInputView.h */,
+				CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */,
 				3575C47A1BE1EF25000C3D02 /* FDInputToolbarView.h */,
 				3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */,
 			);
@@ -945,6 +950,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */,
 				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
 				CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */,
 				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,

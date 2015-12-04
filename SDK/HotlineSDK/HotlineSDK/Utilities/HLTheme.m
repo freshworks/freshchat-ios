@@ -13,7 +13,7 @@
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
 @property (strong, nonatomic) UIFont *systemFont;
-
+@property (strong, nonatomic) NSString *themeName;
 
 @end
 
@@ -35,6 +35,44 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSystemFont:) name:UIContentSizeCategoryDidChangeNotification object:nil];
     }
     return self;
+}
+
+-(NSBundle *)getHLResourceBundle{
+    NSBundle *MHResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    return MHResourcesBundle;
+}
+
+-(NSString *)getPathForTheme:(NSString *)theme{
+    NSString *path = [[NSBundle mainBundle] pathForResource:theme ofType:@"plist"];
+    if (!path) {
+        NSBundle *MHResourcesBundle = [self getHLResourceBundle];
+        path = [MHResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
+    }
+    return path;
+}
+
+//when setting a theme, check if that theme file exist, if yes update the theme preferences else throw exception.
+-(void)setThemeName:(NSString *)themeName{
+    NSString *themeFilePath = [self getPathForTheme:themeName];
+    if (themeFilePath) {
+        _themeName = themeName;
+        NSData *plistData = [[NSFileManager defaultManager] contentsAtPath:themeFilePath];
+        [self updateThemePreferencesWithData:plistData];
+    }else{
+        NSString *exceptionName   = @"MOBIHELP_SDK_INVALID_THEME_FILE";
+        NSString *reason          = @"You are attempting to set a theme file \"%@\" that is not linked with the project through MHResourcesBundle";
+        NSString *exceptionReason = [NSString stringWithFormat:reason,themeName];
+        [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
+    }
+}
+
+-(void)updateThemePreferencesWithData:(NSData *)plistData{
+    NSString *errorDescription;
+    NSPropertyListFormat plistFormat;
+    NSDictionary *immutablePlistInfo = (NSDictionary *)[NSPropertyListSerialization propertyListFromData:plistData mutabilityOption:NSPropertyListMutableContainers format:&plistFormat errorDescription:&errorDescription];
+    if (immutablePlistInfo) {
+        self.themePreferences = [NSMutableDictionary dictionaryWithDictionary:immutablePlistInfo];
+    }
 }
 
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName{
@@ -115,7 +153,7 @@
 -(UIFont *)dialogueTitleFont{
     return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:23];
 }
-    
+
 -(UIColor *)dialogueButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BUTTON_FONT_COLOR];
@@ -312,5 +350,12 @@
     UIColor *color = [self getColorForKeyPath:@"GridView.LastUpdatedFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
+
+#pragma mark - Voice Recording Prompt
+
+-(UIFont *)voiceRecordingTimeLabelFont{
+    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:13];
+}
+
 
 @end
