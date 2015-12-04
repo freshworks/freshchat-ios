@@ -9,6 +9,8 @@
 #import "FDInputToolbarView.h"
 #import "HLTheme.h"
 #import "HLMacros.h"
+#import <AudioToolbox/AudioServices.h>
+#include "TargetConditionals.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>
 
@@ -74,9 +76,14 @@
 
 -(void)sendButtonAction:(id)sender{
     [self.delegate inputToolbar:self sendButtonPressed:sender];
+    self.textView.text = @"";
+    [self updateActionButtons:self.textView];
 }
 
 -(void)micButtonAction:(id)sender{
+    if (!TARGET_IPHONE_SIMULATOR) {
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    }
     [self.delegate inputToolbar:self micButtonPressed:sender];
 }
 
