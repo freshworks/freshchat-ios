@@ -16,7 +16,7 @@
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate,FDAudioInputDelegate>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
@@ -627,6 +627,11 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
+    [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+}
+
+-(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
+    //TODO: Upload audio message
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
 }
 

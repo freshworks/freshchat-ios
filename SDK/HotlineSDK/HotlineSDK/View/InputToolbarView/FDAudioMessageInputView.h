@@ -14,6 +14,7 @@
 @protocol FDAudioInputDelegate <NSObject>
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender;
+-(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender;
 
 @end
 
@@ -23,7 +24,7 @@
 
 @property (nonatomic,strong) UIButton *dismissButton;
 @property (nonatomic,strong) UIButton *stopButton;
-@property (nonatomic,strong) UIButton *uploadButton;
+@property (nonatomic,strong) UIButton *sendButton;
 @property (nonatomic,strong) UILabel *timeLabel;
 @property (nonatomic,strong) UILabel *recordingLabel;
 

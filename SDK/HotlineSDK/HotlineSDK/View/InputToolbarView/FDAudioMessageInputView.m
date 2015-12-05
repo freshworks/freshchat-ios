@@ -29,22 +29,22 @@ int timeMin;
         self.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
         
         self.dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.dismissButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+        [self.dismissButton setImage:[UIImage imageNamed:@"cancel"] forState:UIControlStateNormal];
         [self.dismissButton addTarget:self action:@selector(dismissButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.dismissButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.dismissButton];
         
-        self.stopButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.stopButton setImage:[UIImage imageNamed:@"stop.png"] forState:UIControlStateNormal];
+        self.stopButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.stopButton setImage:[UIImage imageNamed:@"Stop"] forState:UIControlStateNormal];
         [self.stopButton addTarget:self action:@selector(stopButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         self.stopButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.stopButton];
         
-        self.uploadButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.uploadButton.hidden = YES;
-        [self.uploadButton setImage:[UIImage imageNamed:@"Upload.png"] forState:UIControlStateNormal];
-        self.uploadButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:self.uploadButton];
+        self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.sendButton setImage:[UIImage imageNamed:@"Send"] forState:UIControlStateNormal];
+        [self.sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        self.sendButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:self.sendButton];
         
         self.timeLabel = [[UILabel alloc] init];
         self.timeLabel.text = @"00:01";
@@ -53,15 +53,16 @@ int timeMin;
         [self addSubview:self.timeLabel];
         
         self.recordingLabel = [[UILabel alloc] init];
-        self.recordingLabel.text = @"Started Recording..";
         self.recordingLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.recordingLabel];
+        
+        [self resetAudioInputToolbar];
     }
     return self;
 }
 
 -(void)layoutSubviews{
-    NSDictionary *views = @{@"dismissButton":self.dismissButton,@"stopButton":self.stopButton,@"uploadButton":self.uploadButton,@"timeLabel":self.timeLabel,@"recordingLabel":self.recordingLabel};
+    NSDictionary *views = @{@"dismissButton":self.dismissButton,@"stopButton":self.stopButton,@"sendButton":self.sendButton,@"timeLabel":self.timeLabel,@"recordingLabel":self.recordingLabel};
     
     [self addConstraint: [NSLayoutConstraint constraintWithItem:self.recordingLabel
                                   attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self
@@ -75,8 +76,8 @@ int timeMin;
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[dismissButton]-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[stopButton]-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[stopButton]-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[uploadButton]-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[uploadButton]-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[sendButton]-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[sendButton]-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[timeLabel]-[stopButton]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[timeLabel]-|" options:0 metrics:nil views:views]];
     [super layoutSubviews];
@@ -106,14 +107,25 @@ int timeMin;
 }
 
 -(void)stopButtonPressed:(id)sender{
-    NSLog(@"Stop button pressed in audio input view");
     self.stopButton.hidden = YES;
-    self.uploadButton.hidden = NO;
+    self.sendButton.hidden = NO;
     self.recordingLabel.text = @"Recording Stopped";
 }
 
 -(void)dismissButtonAction:(id)sender{
+    [self resetAudioInputToolbar];
     [self.delegate audioMessageInput:self dismissButtonPressed:sender];
+}
+
+-(void)sendButtonAction:(id)sender{
+    [self resetAudioInputToolbar];
+    [self.delegate audioMessageInput:self sendButtonPressed:sender];
+}
+
+-(void)resetAudioInputToolbar{
+    self.stopButton.hidden = NO;
+    self.sendButton.hidden = YES;
+    self.recordingLabel.text = @"Audio Recording";
 }
 
 @end
