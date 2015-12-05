@@ -65,9 +65,34 @@
 -(UIColor *)dialogueButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
 
-//Messagecell UI
+//Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
 -(UIColor *)sendButtonColor;
+-(UIColor *)conversationViewTitleTextColor;
+-(UIColor *)conversationViewBackgroundColor;
+-(UIColor *)actionButtonTextColor;
+-(UIColor *)actionButtonColor;
+-(UIColor *)businessMessageTextColor;
+-(UIColor *)userMessageTextColor;
+-(UIColor *)hyperlinkColor;
+-(BOOL)alwaysPollForMessages;
+-(BOOL)showsBusinessProfileImage;
+-(BOOL)showsUserProfileImage;
+-(BOOL)showsBusinessMessageSenderName;
+-(BOOL)showsUserMessageSenderName;
+-(NSString *)textInputHintText;
+-(NSString *)businessProfileImageName;
+-(NSString *)userProfileImageName;
+-(NSString *)businessMessageSenderName;
+-(NSString *)userMessageSenderName;
+-(NSString *)businessChatBubbleImageName;
+-(NSString *)userChatBubbleImageName;
+-(NSString *)chatBubbleFontName;
+-(NSString *)conversationUIFontName;
+-(float)chatBubbleFontSize;
+-(int)pollingTimeChatInFocus;
+-(int)pollingTimeChatNotInFocus;
+
 
 //Grid View
 

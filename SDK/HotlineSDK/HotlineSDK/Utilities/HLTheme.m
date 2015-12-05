@@ -280,6 +280,89 @@
     return [UIColor blueColor];
 }
 
+/* Additions by Sri - to be checked */
+-(UIColor *)conversationViewTitleTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewTitleTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_CONVERSATIONVIEWTITLETEXTCOLOR];
+}
+-(UIColor *)conversationViewBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_CONVERSATIONVIEWBACKGROUNDCOLOR];
+}
+-(UIColor *)actionButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ACTIONBUTTONTEXTCOLOR];
+}
+-(UIColor *)actionButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ACTIONBUTTONCOLOR];
+}
+-(UIColor *)businessMessageTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BusinessMessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BUSINESSMESSAGETEXTCOLOR];
+}
+-(UIColor *)userMessageTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_USERMESSAGETEXTCOLOR];
+}
+-(UIColor *)hyperlinkColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];
+    return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
+}
+-(BOOL)alwaysPollForMessages{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"];
+}
+-(BOOL)showsBusinessProfileImage{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"];
+}
+-(BOOL)showsUserProfileImage{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"];
+}
+-(BOOL)showsBusinessMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"];
+}
+-(BOOL)showsUserMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"];
+}
+-(NSString *)textInputHintText{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.TextInputHintText"];
+}
+-(NSString *)businessProfileImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
+}
+-(NSString *)userProfileImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
+}
+-(NSString *)businessMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserProfileImageName"];
+}
+-(NSString *)userMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserMessageSenderName"];
+}
+-(NSString *)businessChatBubbleImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessChatBubbleImageName"];
+}
+-(NSString *)userChatBubbleImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserChatBubbleImageName"];
+}
+-(NSString *)chatBubbleFontName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontName"];
+}
+-(NSString *)conversationUIFontName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
+}
+-(float)chatBubbleFontSize{
+   return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontSize"] floatValue];
+}
+-(int)pollingTimeChatInFocus{
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatInFocus"] intValue];
+}
+-(int)pollingTimeChatNotInFocus{
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatNotInFocus"] intValue];
+}
+
+
+
 #pragma mark - Grid View
 
 -(UIColor *)itemBackgroundColor{

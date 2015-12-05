@@ -4,6 +4,48 @@
 <dict>
 	<key>ConversationsUI</key>
 	<dict>
+		<key>ConversationViewTitleTextColor</key>
+		<string>000000</string>
+		<key>ConversationViewBackgroundColor</key>
+		<string>FFFFFF</string>
+		<key>AlwaysPollForMessages</key>
+		<false/>
+		<key>TextInputHintText</key>
+		<string>Type something</string>
+		<key>ConversationUIFontName</key>
+		<string>HelveticaNeue</string>
+		<key>BusinessProfileImageName</key>
+		<string>konotor_supportprofile</string>
+		<key>UserProfileImageName</key>
+		<string>konotor_profile</string>
+		<key>ShowsBusinessProfileImage</key>
+		<true/>
+		<key>ShowsUserProfileImage</key>
+		<false/>
+		<key>PollingTimeChatInFocus</key>
+		<integer>5</integer>
+		<key>PollingTimeChatNotInFocus</key>
+		<integer>0</integer>
+		<key>ShowsBusinessMessageSenderName</key>
+		<false/>
+		<key>ShowsUserMessageSenderName</key>
+		<false/>
+		<key>BusinessMessageSenderName</key>
+		<string>Support</string>
+		<key>UserMessageSenderName</key>
+		<string>You</string>
+		<key>ActionButtonTextColor</key>
+		<string>FFFFFF</string>
+		<key>ActionButtonColor</key>
+		<string>050505</string>
+		<key>BusinessMessageTextColor</key>
+		<string>000000</string>
+		<key>UserMessageTextColor</key>
+		<string>050505</string>
+		<key>BusinessChatBubbleImageName</key>
+		<string>messagebubble_left</string>
+		<key>UserChatBubbleImageName</key>
+		<string>messagebubble_right</string>
 		<key>ChatBubbleFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChatBubbleFontSize</key>
