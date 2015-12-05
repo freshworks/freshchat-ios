@@ -22,29 +22,22 @@ BOOL KONOTOR_APP_INIT_DONE = FALSE;
 @dynamic deviceToken,deviceTokenUpdatedOnServer,lastUpdatedConversation,audioPermissionGiven;
 static BOOL areConversationsDownloading= NO;
 static BOOL isUserBeingCreated = NO;
-+(BOOL) getAppInitStatus
-{
+
++(BOOL) getAppInitStatus{
     return KONOTOR_APP_INIT_DONE;
 }
 
-+(BOOL) InitWithAppID: (NSString *)AppID WithAppKey: (NSString *) appKey
-{
++(BOOL) InitWithAppID: (NSString *)AppID WithAppKey: (NSString *) appKey{
     [KonotorDataManager sharedInstance];
-    if(!KONOTOR_APP_INIT_DONE)
-    {
+    if(!KONOTOR_APP_INIT_DONE){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *urlString = [defaults stringForKey:@"uriForCurrentKonotorApp"];
-        //NSLog(@"URL String: %@",urlString);
-        if(urlString)
-        {
+        if(urlString){
             
             NSURL *mouri = [NSURL URLWithString:urlString];
             NSPersistentStoreCoordinator *coord = [[KonotorDataManager sharedInstance]persistentStoreCoordinator];
-         //   NSLog(@"Entered if with URL String: %@, coord %@, mouri %@, objectID %@",urlString,coord, mouri, [coord managedObjectIDForURIRepresentation:mouri]);
 
             gkCurrentKonotorApp = (KonotorApp*)[[[KonotorDataManager sharedInstance]mainObjectContext] objectWithID:[coord managedObjectIDForURIRepresentation:mouri]];
-            
-         //   NSLog(@"About to set appid,key with URL String: %@",urlString);
 
             [gkCurrentKonotorApp setAppID:AppID];
             [gkCurrentKonotorApp setAppKey:appKey];
@@ -52,32 +45,22 @@ static BOOL isUserBeingCreated = NO;
             [[KonotorDataManager sharedInstance]save];
             [KonotorUser InitUser];
 
-            if(gkCurrentKonotorApp.deviceTokenUpdatedOnServer == FALSE)
-            {
+            if(gkCurrentKonotorApp.deviceTokenUpdatedOnServer == FALSE){
                 [KonotorWebServices AddPushDeviceToken:gkCurrentKonotorApp.deviceToken];
             }
             KONOTOR_APP_INIT_DONE = YES;
-        }
-    
-    
-        else
-        {
-
+            
+        }else{
             
             KonotorApp *currentApp = (KonotorApp *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorApp" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
             [currentApp setAppID:AppID];
             [currentApp setAppKey:appKey];
           
-            NSNumber *z = [NSNumber numberWithInteger:0];
-            [currentApp setLastUpdatedConversation:z];
+            [currentApp setLastUpdatedConversation:@0];
             
             [[KonotorDataManager sharedInstance]save];
             
-            
             gkCurrentKonotorApp = currentApp;
-            
-            
-            
             
             NSURL *moURI = [[currentApp objectID] URIRepresentation];
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -85,228 +68,173 @@ static BOOL isUserBeingCreated = NO;
             [defaults synchronize];
             
             KONOTOR_APP_INIT_DONE = YES;
-            
-            
         }
     }
-
     return YES;
 }
 
 
-+(NSString *) GetAppID
-{
-    if(gkCurrentKonotorApp)
++(NSString *) GetAppID{
+    if(gkCurrentKonotorApp){
         return gkCurrentKonotorApp.appID;
-    
+    }
     return nil;
 }
 
-+(void) addDeviceToken :(NSString *)deviceToken;
-{
-    if(gkCurrentKonotorApp)
-    {
-        if(![[gkCurrentKonotorApp deviceToken] isEqualToString:deviceToken])
-        {
++(void) addDeviceToken :(NSString *)deviceToken;{
+    if(gkCurrentKonotorApp){
+        if(![[gkCurrentKonotorApp deviceToken] isEqualToString:deviceToken]){
             gkCurrentKonotorApp.deviceToken = deviceToken;
             gkCurrentKonotorApp.deviceTokenUpdatedOnServer = FALSE;
             [[KonotorDataManager sharedInstance]save];
             [KonotorWebServices AddPushDeviceToken:deviceToken ];
-            //NSLog(@"%@",[[gkCurrentKonotorApp deviceToken]description]);
         }
     }
     
 }
 
-+(NSString *) getAppVersion
-{
-    if(gkCurrentKonotorApp)
++(NSString *) getAppVersion{
+    if(gkCurrentKonotorApp){
         return gkCurrentKonotorApp.appVersion;
-    
+    }
     return nil;
 }
 
-+(void) UpdateAppVersion: (NSString *) appVersion
-{
-    if(gkCurrentKonotorApp)
-    {
++(void) UpdateAppVersion: (NSString *) appVersion{
+    if(gkCurrentKonotorApp){
         gkCurrentKonotorApp.appVersion = appVersion;
         [[KonotorDataManager sharedInstance]save];
     }
 }
 
-+(void) UpdateSDKVersion: (NSString *) sdkVersion
-{
-    if(gkCurrentKonotorApp)
-    {
++(void) UpdateSDKVersion: (NSString *) sdkVersion{
+    if(gkCurrentKonotorApp){
         gkCurrentKonotorApp.sdkVersion = sdkVersion;
         [[KonotorDataManager sharedInstance]save];
     }
 }
 
-+(NSString *) getSDKVersion
-{
-    if(gkCurrentKonotorApp)
++(NSString *) getSDKVersion{
+    if(gkCurrentKonotorApp){
         return gkCurrentKonotorApp.sdkVersion;
-    
+    }
     return nil;
 }
 
-+(void) successfullyUpdatedDeviceTokenOnServer
-{
-    if(gkCurrentKonotorApp)
-    {
++(void) successfullyUpdatedDeviceTokenOnServer{
+    if(gkCurrentKonotorApp){
         gkCurrentKonotorApp.deviceTokenUpdatedOnServer = TRUE;
         [[KonotorDataManager sharedInstance]save];
     }
 }
 
-+(BOOL) isDeviceTokenUpdatedOnServer
-{
-    if(gkCurrentKonotorApp)
-    {
++(BOOL) isDeviceTokenUpdatedOnServer{
+    if(gkCurrentKonotorApp){
         return gkCurrentKonotorApp.deviceTokenUpdatedOnServer;
     }
-    
     return YES;
     
 }
 
-+(NSString *) GetCachedDeviceToken
-{
-   
-    if(gkCurrentKonotorApp)
-        return gkCurrentKonotorApp.deviceToken;
++(NSString *) GetCachedDeviceToken{
+    if(gkCurrentKonotorApp){
+         return gkCurrentKonotorApp.deviceToken;
+    }
     return nil;
 }
 
-+(NSString *) GetAppKey
-{
-    if(gkCurrentKonotorApp)
++(NSString *) GetAppKey{
+    if(gkCurrentKonotorApp){
         return gkCurrentKonotorApp.appKey;
+    }
     return nil;
 }
 
-+(BOOL) hasWelcomeMessageDisplayed
-{
-    if(gkCurrentKonotorApp)
-    {
++(BOOL) hasWelcomeMessageDisplayed{
+    if(gkCurrentKonotorApp){
         return [gkCurrentKonotorApp hasWelcomeMessageDisplayed];
     }
-    
     return YES;
 }
 
-+(void) setWelcomeMessageStatus:(BOOL) status
-{
-    if(gkCurrentKonotorApp)
-    {
++(void) setWelcomeMessageStatus:(BOOL) status{
+    if(gkCurrentKonotorApp){
          [gkCurrentKonotorApp setHasWelcomeMessageDisplayed:status];
         [[KonotorDataManager sharedInstance]save];
-
-        
     }
 }
 
-
-
-
-+(BOOL) areConversationsDownloading
-{
-    
-        return areConversationsDownloading;
-    
++(BOOL) areConversationsDownloading{
+    return areConversationsDownloading;
 }
 
-
-+(BOOL) isUserBeingCreated
-{
++(BOOL) isUserBeingCreated{
     return isUserBeingCreated;
 }
 
-
-+(void) updateUserBeingCreated:(BOOL) status
-{
++(void) updateUserBeingCreated:(BOOL) status{
     isUserBeingCreated = status;
 }
 
-+(void) updateConversationsDownloading:(BOOL) status
-{
-   
-         areConversationsDownloading = status;
-    
++(void) updateConversationsDownloading:(BOOL) status{
+    areConversationsDownloading = status;
 }
-+(void) updateLastUpdatedConversations:(NSNumber *) lastUpdated
-{
-    if(gkCurrentKonotorApp)
-    {
+
++(void) updateLastUpdatedConversations:(NSNumber *) lastUpdated{
+    if(gkCurrentKonotorApp){
         gkCurrentKonotorApp.lastUpdatedConversation = lastUpdated;
         [[KonotorDataManager sharedInstance]save];
-
     }
 }
 
-+(void) UpdateAppAndSDKVersions
-{
++(void) UpdateAppAndSDKVersions{
     NSString *appVersionOnDisk = [KonotorApp getAppVersion];
     NSString *appVersionOnBundle  = [[[NSBundle mainBundle]infoDictionary]objectForKey:@"CFBundleShortVersionString"];
-
     
-    if(!appVersionOnDisk) //first time it will be nil
-    {
-        if(appVersionOnBundle)
+    //first time it will be nil
+    if(!appVersionOnDisk){
+        if(appVersionOnBundle){
             [KonotorWebServices UpdateAppVersion:appVersionOnBundle];
+        }
 
-    }
-    
     // or if the version has changed
-    else if (![appVersionOnBundle isEqualToString:appVersionOnDisk])
-    {
-        if(appVersionOnBundle)
+    } else if (![appVersionOnBundle isEqualToString:appVersionOnDisk]){
+        if(appVersionOnBundle){
             [KonotorWebServices UpdateAppVersion:appVersionOnBundle];
-
+        }
     }
-    
     
     NSString *sdkVersionOnDisk = [KonotorApp getSDKVersion];
     NSString *latestSDKVersion = KONOTOR_CURRENT_SDK_VERSION;
     
-    if(!sdkVersionOnDisk)
-    {
-        if(latestSDKVersion)
+    if(!sdkVersionOnDisk){
+        if(latestSDKVersion){
             [KonotorWebServices UpdateSdkVersion:latestSDKVersion];
-    }
-    
-    else if( ![sdkVersionOnDisk isEqualToString:latestSDKVersion])
-    {
-        if(latestSDKVersion)
+        }
+    }else if( ![sdkVersionOnDisk isEqualToString:latestSDKVersion]){
+        if(latestSDKVersion){
             [KonotorWebServices UpdateSdkVersion:latestSDKVersion];
-
+        }
     }
 
 }
 
-+(void) SendCachedTokenIfNotUpdated
-{
- 
-    if(![KonotorApp isDeviceTokenUpdatedOnServer])
-    {
++(void) SendCachedTokenIfNotUpdated{
+    if(![KonotorApp isDeviceTokenUpdatedOnServer]){
         NSString *deviceToken = [KonotorApp GetCachedDeviceToken];
-        
-        if(deviceToken)
-            [KonotorWebServices AddPushDeviceToken:deviceToken ];
+        if(deviceToken){
+            [KonotorWebServices AddPushDeviceToken:deviceToken];
+        }
     }
 }
 
-+(NSNumber*) getLastUpdatedConversationsTimeStamp
-{
-    if(gkCurrentKonotorApp)
-    {
++(NSNumber*) getLastUpdatedConversationsTimeStamp{
+    if(gkCurrentKonotorApp){
         return [gkCurrentKonotorApp lastUpdatedConversation];
         [[KonotorDataManager sharedInstance]save];
 
     }
-    
     return nil;
 }
+
 @end

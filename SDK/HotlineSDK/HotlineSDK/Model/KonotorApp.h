@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-
 @interface KonotorApp : NSManagedObject
 
 @property (nonatomic, retain) NSString * appID;
@@ -21,10 +20,7 @@
 @property (nonatomic) BOOL deviceTokenUpdatedOnServer;
 @property (nonatomic) BOOL hasWelcomeMessageDisplayed;
 @property (nonatomic,retain) NSNumber* audioPermissionGiven;
-//@property (nonatomic) BOOL isConversationsDownloading;
-
 @property (nonatomic, retain) NSNumber * lastUpdatedConversation;
-
 
 +(BOOL) InitWithAppID: (NSString *)AppID WithAppKey: (NSString *) AppKey;
 +(NSString *) GetAppID;
