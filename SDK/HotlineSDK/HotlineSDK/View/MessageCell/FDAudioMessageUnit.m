@@ -63,6 +63,18 @@
     [self.mediaProgressBar setMaximumTrackImage:[UIImage imageNamed:@"konotor_progress_black.png"] forState:UIControlStateNormal];
 }
 
+-(void) playMedia:(id)sender
+{
+    if([[Konotor getCurrentPlayingMessageID] isEqualToString:self.messageID])
+    {
+        [Konotor StopPlayback];
+        return;
+    }
+    BOOL playing=[Konotor playMessageWithMessageID:self.messageID];
+    if(playing)
+       [self startAnimating];
+}
+
 - (void) displayMessage:(KonotorMessageData*) currentMessage
 {
     [self.audioPlayButton setHidden:NO];

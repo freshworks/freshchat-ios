@@ -163,6 +163,11 @@ static id <KonotorDelegate> _delegate;
     return[KonotorAudioRecorder stopRecording];
 }
 
++(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation
+{
+    return [KonotorAudioRecorder stopRecordingOnConversation:conversation];
+}
+
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording
 {
     return[KonotorAudioRecorder getTimeElapsedSinceStartOfRecording];
@@ -185,8 +190,9 @@ static id <KonotorDelegate> _delegate;
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
-+(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID{
-    
++(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel{
+    [KonotorAudioRecorder SendRecordingWithMessageID:MessageID toConversationID:ConversationID onChannel:channel];
+    [[Konotor delegate] didStartUploadingNewMessage];
 }
 
 +(BOOL) StopPlayback{

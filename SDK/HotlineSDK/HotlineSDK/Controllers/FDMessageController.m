@@ -33,7 +33,7 @@
 @property (nonatomic,strong) KonotorConversation *conversation;
 @property (nonatomic, strong)KonotorImageInput *imageInput;
 @property (strong, nonatomic) NSTimer *pollingTimer;
-
+@property (nonatomic, strong) NSString* currentRecordingMessageId;
 
 @end
 
@@ -258,7 +258,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
-    [self updateBottomViewWith:self.audioMessageInputView andHeight:TOOLBAR_HEIGHT];
+    BOOL recording=[Konotor startRecording];
+    if(recording){
+        [self updateBottomViewWith:self.audioMessageInputView andHeight:TOOLBAR_HEIGHT];
+    }
     NSLog(@"Mic button pressed");
 }
 
@@ -627,11 +630,19 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
+    [Konotor cancelRecording];
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
 }
 
+-(void) audioMessageInput:(FDAudioMessageInputView *)toolbar stopButtonPressed:(id)sender{
+    self.currentRecordingMessageId=[Konotor stopRecording];
+}
+
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
-    //TODO: Upload audio message
+    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.channel.conversations.allObjects.lastObject];
+    if(self.currentRecordingMessageId!=nil){
+        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.channel.conversations.allObjects.lastObject conversationAlias]) onChannel:self.channel];
+    }
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
 }
 

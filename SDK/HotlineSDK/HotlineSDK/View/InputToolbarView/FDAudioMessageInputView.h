@@ -15,6 +15,7 @@
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender;
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender;
+-(void)audioMessageInput:(FDAudioMessageInputView *)toolbar stopButtonPressed:(id)sender;
 
 @end
 

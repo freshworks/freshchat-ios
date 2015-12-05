@@ -66,6 +66,7 @@ enum KonotorMessageUploadStatus
 +(BOOL) isUserMe:(NSString *) userId;
 +(BOOL) startRecording;
 +(NSString*) stopRecording;
++(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;
 +(BOOL) cancelRecording;
 
@@ -80,6 +81,7 @@ enum KonotorMessageUploadStatus
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 
 +(void) DownloadAllMessages;
 +(void) sendAllUnsentMessages;

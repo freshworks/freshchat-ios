@@ -320,6 +320,30 @@ KonotorAlertView *pAlert;
 
 }
 
++(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation
+{
+    NSString *messageID = nil;
+    if(gkAudioRecorder)
+    {
+        messageID = [KonotorMessage generateMessageID];
+        gkAudioRecorder.messageID = messageID;
+        
+        [gkAudioRecorder stop];
+        
+        [KonotorAudioRecorder SaveAudioMessageInCoreData:gkAudioRecorder onConversation:conversation];
+        
+        
+    }
+    
+    [KonotorAudioRecorder UnInitRecorder];
+    
+    [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
+    
+    return messageID;
+    
+}
+
+
 +(BOOL) deleteRecordingWithMessageID:(NSString *) messageID
 {
     return YES;
@@ -408,6 +432,69 @@ KonotorAlertView *pAlert;
         
     }
     
+}
+
++(BOOL) SendRecordingWithMessageID:(NSString *)messageID toConversationID:(NSString *) conversationID onChannel:(HLChannel*)channel
+{
+    KonotorConversation *conversation = nil;
+    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
+    
+    if(conversationID)
+        conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+    
+    if(!message)
+        return NO;
+    
+    
+    float audioDurationSeconds = [[message durationInSecs]floatValue];
+    if(audioDurationSeconds < 0.5)
+    {
+        
+        KonotorAlertView *alert = [[KonotorAlertView alloc]
+                                   initWithTitle: @"Message too short"
+                                   message: @"The message you are trying to send is less than half a second, Are you sure you want to send?"
+                                   delegate: nil
+                                   cancelButtonTitle:@"No"
+                                   otherButtonTitles:@"Send it",nil];
+        alert.messageToBeSent = message;
+        alert.conversation = conversation;
+        
+        [alert setDelegate:gkAudioRecorder];
+        [alert show];
+        pAlert = alert;
+        
+        return YES;
+        
+    }
+    
+    else if(audioDurationSeconds >120)
+    {
+        
+        KonotorAlertView *alert = [[KonotorAlertView alloc]
+                                   initWithTitle: @"Was it intentional?"
+                                   message: @"The message you are trying to send is more than 2 minutes, Are you sure you want to send?"
+                                   delegate: nil
+                                   cancelButtonTitle:@"No"
+                                   otherButtonTitles:@"Send it",nil];
+        
+        alert.messageToBeSent = message;
+        alert.conversation = conversation;
+        
+        [alert setDelegate:gkAudioRecorder];
+        [alert show];
+        pAlert = alert;
+        
+        return YES;
+        
+    }
+    
+    
+    else
+    {
+        [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
+        return YES;
+        
+    }
     
 }
 
@@ -496,6 +583,47 @@ float gKonoDecibels;
     
     return;
 
+}
+
++(void) SaveAudioMessageInCoreData:(KonotorAudioRecorder *)pRec onConversation:(KonotorConversation*)conversation
+{
+    KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
+    NSManagedObjectContext *context = [datamanager mainObjectContext];
+    
+    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    
+    [message setMessageUserId:[KonotorUser GetUserAlias]];
+    [message setMessageAlias:pRec.messageID];
+    [message setMessageType:[NSNumber numberWithInt:2]];
+    [message setMessageRead:YES];
+    [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
+    message.belongsToConversation=conversation;
+    
+    
+    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+    
+    NSString *path = [pRec.pFileDest path];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    
+    AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:pRec.pFileDest options:nil];
+    
+    CMTime audioDuration = audioAsset.duration;
+    float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
+    [message setDurationInSecs:[NSNumber numberWithFloat:audioDurationSeconds]];
+    
+    
+    [messageBinary setBinaryAudio:data];
+    [messageBinary setValue:message forKey:@"belongsToMessage"];
+    
+    
+    
+    [message setValue:messageBinary forKey:@"hasMessageBinary"];
+    
+    
+    [datamanager save];
+    
+    return;
+    
 }
 
 

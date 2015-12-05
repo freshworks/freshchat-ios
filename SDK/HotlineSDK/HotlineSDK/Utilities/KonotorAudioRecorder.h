@@ -19,8 +19,10 @@
 
 +(BOOL) startRecording;
 +(NSString *) stopRecording;
++(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 +(BOOL) cancelRecording;
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID;
++(BOOL) SendRecordingWithMessageID:(NSString *)messageID toConversationID:(NSString *) conversationID onChannel:(HLChannel*)channel;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;
 +(float) getDecibelLevel;
 @end

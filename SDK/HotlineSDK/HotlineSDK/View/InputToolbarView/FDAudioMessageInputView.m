@@ -8,6 +8,7 @@
 
 #import "FDAudioMessageInputView.h"
 #import "HLTheme.h"
+#import "Konotor.h"
 
 @interface FDAudioMessageInputView ()
 
@@ -80,6 +81,7 @@ int timeMin;
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[sendButton]-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[timeLabel]-[stopButton]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[timeLabel]-|" options:0 metrics:nil views:views]];
+    [self startTimer];
     [super layoutSubviews];
 }
 
@@ -89,27 +91,20 @@ int timeMin;
 }
 
 - (void)timerTick:(NSTimer *)timer{
-    timeSec++;
-    if (timeSec == 60){
-        timeSec = 0;
-        timeMin++;
-    }
-    NSString* timeNow = [NSString stringWithFormat:@"%02d:%02d", timeMin, timeSec];
-    self.timeLabel.text= timeNow;
+    self.timeLabel.text= [NSString stringWithFormat:@"%02d:%02d",(int)[Konotor getTimeElapsedSinceStartOfRecording]/(int)60,(int)[Konotor getTimeElapsedSinceStartOfRecording]%(int)60];
 }
 
 - (void) StopTimer{
     [self.timer invalidate];
-    timeSec = 0;
-    timeMin = 0;
-    NSString* timeNow = [NSString stringWithFormat:@"%02d:%02d", timeMin, timeSec];
-    self.timeLabel.text= timeNow;
+    self.timeLabel.text= [NSString stringWithFormat:@"%02d:%02d",(int)[Konotor getTimeElapsedSinceStartOfRecording]/(int)60,(int)[Konotor getTimeElapsedSinceStartOfRecording]%(int)60];
 }
 
 -(void)stopButtonPressed:(id)sender{
     self.stopButton.hidden = YES;
     self.sendButton.hidden = NO;
     self.recordingLabel.text = @"Recording Stopped";
+    [self StopTimer];
+    [self.delegate audioMessageInput:self stopButtonPressed:sender];
 }
 
 -(void)dismissButtonAction:(id)sender{
@@ -123,8 +118,8 @@ int timeMin;
 }
 
 -(void)resetAudioInputToolbar{
-    self.stopButton.hidden = NO;
-    self.sendButton.hidden = YES;
+    self.stopButton.hidden = YES;
+    self.sendButton.hidden = NO;
     self.recordingLabel.text = @"Audio Recording";
 }
 
