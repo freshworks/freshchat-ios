@@ -7,7 +7,6 @@
 //
 
 #import "KonotorImageInput.h"
-#import "KonotorFeedbackScreen.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FDAttachmentImageController.h"
 
@@ -33,12 +32,6 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
-    if([[KonotorUIParameters sharedInstance] noPhotoOption]){
-        self.sourceViewController=viewController;
-        self.sourceView=viewController.view;
-        [self showImagePicker];
-        return;
-    }
     UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:@"Message Type" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Select Existing Image",@"New Image via Camera",nil];
     inputOptions.delegate = self;
     self.sourceViewController=viewController;

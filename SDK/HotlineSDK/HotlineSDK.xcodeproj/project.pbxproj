@@ -21,17 +21,7 @@
 		35591AAA1B9ED58100BC0B60 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B156FA1795B5AF008F34D8 /* UIKit.framework */; };
 		35591AAB1B9ED58100BC0B60 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DD257178594180053E19E /* Foundation.framework */; };
 		35591AC41B9ED74900BC0B60 /* libHotlineAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */; };
-		35591AFF1B9EDBBC00BC0B60 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */; };
-		35591B001B9EDBBC00BC0B60 /* KonotorEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AEB1B9EDBBC00BC0B60 /* KonotorEventHandler.m */; };
-		35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AED1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m */; };
-		35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */; };
 		35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */; };
-		35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */; };
-		35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */; };
-		35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */; };
-		35591B071B9EDBBC00BC0B60 /* KonotorUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */; };
-		35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AFC1B9EDBBC00BC0B60 /* KonotorUtility.m */; };
-		35591B091B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AFE1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m */; };
 		35591B621B9EDCB700BC0B60 /* Hotline.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B251B9EDCB700BC0B60 /* Hotline.m */; };
 		35591B631B9EDCB700BC0B60 /* Konotor.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B281B9EDCB700BC0B60 /* Konotor.m */; };
 		35591B8E1B9EDD0700BC0B60 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B7C1B9EDD0700BC0B60 /* AFHTTPClient.m */; };
@@ -79,7 +69,6 @@
 		35DCCB531BE002960039EFDD /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB4C1BE002960039EFDD /* FDPromptView.m */; };
 		35DCCB541BE002960039EFDD /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB4E1BE002960039EFDD /* FDYesNoPromptView.m */; };
 		35DCCB571BE002E50039EFDD /* KonotorDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB561BE002E50039EFDD /* KonotorDataManager.m */; };
-		35DCCB5E1BE005370039EFDD /* Konotor_cpp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB591BE005370039EFDD /* Konotor_cpp.mm */; };
 		35DCCB5F1BE005370039EFDD /* KonotorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */; };
 		35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
@@ -159,29 +148,8 @@
 		353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMessageController.m; sourceTree = "<group>"; };
 		35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineAPI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		35591AE81B9EDBBC00BC0B60 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
-		35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
-		35591AEA1B9EDBBC00BC0B60 /* KonotorEventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorEventHandler.h; sourceTree = "<group>"; };
-		35591AEB1B9EDBBC00BC0B60 /* KonotorEventHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorEventHandler.m; sourceTree = "<group>"; };
-		35591AEC1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorFeedbackScreen.h; sourceTree = "<group>"; };
-		35591AED1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorFeedbackScreen.m; sourceTree = "<group>"; };
-		35591AEE1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorFeedbackScreenViewController.h; sourceTree = "<group>"; };
-		35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorFeedbackScreenViewController.m; sourceTree = "<group>"; };
 		35591AF01B9EDBBC00BC0B60 /* KonotorImageInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorImageInput.h; sourceTree = "<group>"; };
 		35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorImageInput.m; sourceTree = "<group>"; };
-		35591AF21B9EDBBC00BC0B60 /* KonotorImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorImageView.h; sourceTree = "<group>"; };
-		35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorImageView.m; sourceTree = "<group>"; };
-		35591AF41B9EDBBC00BC0B60 /* KonotorMediaUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorMediaUIButton.h; sourceTree = "<group>"; };
-		35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorMediaUIButton.m; sourceTree = "<group>"; };
-		35591AF61B9EDBBC00BC0B60 /* KonotorTextInputOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorTextInputOverlay.h; sourceTree = "<group>"; };
-		35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorTextInputOverlay.m; sourceTree = "<group>"; };
-		35591AF81B9EDBBC00BC0B60 /* KonotorUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUI.h; sourceTree = "<group>"; };
-		35591AF91B9EDBBC00BC0B60 /* KonotorUITextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUITextView.h; sourceTree = "<group>"; };
-		35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorUITextView.m; sourceTree = "<group>"; };
-		35591AFB1B9EDBBC00BC0B60 /* KonotorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUtility.h; sourceTree = "<group>"; };
-		35591AFC1B9EDBBC00BC0B60 /* KonotorUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorUtility.m; sourceTree = "<group>"; };
-		35591AFD1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorVoiceInputOverlay.h; sourceTree = "<group>"; };
-		35591AFE1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorVoiceInputOverlay.m; sourceTree = "<group>"; };
 		35591B241B9EDCB700BC0B60 /* Hotline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotline.h; sourceTree = "<group>"; };
 		35591B251B9EDCB700BC0B60 /* Hotline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hotline.m; sourceTree = "<group>"; };
 		35591B271B9EDCB700BC0B60 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
@@ -299,8 +267,6 @@
 		35DCCB4E1BE002960039EFDD /* FDYesNoPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDYesNoPromptView.m; sourceTree = "<group>"; };
 		35DCCB551BE002E50039EFDD /* KonotorDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorDataManager.h; sourceTree = "<group>"; };
 		35DCCB561BE002E50039EFDD /* KonotorDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorDataManager.m; sourceTree = "<group>"; };
-		35DCCB581BE005370039EFDD /* Konotor_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor_cpp.h; sourceTree = "<group>"; };
-		35DCCB591BE005370039EFDD /* Konotor_cpp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Konotor_cpp.mm; sourceTree = "<group>"; };
 		35DCCB5A1BE005370039EFDD /* KonotorAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorAudioPlayer.h; sourceTree = "<group>"; };
 		35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorAudioPlayer.m; sourceTree = "<group>"; };
 		35DCCB5C1BE005370039EFDD /* KonotorAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorAudioRecorder.h; sourceTree = "<group>"; };
@@ -455,8 +421,6 @@
 				35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */,
 				CE9D4D2D1BCE576A006F2E66 /* FDUtilities.h */,
 				CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */,
-				35DCCB581BE005370039EFDD /* Konotor_cpp.h */,
-				35DCCB591BE005370039EFDD /* Konotor_cpp.mm */,
 				35DCCB5A1BE005370039EFDD /* KonotorAudioPlayer.h */,
 				35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */,
 				35DCCB5C1BE005370039EFDD /* KonotorAudioRecorder.h */,
@@ -472,31 +436,10 @@
 		35591AE71B9EDBBC00BC0B60 /* HotlineInterfaceFiles */ = {
 			isa = PBXGroup;
 			children = (
-				35591AF81B9EDBBC00BC0B60 /* KonotorUI.h */,
-				35591AE81B9EDBBC00BC0B60 /* KonotorConversationViewController.h */,
-				35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */,
-				35591AEA1B9EDBBC00BC0B60 /* KonotorEventHandler.h */,
-				35591AEB1B9EDBBC00BC0B60 /* KonotorEventHandler.m */,
-				35591AEC1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.h */,
-				35591AED1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m */,
-				35591AEE1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.h */,
-				35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */,
 				35591AF01B9EDBBC00BC0B60 /* KonotorImageInput.h */,
 				35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */,
 				355F544C1C107787008FC1FA /* FDAttachmentImageController.h */,
 				355F544D1C107787008FC1FA /* FDAttachmentImageController.m */,
-				35591AF21B9EDBBC00BC0B60 /* KonotorImageView.h */,
-				35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */,
-				35591AF41B9EDBBC00BC0B60 /* KonotorMediaUIButton.h */,
-				35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */,
-				35591AF61B9EDBBC00BC0B60 /* KonotorTextInputOverlay.h */,
-				35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */,
-				35591AF91B9EDBBC00BC0B60 /* KonotorUITextView.h */,
-				35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */,
-				35591AFB1B9EDBBC00BC0B60 /* KonotorUtility.h */,
-				35591AFC1B9EDBBC00BC0B60 /* KonotorUtility.m */,
-				35591AFD1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.h */,
-				35591AFE1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m */,
 			);
 			path = HotlineInterfaceFiles;
 			sourceTree = "<group>";
@@ -918,7 +861,6 @@
 				35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */,
 				359E3E871BA6D20600B933C5 /* KonotorMessage.m in Sources */,
 				35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */,
-				35DCCB5E1BE005370039EFDD /* Konotor_cpp.mm in Sources */,
 				35591B951B9EDD0700BC0B60 /* AFXMLRequestOperation.m in Sources */,
 				35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */,
 				35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */,
@@ -954,17 +896,11 @@
 				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
 				CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */,
 				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,
-				35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */,
-				35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */,
 				35DCCB511BE002960039EFDD /* FDTableViewCell.m in Sources */,
 				35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */,
 				355F544E1C107787008FC1FA /* FDAttachmentImageController.m in Sources */,
 				CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */,
 				35DCCB3E1BE002220039EFDD /* FDActionButton.m in Sources */,
-				35591AFF1B9EDBBC00BC0B60 /* KonotorConversationViewController.m in Sources */,
-				35591B001B9EDBBC00BC0B60 /* KonotorEventHandler.m in Sources */,
-				35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */,
-				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
 				91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */,
 				CE9D4D3B1BCFC363006F2E66 /* (null) in Sources */,
@@ -973,17 +909,14 @@
 				35DCCB571BE002E50039EFDD /* KonotorDataManager.m in Sources */,
 				CE16D33B1BFDE3100045F235 /* HLChannel.m in Sources */,
 				353AA00D1BDF7B4F008CDAB2 /* FDMessageController.m in Sources */,
-				35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */,
 				CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */,
 				35DCCB361BE001650039EFDD /* HLGridViewCell.m in Sources */,
 				35DCCB531BE002960039EFDD /* FDPromptView.m in Sources */,
 				3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */,
-				35591B091B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m in Sources */,
 				CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */,
 				35DCCB2F1BE001650039EFDD /* FDBadgeView.m in Sources */,
 				35DCCB3F1BE002220039EFDD /* FDAudioMessageUnit.m in Sources */,
 				3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */,
-				35591B071B9EDBBC00BC0B60 /* KonotorUITextView.m in Sources */,
 				CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */,
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
 				CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */,
@@ -994,7 +927,6 @@
 				35DCCB501BE002960039EFDD /* FDSearchBar.m in Sources */,
 				35DCCB4F1BE002960039EFDD /* FDButton.m in Sources */,
 				CE6245301BFC8F9C0050C8EB /* FDDateUtil.m in Sources */,
-				35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */,
 				35DCCB521BE002960039EFDD /* FDAlertView.m in Sources */,
 				CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */,
 				CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */,

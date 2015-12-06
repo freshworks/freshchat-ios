@@ -7,8 +7,6 @@
 //
 
 #import "Hotline.h"
-#import "KonotorFeedbackScreen.h"
-#import "KonotorEventHandler.h"
 #import "HLContainerController.h"
 #import "HLCategoriesListController.h"
 #import "HLCategoryGridViewController.h"
@@ -18,6 +16,7 @@
 #import "FDMessageController.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
+#import "Konotor.h"
 
 @interface Hotline ()
 
@@ -63,10 +62,6 @@
     }];
 }
 
-+(void)showFeedbackScreen{
-    [KonotorFeedbackScreen showFeedbackScreen];
-}
-
 +(void)setSecretKey:(NSString *)key{
     [Konotor setSecretKey:key];
 }
@@ -78,7 +73,7 @@
     if (delegate) {
         [Konotor InitWithAppID:AppID AppKey:AppKey withDelegate:delegate];
     }else{
-        [Konotor InitWithAppID:AppID AppKey:AppKey withDelegate:[KonotorEventHandler sharedInstance]];
+        [Konotor InitWithAppID:AppID AppKey:AppKey withDelegate:nil];
     }
     FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
 }

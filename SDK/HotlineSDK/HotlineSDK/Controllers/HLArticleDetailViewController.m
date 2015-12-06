@@ -10,11 +10,11 @@
 #import "HLArticleDetailViewController.h"
 #import "FDVotingManager.h"
 #import "FDSecureStore.h"
-#import "KonotorFeedbackScreen.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
 //#import "FDConstants.h"
 #import "FDLocalNotification.h"
+#import "Hotline.h"
 
 #define HL_THEMES_DIR @"Themes"
 
@@ -311,7 +311,7 @@
 
 -(void)buttonClickedEvent:(id)sender{
     [self hideContactUsPrompt];
-    [KonotorFeedbackScreen showFeedbackScreen];
+    [Hotline presentFeedback:self];
 }
 
 -(void)dealloc{

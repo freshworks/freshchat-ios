@@ -21,8 +21,8 @@
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
-#import "KonotorFeedbackScreen.h"
 #import "KonotorUtil.h"
+#import "Hotline.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
 
@@ -181,7 +181,7 @@
 #pragma mark - Collection view delegate
 
 -(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
-    [KonotorFeedbackScreen showFeedbackScreen];
+    [Hotline presentFeedback:self];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{

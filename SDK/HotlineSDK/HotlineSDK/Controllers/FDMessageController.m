@@ -16,6 +16,9 @@
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
 
+#define KONOTOR_REFRESHINDICATOR_TAG 80
+#define KONOTOR_MESSAGESPERPAGE 25
+
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -447,24 +450,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 #pragma mark Konotor delegates
-
-- (void) didFinishPlaying:(NSString *)messageID{
-    for(UITableViewCell* cell in [self.tableView visibleCells]){
-        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
-        if([button.messageID isEqualToString:messageID]){
-            [button stopAnimating];
-        }
-    }
-}
-
-- (void) didStartPlaying:(NSString *)messageID{
-    for(UITableViewCell* cell in [self.tableView visibleCells]){
-        KonotorMediaUIButton* button=(KonotorMediaUIButton*)[cell viewWithTag:KONOTOR_PLAYBUTTON_TAG];
-        if([button.messageID isEqualToString:messageID]){
-            [button startAnimating];
-        }
-    }
-}
 
 - (void) didStartUploadingNewMessage{
     [self refreshView];

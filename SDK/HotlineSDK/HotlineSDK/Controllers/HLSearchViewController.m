@@ -13,7 +13,6 @@
 #import "FDRanking.h"
 #import "HLTheme.h"
 #import "KonotorDataManager.h"
-#import "KonotorFeedbackScreen.h"
 #import "FDButton.h"
 #import "HLArticleDetailViewController.h"
 #import "FDTableViewCell.h"

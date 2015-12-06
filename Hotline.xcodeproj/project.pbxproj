@@ -42,16 +42,6 @@
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; };
 		35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */; };
-		35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE11BB3EA4600E0052D /* konotor_cam.png */; };
-		35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE21BB3EA4600E0052D /* konotor_cam@2x.png */; };
-		35ED5F0B1BB3EA4600E0052D /* konotor_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE31BB3EA4600E0052D /* konotor_cancel.png */; };
-		35ED5F0C1BB3EA4600E0052D /* konotor_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE41BB3EA4600E0052D /* konotor_cancel@2x.png */; };
-		35ED5F0D1BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE51BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png */; };
-		35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE61BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png */; };
-		35ED5F0F1BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE71BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png */; };
-		35ED5F101BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE81BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png */; };
-		35ED5F111BB3EA4600E0052D /* konotor_cross.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE91BB3EA4600E0052D /* konotor_cross.png */; };
-		35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EEA1BB3EA4600E0052D /* konotor_cross@2x.png */; };
 		35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EEB1BB3EA4600E0052D /* konotor_mic.png */; };
 		35ED5F141BB3EA4600E0052D /* konotor_mic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EEC1BB3EA4600E0052D /* konotor_mic@2x.png */; };
 		35ED5F151BB3EA4600E0052D /* konotor_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EED1BB3EA4600E0052D /* konotor_placeholder.png */; };
@@ -74,8 +64,6 @@
 		35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */; };
 		35ED5F271BB3EA4600E0052D /* konotor_uploading.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */; };
 		35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */; };
-		35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */; };
-		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; };
 		35F398031C07468700FC9B2C /* Upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398001C07468700FC9B2C /* Upload.png */; };
 		35F398041C07468700FC9B2C /* Upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398011C07468700FC9B2C /* Upload@2x.png */; };
 		35F398051C07468700FC9B2C /* Upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398021C07468700FC9B2C /* Upload@3x.png */; };
@@ -203,16 +191,6 @@
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
 		35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_back@2x.png"; sourceTree = "<group>"; };
-		35ED5EE11BB3EA4600E0052D /* konotor_cam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cam.png; sourceTree = "<group>"; };
-		35ED5EE21BB3EA4600E0052D /* konotor_cam@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cam@2x.png"; sourceTree = "<group>"; };
-		35ED5EE31BB3EA4600E0052D /* konotor_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cancel.png; sourceTree = "<group>"; };
-		35ED5EE41BB3EA4600E0052D /* konotor_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cancel@2x.png"; sourceTree = "<group>"; };
-		35ED5EE51BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_chatbubble_ios7_other.png; sourceTree = "<group>"; };
-		35ED5EE61BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_chatbubble_ios7_other@2x.png"; sourceTree = "<group>"; };
-		35ED5EE71BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_chatbubble_ios7_you.png; sourceTree = "<group>"; };
-		35ED5EE81BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_chatbubble_ios7_you@2x.png"; sourceTree = "<group>"; };
-		35ED5EE91BB3EA4600E0052D /* konotor_cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cross.png; sourceTree = "<group>"; };
-		35ED5EEA1BB3EA4600E0052D /* konotor_cross@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cross@2x.png"; sourceTree = "<group>"; };
 		35ED5EEB1BB3EA4600E0052D /* konotor_mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_mic.png; sourceTree = "<group>"; };
 		35ED5EEC1BB3EA4600E0052D /* konotor_mic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_mic@2x.png"; sourceTree = "<group>"; };
 		35ED5EED1BB3EA4600E0052D /* konotor_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_placeholder.png; sourceTree = "<group>"; };
@@ -235,8 +213,6 @@
 		35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_supportprofile@2x.png"; sourceTree = "<group>"; };
 		35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_uploading.png; sourceTree = "<group>"; };
 		35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
-		35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorConversationViewController.xib; sourceTree = "<group>"; };
-		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
 		35F398001C07468700FC9B2C /* Upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Upload.png; sourceTree = "<group>"; };
 		35F398011C07468700FC9B2C /* Upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@2x.png"; sourceTree = "<group>"; };
 		35F398021C07468700FC9B2C /* Upload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@3x.png"; sourceTree = "<group>"; };
@@ -412,7 +388,6 @@
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 				35ED5EDE1BB3EA4600E0052D /* Konotor-Images */,
-				35ED5F021BB3EA4600E0052D /* XIB */,
 			);
 			path = HotlineResources;
 			sourceTree = "<group>";
@@ -453,16 +428,6 @@
 				CE1064A11BC6780700922494 /* message.png */,
 				35ED5EDF1BB3EA4600E0052D /* konotor_back.png */,
 				35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */,
-				35ED5EE11BB3EA4600E0052D /* konotor_cam.png */,
-				35ED5EE21BB3EA4600E0052D /* konotor_cam@2x.png */,
-				35ED5EE31BB3EA4600E0052D /* konotor_cancel.png */,
-				35ED5EE41BB3EA4600E0052D /* konotor_cancel@2x.png */,
-				35ED5EE51BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png */,
-				35ED5EE61BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png */,
-				35ED5EE71BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png */,
-				35ED5EE81BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png */,
-				35ED5EE91BB3EA4600E0052D /* konotor_cross.png */,
-				35ED5EEA1BB3EA4600E0052D /* konotor_cross@2x.png */,
 				35ED5EEB1BB3EA4600E0052D /* konotor_mic.png */,
 				35ED5EEC1BB3EA4600E0052D /* konotor_mic@2x.png */,
 				35ED5EED1BB3EA4600E0052D /* konotor_placeholder.png */,
@@ -487,15 +452,6 @@
 				35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */,
 			);
 			path = "Konotor-Images";
-			sourceTree = "<group>";
-		};
-		35ED5F021BB3EA4600E0052D /* XIB */ = {
-			isa = PBXGroup;
-			children = (
-				35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */,
-				35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */,
-			);
-			path = XIB;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -648,23 +604,15 @@
 				CE1064A21BC6780700922494 /* message.png in Resources */,
 				35ED5F1E1BB3EA4600E0052D /* konotor_progress_blue@2x.png in Resources */,
 				35ED5F1C1BB3EA4600E0052D /* konotor_progress_black@2x.png in Resources */,
-				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
-				35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */,
-				35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */,
 				3518BF901BFB6FC1003B558D /* Send@3x.png in Resources */,
 				3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */,
 				35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */,
 				35ED5F151BB3EA4600E0052D /* konotor_placeholder.png in Resources */,
 				35ED5F1B1BB3EA4600E0052D /* konotor_progress_black.png in Resources */,
-				35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */,
 				35ED5F201BB3EA4600E0052D /* konotor_sent@2x.png in Resources */,
-				35ED5F0D1BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png in Resources */,
-				35ED5F0B1BB3EA4600E0052D /* konotor_cancel.png in Resources */,
 				CE2B27211C11D4C100D9A253 /* Stop.png in Resources */,
 				CE16D3291BFDAF750045F235 /* arrow.jpg in Resources */,
-				35ED5F0C1BB3EA4600E0052D /* konotor_cancel@2x.png in Resources */,
 				CE2B271D1C11D4C100D9A253 /* cancel.png in Resources */,
-				35ED5F0F1BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png in Resources */,
 				35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */,
 				CE2B271F1C11D4C100D9A253 /* Mic.png in Resources */,
 				CE80CA511BE36A9900473E49 /* (null) in Resources */,
@@ -679,18 +627,14 @@
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
 				35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */,
 				35ED5F191BB3EA4600E0052D /* konotor_profile.png in Resources */,
-				35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */,
-				35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */,
 				3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */,
 				35B909421C088CB4003BCC4A /* KonotorModels.bundle in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
 				35F398031C07468700FC9B2C /* Upload.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
 				35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */,
-				35ED5F111BB3EA4600E0052D /* konotor_cross.png in Resources */,
 				35ED5F211BB3EA4600E0052D /* konotor_share.png in Resources */,
 				35ED5F241BB3EA4600E0052D /* konotor_stop@2x.png in Resources */,
-				35ED5F101BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				35ED5F171BB3EA4600E0052D /* konotor_play.png in Resources */,
 				3518BF8E1BFB6FC1003B558D /* Send.png in Resources */,
 				35ED5F141BB3EA4600E0052D /* konotor_mic@2x.png in Resources */,

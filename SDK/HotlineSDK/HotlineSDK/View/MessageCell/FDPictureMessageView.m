@@ -7,7 +7,11 @@
 //
 
 #import "FDPictureMessageView.h"
-#import "KonotorUI.h"
+#import "FDMessageCell.h"
+#define KONOTOR_PICTURE_TAG 89
+
+#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET_IMESSAGECALLOUT
+#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET_IMESSAGECALLOUT 14
 
 @implementation FDPictureMessageView
 
@@ -32,13 +36,6 @@
     tapGesture.height=[[currentMessage picHeight] floatValue];
     tapGesture.width=[[currentMessage picWidth] floatValue];
     self.userInteractionEnabled=YES;
-    NSArray* gestureRecognizers=[self gestureRecognizers];
-    for(UIGestureRecognizer* gr in gestureRecognizers){
-//        if([gr isKindOfClass:[TapOnPictureRecognizer class]])
-//            [self removeGestureRecognizer:gr];
-    }
-  //  [self addGestureRecognizer:tapGesture];
-    
     
     if([currentMessage picThumbData]){
         UIImage *picture=[UIImage imageWithData:[currentMessage picThumbData]];
@@ -68,13 +65,6 @@
                         tapGesture.height=[[currentMessage picHeight] floatValue];
                         tapGesture.width=[[currentMessage picWidth] floatValue];
                         self.userInteractionEnabled=YES;
-                        NSArray* gestureRecognizers=[self gestureRecognizers];
-                        for(UIGestureRecognizer* gr in gestureRecognizers){
-//                            if([gr isKindOfClass:[TapOnPictureRecognizer class]])
-//                                [self removeGestureRecognizer:gr];
-                        }
-                     //   [self addGestureRecognizer:tapGesture];
-                        
                     }
                 });
             });

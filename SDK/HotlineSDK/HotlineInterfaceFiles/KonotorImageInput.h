@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KonotorUtility.h"
+#import <UIKit/UIKit.h>
+#import "Konotor.h"
 
 #define KONOTOR_IMAGEINPUT_CAPTIONTEXT 4243
 #define KONOTOR_IMAGEINPUT_CAPTIONENTRY 4242

@@ -8,7 +8,9 @@
 
 #import "FDMessageCell.h"
 #import "FDUtilities.h"
-#import "KonotorUI.h"
+
+static KonotorUIParameters* konotorUIParameters=nil;
+
 @implementation FDMessageCell
 
 @synthesize messageActionButton,messagePictureImageView,messageSentTimeLabel,messageTextView,chatCalloutImageView,uploadStatusImageView,profileImageView,audioItem,senderNameLabel;
@@ -38,8 +40,6 @@
     
     /* setup callout*/
     chatCalloutImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
-    UIEdgeInsets insets=UIEdgeInsetsMake(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_BOTTOM_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_RIGHT_INSET);
-    [chatCalloutImageView setImage:[[UIImage imageNamed:@"konotor_chatbubble_ios7_other.png"] resizableImageWithCapInsets:insets]];
     [self.contentView addSubview:chatCalloutImageView];
     
     /* setup UserName field*/
@@ -254,6 +254,7 @@
     
         
     KonotorUIParameters* interfaceOptions=[KonotorUIParameters sharedInstance];
+    
     if(isSenderOther){
         senderNameLabel.text=@"Support";
         [uploadStatusImageView setImage:nil];
@@ -435,10 +436,6 @@
         float txtheight=0.0;
         
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
-            
-           // NSMutableAttributedString* attributedString=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
-           // txtheight=[attributedString boundingRectWithSize:CGSizeMake(width, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil].size.height;
-            
             NSString *simpleString=currentMessage.text;
             txtheight=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
         }
@@ -545,5 +542,85 @@
     CGSize size=[txtView sizeThatFits:CGSizeMake(width, 1000)];
     return size.height-16;
 }
+
+@end
+
+@implementation KonotorUIParameters
+
+@synthesize disableTransparentOverlay,headerViewColor,backgroundViewColor,voiceInputEnabled,imageInputEnabled,closeButtonImage,autoShowTextInput,titleText,textInputButtonImage,titleTextColor,showInputOptions,noPhotoOption,titleTextFont,allowSendingEmptyMessage,dontShowLoadingAnimation,sendButtonColor,doneButtonColor,userChatBubble,userTextColor,otherChatBubble,otherTextColor,overlayTransitionStyle,inputHintText,userProfileImage,otherProfileImage,showOtherName,showUserName,otherName,userName,messageTextFont,inputTextFont,notificationCenterMode,customFontName,doneButtonFont,doneButtonText,dismissesInputOnScroll,alwaysPollForMessages,pollingTimeNotOnChatWindow,pollingTimeOnChatWindow,otherChatBubbleInsets,userChatBubbleInsets/*,cancelButtonText,cancelButtonFont,cancelButtonColor*/;
+
++ (KonotorUIParameters*) sharedInstance
+{
+    if(konotorUIParameters==nil){
+        konotorUIParameters=[[KonotorUIParameters alloc] init];
+        konotorUIParameters.voiceInputEnabled=NO;
+        konotorUIParameters.imageInputEnabled=YES;
+        konotorUIParameters.actionButtonLabelColor=[UIColor whiteColor];
+        konotorUIParameters.actionButtonColor=[UIColor colorWithRed:0 green:0.5 blue:0 alpha:1];
+        konotorUIParameters.backgroundViewColor=nil;
+        konotorUIParameters.headerViewColor=[UIColor colorWithRed:0.97 green:0.97 blue:0.97 alpha:1.0];
+        
+        konotorUIParameters.titleTextColor=nil;
+        konotorUIParameters.showInputOptions=YES;
+        konotorUIParameters.textInputButtonImage=nil;
+        konotorUIParameters.messageSharingEnabled=NO;
+        konotorUIParameters.noPhotoOption=NO;
+        konotorUIParameters.titleTextFont=nil;
+        konotorUIParameters.messageTextFont=nil;
+        konotorUIParameters.inputTextFont=nil;
+        konotorUIParameters.allowSendingEmptyMessage=NO;
+        konotorUIParameters.dontShowLoadingAnimation=NO;
+        
+        konotorUIParameters.sendButtonColor=nil;
+        konotorUIParameters.doneButtonColor=nil;
+        
+        konotorUIParameters.otherTextColor=[UIColor blackColor];
+        konotorUIParameters.otherChatBubble=[UIImage imageNamed:@"messagebubble_left"];
+        konotorUIParameters.userTextColor=[UIColor darkGrayColor];
+        konotorUIParameters.userChatBubble=[UIImage imageNamed:@"messagebubble_right"];
+        konotorUIParameters.userProfileImage=nil;
+        konotorUIParameters.otherProfileImage=nil;
+        
+        konotorUIParameters.overlayTransitionStyle=UIModalTransitionStyleCoverVertical;
+        konotorUIParameters.inputHintText=nil;
+        
+        konotorUIParameters.showUserName=NO;
+        konotorUIParameters.showOtherName=NO;
+        
+        konotorUIParameters.otherName=nil;
+        konotorUIParameters.userName=nil;
+        
+        konotorUIParameters.notificationCenterMode=NO;
+        
+        konotorUIParameters.customFontName=nil;
+        konotorUIParameters.doneButtonFont=nil;
+        
+        konotorUIParameters.doneButtonText=@"Done";
+        konotorUIParameters.dismissesInputOnScroll=NO;
+        
+        konotorUIParameters.pollingTimeOnChatWindow=10;
+        konotorUIParameters.pollingTimeNotOnChatWindow=-1;
+        konotorUIParameters.alwaysPollForMessages=NO;
+        
+        konotorUIParameters.otherChatBubbleInsets=UIEdgeInsetsMake(9, 12, 10, 7);
+        konotorUIParameters.userChatBubbleInsets=UIEdgeInsetsMake(10, 7, 9, 12);
+        
+    }
+    return konotorUIParameters;
+}
+
+
+- (void) disableMessageSharing{
+    self.messageSharingEnabled=NO;
+}
+- (void) enableMessageSharing{
+    self.messageSharingEnabled=YES;
+}
+
+@end
+
+@implementation TapOnPictureRecognizer
+
+@synthesize height,width,image,imageURL;
 
 @end
