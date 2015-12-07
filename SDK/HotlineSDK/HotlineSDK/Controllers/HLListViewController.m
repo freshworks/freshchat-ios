@@ -24,11 +24,10 @@
     self.tableView.delegate = self;
     
     self.footerView = [[FDMarginalView alloc] init];
-    self.footerView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.footerView.marginalLabel.userInteractionEnabled=YES;
+
+    // CHECK : Make this a method exposed through a Delegate and move it inside 
     UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
+    [self.footerView addGestureRecognizer: tapGesture];
 
     [self.view addSubview:self.footerView];
     [self.view addSubview:self.tableView];

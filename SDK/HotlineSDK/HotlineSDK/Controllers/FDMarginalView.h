@@ -11,8 +11,7 @@
 
 @interface FDMarginalView : UIView
 
-@property (nonatomic,strong) UILabel *marginalLabel;
-
 -(void)setLabelText:(NSString *)text;
+-(void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
 
 @end
