@@ -12,7 +12,6 @@
 @interface FDMarginalView : UIView
 
 @property (nonatomic,strong) UILabel *marginalLabel;
-@property (nonatomic,strong) HLTheme *theme;
 
 -(void)setLabelText:(NSString *)text;
 
