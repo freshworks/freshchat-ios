@@ -50,7 +50,7 @@ enum KonotorMessageUploadStatus
 
 @interface Konotor : NSObject
 
-+(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
++(void) initWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void) setDelegate:(id) delegate;
 +(BOOL) handleRemoteNotification:(NSDictionary*)userInfo;
 +(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen;
@@ -101,7 +101,6 @@ enum KonotorMessageUploadStatus
 
 +(void) newSession;
 +(BOOL) isPushEnabled;
-+(BOOL) isPoweredByHidden;
 +(void) setSecretKey:(NSString*)key;
 
 @end

@@ -115,13 +115,6 @@
                     tapGesture.height=[[currentMessage picHeight] floatValue];
                     tapGesture.width=[[currentMessage picWidth] floatValue];
                     self.userInteractionEnabled=YES;
-                    NSArray* gestureRecognizers=[self gestureRecognizers];
-                    for(UIGestureRecognizer* gr in gestureRecognizers){
-//                        if([gr isKindOfClass:[TapOnPictureRecognizer class]])
-//                            [self removeGestureRecognizer:gr];
-                    }
-                 //   [self addGestureRecognizer:tapGesture];
-                    
                 }
             });
         });

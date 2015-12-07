@@ -16,7 +16,7 @@
 +(instancetype) sharedInstance;
 +(void) setSecretKey:(NSString*)key;
 +(void) setUnreadWelcomeMessage:(NSString *) text;
--(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
+-(void) initWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void)presentFeedback:(UIViewController *)controller;
 -(void)presentSolutions:(UIViewController *)controller;
 

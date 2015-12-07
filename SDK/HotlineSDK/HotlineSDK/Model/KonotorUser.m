@@ -21,6 +21,42 @@
 static BOOL KONOTOR_INIT_USER_DONE = NO;
 static KonotorUser *gCurrentUser = nil;
 
++(void)InitUser{
+    if(![KonotorApp getAppInitStatus])
+        return;
+    
+    if(!KONOTOR_INIT_USER_DONE){
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *urlString = [defaults stringForKey:@"uriForCurrentlyLoggedInKonotorUser"];
+        if(urlString){
+            NSURL *mouri = [NSURL URLWithString:urlString];
+            NSPersistentStoreCoordinator *coord = [[KonotorDataManager sharedInstance]persistentStoreCoordinator];
+            NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
+            gCurrentUser = (KonotorUser*)[context objectWithID:[coord managedObjectIDForURIRepresentation:mouri]];
+            KONOTOR_INIT_USER_DONE = YES;
+            [Konotor performSelector:@selector(PerformAllPendingTasks) withObject:nil];
+            [KonotorWebServices DAUCall];
+        }
+        else
+        {
+            KonotorUser *pUser = (KonotorUser *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorUser" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
+            
+            pUser.isUserCreatedOnServer = [FDUtilities isRegisteredDevice];
+            pUser.userAlias = [FDUtilities getUUID];
+            
+            [[KonotorDataManager sharedInstance]save];
+            gCurrentUser = pUser;
+            NSURL *moURI = [[pUser objectID] URIRepresentation];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:[moURI absoluteString] forKey:@"uriForCurrentlyLoggedInKonotorUser"];
+            [defaults synchronize];
+            [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(PerformAllPendingTasks) withObject:[Konotor class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
+            [KonotorWebServices DAUCall];
+            KONOTOR_INIT_USER_DONE = YES;
+        }
+    }
+}
+
 +(BOOL) CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:(SEL)SuccessSelector withObject:(id) successObject withSuccessParameter:(id) successParameter
 ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParameter:(id) failureParameter{
     
@@ -121,45 +157,10 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
 }
 
 +(KonotorUser *) GetCurrentlyLoggedInUser{
-    if(!gCurrentUser)
+    if(!gCurrentUser){
         [KonotorUser InitUser];
-    return gCurrentUser;
-}
-
-+(void)InitUser{
-    if(![KonotorApp getAppInitStatus])
-        return;
-    
-    if(!KONOTOR_INIT_USER_DONE){
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *urlString = [defaults stringForKey:@"uriForCurrentlyLoggedInKonotorUser"];
-        if(urlString){
-            NSURL *mouri = [NSURL URLWithString:urlString];
-            NSPersistentStoreCoordinator *coord = [[KonotorDataManager sharedInstance]persistentStoreCoordinator];
-            NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-            gCurrentUser = (KonotorUser*)[context objectWithID:[coord managedObjectIDForURIRepresentation:mouri]];
-            KONOTOR_INIT_USER_DONE = YES;
-            [Konotor performSelector:@selector(PerformAllPendingTasks) withObject:nil];
-            [KonotorWebServices DAUCall];
-        }
-        else
-        {
-            KonotorUser *pUser = (KonotorUser *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorUser" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
-            
-            pUser.isUserCreatedOnServer = [FDUtilities isRegisteredDevice];
-            pUser.userAlias = [FDUtilities getUUID];
-            
-            [[KonotorDataManager sharedInstance]save];
-            gCurrentUser = pUser;
-            NSURL *moURI = [[pUser objectID] URIRepresentation];
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:[moURI absoluteString] forKey:@"uriForCurrentlyLoggedInKonotorUser"];
-            [defaults synchronize];
-            [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(PerformAllPendingTasks) withObject:[Konotor class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
-            [KonotorWebServices DAUCall];
-            KONOTOR_INIT_USER_DONE = YES;
-        }
     }
+    return gCurrentUser;
 }
 
 +(BOOL) UserCreatedOnServer{

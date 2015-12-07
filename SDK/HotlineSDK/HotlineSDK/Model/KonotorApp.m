@@ -27,7 +27,7 @@ static BOOL isUserBeingCreated = NO;
     return KONOTOR_APP_INIT_DONE;
 }
 
-+(BOOL) InitWithAppID: (NSString *)AppID WithAppKey: (NSString *) appKey{
++(BOOL)initWithAppID: (NSString *)AppID WithAppKey: (NSString *) appKey{
     [KonotorDataManager sharedInstance];
     if(!KONOTOR_APP_INIT_DONE){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -43,11 +43,11 @@ static BOOL isUserBeingCreated = NO;
             [gkCurrentKonotorApp setAppKey:appKey];
             
             [[KonotorDataManager sharedInstance]save];
-            [KonotorUser InitUser];
 
             if(gkCurrentKonotorApp.deviceTokenUpdatedOnServer == FALSE){
                 [KonotorWebServices AddPushDeviceToken:gkCurrentKonotorApp.deviceToken];
             }
+            
             KONOTOR_APP_INIT_DONE = YES;
             
         }else{

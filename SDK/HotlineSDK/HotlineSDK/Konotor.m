@@ -9,10 +9,6 @@
 #import "Konotor.h"
 #import "KonotorUser.h"
 #import "KonotorDataManager.h"
-#import <AVFoundation/AVAudioPlayer.h>
-#import <AVFoundation/AVAudioSession.h>
-#import <AVFoundation/AVFoundation.h>
-#import "CoreAudio/CoreAudioTypes.h"
 #import <Foundation/NSUUID.h>
 #import "KonotorAudioRecorder.h"
 #import "KonotorApp.h"
@@ -22,91 +18,41 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "HLMacros.h"
 #import "HLMessageServices.h"
-
+#import "FDChannelUpdater.h"
+#import "FDSolutionUpdater.h"
 
 extern  bool KONOTOR_APP_INIT_DONE;
-static NSString* kon_unlock_key=nil;
-
-@interface NSString(MD5)
-
-- (NSString *)MD5;
-
-@end
-
-@implementation NSString(MD5)
-
-- (NSString*)MD5
-{
-    // Create pointer to the string as UTF8
-    const char *ptr = [self UTF8String];
-    
-    // Create byte array of unsigned chars
-    unsigned char md5Buffer[16];
-    
-    // Create 16 byte MD5 hash value, store in buffer
-    CC_MD5(ptr,(unsigned int) strlen(ptr), md5Buffer);
-    
-    // Convert MD5 value in the buffer to NSString of hex values
-    NSMutableString *output = [NSMutableString stringWithCapacity:16 * 2];
-    for(int i = 0; i < 16; i++)
-        [output appendFormat:@"%02x",md5Buffer[i]];
-    
-    return output;
-}
-
-@end
+static NSString *kon_unlock_key = nil;
 
 @implementation Konotor
 
 static id <KonotorDelegate> _delegate;
 
-+(id) delegate
-{
++(id) delegate{
     return _delegate;
 }
 
-+(void) setDelegate:(id)delegate
-{
++(void) setDelegate:(id)delegate{
     _delegate = delegate;
 }
 
-+(void) setSecretKey:(NSString*)key
-{
++(void) setSecretKey:(NSString*)key{
     kon_unlock_key=key;
 }
 
-+(void) InitSequenceWithAppID :(NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate
-{
-    if(KONOTOR_APP_INIT_DONE)
-    {
-        return;
-    }
-    
-    [KonotorApp InitWithAppID:AppID WithAppKey:AppKey];
-    _delegate = delegate;
-    [KonotorUser InitUser];
-    [KonotorApp UpdateAppAndSDKVersions];
-}
-
-+(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate{
-    
++(void) initWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
     if(KONOTOR_APP_INIT_DONE){
         return;
     }
     
-
-    if (![NSThread isMainThread]){
-        dispatch_async(dispatch_get_main_queue(),^{
-            [Konotor InitSequenceWithAppID:AppID AppKey:AppKey withDelegate:delegate];
-        });
-        
-    }
-    
-    else
-    {
-        [Konotor InitSequenceWithAppID:AppID AppKey:AppKey withDelegate:delegate];
-                           
-    }
+    //in the completion handler init user
+    //on success do all the pending tasks
+    dispatch_async(dispatch_get_main_queue(),^{
+        _delegate = delegate;
+        [KonotorApp initWithAppID:AppID WithAppKey:AppKey];
+        [KonotorUser InitUser];
+        [KonotorApp UpdateAppAndSDKVersions];
+    });
 }
 
 +(void) sendAllUnsentMessages{
@@ -119,7 +65,8 @@ static id <KonotorDelegate> _delegate;
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
         if(KONOTOR_APP_INIT_DONE){
-//            [[[HLMessageServices alloc]init]fetchAllChannels:nil];
+            [[[FDChannelUpdater alloc]init] fetch];
+            [[[FDSolutionUpdater alloc]init] fetch];
             [KonotorShareMessageEvent UploadAllUnuploadedEvents];
             [KonotorCustomProperty UploadAllUnuploadedProperties];
             [KonotorMessage uploadAllUnuploadedMessages];
@@ -134,6 +81,7 @@ static id <KonotorDelegate> _delegate;
 {
     return [KonotorApp areConversationsDownloading];
 }
+
 +(void) DownloadAllMessages
 {
     [KonotorConversation DownloadAllMessages];
@@ -253,8 +201,6 @@ static id <KonotorDelegate> _delegate;
     
 }
 
-
-
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId
 {
     return [KonotorMessage setBinaryImage:imageData forMessageId:messageId];
@@ -324,9 +270,6 @@ static id <KonotorDelegate> _delegate;
     
     return FALSE;
 }
-
-
-
 
 +(BOOL) addDeviceToken:(NSData *) deviceToken
 {
@@ -447,16 +390,12 @@ static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void) newSession
-{
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
++(void) newSession{
+    dispatch_async(dispatch_get_main_queue(),^{
         [KonotorUser InitUser];
         [Konotor PerformAllPendingTasks];
         [KonotorWebServices DAUCall];
     });
-
-    
 }
 
 +(BOOL) isPushEnabled
@@ -466,25 +405,6 @@ static id <KonotorDelegate> _delegate;
     else
         return NO;
 }
-
-+(BOOL) isPoweredByHidden
-{
-    if(kon_unlock_key==nil) return NO;
-    NSString* myString=[[KonotorApp GetAppKey] stringByAppendingString:[KonotorApp GetAppID]];
-    NSMutableString *reversedString = [NSMutableString stringWithCapacity:[myString length]];
-    
-    [myString enumerateSubstringsInRange:NSMakeRange(0,[myString length])
-                                 options:(NSStringEnumerationReverse | NSStringEnumerationByComposedCharacterSequences)
-                              usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-                                  [reversedString appendString:substring];
-                              }];
-    
-    if([[reversedString MD5] isEqualToString:kon_unlock_key])
-        return YES;
-    else
-        return NO;
-}
-
 
 @end
 

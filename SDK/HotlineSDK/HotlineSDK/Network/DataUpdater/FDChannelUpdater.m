@@ -23,7 +23,7 @@
 
 -(void)doFetch:(void(^)(NSError *error))completion{
     HLMessageServices *service = [[HLMessageServices alloc]init];
-//    [service fetchAllChannels:nil];
+    [service fetchAllChannels:nil];
 }
 
 @end

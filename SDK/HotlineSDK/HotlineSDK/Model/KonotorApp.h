@@ -22,7 +22,7 @@
 @property (nonatomic,retain) NSNumber* audioPermissionGiven;
 @property (nonatomic, retain) NSNumber * lastUpdatedConversation;
 
-+(BOOL) InitWithAppID: (NSString *)AppID WithAppKey: (NSString *) AppKey;
++(BOOL)initWithAppID: (NSString *)AppID WithAppKey: (NSString *) AppKey;
 +(NSString *) GetAppID;
 +(NSString *) GetAppKey;
 +(void) addDeviceToken:(NSString *)deviceToken;
