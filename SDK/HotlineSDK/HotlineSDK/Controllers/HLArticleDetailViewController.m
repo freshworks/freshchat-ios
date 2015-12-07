@@ -138,12 +138,12 @@
     [self.webView setBackgroundColor:[UIColor whiteColor]];
     
     //Article Vote Prompt View
-    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"Article Vote Prompt"];
+    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"ARTICLE_VOTE_PROMPT"];
     self.articleVotePromptView.delegate = self;
     self.articleVotePromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
     //contact us prompt view
-    self.contactUsPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"Contact Us Prompt"];
+    self.contactUsPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"CONTACT_US_PROMPT"];
     self.contactUsPromptView.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");
     self.contactUsPromptView.translatesAutoresizingMaskIntoConstraints = NO;
     

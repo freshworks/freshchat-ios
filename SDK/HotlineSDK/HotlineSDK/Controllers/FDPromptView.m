@@ -32,7 +32,7 @@
     HLTheme *theme = [HLTheme sharedInstance];
     button.titleLabel.font = [theme dialogueTitleFont];
     button.translatesAutoresizingMaskIntoConstraints = NO;
-    buttonName = [NSString stringWithFormat:@" %@",buttonName];
+    buttonName = [NSString stringWithFormat:@"_%@",buttonName];
     [button setTitle:HLLocalizedString([key stringByAppendingString:buttonName]) forState:UIControlStateNormal];
     [button setTitleColor:[theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
     [button setTranslatesAutoresizingMaskIntoConstraints:NO];
