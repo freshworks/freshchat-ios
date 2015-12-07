@@ -63,7 +63,7 @@
 
 -(void)presentSolutions:(UIViewController *)controller{
     UIViewController *preferedController = nil;
-    if (self.dispalySolutionAsGrid) {
+    if (self.displaySolutionsAsGrid) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
