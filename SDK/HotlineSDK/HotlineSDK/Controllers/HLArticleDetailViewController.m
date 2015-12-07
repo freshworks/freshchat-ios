@@ -111,6 +111,7 @@
 -(void)setNavigationItem{
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    // CHECK : Move this image name "BackArrow" to Themefile - Rex 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self.navigationController

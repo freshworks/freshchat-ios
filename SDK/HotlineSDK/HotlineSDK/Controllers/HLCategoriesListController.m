@@ -118,6 +118,8 @@
         cell = [[FDCategoryListViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
+    // CHECK : Why is this check required ? - feels hacky - Rex
+    // Feels like something I would do
     if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
         cell.titleLabel.text  = category.title;

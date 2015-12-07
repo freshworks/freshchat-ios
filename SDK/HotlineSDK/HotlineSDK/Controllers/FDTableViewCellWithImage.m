@@ -32,6 +32,7 @@
         [self.imgView.layer setCornerRadius:8.0f];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
+        // CHECK : Move this image file name to Themefile - Rex 
         [self.imgView setImage:[UIImage imageNamed:@"loading.png"]];
         
         self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
@@ -77,6 +78,8 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
+    // CHECK : Move this image file name to Themefile - Rex
+    // Looks like there are many places where the same image is accessed. unify under a HLTheme Function. 
     self.imgView.image=[UIImage imageNamed:@"loading.png"];
 }
 

@@ -61,6 +61,8 @@
     [super layoutSubviews];
 }
 
+
+// CHECK : Unused at the moment - Rex 
 -(UIImageView *)createImageView{
     UIImageView *imageView = [[UIImageView alloc] init];
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
