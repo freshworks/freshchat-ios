@@ -167,7 +167,7 @@
 		<key>CellBackgroundColor</key>
 		<string>FFFFFF</string>
 		<key>CellSeparatorColor</key>
-		<string>C8C8C8</string>
+		<string>F2F2F2</string>
 		<key>TitleFontColor</key>
 		<string>222222</string>
 		<key>TitleFontName</key>
@@ -196,7 +196,7 @@
 		<key>ItemBackgroundColor</key>
 		<string>FFFFFF</string>
 		<key>ItemSeparatorColor</key>
-		<string>C8C8C8</string>
+		<string>F2F2F2</string>
 		<key>CategoryTitleFontColor</key>
 		<string>222222</string>
 		<key>CategoryTitleFontName</key>

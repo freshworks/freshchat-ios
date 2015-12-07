@@ -219,7 +219,7 @@
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
-    return color ? color : [UIColor lightGrayColor];
+    return color ? color : [HLTheme colorWithHex:@"F2F2F2"];
 }
 
 -(UIColor *)timeDetailTextColor {

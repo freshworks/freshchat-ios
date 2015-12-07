@@ -122,6 +122,8 @@
         HLCategory *category =  self.categories[indexPath.row];
         cell.titleLabel.text  = category.title;
         cell.detailLabel.text = category.categoryDescription;
+        cell.layer.borderWidth = 0.5f;
+        cell.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
         cell.imgView.image = [UIImage imageWithData:category.icon];
     }
     return cell;
