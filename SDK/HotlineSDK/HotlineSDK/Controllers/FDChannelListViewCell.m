@@ -14,23 +14,12 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.theme = [HLTheme sharedInstance];
-        
-        self.layer.borderWidth = 0.6;
-        self.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
-        
-        self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
-        self.imgView.layer.masksToBounds = YES;
-        
-        [self setupTheme];
+        self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
+        self.titleLabel.textColor = [self.theme tableViewCellFontColor];
+        self.titleLabel.font      = [self.theme tableViewCellFont];
+        self.detailLabel.textColor = [self.theme timeDetailTextColor];
     }
     return self;
-}
-
--(void)setupTheme{
-    self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
-    self.titleLabel.textColor = [self.theme tableViewCellFontColor];
-    self.titleLabel.font      = [self.theme tableViewCellFont];
-    self.detailLabel.textColor = [self.theme timeDetailTextColor];
 }
 
 -(void)addAccessoryView{
@@ -83,16 +72,17 @@
     return image;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
-    self.imgView.layer.masksToBounds = YES;
-    
-}
-
 -(void)prepareForReuse{
     [super prepareForReuse];
     self.imgView.image=[UIImage imageNamed:@"loading.png"];
+}
+
+-(void)drawRect:(CGRect)rect{
+    [super drawRect:rect];
+    self.layer.borderWidth = 0.6;
+    self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
+    self.imgView.layer.masksToBounds = YES;
+    self.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
 }
 
 @end
