@@ -48,15 +48,15 @@
         NSDictionary *views = @{ @"imageView" : self.imgView, @"title" : self.titleLabel,@"subtitle":self.detailLabel,
                                  @"contentEncloser" : self.contentEncloser };
         
+        [self.contentEncloser addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentEncloser attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[contentEncloser]" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentEncloser]|" options:0 metrics:nil views:views]];
         [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[title]-5-[subtitle]" options:0 metrics:nil views:views]];
         [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]-|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[imageView]|" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
         [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]-|" options:0 metrics:nil views:views]];
-        
         [self addAccessoryView];
-        
         [self setupTheme];
     }
     return self;
@@ -73,11 +73,6 @@
         self.titleLabel.font      = [self.theme tableViewCellFont];
         self.detailLabel.textColor = [self.theme timeDetailTextColor];
     }
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
 }
 
 -(void)prepareForReuse{
