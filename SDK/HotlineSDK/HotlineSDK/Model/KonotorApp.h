@@ -29,14 +29,12 @@
 +(void) successfullyUpdatedDeviceTokenOnServer;
 +(NSNumber*) getLastUpdatedConversationsTimeStamp;
 +(void) updateLastUpdatedConversations:(NSNumber *) lastUpdated;
-+(void) updateConversationsDownloading:(BOOL) status;
 +(void) updateUserBeingCreated:(BOOL) status;
 +(NSString *) getAppVersion;
 +(NSString *) getSDKVersion;
 +(void) SendCachedTokenIfNotUpdated;
 +(NSString *) GetCachedDeviceToken;
 
-+(BOOL) areConversationsDownloading;
 +(BOOL) isUserBeingCreated;
 +(BOOL) getAppInitStatus;
 +(BOOL) hasWelcomeMessageDisplayed;

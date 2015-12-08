@@ -96,7 +96,6 @@ enum KonotorMessageUploadStatus
 +(NSArray *) getAllMessagesForConversation:(NSString *)conversationID;
 +(NSArray *) getAllMessagesForDefaultConversation;
 +(NSArray *) getAllConversations;
-+(BOOL) areConversationsDownloading;
 +(int) getUnreadMessagesCount;
 
 +(void) newSession;

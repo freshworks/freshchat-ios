@@ -9,13 +9,11 @@
 #import "Konotor.h"
 #import "KonotorUser.h"
 #import "KonotorDataManager.h"
-#import <Foundation/NSUUID.h>
 #import "KonotorAudioRecorder.h"
 #import "KonotorApp.h"
 #import "KonotorAudioPlayer.h"
 #import "WebServices.h"
 #import "KonotorShareMessageEvent.h"
-#import <CommonCrypto/CommonDigest.h>
 #import "HLMacros.h"
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
@@ -45,8 +43,6 @@ static id <KonotorDelegate> _delegate;
         return;
     }
     
-    //in the completion handler init user
-    //on success do all the pending tasks
     dispatch_async(dispatch_get_main_queue(),^{
         _delegate = delegate;
         [KonotorApp initWithAppID:AppID WithAppKey:AppKey];
@@ -75,11 +71,6 @@ static id <KonotorDelegate> _delegate;
             [KonotorApp UpdateAppAndSDKVersions];
         }
     });
-}
-
-+(BOOL) areConversationsDownloading
-{
-    return [KonotorApp areConversationsDownloading];
 }
 
 +(void) DownloadAllMessages

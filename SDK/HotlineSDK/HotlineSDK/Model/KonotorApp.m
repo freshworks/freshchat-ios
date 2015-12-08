@@ -20,7 +20,6 @@ BOOL KONOTOR_APP_INIT_DONE = FALSE;
 @dynamic appID;
 @dynamic appKey,appVersion,sdkVersion,hasWelcomeMessageDisplayed;
 @dynamic deviceToken,deviceTokenUpdatedOnServer,lastUpdatedConversation,audioPermissionGiven;
-static BOOL areConversationsDownloading= NO;
 static BOOL isUserBeingCreated = NO;
 
 +(BOOL) getAppInitStatus{
@@ -164,10 +163,6 @@ static BOOL isUserBeingCreated = NO;
     }
 }
 
-+(BOOL) areConversationsDownloading{
-    return areConversationsDownloading;
-}
-
 +(BOOL) isUserBeingCreated{
     return isUserBeingCreated;
 }
@@ -176,9 +171,6 @@ static BOOL isUserBeingCreated = NO;
     isUserBeingCreated = status;
 }
 
-+(void) updateConversationsDownloading:(BOOL) status{
-    areConversationsDownloading = status;
-}
 
 +(void) updateLastUpdatedConversations:(NSNumber *) lastUpdated{
     if(gkCurrentKonotorApp){

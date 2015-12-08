@@ -161,7 +161,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
         
         if(error || statusCode >= 400){
             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-            [KonotorApp updateConversationsDownloading:NO];
             [Konotor performSelector:@selector(conversationsDownloadFailed)];
             return;
             
@@ -172,7 +171,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
             NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
             if(!toplevel){
-                [KonotorApp updateConversationsDownloading:NO];
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
@@ -185,7 +183,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             }
             
             if(!pArrayOfConversations){
-                [KonotorApp updateConversationsDownloading:NO];
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
@@ -222,18 +219,14 @@ NSMutableDictionary* gkConversationIdConversationMap;
                     }
                 }
             }
-            [KonotorApp updateConversationsDownloading:NO];
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
         [[KonotorDataManager sharedInstance]save];
-        
         DOWNLOAD_IN_PROGRESS = NO;
-        
     }];
 }
 
-+(NSNumber *) getLastMessageTimeStampOfTheseConversations:(NSArray *) pConversations
-{
++(NSNumber *) getLastMessageTimeStampOfTheseConversations:(NSArray *) pConversations{
     if(![pConversations count])
         return nil;
     
