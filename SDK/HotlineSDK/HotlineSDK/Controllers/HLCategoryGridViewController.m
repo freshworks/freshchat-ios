@@ -227,6 +227,7 @@
         cell.layer.borderColor=[[HLTheme sharedInstance] itemSeparatorColor].CGColor;
         if (!category.icon){
             cell.imageView.image=[UIImage imageNamed:@"loading.png"];
+            cell.imageView.contentMode = UIViewContentModeCenter;
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
             [cell.label sizeToFit];

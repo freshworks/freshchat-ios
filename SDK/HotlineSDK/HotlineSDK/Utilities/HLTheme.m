@@ -282,7 +282,7 @@
 #pragma mark - Grid View Cell
 
 -(UIFont *)categoryTitleFont{
-    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:14];
 }
 
 -(UIColor *)categoryTitleFontColor{

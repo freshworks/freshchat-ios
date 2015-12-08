@@ -50,7 +50,7 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
+    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"search"];
     UIImage *contactUsButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE")];
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -58,7 +58,7 @@
     [searchButton setImage:searchButtonImage forState:UIControlStateNormal];
     [searchButton addTarget:self action:@selector(searchButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
-    
+    [searchBarButton setStyle:UIBarButtonItemStylePlain];
     UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     fixedItem.width = -20.0f; // or whatever you want
     
@@ -143,7 +143,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 100;
+    return 64;
 }
 
 @end

@@ -7,7 +7,7 @@
 
 /* Grid View */
 "FAQ_TITLE_TEXT"="FAQs";
-"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE"="SearchButton";
+"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE"="search";
 "FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE"="chat";
 "FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT"="Close";
 
@@ -32,3 +32,5 @@
 "Contact Us Prompt Button"="Still need help? Contact Us ";
 "THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
 
+/* Search View Place Holder */
+"SEARCH_PLACEHOLDER"="Search for FAQs";

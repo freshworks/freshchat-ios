@@ -217,7 +217,7 @@
 		<key>CategoryTitleFontName</key>
 		<string>HelveticaNeue</string>
 		<key>CategoryTitleFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
 	</dict>
