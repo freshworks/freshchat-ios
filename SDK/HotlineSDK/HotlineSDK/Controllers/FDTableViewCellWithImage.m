@@ -32,7 +32,7 @@
         [self.imgView.layer setCornerRadius:8.0f];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.imgView setImage:[UIImage imageNamed:@"loading.png"]];
+        [self.imgView setImage:[[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"]];
         
         self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         [self.detailLabel setNumberOfLines:0];

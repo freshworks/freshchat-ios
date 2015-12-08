@@ -221,5 +221,16 @@
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
 	</dict>
+	<key>Images</key>
+	<dict>
+		<key>Search</key>
+		<string>HLResources.bundle/Images/search</string>
+		<key>Chat</key>
+		<string>HLResources.bundle/Images/chat</string>
+		<key>BackArrow</key>
+		<string>HLResources.bundle/Images/BackArrow</string>
+		<key>FAQLoadingIcon </key>
+		<string>HLResources.bundle/Images/loading</string>
+	</dict>
 </dict>
 </plist>

@@ -13,7 +13,7 @@
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
 @property (strong, nonatomic) UIFont *systemFont;
-
+@property (strong,nonatomic) NSString * themeName;
 
 @end
 
@@ -31,16 +31,62 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        self.themeName = FD_DEFAULT_THEME_NAME;
         self.systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSystemFont:) name:UIContentSizeCategoryDidChangeNotification object:nil];
     }
     return self;
 }
 
+-(void)setThemeName:(NSString *)themeName{
+    NSString *themeFilePath = [self getPathForTheme:themeName];
+    if (themeFilePath) {
+        _themeName = themeName;
+        NSData *plistData = [[NSFileManager defaultManager] contentsAtPath:themeFilePath];
+        [self updateThemePreferencesWithData:plistData];
+    }else{
+        NSString *exceptionName   = @"HOTLINE_SDK_INVALID_THEME_FILE";
+        NSString *reason          = @"You are attempting to set a theme file \"%@\" that is not linked with the project through HLResourcesBundle";
+        NSString *exceptionReason = [NSString stringWithFormat:reason,themeName];
+        [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
+    }
+}
+
+-(void)updateThemePreferencesWithData:(NSData *)plistData{
+    NSString *errorDescription;
+    NSPropertyListFormat plistFormat;
+    NSDictionary *immutablePlistInfo = (NSDictionary *)[NSPropertyListSerialization propertyListFromData:plistData mutabilityOption:NSPropertyListMutableContainers format:&plistFormat errorDescription:&errorDescription];
+    if (immutablePlistInfo) {
+        self.themePreferences = [NSMutableDictionary dictionaryWithDictionary:immutablePlistInfo];
+    }
+}
+
+-(NSString *)getPathForTheme:(NSString *)theme{
+    NSString *path = [[NSBundle mainBundle] pathForResource:theme ofType:@"plist"];
+    if (!path) {
+        NSBundle *HLResourcesBundle = [self getHLResourceBundle];
+        path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
+    }
+    return path;
+}
+
+-(NSBundle *)getHLResourceBundle{
+    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    return HLResourcesBundle;
+}
+
+
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName{
     NSString *pathPrefix        = @"HLResources.bundle/Images/";
     NSString *imageNameWithPath = [NSString stringWithFormat:@"%@%@",pathPrefix,imageName];
     return [UIImage imageNamed:imageNameWithPath];
+}
+
+-(UIImage *)getImageWithKey:(NSString *)key{
+    NSString *keypath = [NSString stringWithFormat:@"Images.%@",key];
+    NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
+    UIImage *image = [UIImage imageNamed:imageName];
+    return image;
 }
 
 -(UIColor *)gridViewItemBackgroundColor{

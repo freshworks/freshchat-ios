@@ -84,4 +84,7 @@
 -(UIFont *)lastUpdatedFont;
 -(UIColor *)lastUpdatedFontColor;
 
+//Images
+-(UIImage *)getImageWithKey:(NSString *)key;
+
 @end

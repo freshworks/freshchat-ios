@@ -93,8 +93,8 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE")];
-    UIImage *contactUsButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE")];
+    UIImage *searchButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Search"];
+    UIImage *contactUsButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Chat"];
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     searchButton.frame = CGRectMake(0, 0, 44, 44);

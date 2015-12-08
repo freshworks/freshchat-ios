@@ -50,8 +50,8 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"search"];
-    UIImage *contactUsButtonImage = [HLTheme getImageFromMHBundleWithName:HLLocalizedString(@"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE")];
+    UIImage *searchButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Search"];
+    UIImage *contactUsButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Chat"];
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     searchButton.frame = CGRectMake(0, 0, 44, 44);
@@ -117,7 +117,6 @@
     if (!cell) {
         cell = [[FDCategoryListViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
-    
     if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
         cell.titleLabel.text  = category.title;
@@ -134,12 +133,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row < self.categories.count) {
-        HLCategory *category =  self.categories[indexPath.row];
-        HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
-        [self.navigationController pushViewController:container animated:YES];
-    }
+    HLCategory *category =  self.categories[indexPath.row];
+    HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+    [self.navigationController pushViewController:container animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
