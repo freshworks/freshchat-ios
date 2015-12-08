@@ -10,18 +10,13 @@
 
 @implementation FDCategoryListViewCell
 
--(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        for (id view in [self.subviews[0] subviews]) {
-            if ([view isKindOfClass:[UIButton class]]) {
-                UIButton *accessoryButton = (UIButton *)view;
-                accessoryButton.backgroundColor = nil;
-            }
-        }
-    }
-    return self;
+-(void)addAccessoryView{
+    UIImageView *accessoryView = [[UIImageView alloc] init];
+    accessoryView.image = [HLTheme getImageFromMHBundleWithName:@"rightArrow.png"];
+    accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
+    [self.contentView addSubview:accessoryView];
+    NSDictionary *views = @{@"contentEncloser" : self.contentEncloser,@"accessoryView" : accessoryView};
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-10-[accessoryView(6)]-10-|" options:NSLayoutFormatAlignAllCenterY metrics:nil views:views]];
 }
 
 @end

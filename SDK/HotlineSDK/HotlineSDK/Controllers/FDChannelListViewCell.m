@@ -27,8 +27,7 @@
         self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.lastUpdatedLabel];
         
-        self.badgeView  = [[FDBadgeView alloc]initWithFrame:CGRectMake(257, 98, 31.5, 21)
-                                             andBadgeNumber:0];
+        self.badgeView  = [[FDBadgeView alloc]initWithFrame:CGRectMake(257, 98, 31.5, 21) andBadgeNumber:0];
         [self.badgeView badgeButtonBackgroundColor:[UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1]];
         [self.badgeView badgeButtonTitleColor:[self.theme badgeButtonTitleColor]];
         self.badgeView.translatesAutoresizingMaskIntoConstraints = NO;
