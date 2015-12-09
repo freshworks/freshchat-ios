@@ -11,7 +11,6 @@
 
 @interface FDMarginalView : UIView
 
--(void)setLabelText:(NSString *)text;
 -(void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
 
 @end

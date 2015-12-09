@@ -19,9 +19,6 @@
 
 //All properties are set to nil so that the button doesn't get fucked up somewhere
 
-// CHECK :
-// Suggesstion : May be add theme defaults here ( of course only if gets called ). 
-
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {

@@ -44,12 +44,14 @@
 -(CGFloat)tableViewSectionHeaderHeight;
 
 //Overall SDK
--(UIFont *)talkToUsButtonFont;
 -(UIColor *)backgroundColorSDK;
 -(UIColor *)badgeButtonBackgroundColor;
 -(UIColor *)badgeButtonTitleColor;
--(UIColor *)talkToUsButtonColor;
 -(UIColor *)noItemsFoundMessageColor;
+
+//Talk to us button
+-(UIFont *)talkToUsButtonFont;
+-(UIColor *)talkToUsButtonColor;
 
 //Dialogues
 -(UIColor *)getButtontextColorForKey:(NSString *)key;
