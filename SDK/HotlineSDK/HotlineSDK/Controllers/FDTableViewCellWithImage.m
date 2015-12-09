@@ -77,6 +77,8 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
+    // CHECK : Move this image file name to Themefile - Rex
+    // Looks like there are many places where the same image is accessed. unify under a HLTheme Function. 
     self.imgView.image=[UIImage imageNamed:@"loading.png"];
 }
 

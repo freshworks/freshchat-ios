@@ -78,7 +78,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                                                              URL:storeURL
                                                          options:options
                                                            error:&error]) {
-		//NSLog(@"Fatal error while creating persistent store: %@", error);
+		NSLog(@"Fatal error while creating persistent store: %@", error);
 		abort();
 	}
     

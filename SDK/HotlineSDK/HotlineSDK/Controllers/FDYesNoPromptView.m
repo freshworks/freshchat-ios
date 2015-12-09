@@ -29,10 +29,10 @@
     self.theme = [HLTheme sharedInstance];
         
      self.promptLabel = [self createPromptLabel];
-     self.promptLabel.text = HLLocalizedString([key stringByAppendingString:@" Label Text"]);
+     self.promptLabel.text = HLLocalizedString([key stringByAppendingString:@"_LABEL_TEXT"]);
      [self addSubview:self.promptLabel];
         
-     self.YesButton = [self createPromptButton:@"Yes" withKey:key];
+     self.YesButton = [self createPromptButton:@"YES" withKey:key];
      [self.YesButton setTitleColor:[self.theme dialogueYesButtonTextColor] forState:UIControlStateNormal];
      [self.YesButton setBackgroundColor:[self.theme dialogueYesButtonBackgroundColor]];
      [[self.YesButton layer] setBorderWidth:0.3f];
@@ -41,7 +41,7 @@
      [self.YesButton addTarget:self.delegate action:@selector(yesButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
      [self addSubview:self.YesButton];
         
-     self.NoButton = [self createPromptButton:@"No" withKey:key];
+     self.NoButton = [self createPromptButton:@"NO" withKey:key];
      [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
      [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
      [[self.NoButton layer] setBorderWidth:0.3f];

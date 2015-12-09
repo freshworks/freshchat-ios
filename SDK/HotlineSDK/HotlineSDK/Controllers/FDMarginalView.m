@@ -9,34 +9,52 @@
 #import "FDMarginalView.h"
 #import "HLMacros.h"
 
+@interface FDMarginalView ()
+
+@property (nonatomic,strong) UILabel *actionLabel;
+
+@end
+
 @implementation FDMarginalView
 
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
         self.backgroundColor = [UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1];
-        self.marginalLabel = [[UILabel alloc] initWithFrame:CGRectInset(self.bounds, 60.0f, 0.0f)];
-        self.marginalLabel.textColor = [UIColor whiteColor];
-        self.marginalLabel.textAlignment = UITextAlignmentCenter;
-        self.marginalLabel.font = [[HLTheme sharedInstance] talkToUsButtonFont];
-        self.marginalLabel.translatesAutoresizingMaskIntoConstraints=NO;
-        [self addSubview:self.marginalLabel];
+        self.actionLabel = [[UILabel alloc] initWithFrame:CGRectInset(self.bounds, 60.0f, 0.0f)];
+
+        [self setLabelText:HLLocalizedString(@"CONTACT_US_BUTTON_LABEL")];
         
-        NSDictionary *views = @{ @"label":self.marginalLabel};
+        [self addSubview:self.actionLabel];
+        
+        NSDictionary *views = @{ @"label":self.actionLabel};
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[label]|" options:0 metrics:nil views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:nil views:views]];
+        
+        self.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return self;
 }
 
 -(void)setLabelText:(NSString *)text{
-    self.marginalLabel.text = text;
-    self.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.marginalLabel.textColor = [UIColor blackColor];
-    self.marginalLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.marginalLabel.backgroundColor = [UIColor clearColor];
-    self.marginalLabel.userInteractionEnabled=YES;
+    self.actionLabel.text = text;
+    
+    self.actionLabel.textAlignment = UITextAlignmentCenter;
+    
+    self.actionLabel.font = [[HLTheme sharedInstance] talkToUsButtonFont];
+    
+    self.actionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.actionLabel.translatesAutoresizingMaskIntoConstraints=NO;
+    
+    // CHECK : Read these from a Theme file entry
+    self.actionLabel.textColor = [UIColor blackColor];
+    self.actionLabel.backgroundColor = [UIColor clearColor];
+    
+    self.actionLabel.userInteractionEnabled=YES;
+}
+
+-(void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer{
+    [self.actionLabel addGestureRecognizer:gestureRecognizer];
 }
 
 @end
