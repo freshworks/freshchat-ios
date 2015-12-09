@@ -7,8 +7,8 @@
 //
 
 #import "ViewController.h"
-#import "FreshdeskSDK/Mobihelp.h"
 #import "HotlineSDK/Hotline.h"
+#import "FDSettingsController.h"
 
 @interface ViewController ()
 
@@ -18,16 +18,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (IBAction)showFAQ:(id)sender {
-    [[Mobihelp sharedInstance]presentSolutions:self];
+    [[Hotline sharedInstance] presentSolutions:self];
 }
 
 - (IBAction)conversations:(id)sender {
     [Hotline showFeedbackScreen];
 
+}
+
+- (IBAction)settings:(id)sender {
+    FDSettingsController *settings = [FDSettingsController new];
+    UINavigationController *navigationController = [[UINavigationController alloc]init];
+    navigationController.viewControllers = @[settings];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

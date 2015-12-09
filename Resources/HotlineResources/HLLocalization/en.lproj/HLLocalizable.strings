@@ -1,0 +1,36 @@
+/* 
+  Localizable.strings
+  Hotline
+
+  Copyright (c) 2015 Freshdesk. All rights reserved.
+*/
+
+/* Grid View */
+"FAQ_TITLE_TEXT"="FAQs";
+"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE"="search";
+"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE"="chat";
+"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT"="Close";
+
+/* Categories List View Controller */
+"CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE"="Close";
+"CATEGORIES_LIST_VIEW_FOOTER_LABEL"="Contact Us";
+
+/* Articles List View Controller */
+"ARTICLE_LIST_VIEW_TITLE"="Article List";
+
+/* Resolved Ticket Scenario */
+"Resolved Prompt Label Text" = "Did we help solve your issue ?";
+"Resolved Prompt Yes"="YES";
+"Resolved Prompt No"="NO";
+
+/* Article UpVote DownVote */
+"Article Vote Prompt Label Text"="Was this helpful?";
+"Article Vote Prompt Yes"="Yes!";
+"Article Vote Prompt No"="No";
+
+/* Contact Us prompt */
+"Contact Us Prompt Button"="Still need help? Contact Us ";
+"THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
+
+/* Search View Place Holder */
+"SEARCH_PLACEHOLDER"="Search for FAQs";

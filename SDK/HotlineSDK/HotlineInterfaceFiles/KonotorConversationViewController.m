@@ -22,9 +22,6 @@ static NSData* copiedContent=nil;
 static NSString* copiedMessageId=@"";
 static int messageCount_prev=0;
 static UIFont* KONOTOR_MESSAGETEXT_FONT=nil;
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-static enum KonotorMessageType copiedMessageType=KonotorMessageTypeText;
-#endif
 static NSString* copiedMimeType=@"";
 static NSTimer* refreshMessagesTimer=nil;
 
@@ -34,10 +31,6 @@ static int loadMore=KONOTOR_MESSAGESPERPAGE;
 static BOOL notificationCenterMode=NO;
 
 NSMutableDictionary *messageHeights=nil;
-
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-MFMailComposeViewController* mailComposer=nil;
-#endif
 
 UIImage* meImage=nil,*otherImage=nil,*sendingImage=nil,*sentImage=nil;
 
@@ -85,11 +78,6 @@ NSString* otherName=nil,*userName=nil;
     
     notificationCenterMode=[KonotorUIParameters sharedInstance].notificationCenterMode;
 
-
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-    mailComposer=[[MFMailComposeViewController alloc] init];
-    [mailComposer setMailComposeDelegate:self];
-#endif
     if(messageHeights==nil)
         messageHeights=[[NSMutableDictionary alloc] init];
     numberOfMessagesShown=KONOTOR_MESSAGESPERPAGE;
@@ -448,23 +436,9 @@ NSString* otherName=nil,*userName=nil;
         uploadStatus.tag=KONOTOR_UPLOADSTATUS_TAG;
         if(KONOTOR_SHOW_UPLOADSTATUS)
             [cell.contentView addSubview:uploadStatus];
-#if KONOTOR_IMAGE_SUPPORT
         UIImageView* picView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KONOTOR_TEXTMESSAGE_MAXWIDTH, 0)];
         picView.tag=KONOTOR_PICTURE_TAG;
         [messageText addSubview:picView];
-#endif
-        
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-        KonotorShareButton* shareButton=[KonotorShareButton buttonWithType:UIButtonTypeCustom];
-        [shareButton setImage:[UIImage imageNamed:@"konotor_share.png"] forState:UIControlStateNormal];
-        [shareButton setFrame:CGRectMake(0, 0, 36, 36)];
-        [shareButton setHidden:YES];
-        shareButton.tag=KONOTOR_SHAREBUTTON_TAG;
-        [shareButton addTarget:self action:@selector(showMessageActions:) forControlEvents:UIControlEventTouchUpInside];
-        [shareButton setMessageId:currentMessage.messageId];
-        [cell.contentView addSubview:shareButton];
-        
-#endif
         
         KonotorActionButton* actionButton=[KonotorActionButton buttonWithType:UIButtonTypeCustom];
         [self setStyleForActionButton:actionButton];
@@ -507,9 +481,7 @@ NSString* otherName=nil,*userName=nil;
         [uploadStatus setImage:sentImage];
     else
         [uploadStatus setImage:sendingImage];
-#if KONOTOR_IMAGE_SUPPORT
     UIImageView* picView=(UIImageView*)[messageText viewWithTag:KONOTOR_PICTURE_TAG];
-#endif
     
     UIEdgeInsets insets=UIEdgeInsetsMake(KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_BOTTOM_INSET, KONOTOR_MESSAGE_BACKGROUND_IMAGE_RIGHT_INSET);
     
@@ -545,15 +517,6 @@ NSString* otherName=nil,*userName=nil;
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
-    
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-    UIButton* shareButton=(UIButton*)[cell.contentView viewWithTag:KONOTOR_SHAREBUTTON_TAG];
-    [shareButton setFrame:CGRectMake(isSenderOther?messageTextBoxWidth+4+messageTextBoxX:4,messageTextBoxY , 36, 36)];
-    if(isSenderOther)
-        [shareButton setHidden:(![[KonotorUIParameters sharedInstance] messageSharingEnabled])];
-    else
-        [shareButton setHidden:(![[KonotorUIParameters sharedInstance] messageSharingEnabled])];
-#endif
     
     if([messageText respondsToSelector:@selector(setTextContainerInset:)])
         [messageText setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
@@ -602,9 +565,7 @@ NSString* otherName=nil,*userName=nil;
         txtMsgFrame.size.width=messageContentViewWidth;
         if(KONOTOR_USESCALLOUTIMAGE)
             messageBackground.frame=txtMsgFrame;
-#if KONOTOR_IMAGE_SUPPORT
         [picView setHidden:YES];
-#endif
         [self setupActionButtonWithUrlString:actionUrl label:actionLabel actionButton:actionButton frame:messageText.frame];
 
     }
@@ -689,9 +650,7 @@ NSString* otherName=nil,*userName=nil;
         [playButton.mediaProgressBar setMaximumValue:currentMessage.durationInSecs.floatValue];
         if([[Konotor getCurrentPlayingMessageID] isEqualToString:[currentMessage messageId]])
             [playButton startAnimating];
-#if KONOTOR_IMAGE_SUPPORT
         [picView setHidden:YES];
-#endif
         [self setupActionButtonWithUrlString:actionUrl label:actionLabel actionButton:actionButton frame:messageText.frame];
         
     }
@@ -722,7 +681,6 @@ NSString* otherName=nil,*userName=nil;
             [timeField setContentOffset:CGPointMake(0, 4)];
         float txtheight=0.0;
         
-#if KONOTOR_ENABLECAPTIONS
         currentMessage.picCaption=(currentMessage.isMarketingMessage?currentMessage.text:@"");
 
         if((currentMessage.picCaption)&&(![currentMessage.picCaption isEqualToString:@""])){
@@ -756,7 +714,6 @@ NSString* otherName=nil,*userName=nil;
             
         }
         
-#endif
         
         CGRect txtMsgFrame=messageText.frame;
         txtMsgFrame.size.height=16+height+txtheight;
@@ -776,7 +733,6 @@ NSString* otherName=nil,*userName=nil;
         
         [playButton.mediaProgressBar setHidden:YES];
         [playButton setHidden:YES];
-#if KONOTOR_IMAGE_SUPPORT
         [picView setHidden:NO];
         
         picView.layer.cornerRadius=10.0;
@@ -804,10 +760,7 @@ NSString* otherName=nil,*userName=nil;
         
         if([currentMessage picThumbData]){
             UIImage *picture=[UIImage imageWithData:[currentMessage picThumbData]];
-            if(KONOTOR_ENABLECAPTIONS&&!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0"))
-                [picView setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8+txtheight-2, imgwidth, height)];
-            else
-                [picView setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
+            [picView setFrame:CGRectMake((KONOTOR_TEXTMESSAGE_MAXWIDTH-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
             [picView setImage:picture];
             
             if(![currentMessage picData]){
@@ -901,10 +854,7 @@ NSString* otherName=nil,*userName=nil;
                 });
             });
         }
-        #endif
         [self setupActionButtonWithUrlString:actionUrl label:actionLabel actionButton:actionButton frame:messageText.frame];
-
-        
         
     }
     else if([currentMessage messageType].integerValue==KonotorMessageTypeHTML)
@@ -957,9 +907,7 @@ NSString* otherName=nil,*userName=nil;
         txtMsgFrame.size.width=messageContentViewWidth;
         if(KONOTOR_USESCALLOUTIMAGE)
             messageBackground.frame=txtMsgFrame;
-#if KONOTOR_IMAGE_SUPPORT
         [picView setHidden:YES];
-#endif
         [self setupActionButtonWithUrlString:actionUrl label:actionLabel actionButton:actionButton frame:messageText.frame];
 
         
@@ -969,9 +917,7 @@ NSString* otherName=nil,*userName=nil;
     {
         [playButton.mediaProgressBar setHidden:YES];
         [playButton setHidden:YES];
-#if KONOTOR_IMAGE_SUPPORT
         [picView setHidden:YES];
-#endif
         [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING), messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
 #if(__IPHONE_OS_VERSION_MAX_ALLOWED>=70000)
         
@@ -1255,7 +1201,6 @@ NSString* otherName=nil,*userName=nil;
         
         float txtheight=0.0;
         
-#if KONOTOR_ENABLECAPTIONS
         
         currentMessage.picCaption=(currentMessage.isMarketingMessage?currentMessage.text:@"");
         
@@ -1281,7 +1226,6 @@ NSString* otherName=nil,*userName=nil;
             }
             
         }
-#endif
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
         
         
@@ -1361,47 +1305,6 @@ NSString* otherName=nil,*userName=nil;
     CGSize size=[txtView sizeThatFits:CGSizeMake(width, 1000)];
     return size.height-16;
 }
-
-
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 #pragma mark - Table view delegate
 
@@ -1527,38 +1430,8 @@ NSString* otherName=nil,*userName=nil;
     }
 }
 
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-    if(alertView.tag==KONOTOR_SHARE_ALERT_TAG){
-        if(buttonIndex==1){
-            if([MFMailComposeViewController canSendMail]){
-                [mailComposer setSubject:@"Sharing a message with you"];
-                [mailComposer setMessageBody:copiedText isHTML:NO];
-                if(copiedContent){
-                    if((copiedMessageType==KonotorMessageTypePicture)||(copiedMessageType==KonotorMessageTypePictureV2))
-                        [mailComposer addAttachmentData:copiedContent mimeType:copiedMimeType fileName:@"sharedImage.jpg"];
-                    else{
-                        [mailComposer addAttachmentData:copiedContent mimeType:copiedMimeType fileName:@"sharedAudio.mp4"];
-                    }
-                }
-                
-                [[[KonotorFeedbackScreen sharedInstance] conversationViewController]
-                 presentViewController:mailComposer animated:NO completion:nil];
-            }
-            else{
-                UIAlertView *errorAlert=[[UIAlertView alloc] initWithTitle:@"Can't send email" message:@"Sorry! Your device is not configured to send email." delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-                [errorAlert show];
-            }
-        }
-    }
-    else{
-#endif
-        showingAlert=NO;
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-    }
-#endif
-    
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    showingAlert=NO;
 }
 
 - (void) didStartPlaying:(NSString *)messageID
@@ -1693,48 +1566,6 @@ NSString* otherName=nil,*userName=nil;
     return timeString;
     
 }
-
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
--(void) showMessageActions:(id) sender
-{
-    UIAlertView* alertdlg=[[UIAlertView alloc] initWithTitle:@"Share" message:@"Share this message via " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Email", nil];
-    alertdlg.tag=KONOTOR_SHARE_ALERT_TAG;
-    copiedMessageId=[(KonotorShareButton*)sender messageId];
-    copiedText=[(UITextView*)[[sender superview] viewWithTag:KONOTOR_MESSAGETEXTVIEW_TAG] text];
-    copiedContent=nil;
-    copiedMimeType=nil;
-    copiedMessageType=KonotorMessageTypeText;
-    UIImageView* img=(UIImageView*)[[sender superview] viewWithTag:KONOTOR_PICTURE_TAG];
-    if(![img isHidden]){
-        copiedContent=UIImageJPEGRepresentation([img image], 0.85);
-        copiedMimeType=@"image/jpeg";
-        copiedMessageType=KonotorMessageTypePicture;
-    }
-    
-    KonotorMediaUIButton* playButton=(KonotorMediaUIButton*)[[sender superview] viewWithTag:KONOTOR_PLAYBUTTON_TAG];
-    if(![playButton isHidden]){
-        copiedText=@"Sharing voice message.";
-        copiedContent=playButton.message.audioData;
-        copiedMimeType=@"audio/mp4";
-    }
-    [alertdlg show];
-}
-#endif
-
-#if KONOTOR_MESSAGE_SHARE_SUPPORT
-
--(void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
-    [controller dismissViewControllerAnimated:YES completion:nil];
-    mailComposer=nil;
-    mailComposer=[[MFMailComposeViewController alloc] init];
-    [mailComposer setMailComposeDelegate:self];
-    if(result==MFMailComposeResultSent){
-        [Konotor shareEventWithMessageID:copiedMessageId shareType:[NSString stringWithFormat:@"%d",copiedMessageType]];
-    }
-
-}
-#endif
 
 -(void) openActionUrl:(id) sender
 {
