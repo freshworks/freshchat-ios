@@ -55,7 +55,7 @@
     if ([item isEqualToString:@"List/Grid"]) {
         UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
         cell.accessoryView = switchView;
-        [switchView setOn:[Hotline sharedInstance].dispalySolutionAsGrid animated:NO];
+        [switchView setOn:[Hotline sharedInstance].displaySolutionsAsGrid animated:NO];
         [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
     }
     
@@ -69,7 +69,7 @@
 
 - (void) switchChanged:(id)sender {
     UISwitch* switchControl = sender;
-    [Hotline sharedInstance].dispalySolutionAsGrid = switchControl.on;
+    [Hotline sharedInstance].displaySolutionsAsGrid = switchControl.on;
 }
 
 @end

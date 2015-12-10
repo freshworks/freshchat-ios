@@ -8,7 +8,6 @@
 
 #import "HLListViewController.h"
 #import "KonotorFeedbackScreen.h"
-#import "HLMacros.h"
 
 @implementation HLListViewController
 
@@ -24,13 +23,8 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.footerView = [[FDMarginalView alloc] init];
-    self.footerView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.footerView.marginalLabel.userInteractionEnabled=YES;
-    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
-
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
+    
     [self.view addSubview:self.footerView];
     [self.view addSubview:self.tableView];
     
@@ -40,7 +34,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][footerView(40)]|" options:0 metrics:nil views:views]];
 }
 
--(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
     [KonotorFeedbackScreen showFeedbackScreen];
 }
 

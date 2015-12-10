@@ -11,7 +11,7 @@
 
 @interface Hotline : NSObject
 
-@property(nonatomic) BOOL dispalySolutionAsGrid;
+@property(nonatomic) BOOL displaySolutionsAsGrid;
 
 +(instancetype) sharedInstance;
 +(void) setSecretKey:(NSString*)key;

@@ -75,9 +75,10 @@
     
 }
 
+//TODO: Looks like there are many places where the same image is accessed. unify under a HLTheme Function.
 -(void)prepareForReuse{
     [super prepareForReuse];
-    self.imgView.image=[UIImage imageNamed:@"loading.png"];
+    self.imgView.image = [[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"];
 }
 
 @end

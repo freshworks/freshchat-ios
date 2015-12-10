@@ -9,11 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "HLTheme.h"
 
+@class FDMarginalView;
+
+@protocol FDMarginalViewDelegate <NSObject>
+
+-(void)marginalView:(FDMarginalView*)marginalView handleTap:(id)sender;
+
+@end
+
 @interface FDMarginalView : UIView
 
-@property (nonatomic,strong) UILabel *marginalLabel;
-@property (nonatomic,strong) HLTheme *theme;
-
--(void)setLabelText:(NSString *)text;
+-(id)initWithDelegate:(id <FDMarginalViewDelegate>)delegate;
 
 @end

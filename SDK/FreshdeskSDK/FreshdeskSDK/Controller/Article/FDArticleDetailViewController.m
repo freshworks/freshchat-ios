@@ -113,6 +113,10 @@
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     self.webView.delegate = self;
     self.webView.dataDetectorTypes = UIDataDetectorTypeAll;
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")){
+        self.webView.allowsPictureInPictureMediaPlayback = NO;
+    }
+
     [self.webView loadHTMLString:self.embedHTML baseURL:nil];
     [self.view addSubview:self.webView];
     

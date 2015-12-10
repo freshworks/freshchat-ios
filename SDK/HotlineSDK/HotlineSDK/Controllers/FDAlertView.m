@@ -32,7 +32,7 @@
         self.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");
         [self addSubview:self.promptLabel];
         
-        self.Button1 = [self createPromptButton:@"Button" withKey:key];
+        self.Button1 = [self createPromptButton:@"BUTTON" withKey:key];
         self.Button1.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.Button1.titleLabel.numberOfLines = 0;
         self.Button1.titleLabel.textAlignment = NSTextAlignmentCenter;
