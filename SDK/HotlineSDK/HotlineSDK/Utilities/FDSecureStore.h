@@ -13,6 +13,7 @@
 
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
+#define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 
 @interface FDSecureStore : NSObject
 

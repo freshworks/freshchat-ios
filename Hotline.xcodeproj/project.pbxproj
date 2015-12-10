@@ -70,6 +70,7 @@
 		CE10648C1BC54C9300922494 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = CE10648B1BC54C9300922494 /* loading.png */; };
 		CE1064A21BC6780700922494 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1064A11BC6780700922494 /* message.png */; };
 		CE80CA511BE36A9900473E49 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE80CA501BE36A9900473E49 /* KonotorModels.bundle */; };
+		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -210,6 +211,7 @@
 		CE10648B1BC54C9300922494 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		CE1064A11BC6780700922494 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		CE80CA501BE36A9900473E49 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */,
 				35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */,
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
@@ -256,6 +259,7 @@
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
+				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
