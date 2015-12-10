@@ -282,7 +282,7 @@
 
 -(UIColor *)talkToUsButtonColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)talkToUsButtonFont{

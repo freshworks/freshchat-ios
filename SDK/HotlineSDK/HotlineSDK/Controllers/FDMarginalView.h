@@ -9,8 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "HLTheme.h"
 
+@class FDMarginalView;
+
+@protocol FDMarginalViewDelegate <NSObject>
+
+-(void)marginalView:(FDMarginalView*)marginalView handleTap:(id)sender;
+
+@end
+
 @interface FDMarginalView : UIView
 
--(void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+-(id)initWithDelegate:(id <FDMarginalViewDelegate>)delegate;
 
 @end

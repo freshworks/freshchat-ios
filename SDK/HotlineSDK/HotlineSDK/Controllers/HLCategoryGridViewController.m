@@ -22,8 +22,9 @@
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
 #import "KonotorFeedbackScreen.h"
+#import "Hotline.h"
 
-@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
+@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
 @property (nonatomic, strong) NSArray *categories;
 @property (nonatomic, strong) FDSearchBar *searchBar;
@@ -176,11 +177,7 @@
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
-    self.footerView = [[FDMarginalView alloc] init];
-
-    // CHECK : Use a delegate for the Tap and move this inside.
-    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.footerView addGestureRecognizer: tapGesture];
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
     
     [self.view addSubview:self.footerView];
     [self.view addSubview:self.collectionView];
@@ -194,11 +191,11 @@
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
 }
 
-#pragma mark - Collection view delegate
-
--(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
     [KonotorFeedbackScreen showFeedbackScreen];
 }
+
+#pragma mark - Collection view delegate
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
     return CGSizeMake(self.collectionView.bounds.size.width, 44);

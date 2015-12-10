@@ -131,11 +131,11 @@
 		<key>NoItemsFoundMessageColor</key>
 		<string>000000</string>
 		<key>TalkToUsButtonColor</key>
-		<string>0079FF</string>
+		<string>FFFFFF</string>
 		<key>TalkToUsButtonFontName</key>
 		<string>Helvetica</string>
 		<key>TalkToUsButtonFontSize</key>
-		<string>18.0f</string>
+		<string>14.0f</string>
 		<key>UnreadBadgeColor</key>
 		<string>DE2021</string>
 		<key>UnreadBadgeTitleColor</key>

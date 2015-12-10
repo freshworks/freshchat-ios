@@ -8,7 +8,6 @@
 
 #import "HLListViewController.h"
 #import "KonotorFeedbackScreen.h"
-#import "HLMacros.h"
 
 @implementation HLListViewController
 
@@ -24,12 +23,8 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.footerView = [[FDMarginalView alloc] init];
-
-    // CHECK : Make this a method exposed through a Delegate and move it inside 
-    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.footerView addGestureRecognizer: tapGesture];
-
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
+    
     [self.view addSubview:self.footerView];
     [self.view addSubview:self.tableView];
     
@@ -39,7 +34,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][footerView(40)]|" options:0 metrics:nil views:views]];
 }
 
--(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
     [KonotorFeedbackScreen showFeedbackScreen];
 }
 

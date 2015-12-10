@@ -29,7 +29,6 @@
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
         
-        // CHECK : Why FLT_MAX ? - Rex
         CGSize maximumLabelSize = CGSizeMake(296, FLT_MAX);
         CGSize expectedLabelSize = [self.label.text sizeWithFont:[[HLTheme sharedInstance] tableViewCellFont] constrainedToSize:maximumLabelSize lineBreakMode:self.label.lineBreakMode];
         //adjust the label the the new height.
