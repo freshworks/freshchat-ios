@@ -32,6 +32,11 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
     parent.title = @"Channels";
+    HLTheme *theme = [HLTheme sharedInstance];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [theme channelTitleFontColor],
+                                                           NSFontAttributeName: [theme channelTitleFont]
+                                                           }];
     self.channels = [[NSMutableArray alloc] init];
     [self setNavigationItem];
     [self updateChannels];
