@@ -22,9 +22,8 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 
 @interface KonotorDataManager : NSObject
 
-@property (nonatomic, readonly, retain) NSManagedObjectModel *objectModel;
-@property (nonatomic, readonly, retain) NSManagedObjectContext *mainObjectContext;
-@property (nonatomic, readonly, retain) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong) NSManagedObjectContext *mainObjectContext;
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectContext *backgroundContext;
 
 +(KonotorDataManager*)sharedInstance;

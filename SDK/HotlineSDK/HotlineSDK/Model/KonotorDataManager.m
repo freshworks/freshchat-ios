@@ -8,21 +8,16 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 
-
 NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
 NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
 
 @interface KonotorDataManager ()
 
-- (NSString*)sharedDocumentsPath;
+@property (nonatomic, strong) NSManagedObjectModel *objectModel;
 
 @end
 
 @implementation KonotorDataManager
-
-@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-@synthesize mainObjectContext = _mainObjectContext;
-@synthesize objectModel = _objectModel;
 
 NSString * const kDataManagerBundleName = @"KonotorModels";
 NSString * const kDataManagerModelName = @"KonotorModel";
@@ -31,96 +26,58 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 + (KonotorDataManager*)sharedInstance {
 	static dispatch_once_t pred;
 	static KonotorDataManager *sharedInstance = nil;
-    
-	dispatch_once(&pred, ^{ sharedInstance = [[self alloc] init]; });
+	dispatch_once(&pred, ^{
+        sharedInstance = [[self alloc] init];
+    });
 	return sharedInstance;
 }
 
-- (void)dealloc {
-	[self save];
+-(id)init{
+    self = [super init];
+    if (self) {
+        [self preparePersistantStoreCoordinator];
+        [self setMainQueueContext];
+    }
+    return  self;
 }
 
-- (NSManagedObjectModel*)objectModel {
-	if (_objectModel)
-		return _objectModel;
-    
-	NSBundle *bundle = [NSBundle mainBundle];
-	if (kDataManagerBundleName){
-        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KonotorModels" ofType:@"bundle"];
-		bundle = [NSBundle bundleWithPath:bundlePath];
-	}
-	NSString *modelPath = [bundle pathForResource:kDataManagerModelName ofType:@"momd"];
-	_objectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:modelPath]];
-	return _objectModel;
+-(void)preparePersistantStoreCoordinator{
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KonotorModels" ofType:@"bundle"];
+    NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
+    NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+    NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    NSURL *persistantStoreURL = [NSURL fileURLWithPath:storePath];
+    NSError* error = nil;
+    NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES };
+    [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
+                                                            URL:persistantStoreURL options:options error:&error];
+    if (error) {
+        FDLog(@"Persistant Coordinator could not be created \n%@", error);
+    }
 }
 
-- (NSPersistentStoreCoordinator*)persistentStoreCoordinator {
-	if (_persistentStoreCoordinator)
-		return _persistentStoreCoordinator;
-    
-	// Get the paths to the SQLite file
-	NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:kDataManagerSQLiteName];
-	NSURL *storeURL = [NSURL fileURLWithPath:storePath];
-    
-	// Define the Core Data version migration options
-	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
-                             nil];
-    
-    
-	// Attempt to load the persistent store
-	NSError *error = nil;
-    
-	_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.objectModel];
-	if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                                                   configuration:nil
-                                                             URL:storeURL
-                                                         options:options
-                                                           error:&error]) {
-		//NSLog(@"Fatal error while creating persistent store: %@", error);
-		abort();
-	}
-    
-	return _persistentStoreCoordinator;
+-(void)setMainQueueContext{
+    self.mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    self.mainObjectContext.undoManager = nil;
+    self.mainObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
+    self.mainObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
 }
 
-- (NSManagedObjectContext*)mainObjectContext {
-	if (_mainObjectContext)
-		return _mainObjectContext;
-    
-	// Create the main context only on the main thread
-	if (![NSThread isMainThread]) {
-		[self performSelectorOnMainThread:@selector(mainObjectContext) withObject:nil waitUntilDone:YES];
-		return _mainObjectContext;
-	}
-	_mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    _mainObjectContext.undoManager = nil;
-    _mainObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
-    _mainObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-	return _mainObjectContext;
-}
-
-- (BOOL)save {
-	if (![self.mainObjectContext hasChanges])
-		return YES;
-    
-	NSError *error = nil;
-	if (![self.mainObjectContext save:&error]) {
-		//NSLog(@"[Konotor] Error while saving: %@\n%@", [error localizedDescription], [error userInfo]);
-		[[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
-                                                            object:error];
-		return NO;
-	}
-    
-	[[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveNotification object:nil];
-	return YES;
+-(NSManagedObjectContext *)backgroundContext{
+    if (!_backgroundContext) {
+        _backgroundContext = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        _backgroundContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
+        _backgroundContext.undoManager = nil;
+    }
+    return _backgroundContext;
 }
 
 - (NSString*)sharedDocumentsPath {
 	static NSString *SharedDocumentsPath = nil;
-	if (SharedDocumentsPath)
-		return SharedDocumentsPath;
+    if (SharedDocumentsPath){
+        return SharedDocumentsPath;
+    }
     
 	// Compose a path to the <Library>/Database directory
 	NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -133,27 +90,31 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 	BOOL isDirectory;
 	if (![manager fileExistsAtPath:SharedDocumentsPath isDirectory:&isDirectory] || !isDirectory) {
 		NSError *error = nil;
-		NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                         forKey:NSFileProtectionKey];
-		[manager createDirectoryAtPath:SharedDocumentsPath
-		   withIntermediateDirectories:YES
-                            attributes:attr
-                                 error:&error];
-		if (error)
-			NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+		NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete forKey:NSFileProtectionKey];
+		[manager createDirectoryAtPath:SharedDocumentsPath withIntermediateDirectories:YES attributes:attr error:&error];
+        if (error){
+            NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+        }
 	}
-    
 	return SharedDocumentsPath;
 }
 
--(NSManagedObjectContext *)backgroundContext{
-    if (!_backgroundContext) {
-        _backgroundContext = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        _backgroundContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
-        _backgroundContext.undoManager = nil;
+- (BOOL)save {
+    if (![self.mainObjectContext hasChanges])
+        return YES;
+    
+    NSError *error = nil;
+    if (![self.mainObjectContext save:&error]) {
+        //NSLog(@"[Konotor] Error while saving: %@\n%@", [error localizedDescription], [error userInfo]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
+                                                            object:error];
+        return NO;
     }
-    return _backgroundContext;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveNotification object:nil];
+    return YES;
 }
+
 
 /* Execute fetch request on the background context (I/O)
    fetch objects from updated PSC from main context (non I/O)
@@ -278,6 +239,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             if (handler) handler(count == 0);
         });
     }];
+}
+
+- (void)dealloc {
+    [self save];
 }
 
 @end
