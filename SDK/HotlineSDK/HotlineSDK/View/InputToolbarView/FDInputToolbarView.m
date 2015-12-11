@@ -57,9 +57,9 @@
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
+        [sendButton setTitle:HLLocalizedString(@"SEND_BUTTON_TEXT") forState:UIControlStateNormal];
+        [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *sendImage = [UIImage imageNamed:INPUT_BAR_SEND_ICON];
-        [sendButton setImage:sendImage forState:UIControlStateNormal];
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:textView];

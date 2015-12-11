@@ -32,4 +32,5 @@
 
 /* Message UI */
 "Message Placeholder Text"="Message";
-"Send Button Text"="send";
+"SEND_BUTTON_TEXT"="Send";
+

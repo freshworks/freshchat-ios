@@ -268,7 +268,8 @@
 }
 
 -(UIColor *)sendButtonColor{
-    return [UIColor blueColor];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
 }
 
 /* Additions by Sri - to be checked */
