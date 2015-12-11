@@ -458,7 +458,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
             
         case KonotorMessageTypePicture:
         {
-            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
+            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height-4, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
             
             break;
@@ -496,7 +496,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
         }
     }
     
-    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height, 10, 10)];
+    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height+2, 10, 10)];
     
 }
 
@@ -575,9 +575,9 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.doneButtonColor=nil;
         
         konotorUIParameters.otherTextColor=[UIColor blackColor];
-        konotorUIParameters.otherChatBubble=[UIImage imageNamed:@"messagebubble_left"];
+        konotorUIParameters.otherChatBubble=[UIImage imageNamed:@"Bubble_outline"];
         konotorUIParameters.userTextColor=[UIColor darkGrayColor];
-        konotorUIParameters.userChatBubble=[UIImage imageNamed:@"messagebubble_right"];
+        konotorUIParameters.userChatBubble=[UIImage imageNamed:@"Bubble_filled"];
         konotorUIParameters.userProfileImage=nil;
         konotorUIParameters.otherProfileImage=nil;
         
