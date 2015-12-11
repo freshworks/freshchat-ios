@@ -30,6 +30,8 @@
 
 -(void)initWithConfig:(HotlineConfig *)config;
 
++(void) addDeviceToken:(NSData *) deviceToken;
+
 -(void)presentFeedback:(UIViewController *)controller;
 
 -(void)presentSolutions:(UIViewController *)controller;

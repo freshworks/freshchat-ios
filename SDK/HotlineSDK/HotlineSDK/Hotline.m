@@ -71,6 +71,10 @@
     FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
 }
 
++(void) addDeviceToken:(NSData *) deviceToken {
+    [Konotor addDeviceToken:deviceToken];
+}
+
 -(void)presentSolutions:(UIViewController *)controller{
     UIViewController *preferedController = nil;
     if (self.dispalySolutionAsGrid) {

@@ -17,6 +17,7 @@
 #import "Konotor.h"
 #import "KonotorCustomProperties.h"
 #import "KonotorShareMessageEvent.h"
+#import "HLMacros.h"
 
 #define MESSAGE_NOT_UPLOADED 0
 #define MESSAGE_UPLOADING 1
@@ -235,6 +236,7 @@
     NSString *token = [KonotorApp GetAppKey];
     
     if (!user || ![KonotorUser isUserCreatedOnServer] ){
+        FDLog(@" Could not send device token to server, user not created yet");
         return;
     }
     
@@ -243,8 +245,10 @@
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
-         [KonotorApp successfullyUpdatedDeviceTokenOnServer];
-     } failure:nil];
+        [KonotorApp successfullyUpdatedDeviceTokenOnServer];
+    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
+        FDLog(@" Could not send device token to server :%@", error);
+    }];
     [operation start];
 }
 
