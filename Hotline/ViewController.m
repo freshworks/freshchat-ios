@@ -25,7 +25,7 @@
 }
 
 - (IBAction)conversations:(id)sender {
-    [Hotline presentFeedback:self];
+    [[Hotline sharedInstance] presentFeedback:self];
 }
 
 - (IBAction)settings:(id)sender {

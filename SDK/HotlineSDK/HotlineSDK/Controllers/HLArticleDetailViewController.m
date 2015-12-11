@@ -311,7 +311,7 @@
 
 -(void)buttonClickedEvent:(id)sender{
     [self hideContactUsPrompt];
-    [Hotline presentFeedback:self];
+    [[Hotline sharedInstance] presentFeedback:self];
 }
 
 -(void)dealloc{

@@ -15,6 +15,7 @@
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
+#define HOTLINE_DEFAULTS_DOMAIN @"hotline_defaults_domain"
 #define HOTLINE_DEFAULTS_APP_KEY @"hotline_defaults_app_key"
 
 @interface FDSecureStore : NSObject

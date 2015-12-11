@@ -44,7 +44,7 @@
     return self;
 }
 
-+(void)presentFeedback:(UIViewController *)controller{
+-(void)presentFeedback:(UIViewController *)controller{
     [[KonotorDataManager sharedInstance]fetchAllChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
@@ -62,15 +62,12 @@
     }];
 }
 
--(void)initWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
+-(void)initWithConfig:(HotlineConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    [store setObject:AppID forKey:HOTLINE_DEFAULTS_APP_ID];
-    [store setObject:AppKey forKey:HOTLINE_DEFAULTS_APP_KEY];
-    if (delegate) {
-        [Konotor initWithAppID:AppID AppKey:AppKey withDelegate:delegate];
-    }else{
-        [Konotor initWithAppID:AppID AppKey:AppKey withDelegate:nil];
-    }
+    [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
+    [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
+    [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+    [Konotor initWithAppID:config.appID AppKey:config.appKey withDelegate:nil];
     FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
 }
 

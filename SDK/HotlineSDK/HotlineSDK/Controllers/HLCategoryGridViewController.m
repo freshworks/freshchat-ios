@@ -181,7 +181,7 @@
 #pragma mark - Collection view delegate
 
 -(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
-    [Hotline presentFeedback:self];
+    [[Hotline sharedInstance] presentFeedback:self];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{

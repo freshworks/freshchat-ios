@@ -76,10 +76,12 @@
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
-    NSString *appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,appID,categoryID,articleID];
     request.HTTPMethod = HTTP_METHOD_PUT;
-    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSDictionary *voteInfo;
     if (vote) {
@@ -97,63 +99,6 @@
 
 -(void)postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_UPDATED object:self];
-}
-
--(NSURLSessionDataTask *)fetchCategoriesInBatches{
-    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
-    request.HTTPMethod = HTTP_METHOD_GET;
-    NSString *appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
-    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES,appID];
-    [request setRelativePath:path andURLParams:@[token]];
-    
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
-        __block BOOL canAbortRequest = NO;
-        __block NSMutableArray *solutions = [NSMutableArray new];
-        dispatch_group_t group = dispatch_group_create();
-        NSArray *categories = responseObject[@"categories"];
-        
-        for (int i=0; i<categories.count; i++) {
-            
-            if (canAbortRequest) {
-                break;
-            }
-            
-            dispatch_group_enter(group);
-            
-            if (NO) { // If fetch not required for a particular category
-                dispatch_group_leave(group);
-                continue;
-            }
-            
-            
-            NSDictionary *categoryInfo = categories[i];
-            NSString *categoryID = categoryInfo[@"categoryId"];
-            NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLES,appID, categoryID];
-            NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
-            [request setRelativePath:path andURLParams:@[token]];
-            [apiClient request:request withHandler:^(id responseObject, NSError *error) {
-                if (!error) {
-                    [solutions addObject:@{ @"category" : categoryInfo, @"articles" : responseObject[@"articles"]}];
-                }else{
-                    canAbortRequest = YES;
-                }
-                dispatch_group_leave(group);
-            }];
-        }
-        
-        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-            if (!canAbortRequest) {
-                [[KonotorDataManager sharedInstance]deleteAllSolutions:^(NSError *error) {
-                    if (!error) {
-                        [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
-                    }
-                }];
-            }
-        });
-    }];
-    return task;
 }
 
 @end
