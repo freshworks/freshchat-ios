@@ -71,10 +71,6 @@
     FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
 }
 
-+(void)setUnreadWelcomeMessage:(NSString *)text{
-    [Konotor setUnreadWelcomeMessage:text];
-}
-
 -(void)presentSolutions:(UIViewController *)controller{
     UIViewController *preferedController = nil;
     if (self.dispalySolutionAsGrid) {

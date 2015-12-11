@@ -60,51 +60,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return messageID;
 }
 
-+(void)insertLocalTextMessage : (NSString *) text Read:(BOOL) read IsWelcomeMessage:(BOOL) isWelcomeMessage{
-    KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
-    NSManagedObjectContext *context = [datamanager mainObjectContext];
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    [message setMessageAlias:[KonotorMessage generateMessageID]];
-    [message setMessageType:[NSNumber numberWithInt:1]];
-    [message setMessageRead:read];
-    [message setText:text];
-    [message setUploadStatus:[NSNumber numberWithInt:2]];
-    [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
-    [datamanager save];
-    
-    KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-    if(pUser){
-        KonotorConversation *pDefaultConvo = [pUser valueForKeyPath:@"defaultConversation"];
-        [message associateMessageToConversation:pDefaultConvo];
-        if(!read)
-            [pDefaultConvo incrementUnreadCount];
-    }
-    
-    if(isWelcomeMessage){
-        NSURL *moURI = [[message objectID] URIRepresentation];
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:[moURI absoluteString] forKey:@"uriForWelcomeMessage"];
-        [defaults synchronize];
-    }
-}
-
-+(void)updateWelcomeMessageText:(NSString*)text{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *urlString = [defaults stringForKey:@"uriForWelcomeMessage"];
-    if(urlString){
-        NSURL *mouri = [NSURL URLWithString:urlString];
-        NSPersistentStoreCoordinator *coord = [[KonotorDataManager sharedInstance]persistentStoreCoordinator];
-        NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-        KonotorMessage *message = (KonotorMessage*)[context objectWithID:[coord managedObjectIDForURIRepresentation:mouri]];
-        if(message){
-            if([[message text] isEqualToString:text])
-                return;
-            message.text=text;
-            [[KonotorDataManager sharedInstance] save];
-        }
-    }
-}
-
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];

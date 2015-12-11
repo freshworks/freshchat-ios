@@ -18,7 +18,6 @@
 
 @property (nonatomic, retain) NSString * deviceToken;
 @property (nonatomic) BOOL deviceTokenUpdatedOnServer;
-@property (nonatomic) BOOL hasWelcomeMessageDisplayed;
 @property (nonatomic,retain) NSNumber* audioPermissionGiven;
 @property (nonatomic, retain) NSNumber * lastUpdatedConversation;
 
@@ -37,8 +36,6 @@
 
 +(BOOL) isUserBeingCreated;
 +(BOOL) getAppInitStatus;
-+(BOOL) hasWelcomeMessageDisplayed;
-+(void) setWelcomeMessageStatus:(BOOL) status;
 +(void) UpdateAppAndSDKVersions;
 +(void) UpdateAppVersion: (NSString *) appVersion;
 +(void) UpdateSDKVersion: (NSString *) sdkVersion;

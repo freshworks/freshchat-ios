@@ -59,8 +59,6 @@ enum KonotorMessageUploadStatus
 +(void) setUserName: (NSString *) fullName;
 +(void) setUserEmail: (NSString *) email;
 +(void) setCustomUserProperty:(NSString *) value forKey: (NSString*) key;
-+(void) setWelcomeMessage:(NSString *) text;
-+(void) setUnreadWelcomeMessage:(NSString *) text;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) isUserMe:(NSString *) userId;

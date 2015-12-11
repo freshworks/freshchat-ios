@@ -213,30 +213,6 @@ static id <KonotorDelegate> _delegate;
     return [KonotorMessage getAllMessagesForConversation:conversationID];
 }
 
-+(void) setWelcomeMessage:(NSString *) text
-{
-    if(![KonotorApp hasWelcomeMessageDisplayed])
-    {
-        [KonotorMessage insertLocalTextMessage:text Read:YES IsWelcomeMessage:YES];
-        [KonotorApp setWelcomeMessageStatus:YES];
-    }
-    else{
-        [KonotorMessage updateWelcomeMessageText:text];
-    }
-}
-
-+(void) setUnreadWelcomeMessage:(NSString *) text
-{
-    if(![KonotorApp hasWelcomeMessageDisplayed])
-    {
-        [KonotorMessage insertLocalTextMessage:text Read:NO IsWelcomeMessage:YES];
-        [KonotorApp setWelcomeMessageStatus:YES];
-    }
-    else{
-        [KonotorMessage updateWelcomeMessageText:text];
-    }
-}
-
 +(int) getUnreadMessagesCount
 {
     NSArray* allConvs=[Konotor getAllConversations];

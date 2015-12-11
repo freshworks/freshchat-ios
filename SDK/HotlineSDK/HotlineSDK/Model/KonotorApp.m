@@ -18,7 +18,7 @@ BOOL KONOTOR_APP_INIT_DONE = FALSE;
 @implementation KonotorApp
 
 @dynamic appID;
-@dynamic appKey,appVersion,sdkVersion,hasWelcomeMessageDisplayed;
+@dynamic appKey,appVersion,sdkVersion;
 @dynamic deviceToken,deviceTokenUpdatedOnServer,lastUpdatedConversation,audioPermissionGiven;
 static BOOL isUserBeingCreated = NO;
 
@@ -147,20 +147,6 @@ static BOOL isUserBeingCreated = NO;
         return gkCurrentKonotorApp.appKey;
     }
     return nil;
-}
-
-+(BOOL) hasWelcomeMessageDisplayed{
-    if(gkCurrentKonotorApp){
-        return [gkCurrentKonotorApp hasWelcomeMessageDisplayed];
-    }
-    return YES;
-}
-
-+(void) setWelcomeMessageStatus:(BOOL) status{
-    if(gkCurrentKonotorApp){
-         [gkCurrentKonotorApp setHasWelcomeMessageDisplayed:status];
-        [[KonotorDataManager sharedInstance]save];
-    }
 }
 
 +(BOOL) isUserBeingCreated{

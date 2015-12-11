@@ -22,8 +22,6 @@
  */
 +(instancetype) sharedInstance;
 
-+(void)setUnreadWelcomeMessage:(NSString *) text;
-
 /**
  *  Initialize configuration for Config.
  *
