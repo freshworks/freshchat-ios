@@ -34,10 +34,6 @@ static id <KonotorDelegate> _delegate;
     _delegate = delegate;
 }
 
-+(void) setSecretKey:(NSString*)key{
-    kon_unlock_key=key;
-}
-
 +(void) initWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
     if(KONOTOR_APP_INIT_DONE){
         return;

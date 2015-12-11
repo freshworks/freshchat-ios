@@ -62,10 +62,6 @@
     }];
 }
 
-+(void)setSecretKey:(NSString *)key{
-    [Konotor setSecretKey:key];
-}
-
 -(void)initWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:AppID forKey:HOTLINE_DEFAULTS_APP_ID];

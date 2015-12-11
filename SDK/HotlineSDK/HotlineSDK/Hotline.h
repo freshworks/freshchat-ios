@@ -14,7 +14,6 @@
 @property(nonatomic) BOOL dispalySolutionAsGrid;
 
 +(instancetype) sharedInstance;
-+(void) setSecretKey:(NSString*)key;
 +(void) setUnreadWelcomeMessage:(NSString *) text;
 -(void) initWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void)presentFeedback:(UIViewController *)controller;
