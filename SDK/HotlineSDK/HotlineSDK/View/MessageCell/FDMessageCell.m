@@ -91,6 +91,8 @@ static KonotorUIParameters* konotorUIParameters=nil;
     if(showsProfile){
         profileImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:profileImageView];
+        profileImageView.layer.masksToBounds=YES;
+        profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
     }
     
     /* setup message sent status*/
@@ -369,7 +371,6 @@ static KonotorUIParameters* konotorUIParameters=nil;
     [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextView.frame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue isAgentMessage:(BOOL)isSenderOther];
     
    if(showsProfile){
-       profileImageView.hidden = NO;
        if(isSenderOther){
            profileImageView.image = [UIImage imageNamed:@"konotor_supportprofile"];
        }else{
@@ -377,8 +378,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
        }
        
        profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
-
-       profileImageView.layer.cornerRadius = KONOTOR_PROFILEIMAGE_DIMENSION/2;
+       profileImageView.hidden = NO;
        
     }else{
         profileImageView.hidden = YES;
