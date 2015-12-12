@@ -32,5 +32,6 @@
 
 @property (strong) KonotorConversation *conversation;
 @property (strong) KonotorMessage *messageToBeSent;
+@property (strong) HLChannel* channel;
 
 @end

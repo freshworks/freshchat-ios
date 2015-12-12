@@ -427,6 +427,7 @@ KonotorAlertView *pAlert;
                                    otherButtonTitles:@"Send it",nil];
         alert.messageToBeSent = message;
         alert.conversation = conversation;
+        alert.channel=channel;
         
         [alert setDelegate:gkAudioRecorder];
         [alert show];
@@ -448,7 +449,7 @@ KonotorAlertView *pAlert;
         
         alert.messageToBeSent = message;
         alert.conversation = conversation;
-        
+        alert.channel=channel;
         [alert setDelegate:gkAudioRecorder];
         [alert show];
         pAlert = alert;
@@ -497,7 +498,7 @@ KonotorAlertView *pAlert;
     
     else
     {
-        [KonotorWebServices uploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation] onChannel:nil];
+        [KonotorWebServices uploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation] onChannel:[alertView channel]];
         gkAudioRecorder = nil;
 
     }
