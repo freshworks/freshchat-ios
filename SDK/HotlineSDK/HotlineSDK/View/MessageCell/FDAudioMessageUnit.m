@@ -47,7 +47,7 @@
 
 -(void) setUpView
 {
-    float messageTextBoxWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
+    float messageTextBoxWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING*2;
     self.audioPlayButton=[[UIButton alloc] initWithFrame:CGRectMake(messageTextBoxWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PLAYBUTTON_DIMENSION,KONOTOR_AUDIOMESSAGE_HEIGHT/2-KONOTOR_PLAYBUTTON_DIMENSION/2,KONOTOR_PLAYBUTTON_DIMENSION,KONOTOR_PLAYBUTTON_DIMENSION)];
     [self.audioPlayButton setImage:[UIImage imageNamed:@"konotor_play.png"] forState:UIControlStateNormal];
     [self.audioPlayButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
