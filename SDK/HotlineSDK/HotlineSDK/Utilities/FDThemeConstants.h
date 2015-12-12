@@ -10,6 +10,7 @@
 #define FreshdeskSDK_FDThemeConstants_h
 
 #define FD_THEMES_DIR @"Themes"
+#define FD_DEFAULT_THEME_NAME @"HLLightTheme"
 #define FD_FONT_SIZE_LARGE [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline].pointSize
 #define FD_FONT_SIZE_MEDIUM [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline].pointSize
 #define FD_FONT_SIZE_NORMAL [UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize
@@ -41,6 +42,7 @@
 #define FD_BUSINESSMESSAGETEXTCOLOR @"000000"
 #define FD_USERMESSAGETEXTCOLOR @"050505"
 #define FD_HYPERLINKCOLOR @"050505"
+#define FD_SEND_BUTTON_COLOR @"0079FF"
 #define FD_ALWAYSPOLLFORMESSAGES NO
 #define FD_SHOWSBUSINESSPROFILEIMAGE YES
 #define FD_SHOWSUSERPROFILEIMAGE NO

@@ -116,7 +116,7 @@
 		<key>FontSize</key>
 		<string>15.0f</string>
 	</dict>
-	<key>ConversationListView</key>
+	<key>ChannelListView</key>
 	<dict>
 		<key>BackgroundColor</key>
 		<string>FFFFFF</string>
@@ -125,19 +125,27 @@
 		<key>ChannelTitleFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChannelTitleFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
 		<key>ChannelDescriptionFontColor</key>
 		<string>222222</string>
 		<key>ChannelDescriptionFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChannelDescriptionFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
 		<key>LastUpdatedTimeFontColor</key>
 		<string>222222</string>
 		<key>LastUpdatedTimeFontName</key>
 		<string>HelveticaNeue</string>
 		<key>LastUpdatedTimeFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
+		<key>UnreadBadgeColor</key>
+		<string>3399FF</string>
+		<key>UnreadBadgeTitleColor</key>
+		<string>FFFFFF</string>
+		<key>UnreadBadgeFontName</key>
+		<string>HelveticaNeue</string>
+		<key>UnreadBadgeFontSize</key>
+		<string>14.0f</string>
 	</dict>
 	<key>NavigationBar</key>
 	<dict>
@@ -168,10 +176,6 @@
 		<string>Helvetica</string>
 		<key>TalkToUsButtonFontSize</key>
 		<string>18.0f</string>
-		<key>UnreadBadgeColor</key>
-		<string>3399FF</string>
-		<key>UnreadBadgeTitleColor</key>
-		<string>FFFFFF</string>
 	</dict>
 	<key>SearchBar</key>
 	<dict>

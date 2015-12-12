@@ -31,6 +31,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        self.themeName = FD_DEFAULT_THEME_NAME;
         self.systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSystemFont:) name:UIContentSizeCategoryDidChangeNotification object:nil];
     }
@@ -257,16 +258,6 @@
     return [self getFontWithKey:@"OverallSettings.TalkToUsButton" andDefaultSize:FD_FONT_SIZE_LARGE];
 }
 
--(UIColor *)badgeButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.UnreadBadgeColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
-}
-
--(UIColor *)badgeButtonTitleColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.UnreadBadgeTitleColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
-}
-
 -(UIColor *)noItemsFoundMessageColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.NoItemsFoundMessageColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
@@ -277,7 +268,8 @@
 }
 
 -(UIColor *)sendButtonColor{
-    return [UIColor blueColor];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
 }
 
 /* Additions by Sri - to be checked */
@@ -400,38 +392,52 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
-#pragma mark - Conversation List View
+#pragma mark - Channel List View
 
 -(UIColor *)conversationListViewBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationListView.BackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
 }
 
 -(UIFont *)channelTitleFont{
-    return [self getFontWithKey:@"GridView.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)channelTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ChannelTitleFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelTitleFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)channelDescriptionFont{
-    return [self getFontWithKey:@"GridView.ChannelDescription" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.ChannelDescription" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)channelDescriptionFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ChannelDescriptionFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelDescriptionFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)lastUpdatedFont{
-    return [self getFontWithKey:@"GridView.LastUpdated" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.LastUpdated" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)lastUpdatedFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.LastUpdatedFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+-(UIFont *)badgeButtonFont{
+    return [self getFontWithKey:@"ChannelListView.UnreadBadge" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)badgeButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
+}
+
+-(UIColor *)badgeButtonTitleColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeTitleColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Voice Recording Prompt
