@@ -8,6 +8,7 @@
 
 #import "FDMessageCell.h"
 #import "FDUtilities.h"
+#import "HLTheme.h"
 
 static KonotorUIParameters* konotorUIParameters=nil;
 
@@ -34,7 +35,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
     showsProfile=YES;
     showsSenderName=NO;
-    customFontName=@"Helvetica";
+    customFontName=[[HLTheme sharedInstance] conversationUIFontName];
     showsUploadStatus=YES;
     showsTimeStamp=YES;
     
@@ -118,9 +119,11 @@ static KonotorUIParameters* konotorUIParameters=nil;
     [self.delegate messageCell:self pictureTapped:self.messagePictureImageView.image];
 }
 
-- (float) getWidthForMessage:(KonotorMessageData*)message{
++ (float) getWidthForMessage:(KonotorMessageData*)message{
     
-    float messageContentViewWidth = KONOTOR_TEXTMESSAGE_MAXWIDTH;
+    NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
+    
+    float messageContentViewWidth = KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
 
     //single line text messages and html messages occupy less width than others
     
@@ -210,7 +213,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
     isSenderOther=[Konotor isUserMe:[currentMessage messageUserId]]?NO:YES;
     float profileX=0.0, profileY=0.0, messageContentViewX=0.0, messageContentViewY=0.0, messageTextBoxX=0.0, messageTextBoxY=0.0,messageContentViewWidth=0.0,messageTextBoxWidth=0.0;
     
-    messageContentViewWidth=[self getWidthForMessage:currentMessage];
+    messageContentViewWidth=[FDMessageCell getWidthForMessage:currentMessage];
     
     // get the length of the textview if one line and calculate page sides
     
@@ -390,10 +393,10 @@ static KonotorUIParameters* konotorUIParameters=nil;
     
     NSInteger messageType = [currentMessage.messageType integerValue];
     
-    BOOL KONOTOR_SHOWPROFILEIMAGE=NO;
+    BOOL KONOTOR_SHOWPROFILEIMAGE=YES;
     BOOL KONOTOR_SHOW_SENDERNAME=NO;
     
-    float maxTextWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH;
+    float maxTextWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
     float widthBufferIfNoProfileImage=5*KONOTOR_HORIZONTAL_PADDING;
     float maxAvailableWidth=parentView.frame.size.width-3*KONOTOR_HORIZONTAL_PADDING-(KONOTOR_SHOWPROFILEIMAGE?KONOTOR_PROFILEIMAGE_DIMENSION:widthBufferIfNoProfileImage);
     float width=MIN(maxAvailableWidth,maxTextWidth);
@@ -402,7 +405,8 @@ static KonotorUIParameters* konotorUIParameters=nil;
     +(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:0)
     +KONOTOR_VERTICAL_PADDING*2;
     float minimumHeight=(KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2;
-    
+    width = [FDMessageCell getWidthForMessage:currentMessage];
+
     float cellHeight=0;
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)){
@@ -422,7 +426,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
         
     }
     else if(messageType == KonotorMessageTypeAudio){
-        cellHeight=KONOTOR_AUDIOMESSAGE_HEIGHT+KONOTOR_VERTICAL_PADDING+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+        cellHeight=KONOTOR_AUDIOMESSAGE_HEIGHT+(KONOTOR_SHOW_SENDERNAME?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(KONOTOR_SHOW_SENDERNAME?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
 ;
     }
     else if((messageType == KonotorMessageTypePicture)||(messageType == KonotorMessageTypePictureV2)){
@@ -538,8 +542,13 @@ static KonotorUIParameters* konotorUIParameters=nil;
 +(CGFloat)getTextViewHeightForMaxWidth:(CGFloat)width text:(NSString *)text withFont:(UIFont *)font{
     UITextView* txtView=[[UITextView alloc] init];
     [txtView setFont:font];
+    if([txtView respondsToSelector:@selector(setTextContainerInset:)])
+        [txtView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
+
     [txtView setText:text];
-    CGSize size=[txtView sizeThatFits:CGSizeMake(width, 1000)];
+    [txtView setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
+    [txtView setTextAlignment:NSTextAlignmentLeft];
+    CGSize size=[txtView sizeThatFits:CGSizeMake(width-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING, 1000)];
     return size.height-16;
 }
 
