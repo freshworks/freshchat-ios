@@ -30,11 +30,13 @@
 
 -(void)initWithConfig:(HotlineConfig *)config;
 
-+(void) addDeviceToken:(NSData *) deviceToken;
-
 -(void)presentFeedback:(UIViewController *)controller;
 
 -(void)presentSolutions:(UIViewController *)controller;
+
+-(void)addDeviceToken:(NSData *) deviceToken;
+
+-(void)handleRemoteNotification:(NSDictionary *)notification;
 
 @end
 
@@ -58,5 +60,6 @@
  *
  */
 -(instancetype)initWithDomain:(NSString*)domain withAppID:(NSString*)appID andAppKey:(NSString*)appKey;
+
 
 @end

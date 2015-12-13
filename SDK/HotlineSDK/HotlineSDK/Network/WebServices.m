@@ -246,8 +246,9 @@
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
         [KonotorApp successfullyUpdatedDeviceTokenOnServer];
+        FDLog(@"Device token updated on server 👍");
     } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
-        FDLog(@" Could not send device token to server :%@", error);
+        FDLog(@"Could not send device token to server :%@", error);
     }];
     [operation start];
 }

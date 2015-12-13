@@ -16,17 +16,17 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self konotorIntegration];
+    [self hotlineIntegration];
     [self registerAppForNotifications];
+    [self handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     return YES;
 }
 
--(void)konotorIntegration{
+-(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
                                                        andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
     [[Hotline sharedInstance]initWithConfig:config];
 }
-
 
 -(void)registerAppForNotifications{
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
@@ -37,19 +37,28 @@
     }
 }
 
+-(void)handleNotification:(NSDictionary *)info {
+    if ([info[@"source"] isEqualToString:@"konotor"]) {
+        [[Hotline sharedInstance] handleRemoteNotification:info];
+    }
+}
+
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     NSLog(@"Registered Device Token  %@", devToken);
-    NSLog(@"is registered  :: %d" ,    [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
-    [Hotline addDeviceToken:devToken];
+    NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
+    [[Hotline sharedInstance] addDeviceToken:devToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"Failed to register device  %@", error);
+    NSLog(@"Failed to register remote notification  %@", error);
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
-    NSLog(@"received push notification call %@", info);
-    
+    [self handleNotification:info];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 @end

@@ -234,13 +234,11 @@ static id <KonotorDelegate> _delegate;
     return FALSE;
 }
 
-+(BOOL) addDeviceToken:(NSData *) deviceToken
-{
++(BOOL) addDeviceToken:(NSData *) deviceToken{
     NSString *tokenStr = [deviceToken description];
     NSString *strDeviceToken = [[[tokenStr stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""] ;
     [KonotorApp addDeviceToken:strDeviceToken];
     return YES;
-    
 }
 
 +(void) setUserIdentifier: (NSString *) UserIdentifier

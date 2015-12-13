@@ -44,6 +44,27 @@
     return self;
 }
 
+-(void)initWithConfig:(HotlineConfig *)config{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
+    [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
+    [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+    [Konotor initWithAppID:config.appID AppKey:config.appKey withDelegate:nil];
+    FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
+}
+
+-(void)presentSolutions:(UIViewController *)controller{
+    UIViewController *preferedController = nil;
+    if (self.dispalySolutionAsGrid) {
+        preferedController = [[HLCategoryGridViewController alloc]init];
+    }else{
+        preferedController = [[HLCategoriesListController alloc]init];
+    }
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
+}
+
 -(void)presentFeedback:(UIViewController *)controller{
     [[KonotorDataManager sharedInstance]fetchAllChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
@@ -62,29 +83,14 @@
     }];
 }
 
--(void)initWithConfig:(HotlineConfig *)config{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
-    [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
-    [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
-    [Konotor initWithAppID:config.appID AppKey:config.appKey withDelegate:nil];
-    FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
-}
+#pragma mark Push notifications
 
-+(void) addDeviceToken:(NSData *) deviceToken {
+-(void)addDeviceToken:(NSData *) deviceToken {
     [Konotor addDeviceToken:deviceToken];
 }
 
--(void)presentSolutions:(UIViewController *)controller{
-    UIViewController *preferedController = nil;
-    if (self.dispalySolutionAsGrid) {
-        preferedController = [[HLCategoryGridViewController alloc]init];
-    }else{
-        preferedController = [[HLCategoriesListController alloc]init];
-    }
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-    [controller presentViewController:navigationController animated:YES completion:nil];
+-(void)handleRemoteNotification:(NSDictionary *)notification{
+    FDLog(@"Handle notification %@", notification);
 }
 
 @end
