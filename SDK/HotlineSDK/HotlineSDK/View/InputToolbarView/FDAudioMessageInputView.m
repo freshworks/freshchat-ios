@@ -48,7 +48,7 @@ int timeMin;
         [self addSubview:self.sendButton];
         
         self.timeLabel = [[UILabel alloc] init];
-        self.timeLabel.text = @"00:01";
+        self.timeLabel.text = @"00:00";
         self.timeLabel.font = [[HLTheme sharedInstance] voiceRecordingTimeLabelFont];
         self.timeLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.timeLabel];
