@@ -73,7 +73,7 @@
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_CHANNELS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         HideNetworkActivityIndicator();
         [weakSelf updateChannels];
-        NSLog(@"Got Notifications !!!");
+        FDLog(@"Got Notifications !!!");
     }];
 }
 

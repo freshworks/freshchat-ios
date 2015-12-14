@@ -8,6 +8,12 @@
 
 #import "FDChannelListViewCell.h"
 
+@interface FDChannelListViewCell ()
+
+@property (strong, nonatomic) HLTheme *theme;
+
+@end
+
 @implementation FDChannelListViewCell
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -74,6 +80,7 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
+    // TODO : Loading image from theme
     self.imgView.image=[UIImage imageNamed:@"loading.png"];
 }
 

@@ -49,7 +49,6 @@
     float messageOriginX=messageFrame.origin.x;
     float messageOriginY=messageFrame.origin.y;
     float horizontalPadding=KONOTOR_HORIZONTAL_PADDING*3;
-    float verticalPadding=KONOTOR_VERTICAL_PADDING;
     float percentWidth=0.5;
     float padding = 10;
     float maxButtonWidth =messageFrameWidth-horizontalPadding*2;

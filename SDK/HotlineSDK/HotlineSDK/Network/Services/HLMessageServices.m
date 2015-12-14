@@ -20,11 +20,12 @@
 -(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    // TODO : This is repeated multitimes. Needs refactor.
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
     request.HTTPMethod = HTTP_METHOD_GET;
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS,appID];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {

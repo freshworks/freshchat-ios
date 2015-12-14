@@ -12,6 +12,11 @@
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate>
 
+@property (strong, nonatomic) UIView* sourceView;
+@property (strong, nonatomic) UIViewController* sourceViewController;
+@property (strong, nonatomic) UIImage* imagePicked;
+@property (strong, nonatomic) UIPopoverController* popover;
+
 @property (nonatomic, strong) KonotorConversation *conversation;
 @property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDAttachmentImageController *imageController;
@@ -20,7 +25,7 @@
 
 @implementation KonotorImageInput
 
-@synthesize sourceView,alertOptions,sourceViewController,imagePicked,popover;
+@synthesize sourceView,sourceViewController,imagePicked,popover;
 
 - (instancetype)initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     self = [super init];
@@ -32,6 +37,7 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
+    // TODO : Read the text from Localizable Strings - Rex
     UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:@"Message Type" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Select Existing Image",@"New Image via Camera",nil];
     inputOptions.delegate = self;
     self.sourceViewController=viewController;
@@ -77,6 +83,7 @@
             [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
         });
     }else{
+        // TODO : Localization
         UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:@"Camera Unavailable" message:@"Sorry! Your device doesn't have a camera, or the camera is not available for use." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertview show];
     }

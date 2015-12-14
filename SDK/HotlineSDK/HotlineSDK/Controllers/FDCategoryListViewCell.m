@@ -12,6 +12,7 @@
 
 -(void)addAccessoryView{
     UIImageView *accessoryView = [[UIImageView alloc] init];
+    // TODO : Should be read from a Theme. 
     accessoryView.image = [HLTheme getImageFromMHBundleWithName:@"rightArrow.png"];
     accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
     [self.contentView addSubview:accessoryView];

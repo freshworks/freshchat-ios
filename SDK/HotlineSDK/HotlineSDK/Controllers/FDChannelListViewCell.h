@@ -8,7 +8,6 @@
 
 #import "FDTableViewCellWithImage.h"
 #import "FDBadgeView.h"
-#import "FDButton.h"
 
 @interface FDChannelListViewCell : FDTableViewCellWithImage
 

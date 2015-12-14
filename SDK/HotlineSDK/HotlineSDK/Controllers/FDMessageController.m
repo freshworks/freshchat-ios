@@ -15,9 +15,7 @@
 #import "HLMacros.h"
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
-
-#define KONOTOR_REFRESHINDICATOR_TAG 80
-#define KONOTOR_MESSAGESPERPAGE 25
+#import "HLConstants.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 

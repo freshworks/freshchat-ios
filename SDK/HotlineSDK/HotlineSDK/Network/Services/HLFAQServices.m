@@ -24,11 +24,11 @@
 -(NSURLSessionDataTask *)fetchAllCategories{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
     request.HTTPMethod = HTTP_METHOD_GET;
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES,appID];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
@@ -75,10 +75,11 @@
 
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:HOTLINE_USER_DOMAIN]];
     FDSecureStore *store = [FDSecureStore sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE,appID,categoryID,articleID];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE_PATH,appID,categoryID,articleID];
     request.HTTPMethod = HTTP_METHOD_PUT;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];

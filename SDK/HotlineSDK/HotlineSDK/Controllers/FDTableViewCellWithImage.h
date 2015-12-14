@@ -14,7 +14,6 @@
 @property (strong, nonatomic) UIImageView *imgView;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *detailLabel;
-@property (strong, nonatomic) HLTheme *theme;
 @property (strong, nonatomic) UIView *contentEncloser;
 
 -(void)setupTheme;

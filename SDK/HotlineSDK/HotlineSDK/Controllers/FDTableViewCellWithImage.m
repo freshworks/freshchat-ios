@@ -7,8 +7,14 @@
 //
 
 #import "FDTableViewCellWithImage.h"
+@interface FDTableViewCellWithImage ()
+
+@property (strong, nonatomic) HLTheme *theme;
+
+@end
 
 @implementation FDTableViewCellWithImage
+
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -63,7 +69,7 @@
 }
 
 -(void)addAccessoryView{
-    
+    NSLog(@"WARNING: Unimplemented method. %@ should implement addAccessoryView" , self.class);
 }
 
 -(void)setupTheme{
@@ -80,7 +86,6 @@
     
 }
 
-//TODO: Looks like there are many places where the same image is accessed. unify under a HLTheme Function.
 -(void)prepareForReuse{
     [super prepareForReuse];
     self.imgView.image = [[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"];

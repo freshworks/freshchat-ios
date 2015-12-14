@@ -39,12 +39,16 @@
 #define FD_CONVERSATIONS_UI_RECEIVED_MESSAGE_FONT_COLOR @"4E4E4E"
 #define FD_FAQS_ITEM_SEPARATOR_COLOR @"F2F2F2"
 
+
+// TODO : Please rename this to use SCREAMING_SNAKE_CASE as above. - Rex
 #define FD_CONVERSATIONVIEWTITLETEXTCOLOR @"000000"
+// TODO : REPEATED .. used white and black from above
 #define FD_CONVERSATIONVIEWBACKGROUNDCOLOR @"FFFFFF"
 #define FD_ACTIONBUTTONTEXTCOLOR @"FFFFFF"
 #define FD_ACTIONBUTTONCOLOR @"050505"
 #define FD_BUSINESSMESSAGETEXTCOLOR @"000000"
 #define FD_USERMESSAGETEXTCOLOR @"050505"
+// TODO : Please group these colours .. no point in defining one for everything - Rex
 #define FD_HYPERLINKCOLOR @"050505"
 #define FD_SEND_BUTTON_COLOR @"0079FF"
 #define FD_ALWAYSPOLLFORMESSAGES NO
@@ -52,6 +56,8 @@
 #define FD_SHOWSUSERPROFILEIMAGE NO
 #define FD_SHOWSBUSINESSMESSAGESENDERNAME NO
 #define FD_SHOWSUSERMESSAGESENDERNAME NO
+// TODO : Should not be hard coded . Read from Localization file and this doesnt seem to be used
+// Remove all unsed #define - REX
 #define FD_TEXTINPUTHINTTEXT @"Type something..."
 #define FD_BUSINESSPROFILEIMAGENAME @"konotor_supportprofile"
 #define FD_USERPROFILEIMAGENAME @"konotor_profile"
