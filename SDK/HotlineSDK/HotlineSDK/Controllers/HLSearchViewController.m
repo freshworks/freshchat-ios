@@ -69,7 +69,7 @@
     self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.searchBar.hidden = NO;
     self.searchBar.delegate = self;
-    self.searchBar.placeholder = HLLocalizedString(@"Search Placeholder");
+    self.searchBar.placeholder = HLLocalizedString(@"SEARCH_PLACEHOLDER");
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchBar becomeFirstResponder];

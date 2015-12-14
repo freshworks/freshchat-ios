@@ -16,6 +16,9 @@
 
 @interface FDAlertView : FDPromptView
 
+@property (nonatomic, strong) UIButton *Button1;
+@property (nonatomic, strong) UILabel *promptLabel;
+
 -(instancetype)initWithDelegate:(id <FDAlertViewDelegate>)delegate andKey:(NSString *)key;
 
 @end

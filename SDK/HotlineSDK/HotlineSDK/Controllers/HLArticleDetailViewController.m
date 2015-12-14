@@ -111,7 +111,7 @@
 -(void)setNavigationItem{
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:@"BackArrow"]
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self.navigationController
                                                                   action:@selector(popViewControllerAnimated:)];
@@ -138,12 +138,13 @@
     [self.webView setBackgroundColor:[UIColor whiteColor]];
     
     //Article Vote Prompt View
-    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"Article Vote Prompt"];
+    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"ARTICLE_VOTE_PROMPT"];
     self.articleVotePromptView.delegate = self;
     self.articleVotePromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
     //contact us prompt view
-    self.contactUsPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"Contact Us Prompt"];
+    self.contactUsPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"CONTACT_US_PROMPT"];
+    self.contactUsPromptView.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");
     self.contactUsPromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.view addSubview:self.webView];
@@ -281,6 +282,16 @@
 -(void)showContactUsPrompt{
     [UIView animateWithDuration:.5 animations:^{
         [self.contactUsPromptView setHidden:NO];
+        self.contactUsPromptView.Button1.hidden = NO;
+        [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void)showThankYouPrompt{
+    [UIView animateWithDuration:.5 animations:^{
+        [self.contactUsPromptView setHidden:NO];
+        self.contactUsPromptView.Button1.hidden = YES;
         [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
         [self.view layoutIfNeeded];
     }];
@@ -296,6 +307,7 @@
 
 -(void)yesButtonClicked:(id)sender{
     [self hideArticleRatingPrompt];
+    [self showThankYouPrompt];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");
     }];

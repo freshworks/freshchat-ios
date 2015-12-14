@@ -9,34 +9,59 @@
 #import "FDMarginalView.h"
 #import "HLMacros.h"
 
+@interface FDMarginalView ()
+
+@property (nonatomic,strong) UILabel *actionLabel;
+@property (nonatomic,strong) id<FDMarginalViewDelegate> delegate;
+
+@end
+
 @implementation FDMarginalView
 
--(id)initWithFrame:(CGRect)frame{
-    self = [super initWithFrame:frame];
+-(id)initWithDelegate:(id <FDMarginalViewDelegate>)delegate{
+    self = [super init];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
-        self.backgroundColor = [UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1];
-        self.marginalLabel = [[UILabel alloc] initWithFrame:CGRectInset(self.bounds, 60.0f, 0.0f)];
-        self.marginalLabel.textColor = [UIColor whiteColor];
-        self.marginalLabel.textAlignment = UITextAlignmentCenter;
-        self.marginalLabel.font = [[HLTheme sharedInstance] talkToUsButtonFont];
-        self.marginalLabel.translatesAutoresizingMaskIntoConstraints=NO;
-        [self addSubview:self.marginalLabel];
+        HLTheme *theme = [HLTheme sharedInstance];
+
+        self.delegate = delegate;
+        self.userInteractionEnabled = YES;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
         
-        NSDictionary *views = @{ @"label":self.marginalLabel};
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[label]|" options:0 metrics:nil views:views]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[label]|" options:0 metrics:nil views:views]];
+        self.backgroundColor = [UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1];
+        UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [self addGestureRecognizer:tapGesture];
+        
+        self.actionLabel = [[UILabel alloc] init];
+        self.actionLabel.text = HLLocalizedString(@"CONTACT_US_BUTTON_LABEL");
+        self.actionLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        self.actionLabel.textAlignment = UITextAlignmentCenter;
+        self.actionLabel.font = [theme talkToUsButtonFont];
+        self.actionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.actionLabel.textColor = [theme talkToUsButtonColor];
+        [self addSubview:self.actionLabel];
+        
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.actionLabel
+                                                         attribute:NSLayoutAttributeCenterX
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeCenterX
+                                                        multiplier:1
+                                                          constant:0]];
+        
+        [self addConstraint: [NSLayoutConstraint constraintWithItem:self.actionLabel
+                                                          attribute:NSLayoutAttributeCenterY
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self
+                                                          attribute:NSLayoutAttributeCenterY
+                                                         multiplier:1
+                                                           constant:0]];
     }
     return self;
 }
 
--(void)setLabelText:(NSString *)text{
-    self.marginalLabel.text = text;
-    self.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.marginalLabel.textColor = [UIColor blackColor];
-    self.marginalLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    self.marginalLabel.backgroundColor = [UIColor clearColor];
-    self.marginalLabel.userInteractionEnabled=YES;
+-(void)handleTapGesture:(id)sender{
+    [self.delegate marginalView:self handleTap:sender];
 }
 
 @end

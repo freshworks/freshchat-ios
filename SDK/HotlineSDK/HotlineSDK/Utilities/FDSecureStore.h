@@ -17,6 +17,7 @@
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
 #define HOTLINE_DEFAULTS_DOMAIN @"hotline_defaults_domain"
 #define HOTLINE_DEFAULTS_APP_KEY @"hotline_defaults_app_key"
+#define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 
 @interface FDSecureStore : NSObject
 

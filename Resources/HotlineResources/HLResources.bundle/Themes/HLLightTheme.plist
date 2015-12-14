@@ -73,14 +73,24 @@
 	</dict>
 	<key>Dialogues</key>
 	<dict>
-		<key>ButtonFontColor</key>
-		<string>007AFF</string>
-		<key>ButtonFontName</key>
-		<string>HelveticaNeue</string>
-		<key>ButtonFontSize</key>
-		<string>18</string>
-		<key>DialogueBackgroundColor</key>
+		<key>YesButtonFontColor</key>
 		<string>FFFFFF</string>
+		<key>YesButtonFontName</key>
+		<string>HelveticaNeue</string>
+		<key>YesButtonFontSize</key>
+		<string>18</string>
+		<key>YesButtonBackgroundColor</key>
+		<string>007AFF</string>
+		<key>NoButtonFontColor</key>
+		<string>007AFF</string>
+		<key>NoButtonFontName</key>
+		<string>HelveticaNeue</string>
+		<key>NoButtonFontSize</key>
+		<string>18</string>
+		<key>NoButtonBackgroundColor</key>
+		<string>D8D8D8</string>
+		<key>DialogueBackgroundColor</key>
+		<string>D8D8D8</string>
 		<key>DialogueLabelFontColor</key>
 		<string>000000</string>
 		<key>DialogueLabelFontName</key>
@@ -171,11 +181,15 @@
 		<key>NoItemsFoundMessageColor</key>
 		<string>000000</string>
 		<key>TalkToUsButtonColor</key>
-		<string>0079FF</string>
+		<string>FFFFFF</string>
 		<key>TalkToUsButtonFontName</key>
 		<string>Helvetica</string>
 		<key>TalkToUsButtonFontSize</key>
-		<string>18.0f</string>
+		<string>14.0f</string>
+		<key>UnreadBadgeColor</key>
+		<string>DE2021</string>
+		<key>UnreadBadgeTitleColor</key>
+		<string>FFFFFF</string>
 	</dict>
 	<key>SearchBar</key>
 	<dict>
@@ -203,7 +217,7 @@
 		<key>CellBackgroundColor</key>
 		<string>FFFFFF</string>
 		<key>CellSeparatorColor</key>
-		<string>C8C8C8</string>
+		<string>F2F2F2</string>
 		<key>TitleFontColor</key>
 		<string>222222</string>
 		<key>TitleFontName</key>
@@ -232,7 +246,7 @@
 		<key>ItemBackgroundColor</key>
 		<string>FFFFFF</string>
 		<key>ItemSeparatorColor</key>
-		<string>C8C8C8</string>
+		<string>F2F2F2</string>
 		<key>CategoryTitleFontColor</key>
 		<string>222222</string>
 		<key>CategoryTitleFontName</key>
@@ -253,9 +267,20 @@
 		<key>CategoryTitleFontName</key>
 		<string>HelveticaNeue</string>
 		<key>CategoryTitleFontSize</key>
-		<string>15.0f</string>
+		<string>14.0f</string>
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
+	</dict>
+	<key>Images</key>
+	<dict>
+		<key>Search</key>
+		<string>HLResources.bundle/Images/search</string>
+		<key>Chat</key>
+		<string>HLResources.bundle/Images/chat</string>
+		<key>BackArrow</key>
+		<string>HLResources.bundle/Images/BackArrow</string>
+		<key>FAQLoadingIcon </key>
+		<string>HLResources.bundle/Images/loading</string>
 	</dict>
 </dict>
 </plist>

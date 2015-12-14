@@ -24,7 +24,7 @@
 #import "KonotorUtil.h"
 #import "Hotline.h"
 
-@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate>
+@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
 @property (nonatomic, strong) NSArray *categories;
 @property (nonatomic, strong) FDSearchBar *searchBar;
@@ -94,14 +94,28 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [HLTheme getImageFromMHBundleWithName:@"search"];
-
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-
+    UIImage *searchButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Search"];
+    UIImage *contactUsButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Chat"];
+    
+    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchButton.frame = CGRectMake(0, 0, 44, 44);
+    [searchButton setImage:searchButtonImage forState:UIControlStateNormal];
+    [searchButton addTarget:self action:@selector(searchButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
+    
+    UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedItem.width = -20.0f; // or whatever you want
+    
+    UIButton *contactUsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    contactUsButton.frame = CGRectMake(272, 50, 24, 24);
+    [contactUsButton setImage:contactUsButtonImage forState:UIControlStateNormal];
+    [contactUsButton addTarget:self action:@selector(contactUsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *contactUsBarButton = [[UIBarButtonItem alloc] initWithCustomView:contactUsButton];
+    
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
-    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
@@ -112,6 +126,10 @@
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
     
+}
+
+-(void)contactUsButtonAction:(id)sender{
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 -(void)updateCategories{
@@ -159,12 +177,7 @@
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
-    self.footerView = [[FDMarginalView alloc] init];
-    self.footerView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.footerView.marginalLabel.userInteractionEnabled=YES;
-    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
     
     [self.view addSubview:self.footerView];
     [self.view addSubview:self.collectionView];
@@ -178,11 +191,11 @@
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
 }
 
-#pragma mark - Collection view delegate
-
--(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
-    [[Hotline sharedInstance] presentFeedback:self];
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
+    [[Hotline sharedInstance]presentFeedback:self];
 }
+
+#pragma mark - Collection view delegate
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
     return CGSizeMake(self.collectionView.bounds.size.width, 44);
@@ -206,10 +219,11 @@
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
         cell.backgroundColor = [[HLTheme sharedInstance] itemBackgroundColor];
-        cell.layer.borderWidth=0.5f;
+        cell.layer.borderWidth=0.3f;
         cell.layer.borderColor=[[HLTheme sharedInstance] itemSeparatorColor].CGColor;
         if (!category.icon){
             cell.imageView.image=[UIImage imageNamed:@"loading.png"];
+            cell.imageView.contentMode = UIViewContentModeCenter;
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
             [cell.label sizeToFit];

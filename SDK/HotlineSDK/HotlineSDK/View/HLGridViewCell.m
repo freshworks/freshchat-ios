@@ -36,6 +36,7 @@
         newFrame.size.height = expectedLabelSize.height;
         self.label.frame = newFrame;
         self.label = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, self.bounds.size.width, 40)];
+        self.label.font = [self.theme categoryTitleFont];
         self.label.lineBreakMode=NSLineBreakByTruncatingTail;
         self.label.textAlignment = NSTextAlignmentCenter;
         self.label.backgroundColor = [self.theme imageViewItemBackgroundColor];
@@ -47,8 +48,24 @@
         
         NSDictionary *views = @{ @"imageView" : self.imageView, @"label" : self.label};
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraint:
+         [NSLayoutConstraint constraintWithItem:self.imageView
+                                      attribute:NSLayoutAttributeCenterX
+                                      relatedBy:NSLayoutRelationEqual
+                                         toItem:self.contentView
+                                      attribute:NSLayoutAttributeCenterX
+                                     multiplier:1
+                                       constant:0]];
+        [self.contentView addConstraint:
+         [NSLayoutConstraint constraintWithItem:self.imageView
+                                      attribute:NSLayoutAttributeCenterY
+                                      relatedBy:NSLayoutRelationEqual
+                                         toItem:self.contentView
+                                      attribute:NSLayoutAttributeCenterY
+                                     multiplier:1
+                                       constant:0]];
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView]-[label]-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView]-[label]" options:0 metrics:nil views:views]];
     }
     return self;
 }

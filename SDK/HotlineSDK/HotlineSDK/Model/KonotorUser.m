@@ -13,6 +13,8 @@
 #import "KonotorApp.h"
 #import "KonotorUtil.h"
 #import "FDUtilities.h"
+#import <AdSupport/ASIdentifierManager.h>
+#import "FDSecureStore.h"
 
 @implementation KonotorUser
 
@@ -81,9 +83,11 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
             NSMutableDictionary *topLevel=[[NSMutableDictionary alloc]init];
             NSMutableDictionary *sublevel=[[NSMutableDictionary alloc]init];
             NSDictionary *meta = [KonotorUtil deviceInfoProperties];
+            NSString *adId = [self getAdID];
             
             [sublevel setObject:gCurrentUser.userAlias forKey:@"alias"];
             [sublevel setObject:meta forKey:@"meta"];
+            [sublevel setObject:adId forKey:@"adId"];
             [topLevel setObject:sublevel forKey:@"user"];
             
             NSData *pEncodedJSON;
@@ -271,6 +275,22 @@ ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParamet
     [sublevel setObject:email forKey:@"email"];
     KonotorCustomProperty *prop = [KonotorCustomProperty CreateNewPropertyForKey:@"email" WithValue:email];
     [KonotorWebServices UpdateUserPropertiesWithDictionary:sublevel withProperty:prop];
+}
+
++(NSString *)getAdID{
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    NSString *adId = [secureStore objectForKey:HOTLINE_DEFAULTS_ADID];
+    if (!adId) {
+        adId = [self setAdId];
+    }
+    return adId;
+}
+
++(NSString *)setAdId{
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    NSString *adId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
+    return  adId;
 }
 
 @end

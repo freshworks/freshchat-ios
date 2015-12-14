@@ -50,19 +50,25 @@
 -(CGFloat)tableViewSectionHeaderHeight;
 
 //Overall SDK
--(UIFont *)talkToUsButtonFont;
 -(UIColor *)backgroundColorSDK;
 -(UIColor *)badgeButtonBackgroundColor;
 -(UIColor *)badgeButtonTitleColor;
--(UIColor *)talkToUsButtonColor;
 -(UIColor *)noItemsFoundMessageColor;
+
+//Talk to us button
+-(UIFont *)talkToUsButtonFont;
+-(UIColor *)talkToUsButtonColor;
 
 //Dialogues
 -(UIColor *)getButtontextColorForKey:(NSString *)key;
 -(UIFont *)dialogueTitleFont;
 -(UIColor *)dialogueTitleTextColor;
--(UIFont *)dialogueButtonFont;
--(UIColor *)dialogueButtonTextColor;
+-(UIFont *)dialogueYesButtonFont;
+-(UIColor *)dialogueYesButtonTextColor;
+-(UIColor *)dialogueYesButtonBackgroundColor;
+-(UIColor *)dialogueNoButtonBackgroundColor;
+-(UIFont *)dialogueNoButtonFont;
+-(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
 
 //Messagecell & Conversation UI
@@ -117,5 +123,7 @@
 
 //Voice Recording Prompt
 -(UIFont *)voiceRecordingTimeLabelFont;
+
+-(UIImage *)getImageWithKey:(NSString *)key;
 
 @end

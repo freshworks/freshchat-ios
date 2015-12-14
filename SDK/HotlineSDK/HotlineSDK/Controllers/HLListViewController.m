@@ -11,7 +11,7 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "HLChannelViewController.h"
-
+#import "Hotline.h"
 @implementation HLListViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
@@ -23,16 +23,12 @@
     self.tableView = [[UITableView alloc]init];
     self.tableView.tableFooterView = [UIView new];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.tableFooterView = [UIView new];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.footerView = [[FDMarginalView alloc] init];
-    self.footerView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.footerView.marginalLabel.text = HLLocalizedString(@"CATEGORIES_LIST_VIEW_FOOTER_LABEL");
-    self.footerView.marginalLabel.userInteractionEnabled=YES;
-    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.footerView.marginalLabel addGestureRecognizer: tapGesture];
-
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
+    
     [self.view addSubview:self.footerView];
     [self.view addSubview:self.tableView];
     
@@ -51,12 +47,8 @@
     return YES;
 }
 
--(void)handleTapGesture: (UIGestureRecognizer*) recognizer{
-    HLContainerController *preferredController = nil;
-    HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-    preferredController = [[HLContainerController alloc]initWithController:channelViewController];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
-    [self presentViewController:navigationController animated:YES completion:nil];
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

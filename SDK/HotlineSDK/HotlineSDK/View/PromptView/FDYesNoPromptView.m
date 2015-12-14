@@ -12,6 +12,7 @@
 
 @interface FDYesNoPromptView ()
 
+@property (nonatomic, strong) HLTheme *theme;
 @property (strong, nonatomic) UILabel *promptLabel;
 @property (nonatomic, strong) UIButton *YesButton;
 @property (nonatomic, strong) UIButton *NoButton;
@@ -25,15 +26,26 @@
 -(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
+    self.theme = [HLTheme sharedInstance];
+        
      self.promptLabel = [self createPromptLabel];
-     self.promptLabel.text = HLLocalizedString([key stringByAppendingString:@" Label Text"]);
+     self.promptLabel.text = HLLocalizedString([key stringByAppendingString:@"_LABEL_TEXT"]);
      [self addSubview:self.promptLabel];
         
-     self.YesButton = [self createPromptButton:@"Yes" withKey:key];
+     self.YesButton = [self createPromptButton:@"YES" withKey:key];
+     [self.YesButton setTitleColor:[self.theme dialogueYesButtonTextColor] forState:UIControlStateNormal];
+     [self.YesButton setBackgroundColor:[self.theme dialogueYesButtonBackgroundColor]];
+     [[self.YesButton layer] setBorderWidth:0.3f];
+     
+     self.YesButton.layer.cornerRadius = 2;
      [self.YesButton addTarget:self.delegate action:@selector(yesButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
      [self addSubview:self.YesButton];
         
-     self.NoButton = [self createPromptButton:@"No" withKey:key];
+     self.NoButton = [self createPromptButton:@"NO" withKey:key];
+     [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
+     [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
+     [[self.NoButton layer] setBorderWidth:0.3f];
+     self.NoButton.layer.cornerRadius = 2;
      [self.NoButton addTarget:self.delegate action:@selector(noButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
      [self addSubview:self.NoButton];
      [self addSpacersInView:self];
@@ -55,7 +67,7 @@
     
     
     //Constraints for buttons
-    [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button1(desiredWidth1)]-[Button2(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
+    [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button2(desiredWidth1)]-[Button1(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
     [self addConstraint:@"V:[promptLabel]-5-[Button1]" InView:self];
     [self addConstraint:@"V:[promptLabel]-5-[Button2]" InView:self];
     

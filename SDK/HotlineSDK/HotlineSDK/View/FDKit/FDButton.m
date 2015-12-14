@@ -7,6 +7,13 @@
 //
 
 #import "FDButton.h"
+#import "HLTheme.h"
+
+@interface FDButton ()
+
+@property (nonatomic,strong) HLTheme *theme;
+
+@end
 
 @implementation FDButton
 
@@ -15,7 +22,8 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor      = nil;
+        self.theme = [HLTheme sharedInstance];
+        self.backgroundColor      = [self.theme backgroundColorSDK];
         self.titleLabel.tintColor = nil;
         self.tintColor            = nil;
         [self setTitleColor:nil forState:UIControlStateNormal];

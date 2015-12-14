@@ -13,7 +13,7 @@
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
 @property (strong, nonatomic) UIFont *systemFont;
-@property (strong, nonatomic) NSString *themeName;
+@property (strong,nonatomic) NSString * themeName;
 
 @end
 
@@ -38,21 +38,6 @@
     return self;
 }
 
--(NSBundle *)getHLResourceBundle{
-    NSBundle *MHResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
-    return MHResourcesBundle;
-}
-
--(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *path = [[NSBundle mainBundle] pathForResource:theme ofType:@"plist"];
-    if (!path) {
-        NSBundle *MHResourcesBundle = [self getHLResourceBundle];
-        path = [MHResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
-    }
-    return path;
-}
-
-//when setting a theme, check if that theme file exist, if yes update the theme preferences else throw exception.
 -(void)setThemeName:(NSString *)themeName{
     NSString *themeFilePath = [self getPathForTheme:themeName];
     if (themeFilePath) {
@@ -60,8 +45,8 @@
         NSData *plistData = [[NSFileManager defaultManager] contentsAtPath:themeFilePath];
         [self updateThemePreferencesWithData:plistData];
     }else{
-        NSString *exceptionName   = @"MOBIHELP_SDK_INVALID_THEME_FILE";
-        NSString *reason          = @"You are attempting to set a theme file \"%@\" that is not linked with the project through MHResourcesBundle";
+        NSString *exceptionName   = @"HOTLINE_SDK_INVALID_THEME_FILE";
+        NSString *reason          = @"You are attempting to set a theme file \"%@\" that is not linked with the project through HLResourcesBundle";
         NSString *exceptionReason = [NSString stringWithFormat:reason,themeName];
         [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
     }
@@ -76,10 +61,31 @@
     }
 }
 
+-(NSString *)getPathForTheme:(NSString *)theme{
+    NSString *path = [[NSBundle mainBundle] pathForResource:theme ofType:@"plist"];
+    if (!path) {
+        NSBundle *HLResourcesBundle = [self getHLResourceBundle];
+        path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
+    }
+    return path;
+}
+
+-(NSBundle *)getHLResourceBundle{
+    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    return HLResourcesBundle;
+}
+
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName{
     NSString *pathPrefix        = @"HLResources.bundle/Images/";
     NSString *imageNameWithPath = [NSString stringWithFormat:@"%@%@",pathPrefix,imageName];
     return [UIImage imageNamed:imageNameWithPath];
+}
+
+-(UIImage *)getImageWithKey:(NSString *)key{
+    NSString *keypath = [NSString stringWithFormat:@"Images.%@",key];
+    NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
+    UIImage *image = [UIImage imageNamed:imageName];
+    return image;
 }
 
 -(UIColor *)gridViewItemBackgroundColor{
@@ -152,21 +158,43 @@
 }
 
 -(UIFont *)dialogueTitleFont{
-    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:23];
+    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:14];
 }
 
--(UIColor *)dialogueButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BUTTON_FONT_COLOR];
+-(UIColor *)dialogueYesButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
 }
 
--(UIFont *)dialogueButtonFont{
-    return [self getFontWithKey:@"Dialogues.Button" andDefaultSize:20];
+-(UIFont *)dialogueYesButtonFont{
+    return [self getFontWithKey:@"Dialogues.YesButton" andDefaultSize:14];
 }
+
+-(UIColor *)dialogueYesButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
+}
+
+//No Button
+
+-(UIColor *)dialogueNoButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
+}
+
+-(UIColor *)dialogueNoButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
+}
+
+-(UIFont *)dialogueNoButtonFont{
+    return [self getFontWithKey:@"Dialogues.NoButton" andDefaultSize:14];
+}
+
 
 -(UIColor *)dialogueBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
 -(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
@@ -234,7 +262,7 @@
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
-    return color ? color : [HLTheme colorWithHex:FD_TABLEVIEW_SEPARATOR_COLOR];
+    return color ? color : [HLTheme colorWithHex:@"F2F2F2"];
 }
 
 -(UIColor *)timeDetailTextColor {
@@ -251,7 +279,7 @@
 
 -(UIColor *)talkToUsButtonColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)talkToUsButtonFont{
@@ -379,7 +407,7 @@
 #pragma mark - Grid View Cell
 
 -(UIFont *)categoryTitleFont{
-    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:14];
 }
 
 -(UIColor *)categoryTitleFontColor{
