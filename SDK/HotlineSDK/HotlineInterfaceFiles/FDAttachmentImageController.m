@@ -47,7 +47,9 @@
 
 -(void)sendButton:(UIBarButtonItem *)button{
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self.delegate attachmentController:self didFinishSelectingImage:self.image];
+    if(self.delegate){
+        [self.delegate attachmentController:self didFinishSelectingImage:self.image];
+    }
 }
 
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
