@@ -26,6 +26,8 @@
 /* Message UI */
 "Message Placeholder Text"="Message";
 "SEND_BUTTON_TEXT"="Send";
+
+/* Contact Us prompt */
 "CONTACT_US_PROMPT_BUTTON"="Still need help? Contact Us ";
 "THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
 

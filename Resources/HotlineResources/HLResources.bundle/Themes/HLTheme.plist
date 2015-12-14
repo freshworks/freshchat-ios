@@ -89,13 +89,13 @@
 		<string>18</string>
 		<key>NoButtonBackgroundColor</key>
 		<string>D8D8D8</string>
-		<key>DialogueBackgroundColor</key>
+		<key>BackgroundColor</key>
 		<string>D8D8D8</string>
-		<key>DialogueLabelFontColor</key>
+		<key>LabelFontColor</key>
 		<string>000000</string>
-		<key>DialogueLabelFontName</key>
+		<key>LabelFontName</key>
 		<string>HelveticaNeue</string>
-		<key>DialogueLabelFontSize</key>
+		<key>LabelFontSize</key>
 		<string>20</string>
 	</dict>
 	<key>FeedbackView</key>

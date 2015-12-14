@@ -153,12 +153,12 @@
 #pragma mark - Dialogue box
 
 -(UIColor *)dialogueTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueLabelFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.LabelFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)dialogueTitleFont{
-    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:14];
+    return [self getFontWithKey:@"Dialogues.Label" andDefaultSize:14];
 }
 
 -(UIColor *)dialogueYesButtonTextColor{
@@ -193,7 +193,7 @@
 
 
 -(UIColor *)dialogueBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueBackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
