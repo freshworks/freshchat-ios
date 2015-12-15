@@ -50,7 +50,6 @@
     [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
     [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
     [Konotor initWithAppID:config.appID AppKey:config.appKey withDelegate:nil];
-    FDLog(@"Logged in user :%@",[KonotorUser GetUserAlias]);
 }
 
 -(void)presentSolutions:(UIViewController *)controller{
@@ -66,7 +65,7 @@
 }
 
 -(void)presentFeedback:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance]fetchAllChannels:^(NSArray *channels, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
             if (channels.count == 1) {
@@ -91,6 +90,15 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)notification{
     FDLog(@"Handle notification %@", notification);
+}
+
+-(void)clearUserData{
+    [[FDSecureStore persistedStoreInstance]clearStoreData];
+    [KonotorUser deleteUser];
+    [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
+        FDLog(@"Deleted all channels and conversations");
+    }];
+    [Konotor newSession];
 }
 
 @end
