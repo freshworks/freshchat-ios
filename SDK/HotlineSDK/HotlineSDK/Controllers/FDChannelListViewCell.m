@@ -7,6 +7,7 @@
 //
 
 #import "FDChannelListViewCell.h"
+#import "HLtheme.h"
 
 @interface FDChannelListViewCell ()
 
@@ -80,8 +81,8 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
-    // TODO : Loading image from theme
-    self.imgView.image=[UIImage imageNamed:@"loading.png"];
+    //TODO: Loading image from theme
+    self.imgView.image=[UIImage imageNamed:@"loading"];
 }
 
 -(void)drawRect:(CGRect)rect{

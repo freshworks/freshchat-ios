@@ -82,7 +82,6 @@
 }
 
 -(UIImage *)getImageWithKey:(NSString *)key{
-    NSString *keypath = [NSString stringWithFormat:@"Images.%@",key];
     NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
     return image;
@@ -303,27 +302,27 @@
 /* Additions by Sri - to be checked */
 -(UIColor *)conversationViewTitleTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewTitleTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_CONVERSATIONVIEWTITLETEXTCOLOR];
+    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_TITLE_TEXT_COLOR];
 }
 -(UIColor *)conversationViewBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_CONVERSATIONVIEWBACKGROUNDCOLOR];
+    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_BACKGROUND_COLOR];
 }
 -(UIColor *)actionButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_ACTIONBUTTONTEXTCOLOR];
+    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 -(UIColor *)actionButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_ACTIONBUTTONCOLOR];
+    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 -(UIColor *)businessMessageTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BusinessMessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUSINESSMESSAGETEXTCOLOR];
+    return color ? color : [HLTheme colorWithHex:FD_BUSINESS_MESSAGE_TEXT_COLOR];
 }
 -(UIColor *)userMessageTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_USERMESSAGETEXTCOLOR];
+    return color ? color : [HLTheme colorWithHex:FD_USER_MESSAGE_TEXT_COLOR];
 }
 -(UIColor *)hyperlinkColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];

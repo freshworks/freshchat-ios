@@ -15,6 +15,7 @@
 #define INPUT_BAR_OUTER_TEXT_VIEW_IMAGE @"TextViewOuter"
 #define INPUT_BAR_ATTACHMENT_ICON @"Upload"
 #define INPUT_BAR_SEND_ICON @"Send"
+#define LIST_VIEW_RIGHT_ARROW @"rightArrow"
 
 + (instancetype)sharedInstance;
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
