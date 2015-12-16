@@ -97,7 +97,6 @@
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         HideNetworkActivityIndicator();
         [weakSelf updateCategories];
-        NSLog(@"Got Notifications !!!");
     }];
 }
 

@@ -163,7 +163,6 @@
             weakSelf.categories = @[];
             [weakSelf updateCategories];
             HideNetworkActivityIndicator();
-            NSLog(@"Got Notifications");
         });
     }];
 }

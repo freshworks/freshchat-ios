@@ -34,6 +34,8 @@
 
 -(void)presentSolutions:(UIViewController *)controller;
 
+-(void)clearUserData;
+
 -(void)addDeviceToken:(NSData *) deviceToken;
 
 -(void)handleRemoteNotification:(NSDictionary *)notification;
