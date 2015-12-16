@@ -115,27 +115,6 @@
 			remoteGlobalIDString = 356F19E61B9DBF14002F1E2A;
 			remoteInfo = Hotline;
 		};
-		356F1A371B9DC541002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD3C7CC819069882009919CD;
-			remoteInfo = FreshdeskSDK;
-		};
-		356F1A391B9DC541002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D0B09C2719B20181001AA0A9;
-			remoteInfo = MHModel;
-		};
-		356F1A3B1B9DC541002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD3C7CD819069882009919CD;
-			remoteInfo = FreshdeskSDKTests;
-		};
 		358DD4E71BB012CA00B36E4E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
@@ -180,7 +159,6 @@
 		356F1A1A1B9DC4AF002F1E2A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreshdeskSDK.xcodeproj; path = SDK/FreshdeskSDK/FreshdeskSDK.xcodeproj; sourceTree = "<group>"; };
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -349,7 +327,6 @@
 			isa = PBXGroup;
 			children = (
 				35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */,
-				356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */,
 				356F1C131B9DD23B002F1E2A /* CoreMedia.framework */,
 				356F1C111B9DD223002F1E2A /* AudioToolbox.framework */,
 				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
@@ -365,16 +342,6 @@
 			);
 			name = Framework;
 			path = ..;
-			sourceTree = "<group>";
-		};
-		356F1A311B9DC541002F1E2A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				356F1A381B9DC541002F1E2A /* libFreshdeskSDK.a */,
-				356F1A3A1B9DC541002F1E2A /* MHModel.bundle */,
-				356F1A3C1B9DC541002F1E2A /* FreshdeskSDKTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		356F1BA11B9DD1EC002F1E2A /* Resources */ = {
@@ -542,10 +509,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 356F1A311B9DC541002F1E2A /* Products */;
-					ProjectRef = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-				},
-				{
 					ProductGroup = 35591B991B9EDE9100BC0B60 /* Products */;
 					ProjectRef = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
 				},
@@ -571,27 +534,6 @@
 			fileType = archive.ar;
 			path = libHotlineAPI.a;
 			remoteRef = 35591BA31B9EDE9100BC0B60 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		356F1A381B9DC541002F1E2A /* libFreshdeskSDK.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFreshdeskSDK.a;
-			remoteRef = 356F1A371B9DC541002F1E2A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		356F1A3A1B9DC541002F1E2A /* MHModel.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MHModel.bundle;
-			remoteRef = 356F1A391B9DC541002F1E2A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		356F1A3C1B9DC541002F1E2A /* FreshdeskSDKTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = FreshdeskSDKTests.xctest;
-			remoteRef = 356F1A3B1B9DC541002F1E2A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		358DD4E81BB012CA00B36E4E /* HotlineDB.bundle */ = {
