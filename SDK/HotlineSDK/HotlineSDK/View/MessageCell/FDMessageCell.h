@@ -40,10 +40,13 @@
 @protocol FDMessageCellDelegate <NSObject>
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image;
+-(void)messageCell:(FDMessageCell *)cell deepLinkArticleID:(NSNumber *)articleID;
 
 @end
 
 @interface FDMessageCell : UITableViewCell
+
+@property (nonatomic, strong) KonotorMessageData *messageData;
 
 /* customization options */
 @property (nonatomic) BOOL isSenderOther;

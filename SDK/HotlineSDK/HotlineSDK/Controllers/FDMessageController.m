@@ -205,16 +205,15 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }
     if (indexPath.row < self.messages.count) {
         KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
+        cell.messageData = message;
         [cell drawMessageViewForMessage:message parentView:self.view];
     }
     if(indexPath.row==0 && messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
-        
         int oldnumber=messagesDisplayedCount;
         messagesDisplayedCount+=loadmoreCount;
         if(messagesDisplayedCount>messageCount) messagesDisplayedCount=messageCount;
         [self performSelector:@selector(refreshView:) withObject:[NSNumber numberWithInt:oldnumber] afterDelay:0];
-        
         return cell;
     }
     return cell;
@@ -240,7 +239,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         [refreshIndicator startAnimating];
     
     return cell;
-
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -601,11 +599,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)dealloc{
     [self localNotificationUnSubscription];
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    KonotorMessageData *message = self.messages[indexPath.row];
-    NSLog(@"Message type :%@",message.messageType);
 }
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{

@@ -104,14 +104,17 @@ static KonotorUIParameters* konotorUIParameters=nil;
     
     /* setup message picture view */
     messagePictureImageView=[[FDPictureMessageView alloc] initWithFrame:CGRectZero];
-    TapOnPictureRecognizer* tapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
-    tapGesture.numberOfTapsRequired=1;
-    [messagePictureImageView addGestureRecognizer:tapGesture];
+    TapOnPictureRecognizer *imgViewTapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
+    imgViewTapGesture.numberOfTapsRequired=1;
+    [messagePictureImageView addGestureRecognizer:imgViewTapGesture];
 
     [messageTextView addSubview:messagePictureImageView];
     
     /* setup action button view */
     messageActionButton=[FDActionButton buttonWithType:UIButtonTypeCustom];
+    TapOnPictureRecognizer *actionButtonTapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnActionButton:)];
+    actionButtonTapGesture.numberOfTapsRequired=1;
+    [messageActionButton addGestureRecognizer:actionButtonTapGesture];
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
     [self.contentView addSubview:messageActionButton];
@@ -119,6 +122,10 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 -(void)tappedOnPicture:(id)gesture{
     [self.delegate messageCell:self pictureTapped:self.messagePictureImageView.image];
+}
+
+-(void)tappedOnActionButton:(id)gesture{
+    [self.delegate messageCell:self deepLinkArticleID:self.messageData.articleID];
 }
 
 + (float) getWidthForMessage:(KonotorMessageData*)message{

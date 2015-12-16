@@ -420,6 +420,10 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [newMessage setActionLabel:[message valueForKey:@"messageActionLabel"]];
     [newMessage setActionURL:[message valueForKey:@"messageActionUrl"]];
     
+    if (message[@"articleId"]) {
+        newMessage.articleID = message[@"articleId"];
+    }
+    
     if(([newMessage.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePicture]])||([newMessage.messageType isEqualToNumber:[NSNumber numberWithInt:KonotorMessageTypePictureV2]])){
         [newMessage setPicHeight:[message valueForKey:@"picHeight"]];
         [newMessage setPicWidth:[message valueForKey:@"picWidth"]];
@@ -469,6 +473,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 
 -(KonotorMessageData *) ReturnMessageDataFromManagedObject{
     KonotorMessageData *message = [[KonotorMessageData alloc]init];
+    message.articleID = self.articleID;
     message.messageType = [self messageType];
     message.messageUserId = [self messageUserId];
     message.messageId =[self messageAlias];

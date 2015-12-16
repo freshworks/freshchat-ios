@@ -31,13 +31,13 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		35C8900D1C21CCF9006AA491 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */; };
 		35D3150B1C032E2800783CC3 /* Mic-Idle.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315071C032E2800783CC3 /* Mic-Idle.png */; };
 		35D3150C1C032E2800783CC3 /* Mic-Idle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315081C032E2800783CC3 /* Mic-Idle@2x.png */; };
 		35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315091C032E2800783CC3 /* Mic-Recording.png */; };
 		35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
-		35E767BA1C2024210098CFA1 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35E767B91C2024210098CFA1 /* KonotorModels.bundle */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; };
@@ -162,6 +162,7 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35D315071C032E2800783CC3 /* Mic-Idle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle.png"; sourceTree = "<group>"; };
 		35D315081C032E2800783CC3 /* Mic-Idle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle@2x.png"; sourceTree = "<group>"; };
 		35D315091C032E2800783CC3 /* Mic-Recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Recording.png"; sourceTree = "<group>"; };
@@ -169,7 +170,6 @@
 		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
-		35E767B91C2024210098CFA1 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
@@ -363,7 +363,7 @@
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
 			children = (
-				35E767B91C2024210098CFA1 /* KonotorModels.bundle */,
+				35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */,
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 				35ED5EDE1BB3EA4600E0052D /* Konotor-Images */,
@@ -589,7 +589,7 @@
 				3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
-				35E767BA1C2024210098CFA1 /* KonotorModels.bundle in Resources */,
+				35C8900D1C21CCF9006AA491 /* KonotorModels.bundle in Resources */,
 				35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */,
 				35ED5F211BB3EA4600E0052D /* konotor_share.png in Resources */,
 				35ED5F241BB3EA4600E0052D /* konotor_stop@2x.png in Resources */,

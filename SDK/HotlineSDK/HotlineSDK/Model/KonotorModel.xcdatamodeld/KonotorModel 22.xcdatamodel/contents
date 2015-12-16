@@ -69,6 +69,7 @@
     <entity name="KonotorMessage" representedClassName="KonotorMessage" syncable="YES">
         <attribute name="actionLabel" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="actionURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="audioURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bytes" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="createdMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -121,7 +122,7 @@
         <element name="KonotorApp" positionX="-288" positionY="-27" width="128" height="195"/>
         <element name="KonotorConversation" positionX="162" positionY="560" width="128" height="178"/>
         <element name="KonotorCustomProperty" positionX="-371" positionY="327" width="128" height="105"/>
-        <element name="KonotorMessage" positionX="351" positionY="71" width="128" height="433"/>
+        <element name="KonotorMessage" positionX="351" positionY="71" width="128" height="448"/>
         <element name="KonotorMessageBinary" positionX="693" positionY="552" width="128" height="105"/>
         <element name="KonotorShareMessageEvent" positionX="54" positionY="-25" width="128" height="88"/>
         <element name="KonotorUser" positionX="-578" positionY="162" width="128" height="133"/>

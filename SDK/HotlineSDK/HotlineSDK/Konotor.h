@@ -111,6 +111,8 @@ enum KonotorMessageUploadStatus
 
 @interface KonotorMessageData : NSObject
 
+
+@property (nonatomic, retain) NSNumber *articleID;
 @property (nonatomic, retain) NSNumber * createdMillis;
 @property (nonatomic, retain) NSNumber * messageType;
 @property (nonatomic, retain) NSString * messageUserId;

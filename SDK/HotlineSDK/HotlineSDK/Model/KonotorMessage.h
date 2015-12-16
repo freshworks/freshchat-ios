@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface KonotorMessage : NSManagedObject
 
+@property (nullable, nonatomic, retain) NSNumber *articleID;
 @property (nullable, nonatomic, retain) NSString *actionLabel;
 @property (nullable, nonatomic, retain) NSString *actionURL;
 @property (nullable, nonatomic, retain) NSString *audioURL;
