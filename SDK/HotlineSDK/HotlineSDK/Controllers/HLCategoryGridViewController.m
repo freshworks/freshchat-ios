@@ -21,7 +21,7 @@
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
-#import "KonotorFeedbackScreen.h"
+#import "KonotorUtil.h"
 #import "Hotline.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
@@ -129,7 +129,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [KonotorFeedbackScreen showFeedbackScreen];
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 -(void)updateCategories{
@@ -163,7 +163,6 @@
             weakSelf.categories = @[];
             [weakSelf updateCategories];
             HideNetworkActivityIndicator();
-            NSLog(@"Got Notifications");
         });
     }];
 }
@@ -192,7 +191,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [KonotorFeedbackScreen showFeedbackScreen];
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 #pragma mark - Collection view delegate

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <UIKit/UIImage.h>
+#import "KonotorConversation.h"
 
 @protocol KonotorDelegate <NSObject>
 
@@ -26,6 +27,8 @@
 
 -(BOOL) handleRemoteNotification:(NSDictionary*)userInfo;
 -(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen;
+
+-(void) didStartUploadingNewMessage;
 
 @end
 
@@ -47,7 +50,7 @@ enum KonotorMessageUploadStatus
 
 @interface Konotor : NSObject
 
-+(void) InitWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
++(void) initWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void) setDelegate:(id) delegate;
 +(BOOL) handleRemoteNotification:(NSDictionary*)userInfo;
 +(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen;
@@ -56,13 +59,12 @@ enum KonotorMessageUploadStatus
 +(void) setUserName: (NSString *) fullName;
 +(void) setUserEmail: (NSString *) email;
 +(void) setCustomUserProperty:(NSString *) value forKey: (NSString*) key;
-+(void) setWelcomeMessage:(NSString *) text;
-+(void) setUnreadWelcomeMessage:(NSString *) text;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) isUserMe:(NSString *) userId;
 +(BOOL) startRecording;
 +(NSString*) stopRecording;
++(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;
 +(BOOL) cancelRecording;
 
@@ -73,30 +75,29 @@ enum KonotorMessageUploadStatus
 +(double) getCurrentPlayingAudioTime;
 +(NSString *)getCurrentPlayingMessageID;
 
-
-+(void) uploadVoiceRecordingWithMessageID: (NSString *)messageID;
-+(void) uploadTextFeedback:(NSString *)textFeedback;
-+(void) uploadImage:(UIImage *) image;
-+(void) uploadImage:(UIImage *) image withCaption:(NSString*) caption;
++(void)uploadVoiceRecordingWithMessageID: (NSString *)messageID;
++(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 
 +(void) DownloadAllMessages;
 +(void) sendAllUnsentMessages;
 
 +(void)MarkMessageAsRead:(NSString *) messageID;
-+(void) MarkAllMessagesAsRead;
+
++(void)markAllMessagesAsRead;
+
 +(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId;
 
 +(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType;
 +(NSArray *) getAllMessagesForConversation:(NSString *)conversationID;
 +(NSArray *) getAllMessagesForDefaultConversation;
 +(NSArray *) getAllConversations;
-+(BOOL) areConversationsDownloading;
 +(int) getUnreadMessagesCount;
 
 +(void) newSession;
 +(BOOL) isPushEnabled;
-+(BOOL) isPoweredByHidden;
-+(void) setSecretKey:(NSString*)key;
 
 @end
 
@@ -110,6 +111,8 @@ enum KonotorMessageUploadStatus
 
 @interface KonotorMessageData : NSObject
 
+
+@property (nonatomic, retain) NSNumber *articleID;
 @property (nonatomic, retain) NSNumber * createdMillis;
 @property (nonatomic, retain) NSNumber * messageType;
 @property (nonatomic, retain) NSString * messageUserId;

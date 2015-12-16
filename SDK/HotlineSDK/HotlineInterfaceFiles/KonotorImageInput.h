@@ -7,21 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KonotorUtility.h"
-
-#define KONOTOR_IMAGEINPUT_CAPTIONTEXT 4243
-#define KONOTOR_IMAGEINPUT_CAPTIONENTRY 4242
+#import <UIKit/UIKit.h>
+#import "Konotor.h"
 
 @interface KonotorImageInput : NSObject <UIAlertViewDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UITextViewDelegate>
 
-@property (strong, nonatomic) UIView* sourceView;
-@property (strong, nonatomic) UIView* alertOptions;
-@property (strong, nonatomic) UIViewController* sourceViewController;
-@property (strong, nonatomic) UIImage* imagePicked;
-@property (strong, nonatomic) UIPopoverController* popover;
 
-+ (KonotorImageInput*) sharedInstance;
-+ (void) showInputOptions:(UIViewController*) viewController;
-+ (void) rotateToOrientation:(UIInterfaceOrientation) orientation duration:(NSTimeInterval) duration;
+
+- (instancetype) initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+- (void) showInputOptions:(UIViewController*) viewController;
 
 @end

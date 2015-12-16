@@ -15,28 +15,15 @@
 		3533F0C21BB042C2000B2D9A /* HLFAQServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0C11BB042C2000B2D9A /* HLFAQServices.m */; };
 		3533F0C61BB0435B000B2D9A /* KonotorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0C51BB0435B000B2D9A /* KonotorUtil.m */; };
 		3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */; };
+		353AA00D1BDF7B4F008CDAB2 /* FDMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */; };
 		35591A931B9ED53700BC0B60 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B156FA1795B5AF008F34D8 /* UIKit.framework */; };
 		35591A941B9ED53700BC0B60 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DD257178594180053E19E /* Foundation.framework */; };
 		35591AAA1B9ED58100BC0B60 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B156FA1795B5AF008F34D8 /* UIKit.framework */; };
 		35591AAB1B9ED58100BC0B60 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DD257178594180053E19E /* Foundation.framework */; };
 		35591AC41B9ED74900BC0B60 /* libHotlineAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */; };
-		35591AFF1B9EDBBC00BC0B60 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */; };
-		35591B001B9EDBBC00BC0B60 /* KonotorEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AEB1B9EDBBC00BC0B60 /* KonotorEventHandler.m */; };
-		35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AED1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m */; };
-		35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */; };
 		35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */; };
-		35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */; };
-		35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */; };
-		35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */; };
-		35591B071B9EDBBC00BC0B60 /* KonotorUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */; };
-		35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AFC1B9EDBBC00BC0B60 /* KonotorUtility.m */; };
-		35591B091B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591AFE1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m */; };
 		35591B621B9EDCB700BC0B60 /* Hotline.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B251B9EDCB700BC0B60 /* Hotline.m */; };
 		35591B631B9EDCB700BC0B60 /* Konotor.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B281B9EDCB700BC0B60 /* Konotor.m */; };
-		35591B641B9EDCB700BC0B60 /* Konotor_cpp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 35591B2A1B9EDCB700BC0B60 /* Konotor_cpp.mm */; };
-		35591B661B9EDCB700BC0B60 /* KonotorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B2E1B9EDCB700BC0B60 /* KonotorAudioPlayer.m */; };
-		35591B671B9EDCB700BC0B60 /* KonotorAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B301B9EDCB700BC0B60 /* KonotorAudioRecorder.m */; };
-		35591B6A1B9EDCB700BC0B60 /* KonotorDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B361B9EDCB700BC0B60 /* KonotorDataManager.m */; };
 		35591B8E1B9EDD0700BC0B60 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B7C1B9EDD0700BC0B60 /* AFHTTPClient.m */; };
 		35591B8F1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B7E1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m */; };
 		35591B901B9EDD0700BC0B60 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B801B9EDD0700BC0B60 /* AFImageRequestOperation.m */; };
@@ -48,6 +35,8 @@
 		35591B961B9EDD0700BC0B60 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B8D1B9EDD0700BC0B60 /* UIImageView+AFNetworking.m */; };
 		35591BAA1B9EDF8C00BC0B60 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B241B9EDCB700BC0B60 /* Hotline.h */; };
 		35591BAB1B9EDF9200BC0B60 /* Konotor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B271B9EDCB700BC0B60 /* Konotor.h */; };
+		355F544E1C107787008FC1FA /* FDAttachmentImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 355F544D1C107787008FC1FA /* FDAttachmentImageController.m */; };
+		3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */; };
 		358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C11BB00EB700B36E4E /* HLArticle.m */; };
 		358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C31BB00EB700B36E4E /* HLCategory.m */; };
 		358DD4DE1BB0127100B36E4E /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E6A1BA6D20600B933C5 /* KonotorModel.xcdatamodeld */; };
@@ -56,12 +45,12 @@
 		359E3E861BA6D20600B933C5 /* KonotorCustomProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E651BA6D20600B933C5 /* KonotorCustomProperties.m */; };
 		359E3E871BA6D20600B933C5 /* KonotorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E671BA6D20600B933C5 /* KonotorMessage.m */; };
 		359E3E881BA6D20600B933C5 /* KonotorMessageBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E691BA6D20600B933C5 /* KonotorMessageBinary.m */; };
-		359E3E891BA6D20600B933C5 /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E6A1BA6D20600B933C5 /* KonotorModel.xcdatamodeld */; };
 		359E3E8A1BA6D20600B933C5 /* KonotorShareMessageEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E811BA6D20600B933C5 /* KonotorShareMessageEvent.m */; };
 		359E3E8B1BA6D20600B933C5 /* KonotorUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E831BA6D20600B933C5 /* KonotorUser.m */; };
 		359E3E8F1BA6D7E600B933C5 /* WebServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E8E1BA6D7E600B933C5 /* WebServices.m */; };
 		35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */; };
 		35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B790201BAFD9CC005443FD /* KonotorApp.m */; };
+		35D04B911C1B5A420096F01C /* HotlineConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D04B901C1B5A420096F01C /* HotlineConfig.m */; };
 		35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158B71BB2966B009CFEDF /* HLListViewController.m */; };
 		35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D158BF1BB2B847009CFEDF /* FDReachability.m */; };
 		35D639DE1BBBE22D00979721 /* HLTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D639DD1BBBE22D00979721 /* HLTheme.m */; };
@@ -69,26 +58,40 @@
 		35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9DC1BB96E02008C92E8 /* FDSecureStore.m */; };
 		35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */; };
 		35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */; };
+		35DCCB2F1BE001650039EFDD /* FDBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB1D1BE001650039EFDD /* FDBadgeView.m */; };
+		35DCCB361BE001650039EFDD /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB2B1BE001650039EFDD /* HLGridViewCell.m */; };
+		35DCCB3E1BE002220039EFDD /* FDActionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB391BE002220039EFDD /* FDActionButton.m */; };
+		35DCCB3F1BE002220039EFDD /* FDAudioMessageUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB3B1BE002220039EFDD /* FDAudioMessageUnit.m */; };
+		35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB3D1BE002220039EFDD /* FDMessageCell.m */; };
+		35DCCB4F1BE002960039EFDD /* FDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB431BE002960039EFDD /* FDButton.m */; };
+		35DCCB501BE002960039EFDD /* FDSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB451BE002960039EFDD /* FDSearchBar.m */; };
+		35DCCB511BE002960039EFDD /* FDTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB471BE002960039EFDD /* FDTableViewCell.m */; };
+		35DCCB521BE002960039EFDD /* FDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB4A1BE002960039EFDD /* FDAlertView.m */; };
+		35DCCB531BE002960039EFDD /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB4C1BE002960039EFDD /* FDPromptView.m */; };
+		35DCCB541BE002960039EFDD /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB4E1BE002960039EFDD /* FDYesNoPromptView.m */; };
+		35DCCB571BE002E50039EFDD /* KonotorDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB561BE002E50039EFDD /* KonotorDataManager.m */; };
+		35DCCB5F1BE005370039EFDD /* KonotorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */; };
+		35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
-		CE10645A1BC2779300922494 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE1064591BC2779300922494 /* Info.plist */; };
+		91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
-		CE10649E1BC5601B00922494 /* FDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064991BC5601B00922494 /* FDAlertView.m */; };
-		CE10649F1BC5601B00922494 /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE10649B1BC5601B00922494 /* FDPromptView.m */; };
-		CE1064A01BC5601B00922494 /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */; };
+		CE16D33B1BFDE3100045F235 /* HLChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE16D33A1BFDE3100045F235 /* HLChannel.m */; };
+		CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */; };
+		CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED061BE90479000E8434 /* HLMessageServices.m */; };
+		CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */; };
+		CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */; };
+		CE6245301BFC8F9C0050C8EB /* FDDateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CE62452F1BFC8F9C0050C8EB /* FDDateUtil.m */; };
 		CE754A3F1BDF856A004B6635 /* FDTableViewCellWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = CE754A3E1BDF856A004B6635 /* FDTableViewCellWithImage.m */; };
 		CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE754A411BE0D424004B6635 /* FDMarginalView.m */; };
 		CE80CA1B1BE23FFA00473E49 /* FDCategoryListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA1A1BE23FFA00473E49 /* FDCategoryListViewCell.m */; };
 		CE80CA1E1BE2439900473E49 /* FDChannelListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA1D1BE2439900473E49 /* FDChannelListViewCell.m */; };
 		CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CA621BE36B6500473E49 /* FDIndex.m */; };
 		CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */; };
-		CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */; };
 		CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D051BCD286F006F2E66 /* FDRanking.m */; };
 		CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */; };
 		CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */; };
 		CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */; };
-		CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D361BCEA4F3006F2E66 /* FDSearchBar.m */; };
-		CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */; };
-		CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D4D451BD133AF006F2E66 /* FDButton.m */; };
+		CE9D4D3B1BCFC363006F2E66 /* (null) in Sources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,43 +145,16 @@
 		3533F0C71BB04382000B2D9A /* HLMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLMacros.h; sourceTree = "<group>"; };
 		3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticleDetailViewController.h; sourceTree = "<group>"; };
 		3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleDetailViewController.m; sourceTree = "<group>"; };
+		353AA00B1BDF7B4F008CDAB2 /* FDMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMessageController.h; sourceTree = "<group>"; };
+		353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMessageController.m; sourceTree = "<group>"; };
 		35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineAPI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		35591AE81B9EDBBC00BC0B60 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
-		35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
-		35591AEA1B9EDBBC00BC0B60 /* KonotorEventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorEventHandler.h; sourceTree = "<group>"; };
-		35591AEB1B9EDBBC00BC0B60 /* KonotorEventHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorEventHandler.m; sourceTree = "<group>"; };
-		35591AEC1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorFeedbackScreen.h; sourceTree = "<group>"; };
-		35591AED1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorFeedbackScreen.m; sourceTree = "<group>"; };
-		35591AEE1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorFeedbackScreenViewController.h; sourceTree = "<group>"; };
-		35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorFeedbackScreenViewController.m; sourceTree = "<group>"; };
 		35591AF01B9EDBBC00BC0B60 /* KonotorImageInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorImageInput.h; sourceTree = "<group>"; };
 		35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorImageInput.m; sourceTree = "<group>"; };
-		35591AF21B9EDBBC00BC0B60 /* KonotorImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorImageView.h; sourceTree = "<group>"; };
-		35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorImageView.m; sourceTree = "<group>"; };
-		35591AF41B9EDBBC00BC0B60 /* KonotorMediaUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorMediaUIButton.h; sourceTree = "<group>"; };
-		35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorMediaUIButton.m; sourceTree = "<group>"; };
-		35591AF61B9EDBBC00BC0B60 /* KonotorTextInputOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorTextInputOverlay.h; sourceTree = "<group>"; };
-		35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorTextInputOverlay.m; sourceTree = "<group>"; };
-		35591AF81B9EDBBC00BC0B60 /* KonotorUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUI.h; sourceTree = "<group>"; };
-		35591AF91B9EDBBC00BC0B60 /* KonotorUITextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUITextView.h; sourceTree = "<group>"; };
-		35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorUITextView.m; sourceTree = "<group>"; };
-		35591AFB1B9EDBBC00BC0B60 /* KonotorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUtility.h; sourceTree = "<group>"; };
-		35591AFC1B9EDBBC00BC0B60 /* KonotorUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorUtility.m; sourceTree = "<group>"; };
-		35591AFD1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorVoiceInputOverlay.h; sourceTree = "<group>"; };
-		35591AFE1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorVoiceInputOverlay.m; sourceTree = "<group>"; };
 		35591B241B9EDCB700BC0B60 /* Hotline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotline.h; sourceTree = "<group>"; };
 		35591B251B9EDCB700BC0B60 /* Hotline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hotline.m; sourceTree = "<group>"; };
 		35591B271B9EDCB700BC0B60 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		35591B281B9EDCB700BC0B60 /* Konotor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Konotor.m; sourceTree = "<group>"; };
-		35591B291B9EDCB700BC0B60 /* Konotor_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor_cpp.h; sourceTree = "<group>"; };
-		35591B2A1B9EDCB700BC0B60 /* Konotor_cpp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Konotor_cpp.mm; sourceTree = "<group>"; };
-		35591B2D1B9EDCB700BC0B60 /* KonotorAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorAudioPlayer.h; sourceTree = "<group>"; };
-		35591B2E1B9EDCB700BC0B60 /* KonotorAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorAudioPlayer.m; sourceTree = "<group>"; };
-		35591B2F1B9EDCB700BC0B60 /* KonotorAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorAudioRecorder.h; sourceTree = "<group>"; };
-		35591B301B9EDCB700BC0B60 /* KonotorAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorAudioRecorder.m; sourceTree = "<group>"; };
-		35591B351B9EDCB700BC0B60 /* KonotorDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorDataManager.h; sourceTree = "<group>"; };
-		35591B361B9EDCB700BC0B60 /* KonotorDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorDataManager.m; sourceTree = "<group>"; };
 		35591B741B9EDCCE00BC0B60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		35591B751B9EDCCE00BC0B60 /* KonotorModels-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "KonotorModels-Info.plist"; sourceTree = "<group>"; };
 		35591B761B9EDCCE00BC0B60 /* KonotorModels-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KonotorModels-Prefix.pch"; sourceTree = "<group>"; };
@@ -201,6 +177,10 @@
 		35591B8B1B9EDD0700BC0B60 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		35591B8C1B9EDD0700BC0B60 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		35591B8D1B9EDD0700BC0B60 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		355F544C1C107787008FC1FA /* FDAttachmentImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAttachmentImageController.h; sourceTree = "<group>"; };
+		355F544D1C107787008FC1FA /* FDAttachmentImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAttachmentImageController.m; sourceTree = "<group>"; };
+		3575C47A1BE1EF25000C3D02 /* FDInputToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDInputToolbarView.h; sourceTree = "<group>"; };
+		3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDInputToolbarView.m; sourceTree = "<group>"; };
 		358DD4C01BB00EB700B36E4E /* HLArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticle.h; sourceTree = "<group>"; };
 		358DD4C11BB00EB700B36E4E /* HLArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticle.m; sourceTree = "<group>"; };
 		358DD4C21BB00EB700B36E4E /* HLCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategory.h; sourceTree = "<group>"; };
@@ -250,6 +230,7 @@
 		35B7901F1BAFD9CC005443FD /* KonotorApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorApp.h; sourceTree = "<group>"; };
 		35B790201BAFD9CC005443FD /* KonotorApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorApp.m; sourceTree = "<group>"; };
 		35B790221BB004FE005443FD /* KonotorModel 22.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 22.xcdatamodel"; sourceTree = "<group>"; };
+		35D04B901C1B5A420096F01C /* HotlineConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotlineConfig.m; sourceTree = "<group>"; };
 		35D158B61BB2966B009CFEDF /* HLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLListViewController.h; sourceTree = "<group>"; };
 		35D158B71BB2966B009CFEDF /* HLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLListViewController.m; sourceTree = "<group>"; };
 		35D158BE1BB2B847009CFEDF /* FDReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachability.h; sourceTree = "<group>"; };
@@ -264,21 +245,57 @@
 		35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDataUpdaterWithInterval.m; sourceTree = "<group>"; };
 		35D9F9E51BBAA7FA008C92E8 /* FDSolutionUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSolutionUpdater.h; sourceTree = "<group>"; };
 		35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSolutionUpdater.m; sourceTree = "<group>"; };
+		35DCCB1C1BE001650039EFDD /* FDBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBadgeView.h; sourceTree = "<group>"; };
+		35DCCB1D1BE001650039EFDD /* FDBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBadgeView.m; sourceTree = "<group>"; };
+		35DCCB2A1BE001650039EFDD /* HLGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLGridViewCell.h; sourceTree = "<group>"; };
+		35DCCB2B1BE001650039EFDD /* HLGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLGridViewCell.m; sourceTree = "<group>"; };
+		35DCCB381BE002220039EFDD /* FDActionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDActionButton.h; sourceTree = "<group>"; };
+		35DCCB391BE002220039EFDD /* FDActionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDActionButton.m; sourceTree = "<group>"; };
+		35DCCB3A1BE002220039EFDD /* FDAudioMessageUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAudioMessageUnit.h; sourceTree = "<group>"; };
+		35DCCB3B1BE002220039EFDD /* FDAudioMessageUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAudioMessageUnit.m; sourceTree = "<group>"; };
+		35DCCB3C1BE002220039EFDD /* FDMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMessageCell.h; sourceTree = "<group>"; };
+		35DCCB3D1BE002220039EFDD /* FDMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMessageCell.m; sourceTree = "<group>"; };
+		35DCCB421BE002960039EFDD /* FDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDButton.h; sourceTree = "<group>"; };
+		35DCCB431BE002960039EFDD /* FDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDButton.m; sourceTree = "<group>"; };
+		35DCCB441BE002960039EFDD /* FDSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSearchBar.h; sourceTree = "<group>"; };
+		35DCCB451BE002960039EFDD /* FDSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSearchBar.m; sourceTree = "<group>"; };
+		35DCCB461BE002960039EFDD /* FDTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTableViewCell.h; sourceTree = "<group>"; };
+		35DCCB471BE002960039EFDD /* FDTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTableViewCell.m; sourceTree = "<group>"; };
+		35DCCB491BE002960039EFDD /* FDAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAlertView.h; sourceTree = "<group>"; };
+		35DCCB4A1BE002960039EFDD /* FDAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAlertView.m; sourceTree = "<group>"; };
+		35DCCB4B1BE002960039EFDD /* FDPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPromptView.h; sourceTree = "<group>"; };
+		35DCCB4C1BE002960039EFDD /* FDPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPromptView.m; sourceTree = "<group>"; };
+		35DCCB4D1BE002960039EFDD /* FDYesNoPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDYesNoPromptView.h; sourceTree = "<group>"; };
+		35DCCB4E1BE002960039EFDD /* FDYesNoPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDYesNoPromptView.m; sourceTree = "<group>"; };
+		35DCCB551BE002E50039EFDD /* KonotorDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorDataManager.h; sourceTree = "<group>"; };
+		35DCCB561BE002E50039EFDD /* KonotorDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorDataManager.m; sourceTree = "<group>"; };
+		35DCCB5A1BE005370039EFDD /* KonotorAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorAudioPlayer.h; sourceTree = "<group>"; };
+		35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorAudioPlayer.m; sourceTree = "<group>"; };
+		35DCCB5C1BE005370039EFDD /* KonotorAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorAudioRecorder.h; sourceTree = "<group>"; };
+		35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorAudioRecorder.m; sourceTree = "<group>"; };
 		35ED5ED21BB3E92800E0052D /* HLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLConstants.h; sourceTree = "<group>"; };
 		35FE04421BC4D1DD00EAA8E0 /* FDReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachabilityManager.h; sourceTree = "<group>"; };
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84B15651178C46F4008F34D8 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		84B156FA1795B5AF008F34D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		91BBEAA01BE393DB00F55009 /* FDPictureMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPictureMessageView.h; sourceTree = "<group>"; };
+		91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPictureMessageView.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE1064951BC55FDB00922494 /* FDVotingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDVotingManager.h; sourceTree = "<group>"; };
 		CE1064961BC55FDB00922494 /* FDVotingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDVotingManager.m; sourceTree = "<group>"; };
-		CE1064981BC5601B00922494 /* FDAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAlertView.h; sourceTree = "<group>"; };
-		CE1064991BC5601B00922494 /* FDAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAlertView.m; sourceTree = "<group>"; };
-		CE10649A1BC5601B00922494 /* FDPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPromptView.h; sourceTree = "<group>"; };
-		CE10649B1BC5601B00922494 /* FDPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPromptView.m; sourceTree = "<group>"; };
-		CE10649C1BC5601B00922494 /* FDYesNoPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDYesNoPromptView.h; sourceTree = "<group>"; };
-		CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDYesNoPromptView.m; sourceTree = "<group>"; };
+		CE16D3391BFDE3100045F235 /* HLChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLChannel.h; sourceTree = "<group>"; };
+		CE16D33A1BFDE3100045F235 /* HLChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLChannel.m; sourceTree = "<group>"; };
+		CE2B272A1C11D51B00D9A253 /* FDAudioMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDAudioMessageInputView.h; sourceTree = "<group>"; };
+		CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDAudioMessageInputView.m; sourceTree = "<group>"; };
+		CE55ED051BE90479000E8434 /* HLMessageServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLMessageServices.h; sourceTree = "<group>"; };
+		CE55ED061BE90479000E8434 /* HLMessageServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLMessageServices.m; sourceTree = "<group>"; };
+		CE55ED081BE9E79B000E8434 /* HLChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLChannelViewController.h; sourceTree = "<group>"; };
+		CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLChannelViewController.m; sourceTree = "<group>"; };
+		CE55ED0B1BE9FD4B000E8434 /* FDChannelUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDChannelUpdater.h; sourceTree = "<group>"; };
+		CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDChannelUpdater.m; sourceTree = "<group>"; };
+		CE62452E1BFC8F9C0050C8EB /* FDDateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDDateUtil.h; sourceTree = "<group>"; };
+		CE62452F1BFC8F9C0050C8EB /* FDDateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDateUtil.m; sourceTree = "<group>"; };
 		CE754A3D1BDF856A004B6635 /* FDTableViewCellWithImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTableViewCellWithImage.h; sourceTree = "<group>"; };
 		CE754A3E1BDF856A004B6635 /* FDTableViewCellWithImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTableViewCellWithImage.m; sourceTree = "<group>"; };
 		CE754A401BE0D424004B6635 /* FDMarginalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMarginalView.h; sourceTree = "<group>"; };
@@ -291,8 +308,6 @@
 		CE80CA621BE36B6500473E49 /* FDIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndex.m; sourceTree = "<group>"; };
 		CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryGridViewController.h; sourceTree = "<group>"; };
 		CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryGridViewController.m; sourceTree = "<group>"; };
-		CE80CBCE1BB2B6C500B1C74B /* HLGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLGridViewCell.h; sourceTree = "<group>"; };
-		CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLGridViewCell.m; sourceTree = "<group>"; };
 		CE9D4D041BCD286F006F2E66 /* FDRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDRanking.h; sourceTree = "<group>"; };
 		CE9D4D051BCD286F006F2E66 /* FDRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDRanking.m; sourceTree = "<group>"; };
 		CE9D4D2A1BCE55FF006F2E66 /* FDArticleContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleContent.h; sourceTree = "<group>"; };
@@ -301,13 +316,7 @@
 		CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDUtilities.m; sourceTree = "<group>"; };
 		CE9D4D321BCE91BE006F2E66 /* HLSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLSearchViewController.h; sourceTree = "<group>"; };
 		CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLSearchViewController.m; sourceTree = "<group>"; };
-		CE9D4D351BCEA4F3006F2E66 /* FDSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSearchBar.h; sourceTree = "<group>"; };
-		CE9D4D361BCEA4F3006F2E66 /* FDSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSearchBar.m; sourceTree = "<group>"; };
 		CE9D4D381BCFA4FC006F2E66 /* FDThemeConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDThemeConstants.h; sourceTree = "<group>"; };
-		CE9D4D391BCFC362006F2E66 /* FDTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTableViewCell.h; sourceTree = "<group>"; };
-		CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTableViewCell.m; sourceTree = "<group>"; };
-		CE9D4D441BD133AF006F2E66 /* FDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDButton.h; sourceTree = "<group>"; };
-		CE9D4D451BD133AF006F2E66 /* FDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,16 +359,10 @@
 		3533F0B41BB01D38000B2D9A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				CE80CBCE1BB2B6C500B1C74B /* HLGridViewCell.h */,
-				CE80CBCF1BB2B6C500B1C74B /* HLGridViewCell.m */,
-				CE9D4D441BD133AF006F2E66 /* FDButton.h */,
-				CE9D4D451BD133AF006F2E66 /* FDButton.m */,
-				CE9D4D351BCEA4F3006F2E66 /* FDSearchBar.h */,
-				CE9D4D361BCEA4F3006F2E66 /* FDSearchBar.m */,
+				353AA00B1BDF7B4F008CDAB2 /* FDMessageController.h */,
+				353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */,
 				CE9D4D321BCE91BE006F2E66 /* HLSearchViewController.h */,
 				CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */,
-				CE9D4D391BCFC362006F2E66 /* FDTableViewCell.h */,
-				CE9D4D3A1BCFC362006F2E66 /* FDTableViewCell.m */,
 				CE754A3D1BDF856A004B6635 /* FDTableViewCellWithImage.h */,
 				CE754A3E1BDF856A004B6635 /* FDTableViewCellWithImage.m */,
 				CE80CA191BE23FFA00473E49 /* FDCategoryListViewCell.h */,
@@ -370,19 +373,17 @@
 				CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */,
 				CE754A401BE0D424004B6635 /* FDMarginalView.h */,
 				CE754A411BE0D424004B6635 /* FDMarginalView.m */,
-				CE1064981BC5601B00922494 /* FDAlertView.h */,
-				CE1064991BC5601B00922494 /* FDAlertView.m */,
-				CE10649A1BC5601B00922494 /* FDPromptView.h */,
-				CE10649B1BC5601B00922494 /* FDPromptView.m */,
-				CE10649C1BC5601B00922494 /* FDYesNoPromptView.h */,
-				CE10649D1BC5601B00922494 /* FDYesNoPromptView.m */,
 				3533F0B71BB01D38000B2D9A /* HLContainerController.h */,
 				3533F0B81BB01D38000B2D9A /* HLContainerController.m */,
 				35D158B61BB2966B009CFEDF /* HLListViewController.h */,
 				35D158B71BB2966B009CFEDF /* HLListViewController.m */,
 				35A82B1B1BB27BC0005BB983 /* HLCategoriesListController.h */,
 				35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */,
+				CE55ED081BE9E79B000E8434 /* HLChannelViewController.h */,
+				CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */,
 				3533F0B51BB01D38000B2D9A /* HLArticlesController.h */,
+				CE62452E1BFC8F9C0050C8EB /* FDDateUtil.h */,
+				CE62452F1BFC8F9C0050C8EB /* FDDateUtil.m */,
 				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
 				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
 				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
@@ -395,6 +396,8 @@
 			children = (
 				3533F0C01BB042C2000B2D9A /* HLFAQServices.h */,
 				3533F0C11BB042C2000B2D9A /* HLFAQServices.m */,
+				CE55ED051BE90479000E8434 /* HLMessageServices.h */,
+				CE55ED061BE90479000E8434 /* HLMessageServices.m */,
 				3528BA2F1BC86076008F6C38 /* HLServiceRequest.h */,
 				3528BA301BC86076008F6C38 /* HLServiceRequest.m */,
 			);
@@ -420,6 +423,10 @@
 				35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */,
 				CE9D4D2D1BCE576A006F2E66 /* FDUtilities.h */,
 				CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */,
+				35DCCB5A1BE005370039EFDD /* KonotorAudioPlayer.h */,
+				35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */,
+				35DCCB5C1BE005370039EFDD /* KonotorAudioRecorder.h */,
+				35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */,
 				CE1064951BC55FDB00922494 /* FDVotingManager.h */,
 				CE1064961BC55FDB00922494 /* FDVotingManager.m */,
 				3533F0C41BB0435B000B2D9A /* KonotorUtil.h */,
@@ -431,29 +438,10 @@
 		35591AE71B9EDBBC00BC0B60 /* HotlineInterfaceFiles */ = {
 			isa = PBXGroup;
 			children = (
-				35591AE81B9EDBBC00BC0B60 /* KonotorConversationViewController.h */,
-				35591AE91B9EDBBC00BC0B60 /* KonotorConversationViewController.m */,
-				35591AEA1B9EDBBC00BC0B60 /* KonotorEventHandler.h */,
-				35591AEB1B9EDBBC00BC0B60 /* KonotorEventHandler.m */,
-				35591AEC1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.h */,
-				35591AED1B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m */,
-				35591AEE1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.h */,
-				35591AEF1B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m */,
 				35591AF01B9EDBBC00BC0B60 /* KonotorImageInput.h */,
 				35591AF11B9EDBBC00BC0B60 /* KonotorImageInput.m */,
-				35591AF21B9EDBBC00BC0B60 /* KonotorImageView.h */,
-				35591AF31B9EDBBC00BC0B60 /* KonotorImageView.m */,
-				35591AF41B9EDBBC00BC0B60 /* KonotorMediaUIButton.h */,
-				35591AF51B9EDBBC00BC0B60 /* KonotorMediaUIButton.m */,
-				35591AF61B9EDBBC00BC0B60 /* KonotorTextInputOverlay.h */,
-				35591AF71B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m */,
-				35591AF81B9EDBBC00BC0B60 /* KonotorUI.h */,
-				35591AF91B9EDBBC00BC0B60 /* KonotorUITextView.h */,
-				35591AFA1B9EDBBC00BC0B60 /* KonotorUITextView.m */,
-				35591AFB1B9EDBBC00BC0B60 /* KonotorUtility.h */,
-				35591AFC1B9EDBBC00BC0B60 /* KonotorUtility.m */,
-				35591AFD1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.h */,
-				35591AFE1B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m */,
+				355F544C1C107787008FC1FA /* FDAttachmentImageController.h */,
+				355F544D1C107787008FC1FA /* FDAttachmentImageController.m */,
 			);
 			path = HotlineInterfaceFiles;
 			sourceTree = "<group>";
@@ -463,20 +451,14 @@
 			children = (
 				35591B241B9EDCB700BC0B60 /* Hotline.h */,
 				35591B251B9EDCB700BC0B60 /* Hotline.m */,
+				35D04B901C1B5A420096F01C /* HotlineConfig.m */,
 				35591B271B9EDCB700BC0B60 /* Konotor.h */,
 				35591B281B9EDCB700BC0B60 /* Konotor.m */,
-				3533F0C31BB0435B000B2D9A /* Utilities */,
-				3533F0B41BB01D38000B2D9A /* Controllers */,
 				359E3E5F1BA6D20600B933C5 /* Model */,
+				35DCCB151BE001650039EFDD /* View */,
+				3533F0B41BB01D38000B2D9A /* Controllers */,
+				3533F0C31BB0435B000B2D9A /* Utilities */,
 				359E3E8C1BA6D7E600B933C5 /* Network */,
-				35591B291B9EDCB700BC0B60 /* Konotor_cpp.h */,
-				35591B2A1B9EDCB700BC0B60 /* Konotor_cpp.mm */,
-				35591B2D1B9EDCB700BC0B60 /* KonotorAudioPlayer.h */,
-				35591B2E1B9EDCB700BC0B60 /* KonotorAudioPlayer.m */,
-				35591B2F1B9EDCB700BC0B60 /* KonotorAudioRecorder.h */,
-				35591B301B9EDCB700BC0B60 /* KonotorAudioRecorder.m */,
-				35591B351B9EDCB700BC0B60 /* KonotorDataManager.h */,
-				35591B361B9EDCB700BC0B60 /* KonotorDataManager.m */,
 			);
 			path = HotlineSDK;
 			sourceTree = "<group>";
@@ -527,6 +509,17 @@
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
+		3575C4771BE1EF25000C3D02 /* InputToolbarView */ = {
+			isa = PBXGroup;
+			children = (
+				CE2B272A1C11D51B00D9A253 /* FDAudioMessageInputView.h */,
+				CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */,
+				3575C47A1BE1EF25000C3D02 /* FDInputToolbarView.h */,
+				3575C47B1BE1EF25000C3D02 /* FDInputToolbarView.m */,
+			);
+			path = InputToolbarView;
+			sourceTree = "<group>";
+		};
 		358DD4CC1BB011A200B36E4E /* HotlineDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -570,6 +563,8 @@
 				CE9D4D2B1BCE55FF006F2E66 /* FDArticleContent.m */,
 				358DD4C21BB00EB700B36E4E /* HLCategory.h */,
 				358DD4C31BB00EB700B36E4E /* HLCategory.m */,
+				CE16D3391BFDE3100045F235 /* HLChannel.h */,
+				CE16D33A1BFDE3100045F235 /* HLChannel.m */,
 				35B7901F1BAFD9CC005443FD /* KonotorApp.h */,
 				35B790201BAFD9CC005443FD /* KonotorApp.m */,
 				359E3E621BA6D20600B933C5 /* KonotorConversation.h */,
@@ -584,6 +579,8 @@
 				359E3E811BA6D20600B933C5 /* KonotorShareMessageEvent.m */,
 				359E3E821BA6D20600B933C5 /* KonotorUser.h */,
 				359E3E831BA6D20600B933C5 /* KonotorUser.m */,
+				35DCCB551BE002E50039EFDD /* KonotorDataManager.h */,
+				35DCCB561BE002E50039EFDD /* KonotorDataManager.m */,
 				359E3E6A1BA6D20600B933C5 /* KonotorModel.xcdatamodeld */,
 			);
 			path = Model;
@@ -626,10 +623,68 @@
 			children = (
 				35D9F9E31BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.h */,
 				35D9F9E41BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m */,
+				CE55ED0B1BE9FD4B000E8434 /* FDChannelUpdater.h */,
+				CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */,
 				35D9F9E51BBAA7FA008C92E8 /* FDSolutionUpdater.h */,
 				35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */,
 			);
 			path = DataUpdater;
+			sourceTree = "<group>";
+		};
+		35DCCB151BE001650039EFDD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				35DCCB2A1BE001650039EFDD /* HLGridViewCell.h */,
+				35DCCB2B1BE001650039EFDD /* HLGridViewCell.m */,
+				35DCCB1C1BE001650039EFDD /* FDBadgeView.h */,
+				35DCCB1D1BE001650039EFDD /* FDBadgeView.m */,
+				3575C4771BE1EF25000C3D02 /* InputToolbarView */,
+				35DCCB411BE002960039EFDD /* FDKit */,
+				35DCCB481BE002960039EFDD /* PromptView */,
+				35DCCB371BE002220039EFDD /* MessageCell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		35DCCB371BE002220039EFDD /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				35DCCB3C1BE002220039EFDD /* FDMessageCell.h */,
+				35DCCB3D1BE002220039EFDD /* FDMessageCell.m */,
+				35DCCB381BE002220039EFDD /* FDActionButton.h */,
+				35DCCB391BE002220039EFDD /* FDActionButton.m */,
+				35DCCB3A1BE002220039EFDD /* FDAudioMessageUnit.h */,
+				35DCCB3B1BE002220039EFDD /* FDAudioMessageUnit.m */,
+				91BBEAA01BE393DB00F55009 /* FDPictureMessageView.h */,
+				91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */,
+			);
+			path = MessageCell;
+			sourceTree = "<group>";
+		};
+		35DCCB411BE002960039EFDD /* FDKit */ = {
+			isa = PBXGroup;
+			children = (
+				35DCCB421BE002960039EFDD /* FDButton.h */,
+				35DCCB431BE002960039EFDD /* FDButton.m */,
+				35DCCB441BE002960039EFDD /* FDSearchBar.h */,
+				35DCCB451BE002960039EFDD /* FDSearchBar.m */,
+				35DCCB461BE002960039EFDD /* FDTableViewCell.h */,
+				35DCCB471BE002960039EFDD /* FDTableViewCell.m */,
+			);
+			path = FDKit;
+			sourceTree = "<group>";
+		};
+		35DCCB481BE002960039EFDD /* PromptView */ = {
+			isa = PBXGroup;
+			children = (
+				35DCCB491BE002960039EFDD /* FDAlertView.h */,
+				35DCCB4A1BE002960039EFDD /* FDAlertView.m */,
+				35DCCB4B1BE002960039EFDD /* FDPromptView.h */,
+				35DCCB4C1BE002960039EFDD /* FDPromptView.m */,
+				35DCCB4D1BE002960039EFDD /* FDYesNoPromptView.h */,
+				35DCCB4E1BE002960039EFDD /* FDYesNoPromptView.m */,
+			);
+			path = PromptView;
 			sourceTree = "<group>";
 		};
 		843DD249178594180053E19E = {
@@ -745,7 +800,7 @@
 		843DD24B178594180053E19E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Freshdesk;
 				TargetAttributes = {
 					358DD4D61BB0126000B36E4E = {
@@ -781,7 +836,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE10645A1BC2779300922494 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,15 +859,15 @@
 				359E3E881BA6D20600B933C5 /* KonotorMessageBinary.m in Sources */,
 				35591B8F1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m in Sources */,
 				3533F0C61BB0435B000B2D9A /* KonotorUtil.m in Sources */,
+				35DCCB5F1BE005370039EFDD /* KonotorAudioPlayer.m in Sources */,
+				35D04B911C1B5A420096F01C /* HotlineConfig.m in Sources */,
 				35D9F9DA1BB96DF8008C92E8 /* FDKeyChainStore.m in Sources */,
 				35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */,
-				35591B661B9EDCB700BC0B60 /* KonotorAudioPlayer.m in Sources */,
 				359E3E871BA6D20600B933C5 /* KonotorMessage.m in Sources */,
 				35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */,
-				359E3E891BA6D20600B933C5 /* KonotorModel.xcdatamodeld in Sources */,
 				35591B951B9EDD0700BC0B60 /* AFXMLRequestOperation.m in Sources */,
 				35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */,
-				35591B671B9EDCB700BC0B60 /* KonotorAudioRecorder.m in Sources */,
+				35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */,
 				3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */,
 				358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */,
 				35591B921B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -830,10 +884,8 @@
 				35591B941B9EDD0700BC0B60 /* AFURLConnectionOperation.m in Sources */,
 				35591B8E1B9EDD0700BC0B60 /* AFHTTPClient.m in Sources */,
 				3533F0BD1BB020D3000B2D9A /* HLAPIClient.m in Sources */,
-				35591B6A1B9EDCB700BC0B60 /* KonotorDataManager.m in Sources */,
 				35B790211BAFD9CC005443FD /* KonotorApp.m in Sources */,
 				3533F0C21BB042C2000B2D9A /* HLFAQServices.m in Sources */,
-				35591B641B9EDCB700BC0B60 /* Konotor_cpp.mm in Sources */,
 				35591B911B9EDD0700BC0B60 /* AFJSONRequestOperation.m in Sources */,
 				359E3E8A1BA6D20600B933C5 /* KonotorShareMessageEvent.m in Sources */,
 				35591B621B9EDCB700BC0B60 /* Hotline.m in Sources */,
@@ -844,38 +896,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */,
 				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
-				35591B081B9EDBBC00BC0B60 /* KonotorUtility.m in Sources */,
-				35591B021B9EDBBC00BC0B60 /* KonotorFeedbackScreenViewController.m in Sources */,
+				CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */,
+				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,
+				35DCCB511BE002960039EFDD /* FDTableViewCell.m in Sources */,
 				35591B031B9EDBBC00BC0B60 /* KonotorImageInput.m in Sources */,
-				35591AFF1B9EDBBC00BC0B60 /* KonotorConversationViewController.m in Sources */,
-				CE9D4D461BD133AF006F2E66 /* FDButton.m in Sources */,
-				CE9D4D371BCEA4F3006F2E66 /* FDSearchBar.m in Sources */,
-				35591B001B9EDBBC00BC0B60 /* KonotorEventHandler.m in Sources */,
-				CE10649F1BC5601B00922494 /* FDPromptView.m in Sources */,
-				35591B061B9EDBBC00BC0B60 /* KonotorTextInputOverlay.m in Sources */,
-				35591B041B9EDBBC00BC0B60 /* KonotorImageView.m in Sources */,
+				355F544E1C107787008FC1FA /* FDAttachmentImageController.m in Sources */,
+				CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */,
+				35DCCB3E1BE002220039EFDD /* FDActionButton.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
-				CE9D4D3B1BCFC363006F2E66 /* FDTableViewCell.m in Sources */,
+				91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */,
+				CE9D4D3B1BCFC363006F2E66 /* (null) in Sources */,
 				CE754A3F1BDF856A004B6635 /* FDTableViewCellWithImage.m in Sources */,
 				35A82B1D1BB27BC0005BB983 /* HLCategoriesListController.m in Sources */,
-				35591B011B9EDBBC00BC0B60 /* KonotorFeedbackScreen.m in Sources */,
+				35DCCB571BE002E50039EFDD /* KonotorDataManager.m in Sources */,
+				CE16D33B1BFDE3100045F235 /* HLChannel.m in Sources */,
+				353AA00D1BDF7B4F008CDAB2 /* FDMessageController.m in Sources */,
 				CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */,
+				35DCCB361BE001650039EFDD /* HLGridViewCell.m in Sources */,
+				35DCCB531BE002960039EFDD /* FDPromptView.m in Sources */,
 				3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */,
-				35591B091B9EDBBC00BC0B60 /* KonotorVoiceInputOverlay.m in Sources */,
 				CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */,
-				CE80CBD21BB2B6C500B1C74B /* HLGridViewCell.m in Sources */,
+				35DCCB2F1BE001650039EFDD /* FDBadgeView.m in Sources */,
+				35DCCB3F1BE002220039EFDD /* FDAudioMessageUnit.m in Sources */,
 				3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */,
-				35591B071B9EDBBC00BC0B60 /* KonotorUITextView.m in Sources */,
 				CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */,
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
-				CE10649E1BC5601B00922494 /* FDAlertView.m in Sources */,
 				CE754A421BE0D424004B6635 /* FDMarginalView.m in Sources */,
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,
+				3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */,
 				CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */,
-				35591B051B9EDBBC00BC0B60 /* KonotorMediaUIButton.m in Sources */,
+				35DCCB541BE002960039EFDD /* FDYesNoPromptView.m in Sources */,
+				35DCCB501BE002960039EFDD /* FDSearchBar.m in Sources */,
+				35DCCB4F1BE002960039EFDD /* FDButton.m in Sources */,
+				CE6245301BFC8F9C0050C8EB /* FDDateUtil.m in Sources */,
+				35DCCB521BE002960039EFDD /* FDAlertView.m in Sources */,
+				CE55ED071BE90479000E8434 /* HLMessageServices.m in Sources */,
 				CE80CA631BE36B6500473E49 /* FDIndex.m in Sources */,
-				CE1064A01BC5601B00922494 /* FDYesNoPromptView.m in Sources */,
 				CE80CA1E1BE2439900473E49 /* FDChannelListViewCell.m in Sources */,
 				CE80CA1B1BE23FFA00473E49 /* FDCategoryListViewCell.m in Sources */,
 			);
@@ -925,7 +983,7 @@
 				DSTROOT = /tmp/Konotor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HotlineSDK/HotlineSDK-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "KONOTORURL=\\@\\\"https://app.konotor.com/app/\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -942,7 +1000,7 @@
 				DSTROOT = /tmp/Konotor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HotlineSDK/HotlineSDK-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "KONOTORURL=\\@\\\"https://app.konotor.com/app/\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -959,7 +1017,7 @@
 				DSTROOT = /tmp/Konotor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HotlineSDK/HotlineSDK-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "KONOTORURL=\\@\\\"https://app.konotor.com/app/\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -976,7 +1034,7 @@
 				DSTROOT = /tmp/Konotor.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HotlineSDK/HotlineSDK-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "KONOTORURL=\\@\\\"https://app.konotor.com/app/\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";

@@ -36,9 +36,13 @@
 #pragma mark - Utilities
 //===============================================================================================
 
+//Calculate time delta in a scope
+#define TICK NSDate *startTime = [NSDate date]
+#define TOCK NSLog(@"Elapsed Time: %f", -[startTime timeIntervalSinceNow])
+
 //Activity indicator
-#define ShowNetworkActivityIndicator() [UIApplication sharedApplication].networkActivityIndicatorVisible = YES
-#define HideNetworkActivityIndicator() [UIApplication sharedApplication].networkActivityIndicatorVisible = NO
+#define ShowNetworkActivityIndicator() [KonotorNetworkUtil SetNetworkActivityIndicator:YES]
+#define HideNetworkActivityIndicator() [KonotorNetworkUtil SetNetworkActivityIndicator:NO]
 
 //TrimString
 #define trimString(str) [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]

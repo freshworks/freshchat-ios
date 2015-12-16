@@ -11,12 +11,14 @@
 #define HTTP_METHOD_GET @"GET"
 #define HTTP_METHOD_PUT @"PUT"
 
-#define HOTLINE_USER_DOMAIN @"https://hline.pagekite.me"
+#define HOTLINE_USER_DOMAIN @"https://%@"
 
 #define HOTLINE_REQUEST_PARAMS @"t=%@"
 
-#define HOTLINE_API_ARTICLE_VOTE @"/app/services/app/%@/faq/category/%@/article/%@"
+#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/faq/category"
 
-#define HOTLINE_API_CATEGORIES @"/app/services/app/%@/faq/category"
+#define HOTLINE_API_ARTICLES_PATH @"/app/services/app/%@/faq/category/%@/article"
 
-#define HOTLINE_API_ARTICLES @"/app/services/app/%@/faq/category/%@/article"
+#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/faq/category/%@/article/%@"
+
+#define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"

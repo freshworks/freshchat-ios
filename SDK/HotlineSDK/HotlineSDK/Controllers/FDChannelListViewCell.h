@@ -7,7 +7,13 @@
 //
 
 #import "FDTableViewCellWithImage.h"
+#import "FDBadgeView.h"
 
 @interface FDChannelListViewCell : FDTableViewCellWithImage
+
+@property (nonatomic,strong) FDBadgeView *badgeView;
+@property (nonatomic,strong) UILabel *lastUpdatedLabel;
+
++(UIImage *)generateImageForLabel:(NSString *)labelText;
 
 @end

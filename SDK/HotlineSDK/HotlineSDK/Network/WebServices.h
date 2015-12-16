@@ -13,13 +13,7 @@
 
 @interface KonotorWebServices : NSObject
 
-//+(BOOL) CreateUser: (NSString *) UserID;
-//+(BOOL) CreateUserOnServerIfNotPresent:(NSString *) UserID andPerformSelectorIfSuccessful:(SEL)aSelector withObject:(id) object;
-
-/*+(BOOL) CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:(SEL)SuccessSelector withObject:(id) successObject withSuccessParameter:(id) successParameter
-                                                           ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParameter:(id) failureParameter;*/
-
-+(void) UploadMessage : (KonotorMessage *)pMessage toConversation: (KonotorConversation *) conversationToUploadTo;
++(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void) AddPushDeviceToken: (NSString *) deviceToken;
 +(void) DAUCall;
 +(void) UpdateUserPropertiesWithDictionary:(NSDictionary *) dict withProperty:(KonotorCustomProperty *)property;

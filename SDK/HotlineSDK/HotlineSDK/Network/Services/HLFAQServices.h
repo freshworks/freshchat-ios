@@ -19,7 +19,6 @@
 @interface HLFAQServices : NSObject
 
 -(NSURLSessionDataTask *)fetchAllCategories;
--(NSURLSessionDataTask *)fetchCategoriesInBatches;
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID;
 
 @end

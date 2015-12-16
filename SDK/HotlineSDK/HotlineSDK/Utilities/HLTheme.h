@@ -10,6 +10,13 @@
 
 @interface HLTheme : NSObject
 
+#define FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE @"SearchButton"
+#define INPUT_BAR_INNER_TEXT_VIEW_IMAGE @"TextViewInner"
+#define INPUT_BAR_OUTER_TEXT_VIEW_IMAGE @"TextViewOuter"
+#define INPUT_BAR_ATTACHMENT_ICON @"Upload"
+#define INPUT_BAR_SEND_ICON @"Send"
+#define LIST_VIEW_RIGHT_ARROW @"rightArrow"
+
 + (instancetype)sharedInstance;
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
 -(UIColor *)searchBarInnerBackgroundColor;
@@ -65,6 +72,35 @@
 -(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
 
+//Messagecell & Conversation UI
+-(UIColor *)inputTextFontColor;
+-(UIColor *)sendButtonColor;
+-(UIColor *)conversationViewTitleTextColor;
+-(UIColor *)conversationViewBackgroundColor;
+-(UIColor *)actionButtonTextColor;
+-(UIColor *)actionButtonColor;
+-(UIColor *)businessMessageTextColor;
+-(UIColor *)userMessageTextColor;
+-(UIColor *)hyperlinkColor;
+-(BOOL)alwaysPollForMessages;
+-(BOOL)showsBusinessProfileImage;
+-(BOOL)showsUserProfileImage;
+-(BOOL)showsBusinessMessageSenderName;
+-(BOOL)showsUserMessageSenderName;
+-(NSString *)textInputHintText;
+-(NSString *)businessProfileImageName;
+-(NSString *)userProfileImageName;
+-(NSString *)businessMessageSenderName;
+-(NSString *)userMessageSenderName;
+-(NSString *)businessChatBubbleImageName;
+-(NSString *)userChatBubbleImageName;
+-(NSString *)chatBubbleFontName;
+-(NSString *)conversationUIFontName;
+-(float)chatBubbleFontSize;
+-(int)pollingTimeChatInFocus;
+-(int)pollingTimeChatNotInFocus;
+
+
 //Grid View
 
 -(UIColor *)itemBackgroundColor;
@@ -86,7 +122,9 @@
 -(UIFont *)lastUpdatedFont;
 -(UIColor *)lastUpdatedFontColor;
 
-//Images
+//Voice Recording Prompt
+-(UIFont *)voiceRecordingTimeLabelFont;
+
 -(UIImage *)getImageWithKey:(NSString *)key;
 
 @end

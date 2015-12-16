@@ -23,9 +23,23 @@
 "ARTICLE_VOTE_PROMPT_YES"="Yes!";
 "ARTICLE_VOTE_PROMPT_NO"="No";
 
+/* Message UI */
+"Message Placeholder Text"="Message";
+"SEND_BUTTON_TEXT"="Send";
+
 /* Contact Us prompt */
 "CONTACT_US_PROMPT_BUTTON"="Still need help? Contact Us ";
 "THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
 
 /* Search View Place Holder */
 "SEARCH_PLACEHOLDER"="Search for FAQs";
+
+/* Alerts */
+"CAMERA_UNAVAILABLE_TITLE"="Camera Unavailable";
+"CAMERA_UNAVAILABLE_DESCRIPTION"="Sorry! Your device doesn't have a camera, or the camera is not available for use.";
+"CAMERA_UNAVAILABLE_OK_BUTTON"="ok";
+
+"IMAGE_ATTACHMENT_OPTIONS"="options";
+"IMAGE_ATTACHMENT_CANCEL_BUTTON"="cancel";
+"IMAGE_ATTACHMENT_SELECT_EXISTING_IMAGE"="Select Existing Image";
+"IMAGE_ATTACHMENT_SELECT_NEW_IMAGE"="New Image via Camera";

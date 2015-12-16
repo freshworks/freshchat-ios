@@ -22,6 +22,7 @@
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *)getUUID;
 +(BOOL)isRegisteredDevice;
++(NSString*)stringRepresentationForDate:(NSDate*) date;
 
 @end
 

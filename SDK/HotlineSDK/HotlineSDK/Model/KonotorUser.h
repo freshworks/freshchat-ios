@@ -10,12 +10,14 @@
 #import <CoreData/CoreData.h>
 #import "KonotorConversation.h"
 
+@class KonotorConversation;
+
 @interface KonotorUserData : NSObject
+
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *userAlias;
 @property (strong, nonatomic) NSString *appGeneratedUserID;
-
 
 @end
 
@@ -26,16 +28,15 @@
 @property (strong, retain) NSString *appSpecificIdentifier;
 @property (strong, retain) NSString *userAlias;
 @property (nonatomic) BOOL isUserCreatedOnServer;
-@property (nonatomic, strong) NSSet *hasConversations;
+@property (nonatomic, strong) NSSet<KonotorConversation *> *hasConversations;
 
 +(void)InitUser;
 +(BOOL)isUserPresent;
 +(BOOL) isUserCreatedOnServer;
++(void)deleteUser;
 +(NSString *) GetUserAlias;
 +(BOOL) UserCreatedOnServer;
 +(KonotorUser *) GetCurrentlyLoggedInUser;
-//+(BOOL) CreateUserOnServerIfNotPresent;
-
 +(BOOL) CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:(SEL)SuccessSelector withObject:(id) successObject withSuccessParameter:(id) successParameter
                                                            ifFailure:(SEL)failureSelector withObject: (id) failureObject withFailureParameter:(id) failureParameter;
 

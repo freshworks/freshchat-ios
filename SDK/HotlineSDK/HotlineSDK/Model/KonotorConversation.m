@@ -12,6 +12,8 @@
 #import "KonotorUtil.h"
 #import "KonotorMessage.h"
 #import "Konotor.h"
+#import "HLMessageServices.h"
+#import "HLMacros.h"
 
 @class KonotorConversationData;
 @class KonotorMessageData;
@@ -19,35 +21,35 @@
 @implementation KonotorConversation
 
 @dynamic conversationAlias;
-@dynamic hasMessages;
+@dynamic conversationHostUserAlias;
+@dynamic conversationHostUserId;
 @dynamic createdMillis;
-@dynamic updatedMillis;
+@dynamic status;
 @dynamic unreadMessagesCount;
+@dynamic updatedMillis;
+@dynamic belongsToChannel;
+@dynamic hasMessages;
+
+static BOOL DOWNLOAD_IN_PROGRESS = NO;
 
 NSMutableDictionary* gkConversationIdConversationMap;
--(void) incrementUnreadCount
-{
-    int unread = [[self unreadMessagesCount]intValue];
-    unread++;
-    
-    [self setUnreadMessagesCount:[NSNumber numberWithInt:unread]];
-    [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
 
+-(void)incrementUnreadCount{
+    int unread = self.unreadMessagesCount.intValue;
+    unread++;
+    self.unreadMessagesCount = @(unread);
+    [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
     [[KonotorDataManager sharedInstance]save];
 }
--(void) decrementUnreadCount
-{
+
+-(void)decrementUnreadCount{
     int unread = [[self unreadMessagesCount]intValue];
-    if(unread > 0)
-    {
+    if(unread > 0){
         unread--;
     }
-    
     [self setUnreadMessagesCount:[NSNumber numberWithInt:unread]];
     [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
-
     [[KonotorDataManager sharedInstance]save];
-
 }
 
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId
@@ -58,7 +60,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
         if(conversation)
             return conversation;
     }
-    
     
     if(!gkConversationIdConversationMap)
     {
@@ -75,7 +76,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"conversationAlias == %@",conversationId];
     
     [request setPredicate:predicate];
-    //NSLog(@"%@",[predicate description]);
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
     
@@ -93,11 +93,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
             return conversation;
         }
     }
-    
-    
     return nil;
-    
-    
 }
 
 +(void) CreateDefaultConversation
@@ -121,200 +117,115 @@ NSMutableDictionary* gkConversationIdConversationMap;
     [[KonotorDataManager sharedInstance]save];
 }
 
-+(void) DownloadAllMessages
-{
-    NSString *pBasePath = [KonotorUtil GetBaseURL];
++(void) DownloadAllMessages{
+    FDLog(@"download message called");
     
-    /*if(![KonotorUser  CreateUserOnServerIfNotPresent])
-    {
-     //add the delegate func to return failure here
+    if (DOWNLOAD_IN_PROGRESS) {
+        FDLog(@"download message in progress, so skip");
         return;
-    }*/
-    
-    if(![KonotorUser isUserCreatedOnServer])
-    {
-        [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(DownloadAllMessages) withObject:[KonotorConversation class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
-        return;
-
     }
     
-    if([KonotorApp areConversationsDownloading])
+    if(![KonotorUser isUserCreatedOnServer]){
+        [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(DownloadAllMessages) withObject:[KonotorConversation class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
         return;
+    }
     
+    [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
+    HLMessageServices *messageService = [[HLMessageServices alloc]init];
+    [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+        [KonotorConversation fetchAllMessagesInChannel:channels];
+    }];
+}
+
++ (void)fetchAllMessagesInChannel:(NSArray *)channels{
+
+    NSString *pBasePath = [KonotorUtil GetBaseURL];
     NSString *app = [KonotorApp GetAppID];
     NSString *user = [KonotorUser GetUserAlias];
     NSString *token = [KonotorApp GetAppKey];
     
+    NSNumber* timestamp = [KonotorApp getLastUpdatedConversationsTimeStamp];
     
+    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",app,@"/user/",user,@"/conversation/v2?t=",token,@"&messageAfter=",timestamp];
+
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
     [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    
     [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
     
-    NSNumber* timestamp = [KonotorApp getLastUpdatedConversationsTimeStamp];
-
-    
-    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",app,@"/user/",user,@"/conversation?t=",token,@"&messageAfter=",timestamp];
-  
-    
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:getPath parameters:nil];
-    
-    [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
-    [KonotorApp updateConversationsDownloading:YES];
-    
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error)
-     {
-         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-         int statusCode = (int)[httpResponse statusCode];
-         
-         if(error || statusCode >= 400)
-         {
-             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-             [KonotorApp updateConversationsDownloading:NO];
 
-             [Konotor performSelector:@selector(conversationsDownloadFailed)];
-
-             //NSLog(@"Download failed");
-             return;
-             
-         }
-         
-         else
-         {
-             KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-             
-             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-             
-             NSMutableArray *pArrayOfConversations;
-             
-             id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
-             
-             NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
-             
-             if(!toplevel)
-             {
-                 
-                 [KonotorApp updateConversationsDownloading:NO];
-                 [Konotor performSelector:@selector(conversationsDownloaded)];
-                 return;
-             }
-             
-             pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
-             
-             NSNumber *lastmsgts = [KonotorConversation getLastMessageTimeStampOfTheseConversations:pArrayOfConversations];
-             
-             if(lastmsgts)
-                 [KonotorApp updateLastUpdatedConversations:lastmsgts];
-                          
-             if(!pArrayOfConversations)
-             {
-                 [KonotorApp updateConversationsDownloading:NO];
-                 [Konotor performSelector:@selector(conversationsDownloaded)];
-                 return;
-             }
-             
-             NSMutableArray *ConversationArray;
-             NSSet *ConversationCollectionSet =[NSSet setWithSet:[pUser valueForKeyPath:@"hasConversations"]];
-             
-             if(ConversationCollectionSet)
-                 ConversationArray = [NSMutableArray arrayWithArray:[ConversationCollectionSet allObjects]];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        int statusCode = (int)[httpResponse statusCode];
+        
+        if(error || statusCode >= 400){
+            [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
+            [Konotor performSelector:@selector(conversationsDownloadFailed)];
+            return;
             
-             
-             NSMutableSet *SetToWhichConversationsAreToBeAdded = [pUser mutableSetValueForKey:@"hasConversations"];
-             
-             
-             for(KonotorConversation* conversationFromJSON in pArrayOfConversations)
-             {
-                 
-                 BOOL conversationFoundOnDisk = NO;
-                 
-                 for(KonotorConversation *conversationFromDisk in ConversationArray)
-                 {
-                     if([[conversationFromJSON valueForKey:@"alias"] isEqualToString: conversationFromDisk.conversationAlias])
-                     {
-                         
-                         conversationFoundOnDisk = YES;
-                             
-                         NSMutableSet *mutableSetOfExistingConversationsOnDisk = [conversationFromDisk  mutableSetValueForKey:@"hasMessages"];
-                      
-                         
-                         NSSet *setOfExistingMessagesOnDisk =[NSSet setWithSet:[conversationFromDisk  valueForKeyPath:@"hasMessages"]];
-                         NSArray *ExistingMessagesOnDisk = [setOfExistingMessagesOnDisk allObjects];
-                         
-                         
-                         NSMutableArray *messagesFromJSON = [conversationFromJSON valueForKey:@"messages"];
-                         
-                         for(KonotorMessage *JSONMessage in messagesFromJSON)
-                         {
-                             BOOL messageFoundOnDisk = NO;
-                             
-                             for(KonotorMessage *DiskMessage in ExistingMessagesOnDisk)
-                             {
-                                 
-                                 if([DiskMessage.messageAlias isEqualToString:[JSONMessage valueForKey:@"alias"]])
-                                 {
-                                     messageFoundOnDisk = YES;
-                                    break;
-                                     
-                                 }
-                             }
-                             
-                             if(!messageFoundOnDisk)
-                             {
-                                 
-                                 //message not found on disk its a new message  add it to the conversation.
-                                 KonotorMessage *messageToBeAdded = [KonotorMessage CreateNewMessage:JSONMessage];
-                                 [conversationFromDisk incrementUnreadCount];
-                                 [messageToBeAdded setUploadStatus:[NSNumber numberWithInt:2]];
-
-                                 [mutableSetOfExistingConversationsOnDisk addObject:messageToBeAdded];
-                                 [messageToBeAdded setValue:conversationFromDisk forKey:@"belongsToConversation"];
-                                 
-                                 
-                             }
-                         }
-                         
-                         break;
-                     } // end of block if the sticker id matches
-                     
-                 }// end of loop iterating thru all collections from disk
-                 
-                 if(!conversationFoundOnDisk) //collection not found on disk, add to disk.
-                 {
-                     KonotorConversation *newConversation = [KonotorConversation CreateNewConversation:conversationFromJSON];
-                     
-                     
-                     
-                     NSMutableSet *ConversationtoWhichToBeAdded = [ newConversation mutableSetValueForKey:@"hasMessages"];
-                     
-                     for( KonotorMessage *newMessage in [conversationFromJSON valueForKey:@"messages"])
-                     {
-                         KonotorMessage *messageToBeAdded = [KonotorMessage CreateNewMessage:newMessage];
-                         [messageToBeAdded setUploadStatus:[NSNumber numberWithInt:2]];
-                         [newConversation incrementUnreadCount];
-
-                         [ConversationtoWhichToBeAdded addObject:messageToBeAdded];
-                         [messageToBeAdded setValue:newConversation forKey:@"belongsToConversation"];
-                     }
-                     
-                     [SetToWhichConversationsAreToBeAdded addObject:newConversation];
-                 }
-                 
-             }//end of loop iterating through the json of collections
-             [KonotorApp updateConversationsDownloading:NO];
-             [Konotor performSelector:@selector(conversationsDownloaded)];
-         }//end of block of successful download of json of collections
-         
-         [[KonotorDataManager sharedInstance]save];
-     }];
-    
-
+        }else{
+            
+            KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
+            [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
+            id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
+            NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
+            if(!toplevel){
+                [Konotor performSelector:@selector(conversationsDownloaded)];
+                return;
+            }
+            
+            NSMutableArray *pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
+            NSNumber *lastUpdatedTime = [KonotorConversation getLastMessageTimeStampOfTheseConversations:pArrayOfConversations];
+            
+            if(lastUpdatedTime){
+                [KonotorApp updateLastUpdatedConversations:lastUpdatedTime];
+            }
+            
+            if(!pArrayOfConversations){
+                [Konotor performSelector:@selector(conversationsDownloaded)];
+                return;
+            }
+            
+            DOWNLOAD_IN_PROGRESS = YES;
+            
+            for (int i=0; i<pArrayOfConversations.count; i++) {
+                NSDictionary *conversationInfo = pArrayOfConversations[i];
+                NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+                HLChannel *channel = channels[i];
+                KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+                if (conversation) {
+                    NSArray *messages = conversationInfo[@"messages"];
+                    for (int j=0; j<messages.count; j++) {
+                        NSDictionary *messageInfo = messages[j];
+                        KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"messageId"]];
+                        if (!message) {
+                            KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
+                            newMessage.uploadStatus = @2;
+                            newMessage.belongsToConversation = conversation;
+                            [conversation incrementUnreadCount];
+                        }
+                    }
+                }else{
+                    KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+                    NSArray *messages = conversationInfo[@"messages"];
+                    for (int j=0; j<messages.count; j++) {
+                        NSDictionary *messageInfo = messages[j];
+                        KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
+                        newMessage.uploadStatus = @2;
+                        newMessage.belongsToConversation = newConversation;
+                        [newConversation incrementUnreadCount];
+                    }
+                }
+            }
+            [Konotor performSelector:@selector(conversationsDownloaded)];
+        }
+        [[KonotorDataManager sharedInstance]save];
+        DOWNLOAD_IN_PROGRESS = NO;
+    }];
 }
 
-
-+(NSNumber *) getLastMessageTimeStampOfTheseConversations:(NSArray *) pConversations
-{
++(NSNumber *) getLastMessageTimeStampOfTheseConversations:(NSArray *) pConversations{
     if(![pConversations count])
         return nil;
     
@@ -329,8 +240,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
     {
         NSDictionary *lastMessage = [messagesArray objectAtIndex:[messagesArray count]-1];
         NSNumber *timestamp = [lastMessage valueForKey:@"createdMillis"];
-        
-        //NSLog(@"%@",[timestamp description]);
         
         double existingValue = [[KonotorApp getLastUpdatedConversationsTimeStamp]doubleValue];
         double newValue = [timestamp doubleValue];
@@ -347,28 +256,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
     
     
 }
-+(KonotorConversation *)CreateNewConversation:(KonotorConversation *)conversation
-{
-    KonotorConversation *newConversation = (KonotorConversation *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
-    
-    newConversation.conversationAlias = [conversation valueForKey:@"alias"];
-    
-    KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
 
-    NSMutableSet *SetToWhichConversationsAreToBeAdded = [pUser mutableSetValueForKey:@"hasConversations"];
-
-    [SetToWhichConversationsAreToBeAdded addObject:newConversation];
-
-    [[KonotorDataManager sharedInstance]save];
-    return newConversation;
-    
-    
-
-}
-
-
-+(NSArray *) ReturnAllConversations
-{
++(NSArray *) ReturnAllConversations{
     
     KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
     if(pUser)
@@ -397,9 +286,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
 
 }
 
-
-
-
 -(KonotorConversationData *) ReturnConversationDataFromManagedObject
 {
     KonotorConversationData *conversation = [[KonotorConversationData alloc]init];
@@ -410,5 +296,17 @@ NSMutableDictionary* gkConversationIdConversationMap;
     
 }
 
++(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel{
+    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
+    KonotorConversation *newConversation = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:context];
+
+    newConversation.conversationAlias = conversationID;
+
+    if (channel) {
+        newConversation.belongsToChannel = channel;
+    }
+    
+    return newConversation;
+}
 
 @end

@@ -12,5 +12,6 @@
 #define HOTLINE_SOLUTIONS_UPDATED @"com.freshdesk.hotline_solutions_updated"
 #define HOTLINE_NETWORK_REACHABLE @"com.freshdesk.hotline_network_reachable"
 #define HOTLINE_NETWORK_UNREACHABLE @"com.freshdesk.hotline_network_unreachable"
+#define HOTLINE_CHANNELS_UPDATED @"com.freshdesk.hotline_channels_updated"
 
 #endif

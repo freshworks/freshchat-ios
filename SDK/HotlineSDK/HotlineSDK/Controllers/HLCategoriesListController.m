@@ -18,7 +18,8 @@
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
 #import "FDCategoryListViewCell.h"
-#import "KonotorFeedbackScreen.h"
+#import "KonotorUtil.h"
+#import "Hotline.h"
 
 @interface HLCategoriesListController ()
 
@@ -88,7 +89,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [KonotorFeedbackScreen showFeedbackScreen];
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 -(void)localNotificationSubscription{
@@ -96,7 +97,6 @@
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         HideNetworkActivityIndicator();
         [weakSelf updateCategories];
-        NSLog(@"Got Notifications !!!");
     }];
 }
 

@@ -7,58 +7,69 @@
 //
 
 #import "FDTableViewCellWithImage.h"
+@interface FDTableViewCellWithImage ()
+
+@property (strong, nonatomic) HLTheme *theme;
+
+@end
 
 @implementation FDTableViewCellWithImage
+
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.theme = [HLTheme sharedInstance];
         
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        for (id view in [self.subviews[0] subviews]) {
-            if ([view isKindOfClass:[UIButton class]]) {
-                UIButton *accessoryButton = (UIButton *)view;
-                accessoryButton.backgroundColor = nil;
-            }
-        }
-        
+        self.contentEncloser = [[UIView alloc]init];
+        self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
+    
         self.titleLabel = [[UILabel alloc] init];
+        [self.titleLabel setNumberOfLines:2];
+        [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
         self.titleLabel.font = [self.theme tableViewCellDetailFont];
         self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
         self.imgView=[[UIImageView alloc] init];
+        self.imgView.backgroundColor = [UIColor greenColor];
         self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
-        [self.imgView.layer setCornerRadius:8.0f];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.imgView setImage:[[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"]];
         
-        self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
-        [self.detailLabel setNumberOfLines:0];
+        self.detailLabel = [[UILabel alloc] init];
+        [self.detailLabel setNumberOfLines:2];
         self.detailLabel.font = [self.theme tableViewCellDetailFont];
         self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
-        [self.detailLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
-        
         [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.detailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-
         
-        [self.contentView addSubview:self.imgView];
-        [self.contentView addSubview:self.titleLabel];
-        [self.contentView addSubview:self.detailLabel];
+        [self.contentView addSubview:self.contentEncloser];
+        [self.contentEncloser addSubview:self.imgView];
+        [self.contentEncloser addSubview:self.titleLabel];
+        [self.contentEncloser addSubview:self.detailLabel];
         
-        NSDictionary *views = @{ @"imageView" : self.imgView, @"label" : self.titleLabel,@"detail":self.detailLabel};
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[label]-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[imageView(75)]-[detail]-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[imageView(75)]" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[label]-[detail]-|" options:0 metrics:nil views:views]];
+        NSDictionary *views = @{ @"imageView" : self.imgView, @"title" : self.titleLabel,@"subtitle":self.detailLabel,
+                                 @"contentEncloser" : self.contentEncloser };
         
+        [self.contentEncloser addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentEncloser attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[contentEncloser]" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentEncloser]|" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[title]-5-[subtitle]" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]-|" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]-|" options:0 metrics:nil views:views]];
+        [self addAccessoryView];
         [self setupTheme];
     }
     return self;
+}
+
+-(void)addAccessoryView{
+    NSLog(@"WARNING: Unimplemented method. %@ should implement addAccessoryView" , self.class);
 }
 
 -(void)setupTheme{
@@ -75,7 +86,6 @@
     
 }
 
-//TODO: Looks like there are many places where the same image is accessed. unify under a HLTheme Function.
 -(void)prepareForReuse{
     [super prepareForReuse];
     self.imgView.image = [[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"];

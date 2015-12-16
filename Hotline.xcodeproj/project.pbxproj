@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3518BF8E1BFB6FC1003B558D /* Send.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF8B1BFB6FC1003B558D /* Send.png */; };
+		3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF8C1BFB6FC1003B558D /* Send@2x.png */; };
+		3518BF901BFB6FC1003B558D /* Send@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518BF8D1BFB6FC1003B558D /* Send@3x.png */; };
 		3551A4ED1C03525300348AE5 /* BackArrow_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3551A4EB1C03525300348AE5 /* BackArrow_2x.png */; };
 		3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3551A4EC1C03525300348AE5 /* BackArrow.png */; };
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
@@ -28,21 +31,17 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		35C8900D1C21CCF9006AA491 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */; };
+		35D3150B1C032E2800783CC3 /* Mic-Idle.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315071C032E2800783CC3 /* Mic-Idle.png */; };
+		35D3150C1C032E2800783CC3 /* Mic-Idle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315081C032E2800783CC3 /* Mic-Idle@2x.png */; };
+		35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315091C032E2800783CC3 /* Mic-Recording.png */; };
+		35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
+		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
 		35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDF1BB3EA4600E0052D /* konotor_back.png */; };
 		35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */; };
-		35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE11BB3EA4600E0052D /* konotor_cam.png */; };
-		35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE21BB3EA4600E0052D /* konotor_cam@2x.png */; };
-		35ED5F0B1BB3EA4600E0052D /* konotor_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE31BB3EA4600E0052D /* konotor_cancel.png */; };
-		35ED5F0C1BB3EA4600E0052D /* konotor_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE41BB3EA4600E0052D /* konotor_cancel@2x.png */; };
-		35ED5F0D1BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE51BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png */; };
-		35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE61BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png */; };
-		35ED5F0F1BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE71BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png */; };
-		35ED5F101BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE81BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png */; };
-		35ED5F111BB3EA4600E0052D /* konotor_cross.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EE91BB3EA4600E0052D /* konotor_cross.png */; };
-		35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EEA1BB3EA4600E0052D /* konotor_cross@2x.png */; };
 		35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EEB1BB3EA4600E0052D /* konotor_mic.png */; };
 		35ED5F141BB3EA4600E0052D /* konotor_mic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EEC1BB3EA4600E0052D /* konotor_mic@2x.png */; };
 		35ED5F151BB3EA4600E0052D /* konotor_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EED1BB3EA4600E0052D /* konotor_placeholder.png */; };
@@ -63,13 +62,27 @@
 		35ED5F241BB3EA4600E0052D /* konotor_stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFC1BB3EA4600E0052D /* konotor_stop@2x.png */; };
 		35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFD1BB3EA4600E0052D /* konotor_supportprofile.png */; };
 		35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */; };
-		35ED5F271BB3EA4600E0052D /* konotor_uploading.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */; };
-		35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */; };
-		35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */; };
-		35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */; };
+		35F398041C07468700FC9B2C /* Upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398011C07468700FC9B2C /* Upload@2x.png */; };
+		35F398051C07468700FC9B2C /* Upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F398021C07468700FC9B2C /* Upload@3x.png */; };
+		910D37C51C1722350067B0BE /* Bubble_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37BF1C1722350067B0BE /* Bubble_filled.png */; };
+		910D37C61C1722350067B0BE /* Bubble_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37C01C1722350067B0BE /* Bubble_filled@2x.png */; };
+		910D37C71C1722350067B0BE /* Bubble_filled@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37C11C1722350067B0BE /* Bubble_filled@3x.png */; };
+		910D37C81C1722350067B0BE /* Bubble_outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37C21C1722350067B0BE /* Bubble_outline.png */; };
+		910D37C91C1722350067B0BE /* Bubble_outline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37C31C1722350067B0BE /* Bubble_outline@2x.png */; };
+		910D37CA1C1722350067B0BE /* Bubble_outline@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37C41C1722350067B0BE /* Bubble_outline@3x.png */; };
+		910D37D51C1724EC0067B0BE /* konotor_uploading.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37D21C1724EC0067B0BE /* konotor_uploading.png */; };
+		910D37D61C1724EC0067B0BE /* konotor_uploading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37D31C1724EC0067B0BE /* konotor_uploading@2x.png */; };
+		910D37D71C1724EC0067B0BE /* konotor_uploading@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 910D37D41C1724EC0067B0BE /* konotor_uploading@3x.png */; };
 		CE10648C1BC54C9300922494 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = CE10648B1BC54C9300922494 /* loading.png */; };
 		CE1064A21BC6780700922494 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1064A11BC6780700922494 /* message.png */; };
-		CE80CA511BE36A9900473E49 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE80CA501BE36A9900473E49 /* KonotorModels.bundle */; };
+		CE16D3291BFDAF750045F235 /* arrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE16D3281BFDAF750045F235 /* arrow.jpg */; };
+		CE2B271D1C11D4C100D9A253 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = CE2B27171C11D4C100D9A253 /* cancel.png */; };
+		CE2B271E1C11D4C100D9A253 /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE2B27181C11D4C100D9A253 /* cancel@2x.png */; };
+		CE2B271F1C11D4C100D9A253 /* Mic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE2B27191C11D4C100D9A253 /* Mic.png */; };
+		CE2B27201C11D4C100D9A253 /* Mic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE2B271A1C11D4C100D9A253 /* Mic@2x.png */; };
+		CE2B27211C11D4C100D9A253 /* Stop.png in Resources */ = {isa = PBXBuildFile; fileRef = CE2B271B1C11D4C100D9A253 /* Stop.png */; };
+		CE2B27221C11D4C100D9A253 /* Stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE2B271C1C11D4C100D9A253 /* Stop@2x.png */; };
+		CE80CA511BE36A9900473E49 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
@@ -102,27 +115,6 @@
 			remoteGlobalIDString = 356F19E61B9DBF14002F1E2A;
 			remoteInfo = Hotline;
 		};
-		356F1A371B9DC541002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD3C7CC819069882009919CD;
-			remoteInfo = FreshdeskSDK;
-		};
-		356F1A391B9DC541002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D0B09C2719B20181001AA0A9;
-			remoteInfo = MHModel;
-		};
-		356F1A3B1B9DC541002F1E2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD3C7CD819069882009919CD;
-			remoteInfo = FreshdeskSDKTests;
-		};
 		358DD4E71BB012CA00B36E4E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
@@ -140,6 +132,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3518BF8B1BFB6FC1003B558D /* Send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Send.png; sourceTree = "<group>"; };
+		3518BF8C1BFB6FC1003B558D /* Send@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Send@2x.png"; sourceTree = "<group>"; };
+		3518BF8D1BFB6FC1003B558D /* Send@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Send@3x.png"; sourceTree = "<group>"; };
 		3551A4EB1C03525300348AE5 /* BackArrow_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow_2x.png; sourceTree = "<group>"; };
 		3551A4EC1C03525300348AE5 /* BackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackArrow.png; sourceTree = "<group>"; };
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
@@ -164,26 +159,21 @@
 		356F1A1A1B9DC4AF002F1E2A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreshdeskSDK.xcodeproj; path = SDK/FreshdeskSDK/FreshdeskSDK.xcodeproj; sourceTree = "<group>"; };
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		35D315071C032E2800783CC3 /* Mic-Idle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle.png"; sourceTree = "<group>"; };
+		35D315081C032E2800783CC3 /* Mic-Idle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle@2x.png"; sourceTree = "<group>"; };
+		35D315091C032E2800783CC3 /* Mic-Recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Recording.png"; sourceTree = "<group>"; };
+		35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Recording@2x.png"; sourceTree = "<group>"; };
 		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
+		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		35ED5EDF1BB3EA4600E0052D /* konotor_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_back.png; sourceTree = "<group>"; };
 		35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_back@2x.png"; sourceTree = "<group>"; };
-		35ED5EE11BB3EA4600E0052D /* konotor_cam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cam.png; sourceTree = "<group>"; };
-		35ED5EE21BB3EA4600E0052D /* konotor_cam@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cam@2x.png"; sourceTree = "<group>"; };
-		35ED5EE31BB3EA4600E0052D /* konotor_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cancel.png; sourceTree = "<group>"; };
-		35ED5EE41BB3EA4600E0052D /* konotor_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cancel@2x.png"; sourceTree = "<group>"; };
-		35ED5EE51BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_chatbubble_ios7_other.png; sourceTree = "<group>"; };
-		35ED5EE61BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_chatbubble_ios7_other@2x.png"; sourceTree = "<group>"; };
-		35ED5EE71BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_chatbubble_ios7_you.png; sourceTree = "<group>"; };
-		35ED5EE81BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_chatbubble_ios7_you@2x.png"; sourceTree = "<group>"; };
-		35ED5EE91BB3EA4600E0052D /* konotor_cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cross.png; sourceTree = "<group>"; };
-		35ED5EEA1BB3EA4600E0052D /* konotor_cross@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cross@2x.png"; sourceTree = "<group>"; };
 		35ED5EEB1BB3EA4600E0052D /* konotor_mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_mic.png; sourceTree = "<group>"; };
 		35ED5EEC1BB3EA4600E0052D /* konotor_mic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_mic@2x.png"; sourceTree = "<group>"; };
 		35ED5EED1BB3EA4600E0052D /* konotor_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_placeholder.png; sourceTree = "<group>"; };
@@ -204,13 +194,26 @@
 		35ED5EFC1BB3EA4600E0052D /* konotor_stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_stop@2x.png"; sourceTree = "<group>"; };
 		35ED5EFD1BB3EA4600E0052D /* konotor_supportprofile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_supportprofile.png; sourceTree = "<group>"; };
 		35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_supportprofile@2x.png"; sourceTree = "<group>"; };
-		35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_uploading.png; sourceTree = "<group>"; };
-		35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
-		35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorConversationViewController.xib; sourceTree = "<group>"; };
-		35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
+		35F398011C07468700FC9B2C /* Upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@2x.png"; sourceTree = "<group>"; };
+		35F398021C07468700FC9B2C /* Upload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upload@3x.png"; sourceTree = "<group>"; };
+		910D37BF1C1722350067B0BE /* Bubble_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubble_filled.png; sourceTree = "<group>"; };
+		910D37C01C1722350067B0BE /* Bubble_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bubble_filled@2x.png"; sourceTree = "<group>"; };
+		910D37C11C1722350067B0BE /* Bubble_filled@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bubble_filled@3x.png"; sourceTree = "<group>"; };
+		910D37C21C1722350067B0BE /* Bubble_outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubble_outline.png; sourceTree = "<group>"; };
+		910D37C31C1722350067B0BE /* Bubble_outline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bubble_outline@2x.png"; sourceTree = "<group>"; };
+		910D37C41C1722350067B0BE /* Bubble_outline@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bubble_outline@3x.png"; sourceTree = "<group>"; };
+		910D37D21C1724EC0067B0BE /* konotor_uploading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_uploading.png; sourceTree = "<group>"; };
+		910D37D31C1724EC0067B0BE /* konotor_uploading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@2x.png"; sourceTree = "<group>"; };
+		910D37D41C1724EC0067B0BE /* konotor_uploading@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_uploading@3x.png"; sourceTree = "<group>"; };
 		CE10648B1BC54C9300922494 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		CE1064A11BC6780700922494 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
-		CE80CA501BE36A9900473E49 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		CE16D3281BFDAF750045F235 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arrow.jpg; sourceTree = "<group>"; };
+		CE2B27171C11D4C100D9A253 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
+		CE2B27181C11D4C100D9A253 /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@2x.png"; sourceTree = "<group>"; };
+		CE2B27191C11D4C100D9A253 /* Mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mic.png; sourceTree = "<group>"; };
+		CE2B271A1C11D4C100D9A253 /* Mic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic@2x.png"; sourceTree = "<group>"; };
+		CE2B271B1C11D4C100D9A253 /* Stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Stop.png; sourceTree = "<group>"; };
+		CE2B271C1C11D4C100D9A253 /* Stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stop@2x.png"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -259,7 +262,6 @@
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
-				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
@@ -287,6 +289,7 @@
 				356F19F41B9DBF14002F1E2A /* Main.storyboard */,
 				356F19F71B9DBF14002F1E2A /* Images.xcassets */,
 				356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */,
+				35D707311BE2C1AE0035FD74 /* Utilities */,
 				356F1BA11B9DD1EC002F1E2A /* Resources */,
 				356F1A201B9DC4D8002F1E2A /* Framework */,
 				356F19EA1B9DBF14002F1E2A /* Supporting Files */,
@@ -324,9 +327,9 @@
 			isa = PBXGroup;
 			children = (
 				35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */,
-				356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */,
 				356F1C131B9DD23B002F1E2A /* CoreMedia.framework */,
 				356F1C111B9DD223002F1E2A /* AudioToolbox.framework */,
+				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
 				356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */,
 				356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */,
 				356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */,
@@ -341,16 +344,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		356F1A311B9DC541002F1E2A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				356F1A381B9DC541002F1E2A /* libFreshdeskSDK.a */,
-				356F1A3A1B9DC541002F1E2A /* MHModel.bundle */,
-				356F1A3C1B9DC541002F1E2A /* FreshdeskSDKTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		356F1BA11B9DD1EC002F1E2A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,14 +352,21 @@
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
 		};
+		35D707311BE2C1AE0035FD74 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
 			children = (
-				CE80CA501BE36A9900473E49 /* KonotorModels.bundle */,
+				35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */,
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 				35ED5EDE1BB3EA4600E0052D /* Konotor-Images */,
-				35ED5F021BB3EA4600E0052D /* XIB */,
 			);
 			path = HotlineResources;
 			sourceTree = "<group>";
@@ -382,22 +382,34 @@
 		35ED5EDE1BB3EA4600E0052D /* Konotor-Images */ = {
 			isa = PBXGroup;
 			children = (
+				910D37BF1C1722350067B0BE /* Bubble_filled.png */,
+				910D37C01C1722350067B0BE /* Bubble_filled@2x.png */,
+				910D37C11C1722350067B0BE /* Bubble_filled@3x.png */,
+				910D37C21C1722350067B0BE /* Bubble_outline.png */,
+				910D37C31C1722350067B0BE /* Bubble_outline@2x.png */,
+				910D37C41C1722350067B0BE /* Bubble_outline@3x.png */,
+				35F398011C07468700FC9B2C /* Upload@2x.png */,
+				35F398021C07468700FC9B2C /* Upload@3x.png */,
+				35D315071C032E2800783CC3 /* Mic-Idle.png */,
+				35D315081C032E2800783CC3 /* Mic-Idle@2x.png */,
+				35D315091C032E2800783CC3 /* Mic-Recording.png */,
+				35D3150A1C032E2800783CC3 /* Mic-Recording@2x.png */,
+				CE2B27171C11D4C100D9A253 /* cancel.png */,
+				CE2B27181C11D4C100D9A253 /* cancel@2x.png */,
+				CE2B27191C11D4C100D9A253 /* Mic.png */,
+				CE2B271A1C11D4C100D9A253 /* Mic@2x.png */,
+				CE2B271B1C11D4C100D9A253 /* Stop.png */,
+				CE2B271C1C11D4C100D9A253 /* Stop@2x.png */,
+				3518BF8B1BFB6FC1003B558D /* Send.png */,
+				3518BF8C1BFB6FC1003B558D /* Send@2x.png */,
+				3518BF8D1BFB6FC1003B558D /* Send@3x.png */,
 				3551A4EB1C03525300348AE5 /* BackArrow_2x.png */,
 				3551A4EC1C03525300348AE5 /* BackArrow.png */,
 				CE10648B1BC54C9300922494 /* loading.png */,
+				CE16D3281BFDAF750045F235 /* arrow.jpg */,
 				CE1064A11BC6780700922494 /* message.png */,
 				35ED5EDF1BB3EA4600E0052D /* konotor_back.png */,
 				35ED5EE01BB3EA4600E0052D /* konotor_back@2x.png */,
-				35ED5EE11BB3EA4600E0052D /* konotor_cam.png */,
-				35ED5EE21BB3EA4600E0052D /* konotor_cam@2x.png */,
-				35ED5EE31BB3EA4600E0052D /* konotor_cancel.png */,
-				35ED5EE41BB3EA4600E0052D /* konotor_cancel@2x.png */,
-				35ED5EE51BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png */,
-				35ED5EE61BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png */,
-				35ED5EE71BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png */,
-				35ED5EE81BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png */,
-				35ED5EE91BB3EA4600E0052D /* konotor_cross.png */,
-				35ED5EEA1BB3EA4600E0052D /* konotor_cross@2x.png */,
 				35ED5EEB1BB3EA4600E0052D /* konotor_mic.png */,
 				35ED5EEC1BB3EA4600E0052D /* konotor_mic@2x.png */,
 				35ED5EED1BB3EA4600E0052D /* konotor_placeholder.png */,
@@ -418,19 +430,11 @@
 				35ED5EFC1BB3EA4600E0052D /* konotor_stop@2x.png */,
 				35ED5EFD1BB3EA4600E0052D /* konotor_supportprofile.png */,
 				35ED5EFE1BB3EA4600E0052D /* konotor_supportprofile@2x.png */,
-				35ED5EFF1BB3EA4600E0052D /* konotor_uploading.png */,
-				35ED5F001BB3EA4600E0052D /* konotor_uploading@2x.png */,
+				910D37D21C1724EC0067B0BE /* konotor_uploading.png */,
+				910D37D31C1724EC0067B0BE /* konotor_uploading@2x.png */,
+				910D37D41C1724EC0067B0BE /* konotor_uploading@3x.png */,
 			);
 			path = "Konotor-Images";
-			sourceTree = "<group>";
-		};
-		35ED5F021BB3EA4600E0052D /* XIB */ = {
-			isa = PBXGroup;
-			children = (
-				35ED5F031BB3EA4600E0052D /* KonotorConversationViewController.xib */,
-				35ED5F041BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib */,
-			);
-			path = XIB;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -443,6 +447,7 @@
 				356F19E31B9DBF14002F1E2A /* Sources */,
 				356F19E41B9DBF14002F1E2A /* Frameworks */,
 				356F19E51B9DBF14002F1E2A /* Resources */,
+				3500C2EC1BE37C4F00FF73BE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -504,10 +509,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 356F1A311B9DC541002F1E2A /* Products */;
-					ProjectRef = 356F1A301B9DC541002F1E2A /* FreshdeskSDK.xcodeproj */;
-				},
-				{
 					ProductGroup = 35591B991B9EDE9100BC0B60 /* Products */;
 					ProjectRef = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
 				},
@@ -535,27 +536,6 @@
 			remoteRef = 35591BA31B9EDE9100BC0B60 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		356F1A381B9DC541002F1E2A /* libFreshdeskSDK.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFreshdeskSDK.a;
-			remoteRef = 356F1A371B9DC541002F1E2A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		356F1A3A1B9DC541002F1E2A /* MHModel.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MHModel.bundle;
-			remoteRef = 356F1A391B9DC541002F1E2A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		356F1A3C1B9DC541002F1E2A /* FreshdeskSDKTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = FreshdeskSDKTests.xctest;
-			remoteRef = 356F1A3B1B9DC541002F1E2A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		358DD4E81BB012CA00B36E4E /* HotlineDB.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
@@ -577,50 +557,62 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE2B27201C11D4C100D9A253 /* Mic@2x.png in Resources */,
+				CE2B271E1C11D4C100D9A253 /* cancel@2x.png in Resources */,
 				CE1064A21BC6780700922494 /* message.png in Resources */,
 				35ED5F1E1BB3EA4600E0052D /* konotor_progress_blue@2x.png in Resources */,
 				35ED5F1C1BB3EA4600E0052D /* konotor_progress_black@2x.png in Resources */,
-				35ED5F091BB3EA4600E0052D /* konotor_cam.png in Resources */,
-				35ED5F2B1BB3EA4600E0052D /* KonotorFeedbackScreenViewController.xib in Resources */,
-				35ED5F121BB3EA4600E0052D /* konotor_cross@2x.png in Resources */,
+				3518BF901BFB6FC1003B558D /* Send@3x.png in Resources */,
 				3551A4EE1C03525300348AE5 /* BackArrow.png in Resources */,
-				35ED5F281BB3EA4600E0052D /* konotor_uploading@2x.png in Resources */,
+				910D37C71C1722350067B0BE /* Bubble_filled@3x.png in Resources */,
 				35ED5F151BB3EA4600E0052D /* konotor_placeholder.png in Resources */,
+				910D37C51C1722350067B0BE /* Bubble_filled.png in Resources */,
 				35ED5F1B1BB3EA4600E0052D /* konotor_progress_black.png in Resources */,
-				35ED5F2A1BB3EA4600E0052D /* KonotorConversationViewController.xib in Resources */,
 				35ED5F201BB3EA4600E0052D /* konotor_sent@2x.png in Resources */,
-				35ED5F0D1BB3EA4600E0052D /* konotor_chatbubble_ios7_other.png in Resources */,
-				35ED5F0B1BB3EA4600E0052D /* konotor_cancel.png in Resources */,
-				35ED5F0C1BB3EA4600E0052D /* konotor_cancel@2x.png in Resources */,
-				35ED5F0F1BB3EA4600E0052D /* konotor_chatbubble_ios7_you.png in Resources */,
-				CE80CA511BE36A9900473E49 /* KonotorModels.bundle in Resources */,
+				CE2B27211C11D4C100D9A253 /* Stop.png in Resources */,
+				910D37CA1C1722350067B0BE /* Bubble_outline@3x.png in Resources */,
+				CE16D3291BFDAF750045F235 /* arrow.jpg in Resources */,
+				CE2B271D1C11D4C100D9A253 /* cancel.png in Resources */,
+				35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */,
+				CE2B271F1C11D4C100D9A253 /* Mic.png in Resources */,
+				CE80CA511BE36A9900473E49 /* (null) in Resources */,
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
 				35ED5F081BB3EA4600E0052D /* konotor_back@2x.png in Resources */,
+				910D37D61C1724EC0067B0BE /* konotor_uploading@2x.png in Resources */,
 				35ED5F231BB3EA4600E0052D /* konotor_stop.png in Resources */,
 				3551A4ED1C03525300348AE5 /* BackArrow_2x.png in Resources */,
 				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
+				35D3150E1C032E2800783CC3 /* Mic-Recording@2x.png in Resources */,
 				35ED5F191BB3EA4600E0052D /* konotor_profile.png in Resources */,
-				35ED5F0E1BB3EA4600E0052D /* konotor_chatbubble_ios7_other@2x.png in Resources */,
-				35ED5F0A1BB3EA4600E0052D /* konotor_cam@2x.png in Resources */,
+				3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
+				35C8900D1C21CCF9006AA491 /* KonotorModels.bundle in Resources */,
 				35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */,
-				35ED5F111BB3EA4600E0052D /* konotor_cross.png in Resources */,
 				35ED5F211BB3EA4600E0052D /* konotor_share.png in Resources */,
 				35ED5F241BB3EA4600E0052D /* konotor_stop@2x.png in Resources */,
-				35ED5F101BB3EA4600E0052D /* konotor_chatbubble_ios7_you@2x.png in Resources */,
+				910D37C81C1722350067B0BE /* Bubble_outline.png in Resources */,
+				910D37D51C1724EC0067B0BE /* konotor_uploading.png in Resources */,
 				35ED5F171BB3EA4600E0052D /* konotor_play.png in Resources */,
+				3518BF8E1BFB6FC1003B558D /* Send.png in Resources */,
 				35ED5F141BB3EA4600E0052D /* konotor_mic@2x.png in Resources */,
 				35ED5F161BB3EA4600E0052D /* konotor_placeholder@2x.png in Resources */,
+				910D37D71C1724EC0067B0BE /* konotor_uploading@3x.png in Resources */,
+				35D3150C1C032E2800783CC3 /* Mic-Idle@2x.png in Resources */,
 				356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */,
 				35ED5F071BB3EA4600E0052D /* konotor_back.png in Resources */,
-				35ED5F271BB3EA4600E0052D /* konotor_uploading.png in Resources */,
+				910D37C61C1722350067B0BE /* Bubble_filled@2x.png in Resources */,
+				910D37C91C1722350067B0BE /* Bubble_outline@2x.png in Resources */,
+				35D3150B1C032E2800783CC3 /* Mic-Idle.png in Resources */,
 				CE10648C1BC54C9300922494 /* loading.png in Resources */,
+				CE2B27221C11D4C100D9A253 /* Stop@2x.png in Resources */,
 				35ED5F261BB3EA4600E0052D /* konotor_supportprofile@2x.png in Resources */,
 				35ED5F181BB3EA4600E0052D /* konotor_play@2x.png in Resources */,
 				35ED5F1A1BB3EA4600E0052D /* konotor_profile@2x.png in Resources */,
+				35F398051C07468700FC9B2C /* Upload@3x.png in Resources */,
+				35F398041C07468700FC9B2C /* Upload@2x.png in Resources */,
 				35ED5F1F1BB3EA4600E0052D /* konotor_sent.png in Resources */,
 				35ED5F221BB3EA4600E0052D /* konotor_share@2x.png in Resources */,
 			);
@@ -635,6 +627,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3500C2EC1BE37C4F00FF73BE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "KEYWORDS=\"TODO:|FIXME:|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		356F19E31B9DBF14002F1E2A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -642,6 +650,7 @@
 			files = (
 				35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */,
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
+				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
 				356F19ED1B9DBF14002F1E2A /* main.m in Sources */,
 			);
@@ -785,6 +794,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
@@ -802,6 +812,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;

@@ -75,7 +75,6 @@
     return HLResourcesBundle;
 }
 
-
 +(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName{
     NSString *pathPrefix        = @"HLResources.bundle/Images/";
     NSString *imageNameWithPath = [NSString stringWithFormat:@"%@%@",pathPrefix,imageName];
@@ -83,7 +82,6 @@
 }
 
 -(UIImage *)getImageWithKey:(NSString *)key{
-    NSString *keypath = [NSString stringWithFormat:@"Images.%@",key];
     NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
     return image;
@@ -154,15 +152,13 @@
 #pragma mark - Dialogue box
 
 -(UIColor *)dialogueTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueLabelFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.LabelFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)dialogueTitleFont{
-    return [self getFontWithKey:@"Dialogues.DialogueLabel" andDefaultSize:14];
+    return [self getFontWithKey:@"Dialogues.Label" andDefaultSize:14];
 }
-
-//Yes Button
 
 -(UIColor *)dialogueYesButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonFontColor"];
@@ -196,7 +192,7 @@
 
 
 -(UIColor *)dialogueBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.DialogueBackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
@@ -235,7 +231,7 @@
 }
 
 -(UIFont *)tableViewCellTitleFont{
-    return [self getFontWithKey:@"TableView.Title" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"TableView.Title" andDefaultSize:14];
 }
 
 -(UIColor *)tableViewCellTitleFontColor{
@@ -244,7 +240,7 @@
 }
 
 -(UIFont *)tableViewCellDetailFont{
-    return [self getFontWithKey:@"TableView.Detail" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"TableView.Detail" andDefaultSize:14];
 }
 
 -(UIColor *)tableViewCellDetailFontColor{
@@ -289,20 +285,102 @@
     return [self getFontWithKey:@"OverallSettings.TalkToUsButton" andDefaultSize:FD_FONT_SIZE_LARGE];
 }
 
--(UIColor *)badgeButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.UnreadBadgeColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
-}
-
--(UIColor *)badgeButtonTitleColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.UnreadBadgeTitleColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
-}
-
 -(UIColor *)noItemsFoundMessageColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.NoItemsFoundMessageColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
+
+-(UIColor *)inputTextFontColor{
+    return [UIColor blackColor];
+}
+
+-(UIColor *)sendButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
+}
+
+/* Additions by Sri - to be checked */
+-(UIColor *)conversationViewTitleTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewTitleTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_TITLE_TEXT_COLOR];
+}
+-(UIColor *)conversationViewBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_BACKGROUND_COLOR];
+}
+-(UIColor *)actionButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
+}
+-(UIColor *)actionButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
+}
+-(UIColor *)businessMessageTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BusinessMessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BUSINESS_MESSAGE_TEXT_COLOR];
+}
+-(UIColor *)userMessageTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_USER_MESSAGE_TEXT_COLOR];
+}
+-(UIColor *)hyperlinkColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];
+    return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
+}
+-(BOOL)alwaysPollForMessages{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"];
+}
+-(BOOL)showsBusinessProfileImage{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"];
+}
+-(BOOL)showsUserProfileImage{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"];
+}
+-(BOOL)showsBusinessMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"];
+}
+-(BOOL)showsUserMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"];
+}
+-(NSString *)textInputHintText{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.TextInputHintText"];
+}
+-(NSString *)businessProfileImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
+}
+-(NSString *)userProfileImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
+}
+-(NSString *)businessMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserProfileImageName"];
+}
+-(NSString *)userMessageSenderName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserMessageSenderName"];
+}
+-(NSString *)businessChatBubbleImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessChatBubbleImageName"];
+}
+-(NSString *)userChatBubbleImageName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserChatBubbleImageName"];
+}
+-(NSString *)chatBubbleFontName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontName"];
+}
+-(NSString *)conversationUIFontName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
+}
+-(float)chatBubbleFontSize{
+   return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontSize"] floatValue];
+}
+-(int)pollingTimeChatInFocus{
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatInFocus"] intValue];
+}
+-(int)pollingTimeChatNotInFocus{
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatNotInFocus"] intValue];
+}
+
+
 
 #pragma mark - Grid View
 
@@ -341,38 +419,58 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
-#pragma mark - Conversation List View
+#pragma mark - Channel List View
 
 -(UIColor *)conversationListViewBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationListView.BackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
 }
 
 -(UIFont *)channelTitleFont{
-    return [self getFontWithKey:@"GridView.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)channelTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ChannelTitleFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelTitleFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)channelDescriptionFont{
-    return [self getFontWithKey:@"GridView.ChannelDescription" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.ChannelDescription" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)channelDescriptionFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ChannelDescriptionFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelDescriptionFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)lastUpdatedFont{
-    return [self getFontWithKey:@"GridView.LastUpdated" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.LastUpdated" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)lastUpdatedFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.LastUpdatedFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+}
+
+-(UIFont *)badgeButtonFont{
+    return [self getFontWithKey:@"ChannelListView.UnreadBadge" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)badgeButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
+}
+
+-(UIColor *)badgeButtonTitleColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeTitleColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+#pragma mark - Voice Recording Prompt
+
+-(UIFont *)voiceRecordingTimeLabelFont{
+    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:13];
 }
 
 
