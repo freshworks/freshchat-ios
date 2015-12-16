@@ -33,6 +33,7 @@
 +(void)InitUser;
 +(BOOL)isUserPresent;
 +(BOOL) isUserCreatedOnServer;
++(void)deleteUser;
 +(NSString *) GetUserAlias;
 +(BOOL) UserCreatedOnServer;
 +(KonotorUser *) GetCurrentlyLoggedInUser;
@@ -43,7 +44,5 @@
 +(void) setUserName: (NSString *) fullName;
 +(void) setUserEmail: (NSString *) email;
 +(void) setCustomUserProperty:(NSString *) value forKey: (NSString*) key;
-
-- (void)addHasConversationsObject:(KonotorConversation *)value;
 
 @end

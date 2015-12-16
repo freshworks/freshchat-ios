@@ -88,8 +88,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     {
         if(!([stringRoute isEqualToString:@"HeadphonesAndMicrophone"]||[stringRoute isEqualToString:@"HeadsetInOut"]||[stringRoute isEqualToString:@"HeadsetBT"]))
         {
-            //TODO
-            //[(AppDelegate*)[[UIApplication sharedApplication] delegate] turnSpeakerOn:((AppDelegate*)[[UIApplication sharedApplication] delegate]).speakerOn];
         }
     }
     

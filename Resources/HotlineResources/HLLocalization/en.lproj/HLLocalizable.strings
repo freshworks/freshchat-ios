@@ -33,3 +33,13 @@
 
 /* Search View Place Holder */
 "SEARCH_PLACEHOLDER"="Search for FAQs";
+
+/* Alerts */
+"CAMERA_UNAVAILABLE_TITLE"="Camera Unavailable";
+"CAMERA_UNAVAILABLE_DESCRIPTION"="Sorry! Your device doesn't have a camera, or the camera is not available for use.";
+"CAMERA_UNAVAILABLE_OK_BUTTON"="ok";
+
+"IMAGE_ATTACHMENT_OPTIONS"="options";
+"IMAGE_ATTACHMENT_CANCEL_BUTTON"="cancel";
+"IMAGE_ATTACHMENT_SELECT_EXISTING_IMAGE"="Select Existing Image";
+"IMAGE_ATTACHMENT_SELECT_NEW_IMAGE"="New Image via Camera";

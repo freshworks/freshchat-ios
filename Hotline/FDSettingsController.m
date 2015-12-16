@@ -20,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.items = @[@"List/Grid"];
+    self.items = @[@"List/Grid", @"Clear user data"];
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     self.navigationItem.leftBarButtonItem = closeButton;
     [self setSubviews];
@@ -70,6 +70,13 @@
 - (void) switchChanged:(id)sender {
     UISwitch* switchControl = sender;
     [Hotline sharedInstance].displaySolutionsAsGrid = switchControl.on;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *item = self.items[indexPath.row];
+    if ([item isEqualToString:@"Clear user data"]) {
+        [[Hotline sharedInstance]clearUserData];
+    }
 }
 
 @end

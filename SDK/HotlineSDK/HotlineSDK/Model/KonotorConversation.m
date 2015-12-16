@@ -208,7 +208,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
                     }
                 }else{
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                    [pUser addHasConversationsObject:newConversation];
                     NSArray *messages = conversationInfo[@"messages"];
                     for (int j=0; j<messages.count; j++) {
                         NSDictionary *messageInfo = messages[j];

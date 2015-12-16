@@ -9,6 +9,7 @@
 #import "KonotorImageInput.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FDAttachmentImageController.h"
+#import "HLMacros.h"
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate>
 
@@ -37,8 +38,8 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
-    // TODO : Read the text from Localizable Strings - Rex
-    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:@"Message Type" delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Select Existing Image",@"New Image via Camera",nil];
+    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:HLLocalizedString(@"IMAGE_ATTACHMENT_OPTIONS") delegate:nil cancelButtonTitle:HLLocalizedString(@"IMAGE_ATTACHMENT_CANCEL_BUTTON")
+                                              destructiveButtonTitle:nil otherButtonTitles:HLLocalizedString(@"IMAGE_ATTACHMENT_SELECT_EXISTING_IMAGE"),HLLocalizedString(@"New Image via Camera"),nil];
     inputOptions.delegate = self;
     self.sourceViewController=viewController;
     self.sourceView=viewController.view;
@@ -83,8 +84,8 @@
             [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
         });
     }else{
-        // TODO : Localization
-        UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:@"Camera Unavailable" message:@"Sorry! Your device doesn't have a camera, or the camera is not available for use." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE") message:HLLocalizedString(@"CAMERA_UNAVAILABLE_DESCRIPTION") delegate:nil
+                                                cancelButtonTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE_OK_BUTTON") otherButtonTitles:nil];
         [alertview show];
     }
 }
