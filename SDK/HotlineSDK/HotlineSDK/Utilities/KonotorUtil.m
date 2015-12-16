@@ -7,6 +7,7 @@
 //
 
 #import "KonotorUtil.h"
+#import "FDSecureStore.h"
 
 @implementation KonotorNetworkUtil
 
@@ -90,7 +91,9 @@ static NSInteger networkIndicator = 0;
 @implementation KonotorUtil
 
 +(NSString *) GetBaseURL{
-    return @"http://hline.pagekite.me/app/";
+    //TODO: Needs to be moved into HLServiceRequest
+    NSString *baseURL = [[FDSecureStore sharedInstance]objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    return [NSString stringWithFormat:@"%@%@%@",@"https://",baseURL,@"/app/"];
 }
 
 AFKonotorHTTPClient *pKonotorSingle = nil;
