@@ -43,12 +43,16 @@
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
     
+    //TODO: Use this prefetch when channel is created with background context
+    
     //Prefetch category icon
-    __block NSData *imageData = nil;
-    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
-    });
-    channel.icon = imageData;
+    
+    //    __block NSData *imageData = nil;
+    //    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
+    //    });
+    //    channel.icon = imageData;
+    
     channel.welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
     return channel;
 }

@@ -114,7 +114,19 @@
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
         }else{
-            cell.imgView.image = [FDChannelListViewCell generateImageForLabel:channel.name];
+            UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
+            if(channel.iconURL){
+                NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
+                NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
+                __weak FDChannelListViewCell *weakCell = cell;
+                [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    weakCell.imgView.image = image;
+                    channel.icon = UIImagePNGRepresentation(image);
+                    [[KonotorDataManager sharedInstance]save];
+                } failure:nil];
+            }else{
+                cell.imgView.image = placeholderImage;
+            }
         }
         
         [cell.badgeView updateBadgeCount:conversation.unreadMessagesCount.integerValue];

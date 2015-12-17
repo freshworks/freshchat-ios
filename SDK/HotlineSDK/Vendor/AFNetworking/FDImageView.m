@@ -1,30 +1,16 @@
-// UIImageView+AFNetworking.m
 //
-// Copyright (c) 2011 Gowalla (http://gowalla.com/)
+//  FDImageView.m
+//  HotlineSDK
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+//  Created by Aravinth Chandran on 17/12/15.
+//  Copyright © 2015 Freshdesk. All rights reserved.
 //
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
 
+#import "FDImageView.h"
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-#import "UIImageView+AFNetworking.h"
 
 @interface AFKonotorImageCache : NSCache
 - (UIImage *)cachedImageForRequest:(NSURLRequest *)request;
@@ -36,17 +22,18 @@
 
 static char kAFImageRequestOperationObjectKey;
 
-@interface UIImageView (_AFKonotorNetworking)
-@property (readwrite, nonatomic, strong, setter = af_setImageRequestOperation:) AFKonotorImageRequestOperation *af_imageRequestOperation;
-@end
 
-@implementation UIImageView (_AFKonotorNetworking)
-@dynamic af_imageRequestOperation;
+@interface FDImageView ()
+
+@property (readwrite, nonatomic, strong, setter = af_setImageRequestOperation:) AFKonotorImageRequestOperation *af_imageRequestOperation;
+
 @end
 
 #pragma mark -
 
-@implementation UIImageView (AFKonotorNetworking)
+@implementation FDImageView
+
+@dynamic af_imageRequestOperation;
 
 - (AFKonotorHTTPRequestOperation *)af_imageRequestOperation {
     return (AFKonotorHTTPRequestOperation *)objc_getAssociatedObject(self, &kAFImageRequestOperationObjectKey);
@@ -63,7 +50,7 @@ static char kAFImageRequestOperationObjectKey;
         _af_imageRequestOperationQueue = [[NSOperationQueue alloc] init];
         [_af_imageRequestOperationQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
     });
-
+    
     return _af_imageRequestOperationQueue;
 }
 
@@ -73,7 +60,7 @@ static char kAFImageRequestOperationObjectKey;
     dispatch_once(&oncePredicate, ^{
         _af_imageCache = [[AFKonotorImageCache alloc] init];
     });
-
+    
     return _af_imageCache;
 }
 
@@ -88,31 +75,31 @@ static char kAFImageRequestOperationObjectKey;
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
-
+    
     [self setImageWithURLRequest:request placeholderImage:placeholderImage success:nil failure:nil];
 }
 
 - (void)setImageWithURLRequest:(NSURLRequest *)urlRequest
               placeholderImage:(UIImage *)placeholderImage
                        success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))success
-                       failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure
-{
+                       failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure{
     [self cancelImageRequestOperation];
-
-    UIImage *cachedImage = [[[self class] af_sharedImageCache] cachedImageForRequest:urlRequest];
+    
+    
+    UIImage *cachedImage = nil;
     if (cachedImage) {
         if (success) {
             success(nil, nil, cachedImage);
         } else {
             self.image = cachedImage;
         }
-
+        
         self.af_imageRequestOperation = nil;
     } else {
         if (placeholderImage) {
             self.image = placeholderImage;
         }
-
+        
         AFKonotorImageRequestOperation *requestOperation = [[AFKonotorImageRequestOperation alloc] initWithRequest:urlRequest];
         [requestOperation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
             if ([urlRequest isEqual:[self.af_imageRequestOperation request]]) {
@@ -121,27 +108,27 @@ static char kAFImageRequestOperationObjectKey;
                 } else if (responseObject) {
                     self.image = responseObject;
                 }
-
+                
                 if (self.af_imageRequestOperation == operation) {
                     self.af_imageRequestOperation = nil;
                 }
             }
-
+            
             [[[self class] af_sharedImageCache] cacheImage:responseObject forRequest:urlRequest];
         } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
             if ([urlRequest isEqual:[self.af_imageRequestOperation request]]) {
                 if (failure) {
                     failure(operation.request, operation.response, error);
                 }
-
+                
                 if (self.af_imageRequestOperation == operation) {
                     self.af_imageRequestOperation = nil;
                 }
             }
         }];
-
+        
         self.af_imageRequestOperation = requestOperation;
-
+        
         [[[self class] af_sharedImageRequestOperationQueue] addOperation:self.af_imageRequestOperation];
     }
 }
@@ -169,8 +156,8 @@ static inline NSString * AFKonotorImageCacheKeyFromURLRequest(NSURLRequest *requ
         default:
             break;
     }
-
-	return [self objectForKey:AFKonotorImageCacheKeyFromURLRequest(request)];
+    
+    return [self objectForKey:AFKonotorImageCacheKeyFromURLRequest(request)];
 }
 
 - (void)cacheImage:(UIImage *)image

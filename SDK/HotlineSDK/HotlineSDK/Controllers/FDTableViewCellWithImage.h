@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "HLTheme.h"
+#import "FDImageView.h"
 
 @interface FDTableViewCellWithImage : UITableViewCell
 
-@property (strong, nonatomic) UIImageView *imgView;
+@property (strong, nonatomic) FDImageView *imgView;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *detailLabel;
 @property (strong, nonatomic) UIView *contentEncloser;
