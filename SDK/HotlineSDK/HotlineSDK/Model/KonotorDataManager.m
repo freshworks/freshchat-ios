@@ -198,7 +198,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
-    NSManagedObjectContext *context = self.backgroundContext;
+    NSManagedObjectContext *context = self.mainObjectContext;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.resultType = NSCountResultType;
     request.includesSubentities = NO;

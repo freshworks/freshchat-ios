@@ -597,13 +597,17 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self scrollTableViewToLastCell];
 }
 
--(void)dealloc{
-    [self localNotificationUnSubscription];
+#pragma mark - Message cell delegates
+
+-(void)messageCell:(FDMessageCell *)cell deepLinkArticleID:(NSNumber *)articleID{
+    //TODO: Display solution detail page for the article
 }
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
     FDLog(@"Picture message tapped");
 }
+
+#pragma mark - Audio toolbar delegates
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
     [Konotor cancelRecording];
@@ -620,6 +624,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.channel.conversations.allObjects.lastObject conversationAlias]) onChannel:self.channel];
     }
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+}
+
+-(void)dealloc{
+    [self localNotificationUnSubscription];
 }
 
 @end
