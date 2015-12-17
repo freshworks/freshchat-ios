@@ -259,10 +259,14 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        [self.messageHeightMap setValue:@(height) forKey:message.messageId];
+        [self.messageHeightMap setValue:@(height) forKey:message.messageId?message.messageId:[self randomString]];
     }
 
     return height;
+}
+
+-(NSString *)randomString{
+    return [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
