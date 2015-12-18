@@ -15,6 +15,8 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 static UITextView* tempView=nil;
 static UITextView* txtView=nil;
+static NSMutableDictionary* messageWidthMap=nil;
+
 
 @implementation FDMessageCell
 
@@ -157,6 +159,15 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
 + (float) getWidthForMessage:(KonotorMessageData*)message{
     
+    if(messageWidthMap==nil)
+    {
+        messageWidthMap=[[NSMutableDictionary alloc] init];
+    }
+    
+    if([messageWidthMap objectForKey:message.messageId]){
+        return [[messageWidthMap objectForKey:message.messageId] floatValue];
+    }
+    
     if(tempView==nil){
         tempView=[[UITextView alloc] init];
         txtView=[[UITextView alloc] init];
@@ -243,6 +254,9 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             messageContentViewWidth=MIN(picSize.width+16,KONOTOR_TEXTMESSAGE_MAXWIDTH);
 
     }
+    
+    if(message.messageId)
+        [messageWidthMap setObject:@(messageContentViewWidth) forKey:message.messageId];
     
     return messageContentViewWidth;
 }
