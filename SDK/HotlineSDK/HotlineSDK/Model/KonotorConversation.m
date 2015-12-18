@@ -198,7 +198,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                     NSArray *messages = conversationInfo[@"messages"];
                     for (int j=0; j<messages.count; j++) {
                         NSDictionary *messageInfo = messages[j];
-                        KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"messageId"]];
+                        KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
                         if (!message) {
                             KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                             newMessage.uploadStatus = @2;

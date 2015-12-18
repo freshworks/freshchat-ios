@@ -104,7 +104,7 @@
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     
     
-    [dict setObject:shareEvent.messageID forKey:@"messageId"];
+    [dict setObject:shareEvent.messageID forKey:@"alias"];
     [dict setObject:shareEvent.shareType forKey:@"type"];
     [dict setObject: [KonotorUser GetUserAlias] forKey:@"userAlias"];
     
@@ -333,7 +333,6 @@
         NSDictionary* messageInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
 
         if (!conversation) {
-            KonotorUser* user = [KonotorUser GetCurrentlyLoggedInUser];
             NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
             KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
             pMessage.belongsToConversation = newConversation;
@@ -343,7 +342,7 @@
 
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
-        pMessage.messageAlias = [messageInfo[@"messageId"]stringValue];
+        pMessage.messageAlias = messageInfo[@"alias"];
         [[KonotorDataManager sharedInstance]save];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];

@@ -407,7 +407,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 +(KonotorMessage *)createNewMessage:(NSDictionary *)message{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    newMessage.messageAlias = [[message valueForKey:@"messageId"]stringValue];
+    newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
     newMessage.messageUserId = [message valueForKey:@"messageUserAlias"];
     newMessage.bytes = [message valueForKey:@"bytes"];
