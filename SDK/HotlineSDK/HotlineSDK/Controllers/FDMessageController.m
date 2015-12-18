@@ -35,6 +35,7 @@
 @property (nonatomic, strong)KonotorImageInput *imageInput;
 @property (strong, nonatomic) NSTimer *pollingTimer;
 @property (nonatomic, strong) NSString* currentRecordingMessageId;
+@property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
 
 @end
 
@@ -54,9 +55,11 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
+        self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.channel = channel;
         self.conversation = channel.conversations.allObjects.lastObject;
         self.isModalPresentationPreferred = isModal;
+        //TODO: Move to theme file ?
         self.sentImage=[UIImage imageNamed:@"konotor_sent.png"];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
@@ -78,6 +81,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [self startPoller];
 }
 
@@ -125,7 +132,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }else{
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-
 }
 
 -(void)FAQButtonAction:(id)sender{
@@ -247,8 +253,20 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
-    float height = [FDMessageCell getHeightForMessage:message parentView:self.view];
+    float height;
+    if([self.messageHeightMap objectForKey:message.messageId]){
+        height = [[self.messageHeightMap objectForKey:message.messageId] floatValue];
+    }
+    else {
+        height = [FDMessageCell getHeightForMessage:message parentView:self.view];
+        [self.messageHeightMap setValue:@(height) forKey:message.messageId?message.messageId:[self randomString]];
+    }
+
     return height;
+}
+
+-(NSString *)randomString{
+    return [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
@@ -332,7 +350,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                       queue:nil usingBlock:^(NSNotification *note) {
          [KonotorMessage uploadAllUnuploadedMessages];
     }];
-
 }
 
 -(void)localNotificationUnSubscription{
@@ -543,6 +560,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 - (void) refreshView{
     [self refreshView:nil];
+
 }
 
 - (void) refreshView:(id)obj{
@@ -575,19 +593,22 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (conversation) {
         [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:conversation.conversationAlias]mutableCopy]];;
     }
-    
     return [messages sortedArrayUsingDescriptors:@[desc]];
 }
 
 #pragma Scrollview delegates
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
-    CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
-    NSInteger keyboardOffsetFromBottom = self.view.frame.size.height - absoluteFingerLocation.y;
-    
-    if (self.isKeyboardOpen && scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged && absoluteFingerLocation.y >= (self.view.frame.size.height - self.keyboardHeight)) {
-        self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
+    if (self.isKeyboardOpen){
+        CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
+        CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
+        float viewFrameHeight = self.view.frame.size.height;
+        NSInteger keyboardOffsetFromBottom = viewFrameHeight - absoluteFingerLocation.y;
+        
+        if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged
+            && absoluteFingerLocation.y >= (viewFrameHeight - self.keyboardHeight)) {
+            self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
+        }
     }
 }
 
