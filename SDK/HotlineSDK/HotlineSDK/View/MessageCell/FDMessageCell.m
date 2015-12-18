@@ -13,6 +13,9 @@
 #define WIDTH_BUFFER_IF_NO_PROFILE_AVAILABLE 5*KONOTOR_HORIZONTAL_PADDING;
 static KonotorUIParameters* konotorUIParameters=nil;
 
+static UITextView* tempView=nil;
+static UITextView* txtView=nil;
+
 @implementation FDMessageCell
 
 static BOOL KONOTOR_SHOWPROFILEIMAGE=YES;
@@ -48,6 +51,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 - (void) initCell{
     
     /* customization options to be moved out*/
+    
+    if(tempView==nil){
+        tempView=[[UITextView alloc] init];
+        txtView=[[UITextView alloc] init];
+    }
+    
     sentImage=[UIImage imageNamed:@"konotor_sent"];
     sendingImage=[UIImage imageNamed:@"konotor_uploading"];
 
@@ -148,6 +157,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
 + (float) getWidthForMessage:(KonotorMessageData*)message{
     
+    if(tempView==nil){
+        tempView=[[UITextView alloc] init];
+        txtView=[[UITextView alloc] init];
+    }
+
+    
     NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
     
     float messageContentViewWidth = KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
@@ -168,7 +183,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         
         //if message is single line, calculate larger width of the message text and date string
         if (numLines >= 1){
-            UITextView* tempView=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
             [tempView setText:messageText];
             [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
             CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
@@ -176,10 +191,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
             NSString *strDate = [FDUtilities stringRepresentationForDate:date];
             
-            UITextView* tempView2=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
-            [tempView2 setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
-            [tempView2 setText:strDate];
-            CGSize txtTimeSize = [tempView2 sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
+            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+            [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
+            [tempView setText:strDate];
+            CGSize txtTimeSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
             CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
             CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
             
@@ -201,7 +216,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         
         //if message is single line, calculate larger width of the message text and date string
         if (numLines >= 1){
-            UITextView* tempView=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
             [tempView setText:messageText];
             [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
             CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
@@ -209,10 +224,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
             NSString *strDate = [FDUtilities stringRepresentationForDate:date];
             
-            UITextView* tempView2=[[UITextView alloc] initWithFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
-            [tempView2 setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
-            [tempView2 setText:strDate];
-            CGSize txtTimeSize = [tempView2 sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
+            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+            [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
+            [tempView setText:strDate];
+            CGSize txtTimeSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
             CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
             CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
             
@@ -546,7 +561,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 }
 
 +(CGSize)getSizeOfTextViewWidth:(CGFloat)width text:(NSString *)text withFont:(UIFont *)font{
-    UITextView* txtView=[[UITextView alloc] init];
+    if(tempView==nil){
+        tempView=[[UITextView alloc] init];
+        txtView=[[UITextView alloc] init];
+    }
+
     [txtView setFont:font];
     [txtView setText:text];
     CGSize size=[txtView sizeThatFits:CGSizeMake(width, 1000)];
@@ -554,14 +573,22 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 }
 
 +(CGFloat)getTextViewLineHeight:(CGFloat)width text:(NSString *)text withFont:(UIFont *)font{
-    UITextView* txtView=[[UITextView alloc] init];
+    if(tempView==nil){
+        tempView=[[UITextView alloc] init];
+        txtView=[[UITextView alloc] init];
+    }
+
     [txtView setFont:font];
     [txtView setText:text];
     return txtView.font.lineHeight;
 }
 
 +(CGFloat)getTextViewHeightForMaxWidth:(CGFloat)width text:(NSString *)text withFont:(UIFont *)font{
-    UITextView* txtView=[[UITextView alloc] init];
+    if(tempView==nil){
+        tempView=[[UITextView alloc] init];
+        txtView=[[UITextView alloc] init];
+    }
+
     [txtView setFont:font];
     if([txtView respondsToSelector:@selector(setTextContainerInset:)])
         [txtView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
