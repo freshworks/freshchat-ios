@@ -57,7 +57,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.channel = channel;
-        self.conversation = channel.conversations.allObjects.lastObject;
+        self.conversation = channel.conversations.allObjects.firstObject;
         self.isModalPresentationPreferred = isModal;
         //TODO: Move to theme file ?
         self.sentImage=[UIImage imageNamed:@"konotor_sent.png"];
@@ -294,7 +294,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if([toSend isEqualToString:@""]){
         [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
     }else{
-        [Konotor uploadTextFeedback:toSend onConversation:self.channel.conversations.allObjects.lastObject onChannel:self.channel];
+        [Konotor uploadTextFeedback:toSend onConversation:self.channel.conversations.allObjects.firstObject onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
@@ -484,10 +484,12 @@ static CGFloat TOOLBAR_HEIGHT = 40;
             UIImageView* uploadStatus=(UIImageView*)cell.uploadStatusImageView;
             [uploadStatus setImage:self.sentImage];
             for(int i=messageCount-1;i>=0;i--){
-                KonotorMessageData *message = self.messages[i];
-                if([message.messageId isEqualToString:messageID]){
-                    message.uploadStatus = @(MessageUploaded);
-                    break;
+                if (i<self.messages.count) {
+                    KonotorMessageData *message = self.messages[i];
+                    if([message.messageId isEqualToString:messageID]){
+                        message.uploadStatus = @(MessageUploaded);
+                        break;
+                    }
                 }
             }
         }
@@ -582,17 +584,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSMutableArray *messages = [NSMutableArray new];
-    KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
-    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-
-    if(welcomeMsg){
-        [messages insertObject:welcomeMsg atIndex:0];
-    }
-    
-    if (conversation) {
-        [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:conversation.conversationAlias]mutableCopy]];;
-    }
+    NSArray *messages = [KonotorMessage getAllMesssageForChannel:self.channel];
     return [messages sortedArrayUsingDescriptors:@[desc]];
 }
 
@@ -640,9 +632,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
-    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.channel.conversations.allObjects.lastObject];
+    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.channel.conversations.allObjects.firstObject];
     if(self.currentRecordingMessageId!=nil){
-        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.channel.conversations.allObjects.lastObject conversationAlias]) onChannel:self.channel];
+        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.channel.conversations.allObjects.firstObject conversationAlias]) onChannel:self.channel];
     }
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
 }

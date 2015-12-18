@@ -98,18 +98,12 @@
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
         KonotorConversation *conversation = channel.conversations.allObjects.firstObject;
-        KonotorMessageData *lastMessage = [self getLastMessageInConversation:conversation];
+        KonotorMessageData *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
-        
-        if (lastMessage) {
-            cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
-            NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
-            
-        }else{
-            cell.detailLabel.text = channel.welcomeMessage.text;
-        }
+        NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
+        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
         
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
@@ -169,9 +163,9 @@
     return description;
 }
 
--(KonotorMessageData *)getLastMessageInConversation:(KonotorConversation *)conversation{
+-(KonotorMessageData *)getLastMessageInChannel:(HLChannel *)channel{
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSArray *messages = [Konotor getAllMessagesForConversation:conversation.conversationAlias];
+    NSArray *messages = channel.messages.allObjects;
     return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
 }
 

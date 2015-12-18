@@ -292,11 +292,19 @@
     NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock: ^(id <AFKonotorMultipartFormData>formData) {
         
         [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
-        [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding]
-                                    name:@"channelId"];
         
-        if (conversation) {
+        if (channel.channelID) {
+            [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding]
+                                        name:@"channelId"];
+        }else{
+            FDLog(@"Message sending without channel ID");
+        }
+        
+        
+        if (conversation.conversationAlias) {
             [formData appendPartWithFormData:[conversation.conversationAlias dataUsingEncoding:NSUTF8StringEncoding] name:@"conversationId"];
+        }else{
+            FDLog(@"Message sending without conversation ID");
         }
         
         //if audio message add the binary audio also.
@@ -343,6 +351,7 @@
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         pMessage.messageAlias = messageInfo[@"alias"];
+        [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
@@ -351,6 +360,7 @@
     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+        [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
         [KonotorUtil EndBackgroundExecutionForTask:bgtask];

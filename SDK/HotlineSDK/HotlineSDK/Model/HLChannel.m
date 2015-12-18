@@ -1,14 +1,13 @@
 //
 //  HLChannel.m
-//  Hotline
+//  HotlineSDK
 //
-//  Created by user on 03/11/15.
+//  Created by Aravinth Chandran on 19/12/15.
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
 #import "HLChannel.h"
 #import "KonotorConversation.h"
-#import "KonotorMessage.h"
 #import "KonotorMessage.h"
 #import "HLMacros.h"
 
@@ -16,14 +15,14 @@
 
 @dynamic channelID;
 @dynamic created;
-@dynamic isHidden;
 @dynamic icon;
 @dynamic iconURL;
+@dynamic isHidden;
 @dynamic lastUpdated;
 @dynamic name;
 @dynamic position;
 @dynamic conversations;
-@dynamic welcomeMessage;
+@dynamic messages;
 
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     HLChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:context];
@@ -53,7 +52,9 @@
     //    });
     //    channel.icon = imageData;
     
-    channel.welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+    KonotorMessage *welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+    [channel addMessagesObject:welcomeMessage];
+    
     return channel;
 }
 

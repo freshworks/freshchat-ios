@@ -1,8 +1,8 @@
 //
 //  HLChannel.h
-//  Hotline
+//  HotlineSDK
 //
-//  Created by user on 03/11/15.
+//  Created by Aravinth Chandran on 19/12/15.
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
@@ -17,14 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSNumber *channelID;
 @property (nullable, nonatomic, retain) NSDate *created;
-@property (nullable, nonatomic, retain) NSNumber *isHidden;
 @property (nullable, nonatomic, retain) NSData *icon;
 @property (nullable, nonatomic, retain) NSString *iconURL;
+@property (nullable, nonatomic, retain) NSNumber *isHidden;
 @property (nullable, nonatomic, retain) NSDate *lastUpdated;
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSNumber *position;
 @property (nullable, nonatomic, retain) NSSet<KonotorConversation *> *conversations;
-@property (nullable, nonatomic, retain) KonotorMessage *welcomeMessage;
+@property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *messages;
 
 +(HLChannel *)getWithID:(NSNumber *)channelID inContext:(NSManagedObjectContext *)context;
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context;
@@ -38,6 +38,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeConversationsObject:(KonotorConversation *)value;
 - (void)addConversations:(NSSet<KonotorConversation *> *)values;
 - (void)removeConversations:(NSSet<KonotorConversation *> *)values;
+
+- (void)addMessagesObject:(KonotorMessage *)value;
+- (void)removeMessagesObject:(KonotorMessage *)value;
+- (void)addMessages:(NSSet<KonotorMessage *> *)values;
+- (void)removeMessages:(NSSet<KonotorMessage *> *)values;
 
 @end
 

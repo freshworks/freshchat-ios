@@ -31,7 +31,7 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
-		35C8900D1C21CCF9006AA491 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */; };
+		359156171C24B39C000AB9E0 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 359156161C24B39C000AB9E0 /* KonotorModels.bundle */; };
 		35D3150B1C032E2800783CC3 /* Mic-Idle.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315071C032E2800783CC3 /* Mic-Idle.png */; };
 		35D3150C1C032E2800783CC3 /* Mic-Idle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315081C032E2800783CC3 /* Mic-Idle@2x.png */; };
 		35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D315091C032E2800783CC3 /* Mic-Recording.png */; };
@@ -164,7 +164,7 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		359156161C24B39C000AB9E0 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35D315071C032E2800783CC3 /* Mic-Idle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle.png"; sourceTree = "<group>"; };
 		35D315081C032E2800783CC3 /* Mic-Idle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Idle@2x.png"; sourceTree = "<group>"; };
 		35D315091C032E2800783CC3 /* Mic-Recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mic-Recording.png"; sourceTree = "<group>"; };
@@ -367,7 +367,7 @@
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
 			children = (
-				35C8900C1C21CCF9006AA491 /* KonotorModels.bundle */,
+				359156161C24B39C000AB9E0 /* KonotorModels.bundle */,
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 				35ED5EDE1BB3EA4600E0052D /* Konotor-Images */,
@@ -583,6 +583,7 @@
 				CE2B271D1C11D4C100D9A253 /* cancel.png in Resources */,
 				914F46F51C244CDC005C15D8 /* konotor_stop@3x.png in Resources */,
 				35D3150D1C032E2800783CC3 /* Mic-Recording.png in Resources */,
+				359156171C24B39C000AB9E0 /* KonotorModels.bundle in Resources */,
 				CE2B271F1C11D4C100D9A253 /* Mic.png in Resources */,
 				CE80CA511BE36A9900473E49 /* (null) in Resources */,
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
@@ -599,7 +600,6 @@
 				3518BF8F1BFB6FC1003B558D /* Send@2x.png in Resources */,
 				35ED5F1D1BB3EA4600E0052D /* konotor_progress_blue.png in Resources */,
 				35ED5F131BB3EA4600E0052D /* konotor_mic.png in Resources */,
-				35C8900D1C21CCF9006AA491 /* KonotorModels.bundle in Resources */,
 				35ED5F251BB3EA4600E0052D /* konotor_supportprofile.png in Resources */,
 				35ED5F211BB3EA4600E0052D /* konotor_share.png in Resources */,
 				910D37C81C1722350067B0BE /* Bubble_outline.png in Resources */,

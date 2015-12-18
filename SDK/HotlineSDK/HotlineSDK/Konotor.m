@@ -140,6 +140,8 @@ static id <KonotorDelegate> _delegate;
 
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
+    [channel addMessagesObject:message];
+    [[KonotorDataManager sharedInstance]save];
     [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
@@ -150,6 +152,7 @@ static id <KonotorDelegate> _delegate;
 
 +(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
+    [channel addMessagesObject:message];
     [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }

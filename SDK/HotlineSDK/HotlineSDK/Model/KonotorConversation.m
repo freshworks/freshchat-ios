@@ -166,7 +166,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             
         }else{
             
-            KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
             id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
             NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
@@ -203,6 +202,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                             KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                             newMessage.uploadStatus = @2;
                             newMessage.belongsToConversation = conversation;
+                            [conversation.belongsToChannel addMessagesObject:newMessage];
                             [conversation incrementUnreadCount];
                         }
                     }
@@ -214,6 +214,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
                         KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                         newMessage.uploadStatus = @2;
                         newMessage.belongsToConversation = newConversation;
+                        [newConversation.belongsToChannel addMessagesObject:newMessage];
+                        [channel addMessagesObject:newMessage];
                         [newConversation incrementUnreadCount];
                     }
                 }

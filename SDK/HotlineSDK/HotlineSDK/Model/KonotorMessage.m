@@ -69,6 +69,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
+    //TODO: Test if all the messages are deleted when channel is deleted
     message.belongsToConversation = conversation;
     [datamanager save];
     return message;
@@ -279,14 +280,12 @@ NSMutableDictionary *gkMessageIdMessageMap;
         if([array count]==0){
             return;
         }else{
+            FDLog(@"There are %d unuploaded messages", (int)array.count);
+            FDLog(@"Message retry initiated");
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = array[i];
-                if(message){
-                    KonotorConversation *convo = message.belongsToConversation;
-                    if (convo) {
-                        [KonotorWebServices uploadMessage:message toConversation:convo onChannel:convo.belongsToChannel];
-                    }
-                }
+                KonotorConversation *convo = message.belongsToConversation;
+                [KonotorWebServices uploadMessage:message toConversation:convo onChannel:message.belongsToChannel];
             }
         }
     }];
@@ -522,17 +521,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
         return YES;
 }
 
-+(KonotorMessageData *)getWelcomeMessageForChannel:(HLChannel *)channel{
-    return [channel.welcomeMessage ReturnMessageDataFromManagedObject];
-}
-
 +(NSArray *)getAllMesssageForChannel:(HLChannel *)channel{
-    KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
-    NSManagedObjectContext *context = [datamanager mainObjectContext];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"belongsToChannel.channelID == %@",channel.channelID];
-    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     NSMutableArray *messages = [[NSMutableArray alloc]init];
+    NSArray *matches = channel.messages.allObjects;
     for (int i=0; i<matches.count; i++) {
         KonotorMessageData *message = [matches[i] ReturnMessageDataFromManagedObject];
         [messages addObject:message];
