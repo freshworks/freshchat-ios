@@ -15,10 +15,10 @@
 
 #define HOTLINE_REQUEST_PARAMS @"t=%@"
 
-#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/faq/category"
+#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/category"
 
-#define HOTLINE_API_ARTICLES_PATH @"/app/services/app/%@/faq/category/%@/article"
+#define HOTLINE_API_ARTICLES_PATH @"/app/services/app/%@/sdk/faq/category/%@/article"
 
-#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/faq/category/%@/article/%@"
+#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/category/%@/article/%@"
 
 #define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"
