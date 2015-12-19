@@ -40,7 +40,6 @@
 		358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C31BB00EB700B36E4E /* HLCategory.m */; };
 		358DD4DE1BB0127100B36E4E /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E6A1BA6D20600B933C5 /* KonotorModel.xcdatamodeld */; };
 		358DD4F51BB01A3400B36E4E /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E6A1BA6D20600B933C5 /* KonotorModel.xcdatamodeld */; };
-		359156111C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 3591560E1C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.m */; };
 		359156121C24B1B4000AB9E0 /* HLChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 359156101C24B1B4000AB9E0 /* HLChannel.m */; };
 		359E3E851BA6D20600B933C5 /* KonotorConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E631BA6D20600B933C5 /* KonotorConversation.m */; };
 		359E3E861BA6D20600B933C5 /* KonotorCustomProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E651BA6D20600B933C5 /* KonotorCustomProperties.m */; };
@@ -187,8 +186,6 @@
 		358DD4D71BB0126000B36E4E /* HotlineDB.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HotlineDB.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		358DD4EE1BB01A2100B36E4E /* KonotorModels.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KonotorModels.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		358DD4F11BB01A2100B36E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3591560D1C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HLChannel+CoreDataProperties.h"; sourceTree = "<group>"; };
-		3591560E1C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HLChannel+CoreDataProperties.m"; sourceTree = "<group>"; };
 		3591560F1C24B1B4000AB9E0 /* HLChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLChannel.h; sourceTree = "<group>"; };
 		359156101C24B1B4000AB9E0 /* HLChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLChannel.m; sourceTree = "<group>"; };
 		359E3E621BA6D20600B933C5 /* KonotorConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversation.h; sourceTree = "<group>"; };
@@ -558,8 +555,6 @@
 		359E3E5F1BA6D20600B933C5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3591560D1C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.h */,
-				3591560E1C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.m */,
 				3591560F1C24B1B4000AB9E0 /* HLChannel.h */,
 				359156101C24B1B4000AB9E0 /* HLChannel.m */,
 				358DD4C01BB00EB700B36E4E /* HLArticle.h */,
@@ -859,7 +854,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */,
-				359156111C24B1B4000AB9E0 /* HLChannel+CoreDataProperties.m in Sources */,
 				358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */,
 				35591B901B9EDD0700BC0B60 /* AFImageRequestOperation.m in Sources */,
 				359E3E881BA6D20600B933C5 /* KonotorMessageBinary.m in Sources */,

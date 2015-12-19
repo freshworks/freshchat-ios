@@ -23,6 +23,7 @@
 
 @implementation KonotorMessage
 
+@dynamic articleID;
 @dynamic actionLabel;
 @dynamic actionURL;
 @dynamic audioURL;
