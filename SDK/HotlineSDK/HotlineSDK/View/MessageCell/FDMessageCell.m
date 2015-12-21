@@ -181,7 +181,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
     //single line text messages and html messages occupy less width than others
     
-    if((([message messageType].integerValue==KonotorMessageTypeText)||([message messageType].integerValue==KonotorMessageTypeHTML))&&([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID])){
+    if((([message messageType].integerValue==KonotorMessageTypeText)||([message messageType].integerValue==KonotorMessageTypeHTML))&&(![FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID])){
         NSString* messageText=message.text;
         
         //convert HTML text to a plain string for width calculation
@@ -218,7 +218,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             }
         }
     }
-    else if((([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2))&&([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID]))
+    else if((([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2))&&(![FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID]))
     {
         NSString* messageText=message.text;
         
