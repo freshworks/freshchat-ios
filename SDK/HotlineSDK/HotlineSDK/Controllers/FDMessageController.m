@@ -626,14 +626,16 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if(button.articleID!=nil){
         @try{
             HLArticle *article = [HLArticle getWithID:button.articleID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-            HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
-            articleDetailController.articleID = article.articleID;
-            articleDetailController.articleTitle = article.title;
-            articleDetailController.articleDescription = article.articleDescription;
-            articleDetailController.categoryTitle=article.category.title;
-            articleDetailController.categoryID = article.categoryID;
-            HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
-            [self.navigationController pushViewController:container animated:YES];
+            if(article!=nil){
+                HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
+                articleDetailController.articleID = article.articleID;
+                articleDetailController.articleTitle = article.title;
+                articleDetailController.articleDescription = article.articleDescription;
+                articleDetailController.categoryTitle=article.category.title;
+                articleDetailController.categoryID = article.categoryID;
+                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+                [self.navigationController pushViewController:container animated:YES];
+            }
         }
         @catch(NSException* e){
             NSLog(@"%@",e);
