@@ -40,7 +40,8 @@
 @protocol FDMessageCellDelegate <NSObject>
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image;
--(void)messageCell:(FDMessageCell *)cell deepLinkArticleID:(NSNumber *)articleID;
+-(void)openActionUrl:(id)sender;
+
 
 @end
 
@@ -70,6 +71,9 @@
 @property (strong, nonatomic) UIImageView* uploadStatusImageView;
 @property (strong, nonatomic) FDPictureMessageView* messagePictureImageView;
 @property (strong, nonatomic) FDActionButton* messageActionButton;
+
++(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID;
+
 
 @property (strong, nonatomic) id<FDMessageCellDelegate> delegate;
 

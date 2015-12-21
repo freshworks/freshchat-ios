@@ -141,9 +141,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     /* setup action button view */
     messageActionButton=[FDActionButton buttonWithType:UIButtonTypeCustom];
-    TapOnPictureRecognizer *actionButtonTapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnActionButton:)];
-    actionButtonTapGesture.numberOfTapsRequired=1;
-    [messageActionButton addGestureRecognizer:actionButtonTapGesture];
+    [messageActionButton addTarget:self.delegate action:@selector(openActionUrl:) forControlEvents:UIControlEventTouchUpInside];
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
     [self.contentView addSubview:messageActionButton];
@@ -153,9 +151,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     [self.delegate messageCell:self pictureTapped:self.messagePictureImageView.image];
 }
 
--(void)tappedOnActionButton:(id)gesture{
-    [self.delegate messageCell:self deepLinkArticleID:self.messageData.articleID];
++(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID{
+    if(((actionURL!=nil)&&(![actionURL isEqualToString:@""]))||((articleID!=nil)&&(articleID.intValue!=0)))
+        return YES;
+    return NO;
 }
+
 
 + (float) getWidthForMessage:(KonotorMessageData*)message{
     
@@ -180,7 +181,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
     //single line text messages and html messages occupy less width than others
     
-    if((([message messageType].integerValue==KonotorMessageTypeText)||([message messageType].integerValue==KonotorMessageTypeHTML))&&((message.actionURL==nil)||(![message.actionURL isEqualToString:@""]))){
+    if((([message messageType].integerValue==KonotorMessageTypeText)||([message messageType].integerValue==KonotorMessageTypeHTML))&&([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID])){
         NSString* messageText=message.text;
         
         //convert HTML text to a plain string for width calculation
@@ -217,7 +218,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             }
         }
     }
-    else if((([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2))&&((message.actionURL==nil)||(![message.actionURL isEqualToString:@""])))
+    else if((([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2))&&([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID]))
     {
         NSString* messageText=message.text;
         
@@ -336,6 +337,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
     messageActionButton.actionUrlString=actionUrl;
+    messageActionButton.articleID=currentMessage.articleID;
     
     if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
         [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
@@ -355,7 +357,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
         float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
         
-        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
+        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
         [messagePictureImageView setHidden:YES];
         [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
@@ -368,7 +370,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING);
         float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING;
         
-        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
+        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
         [audioItem displayMessage:(FDMessage*)currentMessage];
         
@@ -409,7 +411,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
         float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING;
         
-        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
+        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
         
         [audioItem setHidden:YES];
@@ -495,7 +497,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     }
-    if((currentMessage.actionURL!=nil)&&(![currentMessage.actionURL isEqualToString:@""]))
+    if([FDMessageCell hasButtonForURL:currentMessage.actionURL articleID:currentMessage.articleID])
         cellHeight+= ACTION_URL_HEIGHT;
     return cellHeight;
 }
@@ -554,7 +556,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
 }
 
-- (void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)showSenderName sender:(BOOL)isSenderOther textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY{
+- (void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight articleID:(NSNumber*) articleID textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)showSenderName sender:(BOOL)isSenderOther textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY{
     
     float messageTextBoxX=messageTextFrame.origin.x;
     float messageTextBoxY=messageTextFrame.origin.y;
@@ -569,7 +571,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     msgHeight=msgHeight+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
-    msgHeight+=(actionUrl!=nil)?(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING):0;
+    msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING):0;
   
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }

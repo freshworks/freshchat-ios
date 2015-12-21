@@ -16,6 +16,10 @@
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
 #import "HLConstants.h"
+#import "HLArticle.h"
+#import "HLArticleDetailViewController.h"
+#import "HLArticlesController.h"
+#import "HLContainerController.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
@@ -612,12 +616,42 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 #pragma mark - Message cell delegates
 
--(void)messageCell:(FDMessageCell *)cell deepLinkArticleID:(NSNumber *)articleID{
-    //TODO: Display solution detail page for the article
-}
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
     FDLog(@"Picture message tapped");
+}
+
+-(void) openActionUrl:(id) sender{
+    FDActionButton* button=(FDActionButton*)sender;
+    if(button.articleID!=nil){
+        @try{
+            HLArticle *article = [HLArticle getWithID:button.articleID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+            HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
+            articleDetailController.articleID = article.articleID;
+            articleDetailController.articleTitle = article.title;
+            articleDetailController.articleDescription = article.articleDescription;
+            articleDetailController.categoryTitle=article.category.title;
+            articleDetailController.categoryID = article.categoryID;
+            HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+            [self.navigationController pushViewController:container animated:YES];
+        }
+        @catch(NSException* e){
+            NSLog(@"%@",e);
+        }
+    }
+    if(button.actionUrlString!=nil){
+        @try{
+            NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
+            if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:actionUrl];
+                });
+            }
+        }
+        @catch(NSException* e){
+            NSLog(@"%@",e);
+        }
+    }
 }
 
 #pragma mark - Audio toolbar delegates
