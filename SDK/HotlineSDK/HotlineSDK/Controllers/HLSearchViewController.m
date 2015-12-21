@@ -19,6 +19,7 @@
 #import "FDArticleContent.h"
 #import "FDSearchBar.h"
 #import "HLContainerController.h"
+#import "HLListViewController.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 
@@ -137,15 +138,8 @@
     UIFont *cellFont = [self.theme tableViewCellFont];
     HLArticle *searchArticle = self.searchResults[indexPath.row];
     NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
-    CGFloat heightOfcell = [self heightOfcell:title];
+    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
     return heightOfcell;
-}
-
-- (float) heightOfcell: (NSAttributedString *)title{
-    
-    CGRect rect = [title boundingRectWithSize:(CGSize){[UIScreen mainScreen].bounds.size.width - 40, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-    CGSize rectSize = rect.size;
-    return rectSize.height + 36;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

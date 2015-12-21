@@ -96,17 +96,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UIFont *cellFont = [self.theme tableViewCellFont];
-    HLArticle *article = self.articles[indexPath.row];
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:article.title attributes:@{NSFontAttributeName:cellFont}];
-    CGFloat heightOfcell = [self heightOfcell:title];
+    HLArticle *searchArticle = self.articles[indexPath.row];
+    NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
+    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
     return heightOfcell;
-}
-
-- (float) heightOfcell: (NSAttributedString *)title{
-    
-    CGRect rect = [title boundingRectWithSize:(CGSize){[UIScreen mainScreen].bounds.size.width - 40, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-    CGSize requiredSize = rect.size;
-    return requiredSize.height + 36;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -16,4 +16,6 @@
 
 -(BOOL)canDisplayFooterView;
 
++ (float) heightOfCell: (NSAttributedString *)textContent;
+
 @end
