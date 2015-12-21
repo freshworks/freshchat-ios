@@ -19,6 +19,7 @@
 #import "FDArticleContent.h"
 #import "FDSearchBar.h"
 #import "HLContainerController.h"
+#import "HLListViewController.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) UIView *trialView;
 @property (strong, nonatomic) UITapGestureRecognizer *recognizer;
+@property (strong, nonatomic) HLTheme *theme;
 @end
 
 @implementation HLSearchViewController
@@ -34,6 +36,11 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupSubviews];
+}
+
+-(HLTheme *)theme{
+    if(!_theme) _theme = [HLTheme sharedInstance];
+    return _theme;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -115,7 +122,7 @@
     FDTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[FDTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.numberOfLines = 3;
         cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     if (indexPath.row < self.searchResults.count) {
@@ -124,6 +131,15 @@
         cell.textLabel.text = article.title;
     }
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UIFont *cellFont = [self.theme tableViewCellFont];
+    HLArticle *searchArticle = self.searchResults[indexPath.row];
+    NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
+    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
+    return heightOfcell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -20,6 +20,7 @@
 
 @property(nonatomic, strong)HLCategory *category;
 @property(nonatomic, strong)NSArray *articles;
+@property (strong, nonatomic) HLTheme *theme;
 
 @end
 
@@ -29,6 +30,7 @@
     self = [super init];
     if (self) {
         self.category = category;
+        _theme = [HLTheme sharedInstance];
     }
     return self;
 }
@@ -77,9 +79,11 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
+        cell.textLabel.numberOfLines = 3;
         cell.textLabel.text  = article.title;
     }
     return cell;
@@ -87,6 +91,15 @@
 
 -(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
     return self.articles.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UIFont *cellFont = [self.theme tableViewCellFont];
+    HLArticle *searchArticle = self.articles[indexPath.row];
+    NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
+    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
+    return heightOfcell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
