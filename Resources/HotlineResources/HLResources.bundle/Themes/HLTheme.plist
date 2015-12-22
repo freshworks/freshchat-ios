@@ -274,13 +274,43 @@
 	<key>Images</key>
 	<dict>
 		<key>Search</key>
-		<string>HLResources.bundle/Images/search</string>
-		<key>Chat</key>
-		<string>HLResources.bundle/Images/chat</string>
-		<key>BackArrow</key>
-		<string>HLResources.bundle/Images/BackArrow</string>
-		<key>FAQLoadingIcon </key>
-		<string>HLResources.bundle/Images/loading</string>
+		<string>HLResources.bundle/Images/hotline_search</string>
+		<key>ContactUsIcon</key>
+		<string>HLResources.bundle/Images/hotline_contact_us_icon</string>
+		<key>BackButton</key>
+		<string>HLResources.bundle/Images/hotline_back_button</string>
+		<key>AttachmentUpload</key>
+		<string>HLResources.bundle/Images/hotline_upload</string>
+		<key>BubbleRight</key>
+		<string>HLResources.bundle/Images/hotline_bubble_right</string>
+		<key>BubbleLeft</key>
+		<string>HLResources.bundle/Images/hotline_bubble_left</string>
+		<key>AudioToolbarCancel</key>
+		<string>HLResources.bundle/Images/hotline_cancel</string>
+		<key>Mic</key>
+		<string>HLResources.bundle/Images/hotline_mic</string>
+		<key>Send</key>
+		<string>HLResources.bundle/Images/hotline_send</string>
+		<key>MessageSending</key>
+		<string>HLResources.bundle/Images/hotline_sending</string>
+		<key>MessageSent</key>
+		<string>HLResources.bundle/Images/hotline_sent</string>
+		<key>ImagePlaceholder</key>
+		<string>HLResources.bundle/Images/hotline_image_placeholder</string>
+		<key>UserAvatarImage</key>
+		<string>HLResources.bundle/Images/hotline_avatar_image_user</string>
+		<key>AgentAvatarImage</key>
+		<string>HLResources.bundle/Images/hotline_avatar_image_agent</string>
+		<key>AudioMessagePlayButton</key>
+		<string>HLResources.bundle/Images/hotline_play</string>
+		<key>AudioMessageStopButton</key>
+		<string>HLResources.bundle/Images/hotline_stop</string>
+		<key>AudioProgessBarMin</key>
+		<string>HLResources.bundle/Images/hotline_audio_progess_min</string>
+		<key>AudioProgessBarMax</key>
+		<string>HLResources.bundle/Images/hotline_audio_progess_max</string>
+		<key>TableViewAccessoryIcon</key>
+		<string>HLResources.bundle/Images/hotline_rightArrow</string>
 	</dict>
 </dict>
 </plist>

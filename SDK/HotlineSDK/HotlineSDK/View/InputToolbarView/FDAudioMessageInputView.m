@@ -27,22 +27,22 @@ int timeMin;
     self = [super init];
     if (self) {
         self.delegate = delegate;
+        self.theme = [HLTheme sharedInstance];
         self.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
         
         self.dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.dismissButton setImage:[UIImage imageNamed:@"cancel"] forState:UIControlStateNormal];
+        [self.dismissButton setImage:[self.theme getImageWithKey:HOTLINE_AUDIO_TOOLBAR_CANCEL] forState:UIControlStateNormal];
         [self.dismissButton addTarget:self action:@selector(dismissButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.dismissButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.dismissButton];
         
         self.stopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.stopButton setImage:[UIImage imageNamed:@"Stop"] forState:UIControlStateNormal];
         [self.stopButton addTarget:self action:@selector(stopButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         self.stopButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.stopButton];
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.sendButton setImage:[UIImage imageNamed:@"Send"] forState:UIControlStateNormal];
+        [self.sendButton setImage:[self.theme getImageWithKey:HOTLINE_SEND_ICON] forState:UIControlStateNormal];
         [self.sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.sendButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.sendButton];

@@ -12,7 +12,7 @@
 
 -(void)addAccessoryView{
     UIImageView *accessoryView = [[UIImageView alloc] init];
-    accessoryView.image = [HLTheme getImageFromMHBundleWithName:LIST_VIEW_RIGHT_ARROW];
+    accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:HOTLINE_TABLEVIEW_ACCESSORY_ICON];
     accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
     [self.contentView addSubview:accessoryView];
     NSDictionary *views = @{@"contentEncloser" : self.contentEncloser,@"accessoryView" : accessoryView};

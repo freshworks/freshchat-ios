@@ -30,8 +30,8 @@ static KonotorUIParameters* konotorUIParameters=nil;
 - (void) initCell{
     
     /* customization options to be moved out*/
-    sentImage=[UIImage imageNamed:@"konotor_sent"];
-    sendingImage=[UIImage imageNamed:@"konotor_uploading"];
+    sentImage=[[HLTheme sharedInstance] getImageWithKey:HOTLINE_MESSAGE_SENT_ICON];
+    sendingImage=[[HLTheme sharedInstance] getImageWithKey:HOTLINE_MESSAGE_SENDING_ICON];
 
     showsProfile=YES;
     showsSenderName=NO;
@@ -379,9 +379,9 @@ static KonotorUIParameters* konotorUIParameters=nil;
     
    if(showsProfile){
        if(isSenderOther){
-           profileImageView.image = [UIImage imageNamed:@"konotor_supportprofile"];
+           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:HOTLINE_AVATAR_IMAGE_AGENT];
        }else{
-           profileImageView.image = [UIImage imageNamed:@"konotor_profile"];
+           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:HOTLINE_AVATAR_IMAGE_USER];
        }
        
        profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
@@ -591,9 +591,10 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.doneButtonColor=nil;
         
         konotorUIParameters.otherTextColor=[UIColor blackColor];
-        konotorUIParameters.otherChatBubble=[UIImage imageNamed:@"Bubble_outline"];
+        konotorUIParameters.otherChatBubble=[[HLTheme sharedInstance]getImageWithKey:HOTLINE_BUBBLE_CELL_LEFT];
         konotorUIParameters.userTextColor=[UIColor darkGrayColor];
-        konotorUIParameters.userChatBubble=[UIImage imageNamed:@"Bubble_filled"];
+        
+        konotorUIParameters.userChatBubble=[[HLTheme sharedInstance]getImageWithKey:HOTLINE_BUBBLE_CELL_RIGHT];
         konotorUIParameters.userProfileImage=nil;
         konotorUIParameters.otherProfileImage=nil;
         

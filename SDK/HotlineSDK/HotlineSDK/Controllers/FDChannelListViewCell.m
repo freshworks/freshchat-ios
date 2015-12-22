@@ -32,7 +32,7 @@
 -(void)addAccessoryView{
     
     UIImageView *accessoryView = [[UIImageView alloc] init];
-    accessoryView.image = [HLTheme getImageFromMHBundleWithName:@"rightArrow"];
+    accessoryView.image = [self.theme getImageWithKey:HOTLINE_TABLEVIEW_ACCESSORY_ICON];
     accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
     [self.contentView addSubview:accessoryView];
 
@@ -81,8 +81,6 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
-    //TODO: Loading image from theme
-    self.imgView.image=[UIImage imageNamed:@"loading"];
 }
 
 -(void)drawRect:(CGRect)rect{

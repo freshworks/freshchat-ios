@@ -72,7 +72,6 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
-    self.imageView.image=[UIImage imageNamed:@"loading.png"];
 }
 
 -(void)layoutSubviews{

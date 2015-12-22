@@ -30,12 +30,14 @@
 @property (nonatomic, strong) FDSearchBar *searchBar;
 @property (nonatomic, strong) FDMarginalView *footerView;
 @property (nonatomic, strong) UILabel  *noSolutionsLabel;
+@property (nonatomic, strong) HLTheme *theme;
 
 @end
 
 @implementation HLCategoryGridViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
+    self.theme = [HLTheme sharedInstance];
     parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     self.view.backgroundColor = [UIColor whiteColor];
     [self updateCategories];
@@ -60,7 +62,7 @@
 }
 
 -(void)theming{
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[[HLTheme sharedInstance] backgroundColorSDK]];
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[self.theme backgroundColorSDK]];
 }
 
 -(void)setupSearchBar{
@@ -76,7 +78,7 @@
     for (id subview in mainSubView.subviews) {
         if ([subview isKindOfClass:[UITextField class]]) {
             UITextField *textField = (UITextField *)subview;
-            textField.backgroundColor = [[HLTheme sharedInstance] searchBarInnerBackgroundColor];
+            textField.backgroundColor = [self.theme searchBarInnerBackgroundColor];
         }
     }
     
@@ -90,12 +92,12 @@
 
 -(void)adjustUIBounds{
     self.edgesForExtendedLayout=UIRectEdgeNone;
-    self.navigationController.view.backgroundColor = [[HLTheme sharedInstance] searchBarOuterBackgroundColor];
+    self.navigationController.view.backgroundColor = [self.theme searchBarOuterBackgroundColor];
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Search"];
-    UIImage *contactUsButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Chat"];
+    UIImage *searchButtonImage = [self.theme getImageWithKey:HOTLINE_SEARCH_ICON];
+    UIImage *contactUsButtonImage = [self.theme getImageWithKey:HOTLINE_CONTACT_US_ICON];
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     searchButton.frame = CGRectMake(0, 0, 44, 44);
@@ -217,11 +219,10 @@
     if (indexPath.row < self.categories.count){
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
-        cell.backgroundColor = [[HLTheme sharedInstance] itemBackgroundColor];
+        cell.backgroundColor = [self.theme itemBackgroundColor];
         cell.layer.borderWidth=0.3f;
-        cell.layer.borderColor=[[HLTheme sharedInstance] itemSeparatorColor].CGColor;
+        cell.layer.borderColor=[self.theme itemSeparatorColor].CGColor;
         if (!category.icon){
-            cell.imageView.image=[UIImage imageNamed:@"loading.png"];
             cell.imageView.contentMode = UIViewContentModeCenter;
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];

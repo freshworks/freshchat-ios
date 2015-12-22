@@ -8,17 +8,29 @@
 
 #import <UIKit/UIKit.h>
 
+#define HOTLINE_SEARCH_ICON @"Search"
+#define HOTLINE_CONTACT_US_ICON @"ContactUsIcon"
+#define HOTLINE_BACK_BUTTON @"BackButton"
+#define HOTLINE_ATTACH_ICON @"AttachmentUpload"
+#define HOTLINE_BUBBLE_CELL_LEFT @"BubbleLeft"
+#define HOTLINE_BUBBLE_CELL_RIGHT @"BubbleRight"
+#define HOTLINE_AUDIO_TOOLBAR_CANCEL @"AudioToolbarCancel"
+#define HOTLINE_INPUT_TOOLBAR_MIC @"Mic"
+#define HOTLINE_SEND_ICON @"Send"
+#define HOTLINE_MESSAGE_SENDING_ICON @"MessageSending"
+#define HOTLINE_MESSAGE_SENT_ICON @"MessageSent"
+#define HOTLINE_IMAGE_PLACEHOLDER @"ImagePlaceholder"
+#define HOTLINE_AVATAR_IMAGE_USER @"UserAvatarImage"
+#define HOTLINE_AVATAR_IMAGE_AGENT @"AgentAvatarImage"
+#define HOTLINE_AUDIO_PLAY_BUTTON @"AudioMessagePlayButton"
+#define HOTLINE_AUDIO_STOP_BUTTON @"AudioMessageStopButton"
+#define HOTLINE_AUDIO_PROGRESS_BAR_MIN @"AudioProgessBarMin"
+#define HOTLINE_AUDIO_PROGRESS_BAR_MAX @"AudioProgessBarMax"
+#define HOTLINE_TABLEVIEW_ACCESSORY_ICON @"TableViewAccessoryIcon"
+
 @interface HLTheme : NSObject
 
-#define FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE @"SearchButton"
-#define INPUT_BAR_INNER_TEXT_VIEW_IMAGE @"TextViewInner"
-#define INPUT_BAR_OUTER_TEXT_VIEW_IMAGE @"TextViewOuter"
-#define INPUT_BAR_ATTACHMENT_ICON @"Upload"
-#define INPUT_BAR_SEND_ICON @"Send"
-#define LIST_VIEW_RIGHT_ARROW @"rightArrow"
-
 + (instancetype)sharedInstance;
-+(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
 -(UIColor *)searchBarInnerBackgroundColor;
 -(UIColor *)gridViewItemBackgroundColor;
 +(UIColor *)colorWithHex:(NSString *)value;

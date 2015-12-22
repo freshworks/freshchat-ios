@@ -16,6 +16,7 @@
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
 #import "HLConstants.h"
+#import "HLTheme.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
@@ -57,7 +58,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.channel = channel;
         self.conversation = channel.conversations.allObjects.lastObject;
         self.isModalPresentationPreferred = isModal;
-        self.sentImage=[UIImage imageNamed:@"konotor_sent.png"];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -110,7 +110,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:HOTLINE_BACK_BUTTON]
                                                                        style:UIBarButtonItemStylePlain
                                                                       target:self.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
