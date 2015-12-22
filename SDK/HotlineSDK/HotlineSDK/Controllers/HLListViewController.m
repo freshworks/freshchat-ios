@@ -12,6 +12,9 @@
 #import "FDMessageController.h"
 #import "HLChannelViewController.h"
 #import "Hotline.h"
+
+#define CELL_OFFSET 36
+
 @implementation HLListViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
@@ -45,6 +48,14 @@
 
 -(BOOL)canDisplayFooterView{
     return YES;
+}
+
+//method to return height of text rect
++ (float) heightOfCell: (NSAttributedString *)textContent{
+    
+    CGRect rect = [textContent boundingRectWithSize:(CGSize){[UIScreen mainScreen].bounds.size.width - 40, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+    CGSize rectSize = rect.size;
+    return rectSize.height + CELL_OFFSET;
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
