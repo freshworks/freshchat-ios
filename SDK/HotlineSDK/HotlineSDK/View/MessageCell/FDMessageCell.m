@@ -272,6 +272,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     messageContentViewWidth=[FDMessageCell getWidthForMessage:currentMessage];
     
+    showsProfile=isSenderOther?([HLTheme sharedInstance].showsBusinessProfileImage):([HLTheme sharedInstance].showsUserProfileImage);
+    
     // get the length of the textview if one line and calculate page sides
     
     float messageDisplayWidth=parentView.frame.size.width;
