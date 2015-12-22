@@ -56,9 +56,14 @@
             "%@" // CSS Content
             "</style>"
             "<body>"
+            "<div class='article-title'><h3>"
+            "%@" // Article Title
+            "<h3></div>"
+            "<div class='article-body'>"
             "%@" // Article Content
+            "</div>"
             "</body>"
-            "</html>", [self normalizeCssContent],article];
+            "</html>", [self normalizeCssContent],self.articleTitle,article];
 }
 
 -(NSString *)normalizeCssContent{
