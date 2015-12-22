@@ -27,9 +27,9 @@
 "Message Placeholder Text"="Message";
 "SEND_BUTTON_TEXT"="Send";
 
-/* Contact Us prompt */
-"CONTACT_US_PROMPT_BUTTON"="Still need help? Contact Us ";
+/* Article Vote thank you prompt */
 "THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
+"THANK_YOU_PROMPT_BUTTON"="Still need help? Contact Us";
 
 /* Search View Place Holder */
 "SEARCH_PLACEHOLDER"="Search for FAQs";

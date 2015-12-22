@@ -127,4 +127,5 @@
 
 -(UIImage *)getImageWithKey:(NSString *)key;
 
+-(NSString *)getCssFileContent:(NSString *)key;
 @end

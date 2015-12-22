@@ -473,5 +473,11 @@
     return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:13];
 }
 
+-(NSString *)getCssFileContent:(NSString *)key{
+    NSBundle *hlResourceBundle = [self getHLResourceBundle];
+    NSString  *cssFilePath = [hlResourceBundle pathForResource:key ofType:@"css" inDirectory:FD_THEMES_DIR];
+    NSData *cssContent = [NSData dataWithContentsOfFile:cssFilePath];
+    return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
+}
 
 @end

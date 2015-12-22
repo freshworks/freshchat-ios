@@ -12,11 +12,8 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
-//#import "FDConstants.h"
 #import "FDLocalNotification.h"
 #import "Hotline.h"
-
-#define HL_THEMES_DIR @"Themes"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -24,12 +21,11 @@
 //@property (strong, nonatomic) FDTheme *theme;
 @property (strong, nonatomic) FDSecureStore *secureStore;
 @property (strong, nonatomic) FDVotingManager *votingManager;
-@property (strong, nonatomic) NSLayoutConstraint *alertPromptViewHeightConstraint;
-@property (strong, nonatomic) NSLayoutConstraint *articlePromptViewHeightConstraint;
 @property (strong,nonatomic) FDYesNoPromptView *articleVotePromptView;
-@property (strong, nonatomic) FDAlertView *contactUsPromptView;
+@property (strong, nonatomic) FDAlertView *thankYouPromptView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) NSString *appAudioCategory;
+@property (strong, nonatomic) NSMutableDictionary *promptHeightConstraintMap;
 
 @end
 
@@ -43,6 +39,7 @@
         // _theme = [FDTheme sharedInstance];
          _secureStore = [FDSecureStore sharedInstance];
          _votingManager = [FDVotingManager sharedInstance];
+        _promptHeightConstraintMap = [[NSMutableDictionary alloc]init];
     }
     return self;
 }
@@ -67,17 +64,8 @@
 }
 
 -(NSString *)normalizeCssContent{
-    NSBundle *hlResourceBundle = [self getHLResourceBundle];
-    NSString  *cssFilePath = [hlResourceBundle pathForResource:@"normalize" ofType:@"css" inDirectory:HL_THEMES_DIR];
-    NSData *cssContent = [NSData dataWithContentsOfFile:cssFilePath];
-    return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
+    return [[HLTheme sharedInstance] getCssFileContent:@"normalize"];
 }
-
--(NSBundle *)getHLResourceBundle{
-    NSBundle *HLResourceBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
-    return HLResourceBundle;
-}
-
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
@@ -131,6 +119,26 @@
 
 }
 
+-(void)setUpHeightConstraint:(FDPromptView *)promptView {
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:promptView
+                                 attribute:NSLayoutAttributeHeight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:nil
+                                 attribute:NSLayoutAttributeNotAnAttribute
+                                multiplier:1.0
+                                  constant:[promptView getPromptHeight]];
+    [self.promptHeightConstraintMap setObject:heightConstraint forKey:[self getKeyForObject:promptView]];
+}
+
+-(NSString *) getKeyForObject:(NSObject *) object {
+    return [NSString stringWithFormat:@"%lu" , (unsigned long)[object hash]];
+}
+
+-(NSLayoutConstraint *) getHeightConstraint:(FDPromptView *) promptView {
+    return [self.promptHeightConstraintMap  valueForKey:[self getKeyForObject:promptView]];
+}
+
+
 -(void)setSubviews{
     self.webView = [[UIWebView alloc]init];
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -147,40 +155,27 @@
     self.articleVotePromptView.delegate = self;
     self.articleVotePromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    //contact us prompt view
-    self.contactUsPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"CONTACT_US_PROMPT"];
-    self.contactUsPromptView.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");
-    self.contactUsPromptView.translatesAutoresizingMaskIntoConstraints = NO;
+    //Thank you prompt view
+    self.thankYouPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"THANK_YOU_PROMPT"];
+    self.thankYouPromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.view addSubview:self.webView];
     [self.view addSubview:self.articleVotePromptView];
-    [self.view addSubview:self.contactUsPromptView];
+    [self.view addSubview:self.thankYouPromptView];
     
-    self.articlePromptViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.articleVotePromptView
-                                                                   attribute:NSLayoutAttributeHeight
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1.0
-                                                                    constant:ARTICLE_PROMPT_VIEW_HEIGHT];
-    self.alertPromptViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.contactUsPromptView
-                                                                   attribute:NSLayoutAttributeHeight
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1.0
-                                                                    constant:ALERT_PROMPT_VIEW_HEIGHT];
+    [self setUpHeightConstraint:self.articleVotePromptView];
+    [self setUpHeightConstraint:self.thankYouPromptView];
     
-    NSDictionary *views = @{@"webView" : self.webView, @"articleVotePromptView" : self.articleVotePromptView, @"contactUsVotePromptView" : self.contactUsPromptView};
+    NSDictionary *views = @{@"webView" : self.webView, @"articleVotePromptView" : self.articleVotePromptView, @"contactUsVotePromptView" : self.thankYouPromptView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[articleVotePromptView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contactUsVotePromptView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView][articleVotePromptView][contactUsVotePromptView]|" options:0 metrics:nil views:views]];
     
-    [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:0];
-    [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:0];
+    [self modifyConstraint:[self getHeightConstraint:self.thankYouPromptView] withHeight:0];
+    [self modifyConstraint:[self getHeightConstraint:self.articleVotePromptView] withHeight:0];
     
-    [self.contactUsPromptView setHidden:YES];
+    [self.thankYouPromptView setHidden:YES];
     [self.articleVotePromptView setHidden:YES];
 }
 
@@ -268,46 +263,42 @@
     }
 }
 
--(void) showArticleRatingPrompt{
+-(void) hidePrompt:(FDPromptView *)promptView {
     [UIView animateWithDuration:.5 animations:^{
-        [self.articleVotePromptView setHidden:NO];
-        [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:ARTICLE_PROMPT_VIEW_HEIGHT];
+        [promptView setHidden:YES];
+        [self modifyConstraint:[self getHeightConstraint:promptView] withHeight:0];
         [self.view layoutIfNeeded];
     }];
+}
+
+-(void)showPrompt:(FDPromptView *)promptView {
+    [UIView animateWithDuration:.5 animations:^{
+        [promptView setHidden:NO];
+        [self modifyConstraint:[self getHeightConstraint:promptView] withHeight:[promptView getPromptHeight]];
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void) showArticleRatingPrompt{
+    [self showPrompt:self.articleVotePromptView];
 }
 
 -(void) hideArticleRatingPrompt{
-    [UIView animateWithDuration:.5 animations:^{
-        [self.articleVotePromptView setHidden:YES];
-        [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:0];
-        [self.view layoutIfNeeded];
-    }];
+    [self hidePrompt:self.articleVotePromptView];
 }
 
 -(void)showContactUsPrompt{
-    [UIView animateWithDuration:.5 animations:^{
-        [self.contactUsPromptView setHidden:NO];
-        self.contactUsPromptView.Button1.hidden = NO;
-        [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
-        [self.view layoutIfNeeded];
-    }];
+    self.thankYouPromptView.Button1.hidden = NO;
+    [self showPrompt:self.thankYouPromptView];
 }
 
 -(void)showThankYouPrompt{
-    [UIView animateWithDuration:.5 animations:^{
-        [self.contactUsPromptView setHidden:NO];
-        self.contactUsPromptView.Button1.hidden = YES;
-        [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:ALERT_PROMPT_VIEW_HEIGHT];
-        [self.view layoutIfNeeded];
-    }];
+    self.thankYouPromptView.Button1.hidden = YES;
+    [self showPrompt:self.thankYouPromptView];
 }
 
 -(void)hideContactUsPrompt{
-    [UIView animateWithDuration:.5 animations:^{
-        [self.contactUsPromptView setHidden:YES];
-        [self modifyConstraint:self.alertPromptViewHeightConstraint withHeight:0];
-        [self.view layoutIfNeeded];
-    }];
+   [self hidePrompt:self.thankYouPromptView];
 }
 
 -(void)yesButtonClicked:(id)sender{
