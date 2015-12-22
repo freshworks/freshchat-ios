@@ -196,6 +196,11 @@
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
+-(UIColor *)dialogueButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
+}
+
 -(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
     NSString *preferredFontName; CGFloat preferredFontSize;
     NSString *fontNameValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@"FontName"]];

@@ -34,7 +34,7 @@
         
         self.Button1 = [self createPromptButton:@"BUTTON" withKey:key];
         //TODO: Move this to theme file - Rex
-        [self.Button1 setTitleColor:[HLTheme colorWithHex:@"007AFF"] forState:UIControlStateNormal];
+        [self.Button1 setTitleColor:[[HLTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.Button1];
         [self setBackgroundColor:[UIColor whiteColor]];

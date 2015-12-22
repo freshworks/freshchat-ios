@@ -71,6 +71,7 @@
 -(UIFont *)dialogueNoButtonFont;
 -(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
+-(UIColor *)dialogueButtonColor;
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
