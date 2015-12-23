@@ -31,7 +31,7 @@ int timeMin;
         self.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
         
         self.dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.dismissButton setImage:[self.theme getImageWithKey:HOTLINE_AUDIO_TOOLBAR_CANCEL] forState:UIControlStateNormal];
+        [self.dismissButton setImage:[self.theme getImageWithKey:IMAGE_AUDIO_TOOLBAR_CANCEL] forState:UIControlStateNormal];
         [self.dismissButton addTarget:self action:@selector(dismissButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.dismissButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.dismissButton];
@@ -42,7 +42,7 @@ int timeMin;
         [self addSubview:self.stopButton];
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.sendButton setImage:[self.theme getImageWithKey:HOTLINE_SEND_ICON] forState:UIControlStateNormal];
+        [self.sendButton setImage:[self.theme getImageWithKey:IMAGE_SEND_ICON] forState:UIControlStateNormal];
         [self.sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.sendButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.sendButton];

@@ -50,10 +50,10 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [self.theme getImageWithKey:HOTLINE_SEARCH_ICON];
+    UIImage *searchButtonImage = [self.theme getImageWithKey:IMAGE_SEARCH_ICON];
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:HOTLINE_BACK_BUTTON]
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_BACK_BUTTON]
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self.navigationController
                                                                   action:@selector(popViewControllerAnimated:)];

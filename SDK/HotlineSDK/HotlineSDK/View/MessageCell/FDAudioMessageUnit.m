@@ -31,7 +31,7 @@
 {
     playbackState=FDAudioMessageMediaStatePlaying;
     progressAnimationTimer= [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(updateProgress) userInfo:nil repeats:YES];
-    [audioPlayButton setImage:[self.theme getImageWithKey:HOTLINE_AUDIO_STOP_BUTTON] forState:UIControlStateNormal];
+    [audioPlayButton setImage:[self.theme getImageWithKey:IMAGE_AUDIO_STOP_BUTTON] forState:UIControlStateNormal];
     [progressAnimationTimer fire];
 }
 
@@ -48,7 +48,7 @@
 {
     playbackState=FDAudioMessageMediaStateStopped;
     [progressAnimationTimer invalidate];
-    [audioPlayButton setImage:[self.theme getImageWithKey:HOTLINE_AUDIO_PLAY_BUTTON] forState:UIControlStateNormal];
+    [audioPlayButton setImage:[self.theme getImageWithKey:IMAGE_AUDIO_PLAY_BUTTON] forState:UIControlStateNormal];
     progressAnimationTimer=nil;
     [mediaProgressBar setValue:0 animated:NO];
 }
@@ -63,7 +63,7 @@
 {
     float messageTextBoxWidth=KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING*2;
     self.audioPlayButton=[[UIButton alloc] initWithFrame:CGRectMake(messageTextBoxWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PLAYBUTTON_DIMENSION,KONOTOR_AUDIOMESSAGE_HEIGHT/2-KONOTOR_PLAYBUTTON_DIMENSION/2,KONOTOR_PLAYBUTTON_DIMENSION,KONOTOR_PLAYBUTTON_DIMENSION)];
-    [self.audioPlayButton setImage:[self.theme getImageWithKey:HOTLINE_AUDIO_PLAY_BUTTON] forState:UIControlStateNormal];
+    [self.audioPlayButton setImage:[self.theme getImageWithKey:IMAGE_AUDIO_PLAY_BUTTON] forState:UIControlStateNormal];
     [self.audioPlayButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
     [self.audioPlayButton setBackgroundColor:[UIColor blackColor]];
     self.audioPlayButton.layer.cornerRadius=KONOTOR_PLAYBUTTON_DIMENSION/2;
@@ -73,8 +73,8 @@
     self.mediaProgressBar.frame=CGRectMake(KONOTOR_HORIZONTAL_PADDING, KONOTOR_AUDIOMESSAGE_HEIGHT/2-self.mediaProgressBar.currentThumbImage.size.height/2, messageTextBoxWidth-KONOTOR_PLAYBUTTON_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING, self.mediaProgressBar.currentThumbImage.size.height);
     self.mediaProgressBar.frame=CGRectMake(KONOTOR_HORIZONTAL_PADDING, KONOTOR_AUDIOMESSAGE_HEIGHT/2-self.mediaProgressBar.bounds.size.height/2, messageTextBoxWidth-KONOTOR_PLAYBUTTON_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING, self.mediaProgressBar.bounds.size.height);
     
-    [self.mediaProgressBar setMinimumTrackImage:[self.theme getImageWithKey:HOTLINE_AUDIO_PROGRESS_BAR_MIN] forState:UIControlStateNormal];
-    [self.mediaProgressBar setMaximumTrackImage:[self.theme getImageWithKey:HOTLINE_AUDIO_PROGRESS_BAR_MAX] forState:UIControlStateNormal];
+    [self.mediaProgressBar setMinimumTrackImage:[self.theme getImageWithKey:IMAGE_AUDIO_PROGRESS_BAR_MIN] forState:UIControlStateNormal];
+    [self.mediaProgressBar setMaximumTrackImage:[self.theme getImageWithKey:IMAGE_AUDIO_PROGRESS_BAR_MAX] forState:UIControlStateNormal];
 }
 
 -(void) playMedia:(id)sender

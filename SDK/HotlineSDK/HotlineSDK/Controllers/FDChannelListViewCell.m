@@ -32,7 +32,7 @@
 -(void)addAccessoryView{
     
     UIImageView *accessoryView = [[UIImageView alloc] init];
-    accessoryView.image = [self.theme getImageWithKey:HOTLINE_TABLEVIEW_ACCESSORY_ICON];
+    accessoryView.image = [self.theme getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
     accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
     [self.contentView addSubview:accessoryView];
 

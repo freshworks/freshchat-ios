@@ -96,8 +96,8 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [self.theme getImageWithKey:HOTLINE_SEARCH_ICON];
-    UIImage *contactUsButtonImage = [self.theme getImageWithKey:HOTLINE_CONTACT_US_ICON];
+    UIImage *searchButtonImage = [self.theme getImageWithKey:IMAGE_SEARCH_ICON];
+    UIImage *contactUsButtonImage = [self.theme getImageWithKey:IMAGE_CONTACT_US_ICON];
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     searchButton.frame = CGRectMake(0, 0, 44, 44);

@@ -310,7 +310,7 @@
 		<key>AudioProgessBarMax</key>
 		<string>HLResources.bundle/Images/hotline_audio_progess_max</string>
 		<key>TableViewAccessoryIcon</key>
-		<string>HLResources.bundle/Images/hotline_rightArrow</string>
+		<string>HLResources.bundle/Images/hotline_right_arrow</string>
 	</dict>
 </dict>
 </plist>

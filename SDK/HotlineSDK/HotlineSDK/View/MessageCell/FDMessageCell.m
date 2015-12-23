@@ -30,8 +30,8 @@ static KonotorUIParameters* konotorUIParameters=nil;
 - (void) initCell{
     
     /* customization options to be moved out*/
-    sentImage=[[HLTheme sharedInstance] getImageWithKey:HOTLINE_MESSAGE_SENT_ICON];
-    sendingImage=[[HLTheme sharedInstance] getImageWithKey:HOTLINE_MESSAGE_SENDING_ICON];
+    sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
+    sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
 
     showsProfile=YES;
     showsSenderName=NO;
@@ -379,9 +379,9 @@ static KonotorUIParameters* konotorUIParameters=nil;
     
    if(showsProfile){
        if(isSenderOther){
-           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:HOTLINE_AVATAR_IMAGE_AGENT];
+           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
        }else{
-           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:HOTLINE_AVATAR_IMAGE_USER];
+           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_USER];
        }
        
        profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
@@ -591,10 +591,10 @@ static KonotorUIParameters* konotorUIParameters=nil;
         konotorUIParameters.doneButtonColor=nil;
         
         konotorUIParameters.otherTextColor=[UIColor blackColor];
-        konotorUIParameters.otherChatBubble=[[HLTheme sharedInstance]getImageWithKey:HOTLINE_BUBBLE_CELL_LEFT];
+        konotorUIParameters.otherChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
         konotorUIParameters.userTextColor=[UIColor darkGrayColor];
         
-        konotorUIParameters.userChatBubble=[[HLTheme sharedInstance]getImageWithKey:HOTLINE_BUBBLE_CELL_RIGHT];
+        konotorUIParameters.userChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
         konotorUIParameters.userProfileImage=nil;
         konotorUIParameters.otherProfileImage=nil;
         

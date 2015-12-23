@@ -110,7 +110,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:HOTLINE_BACK_BUTTON]
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
                                                                        style:UIBarButtonItemStylePlain
                                                                       target:self.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
