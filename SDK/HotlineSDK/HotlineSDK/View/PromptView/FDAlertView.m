@@ -24,9 +24,6 @@
     self = [super init];
     if (self) {
         self.delegate = delegate;
-//        self.iconView = [self createImageView];
-//        self.iconView.image = [UIImage imageNamed:@"message.png"];
-//        [self addSubview:self.iconView];
         
         self.promptLabel = [self createPromptLabel];
         self.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");

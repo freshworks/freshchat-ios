@@ -46,13 +46,13 @@
 
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *attachmentImage = [UIImage imageNamed:INPUT_BAR_ATTACHMENT_ICON];
+        UIImage *attachmentImage = [self.theme getImageWithKey:IMAGE_ATTACH_ICON];
         [attachButton setImage:attachmentImage forState:UIControlStateNormal];
         [attachButton addTarget:self action:@selector(attachmentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
         micButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *micImage = [UIImage imageNamed:@"Mic-Idle"];
+        UIImage *micImage = [[HLTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
         [micButton setImage:micImage forState:UIControlStateNormal];
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         

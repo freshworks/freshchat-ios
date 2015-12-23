@@ -8,17 +8,30 @@
 
 #import <UIKit/UIKit.h>
 
+#define IMAGE_SEARCH_ICON @"Search"
+#define IMAGE_CONTACT_US_ICON @"ContactUsIcon"
+#define IMAGE_BACK_BUTTON @"BackButton"
+#define IMAGE_ATTACH_ICON @"AttachmentUpload"
+#define IMAGE_BUBBLE_CELL_LEFT @"BubbleLeft"
+#define IMAGE_BUBBLE_CELL_RIGHT @"BubbleRight"
+#define IMAGE_AUDIO_TOOLBAR_CANCEL @"AudioToolbarCancel"
+#define IMAGE_INPUT_TOOLBAR_MIC @"Mic"
+#define IMAGE_SEND_ICON @"Send"
+#define IMAGE_MESSAGE_SENDING_ICON @"MessageSending"
+#define IMAGE_MESSAGE_SENT_ICON @"MessageSent"
+#define IMAGE_PLACEHOLDER @"ImagePlaceholder"
+#define IMAGE_AVATAR_USER @"UserAvatarImage"
+#define IMAGE_AVATAR_AGENT @"AgentAvatarImage"
+#define IMAGE_AUDIO_PLAY_BUTTON @"AudioMessagePlayButton"
+#define IMAGE_AUDIO_STOP_BUTTON @"AudioMessageStopButton"
+#define IMAGE_AUDIO_PROGRESS_BAR_MIN @"AudioProgessBarMin"
+#define IMAGE_AUDIO_PROGRESS_BAR_MAX @"AudioProgessBarMax"
+#define IMAGE_TABLEVIEW_ACCESSORY_ICON @"TableViewAccessoryIcon"
+#define IMAGE_LOADING_ICON
+
 @interface HLTheme : NSObject
 
-#define FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE @"SearchButton"
-#define INPUT_BAR_INNER_TEXT_VIEW_IMAGE @"TextViewInner"
-#define INPUT_BAR_OUTER_TEXT_VIEW_IMAGE @"TextViewOuter"
-#define INPUT_BAR_ATTACHMENT_ICON @"Upload"
-#define INPUT_BAR_SEND_ICON @"Send"
-#define LIST_VIEW_RIGHT_ARROW @"rightArrow"
-
 + (instancetype)sharedInstance;
-+(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName;
 -(UIColor *)searchBarInnerBackgroundColor;
 -(UIColor *)gridViewItemBackgroundColor;
 +(UIColor *)colorWithHex:(NSString *)value;
