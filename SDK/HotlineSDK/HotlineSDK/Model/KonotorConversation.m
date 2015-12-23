@@ -206,8 +206,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
                         }
                     }
                 }else{
-                    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-                    f.numberStyle = NSNumberFormatterDecimalStyle;
                     NSNumber *channelId = conversationInfo[@"channelId"];
                     HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
