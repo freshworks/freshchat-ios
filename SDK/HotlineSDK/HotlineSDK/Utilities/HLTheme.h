@@ -71,6 +71,7 @@
 -(UIFont *)dialogueNoButtonFont;
 -(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
+-(UIColor *)dialogueButtonColor;
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
@@ -127,4 +128,5 @@
 
 -(UIImage *)getImageWithKey:(NSString *)key;
 
+-(NSString *)getCssFileContent:(NSString *)key;
 @end

@@ -89,6 +89,8 @@
 		<string>18</string>
 		<key>NoButtonBackgroundColor</key>
 		<string>D8D8D8</string>
+		<key>ButtonColor</key>
+		<string>007AFF</string>
 		<key>BackgroundColor</key>
 		<string>D8D8D8</string>
 		<key>LabelFontColor</key>
