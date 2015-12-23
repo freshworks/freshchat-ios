@@ -68,31 +68,31 @@
     return date;
 }
 
-+(NSString *)itemCreatedDurationSinceDate:(NSDate*)date{
-    NSInteger FEW_SECONDS = 50;
-    NSInteger FEW_MINUTES = 5, ONE_HOUR = 60, ONE_DAY = 1440, ONE_MONTH = 43200;    //(in minutes)
-    NSTimeInterval intervalInSeconds = [[NSDate date] timeIntervalSinceDate:date];
-    NSInteger interval = intervalInSeconds/60;
-    if (intervalInSeconds < 10) {
-        return HLLocalizedString(@"Just now");
-    }else if(intervalInSeconds < FEW_SECONDS){
-        return HLLocalizedString(@"few seconds ago");
-    }else if (interval < FEW_MINUTES) {
-        return HLLocalizedString(@"few minutes ago");
-    }else if(interval >= FEW_MINUTES && interval < ONE_HOUR){
-        return [NSString stringWithFormat:HLLocalizedString(@"n minutes ago"),(long)interval];
-    }else if(interval >= ONE_HOUR && interval < ONE_DAY){
-        NSInteger hours = (int)interval/ONE_HOUR;
-        if (hours == 1) { return HLLocalizedString(@"an hour ago"); }
-        return [NSString stringWithFormat:HLLocalizedString(@"n hours ago"),(long)hours];
-    }else if(interval >=ONE_DAY && interval< ONE_MONTH){
-        NSInteger days = (int)interval/ONE_DAY;
-        if (days == 1) { return HLLocalizedString(@"a day ago"); }
-        return [NSString stringWithFormat:HLLocalizedString(@"n days ago"),(long)days];
-    }else{
-        return HLLocalizedString(@"more than a month ago");
-    }
-}
+//+(NSString *)itemCreatedDurationSinceDate:(NSDate*)date{
+//    NSInteger FEW_SECONDS = 50;
+//    NSInteger FEW_MINUTES = 5, ONE_HOUR = 60, ONE_DAY = 1440, ONE_MONTH = 43200;    //(in minutes)
+//    NSTimeInterval intervalInSeconds = [[NSDate date] timeIntervalSinceDate:date];
+//    NSInteger interval = intervalInSeconds/60;
+//    if (intervalInSeconds < 10) {
+//        return HLLocalizedString(@"Just now");
+//    }else if(intervalInSeconds < FEW_SECONDS){
+//        return HLLocalizedString(@"few seconds ago");
+//    }else if (interval < FEW_MINUTES) {
+//        return HLLocalizedString(@"few minutes ago");
+//    }else if(interval >= FEW_MINUTES && interval < ONE_HOUR){
+//        return [NSString stringWithFormat:HLLocalizedString(@"n minutes ago"),(long)interval];
+//    }else if(interval >= ONE_HOUR && interval < ONE_DAY){
+//        NSInteger hours = (int)interval/ONE_HOUR;
+//        if (hours == 1) { return HLLocalizedString(@"an hour ago"); }
+//        return [NSString stringWithFormat:HLLocalizedString(@"n hours ago"),(long)hours];
+//    }else if(interval >=ONE_DAY && interval< ONE_MONTH){
+//        NSInteger days = (int)interval/ONE_DAY;
+//        if (days == 1) { return HLLocalizedString(@"a day ago"); }
+//        return [NSString stringWithFormat:HLLocalizedString(@"n days ago"),(long)days];
+//    }else{
+//        return HLLocalizedString(@"more than a month ago");
+//    }
+//}
 
 +(NSString *)stringForUnixTime:(NSInteger)unixTime{
     NSTimeInterval interval = unixTime;

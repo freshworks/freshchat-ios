@@ -5,21 +5,19 @@
   Copyright (c) 2015 Freshdesk. All rights reserved.
 */
 
-/* Grid View */
+/* Solution Categories*/
 "faq_title_text"="FAQs";
 "faq_close_button_text"="Close";
-
-/* Categories List View Controller */
-"CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE"="Close";
-"CONTACT_US_BUTTON_LABEL"="Contact Us";
-
-/* Articles List View Controller */
-"ARTICLE_LIST_VIEW_TITLE"="Article List";
+"contact_us_button_text"="Contact Us";
 
 /* Article UpVote DownVote */
-"ARTICLE_VOTE_PROMPT_LABEL_TEXT"="Was this helpful?";
-"ARTICLE_VOTE_PROMPT_YES"="Yes!";
-"ARTICLE_VOTE_PROMPT_NO"="No";
+"article_vote_prompt_text"="Was this helpful?";
+"article_vote_prompt_yes_button_text"="Yes!";
+"article_vote_prompt_no_button_text"="No";
+
+/* Article Vote thank you prompt */
+"thank_you_prompt_text"="Thanks for your feedback";
+"thank_you_prompt_contact_us_button_text"="Still need help? Contact Us";
 
 /*Channels*/
 "channels_title_text"="Channels";
@@ -27,24 +25,20 @@
 
 /* Message UI */
 "Message Placeholder Text"="Message";
-"SEND_BUTTON_TEXT"="Send";
+"send_button_text"="Send";
 "audio_message_title"="Audio message";
 "picture_message_title"="Picture message";
 
-/* Article Vote thank you prompt */
-"THANK_YOU_PROMPT_TEXT"="Thanks for your feedback";
-"THANK_YOU_PROMPT_BUTTON"="Still need help? Contact Us";
-
 /* Search View Place Holder */
-"SEARCH_PLACEHOLDER"="Search for FAQs";
+"search_placeholder_text"="Search for FAQs";
 
 /* Camera Unavailable alert */
 "camera_unavailable_title"="Camera Unavailable";
 "camera_unavailable_description"="Sorry! Your device doesn't have a camera, or the camera is not available for use.";
-"camera_unavailable_ok_button_text"="ok";
+"camera_unavailable_ok_button_text"="OK";
 
 /*Image Attachment*/
-"image_attachment_options"="options";
-"image_attachment_cancel_button_text"="cancel";
+"image_attachment_options"="Options";
+"image_attachment_cancel_button_text"="Cancel";
 "image_attachment_select_existing_image"="Select Existing Image";
 "image_attachment_select_new_image"="New Image via Camera";

@@ -10,7 +10,6 @@
 
 @interface HLTheme : NSObject
 
-#define FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE @"SearchButton"
 #define INPUT_BAR_INNER_TEXT_VIEW_IMAGE @"TextViewInner"
 #define INPUT_BAR_OUTER_TEXT_VIEW_IMAGE @"TextViewOuter"
 #define INPUT_BAR_ATTACHMENT_ICON @"Upload"

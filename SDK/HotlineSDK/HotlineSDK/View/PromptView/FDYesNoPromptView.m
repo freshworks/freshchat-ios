@@ -9,6 +9,7 @@
 #import "FDYesNoPromptView.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
+#import "HLLocalization.h"
 
 @interface FDYesNoPromptView ()
 
@@ -24,28 +25,27 @@
 -(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
-    self.theme = [HLTheme sharedInstance];
-        
-     self.promptLabel = [self createPromptLabel];
-     self.promptLabel.text = HLLocalizedString([key stringByAppendingString:@"_LABEL_TEXT"]);
-     [self addSubview:self.promptLabel];
-        
-     self.YesButton = [self createBorderedPromptButton:@"YES" withKey:key];
-     [self.YesButton setTitleColor:[self.theme dialogueYesButtonTextColor] forState:UIControlStateNormal];
-     [self.YesButton setBackgroundColor:[self.theme dialogueYesButtonBackgroundColor]];
-     
-     [self.YesButton addTarget:self.delegate action:@selector(yesButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-     [self addSubview:self.YesButton];
-        
-     self.NoButton = [self createBorderedPromptButton:@"NO" withKey:key];
-     [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
-     [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
-     
-     
-     [self.NoButton addTarget:self.delegate action:@selector(noButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-     [self addSubview:self.NoButton];
+        self.theme = [HLTheme sharedInstance];
 
-     [self addSpacersInView:self];
+        self.promptLabel = [self createPromptLabel:key];
+        [self addSubview:self.promptLabel];
+
+        self.YesButton = [self createBorderedPromptButton:@"yes" withKey:key];
+        [self.YesButton setTitleColor:[self.theme dialogueYesButtonTextColor] forState:UIControlStateNormal];
+        [self.YesButton setBackgroundColor:[self.theme dialogueYesButtonBackgroundColor]];
+
+        [self.YesButton addTarget:self.delegate action:@selector(yesButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.YesButton];
+
+        self.NoButton = [self createBorderedPromptButton:@"no" withKey:key];
+        [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
+        [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
+
+
+        [self.NoButton addTarget:self.delegate action:@selector(noButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.NoButton];
+
+        [self addSpacersInView:self];
     }
     return self;
 }

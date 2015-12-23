@@ -25,15 +25,11 @@
     self = [super init];
     if (self) {
         self.delegate = delegate;
-//        self.iconView = [self createImageView];
-//        self.iconView.image = [UIImage imageNamed:@"message.png"];
-//        [self addSubview:self.iconView];
         
-        self.promptLabel = [self createPromptLabel];
-        self.promptLabel.text = HLLocalizedString(([NSString stringWithFormat:@"%@_TEXT",key]));
+        self.promptLabel = [self createPromptLabel:key];
         [self addSubview:self.promptLabel];
         
-        self.Button1 = [self createPromptButton:@"BUTTON" withKey:key];
+        self.Button1 = [self createPromptButton:@"contact_us" withKey:key];
         //TODO: Move this to theme file - Rex
         [self.Button1 setTitleColor:[[HLTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];

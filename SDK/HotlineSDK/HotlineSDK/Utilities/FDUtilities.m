@@ -117,7 +117,6 @@
 }
 
 +(NSString *) getUUIDLookupKey{
-    FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", [KonotorApp GetAppID] ,HOTLINE_DEFAULTS_DEVICE_UUID ];
     return uuIdLookupKey;
 }
