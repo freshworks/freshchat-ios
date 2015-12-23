@@ -9,6 +9,7 @@
 #import "FDAlertView.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
+#import "HLLocalization.h"
 
 @interface FDAlertView ()
 

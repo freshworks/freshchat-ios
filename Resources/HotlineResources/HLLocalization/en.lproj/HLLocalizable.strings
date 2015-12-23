@@ -6,10 +6,8 @@
 */
 
 /* Grid View */
-"FAQ_TITLE_TEXT"="FAQs";
-"FAQ_GRID_VIEW_SEARCH_BUTTON_IMAGE"="search";
-"FAQ_GRID_VIEW_CONTACT_US_BUTTON_IMAGE"="chat";
-"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT"="Close";
+"faq_title_text"="FAQs";
+"faq_close_button_text"="Close";
 
 /* Categories List View Controller */
 "CATEGORIES_LIST_VIEW_CLOSE_BUTTON_TITLE"="Close";
@@ -23,9 +21,15 @@
 "ARTICLE_VOTE_PROMPT_YES"="Yes!";
 "ARTICLE_VOTE_PROMPT_NO"="No";
 
+/*Channels*/
+"channels_title_text"="Channels";
+"channels_close_button_text"="Close";
+
 /* Message UI */
 "Message Placeholder Text"="Message";
 "SEND_BUTTON_TEXT"="Send";
+"audio_message_title"="Audio message";
+"picture_message_title"="Picture message";
 
 /* Contact Us prompt */
 "CONTACT_US_PROMPT_BUTTON"="Still need help? Contact Us ";
@@ -34,12 +38,13 @@
 /* Search View Place Holder */
 "SEARCH_PLACEHOLDER"="Search for FAQs";
 
-/* Alerts */
-"CAMERA_UNAVAILABLE_TITLE"="Camera Unavailable";
-"CAMERA_UNAVAILABLE_DESCRIPTION"="Sorry! Your device doesn't have a camera, or the camera is not available for use.";
-"CAMERA_UNAVAILABLE_OK_BUTTON"="ok";
+/* Camera Unavailable alert */
+"camera_unavailable_title"="Camera Unavailable";
+"camera_unavailable_description"="Sorry! Your device doesn't have a camera, or the camera is not available for use.";
+"camera_unavailable_ok_button_text"="ok";
 
-"IMAGE_ATTACHMENT_OPTIONS"="options";
-"IMAGE_ATTACHMENT_CANCEL_BUTTON"="cancel";
-"IMAGE_ATTACHMENT_SELECT_EXISTING_IMAGE"="Select Existing Image";
-"IMAGE_ATTACHMENT_SELECT_NEW_IMAGE"="New Image via Camera";
+/*Image Attachment*/
+"image_attachment_options"="options";
+"image_attachment_cancel_button_text"="cancel";
+"image_attachment_select_existing_image"="Select Existing Image";
+"image_attachment_select_new_image"="New Image via Camera";

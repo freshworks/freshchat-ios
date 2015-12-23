@@ -20,6 +20,7 @@
 #import "FDDateUtil.h"
 #import "KonotorUtil.h"
 #import "FDUtilities.h"
+#import "HLLocalization.h"
 
 @interface HLChannelViewController ()
 
@@ -31,7 +32,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = @"Channels";
+    parent.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     HLTheme *theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
@@ -62,7 +63,7 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
@@ -136,7 +137,7 @@
             break;
             
         case KonotorMessageTypeAudio:
-            description = @"Audio message";
+            description = HLLocalizedString(LOC_AUDIO_MSG_TITLE);
             break;
             
         case KonotorMessageTypePicture:
@@ -144,7 +145,7 @@
             if (message.text) {
                 description = message.text;
             }else{
-                description = @"Picture message";
+                description = HLLocalizedString(LOC_PICTURE_MSG_TITLE);
             }
             break;
         }

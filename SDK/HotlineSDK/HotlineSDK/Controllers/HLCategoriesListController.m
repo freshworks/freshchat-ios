@@ -20,6 +20,7 @@
 #import "FDCategoryListViewCell.h"
 #import "KonotorUtil.h"
 #import "Hotline.h"
+#import "HLLocalization.h"
 
 @interface HLCategoriesListController ()
 
@@ -31,7 +32,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
+    parent.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
     [self updateCategories];
     [self localNotificationSubscription];

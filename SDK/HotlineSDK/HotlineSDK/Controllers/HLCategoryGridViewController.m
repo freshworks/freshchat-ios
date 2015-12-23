@@ -23,6 +23,7 @@
 #import "FDUtilities.h"
 #import "KonotorUtil.h"
 #import "Hotline.h"
+#import "HLLocalization.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -36,7 +37,7 @@
 @implementation HLCategoryGridViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
+    parent.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     self.view.backgroundColor = [UIColor whiteColor];
     [self updateCategories];
     [self setupSubviews];
