@@ -75,12 +75,6 @@
     return HLResourcesBundle;
 }
 
-+(UIImage *)getImageFromMHBundleWithName:(NSString *)imageName{
-    NSString *pathPrefix        = @"HLResources.bundle/Images/";
-    NSString *imageNameWithPath = [NSString stringWithFormat:@"%@%@",pathPrefix,imageName];
-    return [UIImage imageNamed:imageNameWithPath];
-}
-
 -(UIImage *)getImageWithKey:(NSString *)key{
     NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
