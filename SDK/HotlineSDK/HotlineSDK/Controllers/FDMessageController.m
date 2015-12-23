@@ -16,6 +16,7 @@
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
 #import "HLConstants.h"
+#import "HLLocalization.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
@@ -107,7 +108,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)setNavigationItem{
     if(self.isModalPresentationPreferred){
-        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
+        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackArrow"]
@@ -117,7 +118,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
     }
     
-    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
+    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_TITLE_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
     self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
     
     if (self.parentViewController) {
@@ -274,7 +275,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     if([toSend isEqualToString:@""]){
-        [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
+        [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
     }else{
         [Konotor uploadTextFeedback:toSend onConversation:self.channel.conversations.allObjects.lastObject onChannel:self.channel];
         [self checkPushNotificationState];
@@ -301,7 +302,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     
     if (!notificationEnabled) {
         if(promptForPush){
-            [self showAlertWithTitle:@"Modify Push Setting" andMessage:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center"];
+            [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
+                          andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
             promptForPush=NO;
         }
     }
@@ -480,7 +482,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
     if(!showingAlert){
-        [self showAlertWithTitle:@"Message not sent" andMessage:@"We could not send your message(s) at this time. Check your internet or try later."];
+        [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
+                      andMessage:HLLocalizedString(LOC_MESSAGE_UNSENT_INFO_TEXT)];
         showingAlert=YES;
     }
 }

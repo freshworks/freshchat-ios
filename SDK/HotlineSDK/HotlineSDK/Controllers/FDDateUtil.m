@@ -68,6 +68,8 @@
     return date;
 }
 
+// Not used currently
+// Add in the Localization when used . - Rex
 //+(NSString *)itemCreatedDurationSinceDate:(NSDate*)date{
 //    NSInteger FEW_SECONDS = 50;
 //    NSInteger FEW_MINUTES = 5, ONE_HOUR = 60, ONE_DAY = 1440, ONE_MONTH = 43200;    //(in minutes)

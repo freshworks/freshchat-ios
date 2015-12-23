@@ -25,9 +25,24 @@
 
 /* Message UI */
 "Message Placeholder Text"="Message";
+"messages_close_button_text"="Close";
 "send_button_text"="Send";
+"messages_support_label_text"="Support";
+"messages_user_label_text"="You";
+
 "audio_message_title"="Audio message";
 "picture_message_title"="Picture message";
+"picture_message_upload_error"="Error loading picture message.Image Not Found";
+
+"audio_recording"="Audio Recording";
+"audio_recording_stopped"="Recording Stopped";
+
+"empty_message_title"="Empty Message";
+"empty_message_info_text"="You cannot send an empty message. Please type a message to send";
+"modify_push_setting_title"="Modify Push Setting";
+"modify_push_setting_info_text"="To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center";
+"message_unsent_title"="Message not sent";
+"message_unsent_info_text"="We could not send your message(s) at this time. Check your internet or try later.";
 
 /* Search View Place Holder */
 "search_placeholder_text"="Search for FAQs";
