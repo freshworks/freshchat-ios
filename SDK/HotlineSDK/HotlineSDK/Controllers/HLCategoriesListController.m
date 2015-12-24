@@ -24,12 +24,14 @@
 @interface HLCategoriesListController ()
 
 @property (nonatomic, strong)NSArray *categories;
+@property (nonatomic, strong)HLTheme *theme;
 
 @end
 
 @implementation HLCategoriesListController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
+    self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
     parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
     [self setNavigationItem];
@@ -51,8 +53,9 @@
 }
 
 -(void)setNavigationItem{
-    UIImage *searchButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Search"];
-    UIImage *contactUsButtonImage = [[HLTheme sharedInstance] getImageWithKey:@"Chat"];
+    
+    UIImage *searchButtonImage = [self.theme getImageWithKey:IMAGE_SEARCH_ICON];
+    UIImage *contactUsButtonImage = [self.theme getImageWithKey:IMAGE_CONTACT_US_ICON];
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     searchButton.frame = CGRectMake(0, 0, 44, 44);
@@ -122,7 +125,7 @@
         cell.titleLabel.text  = category.title;
         cell.detailLabel.text = category.categoryDescription;
         cell.layer.borderWidth = 0.5f;
-        cell.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
+        cell.layer.borderColor = [self.theme tableViewCellSeparatorColor].CGColor;
         cell.imgView.image = [UIImage imageWithData:category.icon];
     }
     return cell;

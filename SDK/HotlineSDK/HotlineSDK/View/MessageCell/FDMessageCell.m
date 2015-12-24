@@ -59,8 +59,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         txtView=[[UITextView alloc] init];
     }
     
-    sentImage=[UIImage imageNamed:@"konotor_sent"];
-    sendingImage=[UIImage imageNamed:@"konotor_uploading"];
+    sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
+    sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
 
     showsProfile=YES;
     showsSenderName=NO;
@@ -429,9 +429,9 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
    if(showsProfile){
        if(isSenderOther){
-           profileImageView.image = [UIImage imageNamed:@"konotor_supportprofile"];
+           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
        }else{
-           profileImageView.image = [UIImage imageNamed:@"konotor_profile"];
+           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_USER];
        }
        
        profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
@@ -650,9 +650,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         konotorUIParameters.doneButtonColor=nil;
         
         konotorUIParameters.otherTextColor=[UIColor blackColor];
-        konotorUIParameters.otherChatBubble=[UIImage imageNamed:@"Bubble_outline"];
+        konotorUIParameters.otherChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
         konotorUIParameters.userTextColor=[UIColor darkGrayColor];
-        konotorUIParameters.userChatBubble=[UIImage imageNamed:@"Bubble_filled"];
+        
+        konotorUIParameters.userChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
         konotorUIParameters.userProfileImage=nil;
         konotorUIParameters.otherProfileImage=nil;
         
