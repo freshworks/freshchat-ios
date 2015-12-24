@@ -62,12 +62,18 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.channel = channel;
-        self.conversation = channel.conversations.allObjects.firstObject;
         self.isModalPresentationPreferred = isModal;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
     return self;
+}
+
+-(KonotorConversation *)conversation{
+    if(!_conversation){
+        _conversation = [_channel primaryConversation];
+    }
+    return _conversation;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
@@ -297,7 +303,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if([toSend isEqualToString:@""]){
         [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
     }else{
-        [Konotor uploadTextFeedback:toSend onConversation:self.channel.conversations.allObjects.firstObject onChannel:self.channel];
+        [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
@@ -482,21 +488,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) didFinishUploading:(NSString *)messageID{
-    for(FDMessageCell* cell in [self.tableView visibleCells]){
-        if([messageID hash]==cell.tag){
-            UIImageView* uploadStatus=(UIImageView*)cell.uploadStatusImageView;
-            [uploadStatus setImage:self.sentImage];
-            for(int i=messageCount-1;i>=0;i--){
-                if (i<self.messages.count) {
-                    KonotorMessageData *message = self.messages[i];
-                    if([message.messageId isEqualToString:messageID]){
-                        message.uploadStatus = @(MessageUploaded);
-                        break;
-                    }
-                }
-            }
-        }
-    }
     [self refreshView];
 }
 
@@ -622,7 +613,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void) openActionUrl:(id) sender{
     FDActionButton* button=(FDActionButton*)sender;
-    if(button.articleID!=nil){
+    if(button.articleID!=nil && button.articleID > 0){
         @try{
             HLArticle *article = [HLArticle getWithID:button.articleID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
             if(article!=nil){
@@ -640,7 +631,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
             NSLog(@"%@",e);
         }
     }
-    if(button.actionUrlString!=nil){
+    else if(button.actionUrlString!=nil){
         @try{
             NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
             if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
@@ -667,9 +658,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
-    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.channel.conversations.allObjects.firstObject];
+    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
-        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.channel.conversations.allObjects.firstObject conversationAlias]) onChannel:self.channel];
+        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     }
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
 }

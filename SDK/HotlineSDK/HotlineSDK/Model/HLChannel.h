@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeMessagesObject:(KonotorMessage *)value;
 - (void)addMessages:(NSSet<KonotorMessage *> *)values;
 - (void)removeMessages:(NSSet<KonotorMessage *> *)values;
+- (KonotorConversation*) primaryConversation;
 
 @end
 
