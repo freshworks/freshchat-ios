@@ -86,7 +86,6 @@
                                                                       NSForegroundColorAttributeName: [self.theme navigationBarFontColor],
                                                                       NSFontAttributeName: [self.theme navigationBarTitleFont]
                                                                       }];
-    //[self.theme navigationBackgroundColor]];
 }
 
 @end
