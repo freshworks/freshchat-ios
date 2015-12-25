@@ -33,6 +33,10 @@
     [HLChannel updateChannel:self withInfo:channelInfo];
 }
 
+- (KonotorConversation*) primaryConversation{
+    return self.conversations.allObjects.firstObject;
+}
+
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo{
     channel.name = channelInfo[@"name"];
     channel.channelID = channelInfo[@"channelId"];
@@ -72,5 +76,7 @@
     }
     return channel;
 }
+
+
 
 @end
