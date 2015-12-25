@@ -65,6 +65,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
+        messageCount = 0;
+        messageCount_prev = 0;
+        messagesDisplayedCount=20;
+        loadmoreCount=20;
         self.channel = channel;
         self.isModalPresentationPreferred = isModal;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
