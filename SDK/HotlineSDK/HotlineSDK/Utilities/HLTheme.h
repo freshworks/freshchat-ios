@@ -87,6 +87,11 @@
 -(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
 
+//NavigationBar
+-(UIColor *)navigationBarBackgroundColor;
+-(UIFont *)navigationBarTitleFont;
+-(UIColor *)navigationBarFontColor;
+
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
 -(UIColor *)sendButtonColor;

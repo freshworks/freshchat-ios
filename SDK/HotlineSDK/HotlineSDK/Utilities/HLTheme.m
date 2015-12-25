@@ -108,6 +108,22 @@
                            alpha:1.0f];
 }
 
+#pragma mark - Navigation Bar
+
+- (UIColor *) navigationBarBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"NavigationBar.BackgroundColor"];
+    return color ?color : [HLTheme colorWithHex:FD_NAVIGATION_BAR_BACKGROUND];
+}
+
+-(UIFont *)navigationBarTitleFont{
+    return [self getFontWithKey:@"NavigationBar.TitleFontName" andDefaultSize:17];
+}
+
+-(UIColor *)navigationBarFontColor{
+        UIColor *color = [self getColorForKeyPath:@"NavigationBar.TitleColor"];
+        return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
 #pragma mark - Search Bar
 
 -(UIFont *)searchBarFont{

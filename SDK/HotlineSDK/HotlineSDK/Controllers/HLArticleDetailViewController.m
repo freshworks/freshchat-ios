@@ -264,19 +264,15 @@
 }
 
 -(void) showArticleRatingPrompt{
-    [UIView animateWithDuration:.5 animations:^{
         [self.articleVotePromptView setHidden:NO];
         [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:ARTICLE_PROMPT_VIEW_HEIGHT];
         [self.view layoutIfNeeded];
-    }];
 }
 
 -(void) hideArticleRatingPrompt{
-    [UIView animateWithDuration:.5 animations:^{
         [self.articleVotePromptView setHidden:YES];
         [self modifyConstraint:self.articlePromptViewHeightConstraint withHeight:0];
         [self.view layoutIfNeeded];
-    }];
 }
 
 -(void)showContactUsPrompt{
