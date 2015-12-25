@@ -80,6 +80,8 @@
 -(UIFont *)dialogueYesButtonFont;
 -(UIColor *)dialogueYesButtonTextColor;
 -(UIColor *)dialogueYesButtonBackgroundColor;
+-(UIColor *)dialogueNoButtonBorderColor;
+-(UIColor *)dialogueYesButtonBorderColor;
 -(UIColor *)dialogueNoButtonBackgroundColor;
 -(UIFont *)dialogueNoButtonFont;
 -(UIColor *)dialogueNoButtonTextColor;

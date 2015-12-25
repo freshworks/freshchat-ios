@@ -184,6 +184,15 @@
     return [self getFontWithKey:@"Dialogues.NoButton" andDefaultSize:14];
 }
 
+-(UIColor *)dialogueNoButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
+}
+
+-(UIColor *)dialogueYesButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
+}
 
 -(UIColor *)dialogueBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.BackgroundColor"];

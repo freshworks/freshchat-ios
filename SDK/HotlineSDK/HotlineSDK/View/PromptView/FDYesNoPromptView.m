@@ -35,6 +35,7 @@
      self.YesButton = [self createPromptButton:@"YES" withKey:key];
      [self.YesButton setTitleColor:[self.theme dialogueYesButtonTextColor] forState:UIControlStateNormal];
      [self.YesButton setBackgroundColor:[self.theme dialogueYesButtonBackgroundColor]];
+     [[self.YesButton layer] setBorderColor:[[self.theme dialogueYesButtonBorderColor] CGColor]];
      [[self.YesButton layer] setBorderWidth:0.3f];
      
      self.YesButton.layer.cornerRadius = 2;
@@ -45,7 +46,9 @@
      [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
      [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
      [[self.NoButton layer] setBorderWidth:0.3f];
+    [[self.NoButton layer] setBorderColor:[[self.theme dialogueNoButtonBorderColor] CGColor]];
      self.NoButton.layer.cornerRadius = 2;
+        
      [self.NoButton addTarget:self.delegate action:@selector(noButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
      [self addSubview:self.NoButton];
      [self addSpacersInView:self];
@@ -67,9 +70,9 @@
     
     
     //Constraints for buttons
-    [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button2(desiredWidth1)]-[Button1(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
-    [self addConstraint:@"V:[promptLabel]-5-[Button1]" InView:self];
-    [self addConstraint:@"V:[promptLabel]-5-[Button2]" InView:self];
+    [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button2(desiredWidth1)]-15-[Button1(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
+    [self addConstraint:@"V:[promptLabel]-16-[Button1]" InView:self];
+    [self addConstraint:@"V:[promptLabel]-16-[Button2]" InView:self];
     
     [super layoutSubviews];
 }

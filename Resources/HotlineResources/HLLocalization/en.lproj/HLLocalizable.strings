@@ -19,7 +19,7 @@
 "ARTICLE_LIST_VIEW_TITLE"="Article List";
 
 /* Article UpVote DownVote */
-"ARTICLE_VOTE_PROMPT_LABEL_TEXT"="Was this helpful?";
+"ARTICLE_VOTE_PROMPT_LABEL_TEXT"="Was this answer helpful?";
 "ARTICLE_VOTE_PROMPT_YES"="Yes!";
 "ARTICLE_VOTE_PROMPT_NO"="No";
 

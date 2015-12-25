@@ -78,25 +78,29 @@
 		<key>YesButtonFontName</key>
 		<string>HelveticaNeue</string>
 		<key>YesButtonFontSize</key>
-		<string>18</string>
+		<string>14</string>
 		<key>YesButtonBackgroundColor</key>
 		<string>007AFF</string>
 		<key>NoButtonFontColor</key>
-		<string>007AFF</string>
+		<string>535353</string>
 		<key>NoButtonFontName</key>
 		<string>HelveticaNeue</string>
 		<key>NoButtonFontSize</key>
-		<string>18</string>
+		<string>14</string>
 		<key>NoButtonBackgroundColor</key>
-		<string>D8D8D8</string>
+		<string>F6F6F5</string>
+		<key>NoButtonBorderColor</key>
+		<string>C1C1BF</string>
+		<key>YesButtonBorderColor</key>
+		<string>007AFF</string>
 		<key>BackgroundColor</key>
-		<string>D8D8D8</string>
+		<string>F6F6F5</string>
 		<key>LabelFontColor</key>
-		<string>000000</string>
+		<string>535353</string>
 		<key>LabelFontName</key>
 		<string>HelveticaNeue</string>
 		<key>LabelFontSize</key>
-		<string>20</string>
+		<string>15</string>
 	</dict>
 	<key>FeedbackView</key>
 	<dict>
