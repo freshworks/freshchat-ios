@@ -171,8 +171,35 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }];
 }
 
++(void)markAllMessagesAsReadForChannel:(HLChannel*)channel{
+    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
+    [context performBlock:^{
+        NSError *pError;
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
+        request.predicate = predicate;
+        NSArray *array = [context executeFetchRequest:request error:&pError];
+        if([array count]==0){
+            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
+            return;
+        }else{
+            for(int i=0;i<[array count];i++){
+                KonotorMessage *message = [array objectAtIndex:i];
+                if(message){
+                    if(![[message marketingId] isEqualToNumber:@0]){
+                        [message MarkMarketingMessageAsRead];
+                    }else{
+                        [message markAsReadwithNotif:NO];
+                    }
+                }
+            }
+            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
+        }
+    }];
+}
 
-//TODO: Move this to HLCoreServices
 +(void) markMarketingMessageAsClicked:(NSNumber *) marketingId{
     
     NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];

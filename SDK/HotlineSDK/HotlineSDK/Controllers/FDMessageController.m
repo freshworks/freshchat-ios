@@ -586,7 +586,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     }
 
     [self.tableView reloadData];
-    [Konotor markAllMessagesAsRead];
+    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     if(obj==nil)
         [self scrollTableViewToLastCell];
     else{
