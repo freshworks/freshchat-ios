@@ -20,6 +20,7 @@
 #import "FDSearchBar.h"
 #import "HLContainerController.h"
 #import "HLListViewController.h"
+#import "Hotline.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 
@@ -29,6 +30,11 @@
 @property (strong, nonatomic) UIView *trialView;
 @property (strong, nonatomic) UITapGestureRecognizer *recognizer;
 @property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) UIView *emptySearchView;
+@property (strong, nonatomic) NSLayoutConstraint *contactBtnHeightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *contactBtnBottomConstraint;
+@property (nonatomic) CGFloat keyboardHeight;
+@property (nonatomic) BOOL isKeyboardOpen;
 @end
 
 @implementation HLSearchViewController
@@ -36,6 +42,15 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupSubviews];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 -(HLTheme *)theme{
@@ -105,7 +120,133 @@
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial]|"
                                                                       options:0 metrics:nil views:views]];
+    [self setEmptySearchResultView];
 }
+
+- (void) setEmptySearchResultView{
+    
+    self.emptySearchView = [[UIView alloc] init];
+    self.emptySearchView.backgroundColor = [UIColor clearColor];
+    [self.emptySearchView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:self.emptySearchView];
+    
+    UIImageView *noResultImage = [[UIImageView alloc] init];
+    noResultImage.image = [self.theme getImageWithKey:@"EmptySearchImage"];
+    [noResultImage setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.emptySearchView addSubview:noResultImage];
+    
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
+    [self.emptySearchView addSubview:self.footerView];
+    
+    NSDictionary *emptySubViews = @{@"emptySearchView":self.emptySearchView, @"footerView" : self.footerView};
+
+    [self.view addConstraints:[NSLayoutConstraint
+                                constraintsWithVisualFormat:@"H:|-0-[emptySearchView]-0-|"
+                                options:NSLayoutFormatDirectionLeadingToTrailing
+                                metrics:nil
+                                views:emptySubViews]];
+    [self.view addConstraints:[NSLayoutConstraint
+                                constraintsWithVisualFormat:@"V:|-0-[emptySearchView]-0-|"
+                                options:NSLayoutFormatDirectionLeadingToTrailing
+                                metrics:nil
+                                views:emptySubViews]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:emptySubViews]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.emptySearchView
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:0.3
+                                                           constant:0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.emptySearchView
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0.3
+                                                           constant:0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.emptySearchView
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
+                                                          attribute:NSLayoutAttributeCenterY
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.emptySearchView
+                                                          attribute:NSLayoutAttributeCenterY
+                                                         multiplier:0.1
+                                                           constant:0.0]];
+    
+    self.contactBtnHeightConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
+                                                                   attribute:NSLayoutAttributeHeight
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:nil
+                                                                   attribute:NSLayoutAttributeNotAnAttribute
+                                                                  multiplier:1.0
+                                                                    constant:40];
+    
+    self.contactBtnBottomConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
+                                                                   attribute:NSLayoutAttributeBottom
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:self.view
+                                                                   attribute:NSLayoutAttributeBottom
+                                                                  multiplier:1.0 constant:0];
+    
+    
+    [self.view addConstraint:self.contactBtnBottomConstraint];
+    [self.view addConstraint:self.contactBtnHeightConstraint];
+    self.emptySearchView.hidden = YES;
+}
+
+- (void) showEmptySearchView{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.emptySearchView.hidden = NO;
+    });
+}
+
+- (void) hideEmptySearchView{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.emptySearchView.hidden = YES;
+    });
+}
+
+#pragma mark Keyboard delegate
+
+-(void) keyboardWillShow:(NSNotification *)note{
+    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    self.isKeyboardOpen = YES;
+    CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
+    CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
+    self.contactBtnBottomConstraint.constant = - keyboardCoveredHeight;
+    self.keyboardHeight = keyboardCoveredHeight;
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyboardOpen = NO;
+    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    self.keyboardHeight = 0.0;
+    self.contactBtnBottomConstraint.constant = 0.0;
+    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
 
 #pragma mark - TableView DataSource
 
@@ -162,14 +303,18 @@
         [context performBlock:^{
             NSArray *articles = [FDRanking rankTheArticleForSearchTerm:term withContext:context];
             if ([articles count] > 0) {
+                [self hideEmptySearchView];
                 self.searchResults = articles;
                 [self reloadSearchResults];
             }else{
+                
                 self.searchResults = nil;
+                [self showEmptySearchView];
                 [self reloadSearchResults];
             }
         }];
     }else{
+        [self hideEmptySearchView];
         [self fetchAllArticles];
     }
 }
@@ -212,12 +357,24 @@
     }
 }
 
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
+    [[Hotline sharedInstance]presentFeedback:self];
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     return YES;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES]; 
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)dealloc{
+    [self localNotificationUnSubscription];
 }
 
 @end

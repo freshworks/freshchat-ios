@@ -326,6 +326,8 @@
 		<string>HLResources.bundle/Images/hotline_audio_progess_max</string>
 		<key>TableViewAccessoryIcon</key>
 		<string>HLResources.bundle/Images/hotline_right_arrow</string>
+		<key>EmptySearchImage</key>
+		<string>HLResources.bundle/Images/hotline_empty_search_icon</string>
 	</dict>
 </dict>
 </plist>

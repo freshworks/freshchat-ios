@@ -134,7 +134,7 @@
     self.webView.scrollView.scrollEnabled = YES;
     self.webView.scrollView.delegate = self;
     [self.webView loadHTMLString:self.embedHTML baseURL:nil];
-    [self.view addSubview:self.webView];
+    //[self.view addSubview:self.webView];
     [self.webView setBackgroundColor:[UIColor whiteColor]];
     
     //Article Vote Prompt View
