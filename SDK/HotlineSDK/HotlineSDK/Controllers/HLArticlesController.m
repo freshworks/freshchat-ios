@@ -50,15 +50,24 @@
 }
 
 -(void)setNavigationItem{
+    
     UIImage *searchButtonImage = [self.theme getImageWithKey:IMAGE_SEARCH_ICON];
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:searchButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    self.parentViewController.navigationItem.rightBarButtonItem = searchButton;
+    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchButton.frame = CGRectMake(0, 0, 44, 44);
+    [searchButton setImage:searchButtonImage forState:UIControlStateNormal];
+    [searchButton addTarget:self action:@selector(searchButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
+    [searchBarButton setStyle:UIBarButtonItemStylePlain];
+    UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedItem.width = -20.0f;
+    
+    //self.parentViewController.navigationItem.rightBarButtonItem = searchBarButton;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_BACK_BUTTON]
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self.navigationController
                                                                   action:@selector(popViewControllerAnimated:)];
     self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-    
+    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
     /*
      Fix: setting bar button image, disables edge swipe swipe navigation
      http://stackoverflow.com/questions/19054625
