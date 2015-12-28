@@ -1,14 +1,13 @@
 //
 //  HLChannel.m
-//  Hotline
+//  HotlineSDK
 //
-//  Created by user on 03/11/15.
+//  Created by Aravinth Chandran on 19/12/15.
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
 #import "HLChannel.h"
 #import "KonotorConversation.h"
-#import "KonotorMessage.h"
 #import "KonotorMessage.h"
 #import "HLMacros.h"
 
@@ -16,14 +15,14 @@
 
 @dynamic channelID;
 @dynamic created;
-@dynamic isHidden;
 @dynamic icon;
 @dynamic iconURL;
+@dynamic isHidden;
 @dynamic lastUpdated;
 @dynamic name;
 @dynamic position;
 @dynamic conversations;
-@dynamic welcomeMessage;
+@dynamic messages;
 
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     HLChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:context];
@@ -32,6 +31,10 @@
 
 -(void)updateWithInfo:(NSDictionary *)channelInfo{
     [HLChannel updateChannel:self withInfo:channelInfo];
+}
+
+- (KonotorConversation*) primaryConversation{
+    return self.conversations.allObjects.firstObject;
 }
 
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo{
@@ -43,13 +46,19 @@
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
     
+    //TODO: Use this prefetch when channel is created with background context
+    
     //Prefetch category icon
-    __block NSData *imageData = nil;
-    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
-    });
-    channel.icon = imageData;
-    channel.welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+    
+    //    __block NSData *imageData = nil;
+    //    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
+    //    });
+    //    channel.icon = imageData;
+    
+    KonotorMessage *welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+    [channel addMessagesObject:welcomeMessage];
+    
     return channel;
 }
 
@@ -67,5 +76,7 @@
     }
     return channel;
 }
+
+
 
 @end

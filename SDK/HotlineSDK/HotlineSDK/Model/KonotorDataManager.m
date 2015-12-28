@@ -54,6 +54,12 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                                                             URL:persistantStoreURL options:options error:&error];
     if (error) {
         FDLog(@"Persistant Coordinator could not be created \n%@", error);
+        //delete the sqlite file and try again
+        [[NSFileManager defaultManager] removeItemAtPath:persistantStoreURL.path error:nil];
+        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:persistantStoreURL options:nil error:&error]) {
+            NSException *e= [[NSException alloc] initWithName:@"PerisistentStoreException" reason:[NSString stringWithFormat:@"Unresolved error %@, %@", error,[error userInfo]] userInfo:[error userInfo]];
+            @throw e;
+        }
     }
 }
 
@@ -198,7 +204,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
-    NSManagedObjectContext *context = self.backgroundContext;
+    NSManagedObjectContext *context = self.mainObjectContext;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.resultType = NSCountResultType;
     request.includesSubentities = NO;

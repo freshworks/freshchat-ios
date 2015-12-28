@@ -127,6 +127,7 @@
 + (NSString*) stringRepresentationForDate:(NSDate*) date{
     NSString* timeString;
     
+    //TODO: Read these from Localization - Rex
     NSArray* weekdays=[NSArray arrayWithObjects:@"Sunday",@"Monday",@"Tuesday",@"Wednesday",@"Thursday",@"Friday",@"Saturday",nil];
     
     NSDate* today=[[NSDate alloc] init];
@@ -167,6 +168,13 @@
     }
     return timeString;
     
+}
+
++(NSString *) getKeyForObject:(NSObject *) object {
+    if(object){
+        return [NSString stringWithFormat:@"%lu" , (unsigned long)[object hash]];
+    }
+    return @"nil";
 }
 
 @end

@@ -84,7 +84,7 @@
             [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
         });
     }else{
-        UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE") message:HLLocalizedString(@"CAMERA_UNAVAILABLE_DESCRIPTION") delegate:nil
+        UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE_TITLE") message:HLLocalizedString(@"CAMERA_UNAVAILABLE_DESCRIPTION") delegate:nil
                                                 cancelButtonTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE_OK_BUTTON") otherButtonTitles:nil];
         [alertview show];
     }

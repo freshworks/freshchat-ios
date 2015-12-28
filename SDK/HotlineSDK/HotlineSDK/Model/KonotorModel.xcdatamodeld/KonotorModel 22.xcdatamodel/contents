@@ -35,7 +35,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="KonotorConversation" inverseName="belongsToChannel" inverseEntity="KonotorConversation" syncable="YES"/>
-        <relationship name="welcomeMessage" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="KonotorMessage" inverseName="belongsToChannel" inverseEntity="KonotorMessage" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="KonotorMessage" inverseName="belongsToChannel" inverseEntity="KonotorMessage" syncable="YES"/>
     </entity>
     <entity name="KonotorApp" representedClassName="KonotorApp" syncable="YES">
         <attribute name="appID" optional="YES" attributeType="String" syncable="YES"/>
@@ -91,7 +91,7 @@
         <attribute name="read" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HLChannel" inverseName="welcomeMessage" inverseEntity="HLChannel" syncable="YES"/>
+        <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HLChannel" inverseName="messages" inverseEntity="HLChannel" syncable="YES"/>
         <relationship name="belongsToConversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorConversation" inverseName="hasMessages" inverseEntity="KonotorConversation" syncable="YES"/>
         <relationship name="hasMessageBinary" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="KonotorMessageBinary" inverseName="belongsToMessage" inverseEntity="KonotorMessageBinary" syncable="YES"/>
     </entity>
@@ -120,10 +120,10 @@
         <element name="HLCategory" positionX="-576" positionY="420" width="128" height="165"/>
         <element name="HLChannel" positionX="-110" positionY="246" width="128" height="193"/>
         <element name="KonotorApp" positionX="-288" positionY="-27" width="128" height="195"/>
-        <element name="KonotorConversation" positionX="162" positionY="560" width="128" height="178"/>
+        <element name="KonotorConversation" positionX="106" positionY="180" width="128" height="178"/>
         <element name="KonotorCustomProperty" positionX="-371" positionY="327" width="128" height="105"/>
         <element name="KonotorMessage" positionX="351" positionY="71" width="128" height="448"/>
-        <element name="KonotorMessageBinary" positionX="693" positionY="552" width="128" height="105"/>
+        <element name="KonotorMessageBinary" positionX="576" positionY="324" width="128" height="105"/>
         <element name="KonotorShareMessageEvent" positionX="54" positionY="-25" width="128" height="88"/>
         <element name="KonotorUser" positionX="-578" positionY="162" width="128" height="133"/>
     </elements>

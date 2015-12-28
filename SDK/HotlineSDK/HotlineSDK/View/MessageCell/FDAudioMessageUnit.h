@@ -19,7 +19,7 @@ enum FDAudioMessageMediaState {
 @class FDMessage;
 
 #define KONOTOR_AUDIOMESSAGE_HEIGHT 44
-#define KONOTOR_PLAYBUTTON_DIMENSION 40
+#define KONOTOR_PLAYBUTTON_DIMENSION 30
 
 
 @interface FDAudioMessageUnit : NSObject

@@ -8,28 +8,11 @@
 
 #import "FDActionButton.h"
 #import "FDMessageCell.h"
+#import "HLArticleDetailViewController.h"
 
 @implementation FDActionButton
 
-@synthesize actionUrlString;
-
--(void) openActionUrl:(id) sender
-{
-    FDActionButton* button=(FDActionButton*)sender;
-    if(button.actionUrlString!=nil){
-        @try{
-            NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
-            if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[UIApplication sharedApplication] openURL:actionUrl];
-                });
-            }
-        }
-        @catch(NSException* e){
-            NSLog(@"%@",e);
-        }
-    }
-}
+@synthesize actionUrlString,articleID;
 
 - (void) setUpStyle
 {
@@ -68,7 +51,8 @@
     
     float buttonXCenterAlign=messageOriginX-horizontalPadding/3.0+(messageFrameWidth-buttonWidth)/2;
     
-    if(actionUrlString!=nil){
+    if([FDMessageCell hasButtonForURL:actionUrlString articleID:articleID]){
+        self.articleID=articleID;
         self.actionUrlString=actionUrlString;
         [self setFrame:CGRectMake(buttonXCenterAlign,
                                           messageOriginY+messageFrameHeight,
@@ -78,7 +62,6 @@
    
         [self setAttributedTitle:
          [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[UIColor whiteColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
-        [self addTarget:self action:@selector(openActionUrl:) forControlEvents:UIControlEventTouchUpInside];
     }
     else{
         [self setHidden:YES];
