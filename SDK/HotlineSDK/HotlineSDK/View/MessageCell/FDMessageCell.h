@@ -78,8 +78,9 @@
 @property (strong, nonatomic) id<FDMessageCellDelegate> delegate;
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier;
-- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
+- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)width;
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
++ (float) getWidthForMessage:(KonotorMessageData*)message;
 
 @end
 

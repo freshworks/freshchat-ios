@@ -15,7 +15,6 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 static UITextView* tempView=nil;
 static UITextView* txtView=nil;
-static NSMutableDictionary* messageWidthMap=nil;
 
 
 @implementation FDMessageCell
@@ -160,15 +159,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
 + (float) getWidthForMessage:(KonotorMessageData*)message{
     
-    if(messageWidthMap==nil)
-    {
-        messageWidthMap=[[NSMutableDictionary alloc] init];
-    }
-    
-    if([messageWidthMap objectForKey:message.messageId]){
-        return [[messageWidthMap objectForKey:message.messageId] floatValue];
-    }
-    
     if(tempView==nil){
         tempView=[[UITextView alloc] init];
         txtView=[[UITextView alloc] init];
@@ -256,21 +246,18 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
     }
     
-    if(message.messageId)
-        [messageWidthMap setObject:@(messageContentViewWidth) forKey:message.messageId];
-    
     return messageContentViewWidth;
 }
 
 
-- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView{
+- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)contentViewWidth{
     
     NSInteger messageType = [currentMessage.messageType integerValue];
     
     isSenderOther=[Konotor isUserMe:[currentMessage messageUserId]]?NO:YES;
     float profileX=0.0, profileY=0.0, messageContentViewX=0.0, messageContentViewY=0.0, messageTextBoxX=0.0, messageTextBoxY=0.0,messageContentViewWidth=0.0,messageTextBoxWidth=0.0;
     
-    messageContentViewWidth=[FDMessageCell getWidthForMessage:currentMessage];
+    messageContentViewWidth=contentViewWidth;
     
     showsProfile=isSenderOther?([HLTheme sharedInstance].showsBusinessProfileImage):([HLTheme sharedInstance].showsUserProfileImage);
     

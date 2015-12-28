@@ -23,6 +23,7 @@
 +(NSString *)getUUID;
 +(BOOL)isRegisteredDevice;
 +(NSString*)stringRepresentationForDate:(NSDate*) date;
++(NSString *) getKeyForObject:(NSObject *) object;
 
 @end
 
