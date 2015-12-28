@@ -168,9 +168,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
     //single line text messages and html messages occupy less width than others
     
-    if ([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID]){
+    if ([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID] ||
+        message.messageType.integerValue==KonotorMessageTypeAudio ){
         return messageContentViewWidth;
     }
+    
     NSString* messageText=message.text;
     //convert HTML text to a plain string for width calculation
     if(message.messageType.integerValue==KonotorMessageTypeHTML){
