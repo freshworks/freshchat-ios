@@ -323,19 +323,19 @@
     return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
 }
 -(BOOL)alwaysPollForMessages{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"] intValue];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"] boolValue];
 }
 -(BOOL)showsBusinessProfileImage{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"] intValue];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"] boolValue];
 }
 -(BOOL)showsUserProfileImage{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"] intValue];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"] boolValue];
 }
 -(BOOL)showsBusinessMessageSenderName{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"] intValue];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"] boolValue];
 }
 -(BOOL)showsUserMessageSenderName{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"] intValue];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"] boolValue];
 }
 -(NSString *)textInputHintText{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.TextInputHintText"];

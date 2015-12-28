@@ -15,7 +15,6 @@ static KonotorUIParameters* konotorUIParameters=nil;
 
 static UITextView* tempView=nil;
 static UITextView* txtView=nil;
-static NSMutableDictionary* messageWidthMap=nil;
 
 
 @implementation FDMessageCell
@@ -160,117 +159,74 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
 + (float) getWidthForMessage:(KonotorMessageData*)message{
     
-    if(messageWidthMap==nil)
-    {
-        messageWidthMap=[[NSMutableDictionary alloc] init];
-    }
-    
-    if([messageWidthMap objectForKey:message.messageId]){
-        return [[messageWidthMap objectForKey:message.messageId] floatValue];
-    }
-    
     if(tempView==nil){
         tempView=[[UITextView alloc] init];
         txtView=[[UITextView alloc] init];
     }
 
-    
-    NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
-    
     float messageContentViewWidth = KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
 
     //single line text messages and html messages occupy less width than others
     
-    if((([message messageType].integerValue==KonotorMessageTypeText)||([message messageType].integerValue==KonotorMessageTypeHTML))&&(![FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID])){
-        NSString* messageText=message.text;
+    if ([FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID] ||
+        message.messageType.integerValue==KonotorMessageTypeAudio ){
+        return messageContentViewWidth;
+    }
+    
+    NSString* messageText=message.text;
+    //convert HTML text to a plain string for width calculation
+    if(message.messageType.integerValue==KonotorMessageTypeHTML){
+        messageText=[[[NSMutableAttributedString alloc] initWithData:[messageText dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil] string];
+    }
+    
+    //check if message occupies a single line
+    NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
+    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT];
+    int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT]);
+
+    //if message is single line, calculate larger width of the message text and date string
+    if (numLines >= 1){
+        [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+        [tempView setText:messageText];
+        [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
+        CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
-        //convert HTML text to a plain string for width calculation
-        if(message.messageType.integerValue==KonotorMessageTypeHTML){
-            messageText=[[[NSMutableAttributedString alloc] initWithData:[messageText dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil] string];
+        NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
+        NSString *strDate = [FDUtilities stringRepresentationForDate:date];
+        
+        [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
+        [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
+        [tempView setText:strDate];
+        CGSize txtTimeSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
+        CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
+        CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
+        
+        if (msgWidth < timeWidth){
+            messageContentViewWidth = timeWidth;
         }
-        
-        //check if message occupies a single line
-        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT];
-        int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT]);
-        
-        //if message is single line, calculate larger width of the message text and date string
-        if (numLines >= 1){
-            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
-            [tempView setText:messageText];
-            [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
-            CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
-            
-            NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
-            NSString *strDate = [FDUtilities stringRepresentationForDate:date];
-            
-            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
-            [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
-            [tempView setText:strDate];
-            CGSize txtTimeSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
-            CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
-            CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
-            
-            if (msgWidth < timeWidth){
-                messageContentViewWidth = timeWidth;
-            }
-            else{
-                messageContentViewWidth = msgWidth;
-            }
+        else{
+            messageContentViewWidth = msgWidth;
         }
     }
-    else if((([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2))&&(![FDMessageCell hasButtonForURL:message.actionURL articleID:message.articleID]))
-    {
-        NSString* messageText=message.text;
-        
-        //check if message occupies a single line
-        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT];
-        int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT]);
-        
-        //if message is single line, calculate larger width of the message text and date string
-        if (numLines >= 1){
-            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
-            [tempView setText:messageText];
-            [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
-            CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
-            
-            NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
-            NSString *strDate = [FDUtilities stringRepresentationForDate:date];
-            
-            [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
-            [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
-            [tempView setText:strDate];
-            CGSize txtTimeSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 50)];
-            CGFloat msgWidth = txtSize.width + 3 * KONOTOR_HORIZONTAL_PADDING;
-            CGFloat timeWidth = (txtTimeSize.width +  3 * KONOTOR_HORIZONTAL_PADDING)+16;
-            
-            if (msgWidth < timeWidth){
-                messageContentViewWidth = timeWidth;
-            }
-            else{
-                messageContentViewWidth = msgWidth;
-            }
-        }
+    if(([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2)){
         CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:message];
         if((picSize.width+16)>messageContentViewWidth)
             messageContentViewWidth=MIN(picSize.width+16,KONOTOR_TEXTMESSAGE_MAXWIDTH);
 
     }
     
-    if(message.messageId)
-        [messageWidthMap setObject:@(messageContentViewWidth) forKey:message.messageId];
-    
     return messageContentViewWidth;
 }
 
 
-- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView{
+- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)contentViewWidth{
     
     NSInteger messageType = [currentMessage.messageType integerValue];
     
     isSenderOther=[Konotor isUserMe:[currentMessage messageUserId]]?NO:YES;
     float profileX=0.0, profileY=0.0, messageContentViewX=0.0, messageContentViewY=0.0, messageTextBoxX=0.0, messageTextBoxY=0.0,messageContentViewWidth=0.0,messageTextBoxWidth=0.0;
     
-    messageContentViewWidth=[FDMessageCell getWidthForMessage:currentMessage];
+    messageContentViewWidth=contentViewWidth;
     
     showsProfile=isSenderOther?([HLTheme sharedInstance].showsBusinessProfileImage):([HLTheme sharedInstance].showsUserProfileImage);
     

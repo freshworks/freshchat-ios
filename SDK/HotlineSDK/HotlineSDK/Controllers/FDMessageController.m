@@ -21,6 +21,7 @@
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
 #import "HLTheme.h"
+#import "FDUtilities.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
@@ -41,6 +42,7 @@
 @property (strong, nonatomic) NSTimer *pollingTimer;
 @property (nonatomic, strong) NSString* currentRecordingMessageId;
 @property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
+@property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 
 @end
 
@@ -61,6 +63,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     self = [super init];
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
+        self.messageWidthMap = [[NSMutableDictionary alloc]init];
         self.channel = channel;
         self.isModalPresentationPreferred = isModal;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
@@ -221,7 +224,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (indexPath.row < self.messages.count) {
         KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
         cell.messageData = message;
-        [cell drawMessageViewForMessage:message parentView:self.view];
+        [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
     if(indexPath.row==0 && messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
@@ -263,19 +266,34 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
     float height;
-    if([self.messageHeightMap objectForKey:message.messageId]){
-        height = [[self.messageHeightMap objectForKey:message.messageId] floatValue];
+    NSString *key = [self getIdentityForMessage:message];
+    if(self.messageHeightMap[key]){
+        height = [self.messageHeightMap[key] floatValue];
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        [self.messageHeightMap setValue:@(height) forKey:message.messageId?message.messageId:[self randomString]];
+        self.messageHeightMap[key] = @(height);
     }
-
     return height;
 }
 
--(NSString *)randomString{
-    return [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+
+-(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
+    float width;
+    NSString *key = [self getIdentityForMessage:message];
+    if(self.messageWidthMap[key]){
+        width = [self.messageWidthMap[key] floatValue];
+    }
+    else {
+        width = [FDMessageCell getWidthForMessage:message];
+        self.messageWidthMap[key] = @(width);
+    }
+    return width;
+}
+
+
+-(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
+    return [FDUtilities getKeyForObject:message];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
