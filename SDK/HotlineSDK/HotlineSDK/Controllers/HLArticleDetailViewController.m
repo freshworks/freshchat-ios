@@ -223,6 +223,8 @@
     [self handleArticleVotePrompt];
 }
 
+
+//TODO: Do not hide prompt when the user is scrolling up, when he is at the end of the webview
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){
         if(self.bottomViewHeightConstraint.constant > 0 ) {
