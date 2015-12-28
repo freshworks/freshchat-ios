@@ -267,12 +267,12 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
     float height;
     NSString *key = [self getIdentityForMessage:message];
-    if([self.messageHeightMap objectForKey:key]){
-        height = [[self.messageHeightMap objectForKey:key] floatValue];
+    if(self.messageHeightMap[key]){
+        height = [self.messageHeightMap[key] floatValue];
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        [self.messageHeightMap setValue:@(height) forKey:key];
+        self.messageHeightMap[key] = @(height);
     }
     return height;
 }
@@ -281,18 +281,17 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
     float width;
     NSString *key = [self getIdentityForMessage:message];
-    if([self.messageWidthMap objectForKey:key]){
-        width = [[self.messageWidthMap objectForKey:key] floatValue];
+    if(self.messageWidthMap[key]){
+        width = [self.messageWidthMap[key] floatValue];
     }
     else {
         width = [FDMessageCell getWidthForMessage:message];
-        [self.messageWidthMap setValue:@(width) forKey:key];
+        self.messageWidthMap[key] = @(width);
     }
     return width;
 }
 
 
-//TODO: Eliminate random String with hash
 -(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
     return [FDUtilities getKeyForObject:message];
 }
