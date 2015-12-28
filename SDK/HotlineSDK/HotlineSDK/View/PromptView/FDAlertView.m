@@ -26,19 +26,16 @@
         self.delegate = delegate;
         
         self.promptLabel = [self createPromptLabel];
-        self.promptLabel.text = HLLocalizedString(@"THANK_YOU_PROMPT_TEXT");
+        self.promptLabel.text = HLLocalizedString(([NSString stringWithFormat:@"%@_TEXT",key]));
         [self addSubview:self.promptLabel];
         
         self.Button1 = [self createPromptButton:@"BUTTON" withKey:key];
-        self.Button1.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.Button1.titleLabel.numberOfLines = 0;
-        self.Button1.titleLabel.textAlignment = NSTextAlignmentCenter;
-        [self.Button1 setTitleColor:[HLTheme colorWithHex:@"007AFF"] forState:UIControlStateNormal];
+        //TODO: Move this to theme file - Rex
+        [self.Button1 setTitleColor:[[HLTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.Button1];
         [self setBackgroundColor:[UIColor whiteColor]];
         [self addSpacersInView:self];
-        [self setupConstraints];
     }
     return self;
 }
@@ -56,6 +53,10 @@
 -(void)layoutSubviews{
     [self setupConstraints];
     [super layoutSubviews];
+}
+
+-(CGFloat)getPromptHeight{
+    return ALERT_PROMPT_VIEW_HEIGHT;
 }
 
 @end

@@ -282,3 +282,15 @@ img{
 iframe { 
 	max-width:100%;
 }
+
+.article-title {
+    background-color : #ffffff;
+    color : #000000;
+    padding-left:5px;
+    padding-right:5px;
+}
+
+.article-body {
+    padding-left: 5px;
+    padding-right: 5px;
+}

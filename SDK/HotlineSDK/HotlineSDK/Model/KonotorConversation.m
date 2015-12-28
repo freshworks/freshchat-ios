@@ -191,7 +191,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             for (int i=0; i<pArrayOfConversations.count; i++) {
                 NSDictionary *conversationInfo = pArrayOfConversations[i];
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
-                HLChannel *channel = channels[i];
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
                 if (conversation) {
                     NSArray *messages = conversationInfo[@"messages"];
@@ -207,6 +206,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
                         }
                     }
                 }else{
+                    NSNumber *channelId = conversationInfo[@"channelId"];
+                    HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
                     NSArray *messages = conversationInfo[@"messages"];
                     for (int j=0; j<messages.count; j++) {

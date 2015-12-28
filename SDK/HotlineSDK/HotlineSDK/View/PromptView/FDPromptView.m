@@ -31,11 +31,22 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     HLTheme *theme = [HLTheme sharedInstance];
     button.titleLabel.font = [theme dialogueTitleFont];
-    button.translatesAutoresizingMaskIntoConstraints = NO;
+    button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    button.titleLabel.numberOfLines = 0;
+    button.titleLabel.textAlignment = NSTextAlignmentCenter;
+    
     buttonName = [NSString stringWithFormat:@"_%@",buttonName];
     [button setTitle:HLLocalizedString([key stringByAppendingString:buttonName]) forState:UIControlStateNormal];
+    
     [button setTitleColor:[theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
     [button setTranslatesAutoresizingMaskIntoConstraints:NO];
+    return button;
+}
+
+-(UIButton *) createBorderedPromptButton:(NSString *)buttonKey withKey:(NSString *)promptKey {
+    UIButton *button =[self createPromptButton:buttonKey withKey:promptKey];
+    [[button layer] setBorderWidth:0.3f];
+    button.layer.cornerRadius = 2;
     return button;
 }
 
