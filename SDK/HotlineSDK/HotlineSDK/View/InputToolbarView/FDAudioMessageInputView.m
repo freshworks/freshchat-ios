@@ -9,6 +9,7 @@
 #import "FDAudioMessageInputView.h"
 #import "HLTheme.h"
 #import "Konotor.h"
+#import "HLLocalization.h"
 
 @interface FDAudioMessageInputView ()
 
@@ -102,7 +103,7 @@ int timeMin;
 -(void)stopButtonPressed:(id)sender{
     self.stopButton.hidden = YES;
     self.sendButton.hidden = NO;
-    self.recordingLabel.text = @"Recording Stopped";
+    self.recordingLabel.text = HLLocalizedString(LOC_AUDIO_RECORDING_STOPPED);
     [self StopTimer];
     [self.delegate audioMessageInput:self stopButtonPressed:sender];
 }
@@ -120,7 +121,7 @@ int timeMin;
 -(void)resetAudioInputToolbar{
     self.stopButton.hidden = YES;
     self.sendButton.hidden = NO;
-    self.recordingLabel.text = @"Audio Recording";
+    self.recordingLabel.text = HLLocalizedString(LOC_AUDIO_RECORDING);
 }
 
 @end

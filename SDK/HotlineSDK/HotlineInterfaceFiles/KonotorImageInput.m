@@ -10,6 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FDAttachmentImageController.h"
 #import "HLMacros.h"
+#import "HLLocalization.h"
+
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate>
 
@@ -38,8 +40,8 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
-    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:HLLocalizedString(@"IMAGE_ATTACHMENT_OPTIONS") delegate:nil cancelButtonTitle:HLLocalizedString(@"IMAGE_ATTACHMENT_CANCEL_BUTTON")
-                                              destructiveButtonTitle:nil otherButtonTitles:HLLocalizedString(@"IMAGE_ATTACHMENT_SELECT_EXISTING_IMAGE"),HLLocalizedString(@"New Image via Camera"),nil];
+    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_OPTIONS) delegate:nil cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
+                                              destructiveButtonTitle:nil otherButtonTitles:HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT),nil];
     inputOptions.delegate = self;
     self.sourceViewController=viewController;
     self.sourceView=viewController.view;
@@ -84,8 +86,8 @@
             [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
         });
     }else{
-        UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE_TITLE") message:HLLocalizedString(@"CAMERA_UNAVAILABLE_DESCRIPTION") delegate:nil
-                                                cancelButtonTitle:HLLocalizedString(@"CAMERA_UNAVAILABLE_OK_BUTTON") otherButtonTitles:nil];
+        UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_CAMERA_UNAVAILABLE_TITLE) message:HLLocalizedString(LOC_CAMERA_UNAVAILABLE_DESCRIPTION) delegate:nil
+                                                cancelButtonTitle:HLLocalizedString(LOC_CAMERA_UNAVAILABLE_OK_BUTTON) otherButtonTitles:nil];
         [alertview show];
     }
 }

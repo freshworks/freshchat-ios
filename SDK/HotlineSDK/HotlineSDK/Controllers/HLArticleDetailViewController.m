@@ -14,6 +14,7 @@
 #import "HLTheme.h"
 #import "FDLocalNotification.h"
 #import "Hotline.h"
+#import "HLLocalization.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -142,12 +143,12 @@
                                                                     constant:0];
     
     //Article Vote Prompt View
-    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:@"ARTICLE_VOTE_PROMPT"];
+    self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:LOC_ARTICLE_VOTE_PROMPT_PARTIAL];
     self.articleVotePromptView.delegate = self;
     self.articleVotePromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Thank you prompt view
-    self.thankYouPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:@"THANK_YOU_PROMPT"];
+    self.thankYouPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:LOC_THANK_YOU_PROMPT_PARTIAL];
     self.thankYouPromptView.translatesAutoresizingMaskIntoConstraints = NO;
     
     NSDictionary *views = @{@"webView" : self.webView, @"bottomView" : self.bottomView};

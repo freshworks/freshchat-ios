@@ -20,6 +20,7 @@
 #import "FDSearchBar.h"
 #import "HLContainerController.h"
 #import "HLListViewController.h"
+#import "HLLocalization.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 
@@ -76,7 +77,7 @@
     self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.searchBar.hidden = NO;
     self.searchBar.delegate = self;
-    self.searchBar.placeholder = HLLocalizedString(@"SEARCH_PLACEHOLDER");
+    self.searchBar.placeholder = HLLocalizedString(LOC_SEARCH_PLACEHOLDER_TEXT);
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchBar becomeFirstResponder];

@@ -9,12 +9,14 @@
 #import "FDPromptView.h"
 #import "HLTheme.h"
 #import "HLMacros.h"
+#import "HLLocalization.h"
 
 @implementation FDPromptView
 
--(UILabel *)createPromptLabel{
+-(UILabel *)createPromptLabel:(NSString *) key{
     UILabel *promptLabel = [[UILabel alloc] init];
     HLTheme *theme = [HLTheme sharedInstance];
+    //TODO: This self.backgroundColor seems out of place - Rex
     self.backgroundColor = [theme dialogueBackgroundColor];
     promptLabel = [[UILabel alloc]init];
     promptLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -23,7 +25,8 @@
     promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
     promptLabel.numberOfLines = 0;
     promptLabel.textAlignment= NSTextAlignmentCenter;
-    promptLabel.text = @"Default prompt label";
+    promptLabel.text = HLLocalizedString([key stringByAppendingString:
+                                               LOC_TEXT_PARTIAL]);
     return promptLabel;
 }
 
@@ -35,7 +38,7 @@
     button.titleLabel.numberOfLines = 0;
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
     
-    buttonName = [NSString stringWithFormat:@"_%@",buttonName];
+    buttonName = [NSString stringWithFormat:LOC_BUTTON_TEXT_PARTIAL,buttonName];
     [button setTitle:HLLocalizedString([key stringByAppendingString:buttonName]) forState:UIControlStateNormal];
     
     [button setTitleColor:[theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
@@ -94,6 +97,11 @@
 
 -(void)clearPrompt{
     [self removeFromSuperview];
+}
+
+-(CGFloat)getPromptHeight{
+    FDLog(@"Warning: unimplemented getPromptHeight Method");
+    return 0;
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "FDMessageCell.h"
 #import "FDUtilities.h"
 #import "HLTheme.h"
+#import "HLLocalization.h"
 
 #define WIDTH_BUFFER_IF_NO_PROFILE_AVAILABLE 5*KONOTOR_HORIZONTAL_PADDING;
 static KonotorUIParameters* konotorUIParameters=nil;
@@ -273,7 +274,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     KonotorUIParameters* interfaceOptions=[KonotorUIParameters sharedInstance];
     
     if(isSenderOther){
-        senderNameLabel.text=@"Support";
+        senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_SUPPORT_LABEL_TEXT);
         [uploadStatusImageView setImage:nil];
         [chatCalloutImageView setImage:[interfaceOptions.otherChatBubble resizableImageWithCapInsets:interfaceOptions.otherChatBubbleInsets]];
         [senderNameLabel setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERNAME_TEXT_COLOR:interfaceOptions.otherTextColor)];
@@ -281,7 +282,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         [messageSentTimeLabel setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERTIMESTAMP_COLOR:interfaceOptions.otherTextColor)];
     }
     else{
-        senderNameLabel.text=@"You";
+        senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_USER_LABEL_TEXT);
         [chatCalloutImageView setImage:[interfaceOptions.userChatBubble resizableImageWithCapInsets:interfaceOptions.userChatBubbleInsets]];
         [senderNameLabel setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERNAME_TEXT_COLOR:interfaceOptions.userTextColor)];
         [messageTextView setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERMESSAGE_TEXT_COLOR:interfaceOptions.userTextColor)];
@@ -337,7 +338,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
     }else if((messageType ==KonotorMessageTypePicture)||(messageType == KonotorMessageTypePictureV2)){
         if((![currentMessage picData])&&(([[currentMessage picUrl] isEqualToString:@""])|| ([currentMessage picUrl]==nil))&&((currentMessage.text==nil)||([currentMessage.text isEqualToString:@""])))
-            currentMessage.text=@"Error loading picture message.Image Not Found";
+            currentMessage.text=HLLocalizedString(LOC_PICTURE_MSG_UPLOAD_ERROR);
             
         CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:currentMessage];
         
@@ -440,7 +441,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     else if((messageType == KonotorMessageTypePicture)||(messageType == KonotorMessageTypePictureV2)){
         
         if((![currentMessage picData])&&(([[currentMessage picUrl] isEqualToString:@""])|| ([currentMessage picUrl]==nil))&&((simpleString == nil)||([simpleString isEqualToString:@""])))
-            currentMessage.text=@"Error loading picture message.Image Not Found";
+            currentMessage.text=HLLocalizedString(LOC_PICTURE_MSG_UPLOAD_ERROR);
         
         CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:currentMessage];
         
@@ -627,7 +628,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         konotorUIParameters.customFontName=nil;
         konotorUIParameters.doneButtonFont=nil;
         
-        konotorUIParameters.doneButtonText=@"Done";
+        konotorUIParameters.doneButtonText=@"Done";//TODO: Check if this is used
         konotorUIParameters.dismissesInputOnScroll=NO;
         
         konotorUIParameters.pollingTimeOnChatWindow=10;

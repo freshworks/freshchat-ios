@@ -27,7 +27,7 @@ static CGFloat ALERT_PROMPT_VIEW_HEIGHT = 60;
 
 -(UIButton *)createPromptButton:(NSString*)buttonName withKey:(NSString *)key;
 -(UIButton *) createBorderedPromptButton:(NSString *)buttonKey withKey:(NSString *)promptKey;
--(UILabel *)createPromptLabel;
+-(UILabel *)createPromptLabel:(NSString *)key;
 
 //Methods for layouts
 -(void)addConstraintWithBaseLine:(NSString *)constraintString inView:(UIView *)view;
