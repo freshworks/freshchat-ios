@@ -141,7 +141,7 @@
 		<key>ChannelTitleFontSize</key>
 		<string>14.0f</string>
 		<key>ChannelDescriptionFontColor</key>
-		<string>222222</string>
+		<string>ABABAB</string>
 		<key>ChannelDescriptionFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChannelDescriptionFontSize</key>
@@ -229,7 +229,7 @@
 		<key>TitleFontSize</key>
 		<string>14.0f</string>
 		<key>DetailFontColor</key>
-		<string>222222</string>
+		<string>ACACAC</string>
 		<key>DetailFontName</key>
 		<string>HelveticaNeue</string>
 		<key>DetailFontSize</key>
@@ -244,6 +244,15 @@
 		<string>D3D3D3</string>
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
+	</dict>
+	<key>ArticlesList</key>
+	<dict>
+		<key>FontColor</key>
+		<string>525252</string>
+		<key>FontName</key>
+		<string>HelveticaNeue</string>
+		<key>FontSize</key>
+		<string>14.0f</string>
 	</dict>
 	<key>GridView</key>
 	<dict>

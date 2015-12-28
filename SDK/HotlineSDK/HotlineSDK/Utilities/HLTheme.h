@@ -63,6 +63,10 @@
 -(UIColor *)tableViewSectionHeaderBackgroundColor;
 -(CGFloat)tableViewSectionHeaderHeight;
 
+//Article Table View
+-(UIColor *)articleListFontColor;
+-(UIFont *)articleListFont;
+
 //Overall SDK
 -(UIColor *)backgroundColorSDK;
 -(UIColor *)badgeButtonBackgroundColor;

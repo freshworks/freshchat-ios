@@ -93,6 +93,8 @@
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
         cell.textLabel.numberOfLines = 3;
+        cell.textLabel.textColor = [self.theme articleListFontColor];
+        cell.textLabel.font = [self.theme articleListFont];
         cell.textLabel.text  = article.title;
     }
     return cell;
@@ -104,7 +106,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    UIFont *cellFont = [self.theme tableViewCellFont];
+    //UIFont *cellFont = [self.theme tableViewCellFont];
+    UIFont *cellFont = [self.theme articleListFont];
     HLArticle *searchArticle = self.articles[indexPath.row];
     NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
     CGFloat heightOfcell = [HLListViewController heightOfCell:title];

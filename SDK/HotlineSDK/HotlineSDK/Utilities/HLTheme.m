@@ -288,6 +288,17 @@
     return color ? color : [UIColor lightGrayColor];
 }
 
+#pragma mark - Article list
+
+-(UIColor *)articleListFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ArticlesList.FontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
+}
+
+-(UIFont *)articleListFont{
+    return [self getFontWithKey:@"ArticlesList.FontName" andDefaultSize:14];
+}
+
 #pragma mark - Overall SDK
 
 -(UIColor *)backgroundColorSDK{

@@ -382,9 +382,9 @@
 				CE55ED081BE9E79B000E8434 /* HLChannelViewController.h */,
 				CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */,
 				3533F0B51BB01D38000B2D9A /* HLArticlesController.h */,
+				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
 				CE62452E1BFC8F9C0050C8EB /* FDDateUtil.h */,
 				CE62452F1BFC8F9C0050C8EB /* FDDateUtil.m */,
-				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
 				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
 				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
 			);

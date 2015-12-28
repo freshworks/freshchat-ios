@@ -79,7 +79,6 @@
      container controller
      
      */
-    
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{
