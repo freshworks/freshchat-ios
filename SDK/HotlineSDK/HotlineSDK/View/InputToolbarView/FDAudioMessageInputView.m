@@ -120,7 +120,9 @@ int timeMin;
 -(void)resetAudioInputToolbar{
     self.stopButton.hidden = YES;
     self.sendButton.hidden = NO;
-    self.recordingLabel.text = @"Audio Recording";
+    self.recordingLabel.text = @"audio recording";
+    self.recordingLabel.font      = [self.theme articleListFont];
+    self.recordingLabel.textColor = [self.theme articleListFontColor];
 }
 
 @end

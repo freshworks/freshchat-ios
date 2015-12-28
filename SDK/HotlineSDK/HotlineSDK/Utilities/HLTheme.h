@@ -10,6 +10,7 @@
 
 #define IMAGE_SEARCH_ICON @"Search"
 #define IMAGE_CONTACT_US_ICON @"ContactUsIcon"
+#define IMAGE_CONTACT_US_WHITE_ICON @"ContactUsWhiteIcon"
 #define IMAGE_BACK_BUTTON @"BackButton"
 #define IMAGE_ATTACH_ICON @"AttachmentUpload"
 #define IMAGE_BUBBLE_CELL_LEFT @"BubbleLeft"
