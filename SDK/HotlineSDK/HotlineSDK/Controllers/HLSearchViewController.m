@@ -30,7 +30,8 @@
 @property (strong, nonatomic) UIView *trialView;
 @property (strong, nonatomic) UITapGestureRecognizer *recognizer;
 @property (strong, nonatomic) HLTheme *theme;
-@property (strong, nonatomic) UIView *emptySearchView;
+@property (strong, nonatomic) UIImageView *emptySearchImgView;
+@property (strong, nonatomic) UILabel *emptyResultLbl;
 @property (strong, nonatomic) NSLayoutConstraint *contactBtnHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint *contactBtnBottomConstraint;
 @property (nonatomic) CGFloat keyboardHeight;
@@ -95,7 +96,6 @@
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchBar becomeFirstResponder];
-    [self.view addSubview:self.searchBar];
     
     UIView *mainSubView = [self.searchBar.subviews lastObject];
     for (id subview in mainSubView.subviews) {
@@ -111,7 +111,14 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+
     [self.view addSubview:self.tableView];
+
+    
+    [self setEmptySearchResultView];
+
+    [self.view addSubview:self.searchBar];
+
     
     NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|"
@@ -120,70 +127,64 @@
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial]|"
                                                                       options:0 metrics:nil views:views]];
-    [self setEmptySearchResultView];
 }
 
 - (void) setEmptySearchResultView{
     
-    self.emptySearchView = [[UIView alloc] init];
-    self.emptySearchView.backgroundColor = [UIColor clearColor];
-    [self.emptySearchView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:self.emptySearchView];
+    self.emptySearchImgView = [[UIImageView alloc] init];
+    self.emptySearchImgView.image = [self.theme getImageWithKey:@"EmptySearchImage"];
+    [self.emptySearchImgView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:self.emptySearchImgView];
     
-    UIImageView *noResultImage = [[UIImageView alloc] init];
-    noResultImage.image = [self.theme getImageWithKey:@"EmptySearchImage"];
-    [noResultImage setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.emptySearchView addSubview:noResultImage];
+    HLTheme *theme = [HLTheme sharedInstance];
+    self.emptyResultLbl = [[UILabel alloc]init];
+    self.emptyResultLbl.translatesAutoresizingMaskIntoConstraints = NO;
+    self.emptyResultLbl.textColor = [theme dialogueTitleTextColor];
+    self.emptyResultLbl.font = [theme dialogueTitleFont];
+    self.emptyResultLbl.lineBreakMode = NSLineBreakByWordWrapping;
+    self.emptyResultLbl.numberOfLines = 2;
+    self.emptyResultLbl.textAlignment= NSTextAlignmentCenter;
+    self.emptyResultLbl.text = @"Whoops! we couldn't found what you are looking for.";
+    [self.view addSubview:self.emptyResultLbl];
     
     self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
-    [self.emptySearchView addSubview:self.footerView];
+    [self.view addSubview:self.footerView];
     
-    NSDictionary *emptySubViews = @{@"emptySearchView":self.emptySearchView, @"footerView" : self.footerView};
-
-    [self.view addConstraints:[NSLayoutConstraint
-                                constraintsWithVisualFormat:@"H:|-0-[emptySearchView]-0-|"
-                                options:NSLayoutFormatDirectionLeadingToTrailing
-                                metrics:nil
-                                views:emptySubViews]];
-    [self.view addConstraints:[NSLayoutConstraint
-                                constraintsWithVisualFormat:@"V:|-0-[emptySearchView]-0-|"
-                                options:NSLayoutFormatDirectionLeadingToTrailing
-                                metrics:nil
-                                views:emptySubViews]];
+    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"footerView" : self.footerView, @"emptyLabel":self.emptyResultLbl};
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyLabel]-50-|" options:0 metrics:nil views:emptySubViews]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptySearchImageView(100)]" options:0 metrics:nil views:emptySubViews]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptySearchImageView(100)]-10-[emptyLabel]" options:0 metrics:nil views:emptySubViews]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:emptySubViews]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
-                                                          attribute:NSLayoutAttributeWidth
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.emptySearchView
-                                                          attribute:NSLayoutAttributeWidth
-                                                         multiplier:0.3
-                                                           constant:0]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
-                                                          attribute:NSLayoutAttributeHeight
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.emptySearchView
-                                                          attribute:NSLayoutAttributeHeight
-                                                         multiplier:0.3
-                                                           constant:0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
                                                           attribute:NSLayoutAttributeCenterX
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.emptySearchView
+                                                             toItem:self.view
                                                           attribute:NSLayoutAttributeCenterX
                                                          multiplier:1.0
                                                            constant:0.0]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:noResultImage
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultLbl
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
                                                           attribute:NSLayoutAttributeCenterY
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.emptySearchView
+                                                             toItem:self.view
                                                           attribute:NSLayoutAttributeCenterY
-                                                         multiplier:0.1
+                                                         multiplier:0.5
                                                            constant:0.0]];
+    
+    
     
     self.contactBtnHeightConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
                                                                    attribute:NSLayoutAttributeHeight
@@ -203,13 +204,15 @@
     
     [self.view addConstraint:self.contactBtnBottomConstraint];
     [self.view addConstraint:self.contactBtnHeightConstraint];
-    self.emptySearchView.hidden = YES;
+    self.emptySearchImgView.hidden = YES;
+    self.emptyResultLbl.hidden = YES;
 }
 
 - (void) showEmptySearchView{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.emptySearchView.hidden = NO;
+        self.emptySearchImgView.hidden = NO;
+        self.emptyResultLbl.hidden = NO;
     });
 }
 
@@ -217,7 +220,8 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.emptySearchView.hidden = YES;
+        self.emptySearchImgView.hidden = YES;
+        self.emptyResultLbl.hidden = YES;
     });
 }
 
@@ -353,6 +357,7 @@
         [self.view addGestureRecognizer:self.recognizer];
         self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
         self.searchResults = nil;
+        [self hideEmptySearchView];
         [self.tableView reloadData];
     }
 }
