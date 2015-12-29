@@ -20,6 +20,7 @@
 #import "FDDateUtil.h"
 #import "KonotorUtil.h"
 #import "FDUtilities.h"
+#import "HLLocalization.h"
 
 @interface HLChannelViewController ()
 
@@ -31,7 +32,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = @"Channels";
+    parent.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     HLTheme *theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
@@ -62,7 +63,7 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
@@ -97,24 +98,30 @@
     
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
-        KonotorConversation *conversation = channel.conversations.allObjects.firstObject;
-        KonotorMessageData *lastMessage = [self getLastMessageInConversation:conversation];
+        KonotorConversation *conversation = channel.primaryConversation;
+        KonotorMessageData *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
-        
-        if (lastMessage) {
-            cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
-            NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
-            
-        }else{
-            cell.detailLabel.text = channel.welcomeMessage.text;
-        }
+        NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
+        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
         
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
         }else{
-            cell.imgView.image = [FDChannelListViewCell generateImageForLabel:channel.name];
+            UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
+            if(channel.iconURL){
+                NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
+                NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
+                __weak FDChannelListViewCell *weakCell = cell;
+                [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    weakCell.imgView.image = image;
+                    channel.icon = UIImagePNGRepresentation(image);
+                    [[KonotorDataManager sharedInstance]save];
+                } failure:nil];
+            }else{
+                cell.imgView.image = placeholderImage;
+            }
         }
         
         [cell.badgeView updateBadgeCount:conversation.unreadMessagesCount.integerValue];
@@ -136,7 +143,7 @@
             break;
             
         case KonotorMessageTypeAudio:
-            description = @"Audio message";
+            description = HLLocalizedString(LOC_AUDIO_MSG_TITLE);
             break;
             
         case KonotorMessageTypePicture:
@@ -144,7 +151,7 @@
             if (message.text) {
                 description = message.text;
             }else{
-                description = @"Picture message";
+                description = HLLocalizedString(LOC_PICTURE_MSG_TITLE);
             }
             break;
         }
@@ -157,9 +164,9 @@
     return description;
 }
 
--(KonotorMessageData *)getLastMessageInConversation:(KonotorConversation *)conversation{
+-(KonotorMessageData *)getLastMessageInChannel:(HLChannel *)channel{
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSArray *messages = [Konotor getAllMessagesForConversation:conversation.conversationAlias];
+    NSArray *messages = channel.messages.allObjects;
     return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
 }
 

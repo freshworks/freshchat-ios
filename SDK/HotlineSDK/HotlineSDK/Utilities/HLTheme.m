@@ -215,6 +215,11 @@
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
+-(UIColor *)dialogueButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
+}
+
 -(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
     NSString *preferredFontName; CGFloat preferredFontSize;
     NSString *fontNameValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@"FontName"]];
@@ -359,19 +364,19 @@
     return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
 }
 -(BOOL)alwaysPollForMessages{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"] boolValue];
 }
 -(BOOL)showsBusinessProfileImage{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"] boolValue];
 }
 -(BOOL)showsUserProfileImage{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"] boolValue];
 }
 -(BOOL)showsBusinessMessageSenderName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"] boolValue];
 }
 -(BOOL)showsUserMessageSenderName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"];
+    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"] boolValue];
 }
 -(NSString *)textInputHintText{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.TextInputHintText"];
@@ -503,5 +508,11 @@
     return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:13];
 }
 
+-(NSString *)getCssFileContent:(NSString *)key{
+    NSBundle *hlResourceBundle = [self getHLResourceBundle];
+    NSString  *cssFilePath = [hlResourceBundle pathForResource:key ofType:@"css" inDirectory:FD_THEMES_DIR];
+    NSData *cssContent = [NSData dataWithContentsOfFile:cssFilePath];
+    return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
+}
 
 @end

@@ -13,7 +13,8 @@
 +(NSString *)getRFC3339TimeStamp;
 +(NSString *)getWebFriendlyTimeStamp;
 +(NSDate *)getRFC3339DateFromString:(NSString *)dateString;
-+(NSString *)itemCreatedDurationSinceDate:(NSDate*)date;
+// Not used currently
+//+(NSString *)itemCreatedDurationSinceDate:(NSDate*)date;
 +(NSString *)solutionsLastUpdatedWebFriendlyTime;
 +(NSString *)stringForUnixTime:(NSInteger)unixTime;
 +(NSString *)getStringFromDate:(NSDate *)date;

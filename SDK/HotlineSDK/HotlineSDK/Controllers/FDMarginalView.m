@@ -8,6 +8,7 @@
 
 #import "FDMarginalView.h"
 #import "HLMacros.h"
+#import "HLLocalization.h"
 
 @interface FDMarginalView ()
 
@@ -38,7 +39,7 @@
         [self addSubview:self.contactUsImgView];
         
         self.actionLabel = [[UILabel alloc] init];
-        self.actionLabel.text = HLLocalizedString(@"CONTACT_US_BUTTON_LABEL");
+        self.actionLabel.text = HLLocalizedString(LOC_CONTACT_US_BUTTON_TEXT);
         self.actionLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.actionLabel.textAlignment = UITextAlignmentCenter;
         self.actionLabel.font = [theme talkToUsButtonFont];

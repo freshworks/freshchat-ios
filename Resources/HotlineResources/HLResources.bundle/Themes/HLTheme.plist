@@ -92,6 +92,8 @@
 		<key>NoButtonBorderColor</key>
 		<string>C1C1BF</string>
 		<key>YesButtonBorderColor</key>
+		<string>D8D8D8</string>
+		<key>ButtonColor</key>
 		<string>007AFF</string>
 		<key>BackgroundColor</key>
 		<string>F6F6F5</string>

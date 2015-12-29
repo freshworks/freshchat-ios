@@ -91,6 +91,7 @@
 -(UIFont *)dialogueNoButtonFont;
 -(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
+-(UIColor *)dialogueButtonColor;
 
 //NavigationBar
 -(UIColor *)navigationBarBackgroundColor;
@@ -152,4 +153,5 @@
 
 -(UIImage *)getImageWithKey:(NSString *)key;
 
+-(NSString *)getCssFileContent:(NSString *)key;
 @end

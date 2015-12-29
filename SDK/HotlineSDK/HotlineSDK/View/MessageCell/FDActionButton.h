@@ -13,9 +13,9 @@
 
 @interface FDActionButton : UIButton
 @property (strong, nonatomic) NSString* actionUrlString;
+@property (strong, nonatomic) NSNumber* articleID;
 
 - (void) setupWithLabel:(NSString*)actionLabel frame:(CGRect)messageFrame;
 - (void) setUpStyle;
-- (void) openActionUrl:(id) sender;
 
 @end

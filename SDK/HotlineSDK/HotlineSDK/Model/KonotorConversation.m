@@ -166,7 +166,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             
         }else{
             
-            KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
             id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
             NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
@@ -192,21 +191,23 @@ NSMutableDictionary* gkConversationIdConversationMap;
             for (int i=0; i<pArrayOfConversations.count; i++) {
                 NSDictionary *conversationInfo = pArrayOfConversations[i];
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
-                HLChannel *channel = channels[i];
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
                 if (conversation) {
                     NSArray *messages = conversationInfo[@"messages"];
                     for (int j=0; j<messages.count; j++) {
                         NSDictionary *messageInfo = messages[j];
-                        KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"messageId"]];
+                        KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
                         if (!message) {
                             KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                             newMessage.uploadStatus = @2;
                             newMessage.belongsToConversation = conversation;
+                            [conversation.belongsToChannel addMessagesObject:newMessage];
                             [conversation incrementUnreadCount];
                         }
                     }
                 }else{
+                    NSNumber *channelId = conversationInfo[@"channelId"];
+                    HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
                     NSArray *messages = conversationInfo[@"messages"];
                     for (int j=0; j<messages.count; j++) {
@@ -214,6 +215,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
                         KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                         newMessage.uploadStatus = @2;
                         newMessage.belongsToConversation = newConversation;
+                        [newConversation.belongsToChannel addMessagesObject:newMessage];
+                        [channel addMessagesObject:newMessage];
                         [newConversation incrementUnreadCount];
                     }
                 }

@@ -11,6 +11,7 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
+#import "KonotorApp.h"
 
 @implementation FDUtilities
 
@@ -111,15 +112,23 @@
 
 +(BOOL)isRegisteredDevice{
     FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
-    return [secureStore checkItemWithKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
+    return [secureStore checkItemWithKey:uuIdLookupKey];
 }
 
++(NSString *) getUUIDLookupKey{
+    NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", [KonotorApp GetAppID] ,HOTLINE_DEFAULTS_DEVICE_UUID ];
+    return uuIdLookupKey;
+}
+
+//TODO: store existing konotor uuid to the store when absent during migration - Rex
 +(NSString *)getUUID{
     FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
-    NSString *UUID = [secureStore objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
+    NSString *UUID = [secureStore objectForKey:uuIdLookupKey];
     if (!UUID) {
         UUID = [[NSUUID UUID]UUIDString];
-        [secureStore setObject:UUID forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+        [secureStore setObject:UUID forKey:uuIdLookupKey];
     }
     return UUID;
 }
@@ -127,6 +136,7 @@
 + (NSString*) stringRepresentationForDate:(NSDate*) date{
     NSString* timeString;
     
+    //TODO: Read these from Localization - Rex
     NSArray* weekdays=[NSArray arrayWithObjects:@"Sunday",@"Monday",@"Tuesday",@"Wednesday",@"Thursday",@"Friday",@"Saturday",nil];
     
     NSDate* today=[[NSDate alloc] init];
@@ -167,6 +177,13 @@
     }
     return timeString;
     
+}
+
++(NSString *) getKeyForObject:(NSObject *) object {
+    if(object){
+        return [NSString stringWithFormat:@"%lu" , (unsigned long)[object hash]];
+    }
+    return @"nil";
 }
 
 @end

@@ -408,6 +408,8 @@ KonotorAlertView *pAlert;
     KonotorConversation *conversation = nil;
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
     
+    [channel addMessagesObject:message];
+    
     if(conversationID)
         conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
     

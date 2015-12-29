@@ -16,7 +16,13 @@
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
 #import "HLConstants.h"
+#import "HLArticle.h"
+#import "HLArticleDetailViewController.h"
+#import "HLArticlesController.h"
+#import "HLContainerController.h"
+#import "HLLocalization.h"
 #import "HLTheme.h"
+#import "FDUtilities.h"
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
@@ -36,6 +42,8 @@
 @property (nonatomic, strong)KonotorImageInput *imageInput;
 @property (strong, nonatomic) NSTimer *pollingTimer;
 @property (nonatomic, strong) NSString* currentRecordingMessageId;
+@property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
+@property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 
 @end
 
@@ -55,13 +63,21 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
+        self.messageHeightMap = [[NSMutableDictionary alloc]init];
+        self.messageWidthMap = [[NSMutableDictionary alloc]init];
         self.channel = channel;
-        self.conversation = channel.conversations.allObjects.lastObject;
         self.isModalPresentationPreferred = isModal;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
     return self;
+}
+
+-(KonotorConversation *)conversation{
+    if(!_conversation){
+        _conversation = [_channel primaryConversation];
+    }
+    return _conversation;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
@@ -78,6 +94,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [self startPoller];
 }
 
@@ -107,7 +127,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)setNavigationItem{
     if(self.isModalPresentationPreferred){
-        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
+        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
@@ -117,7 +137,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
     }
     
-    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
+    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_TITLE_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
     self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
     
     if (self.parentViewController) {
@@ -125,7 +145,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }else{
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-
 }
 
 -(void)FAQButtonAction:(id)sender{
@@ -206,7 +225,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if (indexPath.row < self.messages.count) {
         KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
         cell.messageData = message;
-        [cell drawMessageViewForMessage:message parentView:self.view];
+        [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
     if(indexPath.row==0 && messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
@@ -247,8 +266,35 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
-    float height = [FDMessageCell getHeightForMessage:message parentView:self.view];
+    float height;
+    NSString *key = [self getIdentityForMessage:message];
+    if(self.messageHeightMap[key]){
+        height = [self.messageHeightMap[key] floatValue];
+    }
+    else {
+        height = [FDMessageCell getHeightForMessage:message parentView:self.view];
+        self.messageHeightMap[key] = @(height);
+    }
     return height;
+}
+
+
+-(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
+    float width;
+    NSString *key = [self getIdentityForMessage:message];
+    if(self.messageWidthMap[key]){
+        width = [self.messageWidthMap[key] floatValue];
+    }
+    else {
+        width = [FDMessageCell getWidthForMessage:message];
+        self.messageWidthMap[key] = @(width);
+    }
+    return width;
+}
+
+
+-(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
+    return [FDUtilities getKeyForObject:message];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
@@ -274,9 +320,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     if([toSend isEqualToString:@""]){
-        [self showAlertWithTitle:@"Empty Message" andMessage:@"You cannot send an empty message. Please type a message to send."];
+        [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
     }else{
-        [Konotor uploadTextFeedback:toSend onConversation:self.channel.conversations.allObjects.lastObject onChannel:self.channel];
+        [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
@@ -301,7 +347,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     
     if (!notificationEnabled) {
         if(promptForPush){
-            [self showAlertWithTitle:@"Modify Push Setting" andMessage:@"To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center"];
+            [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
+                          andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
             promptForPush=NO;
         }
     }
@@ -332,7 +379,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                       queue:nil usingBlock:^(NSNotification *note) {
          [KonotorMessage uploadAllUnuploadedMessages];
     }];
-
 }
 
 -(void)localNotificationUnSubscription{
@@ -462,25 +508,13 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) didFinishUploading:(NSString *)messageID{
-    for(FDMessageCell* cell in [self.tableView visibleCells]){
-        if([messageID hash]==cell.tag){
-            UIImageView* uploadStatus=(UIImageView*)cell.uploadStatusImageView;
-            [uploadStatus setImage:self.sentImage];
-            for(int i=messageCount-1;i>=0;i--){
-                KonotorMessageData *message = self.messages[i];
-                if([message.messageId isEqualToString:messageID]){
-                    message.uploadStatus = @(MessageUploaded);
-                    break;
-                }
-            }
-        }
-    }
     [self refreshView];
 }
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
     if(!showingAlert){
-        [self showAlertWithTitle:@"Message not sent" andMessage:@"We could not send your message(s) at this time. Check your internet or try later."];
+        [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
+                      andMessage:HLLocalizedString(LOC_MESSAGE_UNSENT_INFO_TEXT)];
         showingAlert=YES;
     }
 }
@@ -543,6 +577,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 - (void) refreshView{
     [self refreshView:nil];
+
 }
 
 - (void) refreshView:(id)obj{
@@ -564,30 +599,23 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSMutableArray *messages = [NSMutableArray new];
-    KonotorConversation *conversation = self.channel.conversations.allObjects.lastObject;
-    KonotorMessageData *welcomeMsg = [KonotorMessage getWelcomeMessageForChannel:self.channel];
-
-    if(welcomeMsg){
-        [messages insertObject:welcomeMsg atIndex:0];
-    }
-    
-    if (conversation) {
-        [messages  addObjectsFromArray:[[Konotor getAllMessagesForConversation:conversation.conversationAlias]mutableCopy]];;
-    }
-    
+    NSArray *messages = [KonotorMessage getAllMesssageForChannel:self.channel];
     return [messages sortedArrayUsingDescriptors:@[desc]];
 }
 
 #pragma Scrollview delegates
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
-    CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
-    NSInteger keyboardOffsetFromBottom = self.view.frame.size.height - absoluteFingerLocation.y;
-    
-    if (self.isKeyboardOpen && scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged && absoluteFingerLocation.y >= (self.view.frame.size.height - self.keyboardHeight)) {
-        self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
+    if (self.isKeyboardOpen){
+        CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
+        CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
+        float viewFrameHeight = self.view.frame.size.height;
+        NSInteger keyboardOffsetFromBottom = viewFrameHeight - absoluteFingerLocation.y;
+        
+        if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged
+            && absoluteFingerLocation.y >= (viewFrameHeight - self.keyboardHeight)) {
+            self.bottomViewBottomConstraint.constant = -keyboardOffsetFromBottom;
+        }
     }
 }
 
@@ -597,13 +625,49 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self scrollTableViewToLastCell];
 }
 
--(void)dealloc{
-    [self localNotificationUnSubscription];
-}
+#pragma mark - Message cell delegates
+
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
     FDLog(@"Picture message tapped");
 }
+
+-(void) openActionUrl:(id) sender{
+    FDActionButton* button=(FDActionButton*)sender;
+    if(button.articleID!=nil && button.articleID > 0){
+        @try{
+            HLArticle *article = [HLArticle getWithID:button.articleID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+            if(article!=nil){
+                HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
+                articleDetailController.articleID = article.articleID;
+                articleDetailController.articleTitle = article.title;
+                articleDetailController.articleDescription = article.articleDescription;
+                articleDetailController.categoryTitle=article.category.title;
+                articleDetailController.categoryID = article.categoryID;
+                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+                [self.navigationController pushViewController:container animated:YES];
+            }
+        }
+        @catch(NSException* e){
+            NSLog(@"%@",e);
+        }
+    }
+    else if(button.actionUrlString!=nil){
+        @try{
+            NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
+            if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:actionUrl];
+                });
+            }
+        }
+        @catch(NSException* e){
+            NSLog(@"%@",e);
+        }
+    }
+}
+
+#pragma mark - Audio toolbar delegates
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
     [Konotor cancelRecording];
@@ -615,11 +679,15 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
-    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.channel.conversations.allObjects.lastObject];
+    self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
-        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.channel.conversations.allObjects.lastObject conversationAlias]) onChannel:self.channel];
+        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     }
     [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+}
+
+-(void)dealloc{
+    [self localNotificationUnSubscription];
 }
 
 @end

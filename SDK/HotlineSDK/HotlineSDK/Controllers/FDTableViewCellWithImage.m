@@ -30,7 +30,7 @@
         self.titleLabel.font = [self.theme tableViewCellDetailFont];
         self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
-        self.imgView=[[UIImageView alloc] init];
+        self.imgView=[[FDImageView alloc] init];
         self.imgView.backgroundColor = [UIColor greenColor];
         self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
         [self.imgView.layer setMasksToBounds:YES];

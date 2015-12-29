@@ -20,6 +20,7 @@
 #import "FDCategoryListViewCell.h"
 #import "KonotorUtil.h"
 #import "Hotline.h"
+#import "HLLocalization.h"
 
 @interface HLCategoriesListController ()
 
@@ -33,7 +34,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(@"FAQ_TITLE_TEXT");
+    parent.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
     [self updateCategories];
     [self localNotificationSubscription];
@@ -72,7 +73,7 @@
     [contactUsButton addTarget:self action:@selector(contactUsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *contactUsBarButton = [[UIBarButtonItem alloc] initWithCustomView:contactUsButton];
     
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(@"FAQ_GRID_VIEW_CLOSE_BUTTON_TITLE_TEXT") style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];

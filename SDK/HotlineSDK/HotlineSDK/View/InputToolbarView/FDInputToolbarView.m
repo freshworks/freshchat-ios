@@ -11,6 +11,7 @@
 #import "HLMacros.h"
 #import <AudioToolbox/AudioServices.h>
 #include "TargetConditionals.h"
+#include "HLLocalization.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>
 
@@ -57,7 +58,7 @@
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
-        [sendButton setTitle:HLLocalizedString(@"SEND_BUTTON_TEXT") forState:UIControlStateNormal];
+        [sendButton setTitle:HLLocalizedString(LOC_SEND_BUTTON_TEXT) forState:UIControlStateNormal];
         [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
