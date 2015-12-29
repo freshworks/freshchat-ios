@@ -58,4 +58,12 @@
 #define LOC_BUTTON_TEXT_PARTIAL @"_%@_button_text"
 #define LOC_TEXT_PARTIAL @"_text"
 
+#define LOC_DAY_SUNDAY @"day_sunday"
+#define LOC_DAY_MONDAY @"day_monday"
+#define LOC_DAY_TUEDAY @"day_tueday"
+#define LOC_DAY_WEDNESDAY @"day_wednesday"
+#define LOC_DAY_THURSDAY @"day_thursday"
+#define LOC_DAY_FRIDAY @"day_friday"
+#define LOC_DAY_SATURDAY @"day_saturday"
+
 #endif /* HLLocalization_h */
