@@ -57,3 +57,12 @@
 "image_attachment_cancel_button_text"="Cancel";
 "image_attachment_select_existing_image"="Select Existing Image";
 "image_attachment_select_new_image"="New Image via Camera";
+
+/*days*/
+"day_sunday"="Sunday";
+"day_monday"="Monday";
+"day_tueday"="Tueday";
+"day_wednesday"="Wednesday";
+"day_thursday"="Thursday";
+"day_friday"="Friday";
+"day_saturday"="Saturday";

@@ -12,6 +12,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "KonotorApp.h"
+#import "HLLocalization.h"
 
 @implementation FDUtilities
 
@@ -136,8 +137,14 @@
 + (NSString*) stringRepresentationForDate:(NSDate*) date{
     NSString* timeString;
     
-    //TODO: Read these from Localization - Rex
-    NSArray* weekdays=[NSArray arrayWithObjects:@"Sunday",@"Monday",@"Tuesday",@"Wednesday",@"Thursday",@"Friday",@"Saturday",nil];
+    NSArray* weekdays=[NSArray arrayWithObjects:
+                       HLLocalizedString( LOC_DAY_SUNDAY ),
+                       HLLocalizedString( LOC_DAY_MONDAY ),
+                       HLLocalizedString( LOC_DAY_TUEDAY ),
+                       HLLocalizedString( LOC_DAY_WEDNESDAY ),
+                       HLLocalizedString( LOC_DAY_THURSDAY ),
+                       HLLocalizedString( LOC_DAY_FRIDAY ),
+                       HLLocalizedString( LOC_DAY_SATURDAY ),nil];
     
     NSDate* today=[[NSDate alloc] init];
     
