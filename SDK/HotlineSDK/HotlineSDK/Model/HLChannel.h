@@ -11,11 +11,16 @@
 
 @class KonotorConversation, KonotorMessage;
 
+#define CHANNEL_TYPE_AGENT_ONLY @"AGENT_ONLY"
+#define CHANNEL_TYPE_USER_ONLY @"USER_ONLY"
+#define CHANNEL_TYPE_BOTH @"BOTH"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HLChannel : NSManagedObject
 
 @property (nullable, nonatomic, retain) NSNumber *channelID;
+@property (nullable, nonatomic, retain) NSString *type;
 @property (nullable, nonatomic, retain) NSDate *created;
 @property (nullable, nonatomic, retain) NSData *icon;
 @property (nullable, nonatomic, retain) NSString *iconURL;

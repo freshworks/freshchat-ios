@@ -14,6 +14,7 @@
 @implementation HLChannel
 
 @dynamic channelID;
+@dynamic type;
 @dynamic created;
 @dynamic icon;
 @dynamic iconURL;
@@ -39,6 +40,7 @@
 
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo{
     channel.name = channelInfo[@"name"];
+    channel.type = channelInfo[@"type"];
     channel.channelID = channelInfo[@"channelId"];
     channel.iconURL = channelInfo[@"iconUrl"];
     channel.position = channelInfo[@"position"];
