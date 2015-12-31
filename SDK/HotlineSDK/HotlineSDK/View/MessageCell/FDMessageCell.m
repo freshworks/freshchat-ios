@@ -290,8 +290,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         
     }
     
-    NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-    [messageSentTimeLabel setText:[FDUtilities stringRepresentationForDate:date]];
+    if (currentMessage.createdMillis.integerValue != 0) {
+        NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
+        messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
+    }
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
@@ -532,6 +534,9 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING):0;
   
+    if([messageSentTimeLabel.text isEqualToString:@""]){
+        msgHeight = msgHeight - 16;
+    }
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }
 
