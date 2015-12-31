@@ -216,7 +216,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
         self.audioMessageInputView = [[FDAudioMessageInputView alloc] initWithDelegate:self];
         self.audioMessageInputView.translatesAutoresizingMaskIntoConstraints = NO;
         
-        [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }
 }
 
