@@ -92,7 +92,9 @@
 -(UIColor *)conversationViewTitleTextColor;
 -(UIColor *)conversationViewBackgroundColor;
 -(UIColor *)actionButtonTextColor;
+-(UIColor *)actionButtonSelectedTextColor;
 -(UIColor *)actionButtonColor;
+-(UIColor *)actionButtonBorderColor;
 -(UIColor *)businessMessageTextColor;
 -(UIColor *)userMessageTextColor;
 -(UIColor *)hyperlinkColor;

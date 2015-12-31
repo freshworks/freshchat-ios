@@ -36,8 +36,12 @@
 		<string>You</string>
 		<key>ActionButtonTextColor</key>
 		<string>FFFFFF</string>
+		<key>ActionButtonSelectedTextColor</key>
+		<string>000000</string>
 		<key>ActionButtonColor</key>
-		<string>050505</string>
+		<string>F5F5F5</string>
+		<key>ActionButtonBorderColor</key>
+		<string>F1F1F1</string>
 		<key>BusinessMessageTextColor</key>
 		<string>000000</string>
 		<key>UserMessageTextColor</key>

@@ -29,6 +29,7 @@
 "send_button_text"="Send";
 "messages_support_label_text"="Support";
 "messages_user_label_text"="You";
+"default_action_button_text"="View";
 
 "audio_message_title"="Audio message";
 "picture_message_title"="Picture message";

@@ -311,10 +311,22 @@
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
+
+-(UIColor *)actionButtonSelectedTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonSelectedTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
+}
+
 -(UIColor *)actionButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonColor"];
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
+
+-(UIColor *)actionButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
+}
+
 -(UIColor *)businessMessageTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BusinessMessageTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_BUSINESS_MESSAGE_TEXT_COLOR];

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #define KONOTOR_ACTIONBUTTON_HEIGHT 30
-#define KONOTOR_BUTTON_DEFAULTACTIONLABEL (@"View More")
 
 @interface FDActionButton : UIButton
 @property (strong, nonatomic) NSString* actionUrlString;
