@@ -10,22 +10,23 @@
 #import "FDMessageCell.h"
 #import "HLArticleDetailViewController.h"
 #import "HLLocalization.h"
+#import "HLTheme.h"
 
 @implementation FDActionButton
 
 @synthesize actionUrlString,articleID;
 
-- (void) setUpStyle
-{
+- (void) setUpStyle{
+    HLTheme *theme = [HLTheme sharedInstance];
     float padding = 10;
     [self setFrame:CGRectZero];
     [self setContentEdgeInsets:UIEdgeInsetsMake(padding/8, padding/2, padding/8, padding/2)];
-    self.layer.cornerRadius=5.0;
-    [self setBackgroundColor:[UIColor colorWithRed:0.97 green:0.97 blue:0.97 alpha:1.0]];
-    self.layer.borderColor=[[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0] CGColor];
+    [self setBackgroundColor:[theme actionButtonColor]];
+    self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
     self.layer.borderWidth=0.5;
-    [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    self.layer.cornerRadius=5.0;
+    [self setTitleColor:[theme actionButtonTextColor] forState:UIControlStateNormal];
+    [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
 }
 
 - (void) setupWithLabel:(NSString*)actionLabel frame:(CGRect)messageFrame
@@ -35,7 +36,6 @@
     float messageOriginX=messageFrame.origin.x;
     float messageOriginY=messageFrame.origin.y;
     float horizontalPadding=KONOTOR_HORIZONTAL_PADDING*3;
-    float percentWidth=0.5;
     float padding = 10;
     float maxButtonWidth =messageFrameWidth-horizontalPadding*2;
     
