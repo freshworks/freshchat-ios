@@ -24,49 +24,62 @@
 #import "HLTheme.h"
 #import "FDUtilities.h"
 
+typedef struct {
+    BOOL isLoading;
+    BOOL isShowingAlert;
+    BOOL canPromptForPush;
+    BOOL isFirstWordOnLine;
+    BOOL isKeyboardOpen;
+    BOOL isModalPresentationPreferred;
+} FDMessageControllerFlags;
+
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
-@property (nonatomic,strong)  FDAudioMessageInputView *audioMessageInputView;
-@property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
-@property (strong, nonatomic) NSLayoutConstraint *bottomViewBottomConstraint;
-@property (strong, nonatomic) UIView *bottomView;
-@property (nonatomic) CGFloat keyboardHeight;
-@property (nonatomic) BOOL isKeyboardOpen;
-@property (nonatomic) BOOL isModalPresentationPreferred;
+@property (nonatomic, strong) FDAudioMessageInputView *audioMessageInputView;
+@property (nonatomic, strong) NSLayoutConstraint *bottomViewHeightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *bottomViewBottomConstraint;
+@property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIImage *sentImage;
-@property (nonatomic,strong) KonotorConversation *conversation;
-@property (nonatomic, strong)KonotorImageInput *imageInput;
-@property (strong, nonatomic) NSTimer *pollingTimer;
+@property (nonatomic, strong) KonotorConversation *conversation;
+@property (nonatomic, strong) KonotorImageInput *imageInput;
+@property (nonatomic, strong) NSTimer *pollingTimer;
 @property (nonatomic, strong) NSString* currentRecordingMessageId;
 @property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
+@property (nonatomic, assign) FDMessageControllerFlags flags;
+
+@property (nonatomic) CGFloat keyboardHeight;
+@property (nonatomic) NSInteger messageCount;
+@property (nonatomic) NSInteger messageCountPrevious;
+@property (nonatomic) NSInteger messagesDisplayedCount;
+@property (nonatomic) NSInteger loadmoreCount;
 
 @end
 
 @implementation FDMessageController
 
-static BOOL loading = NO;
-static BOOL showingAlert = NO;
-static BOOL promptForPush = YES;
-BOOL firstWordOnLine=YES;
-
-static int messageCount = 0;
-static int messageCount_prev = 0;
-static int messagesDisplayedCount=20;
-static int loadmoreCount=20;
-static CGFloat TOOLBAR_HEIGHT = 40;
+static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
+        
+        _flags.canPromptForPush = YES;
+        _flags.isFirstWordOnLine = YES;
+        _flags.isModalPresentationPreferred = isModal;
+
+        self.messageCount = 0;
+        self.messageCountPrevious = 0;
+        self.messagesDisplayedCount=20;
+        self.loadmoreCount=20;
+        
         self.channel = channel;
-        self.isModalPresentationPreferred = isModal;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -82,7 +95,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.title = @"Messages";
-    messagesDisplayedCount=20;
+    self.messagesDisplayedCount = 20;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
     [self updateMessages];
@@ -126,7 +139,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)setNavigationItem{
-    if(self.isModalPresentationPreferred){
+    if(_flags.isModalPresentationPreferred){
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
@@ -176,7 +189,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                                  toItem:nil
                                                               attribute:NSLayoutAttributeNotAnAttribute
                                                              multiplier:1.0
-                                                               constant:TOOLBAR_HEIGHT];
+                                                               constant:INPUT_TOOLBAR_HEIGHT];
     
     self.bottomViewBottomConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
                                                               attribute:NSLayoutAttributeBottom
@@ -201,7 +214,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
     
-    [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
 -(void)updateBottomViewWith:(UIView *)view andHeight:(CGFloat) height{
@@ -223,16 +236,18 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         cell.delegate = self;
     }
     if (indexPath.row < self.messages.count) {
-        KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
+        KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
         cell.messageData = message;
         [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
-    if(indexPath.row==0 && messagesDisplayedCount<self.messages.count){
+    if(indexPath.row==0 && self.messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
-        int oldnumber=messagesDisplayedCount;
-        messagesDisplayedCount+=loadmoreCount;
-        if(messagesDisplayedCount>messageCount) messagesDisplayedCount=messageCount;
-        [self performSelector:@selector(refreshView:) withObject:[NSNumber numberWithInt:oldnumber] afterDelay:0];
+        NSInteger oldnumber = self.messagesDisplayedCount;
+        self.messagesDisplayedCount += self.loadmoreCount;
+        if(self.messagesDisplayedCount > self.messageCount){
+            self.messagesDisplayedCount = self.messageCount;
+        }
+        [self performSelector:@selector(refreshView:) withObject:@(oldnumber) afterDelay:0];
         return cell;
     }
     return cell;
@@ -261,11 +276,11 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return messagesDisplayedCount;
+    return self.messagesDisplayedCount;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    KonotorMessageData *message = self.messages[(messageCount-messagesDisplayedCount)+indexPath.row];
+    KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
@@ -306,7 +321,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
     BOOL recording=[Konotor startRecording];
     if(recording){
-        [self updateBottomViewWith:self.audioMessageInputView andHeight:TOOLBAR_HEIGHT];
+        [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
     }
     NSLog(@"Mic button pressed");
 }
@@ -347,10 +362,10 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }
     
     if (!notificationEnabled) {
-        if(promptForPush){
+        if(_flags.canPromptForPush){
             [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
                           andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
-            promptForPush=NO;
+            _flags.canPromptForPush = NO;
         }
     }
 }
@@ -398,7 +413,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void) keyboardWillShow:(NSNotification *)note{
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    self.isKeyboardOpen = YES;
+    _flags.isKeyboardOpen = YES;
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
@@ -411,7 +426,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
-    self.isKeyboardOpen = NO;
+    _flags.isKeyboardOpen = NO;
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.keyboardHeight = 0.0;
     self.bottomViewBottomConstraint.constant = 0.0;
@@ -429,8 +444,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     float height=txtSize.height;
     if((height)>=67){
         height=67;
-        if(firstWordOnLine==YES){
-            firstWordOnLine=NO;
+        if(_flags.isFirstWordOnLine == YES){
+            _flags.isFirstWordOnLine = NO;
         }else{
             textView.scrollEnabled=YES;
         }
@@ -457,7 +472,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 -(void)scrollTableViewToLastCell{
-    int lastSpot=loading?messagesDisplayedCount:(messagesDisplayedCount-1);
+
+     NSInteger lastSpot = _flags.isLoading ? self.messagesDisplayedCount : (self.messagesDisplayedCount-1);
+    
     if(lastSpot<0) return;
     
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:lastSpot inSection:0];
@@ -477,7 +494,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 -(void)scrollTableViewToCell:(int)lastSpot{
     
     if(lastSpot<0) return;
-    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:(messagesDisplayedCount-lastSpot) inSection:0];
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:(self.messagesDisplayedCount-lastSpot) inSection:0];
     @try {
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
@@ -500,9 +517,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 - (void) didFinishDownloadingMessages{
     NSInteger count = [self fetchMessages].count;
-    if( loading || (count > messageCount_prev) ){
+    if( _flags.isLoading || (count > self.messageCountPrevious) ){
         FDLog(@"Refreshing view to show new message");
-        loading=NO;
+        _flags.isLoading = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
         [self refreshView];
     }
@@ -513,17 +530,16 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
-    if(!showingAlert){
+    if(!_flags.isShowingAlert){
         [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
                       andMessage:HLLocalizedString(LOC_MESSAGE_UNSENT_INFO_TEXT)];
-        showingAlert=YES;
+        _flags.isShowingAlert = YES;
     }
 }
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    showingAlert=NO;
+    _flags.isShowingAlert = NO;
 }
-
 
 - (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
     //Show Toast
@@ -531,8 +547,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void) didEncounterErrorWhileDownloadingConversations{
     NSInteger count = [self fetchMessages].count;
-    if((loading)||(count > messageCount_prev)){
-        loading=NO;
+    if(( _flags.isLoading )||(count > self.messageCountPrevious)){
+        _flags.isLoading = NO;
         [self refreshView];
     }
 }
@@ -560,7 +576,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
         if(!([(NSString*)[userInfo valueForKey:@"source"] isEqualToString:@"konotor"])){
             return NO;
         }
-        loading = YES;
+
+        _flags.isLoading = YES;
         [Konotor DownloadAllMessages];
         
         [self.tableView reloadData];
@@ -571,9 +588,12 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)updateMessages{
     self.messages = [self fetchMessages];
-    messageCount=(int)[self.messages count];
-    if((messagesDisplayedCount>messageCount)||(messageCount<=KONOTOR_MESSAGESPERPAGE)||((messageCount-messagesDisplayedCount)<3)){
-        messagesDisplayedCount=messageCount;
+    self.messageCount=(int)[self.messages count];
+    if((self.messagesDisplayedCount > self.messageCount)||
+       (self.messageCount<=KONOTOR_MESSAGESPERPAGE)||
+       ((self.messageCount - self.messagesDisplayedCount)<3)){
+        
+        self.messagesDisplayedCount = self.messageCount;
     }
 }
 - (void) refreshView{
@@ -582,11 +602,13 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 }
 
 - (void) refreshView:(id)obj{
-    messageCount_prev=(int)self.messages.count;
+    self.messageCountPrevious=(int)self.messages.count;
     self.messages = [self fetchMessages];
-    messageCount=(int)[self.messages count];
-    if((messagesDisplayedCount>messageCount)||(messageCount<=KONOTOR_MESSAGESPERPAGE)||((messageCount-messagesDisplayedCount)<3)){
-        messagesDisplayedCount=messageCount;
+    self.messageCount=(int)[self.messages count];
+    if((self.messagesDisplayedCount > self.messageCount)||
+       (self.messageCount<=KONOTOR_MESSAGESPERPAGE)||
+       ((self.messageCount - self.messagesDisplayedCount)<3)){
+        self.messagesDisplayedCount = self.messageCount;
     }
 
     [self.tableView reloadData];
@@ -607,7 +629,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 #pragma Scrollview delegates
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (self.isKeyboardOpen){
+    if (_flags.isKeyboardOpen){
         CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
         CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
         float viewFrameHeight = self.view.frame.size.height;
@@ -672,7 +694,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
     [Konotor cancelRecording];
-    [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
 -(void) audioMessageInput:(FDAudioMessageInputView *)toolbar stopButtonPressed:(id)sender{
@@ -684,7 +706,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     if(self.currentRecordingMessageId!=nil){
         [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     }
-    [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
 -(void)dealloc{
