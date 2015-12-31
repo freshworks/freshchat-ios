@@ -273,6 +273,9 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
+        if(![message.createdMillis integerValue]){
+            height = height - 16;
+        }
         self.messageHeightMap[key] = @(height);
     }
     return height;
