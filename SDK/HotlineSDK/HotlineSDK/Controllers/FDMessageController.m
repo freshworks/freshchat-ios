@@ -294,7 +294,8 @@ static CGFloat TOOLBAR_HEIGHT = 40;
 
 
 -(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
-    return [FDUtilities getKeyForObject:message];
+    return ((message.messageId==nil)?[NSString stringWithFormat:@"%ul",message.createdMillis.intValue]:message.messageId);
+    //[FDUtilities getKeyForObject:message];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
