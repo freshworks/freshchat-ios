@@ -19,8 +19,10 @@
     float padding = 10;
     [self setFrame:CGRectZero];
     [self setContentEdgeInsets:UIEdgeInsetsMake(padding/8, padding/2, padding/8, padding/2)];
-    self.layer.cornerRadius=10.0;
-    [self setBackgroundColor:[UIColor darkGrayColor]];
+    self.layer.cornerRadius=5.0;
+    [self setBackgroundColor:[UIColor colorWithRed:0.97 green:0.97 blue:0.97 alpha:1.0]];
+    self.layer.borderColor=[[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0] CGColor];
+    self.layer.borderWidth=0.5;
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
 }
@@ -47,7 +49,7 @@
     CGSize labelSize=[txtView sizeThatFits:CGSizeMake(messageFrameWidth, KONOTOR_ACTIONBUTTON_HEIGHT)];
     
     float labelWidth=padding + 20+labelSize.width;
-    float buttonWidth=MAX(MIN(labelWidth, maxButtonWidth), maxButtonWidth*percentWidth);
+    float buttonWidth=MIN(labelWidth, maxButtonWidth);//MAX(MIN(labelWidth, maxButtonWidth), maxButtonWidth*percentWidth);
     
     float buttonXCenterAlign=messageOriginX-horizontalPadding/3.0+(messageFrameWidth-buttonWidth)/2;
     
@@ -61,7 +63,7 @@
         [self setHidden:NO];
    
         [self setAttributedTitle:
-         [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[UIColor whiteColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
+         [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[UIColor blackColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
     }
     else{
         [self setHidden:YES];
