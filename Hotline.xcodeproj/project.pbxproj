@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3505E9531C35373B006368E7 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3505E9521C35373B006368E7 /* KonotorModels.bundle */; };
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
 		356F19ED1B9DBF14002F1E2A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EC1B9DBF14002F1E2A /* main.m */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
@@ -30,7 +31,6 @@
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
 		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
-		35F6E6EC1C2C2494007E9419 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35F6E6EB1C2C2494007E9419 /* KonotorModels.bundle */; };
 		CE80CA511BE36A9900473E49 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
@@ -81,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3505E9521C35373B006368E7 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F19EB1B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -111,7 +112,6 @@
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
-		35F6E6EB1C2C2494007E9419 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -261,7 +261,7 @@
 		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
 			isa = PBXGroup;
 			children = (
-				35F6E6EB1C2C2494007E9419 /* KonotorModels.bundle */,
+				3505E9521C35373B006368E7 /* KonotorModels.bundle */,
 				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
 				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
 			);
@@ -400,7 +400,7 @@
 				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
 				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
-				35F6E6EC1C2C2494007E9419 /* KonotorModels.bundle in Resources */,
+				3505E9531C35373B006368E7 /* KonotorModels.bundle in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
 				356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */,
 			);
