@@ -176,7 +176,7 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                                  toItem:nil
                                                               attribute:NSLayoutAttributeNotAnAttribute
                                                              multiplier:1.0
-                                                               constant:TOOLBAR_HEIGHT];
+                                                               constant:0];
     
     self.bottomViewBottomConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
                                                               attribute:NSLayoutAttributeBottom
@@ -184,13 +184,6 @@ static CGFloat TOOLBAR_HEIGHT = 40;
                                                                  toItem:self.view
                                                               attribute:NSLayoutAttributeBottom
                                                              multiplier:1.0 constant:0];
-    
-    self.inputToolbar = [[FDInputToolbarView alloc]initWithDelegate:self];
-    self.inputToolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.inputToolbar showAttachButton:YES];
-    
-    self.audioMessageInputView = [[FDAudioMessageInputView alloc] initWithDelegate:self];
-    self.audioMessageInputView.translatesAutoresizingMaskIntoConstraints = NO;
 
     //Initial Constraints
     NSDictionary *views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
@@ -201,7 +194,17 @@ static CGFloat TOOLBAR_HEIGHT = 40;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
     
-    [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+    if([self.channel.type isEqualToString:CHANNEL_TYPE_BOTH]){
+        
+        self.inputToolbar = [[FDInputToolbarView alloc]initWithDelegate:self];
+        self.inputToolbar.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.inputToolbar showAttachButton:YES];
+        
+        self.audioMessageInputView = [[FDAudioMessageInputView alloc] initWithDelegate:self];
+        self.audioMessageInputView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        [self updateBottomViewWith:self.inputToolbar andHeight:TOOLBAR_HEIGHT];
+    }
 }
 
 -(void)updateBottomViewWith:(UIView *)view andHeight:(CGFloat) height{
