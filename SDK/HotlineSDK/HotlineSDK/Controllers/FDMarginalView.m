@@ -35,7 +35,7 @@
         
         self.contactUsImgView = [[UIImageView alloc] init];
         self.contactUsImgView.translatesAutoresizingMaskIntoConstraints = NO;
-        self.contactUsImgView.image = [theme getImageWithKey:IMAGE_CONTACT_US_WHITE_ICON];
+        self.contactUsImgView.image = [theme getImageWithKey:IMAGE_CONTACT_US_LIGHT_ICON];
         [self addSubview:self.contactUsImgView];
         
         self.actionLabel = [[UILabel alloc] init];
