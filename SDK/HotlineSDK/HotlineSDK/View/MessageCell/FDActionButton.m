@@ -9,6 +9,7 @@
 #import "FDActionButton.h"
 #import "FDMessageCell.h"
 #import "HLArticleDetailViewController.h"
+#import "HLLocalization.h"
 
 @implementation FDActionButton
 
@@ -41,7 +42,7 @@
     UIFont *actionLabelFont=KONOTOR_MESSAGETEXT_FONT;
     
     if([actionLabel isEqualToString:@""]||(actionLabel==nil))
-        actionLabel=KONOTOR_BUTTON_DEFAULTACTIONLABEL;
+        actionLabel=HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
     
     UITextView* txtView=[[UITextView alloc] init];
     [txtView setFont:actionLabelFont];
