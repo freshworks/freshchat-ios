@@ -17,6 +17,14 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "Konotor.h"
+#import "HLCoreServices.h"
+#import "FDUtilities.h"
+#import "FDChannelUpdater.h"
+#import "FDSolutionUpdater.h"
+#import "KonotorShareMessageEvent.h"
+#import "KonotorMessage.h"
+#import "KonotorCustomProperties.h"
+#import "WebServices.h"
 
 @interface Hotline ()
 
@@ -49,7 +57,30 @@
     [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
     [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
     [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
-    [Konotor initWithAppID:config.appID AppKey:config.appKey withDelegate:nil];
+    [self registerUser];
+}
+
+-(void)registerUser{
+    BOOL isUserRegistered = [FDUtilities isUserRegistered];
+    if (!isUserRegistered) {
+        [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
+            if (!error) {
+                [self performPendingTasks];
+            }
+        }];
+    }
+}
+
+-(void)performPendingTasks{
+    FDLog(@"Performing pending tasks");
+    dispatch_async(dispatch_get_main_queue(),^{
+        [[[FDChannelUpdater alloc]init] fetch];
+        [[[FDSolutionUpdater alloc]init] fetch];
+        [KonotorShareMessageEvent UploadAllUnuploadedEvents];
+        [KonotorCustomProperty UploadAllUnuploadedProperties];
+        [KonotorMessage uploadAllUnuploadedMessages];
+        [KonotorConversation DownloadAllMessages];
+    });
 }
 
 -(void)presentSolutions:(UIViewController *)controller{
@@ -84,8 +115,14 @@
 
 #pragma mark Push notifications
 
--(void)addDeviceToken:(NSData *) deviceToken {
-    [Konotor addDeviceToken:deviceToken];
+-(void)addDeviceToken:(NSData *)deviceToken {
+    NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+    if (!isAppRegistered) {
+        [[[HLCoreServices alloc]init] registerAppWithToken:deviceTokenString forUser:userAlias handler:nil];
+    }
 }
 
 -(void)handleRemoteNotification:(NSDictionary *)notification{
@@ -94,11 +131,18 @@
 
 -(void)clearUserData{
     [[FDSecureStore persistedStoreInstance]clearStoreData];
-    [KonotorUser deleteUser];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");
     }];
-    [Konotor newSession];
+    [self newSession];
+}
+
+-(void) newSession{
+    dispatch_async(dispatch_get_main_queue(),^{
+//        [self registerUser];
+        [self performPendingTasks];
+        [KonotorWebServices DAUCall];
+    });
 }
 
 @end

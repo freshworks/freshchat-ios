@@ -11,8 +11,8 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
-#import "KonotorApp.h"
 #import "HLLocalization.h"
+#import <AdSupport/ASIdentifierManager.h>
 
 @implementation FDUtilities
 
@@ -111,27 +111,32 @@
     return image;
 }
 
-+(BOOL)isRegisteredDevice{
-    FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
++(BOOL)isUserRegistered{
+    FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
-    return [secureStore checkItemWithKey:uuIdLookupKey];
+    return [persistedStore checkItemWithKey:uuIdLookupKey];
 }
 
 +(NSString *) getUUIDLookupKey{
-    NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", [KonotorApp GetAppID] ,HOTLINE_DEFAULTS_DEVICE_UUID ];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", appID ,HOTLINE_DEFAULTS_DEVICE_UUID ];
     return uuIdLookupKey;
 }
 
++(NSString *)generateUUID{
+    return [[NSUUID UUID]UUIDString];
+}
+
 //TODO: store existing konotor uuid to the store when absent during migration - Rex
-+(NSString *)getUUID{
-    FDSecureStore *secureStore = [FDSecureStore persistedStoreInstance];
-    NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
-    NSString *UUID = [secureStore objectForKey:uuIdLookupKey];
-    if (!UUID) {
-        UUID = [[NSUUID UUID]UUIDString];
-        [secureStore setObject:UUID forKey:uuIdLookupKey];
-    }
-    return UUID;
++(NSString *)getUserAlias{
+    FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
+    return [persistedStore objectForKey:[FDUtilities getUUIDLookupKey]];
+}
+
++(void)storeUserAlias:(NSString *)alias{
+    FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
+    [persistedStore setObject:alias forKey:[FDUtilities getUUIDLookupKey]];
 }
 
 + (NSString*) stringRepresentationForDate:(NSDate*) date{
@@ -191,6 +196,22 @@
         return [NSString stringWithFormat:@"%lu" , (unsigned long)[object hash]];
     }
     return @"nil";
+}
+
++(NSString *)getAdID{
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    NSString *adId = [secureStore objectForKey:HOTLINE_DEFAULTS_ADID];
+    if (!adId) {
+        adId = [self setAdId];
+    }
+    return adId;
+}
+
++(NSString *)setAdId{
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    NSString *adId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
+    return  adId;
 }
 
 @end

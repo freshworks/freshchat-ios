@@ -25,9 +25,6 @@
 -(void) didEncounterErrorWhileDownloading: (NSString *)messageID;
 -(void) didEncounterErrorWhileDownloadingConversations;
 
--(BOOL) handleRemoteNotification:(NSDictionary*)userInfo;
--(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen;
-
 -(void) didStartUploadingNewMessage;
 
 @end
@@ -50,15 +47,7 @@ enum KonotorMessageUploadStatus
 
 @interface Konotor : NSObject
 
-+(void) initWithAppID: (NSString *) AppID AppKey: (NSString *) AppKey withDelegate:(id) delegate;
 +(void) setDelegate:(id) delegate;
-+(BOOL) handleRemoteNotification:(NSDictionary*)userInfo;
-+(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen;
-+(BOOL) addDeviceToken:(NSData *) deviceToken;
-+(void) setUserIdentifier: (NSString *) UserIdentifier;
-+(void) setUserName: (NSString *) fullName;
-+(void) setUserEmail: (NSString *) email;
-+(void) setCustomUserProperty:(NSString *) value forKey: (NSString*) key;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) isUserMe:(NSString *) userId;
@@ -92,12 +81,6 @@ enum KonotorMessageUploadStatus
 
 +(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType;
 +(NSArray *) getAllMessagesForConversation:(NSString *)conversationID;
-+(NSArray *) getAllMessagesForDefaultConversation;
-+(NSArray *) getAllConversations;
-+(int) getUnreadMessagesCount;
-
-+(void) newSession;
-+(BOOL) isPushEnabled;
 
 @end
 

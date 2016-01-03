@@ -7,10 +7,8 @@
 //
 
 #import "Konotor.h"
-#import "KonotorUser.h"
 #import "KonotorDataManager.h"
 #import "KonotorAudioRecorder.h"
-#import "KonotorApp.h"
 #import "KonotorAudioPlayer.h"
 #import "WebServices.h"
 #import "KonotorShareMessageEvent.h"
@@ -18,8 +16,8 @@
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
+#import "FDUtilities.h"
 
-extern  bool KONOTOR_APP_INIT_DONE;
 static NSString *kon_unlock_key = nil;
 
 @implementation Konotor
@@ -34,54 +32,14 @@ static id <KonotorDelegate> _delegate;
     _delegate = delegate;
 }
 
-+(void) initWithAppID:(NSString *)AppID AppKey:(NSString *)AppKey withDelegate:(id)delegate{
-    if(KONOTOR_APP_INIT_DONE){
-        return;
-    }
-    
-    dispatch_async(dispatch_get_main_queue(),^{
-        _delegate = delegate;
-        [KonotorApp initWithAppID:AppID WithAppKey:AppKey];
-        [KonotorUser InitUser];
-        [KonotorApp UpdateAppAndSDKVersions];
-    });
-}
-
 +(void) sendAllUnsentMessages{
-    if(KONOTOR_APP_INIT_DONE){
-        [KonotorMessage uploadAllUnuploadedMessages];
-    }
-}
-
-+(void) PerformAllPendingTasks{
-    FDLog(@"Performing pending tasks");
-    dispatch_async(dispatch_get_main_queue(),^{
-        if(KONOTOR_APP_INIT_DONE){
-            [[[FDChannelUpdater alloc]init] fetch];
-            [[[FDSolutionUpdater alloc]init] fetch];
-            [KonotorShareMessageEvent UploadAllUnuploadedEvents];
-            [KonotorCustomProperty UploadAllUnuploadedProperties];
-            [KonotorMessage uploadAllUnuploadedMessages];
-            [KonotorConversation DownloadAllMessages];
-            [KonotorApp SendCachedTokenIfNotUpdated];
-            [KonotorApp UpdateAppAndSDKVersions];
-        }
-    });
+    //Check if app init is required before this call
+    [KonotorMessage uploadAllUnuploadedMessages];
 }
 
 +(void) DownloadAllMessages
 {
     [KonotorConversation DownloadAllMessages];
-}
-
-+(BOOL) handleRemoteNotification:(NSDictionary*)userInfo
-{
-    return [_delegate handleRemoteNotification:userInfo];
-}
-
-+(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL)showScreen
-{
-    return [_delegate handleRemoteNotification:userInfo withShowScreen:showScreen];
 }
 
 +(double) getCurrentPlayingAudioTime
@@ -200,34 +158,15 @@ static id <KonotorDelegate> _delegate;
     return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
 }
 
-+(NSArray *) getAllMessagesForDefaultConversation
-{
-    return [KonotorMessage getAllMessagesForDefaultConversation];
-}
-
-+(NSArray*) getAllConversations
-{
-    return [KonotorConversation ReturnAllConversations];
-}
-
-
 +(NSArray *) getAllMessagesForConversation:(NSString *) conversationID
 {
     return [KonotorMessage getAllMessagesForConversation:conversationID];
 }
 
-+(int) getUnreadMessagesCount
-{
-    NSArray* allConvs=[Konotor getAllConversations];
-    if((allConvs!=nil)&&([allConvs count]>0))
-        return [[(KonotorConversationData*)[allConvs objectAtIndex:0] unreadMessagesCount] intValue];
-    else
-        return 0;
-}
 
 +(BOOL) isUserMe:(NSString *) userId
 {
-    NSString *currentUserID = [KonotorUser GetUserAlias];
+    NSString *currentUserID = [FDUtilities getUserAlias];
     if(currentUserID)
     {
         if([currentUserID isEqualToString:userId])
@@ -235,33 +174,6 @@ static id <KonotorDelegate> _delegate;
     }
     
     return FALSE;
-}
-
-+(BOOL) addDeviceToken:(NSData *) deviceToken{
-    NSString *tokenStr = [deviceToken description];
-    NSString *strDeviceToken = [[[tokenStr stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""] ;
-    [KonotorApp addDeviceToken:strDeviceToken];
-    return YES;
-}
-
-+(void) setUserIdentifier: (NSString *) UserIdentifier
-{
-    [KonotorUser setUserIdentifier:UserIdentifier];
-}
-
-+(void) setUserName: (NSString *) fullName
-{
-    [KonotorUser setUserName:fullName];
-}
-
-+(void) setUserEmail: (NSString *) email
-{
-    [KonotorUser setUserEmail:email];
-}
-
-+(void) setCustomUserProperty:(NSString *) value forKey: (NSString*) key
-{
-    [KonotorUser setCustomUserProperty:value forKey:key];
 }
 
 +(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType
@@ -354,32 +266,12 @@ static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void) newSession{
-    dispatch_async(dispatch_get_main_queue(),^{
-        [KonotorUser InitUser];
-        [Konotor PerformAllPendingTasks];
-        [KonotorWebServices DAUCall];
-    });
-}
-
-+(BOOL) isPushEnabled
-{
-    if([KonotorApp GetCachedDeviceToken])
-        return YES;
-    else
-        return NO;
-}
-
 @end
 
 @implementation KonotorConversationData
 
-
-
 @end
 
 @implementation KonotorMessageData
-
-
 
 @end

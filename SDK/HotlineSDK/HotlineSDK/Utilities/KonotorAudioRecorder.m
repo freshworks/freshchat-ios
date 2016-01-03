@@ -12,6 +12,7 @@
 #import "KonotorMessageBinary.h"
 #import "WebServices.h"
 #import "KonotorUtil.h"
+#import "FDUtilities.h"
 
 @implementation KonotorAlertView
 
@@ -524,7 +525,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:[KonotorUser GetUserAlias]];
+    [message setMessageUserId:[FDUtilities getUserAlias]];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];
@@ -564,7 +565,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:[KonotorUser GetUserAlias]];
+    [message setMessageUserId:[FDUtilities getUserAlias]];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];

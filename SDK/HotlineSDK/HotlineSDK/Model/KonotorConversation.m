@@ -8,12 +8,13 @@
 
 #import "KonotorConversation.h"
 #import "KonotorDataManager.h"
-#import "KonotorApp.h"
 #import "KonotorUtil.h"
 #import "KonotorMessage.h"
 #import "Konotor.h"
 #import "HLMessageServices.h"
 #import "HLMacros.h"
+#import "FDSecureStore.h"
+#import "FDUtilities.h"
 
 @class KonotorConversationData;
 @class KonotorMessageData;
@@ -96,27 +97,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
     return nil;
 }
 
-+(void) CreateDefaultConversation
-{
-    KonotorConversation *pDefaultConvo = (KonotorConversation *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:[[KonotorDataManager sharedInstance]mainObjectContext]];
-    
-
-    NSString *convoid = [NSString stringWithFormat:@"%@_%@_%@",[KonotorApp GetAppID],[KonotorUser GetUserAlias],@"feedback"];
-    pDefaultConvo.conversationAlias = convoid;
-    
-    KonotorUser* pUser = [KonotorUser GetCurrentlyLoggedInUser];
-    if(pUser)
-    {
-        [pUser
-         setValue:pDefaultConvo forKey:@"defaultConversation"];
-        
-        NSMutableSet *SetToWhichConversationsAreToBeAdded = [pUser mutableSetValueForKey:@"hasConversations"];
-        
-        [SetToWhichConversationsAreToBeAdded addObject:pDefaultConvo];
-    }
-    [[KonotorDataManager sharedInstance]save];
-}
-
 +(void) DownloadAllMessages{
     FDLog(@"download message called");
     
@@ -124,12 +104,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
         FDLog(@"download message in progress, so skip");
         return;
     }
-    
-    if(![KonotorUser isUserCreatedOnServer]){
-        [KonotorUser CreateUserOnServerIfNotPresentandPerformSelectorIfSuccessful:@selector(DownloadAllMessages) withObject:[KonotorConversation class] withSuccessParameter:nil ifFailure:nil withObject:nil withFailureParameter:nil];
-        return;
-    }
-    
+
     [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
@@ -137,16 +112,21 @@ NSMutableDictionary* gkConversationIdConversationMap;
     }];
 }
 
+//TODO: Move this to HLMessageServices
+
 + (void)fetchAllMessagesInChannel:(NSArray *)channels{
 
     NSString *pBasePath = [KonotorUtil GetBaseURL];
-    NSString *app = [KonotorApp GetAppID];
-    NSString *user = [KonotorUser GetUserAlias];
-    NSString *token = [KonotorApp GetAppKey];
+
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     
-    NSNumber* timestamp = [KonotorApp getLastUpdatedConversationsTimeStamp];
+    //TODO: set channel last updated time to get delta updates
+    NSNumber* timestamp = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
     
-    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",app,@"/user/",user,@"/conversation/v2?t=",token,@"&messageAfter=",timestamp];
+    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",timestamp];
 
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
     [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
@@ -158,6 +138,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];
+        
+        FDLog(@"Download all message call status :%d", statusCode);
         
         if(error || statusCode >= 400){
             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
@@ -175,11 +157,10 @@ NSMutableDictionary* gkConversationIdConversationMap;
             }
             
             NSMutableArray *pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
-            NSNumber *lastUpdatedTime = [KonotorConversation getLastMessageTimeStampOfTheseConversations:pArrayOfConversations];
             
-            if(lastUpdatedTime){
-                [KonotorApp updateLastUpdatedConversations:lastUpdatedTime];
-            }
+
+            
+            //TODO: store last update time stamp of channel here
             
             if(!pArrayOfConversations){
                 [Konotor performSelector:@selector(conversationsDownloaded)];
@@ -194,6 +175,7 @@ NSMutableDictionary* gkConversationIdConversationMap;
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
                 if (conversation) {
                     NSArray *messages = conversationInfo[@"messages"];
+                    FDLog(@"Number of messages to download :%ld", messages.count);
                     for (int j=0; j<messages.count; j++) {
                         NSDictionary *messageInfo = messages[j];
                         KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
@@ -223,70 +205,11 @@ NSMutableDictionary* gkConversationIdConversationMap;
             }
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
+        NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         [[KonotorDataManager sharedInstance]save];
         DOWNLOAD_IN_PROGRESS = NO;
     }];
-}
-
-+(NSNumber *) getLastMessageTimeStampOfTheseConversations:(NSArray *) pConversations{
-    if(![pConversations count])
-        return nil;
-    
-    NSDictionary *lastConversation = [pConversations objectAtIndex:[pConversations count]-1];
-    NSArray *messagesArray = [lastConversation valueForKey:@"messages"];
-    if([messagesArray count]== 0)
-    {
-        return nil;
-    }
-    
-    if(messagesArray)
-    {
-        NSDictionary *lastMessage = [messagesArray objectAtIndex:[messagesArray count]-1];
-        NSNumber *timestamp = [lastMessage valueForKey:@"createdMillis"];
-        
-        double existingValue = [[KonotorApp getLastUpdatedConversationsTimeStamp]doubleValue];
-        double newValue = [timestamp doubleValue];
-        
-        if(newValue > existingValue)
-            return timestamp;
-        
-        else
-            return [NSNumber numberWithDouble:existingValue];
-    }
-    
-    return nil;
-
-    
-    
-}
-
-+(NSArray *) ReturnAllConversations{
-    
-    KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-    if(pUser)
-    {
-       
-        NSSet *pConvoSet =[NSSet setWithSet:[pUser mutableSetValueForKey:@"hasConversations"]];
-        NSMutableArray *pConversations = [NSMutableArray arrayWithArray:[pConvoSet allObjects]];
-
-        if (!pConversations) {
-        return nil;
-        }
-        
-        NSMutableArray *pConversationArrayToReturn = [[NSMutableArray alloc]init];
-
-        for(int i =0;i<[pConversations count];i++)
-        {
-            KonotorConversationData *conversation = [[pConversations objectAtIndex:i] ReturnConversationDataFromManagedObject] ;
-            [pConversationArrayToReturn addObject:conversation];
-        }
-
-        return pConversationArrayToReturn;
-        
-        
-    }
-    return nil;
-
 }
 
 -(KonotorConversationData *) ReturnConversationDataFromManagedObject

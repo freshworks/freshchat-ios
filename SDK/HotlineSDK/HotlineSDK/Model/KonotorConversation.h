@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "KonotorUser.h"
 #import "HLChannel.h"
 
 @interface KonotorConversation : NSManagedObject
@@ -26,9 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *hasMessages;
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel;
-+(void) CreateDefaultConversation;
 +(void) DownloadAllMessages;
-+(NSArray *) ReturnAllConversations;
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId;
 
 -(void) incrementUnreadCount;

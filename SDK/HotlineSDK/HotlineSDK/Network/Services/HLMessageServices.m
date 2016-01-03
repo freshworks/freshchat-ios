@@ -31,7 +31,6 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         if (!error) {
             [self importChannels:responseObject hanlder:handler];
-            [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         }else{
             if (handler) handler(nil, error);
         }

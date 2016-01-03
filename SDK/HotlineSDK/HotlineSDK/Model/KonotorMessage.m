@@ -12,9 +12,10 @@
 #import "WebServices.h"
 #import "KonotorUtil.h"
 #import "KonotorMessageBinary.h"
-#import "KonotorApp.h"
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
+#import "FDUtilities.h"
+#import "FDSecureStore.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -55,9 +56,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
 
 +(NSString *)generateMessageID{
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
+    NSString *userAlias = [FDUtilities getUserAlias];
     NSString *intervalString = [NSString stringWithFormat:@"%.0f", today*1000];
-    NSString *userid = [KonotorUser GetUserAlias];
-    NSString *messageID  =[NSString stringWithFormat:@"%@%@%@",userid,@"_",intervalString];
+    NSString *messageID  =[NSString stringWithFormat:@"%@%@%@",userAlias,@"_",intervalString];
     return messageID;
 }
 
@@ -65,11 +66,16 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    [message setMessageUserId:[KonotorUser GetUserAlias]];
+
+    //TODO: why do we need to associate user alias to message (local cache) ?
+    [message setMessageUserId:[FDUtilities getUserAlias]];
+
+    //TODO: Use defined message type instead of hardcoding
     [message setMessageType:@1];
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
+
     //TODO: Test if all the messages are deleted when channel is deleted
     message.belongsToConversation = conversation;
     [datamanager save];
@@ -80,7 +86,8 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    [message setMessageUserId:[KonotorUser GetUserAlias]];
+    
+    [message setMessageUserId:[FDUtilities getUserAlias]];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:@3];
     [message setMessageRead:YES];
@@ -163,22 +170,23 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }];
 }
 
+
+//TODO: Move this to HLCoreServices
 +(void) markMarketingMessageAsClicked:(NSNumber *) marketingId{
-    
-    if(![KonotorUser isUserCreatedOnServer]) return;
     
     NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
     
-    NSString *app = [KonotorApp GetAppID];
-    NSString *user = [KonotorUser GetUserAlias];
-    NSString *token = [KonotorApp GetAppKey];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     
     if([marketingId intValue] ==0 || !marketingId) return;
     
     //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",app,@"/user/",user,@"/message/marketing/",[marketingId stringValue ],@"/status?clicked=1&t=",token];
+    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?clicked=1&t=",appKey];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:nil failure:nil];
@@ -231,9 +239,10 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return NO;
 }
 
+
+//TODO: Move this to HLCoreServices
+
 -(void) MarkMarketingMessageAsRead{
-    
-    if(![KonotorUser isUserCreatedOnServer]) return;
     
     if([self messageRead])return;
     
@@ -248,12 +257,13 @@ NSMutableDictionary *gkMessageIdMessageMap;
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
     
-    NSString *app = [KonotorApp GetAppID];
-    NSString *user = [KonotorUser GetUserAlias];
-    NSString *token = [KonotorApp GetAppKey];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     
     //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",app,@"/user/",user,@"/message/marketing/",[marketingId stringValue ],@"/status?seen=1&t=",token];
+    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?seen=1&t=",appKey];
     
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
@@ -448,25 +458,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
             [pMessageArrayToReturn addObject:message];
         }
         return pMessageArrayToReturn;
-    }
-    return nil;
-}
-
-+(NSArray *)getAllMessagesForDefaultConversation{
-    KonotorUser *pUser = [KonotorUser GetCurrentlyLoggedInUser];
-    if(pUser){
-        KonotorConversation *pDefaultConvo = [pUser valueForKeyPath:@"defaultConversation"];
-        if(pDefaultConvo){
-            NSSet *pMessagesSet =[NSSet setWithSet:[pDefaultConvo valueForKeyPath:@"hasMessages"]];
-            NSMutableArray *pMessages = [NSMutableArray arrayWithArray:[pMessagesSet allObjects]];
-            NSMutableArray *pMessageArrayToReturn = [[NSMutableArray alloc]init];
-            for(int i =0;i<[pMessages count];i++){
-                KonotorMessageData *message = [[pMessages objectAtIndex:i] ReturnMessageDataFromManagedObject] ;
-                [pMessageArrayToReturn addObject:message];
-            }
-            return pMessageArrayToReturn;
-        }
-
     }
     return nil;
 }

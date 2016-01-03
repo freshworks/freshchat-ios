@@ -8,7 +8,6 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
-#import "KonotorUser.h"
 #import "KonotorMessage.h"
 
 @interface KonotorAudioRecorder : AVAudioRecorder <UIAlertViewDelegate, AVAudioRecorderDelegate>

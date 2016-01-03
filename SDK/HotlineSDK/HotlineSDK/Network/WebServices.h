@@ -11,10 +11,22 @@
 #import "KonotorCustomProperties.h"
 #import "KonotorShareMessageEvent.h"
 
+
+#define MESSAGE_NOT_UPLOADED 0
+#define MESSAGE_UPLOADING 1
+#define MESSAGE_UPLOADED 2
+
+#define PROPERTY_NOT_UPLOADED 0
+#define PROPERTY_UPLOADING 1
+#define PROPERTY_UPLOADED 2
+
+#define EVENT_NOT_UPLOADED 0
+#define EVENT_UPLOADING 1
+#define EVENT_UPLOADED 2
+
 @interface KonotorWebServices : NSObject
 
 +(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void) AddPushDeviceToken: (NSString *) deviceToken;
 +(void) DAUCall;
 +(void) UpdateUserPropertiesWithDictionary:(NSDictionary *) dict withProperty:(KonotorCustomProperty *)property;
 +(void) sendShareMessageEvent:(KonotorShareMessageEvent *)shareEvent;

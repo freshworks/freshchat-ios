@@ -556,39 +556,6 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     }
 }
 
--(BOOL) handleRemoteNotification:(NSDictionary*)userInfo withShowScreen:(BOOL) showScreen{
-    NSString* marketingId=((NSString*)[userInfo objectForKey:@"kon_message_marketingid"]);
-    NSString* url=[userInfo valueForKey:@"kon_m_url"];
-    if(showScreen&&marketingId&&([marketingId longLongValue]!=0))
-        [Konotor MarkMarketingMessageAsClicked:[NSNumber numberWithLongLong:[marketingId longLongValue]]];
-    if(showScreen&&(url!=nil)){
-        @try{
-            NSURL *clickUrl=[NSURL URLWithString:url];
-            if([[UIApplication sharedApplication] canOpenURL:clickUrl]){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[UIApplication sharedApplication] openURL:clickUrl];
-                });
-            }
-        }
-        @catch(NSException *e){
-            NSLog(@"%@",e);
-        }
-        [Konotor DownloadAllMessages];
-        return YES;
-    }else{
-        if(!([(NSString*)[userInfo valueForKey:@"source"] isEqualToString:@"konotor"])){
-            return NO;
-        }
-
-        _flags.isLoading = YES;
-        [Konotor DownloadAllMessages];
-        
-        [self.tableView reloadData];
-        return YES;
-    }
-    return YES;
-}
-
 -(void)updateMessages{
     self.messages = [self fetchMessages];
     self.messageCount=(int)[self.messages count];

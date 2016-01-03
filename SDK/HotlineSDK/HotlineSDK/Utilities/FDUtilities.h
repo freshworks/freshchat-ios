@@ -14,16 +14,20 @@
 
 @interface FDUtilities : NSObject
 
++(NSString *)getUserAlias;
++(NSString *)generateUUID;
++(void)storeUserAlias:(NSString *)alias;
++(BOOL)isUserRegistered;
+
 +(NSString *)base64EncodedStringFromString:(NSString *)string;
 +(NSString *)sanitizeStringForUTF8:(NSString *)string;
 +(NSString *)sanitizeStringForNewLineCharacter:(NSString *)string;
 +(NSString *)replaceSpecialCharacters:(NSString *)term with:(NSString *)replaceString;
 +(void)assertMainThread;
 +(UIImage *)imageWithColor:(UIColor *)color;
-+(NSString *)getUUID;
-+(BOOL)isRegisteredDevice;
 +(NSString*)stringRepresentationForDate:(NSDate*) date;
 +(NSString *) getKeyForObject:(NSObject *) object;
++(NSString *)getAdID;
 
 @end
 
