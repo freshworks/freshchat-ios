@@ -58,8 +58,17 @@
     //    });
     //    channel.icon = imageData;
     
-    KonotorMessage *welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
-    [channel addMessagesObject:welcomeMessage];
+    
+    KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
+    if (welcomeMessage) {
+        NSString *updatedMessage = channelInfo[@"welcomeMessage"][@"text"]; //set welcome message here
+        welcomeMessage.text = updatedMessage;
+        FDLog(@"Welcome message of channel: \"%@\" is updated !", channel.name);
+    }else{
+        welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+        welcomeMessage.isWelcomeMessage = YES;
+        [channel addMessagesObject:welcomeMessage];
+    }
     
     return channel;
 }
