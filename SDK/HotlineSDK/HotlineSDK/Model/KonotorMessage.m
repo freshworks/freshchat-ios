@@ -32,6 +32,7 @@
 @dynamic createdMillis;
 @dynamic durationInSecs;
 @dynamic isDownloading;
+@dynamic isWelcomeMessage;
 @dynamic isMarkedForUpload;
 @dynamic marketingId;
 @dynamic messageAlias;
@@ -521,6 +522,23 @@ NSMutableDictionary *gkMessageIdMessageMap;
         [messages addObject:message];
     }
     return messages;
+}
+
++(KonotorMessage *)getWelcomeMessageForChannel:(HLChannel *)channel{
+    KonotorMessage *message = nil;
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"belongsToChannel == %@ AND isWelcomeMessage == 1",channel];
+    NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count == 1) {
+        message = matches.firstObject;
+    }
+    
+    if (matches.count > 1) {
+        FDLog(@"Duplicate welcome messages found for a channel");
+    }
+    
+    return message;
 }
 
 @end

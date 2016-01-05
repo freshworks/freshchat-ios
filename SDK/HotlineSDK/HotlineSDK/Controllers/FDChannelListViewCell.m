@@ -24,7 +24,7 @@
         self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
         self.titleLabel.textColor = [self.theme tableViewCellFontColor];
         self.titleLabel.font      = [self.theme tableViewCellFont];
-        self.detailLabel.textColor = [self.theme timeDetailTextColor];
+        self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
     }
     return self;
 }

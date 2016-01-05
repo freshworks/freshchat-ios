@@ -56,7 +56,21 @@
 -(void)updateChannels{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
-            self.channels = channels;
+            NSMutableArray *messages = [NSMutableArray array];
+            for(HLChannel *channel in channels){
+                KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
+                [messages addObject:lastMessage];
+            }
+            
+            id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
+            messages = [[messages sortedArrayUsingDescriptors:@[sort]] mutableCopy];
+            
+            NSMutableArray *sortedChannel = [[NSMutableArray alloc] init];
+            for(KonotorMessage *message in messages){
+                [sortedChannel addObject:message.belongsToChannel];
+            }
+            
+            self.channels = sortedChannel;
             [self.tableView reloadData];
         }
     }];
@@ -99,16 +113,19 @@
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
         KonotorConversation *conversation = channel.primaryConversation;
-        KonotorMessageData *lastMessage = [self getLastMessageInChannel:channel];
+        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
-        NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        if([lastMessage.createdMillis integerValue]){
+            NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
+            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        }
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
         
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
-        }else{
+        }
+        else{
             UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
             if(channel.iconURL){
                 NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
@@ -119,7 +136,8 @@
                     channel.icon = UIImagePNGRepresentation(image);
                     [[KonotorDataManager sharedInstance]save];
                 } failure:nil];
-            }else{
+            }
+            else{
                 cell.imgView.image = placeholderImage;
             }
         }
@@ -131,7 +149,7 @@
 }
 
 
--(NSString *)getDetailDescriptionForMessage:(KonotorMessageData *)message{
+-(NSString *)getDetailDescriptionForMessage:(KonotorMessage *)message{
     
     NSString *description = nil;
 
@@ -164,7 +182,7 @@
     return description;
 }
 
--(KonotorMessageData *)getLastMessageInChannel:(HLChannel *)channel{
+-(KonotorMessage *)getLastMessageInChannel:(HLChannel *)channel{
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSArray *messages = channel.messages.allObjects;
     return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
@@ -179,6 +197,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
         FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];

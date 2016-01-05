@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *createdMillis;
 @property (nullable, nonatomic, retain) NSNumber *durationInSecs;
 @property (nonatomic) BOOL isDownloading;
+@property (nonatomic) BOOL isWelcomeMessage;
 @property (nonatomic) BOOL isMarkedForUpload;
 @property (nullable, nonatomic, retain) NSNumber *marketingId;
 @property (nullable, nonatomic, retain) NSString *messageAlias;
@@ -52,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //@property (nonatomic, retain) NSString *marketingId;
 +(NSArray *) getAllMessagesForConversation: (NSString* )conversationID;
++(KonotorMessage *)getWelcomeMessageForChannel:(HLChannel *)channel;
 +(KonotorMessage *) retriveMessageForMessageId: (NSString *)messageId;
 -(NSString *) getJSON;
 +(NSString *)generateMessageID;

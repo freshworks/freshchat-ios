@@ -47,6 +47,7 @@
 
 /* Search View Place Holder */
 "search_placeholder_text"="Search for FAQs";
+"search_empty_result_text"="Whoops! we couldn't found what you are looking for.";
 
 /* Camera Unavailable alert */
 "camera_unavailable_title"="Camera Unavailable";

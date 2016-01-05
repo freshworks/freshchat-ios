@@ -53,7 +53,7 @@
                     NSDate *updateTime = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
                     if ([channel.lastUpdated compare:updateTime] == NSOrderedAscending) {
                         [HLChannel updateChannel:channel withInfo:channelInfo];
-                        FDLog(@"Channel with ID:%@ updated", channelInfo[@"categoryId"]);
+                        FDLog(@"Channel with ID:%@ updated", channel.channelID);
                     }
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];

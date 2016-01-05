@@ -7,10 +7,12 @@
 //
 
 #import "HLContainerController.h"
+#import "HLTheme.h"
 
 @interface HLContainerController ()
 
 @property (nonatomic, strong) UIViewController *childController;
+@property (strong, nonatomic) HLTheme *theme;
 
 @end
 
@@ -20,6 +22,7 @@
     self = [super init];
     if (self) {
         self.childController = controller;
+        self.theme = [HLTheme sharedInstance];
     }
     return self;
 }
@@ -76,9 +79,12 @@
      container controller
      
      */
-    
     self.navigationController.navigationBar.translucent = NO;
-
+    self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{
+                                                                      NSForegroundColorAttributeName: [self.theme navigationBarFontColor],
+                                                                      NSFontAttributeName: [self.theme navigationBarTitleFont]
+                                                                      }];
 }
 
 @end

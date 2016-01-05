@@ -62,9 +62,9 @@
     [self layoutForPromptLabelInView:self];
     
     //Constraints for buttons
-    [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button2(desiredWidth1)]-[Button1(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
-    [self addConstraint:@"V:[promptLabel]-5-[Button1]" InView:self];
-    [self addConstraint:@"V:[promptLabel]-5-[Button2]" InView:self];
+    [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button2(desiredWidth1)]-15-[Button1(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
+    [self addConstraint:@"V:[promptLabel]-16-[Button1]" InView:self];
+    [self addConstraint:@"V:[promptLabel]-16-[Button2]" InView:self];
     
     [super layoutSubviews];
 }

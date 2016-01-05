@@ -10,6 +10,7 @@
 
 #define IMAGE_SEARCH_ICON @"Search"
 #define IMAGE_CONTACT_US_ICON @"ContactUsIcon"
+#define IMAGE_CONTACT_US_LIGHT_ICON @"ContactUsLightIcon"
 #define IMAGE_BACK_BUTTON @"BackButton"
 #define IMAGE_ATTACH_ICON @"AttachmentUpload"
 #define IMAGE_BUBBLE_CELL_LEFT @"BubbleLeft"
@@ -63,6 +64,10 @@
 -(UIColor *)tableViewSectionHeaderBackgroundColor;
 -(CGFloat)tableViewSectionHeaderHeight;
 
+//Article Table View
+-(UIColor *)articleListFontColor;
+-(UIFont *)articleListFont;
+
 //Overall SDK
 -(UIColor *)backgroundColorSDK;
 -(UIColor *)badgeButtonBackgroundColor;
@@ -80,11 +85,18 @@
 -(UIFont *)dialogueYesButtonFont;
 -(UIColor *)dialogueYesButtonTextColor;
 -(UIColor *)dialogueYesButtonBackgroundColor;
+-(UIColor *)dialogueNoButtonBorderColor;
+-(UIColor *)dialogueYesButtonBorderColor;
 -(UIColor *)dialogueNoButtonBackgroundColor;
 -(UIFont *)dialogueNoButtonFont;
 -(UIColor *)dialogueNoButtonTextColor;
 -(UIColor *)dialogueBackgroundColor;
 -(UIColor *)dialogueButtonColor;
+
+//NavigationBar
+-(UIColor *)navigationBarBackgroundColor;
+-(UIFont *)navigationBarTitleFont;
+-(UIColor *)navigationBarFontColor;
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;

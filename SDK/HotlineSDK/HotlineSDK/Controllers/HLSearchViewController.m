@@ -20,6 +20,7 @@
 #import "FDSearchBar.h"
 #import "HLContainerController.h"
 #import "HLListViewController.h"
+#import "Hotline.h"
 #import "HLLocalization.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
@@ -30,6 +31,12 @@
 @property (strong, nonatomic) UIView *trialView;
 @property (strong, nonatomic) UITapGestureRecognizer *recognizer;
 @property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) UIImageView *emptySearchImgView;
+@property (strong, nonatomic) UILabel *emptyResultLbl;
+@property (strong, nonatomic) NSLayoutConstraint *contactBtnHeightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *contactBtnBottomConstraint;
+@property (nonatomic) CGFloat keyboardHeight;
+@property (nonatomic) BOOL isKeyboardOpen;
 @end
 
 @implementation HLSearchViewController
@@ -37,6 +44,15 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupSubviews];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 -(HLTheme *)theme{
@@ -81,7 +97,6 @@
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchBar becomeFirstResponder];
-    [self.view addSubview:self.searchBar];
     
     UIView *mainSubView = [self.searchBar.subviews lastObject];
     for (id subview in mainSubView.subviews) {
@@ -97,7 +112,14 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+
     [self.view addSubview:self.tableView];
+
+    
+    [self setEmptySearchResultView];
+
+    [self.view addSubview:self.searchBar];
+
     
     NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|"
@@ -107,6 +129,129 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial]|"
                                                                       options:0 metrics:nil views:views]];
 }
+
+- (void) setEmptySearchResultView{
+    
+    self.emptySearchImgView = [[UIImageView alloc] init];
+    self.emptySearchImgView.image = [self.theme getImageWithKey:@"EmptySearchImage"];
+    [self.emptySearchImgView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:self.emptySearchImgView];
+    
+    HLTheme *theme = [HLTheme sharedInstance];
+    self.emptyResultLbl = [[UILabel alloc]init];
+    self.emptyResultLbl.translatesAutoresizingMaskIntoConstraints = NO;
+    self.emptyResultLbl.textColor = [theme dialogueTitleTextColor];
+    self.emptyResultLbl.font = [theme dialogueTitleFont];
+    self.emptyResultLbl.lineBreakMode = NSLineBreakByWordWrapping;
+    self.emptyResultLbl.numberOfLines = 2;
+    self.emptyResultLbl.textAlignment= NSTextAlignmentCenter;
+    self.emptyResultLbl.text = HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT);
+    [self.view addSubview:self.emptyResultLbl];
+    
+    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
+    [self.view addSubview:self.footerView];
+    
+    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"footerView" : self.footerView, @"emptyLabel":self.emptyResultLbl};
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyLabel]-50-|" options:0 metrics:nil views:emptySubViews]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptySearchImageView(100)]" options:0 metrics:nil views:emptySubViews]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptySearchImageView(100)]-10-[emptyLabel]" options:0 metrics:nil views:emptySubViews]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:emptySubViews]];
+    
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultLbl
+                                                          attribute:NSLayoutAttributeCenterX
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterX
+                                                         multiplier:1.0
+                                                           constant:0.0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
+                                                          attribute:NSLayoutAttributeCenterY
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeCenterY
+                                                         multiplier:0.5
+                                                           constant:0.0]];
+    
+    
+    
+    self.contactBtnHeightConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
+                                                                   attribute:NSLayoutAttributeHeight
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:nil
+                                                                   attribute:NSLayoutAttributeNotAnAttribute
+                                                                  multiplier:1.0
+                                                                    constant:40];
+    
+    self.contactBtnBottomConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
+                                                                   attribute:NSLayoutAttributeBottom
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:self.view
+                                                                   attribute:NSLayoutAttributeBottom
+                                                                  multiplier:1.0 constant:0];
+    
+    
+    [self.view addConstraint:self.contactBtnBottomConstraint];
+    [self.view addConstraint:self.contactBtnHeightConstraint];
+    self.emptySearchImgView.hidden = YES;
+    self.emptyResultLbl.hidden = YES;
+}
+
+- (void) showEmptySearchView{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.emptySearchImgView.hidden = NO;
+        self.emptyResultLbl.hidden = NO;
+    });
+}
+
+- (void) hideEmptySearchView{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.emptySearchImgView.hidden = YES;
+        self.emptyResultLbl.hidden = YES;
+    });
+}
+
+#pragma mark Keyboard delegate
+
+-(void) keyboardWillShow:(NSNotification *)note{
+    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    self.isKeyboardOpen = YES;
+    CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
+    CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
+    self.contactBtnBottomConstraint.constant = - keyboardCoveredHeight;
+    self.keyboardHeight = keyboardCoveredHeight;
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyboardOpen = NO;
+    NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    self.keyboardHeight = 0.0;
+    self.contactBtnBottomConstraint.constant = 0.0;
+    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
 
 #pragma mark - TableView DataSource
 
@@ -163,14 +308,18 @@
         [context performBlock:^{
             NSArray *articles = [FDRanking rankTheArticleForSearchTerm:term withContext:context];
             if ([articles count] > 0) {
+                [self hideEmptySearchView];
                 self.searchResults = articles;
                 [self reloadSearchResults];
             }else{
+                
                 self.searchResults = nil;
+                [self showEmptySearchView];
                 [self reloadSearchResults];
             }
         }];
     }else{
+        [self hideEmptySearchView];
         [self fetchAllArticles];
     }
 }
@@ -209,8 +358,13 @@
         [self.view addGestureRecognizer:self.recognizer];
         self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
         self.searchResults = nil;
+        [self hideEmptySearchView];
         [self.tableView reloadData];
     }
+}
+
+-(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -219,6 +373,14 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES]; 
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)dealloc{
+    [self localNotificationUnSubscription];
 }
 
 @end

@@ -14,6 +14,7 @@
 #import "Hotline.h"
 
 #define CELL_OFFSET 36
+#define CEll_HORZ_OFFSET 40
 
 @implementation HLListViewController
 
@@ -53,7 +54,7 @@
 //method to return height of text rect
 + (float) heightOfCell: (NSAttributedString *)textContent{
     
-    CGRect rect = [textContent boundingRectWithSize:(CGSize){[UIScreen mainScreen].bounds.size.width - 40, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+    CGRect rect = [textContent boundingRectWithSize:(CGSize){[UIScreen mainScreen].bounds.size.width - CEll_HORZ_OFFSET, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
     CGSize rectSize = rect.size;
     return rectSize.height + CELL_OFFSET;
 }
