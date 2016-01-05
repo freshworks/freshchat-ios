@@ -102,13 +102,16 @@
         KonotorMessageData *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
-        NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        if([lastMessage.createdMillis integerValue]){
+            NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
+            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        }
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
         
         if (channel.icon) {
             cell.imgView.image = [UIImage imageWithData:channel.icon];
-        }else{
+        }
+        else{
             UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
             if(channel.iconURL){
                 NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
@@ -119,7 +122,8 @@
                     channel.icon = UIImagePNGRepresentation(image);
                     [[KonotorDataManager sharedInstance]save];
                 } failure:nil];
-            }else{
+            }
+            else{
                 cell.imgView.image = placeholderImage;
             }
         }
