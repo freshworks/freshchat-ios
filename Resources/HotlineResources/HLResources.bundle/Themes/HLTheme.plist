@@ -82,27 +82,31 @@
 		<key>YesButtonFontName</key>
 		<string>HelveticaNeue</string>
 		<key>YesButtonFontSize</key>
-		<string>18</string>
+		<string>14</string>
 		<key>YesButtonBackgroundColor</key>
 		<string>007AFF</string>
 		<key>NoButtonFontColor</key>
-		<string>007AFF</string>
+		<string>535353</string>
 		<key>NoButtonFontName</key>
 		<string>HelveticaNeue</string>
 		<key>NoButtonFontSize</key>
-		<string>18</string>
+		<string>14</string>
 		<key>NoButtonBackgroundColor</key>
+		<string>F6F6F5</string>
+		<key>NoButtonBorderColor</key>
+		<string>C1C1BF</string>
+		<key>YesButtonBorderColor</key>
 		<string>D8D8D8</string>
 		<key>ButtonColor</key>
 		<string>007AFF</string>
 		<key>BackgroundColor</key>
-		<string>D8D8D8</string>
+		<string>F6F6F5</string>
 		<key>LabelFontColor</key>
-		<string>000000</string>
+		<string>535353</string>
 		<key>LabelFontName</key>
 		<string>HelveticaNeue</string>
 		<key>LabelFontSize</key>
-		<string>20</string>
+		<string>15</string>
 	</dict>
 	<key>FeedbackView</key>
 	<dict>
@@ -143,7 +147,7 @@
 		<key>ChannelTitleFontSize</key>
 		<string>14.0f</string>
 		<key>ChannelDescriptionFontColor</key>
-		<string>222222</string>
+		<string>ABABAB</string>
 		<key>ChannelDescriptionFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChannelDescriptionFontSize</key>
@@ -178,7 +182,7 @@
 		<key>TitleFontName</key>
 		<string>HelveticaNeue</string>
 		<key>TitleFontSize</key>
-		<string>18.0f</string>
+		<string>17.0f</string>
 	</dict>
 	<key>OverallSettings</key>
 	<dict>
@@ -231,7 +235,7 @@
 		<key>TitleFontSize</key>
 		<string>14.0f</string>
 		<key>DetailFontColor</key>
-		<string>222222</string>
+		<string>ACACAC</string>
 		<key>DetailFontName</key>
 		<string>HelveticaNeue</string>
 		<key>DetailFontSize</key>
@@ -246,6 +250,15 @@
 		<string>D3D3D3</string>
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
+	</dict>
+	<key>ArticlesList</key>
+	<dict>
+		<key>FontColor</key>
+		<string>525252</string>
+		<key>FontName</key>
+		<string>HelveticaNeue</string>
+		<key>FontSize</key>
+		<string>14.0f</string>
 	</dict>
 	<key>GridView</key>
 	<dict>
@@ -283,6 +296,8 @@
 		<string>HLResources.bundle/Images/hotline_search</string>
 		<key>ContactUsIcon</key>
 		<string>HLResources.bundle/Images/hotline_contact_us_icon</string>
+		<key>ContactUsLightIcon</key>
+		<string>HLResources.bundle/Images/hotline_contact_us_light_icon</string>
 		<key>BackButton</key>
 		<string>HLResources.bundle/Images/hotline_back_button</string>
 		<key>AttachmentUpload</key>
@@ -317,6 +332,8 @@
 		<string>HLResources.bundle/Images/hotline_audio_progess_max</string>
 		<key>TableViewAccessoryIcon</key>
 		<string>HLResources.bundle/Images/hotline_right_arrow</string>
+		<key>EmptySearchImage</key>
+		<string>HLResources.bundle/Images/hotline_empty_search_icon</string>
 	</dict>
 </dict>
 </plist>

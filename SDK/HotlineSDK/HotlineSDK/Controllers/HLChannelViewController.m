@@ -183,6 +183,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
         FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];

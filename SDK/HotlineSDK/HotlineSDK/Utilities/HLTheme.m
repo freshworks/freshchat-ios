@@ -108,6 +108,22 @@
                            alpha:1.0f];
 }
 
+#pragma mark - Navigation Bar
+
+- (UIColor *) navigationBarBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"NavigationBar.BackgroundColor"];
+    return color ?color : [HLTheme colorWithHex:FD_NAVIGATION_BAR_BACKGROUND];
+}
+
+-(UIFont *)navigationBarTitleFont{
+    return [self getFontWithKey:@"NavigationBar.TitleFontName" andDefaultSize:17];
+}
+
+-(UIColor *)navigationBarFontColor{
+        UIColor *color = [self getColorForKeyPath:@"NavigationBar.TitleColor"];
+        return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
 #pragma mark - Search Bar
 
 -(UIFont *)searchBarFont{
@@ -184,6 +200,15 @@
     return [self getFontWithKey:@"Dialogues.NoButton" andDefaultSize:14];
 }
 
+-(UIColor *)dialogueNoButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
+}
+
+-(UIColor *)dialogueYesButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
+}
 
 -(UIColor *)dialogueBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.BackgroundColor"];
@@ -266,6 +291,17 @@
 -(UIColor *)timeDetailTextColor {
     UIColor *color = [self getColorForKeyPath:@"TableView.TimeDetailTextColor"];
     return color ? color : [UIColor lightGrayColor];
+}
+
+#pragma mark - Article list
+
+-(UIColor *)articleListFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ArticlesList.FontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
+}
+
+-(UIFont *)articleListFont{
+    return [self getFontWithKey:@"ArticlesList.FontName" andDefaultSize:14];
 }
 
 #pragma mark - Overall SDK

@@ -122,6 +122,8 @@ int timeMin;
     self.stopButton.hidden = YES;
     self.sendButton.hidden = NO;
     self.recordingLabel.text = HLLocalizedString(LOC_AUDIO_RECORDING);
+    self.recordingLabel.font      = [self.theme articleListFont];
+    self.recordingLabel.textColor = [self.theme articleListFontColor];
 }
 
 @end
