@@ -17,6 +17,7 @@ static KonotorUIParameters* konotorUIParameters=nil;
 static UITextView* tempView=nil;
 static UITextView* txtView=nil;
 
+//TODO: Remove all magic numbers use defined values of required padding, time height constant etc.,
 
 @implementation FDMessageCell
 

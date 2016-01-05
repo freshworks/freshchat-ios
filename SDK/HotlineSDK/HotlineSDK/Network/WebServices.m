@@ -88,6 +88,10 @@
     [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     
+    NSString *userAlias = [FDUtilities getUserAlias];
+    
+    if (!userAlias) return;
+    
     [dict setObject:shareEvent.messageID forKey:@"alias"];
     [dict setObject:shareEvent.shareType forKey:@"type"];
     [dict setObject: [FDUtilities getUserAlias] forKey:@"userAlias"];
