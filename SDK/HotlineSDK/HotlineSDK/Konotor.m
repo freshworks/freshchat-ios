@@ -163,17 +163,14 @@ static id <KonotorDelegate> _delegate;
     return [KonotorMessage getAllMessagesForConversation:conversationID];
 }
 
-
-+(BOOL) isUserMe:(NSString *) userId
-{
-    NSString *currentUserID = [FDUtilities getUserAlias];
-    if(currentUserID)
-    {
-        if([currentUserID isEqualToString:userId])
-            return TRUE;
++(BOOL)isUserMe:(NSString *)userId{
+    NSString *currentUserID = @"Sender-User";
+    if(currentUserID){
+        if([currentUserID isEqualToString:userId]){
+            return YES;
+        }
     }
-    
-    return FALSE;
+    return NO;
 }
 
 +(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType

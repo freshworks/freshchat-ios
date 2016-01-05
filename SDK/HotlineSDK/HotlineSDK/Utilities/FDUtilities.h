@@ -28,6 +28,7 @@
 +(NSString*)stringRepresentationForDate:(NSDate*) date;
 +(NSString *) getKeyForObject:(NSObject *) object;
 +(NSString *)getAdID;
++(NSString *)generateOfflineMessageAlias;
 
 @end
 

@@ -139,7 +139,7 @@
 
 -(void) newSession{
     dispatch_async(dispatch_get_main_queue(),^{
-//        [self registerUser];
+        [self registerUser];
         [self performPendingTasks];
         [KonotorWebServices DAUCall];
     });

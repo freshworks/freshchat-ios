@@ -68,7 +68,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
 
     //TODO: why do we need to associate user alias to message (local cache) ?
-    [message setMessageUserId:[FDUtilities getUserAlias]];
+    [message setMessageUserId:@"Sender-User"];
 
     //TODO: Use defined message type instead of hardcoding
     [message setMessageType:@1];
@@ -87,7 +87,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:[FDUtilities getUserAlias]];
+    [message setMessageUserId:@"Sender-User"];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:@3];
     [message setMessageRead:YES];
@@ -419,7 +419,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
-    newMessage.messageUserId = [message valueForKey:@"messageUserAlias"];
+    newMessage.messageUserId = @"Sender-Agent";
     newMessage.bytes = [message valueForKey:@"bytes"];
     newMessage.durationInSecs = [message valueForKey:@"durationInSecs"];
     newMessage.read = [message valueForKey:@"read"];

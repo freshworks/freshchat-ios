@@ -518,14 +518,13 @@ float gKonoDecibels;
     return gKonoDecibels;
 }
 
-+(void) SaveAudioMessageInCoreData:(KonotorAudioRecorder *)pRec
-{
++(void) SaveAudioMessageInCoreData:(KonotorAudioRecorder *)pRec{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:[FDUtilities getUserAlias]];
+    [message setMessageUserId:@"Sender-User"];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];
@@ -565,7 +564,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:[FDUtilities getUserAlias]];
+    [message setMessageUserId:@"Sender-User"];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];

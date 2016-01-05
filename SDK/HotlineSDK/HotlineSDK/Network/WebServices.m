@@ -312,6 +312,7 @@
      
     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
+        pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
         [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];

@@ -214,4 +214,9 @@
     return  adId;
 }
 
++(NSString *)generateOfflineMessageAlias{
+    NSString *randomString = [self generateUUID];
+    return [NSString stringWithFormat:@"temp-%@", randomString];
+}
+
 @end

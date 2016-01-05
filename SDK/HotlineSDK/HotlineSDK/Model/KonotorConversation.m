@@ -158,10 +158,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
             
             NSMutableArray *pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
             
-
-            
-            //TODO: store last update time stamp of channel here
-            
             if(!pArrayOfConversations){
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
@@ -175,7 +171,6 @@ NSMutableDictionary* gkConversationIdConversationMap;
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
                 if (conversation) {
                     NSArray *messages = conversationInfo[@"messages"];
-                    FDLog(@"Number of messages to download :%ld", messages.count);
                     for (int j=0; j<messages.count; j++) {
                         NSDictionary *messageInfo = messages[j];
                         KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
