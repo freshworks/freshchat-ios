@@ -145,7 +145,7 @@
     self.emptyResultLbl.lineBreakMode = NSLineBreakByWordWrapping;
     self.emptyResultLbl.numberOfLines = 2;
     self.emptyResultLbl.textAlignment= NSTextAlignmentCenter;
-    self.emptyResultLbl.text = @"Whoops! we couldn't found what you are looking for.";
+    self.emptyResultLbl.text = HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT);
     [self.view addSubview:self.emptyResultLbl];
     
     self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
