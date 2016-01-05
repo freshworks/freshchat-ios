@@ -420,7 +420,14 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
-    newMessage.messageUserId = @"Sender-Agent";
+    
+    //TODO: Use message user type once its ready
+    if ([message[@"messageUserAlias"] isEqualToString:[FDUtilities getUserAlias]]) {
+        newMessage.messageUserId = @"Sender-User";
+    }else{
+        newMessage.messageUserId = @"Sender-Agent";
+    }
+    
     newMessage.bytes = [message valueForKey:@"bytes"];
     newMessage.durationInSecs = [message valueForKey:@"durationInSecs"];
     newMessage.read = [message valueForKey:@"read"];
