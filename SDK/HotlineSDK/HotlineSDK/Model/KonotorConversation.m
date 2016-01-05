@@ -124,9 +124,13 @@ NSMutableDictionary* gkConversationIdConversationMap;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     
     //TODO: set channel last updated time to get delta updates
-    NSNumber* timestamp = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+    NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
     
-    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",timestamp];
+    if (lastUpdateTime == nil) {
+        lastUpdateTime = @0;
+    }
+    
+    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
 
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
     [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
