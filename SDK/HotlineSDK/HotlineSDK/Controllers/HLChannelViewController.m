@@ -56,7 +56,21 @@
 -(void)updateChannels{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
-            self.channels = channels;
+            NSMutableArray *messages = [NSMutableArray array];
+            for(HLChannel *channel in channels){
+                KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
+                [messages addObject:lastMessage];
+            }
+            
+            id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
+            messages = [[messages sortedArrayUsingDescriptors:@[sort]] mutableCopy];
+            
+            NSMutableArray *sortedChannel = [[NSMutableArray alloc] init];
+            for(KonotorMessage *message in messages){
+                [sortedChannel addObject:message.belongsToChannel];
+            }
+            
+            self.channels = sortedChannel;
             [self.tableView reloadData];
         }
     }];
@@ -99,7 +113,7 @@
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
         KonotorConversation *conversation = channel.primaryConversation;
-        KonotorMessageData *lastMessage = [self getLastMessageInChannel:channel];
+        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
@@ -131,7 +145,7 @@
 }
 
 
--(NSString *)getDetailDescriptionForMessage:(KonotorMessageData *)message{
+-(NSString *)getDetailDescriptionForMessage:(KonotorMessage *)message{
     
     NSString *description = nil;
 
@@ -164,7 +178,7 @@
     return description;
 }
 
--(KonotorMessageData *)getLastMessageInChannel:(HLChannel *)channel{
+-(KonotorMessage *)getLastMessageInChannel:(HLChannel *)channel{
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSArray *messages = channel.messages.allObjects;
     return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
