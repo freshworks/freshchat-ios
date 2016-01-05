@@ -40,19 +40,23 @@
     return persistedSecureStore;
 }
 
-- (instancetype)initWithPersistedStore:(BOOL)canPersist{
+- (instancetype)initWithPersistedStore:(BOOL)isPreferred{
     self = [super init];
     if (self) {
+        FDKeyChainStore *store = nil;
         NSString *appID = [[NSBundle mainBundle] infoDictionary][@"CFBundleIdentifier"];
-        NSMutableString *serviceName = [NSMutableString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
-        if (canPersist) {
-            [serviceName appendString:@"-persistedStore"];
+        NSString *serviceName = [NSMutableString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
+        NSString *persistedStoreServiceName = [NSString stringWithFormat:@"%@%@",serviceName,@"-persistedStore"];
+        
+        if (isPreferred) {
+            store = [FDKeyChainStore keyChainStoreWithService:persistedStoreServiceName];
         }else{
+            store = [FDKeyChainStore keyChainStoreWithService:serviceName];
             if ([FDSecureStore isFirstLaunch]){
-                [self.secureStore removeAllItems];
+                [store removeAllItems];
             }
         }
-        self.secureStore = [FDKeyChainStore keyChainStoreWithService:serviceName];
+        self.secureStore = store;
     }
     return self;
 }
