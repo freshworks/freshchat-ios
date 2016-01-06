@@ -61,14 +61,19 @@
 }
 
 -(void)registerUser{
-    BOOL isUserRegistered = [FDUtilities isUserRegistered];
-    if (!isUserRegistered) {
-        [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
-            if (!error) {
-                [self performPendingTasks];
-            }
-        }];
-    }
+    dispatch_async(dispatch_get_main_queue(),^{
+        BOOL isUserRegistered = [FDUtilities isUserRegistered];
+        if (!isUserRegistered) {
+            [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
+                if (!error) {
+                    [self performPendingTasks];
+                }
+            }];
+        }
+        else {
+            [self performPendingTasks];
+        }
+    });
 }
 
 -(void)performPendingTasks{
@@ -80,6 +85,7 @@
         [KonotorCustomProperty UploadAllUnuploadedProperties];
         [KonotorMessage uploadAllUnuploadedMessages];
         [KonotorConversation DownloadAllMessages];
+        [KonotorWebServices DAUCall];
     });
 }
 
@@ -138,11 +144,8 @@
 }
 
 -(void) newSession{
-    dispatch_async(dispatch_get_main_queue(),^{
         [self registerUser];
-        [self performPendingTasks];
-        [KonotorWebServices DAUCall];
-    });
+        //[self performPendingTasks]; this is already called from registerUser
 }
 
 @end

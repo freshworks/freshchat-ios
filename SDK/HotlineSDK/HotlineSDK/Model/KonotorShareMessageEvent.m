@@ -34,8 +34,7 @@
 
 
 
-+(void) UploadAllUnuploadedEvents
-{
++(void) UploadAllUnuploadedEvents{
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorShareMessageEvent" inManagedObjectContext:context];
@@ -49,17 +48,11 @@
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
     
-    if(!array)
-        return;
-    
-    if([array count]==0)
+    if(!array || [array count]==0){
         return ;
-    
-    
-    else
-    {
-        for(int i=0;i<[array count];i++)
-        {
+    }
+    else{
+        for(int i=0;i<[array count];i++){
             KonotorShareMessageEvent *event = [array objectAtIndex:i];
             if(event)
             {
@@ -67,8 +60,6 @@
             }
         }
     }
-    
-    
 }
 
 @end
