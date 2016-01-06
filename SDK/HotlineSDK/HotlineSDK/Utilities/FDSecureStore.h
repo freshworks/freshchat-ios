@@ -26,6 +26,11 @@
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
 
+#define HOTLINE_DEFAULTS_USER_NAME @"hotline_defaults_user_name"
+#define HOTLINE_DEFAULTS_USER_EMAIL @"hotline_defaults_user_email"
+#define HOTLINE_DEFAULTS_USER_PHONE_NUMBER @"hotline_defaults_user_phone_number"
+#define HOTLINE_DEFAULTS_USER_EXTERNAL_ID @"hotline_defaults_user_external_id"
+
 @interface FDSecureStore : NSObject
 
 +(instancetype)sharedInstance;

@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "KonotorMessage.h"
-#import "KonotorCustomProperties.h"
-#import "KonotorShareMessageEvent.h"
-
 
 #define MESSAGE_NOT_UPLOADED 0
 #define MESSAGE_UPLOADING 1
@@ -27,9 +24,6 @@
 @interface KonotorWebServices : NSObject
 
 +(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void) DAUCall;
-+(void) UpdateUserPropertiesWithDictionary:(NSDictionary *) dict withProperty:(KonotorCustomProperty *)property;
-+(void) sendShareMessageEvent:(KonotorShareMessageEvent *)shareEvent;
 +(void) UpdateAppVersion:(NSString *) appVersion;
 +(void) UpdateSdkVersion: (NSString *) sdkVersion;
 

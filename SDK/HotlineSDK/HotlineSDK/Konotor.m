@@ -11,7 +11,6 @@
 #import "KonotorAudioRecorder.h"
 #import "KonotorAudioPlayer.h"
 #import "WebServices.h"
-#import "KonotorShareMessageEvent.h"
 #import "HLMacros.h"
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
@@ -173,13 +172,6 @@ static id <KonotorDelegate> _delegate;
     return NO;
 }
 
-+(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType
-{
-    KonotorShareMessageEvent* event = [KonotorShareMessageEvent sharedMessageWithID:messageID withShareType:shareType];
-    [KonotorWebServices sendShareMessageEvent:event];
-    return;
-    
-}
 //////Start of undocumented functions/////
 
 +(void) conversationsDownloaded

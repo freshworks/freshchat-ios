@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIImage.h>
 #import "KonotorConversation.h"
+#import "Hotline.h"
 
 @protocol KonotorDelegate <NSObject>
 
@@ -79,7 +80,6 @@ enum KonotorMessageUploadStatus
 
 +(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId;
 
-+(void) shareEventWithMessageID: (NSString *)messageID shareType:(NSString*)shareType;
 +(NSArray *) getAllMessagesForConversation:(NSString *)conversationID;
 
 @end

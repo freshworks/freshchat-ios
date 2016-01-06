@@ -21,9 +21,7 @@
 #import "FDUtilities.h"
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
-#import "KonotorShareMessageEvent.h"
 #import "KonotorMessage.h"
-#import "KonotorCustomProperties.h"
 #import "WebServices.h"
 
 @interface Hotline ()
@@ -53,11 +51,69 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
-    [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
-    [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+    [self initWithConfig:config andUser:nil];
+}
+
+-(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{
+    [self storeConfig:config];
     [self registerUser];
+    [self updateUser:user];
+    [self performPendingTasks];
+    [HLCoreServices DAUCall];
+    //TODO: Update app & SDK version
+}
+
+-(void)storeConfig:(HotlineConfig *)config{
+    if ([self hasUpdatedConfigWith:config]) {
+        FDLog(@"Clearing Data for Config update");
+    }
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    
+    if (config) {
+        [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
+        [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
+        [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+    }
+}
+
+-(BOOL)hasUpdatedConfigWith:(HotlineConfig *)config{
+    return NO;
+}
+
+-(void)updateUser:(HotlineUser *)user{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    
+    if (user) {
+        if (user.userName) {
+            [store setObject:user.userName forKey:HOTLINE_DEFAULTS_USER_NAME];
+            userInfo[@"name"] = user.userName;
+        }
+        
+        if (user.emailAddress) {
+            [store setObject:user.emailAddress forKey:HOTLINE_DEFAULTS_USER_EMAIL];
+            userInfo[@"email"] = user.emailAddress;
+        }
+        
+        if (user.phoneNumber) {
+            [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
+            userInfo[@"phone"] = user.phoneNumber;
+        }
+        
+        if (user.externalID) {
+            [store setObject:user.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+            userInfo[@"identifier"] = user.externalID;
+        }
+    }
+
+    [[[HLCoreServices alloc]init]updateUserProperties:userInfo];
+}
+
+-(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
+    if (key && value){
+        [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta": @{key : value}}];
+    }
 }
 
 -(void)registerUser{
@@ -76,8 +132,6 @@
     dispatch_async(dispatch_get_main_queue(),^{
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
-        [KonotorShareMessageEvent UploadAllUnuploadedEvents];
-        [KonotorCustomProperty UploadAllUnuploadedProperties];
         [KonotorMessage uploadAllUnuploadedMessages];
         [KonotorConversation DownloadAllMessages];
     });
@@ -141,7 +195,7 @@
     dispatch_async(dispatch_get_main_queue(),^{
         [self registerUser];
         [self performPendingTasks];
-        [KonotorWebServices DAUCall];
+        [HLCoreServices DAUCall];
     });
 }
 

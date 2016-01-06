@@ -72,4 +72,41 @@
     return task;
 }
 
+-(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info{
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_PROPERTIES_PATH,appID,userAlias];
+    NSData *encodedInfo = [NSJSONSerialization dataWithJSONObject:@{@"user" : info}  options:NSJSONWritingPrettyPrinted error:nil];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    request.HTTPBody = encodedInfo;
+    [request setRelativePath:path andURLParams:@[appKey]];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+        if (!error) {
+            FDLog(@"Pushed user properties to server %@", info);
+        }else{
+            FDLog(@"Could not update user properties %@", error);
+        }
+    }];
+    return task;
+}
+
++(void)DAUCall{
+    NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
+    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
+    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/activity?t=",appKey];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
+    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
+    [operation setCompletionBlockWithSuccess:nil failure:nil];
+    [operation start];
+}
+
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class HotlineConfig;
+@class HotlineConfig, HotlineUser;
 
 @interface Hotline : NSObject
 
@@ -29,6 +29,12 @@
  */
 
 -(void)initWithConfig:(HotlineConfig *)config;
+
+-(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user;
+
+-(void)updateUser:(HotlineUser *)user;
+
+-(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value;
 
 -(void)presentFeedback:(UIViewController *)controller;
 
@@ -63,5 +69,13 @@
  */
 -(instancetype)initWithDomain:(NSString*)domain withAppID:(NSString*)appID andAppKey:(NSString*)appKey;
 
+@end
+
+@interface HotlineUser : NSObject
+
+@property (strong, nonatomic) NSString *userName;
+@property (strong, nonatomic) NSString *emailAddress;
+@property (strong, nonatomic) NSString *phoneNumber;
+@property (strong, nonatomic) NSString *externalID;
 
 @end
