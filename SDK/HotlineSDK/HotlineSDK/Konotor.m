@@ -166,8 +166,10 @@ static id <KonotorDelegate> _delegate;
     //TODO: This will break migration from existing konotor SDK - Rex
     // Migration needs to convert existing userIds or dont use a hardcoded userId.
     NSString *currentUserID = @"Sender-User";
+    NSString *userAlias = [FDUtilities getUserAlias];
     if(currentUserID){
-        if([currentUserID isEqualToString:userId]){
+        if([userId isEqualToString:currentUserID] ||
+           [userId isEqualToString:userAlias]){
             return YES;
         }
     }
