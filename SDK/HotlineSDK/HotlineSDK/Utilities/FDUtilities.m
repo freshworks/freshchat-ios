@@ -219,4 +219,10 @@
     return [NSString stringWithFormat:@"temp-%@", randomString];
 }
 
++(BOOL)isValidEmail:(NSString *)email{
+    NSString *emailPattern=@"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,15}";
+    NSPredicate *emailPatternPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailPattern];
+    return ([emailPatternPredicate evaluateWithObject:email]) ? YES : NO;
+}
+
 @end

@@ -18,6 +18,7 @@
 +(NSString *)generateUUID;
 +(void)storeUserAlias:(NSString *)alias;
 +(BOOL)isUserRegistered;
++(BOOL)isValidEmail:(NSString *)email;
 
 +(NSString *)base64EncodedStringFromString:(NSString *)string;
 +(NSString *)sanitizeStringForUTF8:(NSString *)string;

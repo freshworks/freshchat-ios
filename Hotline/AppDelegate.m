@@ -27,7 +27,7 @@
                                                        andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
     HotlineUser *user = [[HotlineUser alloc]init];
     user.userName = @"JonSnow";
-    user.emailAddress = @"snow@ios";
+    user.emailAddress = @"snow@ios.com";
     user.phoneNumber = @"9898989898";
     user.externalID = @"winterfell";
     [[Hotline sharedInstance]initWithConfig:config andUser:user];

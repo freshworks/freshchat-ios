@@ -90,9 +90,13 @@
             userInfo[@"name"] = user.userName;
         }
         
-        if (user.emailAddress) {
+        if ([FDUtilities isValidEmail:user.emailAddress]) {
             [store setObject:user.emailAddress forKey:HOTLINE_DEFAULTS_USER_EMAIL];
             userInfo[@"email"] = user.emailAddress;
+        }else{
+            NSString *exceptionName   = @"HOTLINE_SDK_INVALID_EMAIL_EXCEPTION";
+            NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
+            [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
         }
         
         if (user.phoneNumber) {
