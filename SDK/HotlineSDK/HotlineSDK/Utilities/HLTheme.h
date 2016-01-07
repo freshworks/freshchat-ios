@@ -122,9 +122,11 @@
 -(NSString *)userMessageSenderName;
 -(NSString *)businessChatBubbleImageName;
 -(NSString *)userChatBubbleImageName;
--(NSString *)chatBubbleFontName;
+//-(NSString *)chatBubbleFontName;
 -(NSString *)conversationUIFontName;
--(float)chatBubbleFontSize;
+//-(float)chatBubbleFontSize;
+-(UIFont *)getChatBubbleMessageFont;
+-(UIFont *)getChatbubbleTimeFont;
 -(int)pollingTimeChatInFocus;
 -(int)pollingTimeChatNotInFocus;
 

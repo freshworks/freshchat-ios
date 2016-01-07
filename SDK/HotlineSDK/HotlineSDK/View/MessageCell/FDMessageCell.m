@@ -37,7 +37,7 @@ static float ACTION_URL_HEIGHT = KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PA
 static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KONOTOR_VERTICAL_PADDING*2 + EXTRA_TIMESTAMP_HEIGHT ;
 static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTOR_USERNAMEFIELD_HEIGHT +KONOTOR_VERTICAL_PADDING*2 + EXTRA_TIMESTAMP_HEIGHT;
 
-@synthesize messageActionButton,messagePictureImageView,messageSentTimeLabel,messageTextView,chatCalloutImageView,uploadStatusImageView,profileImageView,audioItem,senderNameLabel;
+@synthesize messageActionButton,messagePictureImageView,messageSentTimeLabel,messageTextView,chatCalloutImageView,uploadStatusImageView,profileImageView,audioItem,senderNameLabel,messageTextFont;
 
 @synthesize isSenderOther,showsProfile,showsSenderName,customFontName,showsTimeStamp,showsUploadStatus,sentImage,sendingImage;
 
@@ -87,7 +87,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     /* setup SentTime field*/
     if(showsTimeStamp){
         messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-        [messageSentTimeLabel setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
+        [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
         [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
         [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
         [messageSentTimeLabel setTextColor:[UIColor darkGrayColor]];
@@ -98,9 +98,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     
     /* setup message text field*/
-
+    
+    messageTextFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
     messageTextView=[[UITextView alloc] initWithFrame:CGRectZero];
-    [messageTextView setFont:KONOTOR_MESSAGETEXT_FONT];
+    [messageTextView setFont:messageTextFont];
+    
+    
     [messageTextView setBackgroundColor:[UIColor clearColor]];
     [messageTextView setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
     [messageTextView setTextAlignment:NSTextAlignmentLeft];
@@ -183,14 +186,14 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     //check if message occupies a single line
     NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
-    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT];
-    int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:KONOTOR_MESSAGETEXT_FONT]);
+    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
+    int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]]);
 
     //if message is single line, calculate larger width of the message text and date string
     if (numLines >= 1){
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
         [tempView setText:messageText];
-        [tempView setFont:KONOTOR_MESSAGETEXT_FONT];
+        [tempView setFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
         CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
@@ -314,7 +317,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         NSString *simpleString=currentMessage.text;
         [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
         
-        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
+        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:messageTextFont];
         float msgHeight=sizer.height;
         float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
         float contentViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
@@ -357,7 +360,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             
             
             [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
-            CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
+            CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:messageTextFont];
 
             
             txtheight=sizer.height-16;
@@ -424,7 +427,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)){
        // NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
         
-        float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
+        float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
         if(KONOTOR_SHOWPROFILEIMAGE){
             cellHeight= MAX(height+extraHeight,
                             MIN_HEIGHT);
@@ -455,7 +458,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         //TODO: Read message font from theme
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
             NSString *simpleString=currentMessage.text;
-            txtheight=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
+            //txtheight=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
+            txtheight = [FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     }
@@ -612,9 +616,9 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         konotorUIParameters.sendButtonColor=nil;
         konotorUIParameters.doneButtonColor=nil;
         
-        konotorUIParameters.otherTextColor=[UIColor blackColor];
+        konotorUIParameters.otherTextColor=[[HLTheme sharedInstance] businessMessageTextColor];
         konotorUIParameters.otherChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
-        konotorUIParameters.userTextColor=[UIColor darkGrayColor];
+        konotorUIParameters.userTextColor=[[HLTheme sharedInstance] userMessageTextColor];
         
         konotorUIParameters.userChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
         konotorUIParameters.userProfileImage=nil;

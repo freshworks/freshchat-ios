@@ -43,6 +43,7 @@
         NSString *countString = [NSString stringWithFormat:@"%ld",(long)count];
         [self.badgeButton setTitle:countString forState:UIControlStateNormal];
         [self.badgeButton sizeToFit];
+        [self.badgeButton.layer setCornerRadius:self.badgeButton.frame.size.width/3];
         [self.badgeButton setHidden:NO];
     }else{
         [self.badgeButton setHidden:YES];

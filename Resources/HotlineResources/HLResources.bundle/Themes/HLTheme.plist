@@ -45,15 +45,19 @@
 		<key>BusinessMessageTextColor</key>
 		<string>000000</string>
 		<key>UserMessageTextColor</key>
-		<string>050505</string>
+		<string>5a5a5a</string>
 		<key>BusinessChatBubbleImageName</key>
 		<string>messagebubble_left</string>
 		<key>UserChatBubbleImageName</key>
 		<string>messagebubble_right</string>
-		<key>ChatBubbleFontName</key>
+		<key>ChatBubbleMessageFontName</key>
 		<string>HelveticaNeue</string>
-		<key>ChatBubbleFontSize</key>
+		<key>ChatBubbleMessageFontSize</key>
 		<string>14.0f</string>
+		<key>ChatBubbleTimeFontName</key>
+		<string>HelveticaNeue</string>
+		<key>ChatBubbleTimeFontSize</key>
+		<string>11.0f</string>
 		<key>HyperlinkColor</key>
 		<string>2701A0</string>
 		<key>InputTextFontColor</key>

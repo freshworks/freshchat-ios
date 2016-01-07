@@ -73,6 +73,7 @@
 @property (strong, nonatomic) UIImageView* uploadStatusImageView;
 @property (strong, nonatomic) FDPictureMessageView* messagePictureImageView;
 @property (strong, nonatomic) FDActionButton* messageActionButton;
+@property (strong, nonatomic) UIFont *messageTextFont;
 
 +(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID;
 

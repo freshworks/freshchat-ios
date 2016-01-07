@@ -411,15 +411,25 @@
 -(NSString *)userChatBubbleImageName{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserChatBubbleImageName"];
 }
--(NSString *)chatBubbleFontName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontName"];
+
+-(UIFont *)getChatBubbleMessageFont{
+    return [self getFontWithKey:@"ConversationsUI.ChatBubbleMessage" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
+
+-(UIFont *)getChatbubbleTimeFont{
+    return [self getFontWithKey:@"ConversationsUI.ChatBubbleTime" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+/*-(NSString *)chatBubbleFontName{
+    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontName"];
+}*/
 -(NSString *)conversationUIFontName{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
 }
+/*
 -(float)chatBubbleFontSize{
    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontSize"] floatValue];
-}
+}*/
 -(int)pollingTimeChatInFocus{
     return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatInFocus"] intValue];
 }
