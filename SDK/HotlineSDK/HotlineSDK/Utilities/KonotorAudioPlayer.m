@@ -62,34 +62,14 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     //Activate the session
     
+    //TODO: set audio session back to the original state when dismissing msg controller
+    
+    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof (audioRouteOverride),&audioRouteOverride);
     
     [audioSession setActive:YES error:&error];
     
     [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error: &error];
-    
-    UInt32 allowBluetoothInput = 1;
-    AudioSessionSetProperty (
-                             kAudioSessionProperty_OverrideCategoryEnableBluetoothInput,
-                             sizeof (allowBluetoothInput),
-                             &allowBluetoothInput
-                             );
-    
-    
-    UInt32 routeSize = sizeof (CFStringRef);
-    CFStringRef route;
-    
-    OSStatus stat = AudioSessionGetProperty (kAudioSessionProperty_AudioRoute,
-                                             &routeSize,
-                                             &route);
-    
-    NSString *stringRoute = (__bridge NSString *)(route);
-    
-    if(!stat)
-    {
-        if(!([stringRoute isEqualToString:@"HeadphonesAndMicrophone"]||[stringRoute isEqualToString:@"HeadsetInOut"]||[stringRoute isEqualToString:@"HeadsetBT"]))
-        {
-        }
-    }
     
     gCurrentlyPlaying = messageObject;
     
