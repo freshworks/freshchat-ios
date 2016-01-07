@@ -23,6 +23,7 @@
 #import "HLLocalization.h"
 #import "HLTheme.h"
 #import "FDUtilities.h"
+#import "FDImagePreviewController.h"
 
 typedef struct {
     BOOL isLoading;
@@ -32,6 +33,7 @@ typedef struct {
     BOOL isKeyboardOpen;
     BOOL isModalPresentationPreferred;
 } FDMessageControllerFlags;
+
 
 @interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
 
@@ -626,6 +628,8 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
+    FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:image];
+    [imageController presentOnController:self];
     FDLog(@"Picture message tapped");
 }
 

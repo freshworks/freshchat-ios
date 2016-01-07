@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 350EFDEC1BD673DD00F3410B /* FDIndexManager.m */; };
+		350FB0831C3143A500D31455 /* FDImagePreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 350FB0821C3143A500D31455 /* FDImagePreviewController.m */; };
 		3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3528BA301BC86076008F6C38 /* HLServiceRequest.m */; };
 		3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B61BB01D38000B2D9A /* HLArticlesController.m */; };
 		3533F0BA1BB01D38000B2D9A /* HLContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3533F0B81BB01D38000B2D9A /* HLContainerController.m */; };
@@ -128,6 +129,8 @@
 /* Begin PBXFileReference section */
 		350EFDEB1BD673DD00F3410B /* FDIndexManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndexManager.h; sourceTree = "<group>"; };
 		350EFDEC1BD673DD00F3410B /* FDIndexManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDIndexManager.m; sourceTree = "<group>"; };
+		350FB0811C3143A500D31455 /* FDImagePreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDImagePreviewController.h; sourceTree = "<group>"; };
+		350FB0821C3143A500D31455 /* FDImagePreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDImagePreviewController.m; sourceTree = "<group>"; };
 		3528BA2F1BC86076008F6C38 /* HLServiceRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLServiceRequest.h; sourceTree = "<group>"; };
 		3528BA301BC86076008F6C38 /* HLServiceRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLServiceRequest.m; sourceTree = "<group>"; };
 		3533F0B51BB01D38000B2D9A /* HLArticlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLArticlesController.h; sourceTree = "<group>"; };
@@ -355,6 +358,8 @@
 			children = (
 				353AA00B1BDF7B4F008CDAB2 /* FDMessageController.h */,
 				353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */,
+				350FB0811C3143A500D31455 /* FDImagePreviewController.h */,
+				350FB0821C3143A500D31455 /* FDImagePreviewController.m */,
 				CE9D4D321BCE91BE006F2E66 /* HLSearchViewController.h */,
 				CE9D4D331BCE91BE006F2E66 /* HLSearchViewController.m */,
 				CE754A3D1BDF856A004B6635 /* FDTableViewCellWithImage.h */,
@@ -917,6 +922,7 @@
 				CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */,
 				35DCCB541BE002960039EFDD /* FDYesNoPromptView.m in Sources */,
 				35DCCB501BE002960039EFDD /* FDSearchBar.m in Sources */,
+				350FB0831C3143A500D31455 /* FDImagePreviewController.m in Sources */,
 				35DCCB4F1BE002960039EFDD /* FDButton.m in Sources */,
 				CE6245301BFC8F9C0050C8EB /* FDDateUtil.m in Sources */,
 				35DCCB521BE002960039EFDD /* FDAlertView.m in Sources */,
