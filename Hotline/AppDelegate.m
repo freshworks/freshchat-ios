@@ -23,8 +23,8 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
-                                                       andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"9d66862c-ee03-4397-b3cd-cbe11876f0e5"
+                                                       andAppKey:@"7eb6baef-c9bf-41c6-8a96-779c77185028"];
     HotlineUser *user = [[HotlineUser alloc]init];
     user.userName = @"JonSnow";
     user.emailAddress = @"snow@ios.com";
