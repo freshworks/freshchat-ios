@@ -86,9 +86,9 @@
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSDictionary *voteInfo;
     if (vote) {
-        voteInfo = @{ @"article": @{ @"upvote" : @"1", @"downvote" : @"-1" } };
+        voteInfo = @{ @"article": @{ @"upvote" : @"1" } };
     }else{
-        voteInfo = @{ @"article": @{ @"upvote" : @"-1", @"downvote" : @"1" } };
+        voteInfo = @{ @"article": @{ @"downvote" : @"1" } };
     }
     NSData *postData = [NSJSONSerialization dataWithJSONObject:voteInfo options:0 error:nil];
     request.HTTPBody = postData;
