@@ -41,15 +41,22 @@
 
 -(void)setNavigationItem{
     UIBarButtonItem *sendButton = [[UIBarButtonItem alloc]initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendButton:)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
     self.navigationItem.rightBarButtonItem = sendButton;
+    self.navigationItem.leftBarButtonItem = backButton;
     self.navigationController.navigationBar.translucent = NO;
 }
 
 -(void)sendButton:(UIBarButtonItem *)button{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self dismissPresentedView];
     if(self.delegate){
         [self.delegate attachmentController:self didFinishSelectingImage:self.image];
     }
+}
+
+- (void) dismissPresentedView {
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{

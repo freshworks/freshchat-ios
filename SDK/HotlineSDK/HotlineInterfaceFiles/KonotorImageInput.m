@@ -77,6 +77,7 @@
 }
 
 - (void)showCamPicker{
+    
     UIImagePickerController* imagePicker=[[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
     imagePicker.allowsEditing = NO;
@@ -93,11 +94,14 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    
+    [picker dismissViewControllerAnimated:NO completion:nil];
     UIImage* selectedImage = info[UIImagePickerControllerOriginalImage];
     self.imageController = [[FDAttachmentImageController alloc]initWithImage:selectedImage];
     self.imageController.delegate = self;
     self.imagePicked = selectedImage;
-    [picker pushViewController:self.imageController animated:YES];
+    UINavigationController *navcontroller = [[UINavigationController alloc] initWithRootViewController:self.imageController];
+    [self.sourceViewController presentViewController:navcontroller animated:YES completion:nil];
 }
 
 -(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image{

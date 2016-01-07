@@ -23,8 +23,8 @@
 
 @end
 
-static const CGFloat ThrowingThreshold = 1000;
-static const CGFloat ThrowingVelocityPadding = 35;
+static const CGFloat ThrowingThreshold = 700;
+static const CGFloat ThrowingVelocityPadding = 175;
 
 @implementation FDImagePreviewController
 
