@@ -26,12 +26,12 @@
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"9d66862c-ee03-4397-b3cd-cbe11876f0e5"
                                                        andAppKey:@"7eb6baef-c9bf-41c6-8a96-779c77185028"];
     HotlineUser *user = [[HotlineUser alloc]init];
-    user.userName = @"JonSnow";
-    user.emailAddress = @"snow@ios.com";
+    user.userName = @"Sid";
+    user.emailAddress = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
-    user.externalID = @"winterfell";
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
-    [[Hotline sharedInstance]setCustomUserPropertyForKey:@"Sigil" withValue:@"wolf"];
+    [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
+    [Hotline sharedInstance].displaySolutionsAsGrid = YES;
 }
 
 -(void)registerAppForNotifications{
