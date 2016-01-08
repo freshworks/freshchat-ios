@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D9c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,55 +17,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ig7-l3-DoE">
-                                <rect key="frame" x="281" y="112" width="38" height="30"/>
-                                <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="38" id="QdT-7t-NHq"/>
-                                </constraints>
-                                <state key="normal" title="FAQs">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="showFAQ:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gE6-Ed-LFi"/>
-                                </connections>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="RZP-lX-cZ5">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SRX-eJ-kPg">
+                                <rect key="frame" x="531" y="34" width="43" height="25"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j2q-zP-81C">
-                                <rect key="frame" x="251" y="208" width="99" height="30"/>
-                                <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="99" id="e5w-xF-bXR"/>
-                                </constraints>
-                                <state key="normal" title="Conversations">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O2s-Q2-4ac">
+                                <rect key="frame" x="25" y="34" width="26" height="25"/>
+                                <state key="normal" title="Button" image="chat.png"/>
                                 <connections>
-                                    <action selector="conversations:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nvx-7c-jks"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ffW-gi-m2d">
-                                <rect key="frame" x="272" y="298" width="57" height="30"/>
-                                <animations/>
-                                <state key="normal" title="Settings"/>
-                                <connections>
-                                    <action selector="settings:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rH6-Ls-y9U"/>
+                                    <action selector="chatButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wXD-FF-ZPG"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ffW-gi-m2d" firstAttribute="centerX" secondItem="j2q-zP-81C" secondAttribute="centerX" id="5uq-5f-kBt"/>
-                            <constraint firstItem="ffW-gi-m2d" firstAttribute="top" secondItem="j2q-zP-81C" secondAttribute="bottom" constant="60" id="iiN-wZ-FEP"/>
-                            <constraint firstItem="Ig7-l3-DoE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="92" id="rc6-8A-tvM"/>
-                            <constraint firstItem="j2q-zP-81C" firstAttribute="top" secondItem="Ig7-l3-DoE" secondAttribute="bottom" constant="66" id="uHo-9M-vzb"/>
-                            <constraint firstItem="j2q-zP-81C" firstAttribute="centerX" secondItem="Ig7-l3-DoE" secondAttribute="centerX" id="yhl-kp-OoD"/>
-                            <constraint firstItem="j2q-zP-81C" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="zrL-ce-NEO"/>
+                            <constraint firstAttribute="trailing" secondItem="RZP-lX-cZ5" secondAttribute="trailing" id="09D-pG-GJb"/>
+                            <constraint firstItem="RZP-lX-cZ5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="oZh-vX-Rmo"/>
+                            <constraint firstItem="RZP-lX-cZ5" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="qN2-oL-3eB"/>
+                            <constraint firstItem="RZP-lX-cZ5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="tyg-XJ-uPL"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="chatButton" destination="O2s-Q2-4ac" id="kpP-jb-uud"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="387" y="207"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="chat.png" width="32" height="30"/>
+        <image name="homeScreen.png" width="361" height="623"/>
+    </resources>
 </document>

@@ -44,7 +44,7 @@
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];
-    footerLabel.text = @"Powered by Hotline";
+    footerLabel.text = @"Powered by Freshdesk";
     footerLabel.font = [UIFont systemFontOfSize:11];
     footerLabel.textColor = [UIColor whiteColor];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;

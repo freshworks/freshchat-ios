@@ -12,5 +12,13 @@
 
 @implementation HotlineUser
 
++(instancetype)sharedInstance{
+    static HotlineUser *hotlineUser = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        hotlineUser = [[self alloc]init];
+    });
+    return hotlineUser;
+}
 
 @end

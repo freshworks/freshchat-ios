@@ -78,4 +78,6 @@
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *externalID;
 
++(instancetype)sharedInstance;
+
 @end
