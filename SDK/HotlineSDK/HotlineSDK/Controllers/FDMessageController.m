@@ -64,6 +64,7 @@ typedef struct {
 
 @implementation FDMessageController
 
+static CGFloat TABLE_VIEW_TOP_OFFSET = 10;
 static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
@@ -107,7 +108,14 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     [KonotorConversation DownloadAllMessages];
 }
 
+-(UIView *)tableHeaderView{
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, TABLE_VIEW_TOP_OFFSET)];
+    headerView.backgroundColor = self.tableView.backgroundColor;
+    return headerView;
+}
+
 -(void)viewWillAppear:(BOOL)animated{
+    self.tableView.tableHeaderView = [self tableHeaderView];
     [super viewWillAppear:animated];
 }
 
