@@ -23,6 +23,7 @@
 #import "FDSolutionUpdater.h"
 #import "KonotorMessage.h"
 #import "WebServices.h"
+#import "HLConstants.h"
 
 @interface Hotline ()
 
@@ -52,6 +53,7 @@
 
 -(void)initWithConfig:(HotlineConfig *)config{
     [self initWithConfig:config andUser:nil];
+    [[FDSecureStore persistedStoreInstance]clearStoreData];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{
@@ -59,7 +61,30 @@
     [self registerUser];
     [self updateUser:user];
     [HLCoreServices DAUCall];
-    //TODO: Update app & SDK version
+    [self updateAppVersion];
+    [self updateSDKBuildNumber];
+}
+
+-(void)updateAppVersion{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
+    NSString *currentValue = [[[NSBundle mainBundle]infoDictionary]objectForKey:@"CFBundleShortVersionString"];
+    if (![storedValue isEqualToString:currentValue]) {
+        [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta" : @{ @"app_version" : currentValue } } handler:^(NSError *error) {
+            if (!error) {
+                [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
+            }
+        }];
+    }
+}
+
+-(void)updateSDKBuildNumber{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
+    NSString *currentValue = HOTLINE_SDK_BUILD_NUMBER;
+    if (![storedValue isEqualToString:currentValue]) {
+        [[[HLCoreServices alloc]init]updateSDKBuildNumber:currentValue];
+    }
 }
 
 -(void)storeConfig:(HotlineConfig *)config{
@@ -110,12 +135,12 @@
         }
     }
 
-    [[[HLCoreServices alloc]init]updateUserProperties:userInfo];
+    [[[HLCoreServices alloc]init]updateUserProperties:userInfo handler:nil];
 }
 
 -(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
     if (key && value){
-        [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta": @{key : value}}];
+        [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta": @{key : value}} handler:nil];
     }
 }
 

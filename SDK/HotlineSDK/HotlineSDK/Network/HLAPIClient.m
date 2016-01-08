@@ -43,13 +43,13 @@
         if (statusCode >= 400) {
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             error = [NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info];
-            handler(nil, error);
+            if (handler) handler(nil, error);
         }else{
             if (!error) {
                 NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                handler(responseDictionary, nil);
+                if (handler) handler(responseDictionary, nil);
             }else{
-                handler(nil,error);
+                if (handler) handler(nil,error);
             }
         }
         

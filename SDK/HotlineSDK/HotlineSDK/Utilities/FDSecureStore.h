@@ -16,6 +16,9 @@
 #define HOTLINE_DEFAULTS_USER_PHONE_NUMBER @"hotline_defaults_user_phone_number"
 #define HOTLINE_DEFAULTS_USER_EXTERNAL_ID @"hotline_defaults_user_external_id"
 #define HOTLINE_DEFAULTS_IS_APP_REGISTERED @"hotline_defaults_is_app_registered"
+#define HOTLINE_DEFAULTS_APP_VERSION @"hotline_defaults_app_version"
+#define HOTLINE_DEFAULTS_SDK_BUILD_NUMBER @"hotline_defaults_sdk_build_number"
+
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
 #define HOTLINE_DEFAULTS_DOMAIN @"hotline_defaults_domain"
 #define HOTLINE_DEFAULTS_APP_KEY @"hotline_defaults_app_key"
@@ -25,11 +28,6 @@
 
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
-
-#define HOTLINE_DEFAULTS_USER_NAME @"hotline_defaults_user_name"
-#define HOTLINE_DEFAULTS_USER_EMAIL @"hotline_defaults_user_email"
-#define HOTLINE_DEFAULTS_USER_PHONE_NUMBER @"hotline_defaults_user_phone_number"
-#define HOTLINE_DEFAULTS_USER_EXTERNAL_ID @"hotline_defaults_user_external_id"
 
 @interface FDSecureStore : NSObject
 

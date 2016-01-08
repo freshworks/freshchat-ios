@@ -14,11 +14,10 @@
 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler;
 
--(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info;
+-(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler;
 
 +(NSURLSessionDataTask *)DAUCall;
 
-+(void)updateAppVersion:(NSString *) appVersion;
-+(void)updateSdkVersion: (NSString *) sdkVersion;
+-(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 
 @end

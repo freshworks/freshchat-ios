@@ -24,7 +24,5 @@
 @interface KonotorWebServices : NSObject
 
 +(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void) UpdateAppVersion:(NSString *) appVersion;
-+(void) UpdateSdkVersion: (NSString *) sdkVersion;
 
 @end

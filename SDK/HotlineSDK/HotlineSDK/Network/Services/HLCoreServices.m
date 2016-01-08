@@ -14,8 +14,31 @@
 #import "FDUtilities.h"
 #import "KonotorUtil.h"
 #import "KonotorDataManager.h"
+#import "HLConstants.h"
 
 @implementation HLCoreServices
+
+-(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UPDATE_SDK_BUILD_NUMBER_PATH,appID,userAlias];
+    NSString *clientVersion = [NSString stringWithFormat:@"clientVersion=%@",SDKVersion];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    [request setRelativePath:path andURLParams:@[appKey,clientVersion,@"clientType=2"]];
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+        if (!error) {
+            [store setObject:HOTLINE_SDK_BUILD_NUMBER forKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
+            FDLog(@"SDK Version updated to server");
+        }else{
+            FDLog(@"SDK Version could not be updated %@", error);
+        }
+    }];
+    return task;
+}
 
 -(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -42,10 +65,10 @@
             NSString *userAlias = responseObject[@"alias"];
             [FDUtilities storeUserAlias:userAlias];
             FDLog(@"User registered successfully 👍");
-            handler(nil);
+            if (handler) handler(nil);
         }else{
             FDLog(@"User registration failed :%@", error);
-            handler(error);
+            if (handler) handler(error);
         }
     }];
     return task;
@@ -73,7 +96,7 @@
     return task;
 }
 
--(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info{
+-(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -88,7 +111,9 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         if (!error) {
             FDLog(@"Pushed user properties to server %@", info);
+            if (handler) handler(nil);
         }else{
+            if (handler) handler(error);
             FDLog(@"Could not update user properties %@", error);
         }
     }];

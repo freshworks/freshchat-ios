@@ -19,51 +19,6 @@
 
 @implementation KonotorWebServices
 
-+(void) UpdateAppVersion:(NSString *) appVersion{
-    //TODO: Set app version in secure store
-    //[KonotorUser setCustomUserProperty:appVersion forKey:@"app_version"];
-}
-
-//TODO: Move this to HLCoreServices
-+(void) UpdateSdkVersion: (NSString *) sdkVersion{
-    
-    NSString *pBasePath = [KonotorUtil GetBaseURL];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/x-www-form-urlencoded"];
-    [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
-    NSMutableDictionary *topLevel=[[NSMutableDictionary alloc]init];
-
-    NSData *pEncodedJSON;
-    NSError *pError;
-    pEncodedJSON = [NSJSONSerialization dataWithJSONObject:topLevel  options:NSJSONWritingPrettyPrinted error:&pError];
-    
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-
-    NSString *path = [NSString stringWithFormat:@"services/app/%@/user/%@/client?t=%@&clientVersion=%@&clientType=2", appID, userAlias, appKey, sdkVersion];
-    
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:path parameters:nil];
-    [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
-    
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id JSON){
-        
-        //TODO: update latest SDK version in secure store
-
-        //[KonotorApp UpdateSDKVersion:sdkVersion];
-         [[KonotorDataManager sharedInstance]save];
-         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-     }
-     
-    failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-         [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
-     }];
-    [operation start];
-}
-
 //TODO: Move this to HLMessageService
 +(void) uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     if(![pMessage isMarkedForUpload]){
