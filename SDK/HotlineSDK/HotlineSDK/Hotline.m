@@ -27,7 +27,14 @@
 
 @interface Hotline ()
 
+@property(nonatomic, strong, readwrite) HotlineConfig *config;
 @property(nonatomic, strong) FDReachabilityManager *globalReachabilityManager;
+
+@end
+
+@interface HotlineUser ()
+
+-(void)clearUserData;
 
 @end
 
@@ -53,10 +60,10 @@
 
 -(void)initWithConfig:(HotlineConfig *)config{
     [self initWithConfig:config andUser:nil];
-    [[FDSecureStore persistedStoreInstance]clearStoreData];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{
+    self.config = config;
     [self storeConfig:config];
     [self registerUser];
     [self updateUser:user];
@@ -217,6 +224,7 @@
 }
 
 -(void)clearUserData{
+    [[HotlineUser sharedInstance]clearUserData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");

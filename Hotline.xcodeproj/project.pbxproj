@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		351BC5EF1C3ECB6300AB71E3 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 351BC5EE1C3ECB6200AB71E3 /* chat.png */; };
+		351BC5F11C3EDCA800AB71E3 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 351BC5F01C3EDCA800AB71E3 /* settings.png */; };
 		35397E2D1C3EC6B600A235C5 /* homeScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 35397E2C1C3EC6B600A235C5 /* homeScreen.png */; };
 		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
 		356F19ED1B9DBF14002F1E2A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EC1B9DBF14002F1E2A /* main.m */; };
@@ -84,6 +85,7 @@
 
 /* Begin PBXFileReference section */
 		351BC5EE1C3ECB6200AB71E3 /* chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat.png; sourceTree = "<group>"; };
+		351BC5F01C3EDCA800AB71E3 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		35397E2C1C3EC6B600A235C5 /* homeScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeScreen.png; sourceTree = "<group>"; };
 		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,6 +191,7 @@
 				35D707141BE2498B0035FD74 /* FDSettingsController.h */,
 				35D707151BE2498B0035FD74 /* FDSettingsController.m */,
 				351BC5EE1C3ECB6200AB71E3 /* chat.png */,
+				351BC5F01C3EDCA800AB71E3 /* settings.png */,
 				356F19F41B9DBF14002F1E2A /* Main.storyboard */,
 				35397E2C1C3EC6B600A235C5 /* homeScreen.png */,
 				356F19F71B9DBF14002F1E2A /* Images.xcassets */,
@@ -409,6 +412,7 @@
 				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
 				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
 				357213851C36EA5E00E35E09 /* KonotorModels.bundle in Resources */,
+				351BC5F11C3EDCA800AB71E3 /* settings.png in Resources */,
 				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
 				356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */,
 				35397E2D1C3EC6B600A235C5 /* homeScreen.png in Resources */,

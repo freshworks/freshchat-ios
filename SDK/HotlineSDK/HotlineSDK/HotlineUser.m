@@ -21,4 +21,18 @@
     return hotlineUser;
 }
 
+-(void)clearUserData{
+        
+    self.userName = nil;
+    self.emailAddress = nil;
+    self.phoneNumber = nil;
+    self.externalID = nil;
+
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setObject:nil forKey:HOTLINE_DEFAULTS_USER_NAME];
+    [store setObject:nil forKey:HOTLINE_DEFAULTS_USER_EMAIL];
+    [store setObject:nil forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
+    [store setObject:nil forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+}
+
 @end

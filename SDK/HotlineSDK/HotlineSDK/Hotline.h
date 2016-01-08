@@ -13,7 +13,10 @@
 
 @interface Hotline : NSObject
 
+
 @property(nonatomic) BOOL displaySolutionsAsGrid;
+
+@property(nonatomic, strong, readonly) HotlineConfig *config;
 
 /**
  *  Access the Hotline instance.

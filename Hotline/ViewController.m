@@ -35,8 +35,7 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance] presentFeedback:self];
+    [[Hotline sharedInstance]presentFeedback:self];
 }
-
 
 @end
