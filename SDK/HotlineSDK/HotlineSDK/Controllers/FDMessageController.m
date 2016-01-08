@@ -170,6 +170,15 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(UIView *)headerView{
+    float headerViewWidth      = self.view.frame.size.width;
+    float headerViewHeight     = 25;
+    CGRect headerViewFrame     = CGRectMake(0, 0, headerViewWidth, headerViewHeight);
+    UIView *headerView = [[UIView alloc]initWithFrame:headerViewFrame];
+    headerView.backgroundColor = [UIColor clearColor];
+    return headerView;
+}
+
 -(void)setSubviews{
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -178,6 +187,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    //self.tableView.tableHeaderView = [self headerView];
     [self.view addSubview:self.tableView];
     
     //Bottomview
@@ -289,7 +299,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
-        height = [self.messageHeightMap[key] floatValue];
+        height = [self.messageHeightMap[key] floatValue]+ 4;
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
