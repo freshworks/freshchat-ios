@@ -16,6 +16,9 @@
 
 -(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info;
 
-+(void)DAUCall;
++(NSURLSessionDataTask *)DAUCall;
+
++(void)updateAppVersion:(NSString *) appVersion;
++(void)updateSdkVersion: (NSString *) sdkVersion;
 
 @end

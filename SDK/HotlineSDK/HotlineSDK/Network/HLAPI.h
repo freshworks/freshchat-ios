@@ -20,6 +20,8 @@
 
 #define HOTLINE_API_DEVICE_REGISTRATION_PATH @"/app/services/app/%@/user/%@/notification"
 
+#define HOTLINE_API_DAU_PATH @"/app/services/app/%@/user/%@/activity"
+
 #define HOTLINE_API_USER_PROPERTIES_PATH @"/app/services/app/%@/user/%@"
 
 #define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/category"
