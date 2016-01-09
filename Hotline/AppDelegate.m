@@ -67,4 +67,25 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
+/* 
+ supported deep link URLs to test:
+ hotline://?launch=shoes
+ hotline://?launch=cloths
+ */
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    if ([url.scheme isEqualToString:@"hotline"]) {
+
+        if ([url.query isEqualToString:@"launch=shoes"]) {
+            NSLog(@"Lauch shoes screen");
+        }
+        
+        if ([url.query isEqualToString:@"launch=cloths"]) {
+            NSLog(@"Launch cloths screen");
+        }
+
+    }
+    
+    return YES;
+}
+
 @end

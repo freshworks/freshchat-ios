@@ -105,7 +105,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     
     [messageTextView setBackgroundColor:[UIColor clearColor]];
-    [messageTextView setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
+    [messageTextView setDataDetectorTypes:UIDataDetectorTypeAll];
     [messageTextView setTextAlignment:NSTextAlignmentLeft];
     [messageTextView setTextColor:[UIColor blackColor]];
     [messageTextView setEditable:NO];
@@ -579,7 +579,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         [txtView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
 
     [txtView setText:text];
-    [txtView setDataDetectorTypes:(UIDataDetectorTypeLink|UIDataDetectorTypePhoneNumber)];
+    [txtView setDataDetectorTypes:UIDataDetectorTypeAll];
     [txtView setTextAlignment:NSTextAlignmentLeft];
     CGSize size=[txtView sizeThatFits:CGSizeMake(width-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING, 1000)];
     return size.height-16;
