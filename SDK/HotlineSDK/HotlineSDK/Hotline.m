@@ -246,15 +246,17 @@
 
     if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
         FDMessageController *msgController = (FDMessageController *)visibleSDKController;
-        if (![msgController.channel.channelID isEqual:channel.channelID]) {
+        if ([msgController.channel.channelID isEqual:channel.channelID]) {
+            FDLog(@"Do not display notification banner, user in the same channel");
+        }else{
             [banner displayBannerWithChannel:channel];
         }
     }else{
         [banner displayBannerWithChannel:channel];
     }
     
-    [KonotorConversation DownloadAllMessages ];
     FDLog(@"Push Recieved :%@", info);
+    [KonotorConversation DownloadAllMessages];
 }
 
 -(void)clearUserData{
@@ -273,54 +275,47 @@
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
     HLChannel *currentChannel = banner.currentChannel;
     UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
-
     if (visibleSDKController) {
         FDLog(@"visible screen is inside SDK");
-
         if ([visibleSDKController isKindOfClass:[HLChannelViewController class]]) {
-            FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:currentChannel andPresentModally:NO];
-            HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
-            [visibleSDKController.navigationController pushViewController:container animated:YES];
+            [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:currentChannel];
         } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
             FDMessageController *msgController = (FDMessageController *)visibleSDKController;
-            BOOL isModal = msgController.isModal;
-            if (isModal) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:currentChannel
-                                                                                   andPresentModally:YES];
-                HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
-                UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-                [visibleSDKController presentViewController:navigationController animated:YES completion:nil];
+            if (msgController.isModal) {
+                [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
             }else{
                 HLChannel *currentControllerChannel = msgController.channel;
                 if (![currentControllerChannel.channelID isEqualToNumber:currentChannel.channelID]) {
                     UINavigationController *navController = msgController.navigationController;
                     [navController popViewControllerAnimated:NO];
-                    FDMessageController *msgController = [[FDMessageController alloc]initWithChannel:currentChannel andPresentModally:NO];
-                    HLContainerController *container = [[HLContainerController alloc]initWithController:msgController];
-                    [navController pushViewController:container animated:YES];
+                    [self pushMessageControllerFrom:navController withChannel:currentChannel];
                 }
             }
         }else {
-            FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:currentChannel
-                                                                               andPresentModally:YES];
-            HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
-            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-            [visibleSDKController presentViewController:navigationController animated:YES completion:nil];
+            [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
         }
         
     }else{
         FDLog(@"visible screen is outside SDK");
         if (self.preferredControllerForNotification) {
-            FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:currentChannel
-                                                                               andPresentModally:YES];
-            HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
-            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-            [self.preferredControllerForNotification presentViewController:navigationController animated:YES completion:nil];
+            [self presentMessageControllerOn:self.preferredControllerForNotification withChannel:currentChannel];
         }else{
-            //find out a controller yourself and present
+            //Figure out the top controller and present
         }
     }
+}
 
+-(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
+    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+    [controller pushViewController:container animated:YES];
+}
+
+-(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
+    FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end
