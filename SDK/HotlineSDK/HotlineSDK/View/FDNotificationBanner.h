@@ -9,14 +9,24 @@
 #import <UIKit/UIKit.h>
 #import "HLChannel.h"
 
+@class FDNotificationBanner;
+
+@protocol FDNotificationBannerDelegate <NSObject>
+
+-(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender;
+
+@end
+
 @interface FDNotificationBanner : UIView
 
 @property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) UILabel *message;
 @property (nonatomic, strong) UIImageView *imgView;
+@property (nonatomic, strong, readonly) HLChannel *currentChannel;
 
-+ (instancetype)sharedInstance;
+@property (nonatomic, weak) id<FDNotificationBannerDelegate> delegate;
 
++(instancetype)sharedInstance;
 -(void)displayBannerWithChannel:(HLChannel *)channel;
 -(void)dismiss;
 

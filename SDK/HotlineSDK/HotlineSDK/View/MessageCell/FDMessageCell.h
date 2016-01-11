@@ -78,7 +78,7 @@
 +(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID;
 
 
-@property (strong, nonatomic) id<FDMessageCellDelegate> delegate;
+@property (nonatomic, weak) id<FDMessageCellDelegate> delegate;
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier;
 - (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)width;

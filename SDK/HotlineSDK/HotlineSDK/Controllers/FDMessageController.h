@@ -12,6 +12,10 @@
 
 @interface FDMessageController : UIViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate>
 
+@property (nonatomic, strong, readonly) HLChannel *channel;
+
+-(BOOL)isModal;
+
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal;
 
 @end

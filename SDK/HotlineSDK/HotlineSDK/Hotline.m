@@ -27,9 +27,10 @@
 #import "HLConstants.h"
 #import "FDNotificationBanner.h"
 
-@interface Hotline ()
+@interface Hotline () <FDNotificationBannerDelegate>
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
+@property(nonatomic, strong) UIViewController *preferredControllerForNotification;
 @property(nonatomic, strong) FDReachabilityManager *globalReachabilityManager;
 
 @end
@@ -227,31 +228,33 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller{
     
-    FDLog(@"Push Recieved :%@", info);
-    
+    if (controller) {
+        self.preferredControllerForNotification = controller;
+    }else{
+        self.preferredControllerForNotification = nil;
+    }
     
     NSNumber *channelID = @([info[@"kon_c_ch_id"] integerValue]);
     NSString *message = [info valueForKeyPath:@"aps.alert"];
-    
     HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     
-    UIViewController *currentController = [HotlineAppState sharedInstance].currentVisibleController;
     FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+    banner.delegate = self;
     banner.message.text = message;
-    [banner displayBannerWithChannel:channel];
+    
+    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
 
-//    
-//    if (currentController) {
-//        FDLog(@"visible screen is inside SDK");
-//    }else{
-//        FDLog(@"visible screen is outside SDK");
-//        if (!controller) {
-//            controller = nil;
-//        }
-//    }
-//
+    if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
+        FDMessageController *msgController = (FDMessageController *)visibleSDKController;
+        if (![msgController.channel.channelID isEqual:channel.channelID]) {
+            [banner displayBannerWithChannel:channel];
+        }
+    }else{
+        [banner displayBannerWithChannel:channel];
+    }
     
     [KonotorConversation DownloadAllMessages ];
+    FDLog(@"Push Recieved :%@", info);
 }
 
 -(void)clearUserData{
@@ -265,6 +268,59 @@
 
 -(void)newSession{
     [self registerUser];
+}
+
+-(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
+    HLChannel *currentChannel = banner.currentChannel;
+    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
+
+    if (visibleSDKController) {
+        FDLog(@"visible screen is inside SDK");
+
+        if ([visibleSDKController isKindOfClass:[HLChannelViewController class]]) {
+            FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:currentChannel andPresentModally:NO];
+            HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+            [visibleSDKController.navigationController pushViewController:container animated:YES];
+        } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
+            FDMessageController *msgController = (FDMessageController *)visibleSDKController;
+            BOOL isModal = msgController.isModal;
+            if (isModal) {
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:currentChannel
+                                                                                   andPresentModally:YES];
+                HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+                UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+                [visibleSDKController presentViewController:navigationController animated:YES completion:nil];
+            }else{
+                HLChannel *currentControllerChannel = msgController.channel;
+                if (![currentControllerChannel.channelID isEqualToNumber:currentChannel.channelID]) {
+                    UINavigationController *navController = msgController.navigationController;
+                    [navController popViewControllerAnimated:NO];
+                    FDMessageController *msgController = [[FDMessageController alloc]initWithChannel:currentChannel andPresentModally:NO];
+                    HLContainerController *container = [[HLContainerController alloc]initWithController:msgController];
+                    [navController pushViewController:container animated:YES];
+                }
+            }
+        }else {
+            FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:currentChannel
+                                                                               andPresentModally:YES];
+            HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+            [visibleSDKController presentViewController:navigationController animated:YES completion:nil];
+        }
+        
+    }else{
+        FDLog(@"visible screen is outside SDK");
+        if (self.preferredControllerForNotification) {
+            FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:currentChannel
+                                                                               andPresentModally:YES];
+            HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+            [self.preferredControllerForNotification presentViewController:navigationController animated:YES completion:nil];
+        }else{
+            //find out a controller yourself and present
+        }
+    }
+
 }
 
 @end
