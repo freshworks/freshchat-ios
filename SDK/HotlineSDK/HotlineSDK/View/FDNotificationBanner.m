@@ -9,6 +9,7 @@
 #import "FDNotificationBanner.h"
 #import "HLChannel.h"
 #import "FDChannelListViewCell.h"
+#import <AudioToolbox/AudioServices.h>
 
 @interface FDNotificationBanner ()
 
@@ -99,10 +100,15 @@
 }
 
 -(void)displayBannerWithChannel:(HLChannel *)channel{
-    self.title.text = channel.name;
-    self.message.text = @"this is a message from the channel with title you look above";
     
-    if (nil) {
+    if (!TARGET_IPHONE_SIMULATOR) {
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    }
+
+    
+    self.title.text = channel.name;
+    
+    if (channel.icon) {
         self.imgView.image = [UIImage imageWithData:channel.icon];
     }else{
         UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
@@ -112,7 +118,7 @@
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;
     [currentWindow bringSubviewToFront:self];
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         self.hidden = NO;
         CGRect myFrame = self.frame;
         myFrame.origin.y = 0;
@@ -121,7 +127,7 @@
 }
 
 -(void)dismiss{
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         CGRect myFrame = self.frame;
         myFrame.origin.y = -70;
         self.frame = myFrame;

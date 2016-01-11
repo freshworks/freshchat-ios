@@ -231,13 +231,13 @@
     
     
     NSNumber *channelID = @([info[@"kon_c_ch_id"] integerValue]);
+    NSString *message = [info valueForKeyPath:@"aps.alert"];
     
     HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     
     UIViewController *currentController = [HotlineAppState sharedInstance].currentVisibleController;
-    
     FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
-    
+    banner.message.text = message;
     [banner displayBannerWithChannel:channel];
 
 //    
