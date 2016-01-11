@@ -16,6 +16,7 @@
 #import "FDMessageController.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
+#import "HotlineAppState.h"
 #import "Konotor.h"
 #import "HLCoreServices.h"
 #import "FDUtilities.h"
@@ -24,6 +25,7 @@
 #import "KonotorMessage.h"
 #import "WebServices.h"
 #import "HLConstants.h"
+#import "FDNotificationBanner.h"
 
 @interface Hotline ()
 
@@ -219,8 +221,37 @@
     }
 }
 
--(void)handleRemoteNotification:(NSDictionary *)notification{
-    FDLog(@"Handle notification %@", notification);
+-(BOOL)isSourceHotline:(NSDictionary *)info{
+    return ([info[@"source"] isEqualToString:@"konotor"] || [info[@"source"] isEqualToString:@"hotline"]);
+}
+
+-(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller{
+    
+    FDLog(@"Push Recieved :%@", info);
+    
+    
+    NSNumber *channelID = @([info[@"kon_c_ch_id"] integerValue]);
+    
+    HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    
+    UIViewController *currentController = [HotlineAppState sharedInstance].currentVisibleController;
+    
+    FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+    
+    [banner displayBannerWithChannel:channel];
+
+//    
+//    if (currentController) {
+//        FDLog(@"visible screen is inside SDK");
+//    }else{
+//        FDLog(@"visible screen is outside SDK");
+//        if (!controller) {
+//            controller = nil;
+//        }
+//    }
+//
+    
+    [KonotorConversation DownloadAllMessages ];
 }
 
 -(void)clearUserData{

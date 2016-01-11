@@ -18,13 +18,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self hotlineIntegration];
     [self registerAppForNotifications];
-    [self handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     return YES;
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"9d66862c-ee03-4397-b3cd-cbe11876f0e5"
-                                                       andAppKey:@"7eb6baef-c9bf-41c6-8a96-779c77185028"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
+                                                       andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
     user.emailAddress = @"sid@freshdesk.com";
@@ -43,12 +42,6 @@
     }
 }
 
--(void)handleNotification:(NSDictionary *)info {
-    if ([info[@"source"] isEqualToString:@"konotor"]) {
-        [[Hotline sharedInstance] handleRemoteNotification:info];
-    }
-}
-
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     NSLog(@"Registered Device Token  %@", devToken);
     NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
@@ -60,7 +53,10 @@
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
-    [self handleNotification:info];
+    if ([[Hotline sharedInstance]isSourceHotline:info]) {
+        UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
+        [[Hotline sharedInstance]handleRemoteNotification:info withController:rootController];
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{

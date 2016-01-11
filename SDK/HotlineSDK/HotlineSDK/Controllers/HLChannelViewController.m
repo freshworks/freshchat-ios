@@ -21,6 +21,7 @@
 #import "KonotorUtil.h"
 #import "FDUtilities.h"
 #import "HLLocalization.h"
+#import "FDNotificationBanner.h"
 
 @interface HLChannelViewController ()
 
@@ -52,6 +53,7 @@
     [self fetchUpdates];
     self.footerView.hidden = YES;
 }
+
 
 -(void)updateChannels{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {

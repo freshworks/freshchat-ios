@@ -28,7 +28,7 @@
 #define IMAGE_AUDIO_PROGRESS_BAR_MIN @"AudioProgessBarMin"
 #define IMAGE_AUDIO_PROGRESS_BAR_MAX @"AudioProgessBarMax"
 #define IMAGE_TABLEVIEW_ACCESSORY_ICON @"TableViewAccessoryIcon"
-#define IMAGE_LOADING_ICON
+#define IMAGE_NOTIFICATION_CANCEL_ICON @"NotificationCancel"
 
 @interface HLTheme : NSObject
 
