@@ -300,10 +300,19 @@
         if (self.preferredControllerForNotification) {
             [self presentMessageControllerOn:self.preferredControllerForNotification withChannel:currentChannel];
         }else{
-            //Figure out the top controller and present
+            [self presentMessageControllerOn:[self topMostController] withChannel:currentChannel];
         }
     }
 }
+
+-(UIViewController*) topMostController {
+    UIViewController *topController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    return topController;
+}
+
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
