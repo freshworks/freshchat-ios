@@ -149,7 +149,7 @@
 }
 
 -(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
-    if (key && value){
+    if (key.length > 0 && value.length > 0){
         [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta": @{key : value}} handler:nil];
     }
 }
