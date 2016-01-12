@@ -14,8 +14,130 @@
 #import "KonotorDataManager.h"
 #import "HLAPI.h"
 #import "FDLocalNotification.h"
+#import "KonotorConversation.h"
+#import "FDUtilities.h"
+#import "Konotor.h"
+#import "KonotorMessage.h"
+#import "AFHTTPClient.h"
+#import "AFNetworking.h"
+
+static BOOL DOWNLOAD_IN_PROGRESS = NO;
 
 @implementation HLMessageServices
+
++(void)downloadAllMessages{
+    FDLog(@"download message called");
+    
+    if (DOWNLOAD_IN_PROGRESS) {
+        FDLog(@"download message in progress, so skip");
+        return;
+    }
+    
+    ShowNetworkActivityIndicator();
+    HLMessageServices *messageService = [[HLMessageServices alloc]init];
+    [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+        [self fetchAllMessagesInChannel:channels];
+    }];
+}
+
++ (void)fetchAllMessagesInChannel:(NSArray *)channels{
+    
+    NSString *pBasePath = [FDUtilities getBaseURL];
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    
+    NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+    
+    if (lastUpdateTime == nil) {
+        lastUpdateTime = @0;
+    }
+    
+    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
+    
+    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
+    [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
+    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
+    [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
+    
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:getPath parameters:nil];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        int statusCode = (int)[httpResponse statusCode];
+        
+        FDLog(@"Path %@", response.URL);
+        
+        FDLog(@"Download all message call status :%d", statusCode);
+        
+        if(error || statusCode >= 400){
+            HideNetworkActivityIndicator();
+            [Konotor performSelector:@selector(conversationsDownloadFailed)];
+            return;
+            
+        }else{
+            
+            HideNetworkActivityIndicator();
+            id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
+            NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
+            
+            FDLog(@"Messages :%@", toplevel);
+            
+            if(!toplevel){
+                [Konotor performSelector:@selector(conversationsDownloaded)];
+                return;
+            }
+            
+            NSMutableArray *pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
+            
+            if(!pArrayOfConversations){
+                [Konotor performSelector:@selector(conversationsDownloaded)];
+                return;
+            }
+            
+            DOWNLOAD_IN_PROGRESS = YES;
+            
+            for (int i=0; i<pArrayOfConversations.count; i++) {
+                NSDictionary *conversationInfo = pArrayOfConversations[i];
+                NSNumber *channelId = conversationInfo[@"channelId"];
+                HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+                KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+                NSArray *messages = conversationInfo[@"messages"];
+                for (int j=0; j<messages.count; j++) {
+                    NSDictionary *messageInfo = messages[j];
+                    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
+                    if (!message) {
+                        KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
+                        newMessage.uploadStatus = @2;
+                        
+                        if (channel) {
+                            newMessage.belongsToChannel = channel;
+                        }
+                        
+                        if (!conversation) {
+                            conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+                        }
+                        
+                        newMessage.belongsToConversation = conversation;
+                        
+                        if (![lastUpdateTime isEqualToNumber:@0]) {
+                            [conversation incrementUnreadCount];
+                        }
+                        
+                    }
+                }
+            }
+            [Konotor performSelector:@selector(conversationsDownloaded)];
+        }
+        NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+        [[KonotorDataManager sharedInstance]save];
+        DOWNLOAD_IN_PROGRESS = NO;
+    }];
+}
 
 -(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -69,6 +191,110 @@
 
 -(void)postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_CHANNELS_UPDATED object:self];
+}
+
++(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    if(![pMessage isMarkedForUpload]){
+        pMessage.isMarkedForUpload = YES;
+        [[KonotorDataManager sharedInstance]save];
+    }
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    
+    __block NSString *messageAlias = pMessage.messageAlias;
+    
+    if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING){
+        return;
+    }else{
+        pMessage.uploadStatus = @(MESSAGE_UPLOADING);
+        [[KonotorDataManager sharedInstance]save];
+    }
+    
+    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
+    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
+    
+    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/feedback/message/v2?t=",appKey];
+    
+    NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock: ^(id <AFKonotorMultipartFormData>formData) {
+        
+        [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
+        
+        if (channel.channelID) {
+            [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding]
+                                        name:@"channelId"];
+        }else{
+            FDLog(@"Message sending without channel ID");
+        }
+        
+        
+        if (conversation.conversationAlias) {
+            [formData appendPartWithFormData:[conversation.conversationAlias dataUsingEncoding:NSUTF8StringEncoding] name:@"conversationId"];
+        }else{
+            FDLog(@"Message sending without conversation ID");
+        }
+        
+        //if audio message add the binary audio also.
+        if([[pMessage messageType]intValue]== 2){
+            KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
+            
+            if(pBinary){
+                [formData appendPartWithFileData:[pBinary binaryAudio] name:@"file" fileName:@"file2" mimeType:@"application/octet-stream"];
+            }
+        }
+        
+        //if audio message add the binary audio also.
+        if([[pMessage messageType]intValue]== 3) {
+            KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
+            
+            if(pBinary){
+                [formData appendPartWithFileData:[pBinary binaryImage] name:@"picFile" fileName:@".jpg"
+                                        mimeType:@"application/octet-stream"];
+                
+                if([pBinary binaryThumbnail]){
+                    [formData appendPartWithFileData:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg"
+                                            mimeType:@"application/octet-stream"];
+                }
+            }
+        }
+    }];
+    
+    ShowNetworkActivityIndicator();
+    
+    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
+        
+        NSDictionary* messageInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
+        
+        if (!conversation) {
+            NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+            KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+            pMessage.belongsToConversation = newConversation;
+        }else{
+            pMessage.belongsToConversation = conversation;
+        }
+        
+        HideNetworkActivityIndicator();
+        pMessage.uploadStatus = @(MESSAGE_UPLOADED);
+        pMessage.messageAlias = messageInfo[@"alias"];
+        [channel addMessagesObject:pMessage];
+        [[KonotorDataManager sharedInstance]save];
+        [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
+    }
+     
+                                     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
+                                         HideNetworkActivityIndicator();
+                                         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
+                                         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+                                         [channel addMessagesObject:pMessage];
+                                         [[KonotorDataManager sharedInstance]save];
+                                         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
+                                     }];
+    
+    [operation start];
 }
 
 @end

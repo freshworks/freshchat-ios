@@ -29,7 +29,13 @@
 +(NSString*)stringRepresentationForDate:(NSDate*) date;
 +(NSString *) getKeyForObject:(NSObject *) object;
 +(NSString *)getAdID;
++(NSString *)getBaseURL;
 +(NSString *)generateOfflineMessageAlias;
++(NSDictionary *)deviceInfoProperties;
++(void)setActivityIndicator:(BOOL)isVisible;
+
++(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule;
++(void) PostNotificationWithName :(NSString *) notName withObject: (id) object;
 
 @end
 

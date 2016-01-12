@@ -23,9 +23,9 @@
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
 #import "KonotorMessage.h"
-#import "WebServices.h"
 #import "HLConstants.h"
 #import "FDNotificationBanner.h"
+#import "HLMessageServices.h"
 
 @interface Hotline () <FDNotificationBannerDelegate>
 
@@ -176,7 +176,7 @@
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [KonotorConversation DownloadAllMessages];
+        [HLMessageServices downloadAllMessages];
     });
 }
 
@@ -256,7 +256,7 @@
     }
     
     FDLog(@"Push Recieved :%@", info);
-    [KonotorConversation DownloadAllMessages];
+    [HLMessageServices downloadAllMessages];
 }
 
 -(void)clearUserData{

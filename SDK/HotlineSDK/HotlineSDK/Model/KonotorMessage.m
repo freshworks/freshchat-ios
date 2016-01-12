@@ -9,13 +9,14 @@
 #import "KonotorMessage.h"
 #import "KonotorConversation.h"
 #import "Konotor.h"
-#import "WebServices.h"
-#import "KonotorUtil.h"
 #import "KonotorMessageBinary.h"
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
+#import "AFHTTPClient.h"
+#import "AFHTTPRequestOperation.h"
+#import "HLMessageServices.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -202,7 +203,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 
 +(void) markMarketingMessageAsClicked:(NSNumber *) marketingId{
     
-    NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
+    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
     
@@ -281,7 +282,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     //mark as read, if the call fails we can mark it as unread.
     [self MarkAsRead];
 
-    NSURL *url = [NSURL URLWithString:[KonotorUtil GetBaseURL]];
+    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
     
@@ -302,7 +303,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 +(void) PostUnreadCountNotifWithNumber:(NSNumber *)number{
-    [KonotorUtil PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:number];
+    [FDUtilities PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:number];
 }
 
 +(void)uploadAllUnuploadedMessages{
@@ -324,7 +325,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = array[i];
                 KonotorConversation *convo = message.belongsToConversation;
-                [KonotorWebServices uploadMessage:message toConversation:convo onChannel:message.belongsToChannel];
+                [HLMessageServices uploadMessage:message toConversation:convo onChannel:message.belongsToChannel];
             }
         }
     }];

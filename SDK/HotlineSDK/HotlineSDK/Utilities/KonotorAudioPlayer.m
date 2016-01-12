@@ -7,10 +7,12 @@
 //
 
 #import "KonotorAudioPlayer.h"
-#import "KonotorUtil.h"
 #import <UIKit/UIResponder.h>
 #import <UIKit/UIApplication.h>
 #import "Konotor.h"
+#import "FDUtilities.h"
+#import "HLMacros.h"
+
 @implementation KonotorAudioPlayer
 
 KonotorMessage *gCurrentlyPlaying;
@@ -128,11 +130,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     return;
 }
 
-+(void) DownloadMessage : (KonotorMessage *)messageObject
-{
-    
-    UIBackgroundTaskIdentifier bgtask = [KonotorUtil beginBackgroundExecutionWithExpirationHandler:@selector(HandleDownloadExpiry:) withParameters:nil forObject:[KonotorAudioPlayer class]];
-    
++(void) DownloadMessage : (KonotorMessage *)messageObject{
     
     if([messageObject isDownloading])
         return;
@@ -143,15 +141,13 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     NSNotification* notif=[NSNotification notificationWithName:notifSString object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:notif];
     
-    [KonotorNetworkUtil SetNetworkActivityIndicator:YES];
+    ShowNetworkActivityIndicator();
     NSData *soundData = [NSData dataWithContentsOfURL:pURL];
-    [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
+    HideNetworkActivityIndicator();
     
     
-    if(soundData)
-    {
-        
-        
+    if(soundData){
+                
         NSString *notifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"downloaded"];
         
         NSNotification* not=[NSNotification notificationWithName:notifString object:soundData];
@@ -169,7 +165,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         [[NSNotificationCenter defaultCenter] postNotification:not];
     }
     
-    [KonotorUtil EndBackgroundExecutionForTask:bgtask];
 }
 
 +(BOOL) InitAndPlayWithSoundData : (NSData *)soundData
@@ -183,7 +178,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     if(![audioPlayer play])
     {
-        [KonotorUtil AlertView:@"error playing audio" FromModule:@"Audio Player"];
+        [FDUtilities AlertView:@"error playing audio" FromModule:@"Audio Player"];
         return NO;
     }
     

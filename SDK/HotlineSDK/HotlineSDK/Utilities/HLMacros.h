@@ -41,8 +41,8 @@
 #define TOCK NSLog(@"Elapsed Time: %f", -[startTime timeIntervalSinceNow])
 
 //Activity indicator
-#define ShowNetworkActivityIndicator() [KonotorNetworkUtil SetNetworkActivityIndicator:YES]
-#define HideNetworkActivityIndicator() [KonotorNetworkUtil SetNetworkActivityIndicator:NO]
+#define ShowNetworkActivityIndicator() [FDUtilities setActivityIndicator:YES]
+#define HideNetworkActivityIndicator() [FDUtilities setActivityIndicator:NO]
 
 //TrimString
 #define trimString(str) [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]

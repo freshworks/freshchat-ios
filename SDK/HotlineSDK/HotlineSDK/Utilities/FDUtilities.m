@@ -225,4 +225,71 @@
     return ([emailPatternPredicate evaluateWithObject:email]) ? YES : NO;
 }
 
++(NSDictionary *)deviceInfoProperties{
+    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+    
+    UIDevice *device = [UIDevice currentDevice];
+    
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"app_version"];
+    [properties setValue:@"Apple" forKey:@"brand"];
+    
+    [properties setValue:@"Apple" forKey:@"manufacturer"];
+    [properties setValue:@"iPhone OS" forKey:@"os"];
+    [properties setValue:[device systemVersion] forKey:@"os_version"];
+    [properties setValue:[device model] forKey:@"model"];
+    
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"screen_height"];
+    [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"screen_width"];
+    
+    return [NSDictionary dictionaryWithDictionary:properties];
+}
+
+static NSInteger networkIndicator = 0;
+
++(void)setActivityIndicator:(BOOL)isVisible{
+    if (isVisible){
+        networkIndicator++;
+    }
+    else{
+        if(networkIndicator > 0){
+            networkIndicator--;
+        }
+        else{
+            //NSLog(@"%@", @"Something wrong");
+        }
+    }
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(networkIndicator > 0)];
+}
+
++(NSString *)getBaseURL{
+    NSString *baseURL = [[FDSecureStore sharedInstance]objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    return [NSString stringWithFormat:@"%@%@%@",@"https://",baseURL,@"/app/"];
+}
+
+
+#define ENABLE_ALERT_VIEW 0
++(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule{
+    return;
+#ifdef ENABLE_ALERT_VIEW
+    NSString *pStr = [NSString stringWithFormat:@"%@:%@",pModule,alertviewstring ];
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle: pModule
+                          message: pStr
+                          delegate: nil
+                          cancelButtonTitle:nil
+                          otherButtonTitles:@"Ok",
+                          nil];
+    [alert show];
+#else
+    return;
+#endif
+}
+
++(void) PostNotificationWithName :(NSString *) notName withObject: (id) object{
+    NSNotification* not=[NSNotification notificationWithName:notName object:object];
+    [[NSNotificationCenter defaultCenter] postNotification:not];
+}
+
 @end

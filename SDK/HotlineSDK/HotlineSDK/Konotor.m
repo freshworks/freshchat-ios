@@ -10,7 +10,6 @@
 #import "KonotorDataManager.h"
 #import "KonotorAudioRecorder.h"
 #import "KonotorAudioPlayer.h"
-#import "WebServices.h"
 #import "HLMacros.h"
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
@@ -34,11 +33,6 @@ static id <KonotorDelegate> _delegate;
 +(void) sendAllUnsentMessages{
     //Check if app init is required before this call
     [KonotorMessage uploadAllUnuploadedMessages];
-}
-
-+(void) DownloadAllMessages
-{
-    [KonotorConversation DownloadAllMessages];
 }
 
 +(double) getCurrentPlayingAudioTime
@@ -99,7 +93,7 @@ static id <KonotorDelegate> _delegate;
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
-    [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 
@@ -110,7 +104,7 @@ static id <KonotorDelegate> _delegate;
 +(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
     [channel addMessagesObject:message];
-    [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
 

@@ -25,9 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *hasMessages;
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel;
-+(void) DownloadAllMessages;
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId;
-
 -(void) incrementUnreadCount;
 -(void) decrementUnreadCount;
 

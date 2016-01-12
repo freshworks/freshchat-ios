@@ -24,6 +24,7 @@
 #import "HLTheme.h"
 #import "FDUtilities.h"
 #import "FDImagePreviewController.h"
+#import "HLMessageServices.h"
 
 typedef struct {
     BOOL isLoading;
@@ -109,7 +110,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     [self setNavigationItem];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
-    [KonotorConversation DownloadAllMessages];
+    [HLMessageServices downloadAllMessages];
 }
 
 -(UIView *)tableHeaderView{
@@ -149,7 +150,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    [KonotorConversation DownloadAllMessages];
+    [HLMessageServices downloadAllMessages];
 }
 
 -(void)setNavigationItem{

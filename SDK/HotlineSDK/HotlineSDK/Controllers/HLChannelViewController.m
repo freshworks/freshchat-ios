@@ -18,7 +18,6 @@
 #import "KonotorMessage.h"
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
-#import "KonotorUtil.h"
 #import "FDUtilities.h"
 #import "HLLocalization.h"
 #import "FDNotificationBanner.h"

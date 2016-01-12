@@ -21,7 +21,6 @@
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
-#import "KonotorUtil.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
 

@@ -25,7 +25,7 @@
 -(void)doFetch:(void(^)(NSError *error))completion{
     HLMessageServices *service = [[HLMessageServices alloc]init];
     [service fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
-        [KonotorConversation DownloadAllMessages];
+        [HLMessageServices downloadAllMessages];
     }];    
 }
 

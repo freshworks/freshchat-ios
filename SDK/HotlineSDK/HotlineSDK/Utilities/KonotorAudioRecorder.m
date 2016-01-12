@@ -10,9 +10,8 @@
 #import "KonotorDataManager.h"
 #import "KonotorMessage.h"
 #import "KonotorMessageBinary.h"
-#import "WebServices.h"
-#import "KonotorUtil.h"
 #import "FDUtilities.h"
+#import "HLMessageServices.h"
 
 @implementation KonotorAlertView
 
@@ -37,17 +36,17 @@ KonotorAlertView *pAlert;
             dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL status=[KonotorAudioRecorder startRecordingA];
                 if(status){
-                    [KonotorUtil PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
+                    [FDUtilities PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
                 }
                 else{
-                    [KonotorUtil PostNotificationWithName:@"KonotorRecordingFailed" withObject:nil];
+                    [FDUtilities PostNotificationWithName:@"KonotorRecordingFailed" withObject:nil];
                 }
             });
         }
         else
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [KonotorUtil PostNotificationWithName:@"KonotorMicrophoneAccessDenied" withObject:nil];
+                [FDUtilities PostNotificationWithName:@"KonotorMicrophoneAccessDenied" withObject:nil];
             });
         }
     };
@@ -64,10 +63,10 @@ KonotorAlertView *pAlert;
     {
         BOOL status=[KonotorAudioRecorder startRecordingA];
         if(status){
-            [KonotorUtil PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
+            [FDUtilities PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
         }
         else{
-            [KonotorUtil PostNotificationWithName:@"KonotorRecordingFailed" withObject:nil];
+            [FDUtilities PostNotificationWithName:@"KonotorRecordingFailed" withObject:nil];
         }
         return status;
     }
@@ -397,7 +396,7 @@ KonotorAlertView *pAlert;
     
     else
     {
-        [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:nil];
+        [HLMessageServices uploadMessage:message toConversation:conversation onChannel:nil];
         return YES;
         
     }
@@ -464,26 +463,15 @@ KonotorAlertView *pAlert;
     
     else
     {
-        [KonotorWebServices uploadMessage:message toConversation:conversation onChannel:channel];
+        [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
         return YES;
         
     }
     
 }
 
-+(void) UnInitRecorder
-{
-    AudioSessionSetActiveWithFlags (
-                                    false,
-                                    AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
-                                    );
-
-}
-
-
-+(BOOL) UploadFile
-{
-    return YES;
++(void) UnInitRecorder{
+    AudioSessionSetActiveWithFlags ( false, AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation);
 }
 
 
@@ -501,7 +489,7 @@ KonotorAlertView *pAlert;
     
     else
     {
-        [KonotorWebServices uploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation] onChannel:[alertView channel]];
+        [HLMessageServices uploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation] onChannel:[alertView channel]];
         gkAudioRecorder = nil;
 
     }

@@ -71,7 +71,6 @@ enum KonotorMessageUploadStatus
 +(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 
-+(void) DownloadAllMessages;
 +(void) sendAllUnsentMessages;
 
 +(void)MarkMessageAsRead:(NSString *) messageID;

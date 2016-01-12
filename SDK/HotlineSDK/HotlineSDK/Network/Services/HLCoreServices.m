@@ -12,7 +12,6 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
-#import "KonotorUtil.h"
 #import "KonotorDataManager.h"
 #import "HLConstants.h"
 
@@ -49,7 +48,7 @@
     NSDictionary *info = @{
                            @"user" : @{
                                    @"alias" : [FDUtilities generateUUID],
-                                   @"meta"  : [KonotorUtil deviceInfoProperties],
+                                   @"meta"  : [FDUtilities deviceInfoProperties],
                                    @"adId"  : [FDUtilities getAdID]
                                    }
                            };
