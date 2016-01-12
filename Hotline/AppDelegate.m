@@ -53,7 +53,7 @@
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
-    if ([[Hotline sharedInstance]isSourceHotline:info]) {
+    if ([[Hotline sharedInstance]isHotlineNotification:info]) {
         UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
         [[Hotline sharedInstance]handleRemoteNotification:info withController:nil];
     }

@@ -109,7 +109,7 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
         if (!error) {
-            FDLog(@"Pushed user properties to server %@", info);
+            FDLog(@"Pushed properties to server %@", info);
             if (handler) handler(nil);
         }else{
             if (handler) handler(error);

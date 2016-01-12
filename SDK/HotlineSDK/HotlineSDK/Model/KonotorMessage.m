@@ -281,7 +281,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     //mark as read, if the call fails we can mark it as unread.
     [self MarkAsRead];
-
+    
     NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
@@ -296,9 +296,12 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:nil failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-         [self markAsUnread];
-     }];
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
+        FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
+        [self markAsUnread];
+    }];
+    
     [operation start];
 }
 

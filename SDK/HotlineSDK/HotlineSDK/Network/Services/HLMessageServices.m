@@ -21,38 +21,42 @@
 #import "AFHTTPClient.h"
 #import "AFNetworking.h"
 
-static BOOL DOWNLOAD_IN_PROGRESS = NO;
+static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
 @implementation HLMessageServices
 
 +(void)downloadAllMessages{
     FDLog(@"download message called");
     
-    if (DOWNLOAD_IN_PROGRESS) {
+    if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
         return;
     }
     
+    MESSAGES_DOWNLOAD_IN_PROGRESS = YES;
+    
     ShowNetworkActivityIndicator();
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
-        [self fetchAllMessagesInChannel:channels];
+        if (!error) {
+            [self fetchAllMessagesInChannel:channels];
+        }else{
+            MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+        }
     }];
 }
 
-+ (void)fetchAllMessagesInChannel:(NSArray *)channels{
-    
++(void)fetchAllMessagesInChannel:(NSArray *)channels{
     NSString *pBasePath = [FDUtilities getBaseURL];
-    
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    
     NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
     
     if (lastUpdateTime == nil) {
         lastUpdateTime = @0;
+        FDLog(@"Restoring user messages with alias :%@", userAlias);
     }
     
     NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
@@ -68,12 +72,12 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];
         
-        FDLog(@"Path %@", response.URL);
-        
         FDLog(@"Download all message call status :%d", statusCode);
         
         if(error || statusCode >= 400){
+            FDLog(@"Message fetch failed %@", error);
             HideNetworkActivityIndicator();
+            MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             [Konotor performSelector:@selector(conversationsDownloadFailed)];
             return;
             
@@ -86,6 +90,7 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
             FDLog(@"Messages :%@", toplevel);
             
             if(!toplevel){
+                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
@@ -93,11 +98,10 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
             NSMutableArray *pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
             
             if(!pArrayOfConversations){
+                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
-            
-            DOWNLOAD_IN_PROGRESS = YES;
             
             for (int i=0; i<pArrayOfConversations.count; i++) {
                 NSDictionary *conversationInfo = pArrayOfConversations[i];
@@ -123,9 +127,18 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
                         
                         newMessage.belongsToConversation = conversation;
                         
+                        //INFO: Not incrementing unread count while restoring user
                         if (![lastUpdateTime isEqualToNumber:@0]) {
                             [conversation incrementUnreadCount];
                         }
+                        
+                        if (newMessage.marketingId.integerValue !=0 ) {
+                            if (!newMessage.read.boolValue) {
+                                FDLog(@"Found a unread marketing message");
+                                [conversation incrementUnreadCount];
+                            }
+                        }
+
                         
                     }
                 }
@@ -135,7 +148,7 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
         NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
         [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         [[KonotorDataManager sharedInstance]save];
-        DOWNLOAD_IN_PROGRESS = NO;
+        MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
 }
 

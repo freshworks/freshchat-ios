@@ -222,7 +222,7 @@
     }
 }
 
--(BOOL)isSourceHotline:(NSDictionary *)info{
+-(BOOL)isHotlineNotification:(NSDictionary *)info{
     return ([info[@"source"] isEqualToString:@"konotor"] || [info[@"source"] isEqualToString:@"hotline"]);
 }
 
