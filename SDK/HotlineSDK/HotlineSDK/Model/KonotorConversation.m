@@ -180,7 +180,10 @@ static BOOL DOWNLOAD_IN_PROGRESS = NO;
                         }
                         
                         newMessage.belongsToConversation = conversation;
-                        [conversation incrementUnreadCount];
+                        
+                        if (![lastUpdateTime isEqualToNumber:@0]) {
+                            [conversation incrementUnreadCount];
+                        }
 
                     }
                 }
