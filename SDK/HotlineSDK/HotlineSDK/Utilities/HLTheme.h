@@ -130,6 +130,12 @@
 -(int)pollingTimeChatInFocus;
 -(int)pollingTimeChatNotInFocus;
 
+//Notification
+-(UIColor *)notificationBackgroundColor;
+-(UIColor *)notificationTitleTextColor;
+-(UIColor *)notificationMessageTextColor;
+-(UIFont *)notificationTitleFont;
+-(UIFont *)notificationMessageFont;
 
 //Grid View
 

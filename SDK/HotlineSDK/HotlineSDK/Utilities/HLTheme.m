@@ -293,6 +293,31 @@
     return color ? color : [UIColor lightGrayColor];
 }
 
+#pragma mark - Notifictaion
+
+-(UIColor *)notificationBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Notification.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIColor *)notificationTitleTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelTitleFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)notificationMessageTextColor{
+    UIColor *color = [self getColorForKeyPath:@"Notification.MessageFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIFont *)notificationTitleFont{
+    return [self getFontWithKey:@"Notification.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIFont *)notificationMessageFont{
+    return [self getFontWithKey:@"Notification.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{

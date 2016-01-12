@@ -51,14 +51,14 @@
     self.title = [[UILabel alloc] init];
     [self.title setNumberOfLines:2];
     [self.title setLineBreakMode:NSLineBreakByTruncatingTail];
-//    self.title.font = [self.theme tableViewCellDetailFont];
-//    self.title.textColor = [self.theme tableViewCellDetailFontColor];
+    self.title.font = [self.theme notificationTitleFont];
+    self.title.textColor = [self.theme notificationTitleTextColor];
     
     self.message = [[UILabel alloc] init];
     [self.message setNumberOfLines:2];
     [self.message setLineBreakMode:NSLineBreakByTruncatingTail];
-//    self.message.font = [self.theme tableViewCellDetailFont];
-//    self.message.textColor = [self.theme tableViewCellDetailFontColor];
+    self.message.font = [self.theme notificationMessageFont];
+    self.message.textColor = [self.theme notificationMessageTextColor];
 
     self.imgView=[[UIImageView alloc] init];
 //    self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
@@ -90,15 +90,15 @@
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeButton(25)]-15-|" options:0 metrics:nil views:views]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[title]-5-[message]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[imgView]-[message]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[imgView]-[message]-[closeButton]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(25)]" options:0 metrics:nil views:views]];
     
-    self.backgroundColor = [UIColor redColor];
+    self.backgroundColor = [self.theme notificationBackgroundColor];
     
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;
     [currentWindow addSubview:self];
     
-    self.frame = CGRectMake(0, -70, currentWindow.frame.size.width, 70);
+    self.frame = CGRectMake(0, -NOTIFICATION_BANNER_HEIGHT, currentWindow.frame.size.width, NOTIFICATION_BANNER_HEIGHT);
     self.hidden = YES;
     
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -149,7 +149,7 @@
 -(void)dismissBanner:(id)sender{
     [UIView animateWithDuration:0.3 animations:^{
         CGRect myFrame = self.frame;
-        myFrame.origin.y = -70;
+        myFrame.origin.y = -NOTIFICATION_BANNER_HEIGHT;
         self.frame = myFrame;
 
     } completion:^(BOOL finished) {

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HLChannel.h"
+static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 
 @class FDNotificationBanner;
 

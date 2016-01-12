@@ -112,6 +112,23 @@
 		<key>LabelFontSize</key>
 		<string>15</string>
 	</dict>
+	<key>Notification</key>
+	<dict>
+		<key>ChannelTitleFontName</key>
+		<string>HelveticaNeue-Bold</string>
+		<key>ChannelTitleFontSize</key>
+		<string>14</string>
+		<key>ChannelTitleFontColor</key>
+		<string>EFEFEF</string>
+		<key>MessageFontName</key>
+		<string>HelveticaNeue</string>
+		<key>MessageFontSize</key>
+		<string>14</string>
+		<key>MessageFontColor</key>
+		<string>EFEFEF</string>
+		<key>BackgroundColor</key>
+		<string>525454</string>
+	</dict>
 	<key>FeedbackView</key>
 	<dict>
 		<key>FontColor</key>
