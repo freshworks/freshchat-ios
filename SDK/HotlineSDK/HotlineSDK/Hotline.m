@@ -16,6 +16,7 @@
 #import "FDMessageController.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
+#import "HotlineAppState.h"
 #import "Konotor.h"
 #import "HLCoreServices.h"
 #import "FDUtilities.h"
@@ -24,10 +25,12 @@
 #import "KonotorMessage.h"
 #import "WebServices.h"
 #import "HLConstants.h"
+#import "FDNotificationBanner.h"
 
-@interface Hotline ()
+@interface Hotline () <FDNotificationBannerDelegate>
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
+@property(nonatomic, strong) UIViewController *preferredControllerForNotification;
 @property(nonatomic, strong) FDReachabilityManager *globalReachabilityManager;
 
 @end
@@ -219,8 +222,41 @@
     }
 }
 
--(void)handleRemoteNotification:(NSDictionary *)notification{
-    FDLog(@"Handle notification %@", notification);
+-(BOOL)isSourceHotline:(NSDictionary *)info{
+    return ([info[@"source"] isEqualToString:@"konotor"] || [info[@"source"] isEqualToString:@"hotline"]);
+}
+
+-(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller{
+    
+    if (controller) {
+        self.preferredControllerForNotification = controller;
+    }else{
+        self.preferredControllerForNotification = nil;
+    }
+    
+    NSNumber *channelID = @([info[@"kon_c_ch_id"] integerValue]);
+    NSString *message = [info valueForKeyPath:@"aps.alert"];
+    HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    
+    FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+    banner.delegate = self;
+    banner.message.text = message;
+    
+    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
+
+    if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
+        FDMessageController *msgController = (FDMessageController *)visibleSDKController;
+        if ([msgController.channel.channelID isEqual:channel.channelID]) {
+            FDLog(@"Do not display notification banner, user in the same channel");
+        }else{
+            [banner displayBannerWithChannel:channel];
+        }
+    }else{
+        [banner displayBannerWithChannel:channel];
+    }
+    
+    FDLog(@"Push Recieved :%@", info);
+    [KonotorConversation DownloadAllMessages];
 }
 
 -(void)clearUserData{
@@ -234,6 +270,61 @@
 
 -(void)newSession{
     [self registerUser];
+}
+
+-(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
+    HLChannel *currentChannel = banner.currentChannel;
+    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
+    if (visibleSDKController) {
+        FDLog(@"visible screen is inside SDK");
+        if ([visibleSDKController isKindOfClass:[HLChannelViewController class]]) {
+            [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:currentChannel];
+        } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
+            FDMessageController *msgController = (FDMessageController *)visibleSDKController;
+            if (msgController.isModal) {
+                [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
+            }else{
+                HLChannel *currentControllerChannel = msgController.channel;
+                if (![currentControllerChannel.channelID isEqualToNumber:currentChannel.channelID]) {
+                    UINavigationController *navController = msgController.navigationController;
+                    [navController popViewControllerAnimated:NO];
+                    [self pushMessageControllerFrom:navController withChannel:currentChannel];
+                }
+            }
+        }else {
+            [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
+        }
+        
+    }else{
+        FDLog(@"visible screen is outside SDK");
+        if (self.preferredControllerForNotification) {
+            [self presentMessageControllerOn:self.preferredControllerForNotification withChannel:currentChannel];
+        }else{
+            [self presentMessageControllerOn:[self topMostController] withChannel:currentChannel];
+        }
+    }
+}
+
+-(UIViewController*) topMostController {
+    UIViewController *topController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    return topController;
+}
+
+
+-(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
+    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+    [controller pushViewController:container animated:YES];
+}
+
+-(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
+    FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

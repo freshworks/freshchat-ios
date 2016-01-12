@@ -47,10 +47,11 @@
 
 -(void)addDeviceToken:(NSData *) deviceToken;
 
--(void)handleRemoteNotification:(NSDictionary *)notification;
+-(BOOL)isSourceHotline:(NSDictionary *)info;
+
+-(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller;
 
 @end
-
 
 @interface HotlineConfig : NSObject
 

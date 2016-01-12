@@ -296,6 +296,8 @@
 	</dict>
 	<key>Images</key>
 	<dict>
+		<key>NotificationCancel</key>
+		<string>HLResources.bundle/Images/hotline_notification_cancel</string>
 		<key>Search</key>
 		<string>HLResources.bundle/Images/hotline_search</string>
 		<key>ContactUsIcon</key>

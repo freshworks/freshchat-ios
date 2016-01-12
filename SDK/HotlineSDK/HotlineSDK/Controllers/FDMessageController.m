@@ -39,7 +39,7 @@ typedef struct {
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
-@property (nonatomic, strong) HLChannel *channel;
+@property (nonatomic, strong, readwrite) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
 @property (nonatomic, strong) FDAudioMessageInputView *audioMessageInputView;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewHeightConstraint;
@@ -94,6 +94,10 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
         _conversation = [_channel primaryConversation];
     }
     return _conversation;
+}
+
+-(BOOL)isModal{
+    return  _flags.isModalPresentationPreferred;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{

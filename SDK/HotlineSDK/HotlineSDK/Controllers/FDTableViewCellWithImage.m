@@ -31,7 +31,6 @@
         self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
         self.imgView=[[FDImageView alloc] init];
-        self.imgView.backgroundColor = [UIColor greenColor];
         self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;

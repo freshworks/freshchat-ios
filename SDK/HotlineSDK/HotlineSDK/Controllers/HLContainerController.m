@@ -8,6 +8,7 @@
 
 #import "HLContainerController.h"
 #import "HLTheme.h"
+#import "HotlineAppState.h"
 
 @interface HLContainerController ()
 
@@ -86,5 +87,14 @@
                                                                       NSFontAttributeName: [self.theme navigationBarTitleFont]
                                                                       }];
 }
+
+-(void)viewWillAppear:(BOOL)animated{
+    [HotlineAppState sharedInstance].currentVisibleController = self.childController;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [HotlineAppState sharedInstance].currentVisibleController = nil;
+}
+
 
 @end

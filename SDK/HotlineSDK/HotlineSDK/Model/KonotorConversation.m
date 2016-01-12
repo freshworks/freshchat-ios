@@ -143,6 +143,8 @@ NSMutableDictionary* gkConversationIdConversationMap;
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];
         
+        FDLog(@"Path %@", response.URL);
+        
         FDLog(@"Download all message call status :%d", statusCode);
         
         if(error || statusCode >= 400){
@@ -155,6 +157,9 @@ NSMutableDictionary* gkConversationIdConversationMap;
             [KonotorNetworkUtil SetNetworkActivityIndicator:NO];
             id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
             NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
+            
+            FDLog(@"Messages :%@", toplevel);
+            
             if(!toplevel){
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
