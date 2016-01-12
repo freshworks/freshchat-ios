@@ -16,7 +16,6 @@
 - (id)initWithBaseURL:(NSURL *)url;
 +(BOOL) isSuccessResponseCode: (NSURLResponse *) response;
 + (void) SetNetworkActivityIndicator: (BOOL) isVisible;
-+(NSString *) DownloadFile :(NSString *) httpPath;
 
 @end
 

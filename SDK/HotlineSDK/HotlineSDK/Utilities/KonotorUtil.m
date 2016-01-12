@@ -58,33 +58,6 @@ static NSInteger networkIndicator = 0;
     return self;
 }
 
-+(NSString *) DownloadFile :(NSString *) httpPath{
-    NSURL *url = [NSURL URLWithString:httpPath];
-    
-    NSString *lastComponent = [url lastPathComponent];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:httpPath]];
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request] ;
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *returnPath = [paths objectAtIndex:0];
-    
-    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:lastComponent];
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
-    
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
-         NSString *pNot = [httpPath stringByAppendingString:@"_downloaded"];
-         [KonotorUtil PostNotificationWithName:pNot withObject:path];
-     }
-     
-                                     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-         NSString *pNot = [path stringByAppendingString:@"_failed"];
-         [KonotorUtil PostNotificationWithName:pNot withObject:nil];
-     }];
-    
-    [operation start];
-    
-    return returnPath;
-}
-
 @end
 
 

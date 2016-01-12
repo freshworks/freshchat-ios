@@ -89,10 +89,12 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = self.childController;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
 }
 

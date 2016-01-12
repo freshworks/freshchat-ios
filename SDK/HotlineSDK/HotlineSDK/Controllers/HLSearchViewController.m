@@ -61,6 +61,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self setupTap];
     self.view.userInteractionEnabled=YES;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
