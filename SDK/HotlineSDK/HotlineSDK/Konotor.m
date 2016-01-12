@@ -20,7 +20,7 @@ static NSString *kon_unlock_key = nil;
 
 @implementation Konotor
 
-static id <KonotorDelegate> _delegate;
+__weak static id <KonotorDelegate> _delegate;
 
 +(id) delegate{
     return _delegate;
