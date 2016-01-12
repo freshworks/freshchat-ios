@@ -114,6 +114,8 @@
 
 -(void)displayBannerWithChannel:(HLChannel *)channel{
     
+    [[[[UIApplication sharedApplication] delegate] window] setWindowLevel:UIWindowLevelStatusBar+1];
+    
     self.currentChannel = channel;
     
     if (!TARGET_IPHONE_SIMULATOR) {
@@ -152,6 +154,7 @@
 
     } completion:^(BOOL finished) {
         self.hidden = YES;
+        [[[[UIApplication sharedApplication] delegate] window] setWindowLevel:UIWindowLevelNormal];
     } ];
 }
 
