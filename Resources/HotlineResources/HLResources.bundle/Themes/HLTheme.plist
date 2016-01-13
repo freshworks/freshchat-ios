@@ -164,9 +164,9 @@
 		<key>ChannelTitleFontColor</key>
 		<string>222222</string>
 		<key>ChannelTitleFontName</key>
-		<string>HelveticaNeue</string>
+		<string>HelveticaNeue-Medium</string>
 		<key>ChannelTitleFontSize</key>
-		<string>14.0f</string>
+		<string>15.0f</string>
 		<key>ChannelDescriptionFontColor</key>
 		<string>ABABAB</string>
 		<key>ChannelDescriptionFontName</key>

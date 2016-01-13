@@ -116,7 +116,7 @@
 }
 
 -(UIFont *)navigationBarTitleFont{
-    return [self getFontWithKey:@"NavigationBar.TitleFontName" andDefaultSize:17];
+    return [self getFontWithKey:@"NavigationBar.TitleFont" andDefaultSize:17];
 }
 
 -(UIColor *)navigationBarFontColor{

@@ -315,9 +315,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        if(![message.createdMillis integerValue]){
-            height = height - 16;
-        }//TODO: Give names to all the numeric contants used in code. Hard to understand what 
+        //TODO: Give names to all the numeric contants used in code. Hard to understand what
         // this 16 is . And there are too many 16s in the code base - Rex
         self.messageHeightMap[key] = @(height);
     }

@@ -11,6 +11,8 @@
 #import "FDChannelListViewCell.h"
 #import <AudioToolbox/AudioServices.h>
 
+#define systemSoundID 1315
+
 @interface FDNotificationBanner ()
 
 @property (nonatomic, strong) HLTheme *theme;
@@ -87,11 +89,11 @@
 
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[title]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeButton(25)]-15-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeButton(20)]-15-|" options:0 metrics:nil views:views]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[title]-5-[message]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[imgView]-[message]-[closeButton]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(25)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(20)]" options:0 metrics:nil views:views]];
     
     self.backgroundColor = [self.theme notificationBackgroundColor];
     
@@ -120,6 +122,7 @@
     
     if (!TARGET_IPHONE_SIMULATOR) {
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        AudioServicesPlaySystemSound(systemSoundID);
     }
 
     self.title.text = channel.name;

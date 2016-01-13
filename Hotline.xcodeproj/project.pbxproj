@@ -337,6 +337,11 @@
 					356F19E61B9DBF14002F1E2A = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = PKUQ4ZWJH3;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					356F19FF1B9DBF14002F1E2A = {
 						CreatedOnToolsVersion = 6.4;

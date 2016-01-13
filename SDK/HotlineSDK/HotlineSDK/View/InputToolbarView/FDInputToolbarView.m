@@ -93,12 +93,12 @@
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[textView]-5-|" options:0 metrics:nil views:views]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(20)]-8-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(26)]-6-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(20)]-10-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[attachButton(40)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton(40)]-[textView]-[sendButton(40)]-5-|" options:0 metrics:nil views:views]];
 
     //Mic button constraints
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[micButton(20)]-8-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[micButton(40)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[textView]-[micButton(40)]-5-|" options:0 metrics:nil views:views]];
 
     attachButtonWidthConstraint = [NSLayoutConstraint constraintWithItem:attachButton

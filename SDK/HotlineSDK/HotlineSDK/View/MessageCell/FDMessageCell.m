@@ -299,10 +299,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         
     }
     
-    if (currentMessage.createdMillis.integerValue != 0) {
-        NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-        messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
-    }
+    NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
+    messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
@@ -499,7 +497,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             if((KONOTOR_SHOW_TIMESTAMP)&&(showSenderName))
             {
                 
-                [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+                [timeField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
             }
             else{
                 
@@ -515,9 +513,9 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             
         default:
         {
-            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
+            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT)];
             timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
-            [timeField setContentOffset:CGPointMake(0, 4)];
+            [timeField setContentOffset:CGPointMake(0, 0)];
             
             break;
         }
@@ -543,10 +541,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     msgHeight=msgHeight+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
     msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING):0;
-  
-    if([messageSentTimeLabel.text isEqualToString:@""]){
-        msgHeight = msgHeight - 16;
-    }
+    
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }
 
