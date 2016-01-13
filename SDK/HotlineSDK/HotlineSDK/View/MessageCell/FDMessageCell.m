@@ -41,9 +41,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
 @synthesize isSenderOther,showsProfile,showsSenderName,customFontName,showsTimeStamp,showsUploadStatus,sentImage,sendingImage;
 
--(instancetype)initWithReuseIdentifier:(NSString *)identifier{
+- (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<FDMessageCellDelegate>)delegate{
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     if (self) {
+        self.delegate = delegate;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self initCell];
     }
@@ -145,10 +146,14 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     /* setup action button view */
     messageActionButton=[FDActionButton buttonWithType:UIButtonTypeCustom];
-    [messageActionButton addTarget:self.delegate action:@selector(openActionUrl:) forControlEvents:UIControlEventTouchUpInside];
+    [messageActionButton addTarget:self action:@selector(openActionUrl:) forControlEvents:UIControlEventTouchUpInside];
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
     [self.contentView addSubview:messageActionButton];
+}
+
+-(void)openActionUrl:(id)sender{
+    [self.delegate messageCell:self openActionUrl:sender];
 }
 
 -(void)tappedOnPicture:(id)gesture{

@@ -42,7 +42,7 @@
 @protocol FDMessageCellDelegate <NSObject>
 
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image;
--(void)openActionUrl:(id)sender;
+-(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender;
 
 
 @end
@@ -80,7 +80,7 @@
 
 @property (nonatomic, weak) id<FDMessageCellDelegate> delegate;
 
-- (instancetype) initWithReuseIdentifier:(NSString *)identifier;
+- (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<FDMessageCellDelegate>)delegate;
 - (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)width;
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
 + (float) getWidthForMessage:(KonotorMessageData*)message;

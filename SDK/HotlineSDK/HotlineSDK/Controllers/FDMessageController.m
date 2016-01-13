@@ -260,8 +260,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     NSString *cellIdentifier = @"FDMessageCell";
     FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier];
-        cell.delegate = self;
+        cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier andDelegate:self];
     }
     if (indexPath.row < self.messages.count) {
         KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
@@ -656,9 +655,9 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     FDLog(@"Picture message tapped");
 }
 
--(void) openActionUrl:(id) sender{
+-(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
-    if(button.articleID!=nil && button.articleID > 0){
+    if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
             HLArticle *article = [HLArticle getWithID:button.articleID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
             if(article!=nil){
