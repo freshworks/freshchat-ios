@@ -149,6 +149,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         [[KonotorDataManager sharedInstance]save];
         MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+        [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
     }];
 }
 

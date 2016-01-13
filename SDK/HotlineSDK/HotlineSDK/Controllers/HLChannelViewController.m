@@ -40,7 +40,6 @@
                                                            }];
     self.channels = [[NSMutableArray alloc] init];
     [self setNavigationItem];
-    [self updateChannels];
     [self localNotificationSubscription];
 }
 
@@ -54,6 +53,17 @@
     self.footerView.hidden = YES;
 }
 
+-(void)fetchUpdates{
+    [self updateChannels];
+    FDChannelUpdater *updater = [[FDChannelUpdater alloc]init];
+    [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
+        if(isEmpty)[updater resetTime];
+        ShowNetworkActivityIndicator();
+        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+            if (!isFetchPerformed) HideNetworkActivityIndicator();
+        }];
+    }];
+}
 
 -(void)updateChannels{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
@@ -87,20 +97,9 @@
 
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_CHANNELS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_MESSAGES_DOWNLOADED object:nil queue:nil usingBlock:^(NSNotification *note) {
         HideNetworkActivityIndicator();
         [weakSelf updateChannels];
-    }];
-}
-
--(void)fetchUpdates{
-    FDChannelUpdater *updater = [[FDChannelUpdater alloc]init];
-    [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
-        if(isEmpty)[updater resetTime];
-        ShowNetworkActivityIndicator();
-        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
-        }];
     }];
 }
 
