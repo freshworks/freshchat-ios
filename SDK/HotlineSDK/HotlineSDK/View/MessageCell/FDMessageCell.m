@@ -12,7 +12,6 @@
 #import "HLLocalization.h"
 
 #define WIDTH_BUFFER_IF_NO_PROFILE_AVAILABLE 5*KONOTOR_HORIZONTAL_PADDING;
-static KonotorUIParameters* konotorUIParameters=nil;
 
 static UITextView* tempView=nil;
 static UITextView* txtView=nil;
@@ -278,24 +277,28 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         [uploadStatusImageView setImage:sentImage];
     else
         [uploadStatusImageView setImage:sendingImage];
-    
         
-    KonotorUIParameters* interfaceOptions=[KonotorUIParameters sharedInstance];
+    UIColor *otherTextColor = [[HLTheme sharedInstance] businessMessageTextColor];
+    UIColor *userTextColor = [[HLTheme sharedInstance] userMessageTextColor];
+    UIImage *otherChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
+    UIImage *userChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
+    UIEdgeInsets otherChatBubbleInsets=UIEdgeInsetsMake(9, 12, 10, 7);
+    UIEdgeInsets userChatBubbleInsets=UIEdgeInsetsMake(10, 7, 9, 12);
     
     if(isSenderOther){
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_SUPPORT_LABEL_TEXT);
         [uploadStatusImageView setImage:nil];
-        [chatCalloutImageView setImage:[interfaceOptions.otherChatBubble resizableImageWithCapInsets:interfaceOptions.otherChatBubbleInsets]];
-        [senderNameLabel setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERNAME_TEXT_COLOR:interfaceOptions.otherTextColor)];
-        [messageTextView setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERMESSAGE_TEXT_COLOR:interfaceOptions.otherTextColor)];
-        [messageSentTimeLabel setTextColor:((interfaceOptions.otherTextColor==nil)?KONOTOR_OTHERTIMESTAMP_COLOR:interfaceOptions.otherTextColor)];
+        [chatCalloutImageView setImage:[otherChatBubble resizableImageWithCapInsets:otherChatBubbleInsets]];
+        [senderNameLabel setTextColor:((otherTextColor==nil)?KONOTOR_OTHERNAME_TEXT_COLOR:otherTextColor)];
+        [messageTextView setTextColor:((otherTextColor==nil)?KONOTOR_OTHERMESSAGE_TEXT_COLOR:otherTextColor)];
+        [messageSentTimeLabel setTextColor:((otherTextColor==nil)?KONOTOR_OTHERTIMESTAMP_COLOR:otherTextColor)];
     }
     else{
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_USER_LABEL_TEXT);
-        [chatCalloutImageView setImage:[interfaceOptions.userChatBubble resizableImageWithCapInsets:interfaceOptions.userChatBubbleInsets]];
-        [senderNameLabel setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERNAME_TEXT_COLOR:interfaceOptions.userTextColor)];
-        [messageTextView setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERMESSAGE_TEXT_COLOR:interfaceOptions.userTextColor)];
-        [messageSentTimeLabel setTextColor:((interfaceOptions.userTextColor==nil)?KONOTOR_USERTIMESTAMP_COLOR:interfaceOptions.userTextColor)];
+        [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
+        [senderNameLabel setTextColor:((userTextColor==nil)?KONOTOR_USERNAME_TEXT_COLOR:userTextColor)];
+        [messageTextView setTextColor:((userTextColor==nil)?KONOTOR_USERMESSAGE_TEXT_COLOR:userTextColor)];
+        [messageSentTimeLabel setTextColor:((userTextColor==nil)?KONOTOR_USERTIMESTAMP_COLOR:userTextColor)];
         
     }
     
@@ -309,7 +312,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
         [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
-    
     
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)) {
@@ -583,81 +585,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     [txtView setTextAlignment:NSTextAlignmentLeft];
     CGSize size=[txtView sizeThatFits:CGSizeMake(width-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING, 1000)];
     return size.height-16;
-}
-
-@end
-
-@implementation KonotorUIParameters
-
-@synthesize disableTransparentOverlay,headerViewColor,backgroundViewColor,voiceInputEnabled,imageInputEnabled,closeButtonImage,autoShowTextInput,titleText,textInputButtonImage,titleTextColor,showInputOptions,noPhotoOption,titleTextFont,allowSendingEmptyMessage,dontShowLoadingAnimation,sendButtonColor,doneButtonColor,userChatBubble,userTextColor,otherChatBubble,otherTextColor,overlayTransitionStyle,inputHintText,userProfileImage,otherProfileImage,showOtherName,showUserName,otherName,userName,messageTextFont,inputTextFont,notificationCenterMode,customFontName,doneButtonFont,doneButtonText,dismissesInputOnScroll,alwaysPollForMessages,pollingTimeNotOnChatWindow,pollingTimeOnChatWindow,otherChatBubbleInsets,userChatBubbleInsets/*,cancelButtonText,cancelButtonFont,cancelButtonColor*/;
-
-+ (KonotorUIParameters*) sharedInstance
-{
-    if(konotorUIParameters==nil){
-        konotorUIParameters=[[KonotorUIParameters alloc] init];
-        konotorUIParameters.voiceInputEnabled=NO;
-        konotorUIParameters.imageInputEnabled=YES;
-        konotorUIParameters.actionButtonLabelColor=[UIColor whiteColor];
-        konotorUIParameters.actionButtonColor=[UIColor colorWithRed:0 green:0.5 blue:0 alpha:1];
-        konotorUIParameters.backgroundViewColor=nil;
-        konotorUIParameters.headerViewColor=[UIColor colorWithRed:0.97 green:0.97 blue:0.97 alpha:1.0];
-        
-        konotorUIParameters.titleTextColor=nil;
-        konotorUIParameters.showInputOptions=YES;
-        konotorUIParameters.textInputButtonImage=nil;
-        konotorUIParameters.messageSharingEnabled=NO;
-        konotorUIParameters.noPhotoOption=NO;
-        konotorUIParameters.titleTextFont=nil;
-        konotorUIParameters.messageTextFont=nil;
-        konotorUIParameters.inputTextFont=nil;
-        konotorUIParameters.allowSendingEmptyMessage=NO;
-        konotorUIParameters.dontShowLoadingAnimation=NO;
-        
-        konotorUIParameters.sendButtonColor=nil;
-        konotorUIParameters.doneButtonColor=nil;
-        
-        konotorUIParameters.otherTextColor=[[HLTheme sharedInstance] businessMessageTextColor];
-        konotorUIParameters.otherChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
-        konotorUIParameters.userTextColor=[[HLTheme sharedInstance] userMessageTextColor];
-        
-        konotorUIParameters.userChatBubble=[[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
-        konotorUIParameters.userProfileImage=nil;
-        konotorUIParameters.otherProfileImage=nil;
-        
-        konotorUIParameters.overlayTransitionStyle=UIModalTransitionStyleCoverVertical;
-        konotorUIParameters.inputHintText=nil;
-        
-        konotorUIParameters.showUserName=NO;
-        konotorUIParameters.showOtherName=NO;
-        
-        konotorUIParameters.otherName=nil;
-        konotorUIParameters.userName=nil;
-        
-        konotorUIParameters.notificationCenterMode=NO;
-        
-        konotorUIParameters.customFontName=nil;
-        konotorUIParameters.doneButtonFont=nil;
-        
-        konotorUIParameters.doneButtonText=@"Done";//TODO: Check if this is used
-        konotorUIParameters.dismissesInputOnScroll=NO;
-        
-        konotorUIParameters.pollingTimeOnChatWindow=10;
-        konotorUIParameters.pollingTimeNotOnChatWindow=-1;
-        konotorUIParameters.alwaysPollForMessages=NO;
-        
-        konotorUIParameters.otherChatBubbleInsets=UIEdgeInsetsMake(9, 12, 10, 7);
-        konotorUIParameters.userChatBubbleInsets=UIEdgeInsetsMake(10, 7, 9, 12);
-        
-    }
-    return konotorUIParameters;
-}
-
-
-- (void) disableMessageSharing{
-    self.messageSharingEnabled=NO;
-}
-- (void) enableMessageSharing{
-    self.messageSharingEnabled=YES;
 }
 
 @end
