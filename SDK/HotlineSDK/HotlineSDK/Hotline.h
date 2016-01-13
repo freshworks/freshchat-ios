@@ -49,6 +49,8 @@
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
 
+-(NSInteger)unreadMessagesCount;
+
 -(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller;
 
 @end

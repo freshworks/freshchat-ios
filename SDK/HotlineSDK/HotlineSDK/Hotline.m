@@ -327,4 +327,15 @@
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
+-(NSInteger)unreadMessagesCount{
+    NSInteger count = 0;
+    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorConversation"];
+    NSArray *conversations = [context executeFetchRequest:request error:nil];
+    for (KonotorConversation *conversation in conversations) {
+        count += conversation.unreadMessagesCount.integerValue;
+    }
+    return count;
+}
+
 @end
