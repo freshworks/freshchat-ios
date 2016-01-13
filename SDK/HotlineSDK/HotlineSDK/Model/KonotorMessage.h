@@ -66,7 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) markAsUnread;
 +(void)markAllMessagesAsRead;
 +(void)markAllMessagesAsReadForChannel:(HLChannel*)channel;
-+(void) markMarketingMessageAsClicked:(NSNumber *) marketingId;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 -(BOOL) isMarketingMessage;

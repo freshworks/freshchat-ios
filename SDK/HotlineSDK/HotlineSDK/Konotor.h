@@ -77,8 +77,6 @@ enum KonotorMessageUploadStatus
 
 +(void)markAllMessagesAsRead;
 
-+(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId;
-
 +(NSArray *) getAllMessagesForConversation:(NSString *)conversationID;
 
 @end
@@ -112,5 +110,6 @@ enum KonotorMessageUploadStatus
 @property (nonatomic, retain) NSData *audioData;
 @property (nonatomic) BOOL  messageRead;
 @property (nonatomic) BOOL isMarketingMessage;
+@property (nonatomic, retain) NSNumber *marketingId;
 
 @end

@@ -310,4 +310,30 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     [operation start];
 }
 
+
+//TODO: Skip messages that are 'click registered' already
++(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
+    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
+    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
+    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    
+    if([marketingId intValue] ==0 || !marketingId) return;
+    
+    //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
+    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?clicked=1&t=",appKey];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
+    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
+        FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
+    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
+        FDLog(@"Failed to register marketing message click event to server");
+    }];
+    [operation start];
+}
+
 @end

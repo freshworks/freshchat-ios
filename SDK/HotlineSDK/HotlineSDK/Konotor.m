@@ -118,13 +118,6 @@ __weak static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void) MarkMarketingMessageAsClicked:(NSNumber *) marketingId;
-{
-    if(marketingId)
-    {
-        [KonotorMessage markMarketingMessageAsClicked:marketingId ];
-    }
-}
 +(void)markAllMessagesAsRead
 {
     [KonotorMessage markAllMessagesAsRead];

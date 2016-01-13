@@ -30,4 +30,6 @@
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 
++(void)markMarketingMessageAsClicked:(NSNumber *)marketingId;
+
 @end

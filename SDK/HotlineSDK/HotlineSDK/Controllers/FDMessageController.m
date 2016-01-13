@@ -655,6 +655,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     FDLog(@"Picture message tapped");
 }
 
+//TODO: Needs refractor
 -(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
     if(button.articleID!=nil && button.articleID.integerValue > 0){
@@ -677,6 +678,9 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     }
     else if(button.actionUrlString!=nil){
         @try{
+            if (cell.messageData.marketingId.integerValue != 0) {
+                [HLMessageServices markMarketingMessageAsClicked:cell.messageData.marketingId];
+            }
             NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
             if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
                 dispatch_async(dispatch_get_main_queue(), ^{
