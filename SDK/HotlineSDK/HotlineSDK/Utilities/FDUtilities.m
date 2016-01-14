@@ -269,10 +269,7 @@ static NSInteger networkIndicator = 0;
 }
 
 
-#define ENABLE_ALERT_VIEW 0
 +(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule{
-    return;
-#ifdef ENABLE_ALERT_VIEW
     NSString *pStr = [NSString stringWithFormat:@"%@:%@",pModule,alertviewstring ];
     UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle: pModule
@@ -282,9 +279,7 @@ static NSInteger networkIndicator = 0;
                           otherButtonTitles:@"Ok",
                           nil];
     [alert show];
-#else
     return;
-#endif
 }
 
 +(void) PostNotificationWithName :(NSString *) notName withObject: (id) object{

@@ -31,7 +31,7 @@
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
     [Hotline sharedInstance].displaySolutionsAsGrid = YES;
-    NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadMessagesCount]);
+    NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
 }
 
 -(void)registerAppForNotifications{
@@ -61,7 +61,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{
-    NSInteger unreadCount = [[Hotline sharedInstance]unreadMessagesCount];
+    NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:unreadCount];
 }
 

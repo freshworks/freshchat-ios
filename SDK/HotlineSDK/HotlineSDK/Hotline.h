@@ -49,7 +49,22 @@
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
 
--(NSInteger)unreadMessagesCount;
+/**
+ *  Get the last updated unread messages count.
+ *
+ *  @discussion This method returns the last updated count of conversations which require the user's attention. This may not always be up to date.
+ */
+-(NSInteger)unreadCount;
+
+/**
+ *  Get the unread conversations count.
+ *
+ *  @discussion This method lets you asynchronously fetch the latest count of conversations that require the user's attention. It is always up to date.
+ *
+ *  @param completion Completion block with count.
+ *
+ */
+-(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
 
 -(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller;
 
