@@ -90,7 +90,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
         [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
         [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
-        [messageSentTimeLabel setTextColor:[UIColor darkGrayColor]];
         [messageSentTimeLabel setEditable:NO];
         [messageSentTimeLabel setSelectable:NO];
         [messageSentTimeLabel setScrollEnabled:NO];
@@ -523,7 +522,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         }
     }
     
-    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height+2, 10, 10)];
+    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height+6, 10, 10)];
     
 }
 

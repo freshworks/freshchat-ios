@@ -527,11 +527,11 @@
 }
 
 -(UIFont *)lastUpdatedFont{
-    return [self getFontWithKey:@"ChannelListView.LastUpdated" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ChannelListView.LastUpdatedTime" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
 -(UIColor *)lastUpdatedFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedTimeFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
