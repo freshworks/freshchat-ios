@@ -7,6 +7,8 @@
 //
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
+#import "FDUtilities.h"
+#import "HLConstants.h"
 
 NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
 NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
@@ -14,6 +16,7 @@ NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFail
 @interface KonotorDataManager ()
 
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
+@property (nonatomic, strong) NSMutableString *log;
 
 @end
 
@@ -35,10 +38,37 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 -(id)init{
     self = [super init];
     if (self) {
+        self.log = [NSMutableString new];
         [self preparePersistantStoreCoordinator];
         [self setMainQueueContext];
     }
     return  self;
+}
+
+-(void)logInfo:(NSDictionary *)info{
+    [self.log appendString:[NSString stringWithFormat:@"\n %@",info]];
+    FDLog(@"%@",info);
+}
+
+- (NSString*)sharedDocumentsPath {
+    NSString *SharedDocumentsPath = nil;
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    SharedDocumentsPath = [libraryPath stringByAppendingPathComponent:@"Database"];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    BOOL isDirectory;
+    if (![manager fileExistsAtPath:SharedDocumentsPath isDirectory:&isDirectory] || !isDirectory) {
+        NSError *error = nil;
+        NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
+        [manager createDirectoryAtPath:SharedDocumentsPath withIntermediateDirectories:YES attributes:attr error:&error];
+        if (error){
+            NSDictionary *errorInfo = @{@"Folder creation failed" :@{
+                                                @"Reason :"   : error.description,
+                                                @"Folder path used" : SharedDocumentsPath
+                                                }};
+            [self logInfo:errorInfo];
+        }
+    }
+    return SharedDocumentsPath;
 }
 
 -(void)preparePersistantStoreCoordinator{
@@ -47,20 +77,47 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
-    NSURL *persistantStoreURL = [NSURL fileURLWithPath:storePath];
+    NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
+    [self logInfo:@{@"SQLite file path" : persistentStoreURL}];
     NSError* error = nil;
     NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES };
     [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
-                                                            URL:persistantStoreURL options:options error:&error];
+                                                            URL:persistentStoreURL options:options error:&error];
     if (error) {
-        FDLog(@"Persistant Coordinator could not be created \n%@", error);
-        //delete the sqlite file and try again
-        [[NSFileManager defaultManager] removeItemAtPath:persistantStoreURL.path error:nil];
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:persistantStoreURL options:nil error:&error]) {
-            NSException *e= [[NSException alloc] initWithName:@"PerisistentStoreException" reason:[NSString stringWithFormat:@"Unresolved error %@, %@", error,[error userInfo]] userInfo:[error userInfo]];
+        [self logInfo:@{@"Persistent store creation failed" :@{ @"Reason" : error.description}}];
+        [self retryPersistentStoreCreation:persistentStoreURL];
+    }
+}
+
+-(void)retryPersistentStoreCreation:(NSURL *)storeURL{
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
+    
+    if (error) {
+        [self logInfo:@{@"could not delete existing persistent store " : @{ @"Reason" : error.description }}];
+    }
+    
+    [self logInfo:@{@"Attempting to re-create persistent store at URL" : storeURL}];
+    
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                   configuration:nil URL:storeURL options:nil error:&error]) {
+        if (error) {
+            
+            [self logInfo:@{@"Persistent store re-creation failed " : @{ @"Reason" : error.description}}];
+            
+            NSDictionary *additionalInfo = @{
+                                             @"Time stamp" : [NSDate date],
+                                             @"SDK Version" : HOTLINE_SDK_VERSION,
+                                             @"Device Info" : [FDUtilities deviceInfoProperties]
+                                             
+                                             };
+            [self logInfo:additionalInfo];
+            NSException *e= [[NSException alloc] initWithName:@"Perisistent store exception " reason:self.log
+                                                     userInfo:[error userInfo]];
             @throw e;
         }
     }
+
 }
 
 -(void)setMainQueueContext{
@@ -77,32 +134,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         _backgroundContext.undoManager = nil;
     }
     return _backgroundContext;
-}
-
-- (NSString*)sharedDocumentsPath {
-	static NSString *SharedDocumentsPath = nil;
-    if (SharedDocumentsPath){
-        return SharedDocumentsPath;
-    }
-    
-	// Compose a path to the <Library>/Database directory
-	NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	SharedDocumentsPath = [libraryPath stringByAppendingPathComponent:@"Database"];
-    
-    FDLog(@"SQLite store URL :%@", SharedDocumentsPath);
-    
-	// Ensure the database directory exists
-	NSFileManager *manager = [NSFileManager defaultManager];
-	BOOL isDirectory;
-	if (![manager fileExistsAtPath:SharedDocumentsPath isDirectory:&isDirectory] || !isDirectory) {
-		NSError *error = nil;
-		NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete forKey:NSFileProtectionKey];
-		[manager createDirectoryAtPath:SharedDocumentsPath withIntermediateDirectories:YES attributes:attr error:&error];
-        if (error){
-            NSLog(@"Error creating directory path: %@", [error localizedDescription]);
-        }
-	}
-	return SharedDocumentsPath;
 }
 
 - (BOOL)save {
