@@ -39,7 +39,7 @@
     float padding = 10;
     float maxButtonWidth =messageFrameWidth-horizontalPadding*2;
     
-    UIFont *actionLabelFont=KONOTOR_MESSAGETEXT_FONT;
+    UIFont *actionLabelFont= [[HLTheme sharedInstance] getChatBubbleMessageFont];
     
     if([actionLabel isEqualToString:@""]||(actionLabel==nil))
         actionLabel=HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
