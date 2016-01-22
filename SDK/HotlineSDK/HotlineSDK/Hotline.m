@@ -220,6 +220,9 @@
     if (!isAppRegistered) {
         [[[HLCoreServices alloc]init] registerAppWithToken:deviceTokenString forUser:userAlias handler:nil];
     }
+    else {
+     //TODO: Retry with a delay
+    }
 }
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info{

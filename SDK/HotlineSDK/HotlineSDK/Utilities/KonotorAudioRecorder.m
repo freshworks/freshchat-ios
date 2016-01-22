@@ -36,6 +36,7 @@ KonotorAlertView *pAlert;
             dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL status=[KonotorAudioRecorder startRecordingA];
                 if(status){
+                    //TODO: Moved these notification names to an enumeration or Constants. 
                     [FDUtilities PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
                 }
                 else{
@@ -512,6 +513,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
+    //TODO: Please check backward compatibility with Konotor SDK - Rex 
     [message setMessageUserId:@"Sender-User"];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
