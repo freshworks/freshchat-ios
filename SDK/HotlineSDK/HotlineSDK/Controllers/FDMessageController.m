@@ -311,6 +311,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
+        //TODO: If you have add + 4 here .. then I think this should be part of FDMessageCell getHeightForMessage - Rex
         height = [self.messageHeightMap[key] floatValue]+ 4;
     }
     else {
@@ -318,6 +319,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
         //TODO: Give names to all the numeric contants used in code. Hard to understand what
         // this 16 is . And there are too many 16s in the code base - Rex
         self.messageHeightMap[key] = @(height);
+        //TODO: We are missing a + 4 here - Rex
     }
     return height;
 }
