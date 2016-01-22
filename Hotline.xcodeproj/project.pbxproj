@@ -53,13 +53,6 @@
 			remoteGlobalIDString = 35591A9A1B9ED53700BC0B60;
 			remoteInfo = HotlineAPI;
 		};
-		354D0D211C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 358DD4D71BB0126000B36E4E;
-			remoteInfo = HotlineDB;
-		};
 		354D0D231C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
@@ -157,7 +150,6 @@
 			children = (
 				354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */,
 				354D0D201C48D10F004D2AA1 /* libHotlineAPI.a */,
-				354D0D221C48D10F004D2AA1 /* HotlineDB.bundle */,
 				354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */,
 			);
 			name = Products;
@@ -390,13 +382,6 @@
 			remoteRef = 354D0D1F1C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		354D0D221C48D10F004D2AA1 /* HotlineDB.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = HotlineDB.bundle;
-			remoteRef = 354D0D211C48D10F004D2AA1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
@@ -607,7 +592,7 @@
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -625,7 +610,7 @@
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
