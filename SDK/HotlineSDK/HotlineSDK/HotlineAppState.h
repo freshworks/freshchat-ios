@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "HLChannel.h"
 
 @interface HotlineAppState : NSObject
 
 @property (nonatomic, strong) UIViewController *currentVisibleController;
+@property (nonatomic, strong) HLChannel *currentVisibleChannel;
 
 +(instancetype)sharedInstance;
 

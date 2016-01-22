@@ -25,6 +25,7 @@
 #import "FDUtilities.h"
 #import "FDImagePreviewController.h"
 #import "HLMessageServices.h"
+#import "HotlineAppState.h"
 
 typedef struct {
     BOOL isLoading;
@@ -40,7 +41,7 @@ typedef struct {
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
-@property (nonatomic, strong, readwrite) HLChannel *channel;
+@property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
 @property (nonatomic, strong) FDAudioMessageInputView *audioMessageInputView;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewHeightConstraint;
@@ -65,6 +66,7 @@ typedef struct {
 
 @implementation FDMessageController
 
+//TODO: Prefer #define over static for constants . Use static for variables you want to access and can change during runtime - Rex
 static CGFloat TABLE_VIEW_TOP_OFFSET = 10;
 static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 
@@ -84,6 +86,8 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
         self.loadmoreCount=20;
         
         self.channel = channel;
+        //Set  App state reference to current channel
+        [HotlineAppState sharedInstance].currentVisibleChannel = channel;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -132,6 +136,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
+    [HotlineAppState sharedInstance].currentVisibleChannel = nil;
 }
 
 -(void)startPoller{
