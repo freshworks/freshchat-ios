@@ -38,8 +38,9 @@
     [self.contentView addSubview:accessoryView];
 
     self.lastUpdatedLabel = [[UILabel alloc] init];
-    self.lastUpdatedLabel.font = [self.theme tableViewCellDetailFont];
-    self.lastUpdatedLabel.textColor = [self.theme tableViewCellDetailFontColor];
+    self.lastUpdatedLabel.textAlignment = UITextAlignmentRight;
+    self.lastUpdatedLabel.font = [self.theme lastUpdatedFont];
+    self.lastUpdatedLabel.textColor = [self.theme lastUpdatedFontColor];
     self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.lastUpdatedLabel];
     
@@ -55,7 +56,7 @@
                             @"contentEncloser" : self.contentEncloser};
     
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-[lastUpdated]" options:0 metrics:nil views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-5-[lastUpdated]" options:0 metrics:nil views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(21)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[lastUpdated(70)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeCenterY

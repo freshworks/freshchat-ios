@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FDImagePreviewController : UIViewController
+@interface FDImagePreviewController : UIViewController<UIScrollViewDelegate, UIGestureRecognizerDelegate>
+
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 -(instancetype)initWithImage:(UIImage *)image;
 
