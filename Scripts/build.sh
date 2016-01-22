@@ -26,11 +26,15 @@ rm -rf buildtmp
 mkdir buildtmp
 
 
-CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLConstants.h
+CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
 #fix version in file
 cp ${CONSTANTS_FILE} ${CONSTANTS_FILE}.original
 sed -e "s/HOTLINE_SDK_VERSION\(.*\)/HOTLINE_SDK_VERSION @\"${VERSION}\"/g" -i .old ${CONSTANTS_FILE}
 sed -e "s/HOTLINE_SDK_BUILD_NUMBER\(.*\)/HOTLINE_SDK_BUILD_NUMBER @\"${BUILD_NUMBER}\"/g" -i .old ${CONSTANTS_FILE}
+
+
+CONCAT=$(cat ${CONSTANTS_FILE})
+printHeader "Constants changed to $CONCAT";
 
 #additional compiler flags to reduce package size
 COMPILER_FLAGS="GCC_OPTIMIZATION_LEVEL=s GCC_GENERATE_DEBUGGING_SYMBOLS=NO"
