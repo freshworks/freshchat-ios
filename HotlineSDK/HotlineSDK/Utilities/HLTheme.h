@@ -12,6 +12,7 @@
 #define IMAGE_CONTACT_US_ICON @"ContactUsIcon"
 #define IMAGE_CONTACT_US_LIGHT_ICON @"ContactUsLightIcon"
 #define IMAGE_BACK_BUTTON @"BackButton"
+#define IMAGE_CLOSE_PREVIEW @"CloseImagePreview"
 #define IMAGE_ATTACH_ICON @"AttachmentUpload"
 #define IMAGE_BUBBLE_CELL_LEFT @"BubbleLeft"
 #define IMAGE_BUBBLE_CELL_RIGHT @"BubbleRight"
