@@ -14,7 +14,6 @@
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
-		354D0D661C48D504004D2AA1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D611C48D504004D2AA1 /* Info.plist */; };
 		354D0D671C48D504004D2AA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D621C48D504004D2AA1 /* main.m */; };
 		354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */; };
 		354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
@@ -52,13 +51,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 35591A9A1B9ED53700BC0B60;
 			remoteInfo = HotlineAPI;
-		};
-		354D0D211C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 358DD4D71BB0126000B36E4E;
-			remoteInfo = HotlineDB;
 		};
 		354D0D231C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -157,7 +149,6 @@
 			children = (
 				354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */,
 				354D0D201C48D10F004D2AA1 /* libHotlineAPI.a */,
-				354D0D221C48D10F004D2AA1 /* HotlineDB.bundle */,
 				354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */,
 			);
 			name = Products;
@@ -331,7 +322,7 @@
 		356F19DF1B9DBF14002F1E2A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Freshdesk;
 				TargetAttributes = {
 					356F19E61B9DBF14002F1E2A = {
@@ -390,13 +381,6 @@
 			remoteRef = 354D0D1F1C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		354D0D221C48D10F004D2AA1 /* HotlineDB.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = HotlineDB.bundle;
-			remoteRef = 354D0D211C48D10F004D2AA1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
@@ -419,7 +403,6 @@
 				354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */,
 				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
 				354D0D371C48D32D004D2AA1 /* settings.png in Resources */,
-				354D0D661C48D504004D2AA1 /* Info.plist in Resources */,
 				354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
