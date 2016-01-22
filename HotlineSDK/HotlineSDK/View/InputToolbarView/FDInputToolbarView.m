@@ -9,6 +9,7 @@
 #import "FDInputToolbarView.h"
 #import "HLTheme.h"
 #import "HLMacros.h"
+#import "Hotline.h"
 #import <AudioToolbox/AudioServices.h>
 #include "TargetConditionals.h"
 #include "HLLocalization.h"
@@ -92,7 +93,6 @@
     NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(attachButton,textView, sendButton, micButton)];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[textView]-5-|" options:0 metrics:nil views:views]];
-    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(20)]-10-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[attachButton(24)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton(24)]-[textView]-[sendButton(40)]-5-|" options:0 metrics:nil views:views]];
@@ -109,13 +109,35 @@
                                                               multiplier:1.0
                                                                 constant:0.0];
     
-    if (self.canShowAttachButton) {
-        attachButtonWidthConstraint.constant = 40.0;
+    
+//    if (self.canShowAttachButton) {
+//        attachButtonWidthConstraint.constant = 24.0;
+//    }
+    
+    if(![Hotline sharedInstance].config.pictureMessagingEnabled){
+        
+        attachButtonWidthConstraint.constant = 0;
+    }
+    else{
+        attachButtonWidthConstraint.constant = 24.0;
     }
     
     [self addConstraint:attachButtonWidthConstraint];
-    [self updateActionButtons:textView];
+    
+    if(![Hotline sharedInstance].config.voiceMessagingEnabled){
+        
+        [self disableAudioMessaging];
+    }
+    else{
+        [self updateActionButtons:textView];
+    }
     [super layoutSubviews];
+}
+
+- (void) disableAudioMessaging{
+    
+    self.micButton.hidden = YES;
+    self.sendButton.hidden = NO;
 }
 
 -(void)updateActionButtons:(UITextView *)inputTextView{
