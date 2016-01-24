@@ -176,7 +176,7 @@
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices downloadAllMessages];
+        [HLMessageServices downloadAllMessages:nil];
     });
 }
 
@@ -256,7 +256,7 @@
     }
     
     FDLog(@"Push Recieved :%@", info);
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(void)clearUserData{
@@ -338,8 +338,14 @@
     return count;
 }
 
--(void)unreadCountWithCompletion:(void (^)(NSInteger))completion{
-    
+-(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
+    [HLMessageServices downloadAllMessages:^(NSError *error) {
+        if (!error) {
+            if (completion) completion([self unreadCount]);
+        }else{
+            if (completion) completion(0);
+        }
+    }];
 }
 
 @end

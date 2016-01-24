@@ -110,7 +110,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     [self setNavigationItem];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(UIView *)tableHeaderView{
@@ -150,7 +150,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(void)setNavigationItem{

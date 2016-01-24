@@ -25,7 +25,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
 @implementation HLMessageServices
 
-+(void)downloadAllMessages{
++(void)downloadAllMessages:(void(^)(NSError *error))handler{
     FDLog(@"download message called");
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
@@ -39,14 +39,15 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
         if (!error) {
-            [self fetchAllMessagesInChannel:channels];
+            [self fetchAllMessagesInChannel:channels handler:handler];
         }else{
+            if(handler) handler(error);
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         }
     }];
 }
 
-+(void)fetchAllMessagesInChannel:(NSArray *)channels{
++(void)fetchAllMessagesInChannel:(NSArray *)channels handler:(void(^)(NSError *error))handler{
     NSString *pBasePath = [FDUtilities getBaseURL];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -79,6 +80,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             HideNetworkActivityIndicator();
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             [Konotor performSelector:@selector(conversationsDownloadFailed)];
+            if(handler) handler(error);
             return;
             
         }else{
@@ -143,6 +145,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                     }
                 }
             }
+            if(handler) handler(nil);
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
         NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
