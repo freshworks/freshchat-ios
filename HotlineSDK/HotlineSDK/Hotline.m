@@ -99,7 +99,14 @@
 
 -(void)storeConfig:(HotlineConfig *)config{
     if ([self hasUpdatedConfigWith:config]) {
-        FDLog(@"Clearing Data for Config update");
+        KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
+        [dataManager deleteAllSolutions:^(NSError *error) {
+            FDLog(@"All solutions deleted");
+            [dataManager deleteAllIndices:^(NSError *error) {
+                FDLog(@"Index cleared");
+                [self clearUserData];
+            }];
+        }];
     }
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -112,7 +119,10 @@
 }
 
 -(BOOL)hasUpdatedConfigWith:(HotlineConfig *)config{
-    return NO;
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
 }
 
 -(void)updateUser:(HotlineUser *)user{
