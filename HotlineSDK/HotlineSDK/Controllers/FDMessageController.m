@@ -66,9 +66,8 @@ typedef struct {
 
 @implementation FDMessageController
 
-//TODO: Prefer #define over static for constants . Use static for variables you want to access and can change during runtime - Rex
-static CGFloat TABLE_VIEW_TOP_OFFSET = 10;
-static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
+#define INPUT_TOOLBAR_HEIGHT  40
+#define TABLE_VIEW_TOP_OFFSET 10
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];

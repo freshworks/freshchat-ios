@@ -90,7 +90,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
                                                             URL:persistentStoreURL options:options error:&error];
     if (error) {
-        [self appendLogInfo:persistentStoreURL forKey:@"SQLite file path"];
+        [self appendLogInfo:persistentStoreURL.description forKey:@"SQLite file path"];
         [self appendLogInfo:@{@"Persistent store creation failed" :@{ @"Reason" : error.description}}];
         [self retryPersistentStoreCreation:persistentStoreURL];
     }
