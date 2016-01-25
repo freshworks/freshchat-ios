@@ -340,11 +340,7 @@
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
     [HLMessageServices downloadAllMessages:^(NSError *error) {
-        if (!error) {
-            if (completion) completion([self unreadCount]);
-        }else{
-            if (completion) completion(0);
-        }
+        if (completion) completion([self unreadCount]);
     }];
 }
 
