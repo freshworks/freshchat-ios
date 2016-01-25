@@ -357,6 +357,10 @@
 		<string>HLResources.bundle/Images/hotline_right_arrow</string>
 		<key>EmptySearchImage</key>
 		<string>HLResources.bundle/Images/hotline_empty_search_icon</string>
+		<key>ChannelImage</key>
+		<string>HLResources.bundle/Images/hotline_channels_image</string>
+		<key>FAQImage</key>
+		<string>HLResources.bundle/Images/hotline_faq_image</string>
 	</dict>
 </dict>
 </plist>

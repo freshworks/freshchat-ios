@@ -25,6 +25,7 @@
 @interface HLChannelViewController ()
 
 @property (nonatomic, strong) NSArray *channels;
+@property (strong, nonatomic) UIImageView *emptyChannelImgView;
 
 @end
 
@@ -83,6 +84,35 @@
             }
             
             self.channels = sortedChannel;
+            
+            
+            if(!self.channels.count){
+                
+                self.emptyChannelImgView = [[UIImageView alloc] init];
+                HLTheme *theme = [HLTheme sharedInstance];
+                self.emptyChannelImgView.image = [theme getImageWithKey:IMAGE_CHANNEL_ICON];
+                [self.emptyChannelImgView setTranslatesAutoresizingMaskIntoConstraints:NO];
+                [self.view addSubview:self.emptyChannelImgView];
+                
+                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyChannelImgView
+                                                                      attribute:NSLayoutAttributeCenterX
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.tableView
+                                                                      attribute:NSLayoutAttributeCenterX
+                                                                     multiplier:1.0
+                                                                       constant:0.0]];
+                
+                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyChannelImgView
+                                                                      attribute:NSLayoutAttributeCenterY
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.tableView
+                                                                      attribute:NSLayoutAttributeCenterY
+                                                                     multiplier:1.0
+                                                                       constant:0.0]];
+            }
+            else{
+                [self.emptyChannelImgView removeFromSuperview];
+            }
             [self.tableView reloadData];
         }
     }];
