@@ -23,7 +23,7 @@
 
 @interface HLMessageServices : NSObject
 
-+(void)downloadAllMessages;
++(void)downloadAllMessages:(void(^)(NSError *error))handler;
 
 /* fetches channel list, updates existing channels including hidden channels */
 -(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler;

@@ -113,7 +113,7 @@ typedef struct {
     [self setNavigationItem];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(UIView *)tableHeaderView{
@@ -154,7 +154,7 @@ typedef struct {
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(void)setNavigationItem{
