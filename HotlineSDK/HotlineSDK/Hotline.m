@@ -252,11 +252,10 @@
     banner.delegate = self;
     banner.message.text = message;
     
-    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
+    HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
 
-    if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
-        FDMessageController *msgController = (FDMessageController *)visibleSDKController;
-        if ([msgController.channel.channelID isEqual:channel.channelID]) {
+    if(visibleChannel){
+        if ([visibleChannel.channelID isEqual:channel.channelID]) {
             FDLog(@"Do not display notification banner, user in the same channel");
         }else{
             [banner displayBannerWithChannel:channel];
@@ -271,6 +270,7 @@
 
 -(void)clearUserData{
     [[HotlineUser sharedInstance]clearUserData];
+    
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");
@@ -294,7 +294,7 @@
             if (msgController.isModal) {
                 [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
             }else{
-                HLChannel *currentControllerChannel = msgController.channel;
+                HLChannel *currentControllerChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
                 if (![currentControllerChannel.channelID isEqualToNumber:currentChannel.channelID]) {
                     UINavigationController *navController = msgController.navigationController;
                     [navController popViewControllerAnimated:NO];

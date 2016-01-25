@@ -14,7 +14,6 @@
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
-		354D0D661C48D504004D2AA1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D611C48D504004D2AA1 /* Info.plist */; };
 		354D0D671C48D504004D2AA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D621C48D504004D2AA1 /* main.m */; };
 		354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */; };
 		354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
@@ -323,7 +322,7 @@
 		356F19DF1B9DBF14002F1E2A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Freshdesk;
 				TargetAttributes = {
 					356F19E61B9DBF14002F1E2A = {
@@ -404,7 +403,6 @@
 				354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */,
 				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
 				354D0D371C48D32D004D2AA1 /* settings.png in Resources */,
-				354D0D661C48D504004D2AA1 /* Info.plist in Resources */,
 				354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

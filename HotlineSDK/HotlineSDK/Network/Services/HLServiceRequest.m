@@ -25,6 +25,7 @@
         self.stringEncoding = NSUTF8StringEncoding;
         self.timeoutInterval = 60;
         [self setDefaultHTTPHeaders];
+        self.URL = baseURL;
     }
     return self;
 }

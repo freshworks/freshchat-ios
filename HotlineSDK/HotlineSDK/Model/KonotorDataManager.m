@@ -16,7 +16,8 @@ NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFail
 @interface KonotorDataManager ()
 
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
-@property (nonatomic, strong) NSMutableString *log;
+//TODO: Make this generic later for use across SDK - Rex
+@property (nonatomic, strong) NSMutableDictionary *logInfo;
 
 @end
 
@@ -38,17 +39,22 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 -(id)init{
     self = [super init];
     if (self) {
-        self.log = [NSMutableString new];
+        self.logInfo = [NSMutableDictionary new];
         [self preparePersistantStoreCoordinator];
         [self setMainQueueContext];
     }
     return  self;
 }
 
--(void)logInfo:(NSDictionary *)info{
-    [self.log appendString:[NSString stringWithFormat:@"\n %@",info]];
-    FDLog(@"%@",info);
+-(void)appendLogInfo:(NSString *)info forKey:(NSString *)key{
+    self.logInfo[key]=info;
+    FDLog(@"%@",self.logInfo);
 }
+
+-(void)appendLogInfo:(NSDictionary *)info{
+    [self.logInfo addEntriesFromDictionary:info];
+}
+
 
 - (NSString*)sharedDocumentsPath {
     NSString *SharedDocumentsPath = nil;
@@ -65,7 +71,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                                                 @"Reason :"   : error.description,
                                                 @"Folder path used" : SharedDocumentsPath
                                                 }};
-            [self logInfo:errorInfo];
+            [self appendLogInfo:errorInfo];
         }
     }
     return SharedDocumentsPath;
@@ -78,13 +84,14 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
-    [self logInfo:@{@"SQLite file path" : persistentStoreURL}];
+    
     NSError* error = nil;
     NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES };
     [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
                                                             URL:persistentStoreURL options:options error:&error];
     if (error) {
-        [self logInfo:@{@"Persistent store creation failed" :@{ @"Reason" : error.description}}];
+        [self appendLogInfo:persistentStoreURL.description forKey:@"SQLite file path"];
+        [self appendLogInfo:@{@"Persistent store creation failed" :@{ @"Reason" : error.description}}];
         [self retryPersistentStoreCreation:persistentStoreURL];
     }
 }
@@ -94,26 +101,25 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
     
     if (error) {
-        [self logInfo:@{@"could not delete existing persistent store " : @{ @"Reason" : error.description }}];
+        [self appendLogInfo:@{@"could not delete existing persistent store " : @{ @"Reason" : error.description }}];
     }
     
-    [self logInfo:@{@"Attempting to re-create persistent store at URL" : storeURL}];
+    [self appendLogInfo:@{@"Attempting to re-create persistent store at URL" : storeURL}];
     
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                    configuration:nil URL:storeURL options:nil error:&error]) {
         if (error) {
             
-            [self logInfo:@{@"Persistent store re-creation failed " : @{ @"Reason" : error.description}}];
+            [self appendLogInfo:@{@"Persistent store re-creation failed " : @{ @"Reason" : error.description}}];
             
             NSDictionary *additionalInfo = @{
                                              @"Time stamp" : [NSDate date],
                                              @"SDK Version" : HOTLINE_SDK_VERSION,
                                              @"Device Info" : [FDUtilities deviceInfoProperties]
-                                             
-                                             };
-            [self logInfo:additionalInfo];
-            NSException *e= [[NSException alloc] initWithName:@"Perisistent store exception " reason:self.log
-                                                     userInfo:[error userInfo]];
+            };
+            [self appendLogInfo:additionalInfo];
+            NSException *e= [[NSException alloc]
+                                initWithName:@"Perisistent store exception"                                                     reason:[NSString stringWithFormat:@"%@", self.logInfo]                                                     userInfo:[error userInfo]];
             @throw e;
         }
     }
