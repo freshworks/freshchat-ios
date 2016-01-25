@@ -56,13 +56,6 @@
 -(UIColor *)tableViewCellImageBackgroundColor;
 -(UIColor *)tableViewCellSeparatorColor;
 -(UIColor *)timeDetailTextColor;
--(UIFont *)conversationsTimeDetailFont;
-
-//Table View Section
--(UIFont *)tableViewSectionHeaderFont;
--(UIColor *)tableViewSectionHeaderFontColor;
--(UIColor *)tableViewSectionHeaderBackgroundColor;
--(CGFloat)tableViewSectionHeaderHeight;
 
 //Article Table View
 -(UIColor *)articleListFontColor;
@@ -79,7 +72,6 @@
 -(UIColor *)talkToUsButtonColor;
 
 //Dialogues
--(UIColor *)getButtontextColorForKey:(NSString *)key;
 -(UIFont *)dialogueTitleFont;
 -(UIColor *)dialogueTitleTextColor;
 -(UIFont *)dialogueYesButtonFont;
@@ -153,7 +145,6 @@
 -(UIColor *)conversationListViewBackgroundColor;
 -(UIFont *)channelTitleFont;
 -(UIColor *)channelTitleFontColor;
--(UIFont *)channelDescriptionFontl;
 -(UIColor *)channelDescriptionFontColor;
 -(UIFont *)lastUpdatedFont;
 -(UIColor *)lastUpdatedFontColor;
