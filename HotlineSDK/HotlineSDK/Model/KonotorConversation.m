@@ -14,6 +14,7 @@
 #import "HLMacros.h"
 #import "FDSecureStore.h"
 #import "FDUtilities.h"
+#import "FDLocalNotification.h"
 
 @class KonotorConversationData;
 @class KonotorMessageData;
@@ -34,7 +35,7 @@
     int unread = self.unreadMessagesCount.intValue;
     unread++;
     self.unreadMessagesCount = @(unread);
-    [FDUtilities PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
+    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:[NSNumber numberWithInt:unread]];
     [[KonotorDataManager sharedInstance]save];
 }
 
@@ -44,7 +45,7 @@
         unread--;
     }
     [self setUnreadMessagesCount:[NSNumber numberWithInt:unread]];
-    [FDUtilities PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:[NSNumber numberWithInt:unread]];
+    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:[NSNumber numberWithInt:unread]];
     [[KonotorDataManager sharedInstance]save];
 }
 

@@ -220,9 +220,6 @@
     if (!isAppRegistered) {
         [[[HLCoreServices alloc]init] registerAppWithToken:deviceTokenString forUser:userAlias handler:nil];
     }
-    else {
-     //TODO: Retry with a delay
-    }
 }
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info{
@@ -263,8 +260,7 @@
 
 -(void)clearUserData{
     [[HotlineUser sharedInstance]clearUserData];
-    //TODO: This would clear the deviceUUID as well .. Is that intended .
-    // Also why not just clear all data on the sharedInstance secureStore.
+    
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");

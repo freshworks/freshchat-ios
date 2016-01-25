@@ -12,6 +12,7 @@
 #import "KonotorMessageBinary.h"
 #import "FDUtilities.h"
 #import "HLMessageServices.h"
+#import "FDLocalNotification.h"
 
 @implementation KonotorAlertView
 
@@ -37,17 +38,17 @@ KonotorAlertView *pAlert;
                 BOOL status=[KonotorAudioRecorder startRecordingA];
                 if(status){
                     //TODO: Moved these notification names to an enumeration or Constants. 
-                    [FDUtilities PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
+                    [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
                 }
                 else{
-                    [FDUtilities PostNotificationWithName:@"KonotorRecordingFailed" withObject:nil];
+                    [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_FAILED withObject:nil];
                 }
             });
         }
         else
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [FDUtilities PostNotificationWithName:@"KonotorMicrophoneAccessDenied" withObject:nil];
+                [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_MIC_PERMISSION_DENIED withObject:nil];
             });
         }
     };
@@ -64,10 +65,10 @@ KonotorAlertView *pAlert;
     {
         BOOL status=[KonotorAudioRecorder startRecordingA];
         if(status){
-            [FDUtilities PostNotificationWithName:@"KonotorRecordingStarted" withObject:nil];
+            [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
         }
         else{
-            [FDUtilities PostNotificationWithName:@"KonotorRecordingFailed" withObject:nil];
+            [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_FAILED withObject:nil];
         }
         return status;
     }
@@ -513,8 +514,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    //TODO: Please check backward compatibility with Konotor SDK - Rex 
-    [message setMessageUserId:@"Sender-User"];
+    [message setMessageUserId:@"User"];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];
@@ -554,7 +554,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:@"Sender-User"];
+    [message setMessageUserId:@"User"];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];
