@@ -22,6 +22,9 @@
 #define LOC_SEARCH_PLACEHOLDER_TEXT @"search_placeholder_text"
 #define LOC_SEARCH_EMPTY_RESULT_TEXT @"search_empty_result_text"
 
+#define LOC_EMPTY_CHANNEL_TEXT @"empty_channel_text"
+#define LOC_EMPTY_FAQ_TEXT @"empty_faq_text"
+
 #define LOC_CHANNELS_TITLE_TEXT @"channels_title_text"
 #define LOC_CHANNELS_CLOSE_BUTTON_TEXT @"channels_close_button_text"
 

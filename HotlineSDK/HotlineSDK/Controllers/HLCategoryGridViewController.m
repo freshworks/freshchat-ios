@@ -31,6 +31,8 @@
 @property (nonatomic, strong) FDMarginalView *footerView;
 @property (nonatomic, strong) UILabel  *noSolutionsLabel;
 @property (nonatomic, strong) HLTheme *theme;
+@property (strong, nonatomic) UIImageView *emptyFAQImgView;
+@property (strong, nonatomic) UILabel *emptyFAQLbl;
 
 @end
 
@@ -139,6 +141,51 @@
     [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
         if (!error) {
             self.categories = solutions;
+
+            if(!self.categories.count){
+                
+                self.emptyFAQImgView = [[UIImageView alloc] init];
+                self.emptyFAQImgView.image = [self.theme getImageWithKey:IMAGE_FAQ_ICON];
+                [self.emptyFAQImgView setTranslatesAutoresizingMaskIntoConstraints:NO];
+                [self.view addSubview:self.emptyFAQImgView];
+                
+                self.emptyFAQLbl = [[UILabel alloc]init];
+                self.emptyFAQLbl.translatesAutoresizingMaskIntoConstraints = NO;
+                self.emptyFAQLbl.textColor = [self.theme dialogueTitleTextColor];
+                self.emptyFAQLbl.font = [self.theme dialogueTitleFont];
+                self.emptyFAQLbl.lineBreakMode = NSLineBreakByWordWrapping;
+                self.emptyFAQLbl.numberOfLines = 2;
+                self.emptyFAQLbl.textAlignment= NSTextAlignmentCenter;
+                self.emptyFAQLbl.text = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+                [self.view addSubview:self.emptyFAQLbl];
+                
+                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyFAQImgView
+                                                                      attribute:NSLayoutAttributeCenterX
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.collectionView
+                                                                      attribute:NSLayoutAttributeCenterX
+                                                                     multiplier:1.0
+                                                                       constant:0.0]];
+                
+                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyFAQImgView
+                                                                      attribute:NSLayoutAttributeCenterY
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.collectionView
+                                                                      attribute:NSLayoutAttributeCenterY
+                                                                     multiplier:1.0
+                                                                       constant:0.0]];
+                
+                NSDictionary *emptychannelViews = @{@"emptyFAQImg":self.emptyFAQImgView, @"emptyFAQLbl" : self.emptyFAQLbl};
+                
+                [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyFAQLbl]-50-|" options:0 metrics:nil views:emptychannelViews]];
+                
+                [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptyFAQImg]-10-[emptyFAQLbl]" options:0 metrics:nil views:emptychannelViews]];
+            }
+            else{
+                [self.emptyFAQImgView removeFromSuperview];
+                [self.emptyFAQLbl removeFromSuperview];
+            }
+            
             [self.collectionView reloadData];
         }
     }];
