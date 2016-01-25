@@ -18,6 +18,8 @@
         self.domain = domain;
         self.appID = appID;
         self.appKey = appKey;
+        self.pictureMessagingEnabled = YES;
+        self.voiceMessagingEnabled = YES;
     }
     return self;
 }

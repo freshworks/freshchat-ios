@@ -75,6 +75,8 @@
 @property (strong, nonatomic) NSString *appID;
 @property (strong, nonatomic) NSString *appKey;
 @property (strong, nonatomic) NSString *domain;
+@property (nonatomic, assign) BOOL voiceMessagingEnabled;
+@property (nonatomic, assign) BOOL pictureMessagingEnabled;
 
 /**
  *  Initialize Hotline.
