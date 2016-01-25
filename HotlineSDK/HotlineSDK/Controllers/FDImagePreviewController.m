@@ -78,7 +78,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     [closeButton setImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_CLOSE_PREVIEW] forState:UIControlStateNormal];
     [self.view addSubview:closeButton];
     
-    NSDictionary *views = @{ @"closeBtn" :closeButton, @"scrollView" :self.scrollView, @"imageView" :self.imageView};
+    NSDictionary *views = @{ @"closeBtn" :closeButton, @"scrollView" :self.scrollView};
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|" options:0 metrics:nil views:views]];
