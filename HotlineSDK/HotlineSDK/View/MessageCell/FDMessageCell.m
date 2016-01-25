@@ -137,6 +137,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     /* setup message picture view */
     messagePictureImageView=[[FDPictureMessageView alloc] initWithFrame:CGRectZero];
     TapOnPictureRecognizer *imgViewTapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
+    [messagePictureImageView setContentMode:UIViewContentModeCenter];
     imgViewTapGesture.numberOfTapsRequired=1;
     [messagePictureImageView addGestureRecognizer:imgViewTapGesture];
 
@@ -147,7 +148,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     [messageActionButton addTarget:self action:@selector(openActionUrl:) forControlEvents:UIControlEventTouchUpInside];
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
-    [self.contentView addSubview:messageActionButton];
+    [self addSubview:messageActionButton];
 }
 
 -(void)openActionUrl:(id)sender{
@@ -246,7 +247,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         profileX=isSenderOther?KONOTOR_HORIZONTAL_PADDING:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION);
         profileY=KONOTOR_VERTICAL_PADDING;
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth);
+        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth+8);
         messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING):(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
@@ -382,7 +383,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         
         [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
         
-        
+
         [audioItem setHidden:YES];
         [messagePictureImageView setHidden:NO];
         
@@ -429,7 +430,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     NSString *simpleString=currentMessage.text; //[messageText string];
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)){
-       // NSMutableAttributedString* messageText=[FDMessageCell getAttributedStringWithText:currentMessage.text font:KONOTOR_MESSAGETEXT_FONT];
         
         float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
         if(KONOTOR_SHOWPROFILEIMAGE){
@@ -458,11 +458,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         float height=picSize.height;
         float txtheight=0.0;
         
-        
-        //TODO: Read message font from theme
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
             NSString *simpleString=currentMessage.text;
-            //txtheight=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:KONOTOR_MESSAGETEXT_FONT];
             txtheight = [FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
@@ -484,8 +481,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             
         case KonotorMessageTypePicture:
         {
-            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height-4, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
-            timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
+            [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT+4)];
+            timeField.textContainerInset=UIEdgeInsetsMake(0, 0, 0, 0);
             
             break;
         }
@@ -498,11 +495,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
             if((KONOTOR_SHOW_TIMESTAMP)&&(showSenderName))
             {
                 
-                [timeField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
+                [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
             }
             else{
                 
-                [timeField setTextContainerInset:UIEdgeInsetsMake(4, 0, 0, 0)];
+                [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
             }
             
         }
@@ -515,14 +512,14 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         default:
         {
             [timeField setFrame:CGRectMake(messageTextBoxX, messageTextBoxY+messageTextFrame.size.height, messageTextBoxWidth, KONOTOR_TIMEFIELD_HEIGHT)];
-            timeField.textContainerInset=UIEdgeInsetsMake(4, 0, 0, 0);
+            timeField.textContainerInset=UIEdgeInsetsMake(0, 0, 0, 0);
             [timeField setContentOffset:CGPointMake(0, 0)];
             
             break;
         }
     }
     
-    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height+6, 10, 10)];
+    [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height+2, 10, 10)];
     
 }
 
@@ -541,7 +538,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     msgHeight=msgHeight+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
-    msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING):0;
+    msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PADDING):0;
     
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }

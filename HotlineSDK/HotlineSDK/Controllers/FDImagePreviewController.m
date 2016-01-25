@@ -79,7 +79,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     CGRect scrollViewFrame = self.scrollView.frame;
     CGFloat scaleWidth = scrollViewFrame.size.width / self.scrollView.contentSize.width;
     CGFloat scaleHeight = scrollViewFrame.size.height / self.scrollView.contentSize.height;
-    CGFloat minScale = MIN(scaleWidth, scaleHeight);
+    CGFloat minScale = MIN(scaleWidth, 1);
     
     self.scrollView.minimumZoomScale = minScale;
     self.scrollView.maximumZoomScale = 4.0f;
@@ -198,7 +198,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
         CGPoint pointInView = [recognizer locationInView:self.imageView];
         
         // Get a zoom scale that's zoomed in slightly, capped at the maximum zoom scale specified by the scroll view
-        CGFloat newZoomScale = self.scrollView.zoomScale * 1.7f;
+        CGFloat newZoomScale = self.scrollView.zoomScale * 2.0f;
         newZoomScale = MIN(newZoomScale, self.scrollView.maximumZoomScale);
         
         // Figure out the rect we want to zoom to, then zoom to it
@@ -217,5 +217,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
         [self.scrollView setZoomScale:self.scrollView.minimumZoomScale];
     }
 }
+
+
 
 @end

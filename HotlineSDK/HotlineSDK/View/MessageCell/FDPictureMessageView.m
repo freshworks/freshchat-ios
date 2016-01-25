@@ -26,6 +26,8 @@
     float height=picSize.height;
     float imgwidth=picSize.width;
     
+    self.contentMode = UIViewContentModeCenter;
+    
     TapOnPictureRecognizer* tapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
     tapGesture.numberOfTapsRequired=1;
     if([currentMessage picData]){
