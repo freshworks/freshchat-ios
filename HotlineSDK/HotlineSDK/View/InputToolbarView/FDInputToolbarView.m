@@ -13,6 +13,7 @@
 #import <AudioToolbox/AudioServices.h>
 #include "TargetConditionals.h"
 #include "HLLocalization.h"
+#import "FDSecureStore.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>
 
@@ -109,23 +110,21 @@
                                                               multiplier:1.0
                                                                 constant:0.0];
     
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isPictureMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+    BOOL isVoiceMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     
-//    if (self.canShowAttachButton) {
-//        attachButtonWidthConstraint.constant = 24.0;
-//    }
     
-    if(![Hotline sharedInstance].config.pictureMessagingEnabled){
-        
+    if(!isPictureMessageEnabled){
         attachButtonWidthConstraint.constant = 0;
     }
     else{
-        attachButtonWidthConstraint.constant = 24.0;
+        attachButtonWidthConstraint.constant = 40.0;
     }
     
     [self addConstraint:attachButtonWidthConstraint];
     
-    if(![Hotline sharedInstance].config.voiceMessagingEnabled){
-        
+    if(!isVoiceMessageEnabled){
         [self disableAudioMessaging];
     }
     else{
