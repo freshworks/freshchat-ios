@@ -17,6 +17,7 @@
 #import "AFHTTPClient.h"
 #import "AFHTTPRequestOperation.h"
 #import "HLMessageServices.h"
+#import "FDLocalNotification.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -70,7 +71,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
 
     //TODO: why do we need to associate user alias to message (local cache) ?
-    [message setMessageUserId:@"Sender-User"];
+    [message setMessageUserId:@"User"];
 
     //TODO: Use defined message type instead of hardcoding
     [message setMessageType:@1];
@@ -89,7 +90,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:@"Sender-User"];
+    [message setMessageUserId:@"User"];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:@3];
     [message setMessageRead:YES];
@@ -285,7 +286,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
 }
 
 +(void) PostUnreadCountNotifWithNumber:(NSNumber *)number{
-    [FDUtilities PostNotificationWithName:@"KonotorUnreadMessagesCount" withObject:number];
+    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:number];
 }
 
 +(void)uploadAllUnuploadedMessages{
@@ -433,9 +434,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     //TODO: Use message user type once its ready
     if ([message[@"messageUserAlias"] isEqualToString:[FDUtilities getUserAlias]]) {
-        newMessage.messageUserId = @"Sender-User";
+        newMessage.messageUserId = @"User";
     }else{
-        newMessage.messageUserId = @"Sender-Agent";
+        newMessage.messageUserId = @"Agent";
     }
     
     newMessage.bytes = [message valueForKey:@"bytes"];

@@ -29,6 +29,5 @@ static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 
 +(instancetype)sharedInstance;
 -(void)displayBannerWithChannel:(HLChannel *)channel;
--(void)dismiss;
 
 @end

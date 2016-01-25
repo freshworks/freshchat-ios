@@ -25,6 +25,7 @@
 #import "FDUtilities.h"
 #import "FDImagePreviewController.h"
 #import "HLMessageServices.h"
+#import "HotlineAppState.h"
 
 typedef struct {
     BOOL isLoading;
@@ -40,7 +41,7 @@ typedef struct {
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
-@property (nonatomic, strong, readwrite) HLChannel *channel;
+@property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
 @property (nonatomic, strong) FDAudioMessageInputView *audioMessageInputView;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewHeightConstraint;
@@ -65,8 +66,8 @@ typedef struct {
 
 @implementation FDMessageController
 
-static CGFloat TABLE_VIEW_TOP_OFFSET = 10;
-static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
+#define INPUT_TOOLBAR_HEIGHT  40
+#define TABLE_VIEW_TOP_OFFSET 10
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -84,6 +85,8 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
         self.loadmoreCount=20;
         
         self.channel = channel;
+        //Set  App state reference to current channel
+        [HotlineAppState sharedInstance].currentVisibleChannel = channel;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -110,7 +113,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     [self setNavigationItem];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(UIView *)tableHeaderView{
@@ -132,6 +135,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
+    [HotlineAppState sharedInstance].currentVisibleChannel = nil;
 }
 
 -(void)startPoller{
@@ -150,7 +154,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(void)setNavigationItem{
@@ -311,6 +315,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
+        //TODO: If you have add + 4 here .. then I think this should be part of FDMessageCell getHeightForMessage - Rex
         height = [self.messageHeightMap[key] floatValue]+ 4;
     }
     else {
@@ -318,6 +323,7 @@ static CGFloat INPUT_TOOLBAR_HEIGHT = 40;
         //TODO: Give names to all the numeric contants used in code. Hard to understand what
         // this 16 is . And there are too many 16s in the code base - Rex
         self.messageHeightMap[key] = @(height);
+        //TODO: We are missing a + 4 here - Rex
     }
     return height;
 }

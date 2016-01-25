@@ -99,7 +99,14 @@
 
 -(void)storeConfig:(HotlineConfig *)config{
     if ([self hasUpdatedConfigWith:config]) {
-        FDLog(@"Clearing Data for Config update");
+        KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
+        [dataManager deleteAllSolutions:^(NSError *error) {
+            FDLog(@"All solutions deleted");
+            [dataManager deleteAllIndices:^(NSError *error) {
+                FDLog(@"Index cleared");
+                [self clearUserData];
+            }];
+        }];
     }
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -112,7 +119,10 @@
 }
 
 -(BOOL)hasUpdatedConfigWith:(HotlineConfig *)config{
-    return NO;
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
 }
 
 -(void)updateUser:(HotlineUser *)user{
@@ -176,7 +186,7 @@
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices downloadAllMessages];
+        [HLMessageServices downloadAllMessages:nil];
     });
 }
 
@@ -242,11 +252,10 @@
     banner.delegate = self;
     banner.message.text = message;
     
-    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
+    HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
 
-    if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
-        FDMessageController *msgController = (FDMessageController *)visibleSDKController;
-        if ([msgController.channel.channelID isEqual:channel.channelID]) {
+    if(visibleChannel){
+        if ([visibleChannel.channelID isEqual:channel.channelID]) {
             FDLog(@"Do not display notification banner, user in the same channel");
         }else{
             [banner displayBannerWithChannel:channel];
@@ -256,11 +265,12 @@
     }
     
     FDLog(@"Push Recieved :%@", info);
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(void)clearUserData{
     [[HotlineUser sharedInstance]clearUserData];
+    
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");
@@ -284,7 +294,7 @@
             if (msgController.isModal) {
                 [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
             }else{
-                HLChannel *currentControllerChannel = msgController.channel;
+                HLChannel *currentControllerChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
                 if (![currentControllerChannel.channelID isEqualToNumber:currentChannel.channelID]) {
                     UINavigationController *navController = msgController.navigationController;
                     [navController popViewControllerAnimated:NO];
@@ -338,8 +348,10 @@
     return count;
 }
 
--(void)unreadCountWithCompletion:(void (^)(NSInteger))completion{
-    
+-(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
+    [HLMessageServices downloadAllMessages:^(NSError *error) {
+        if (completion) completion([self unreadCount]);
+    }];
 }
 
 @end

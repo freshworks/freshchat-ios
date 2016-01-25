@@ -150,9 +150,7 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 +(BOOL)isUserMe:(NSString *)userId{
-    //TODO: This will break migration from existing konotor SDK - Rex
-    // Migration needs to convert existing userIds or dont use a hardcoded userId.
-    NSString *currentUserID = @"Sender-User";
+    NSString *currentUserID = @"User";
     NSString *userAlias = [FDUtilities getUserAlias];
     if(currentUserID){
         if([userId isEqualToString:currentUserID] ||

@@ -30,6 +30,8 @@
 #define IMAGE_AUDIO_PROGRESS_BAR_MAX @"AudioProgessBarMax"
 #define IMAGE_TABLEVIEW_ACCESSORY_ICON @"TableViewAccessoryIcon"
 #define IMAGE_NOTIFICATION_CANCEL_ICON @"NotificationCancel"
+#define IMAGE_CHANNEL_ICON @"ChannelImage"
+#define IMAGE_FAQ_ICON @"FAQImage"
 
 @interface HLTheme : NSObject
 
