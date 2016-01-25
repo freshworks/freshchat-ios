@@ -11,6 +11,13 @@
 #import "HLTheme.h"
 #import "HLLocalization.h"
 
+//Not exposed to theming
+#define KONOTOR_VERTICAL_PADDING 2
+#define KONOTOR_USERNAMEFIELD_HEIGHT 18
+#define KONOTOR_TIMEFIELD_HEIGHT 16
+#define KONOTOR_SHOW_TIMESTAMP YES
+#define KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME NO
+#define KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING 20
 #define WIDTH_BUFFER_IF_NO_PROFILE_AVAILABLE 5*KONOTOR_HORIZONTAL_PADDING;
 
 static UITextView* tempView=nil;
@@ -289,17 +296,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_SUPPORT_LABEL_TEXT);
         [uploadStatusImageView setImage:nil];
         [chatCalloutImageView setImage:[otherChatBubble resizableImageWithCapInsets:otherChatBubbleInsets]];
-        [senderNameLabel setTextColor:((otherTextColor==nil)?KONOTOR_OTHERNAME_TEXT_COLOR:otherTextColor)];
-        [messageTextView setTextColor:((otherTextColor==nil)?KONOTOR_OTHERMESSAGE_TEXT_COLOR:otherTextColor)];
-        [messageSentTimeLabel setTextColor:((otherTextColor==nil)?KONOTOR_OTHERTIMESTAMP_COLOR:otherTextColor)];
     }
     else{
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_USER_LABEL_TEXT);
         [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
-        [senderNameLabel setTextColor:((userTextColor==nil)?KONOTOR_USERNAME_TEXT_COLOR:userTextColor)];
-        [messageTextView setTextColor:((userTextColor==nil)?KONOTOR_USERMESSAGE_TEXT_COLOR:userTextColor)];
-        [messageSentTimeLabel setTextColor:((userTextColor==nil)?KONOTOR_USERTIMESTAMP_COLOR:userTextColor)];
-        
     }
     
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];

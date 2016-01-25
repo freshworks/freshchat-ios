@@ -16,7 +16,6 @@
 -(UILabel *)createPromptLabel:(NSString *) key{
     UILabel *promptLabel = [[UILabel alloc] init];
     HLTheme *theme = [HLTheme sharedInstance];
-    //TODO: This self.backgroundColor seems out of place - Rex
     self.backgroundColor = [theme dialogueBackgroundColor];
     promptLabel = [[UILabel alloc]init];
     promptLabel.translatesAutoresizingMaskIntoConstraints = NO;

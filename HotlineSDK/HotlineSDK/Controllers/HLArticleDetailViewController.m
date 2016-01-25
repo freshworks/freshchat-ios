@@ -266,13 +266,8 @@
 }
 
 -(void)hideBottomView{
-    FDLog(@"Hide View Called");
-    //TODO: Animations dont work . Remove or fix them - Rex
-    [UIView animateWithDuration:.5 animations:^{
         self.bottomViewHeightConstraint.constant = 0;
-    } completion:^(BOOL finished) {
         [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    }];
 }
 
 -(void)updateBottomViewWith:(FDPromptView *)view{
