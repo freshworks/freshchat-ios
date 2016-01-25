@@ -115,6 +115,8 @@
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+        [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+        [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     }
 }
 
@@ -186,7 +188,7 @@
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices downloadAllMessages];
+        [HLMessageServices downloadAllMessages:nil];
     });
 }
 
@@ -265,7 +267,7 @@
     }
     
     FDLog(@"Push Recieved :%@", info);
-    [HLMessageServices downloadAllMessages];
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 -(void)clearUserData{
@@ -348,8 +350,10 @@
     return count;
 }
 
--(void)unreadCountWithCompletion:(void (^)(NSInteger))completion{
-    
+-(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
+    [HLMessageServices downloadAllMessages:^(NSError *error) {
+        if (completion) completion([self unreadCount]);
+    }];
 }
 
 @end

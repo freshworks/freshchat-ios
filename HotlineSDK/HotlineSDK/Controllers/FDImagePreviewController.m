@@ -7,6 +7,7 @@
 //
 
 #import "FDImagePreviewController.h"
+#import "HLTheme.h"
 
 @interface FDImagePreviewController (){
     CGFloat beginX, beginY;
@@ -42,6 +43,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
     self.scrollView.backgroundColor = [UIColor clearColor];
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.scrollView];
     
     self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5f];
@@ -67,6 +69,23 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     panGesture.minimumNumberOfTouches = 1;
     panGesture.maximumNumberOfTouches = 1;
     [self.scrollView addGestureRecognizer:panGesture];
+    
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton addTarget:self
+               action:@selector(dismissImagePicPreview)
+     forControlEvents:UIControlEventTouchUpInside];
+    closeButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [closeButton setImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_CLOSE_PREVIEW] forState:UIControlStateNormal];
+    [self.view addSubview:closeButton];
+    
+    NSDictionary *views = @{ @"closeBtn" :closeButton, @"scrollView" :self.scrollView};
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|" options:0 metrics:nil views:views]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeBtn(20)]-15-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[closeBtn(20)]" options:0 metrics:nil views:views]];
+
 }
 
 -(void)presentOnController:(UIViewController *)controller{
@@ -88,6 +107,8 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     self.originalBounds = self.scrollView.contentSize;
     
     [self centerScrollViewContents];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeOrientation:)
+                                                 name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)moveImage:(UIPanGestureRecognizer *)recognizer{
@@ -148,7 +169,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
                 }
             }
             else{
-                [self.imageView setCenter:self.originalCenter];
+                [self.imageView setCenter:self.scrollView.center];
             }
         }
         
@@ -187,7 +208,6 @@ static const CGFloat THROWING_THRESHOLD = 1600;
         contentsFrame.origin.y = 0.0f;
     }
     
-    
     self.imageView.frame = contentsFrame;
 }
 
@@ -218,6 +238,24 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     }
 }
 
+-(void)didChangeOrientation:(NSNotification *)notification{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        [self performSelector:@selector(centerScrollViewContents) withObject:nil afterDelay:0.01f];
+    }
+    else {
+        [self performSelector:@selector(centerScrollViewContents) withObject:nil afterDelay:0.01f];
+    }
+}
 
+-(void) dismissImagePicPreview{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
 
 @end

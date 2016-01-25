@@ -24,6 +24,10 @@
 -(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
                                                        andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    
+    config.voiceMessagingEnabled = YES;
+    config.pictureMessagingEnabled = YES;
+    
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
     user.emailAddress = @"sid@freshdesk.com";
@@ -32,6 +36,9 @@
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
     [Hotline sharedInstance].displaySolutionsAsGrid = YES;
     NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
+    [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
+        NSLog(@"Unread count (Async) : %d", (int)count);
+    }];
 }
 
 -(void)registerAppForNotifications{

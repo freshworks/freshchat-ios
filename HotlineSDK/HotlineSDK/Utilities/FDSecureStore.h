@@ -22,6 +22,8 @@
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
 #define HOTLINE_DEFAULTS_DOMAIN @"hotline_defaults_domain"
 #define HOTLINE_DEFAULTS_APP_KEY @"hotline_defaults_app_key"
+#define HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED @"hotline_defaults_voice_message_enabled"
+#define HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED @"hotline_defaults_picture_message_enabled"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
