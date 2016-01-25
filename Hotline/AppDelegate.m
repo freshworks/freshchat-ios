@@ -18,14 +18,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self hotlineIntegration];
     [self registerAppForNotifications];
-    [self handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     return YES;
 }
 
 -(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
                                                        andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
-    [[Hotline sharedInstance]initWithConfig:config];
+    HotlineUser *user = [HotlineUser sharedInstance];
+    user.userName = @"Sid";
+    user.emailAddress = @"sid@freshdesk.com";
+    user.phoneNumber = @"9898989898";
+    [[Hotline sharedInstance]initWithConfig:config andUser:user];
+    [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
+    [Hotline sharedInstance].displaySolutionsAsGrid = YES;
+    NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
 }
 
 -(void)registerAppForNotifications{
@@ -34,12 +40,6 @@
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     }else{
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeNewsstandContentAvailability| UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    }
-}
-
--(void)handleNotification:(NSDictionary *)info {
-    if ([info[@"source"] isEqualToString:@"konotor"]) {
-        [[Hotline sharedInstance] handleRemoteNotification:info];
     }
 }
 
@@ -54,11 +54,36 @@
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
-    [self handleNotification:info];
+    if ([[Hotline sharedInstance]isHotlineNotification:info]) {
+        UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
+        [[Hotline sharedInstance]handleRemoteNotification:info withController:nil];
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:unreadCount];
+}
+
+/* 
+ supported deep link URLs to test:
+ hotline://?launch=shoes
+ hotline://?launch=cloths
+ */
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    if ([url.scheme isEqualToString:@"hotline"]) {
+
+        if ([url.query isEqualToString:@"launch=shoes"]) {
+            NSLog(@"Lauch shoes screen");
+        }
+        
+        if ([url.query isEqualToString:@"launch=cloths"]) {
+            NSLog(@"Launch cloths screen");
+        }
+
+    }
+    
+    return YES;
 }
 
 @end

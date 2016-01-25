@@ -12,11 +12,14 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UIButton *chatButton;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
+    self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
 }
 
@@ -24,15 +27,15 @@
     [[Hotline sharedInstance] presentSolutions:self];
 }
 
-- (IBAction)conversations:(id)sender {
-    [[Hotline sharedInstance] presentFeedback:self];
-}
-
 - (IBAction)settings:(id)sender {
     FDSettingsController *settings = [FDSettingsController new];
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     navigationController.viewControllers = @[settings];
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (IBAction)chatButtonPressed:(id)sender {
+    [[Hotline sharedInstance]presentFeedback:self];
 }
 
 @end

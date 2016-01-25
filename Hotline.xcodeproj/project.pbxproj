@@ -7,13 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */; };
-		356F19ED1B9DBF14002F1E2A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EC1B9DBF14002F1E2A /* main.m */; };
+		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
+		354D0D351C48D32D004D2AA1 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D321C48D32D004D2AA1 /* chat.png */; };
+		354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D331C48D32D004D2AA1 /* homeScreen.png */; };
+		354D0D371C48D32D004D2AA1 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D341C48D32D004D2AA1 /* settings.png */; };
+		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
+		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
+		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
+		354D0D671C48D504004D2AA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D621C48D504004D2AA1 /* main.m */; };
+		354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */; };
+		354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
+		354D0D701C48D6D8004D2AA1 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6D1C48D6D8004D2AA1 /* KonotorModels.bundle */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
 		356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19F21B9DBF14002F1E2A /* ViewController.m */; };
-		356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 356F19F41B9DBF14002F1E2A /* Main.storyboard */; };
-		356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 356F19F71B9DBF14002F1E2A /* Images.xcassets */; };
-		356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */; };
 		356F1A071B9DBF14002F1E2A /* HotlineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F1A061B9DBF14002F1E2A /* HotlineTests.m */; };
 		356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A101B9DC48B002F1E2A /* CoreData.framework */; };
 		356F1A131B9DC492002F1E2A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */; };
@@ -26,33 +32,36 @@
 		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
-		357213851C36EA5E00E35E09 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 357213841C36EA5E00E35E09 /* KonotorModels.bundle */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
-		35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */; };
-		35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */; };
-		CE80CA511BE36A9900473E49 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		35591BA11B9EDE9100BC0B60 /* PBXContainerItemProxy */ = {
+		354D0D1D1C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
+			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 35591AB11B9ED58100BC0B60;
 			remoteInfo = HotlineSDK;
 		};
-		35591BA31B9EDE9100BC0B60 /* PBXContainerItemProxy */ = {
+		354D0D1F1C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
+			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 35591A9A1B9ED53700BC0B60;
 			remoteInfo = HotlineAPI;
 		};
-		35591BA71B9EDF0900BC0B60 /* PBXContainerItemProxy */ = {
+		354D0D231C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
+			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 358DD4EE1BB01A2100B36E4E;
+			remoteInfo = KonotorModels;
+		};
+		354D0D251C48D135004D2AA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 35591A9B1B9ED58100BC0B60;
 			remoteInfo = HotlineSDK;
@@ -64,34 +73,26 @@
 			remoteGlobalIDString = 356F19E61B9DBF14002F1E2A;
 			remoteInfo = Hotline;
 		};
-		358DD4E71BB012CA00B36E4E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 358DD4D71BB0126000B36E4E;
-			remoteInfo = HotlineDB;
-		};
-		358DD4F71BB01A6900B36E4E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 358DD4EE1BB01A2100B36E4E;
-			remoteInfo = KonotorModels;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = SDK/HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
+		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
+		354D0D321C48D32D004D2AA1 /* chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat.png; sourceTree = "<group>"; };
+		354D0D331C48D32D004D2AA1 /* homeScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeScreen.png; sourceTree = "<group>"; };
+		354D0D341C48D32D004D2AA1 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		354D0D5D1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		354D0D5F1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		354D0D601C48D504004D2AA1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		354D0D611C48D504004D2AA1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		354D0D621C48D504004D2AA1 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		354D0D6B1C48D6D8004D2AA1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
+		354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
+		354D0D6D1C48D6D8004D2AA1 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		356F19EB1B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		356F19EC1B9DBF14002F1E2A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		356F19EE1B9DBF14002F1E2A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		356F19EF1B9DBF14002F1E2A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		356F19F11B9DBF14002F1E2A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		356F19F21B9DBF14002F1E2A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		356F19F51B9DBF14002F1E2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		356F19F71B9DBF14002F1E2A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		356F19FA1B9DBF14002F1E2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		356F1A001B9DBF14002F1E2A /* HotlineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HotlineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F1A051B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		356F1A061B9DBF14002F1E2A /* HotlineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotlineTests.m; sourceTree = "<group>"; };
@@ -106,12 +107,9 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		357213841C36EA5E00E35E09 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
-		35ED5EDC1BB3EA4600E0052D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
-		35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -120,8 +118,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */,
 				CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */,
-				35591BA91B9EDF0D00BC0B60 /* libHotlineSDK.a in Frameworks */,
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
 				356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */,
@@ -146,15 +144,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		35591B991B9EDE9100BC0B60 /* Products */ = {
+		354D0D171C48D10F004D2AA1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */,
-				35591BA41B9EDE9100BC0B60 /* libHotlineAPI.a */,
-				358DD4E81BB012CA00B36E4E /* HotlineDB.bundle */,
-				358DD4F81BB01A6900B36E4E /* KonotorModels.bundle */,
+				354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */,
+				354D0D201C48D10F004D2AA1 /* libHotlineAPI.a */,
+				354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		354D0D311C48D32D004D2AA1 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				354D0D321C48D32D004D2AA1 /* chat.png */,
+				354D0D331C48D32D004D2AA1 /* homeScreen.png */,
+				354D0D341C48D32D004D2AA1 /* settings.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		354D0D5B1C48D504004D2AA1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */,
+				354D0D5E1C48D504004D2AA1 /* Main.storyboard */,
+				354D0D601C48D504004D2AA1 /* Images.xcassets */,
+				354D0D611C48D504004D2AA1 /* Info.plist */,
+				354D0D621C48D504004D2AA1 /* main.m */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		354D0D681C48D6D8004D2AA1 /* SDKResources */ = {
+			isa = PBXGroup;
+			children = (
+				354D0D691C48D6D8004D2AA1 /* HLLocalization */,
+				354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */,
+				354D0D6D1C48D6D8004D2AA1 /* KonotorModels.bundle */,
+			);
+			path = SDKResources;
+			sourceTree = "<group>";
+		};
+		354D0D691C48D6D8004D2AA1 /* HLLocalization */ = {
+			isa = PBXGroup;
+			children = (
+				354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */,
+			);
+			path = HLLocalization;
 			sourceTree = "<group>";
 		};
 		356F19DE1B9DBF14002F1E2A = {
@@ -184,24 +221,13 @@
 				356F19F21B9DBF14002F1E2A /* ViewController.m */,
 				35D707141BE2498B0035FD74 /* FDSettingsController.h */,
 				35D707151BE2498B0035FD74 /* FDSettingsController.m */,
-				356F19F41B9DBF14002F1E2A /* Main.storyboard */,
-				356F19F71B9DBF14002F1E2A /* Images.xcassets */,
-				356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */,
+				354D0D311C48D32D004D2AA1 /* Images */,
+				354D0D681C48D6D8004D2AA1 /* SDKResources */,
 				35D707311BE2C1AE0035FD74 /* Utilities */,
-				356F1BA11B9DD1EC002F1E2A /* Resources */,
+				354D0D5B1C48D504004D2AA1 /* Supporting Files */,
 				356F1A201B9DC4D8002F1E2A /* Framework */,
-				356F19EA1B9DBF14002F1E2A /* Supporting Files */,
 			);
 			path = Hotline;
-			sourceTree = "<group>";
-		};
-		356F19EA1B9DBF14002F1E2A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				356F19EB1B9DBF14002F1E2A /* Info.plist */,
-				356F19EC1B9DBF14002F1E2A /* main.m */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		356F1A031B9DBF14002F1E2A /* HotlineTests */ = {
@@ -224,7 +250,7 @@
 		356F1A201B9DC4D8002F1E2A /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */,
+				354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */,
 				356F1C131B9DD23B002F1E2A /* CoreMedia.framework */,
 				356F1C111B9DD223002F1E2A /* AudioToolbox.framework */,
 				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
@@ -242,38 +268,12 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		356F1BA11B9DD1EC002F1E2A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				357213841C36EA5E00E35E09 /* KonotorModels.bundle */,
-				35ED5ED91BB3EA4600E0052D /* HotlineResources */,
-			);
-			path = Resources;
-			sourceTree = SOURCE_ROOT;
-		};
 		35D707311BE2C1AE0035FD74 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		35ED5ED91BB3EA4600E0052D /* HotlineResources */ = {
-			isa = PBXGroup;
-			children = (
-				35ED5EDA1BB3EA4600E0052D /* HLLocalization */,
-				35ED5EDD1BB3EA4600E0052D /* HLResources.bundle */,
-			);
-			path = HotlineResources;
-			sourceTree = "<group>";
-		};
-		35ED5EDA1BB3EA4600E0052D /* HLLocalization */ = {
-			isa = PBXGroup;
-			children = (
-				35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */,
-			);
-			path = HLLocalization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,7 +291,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				35591BA81B9EDF0900BC0B60 /* PBXTargetDependency */,
+				354D0D261C48D135004D2AA1 /* PBXTargetDependency */,
 			);
 			name = Hotline;
 			productName = Hotline;
@@ -322,15 +322,21 @@
 		356F19DF1B9DBF14002F1E2A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Freshdesk;
 				TargetAttributes = {
 					356F19E61B9DBF14002F1E2A = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = PKUQ4ZWJH3;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					356F19FF1B9DBF14002F1E2A = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = EUX55S9U4T;
 						TestTargetID = 356F19E61B9DBF14002F1E2A;
 					};
 				};
@@ -348,8 +354,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 35591B991B9EDE9100BC0B60 /* Products */;
-					ProjectRef = 35591B981B9EDE9100BC0B60 /* HotlineSDK.xcodeproj */;
+					ProductGroup = 354D0D171C48D10F004D2AA1 /* Products */;
+					ProjectRef = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -361,32 +367,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		35591BA21B9EDE9100BC0B60 /* libHotlineSDK.a */ = {
+		354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libHotlineSDK.a;
-			remoteRef = 35591BA11B9EDE9100BC0B60 /* PBXContainerItemProxy */;
+			remoteRef = 354D0D1D1C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		35591BA41B9EDE9100BC0B60 /* libHotlineAPI.a */ = {
+		354D0D201C48D10F004D2AA1 /* libHotlineAPI.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libHotlineAPI.a;
-			remoteRef = 35591BA31B9EDE9100BC0B60 /* PBXContainerItemProxy */;
+			remoteRef = 354D0D1F1C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		358DD4E81BB012CA00B36E4E /* HotlineDB.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = HotlineDB.bundle;
-			remoteRef = 358DD4E71BB012CA00B36E4E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		358DD4F81BB01A6900B36E4E /* KonotorModels.bundle */ = {
+		354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = KonotorModels.bundle;
-			remoteRef = 358DD4F71BB01A6900B36E4E /* PBXContainerItemProxy */;
+			remoteRef = 354D0D231C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -396,13 +395,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE80CA511BE36A9900473E49 /* (null) in Resources */,
-				35ED5F061BB3EA4600E0052D /* HLResources.bundle in Resources */,
-				356F19F61B9DBF14002F1E2A /* Main.storyboard in Resources */,
-				356F19FB1B9DBF14002F1E2A /* LaunchScreen.xib in Resources */,
-				357213851C36EA5E00E35E09 /* KonotorModels.bundle in Resources */,
-				35ED5F051BB3EA4600E0052D /* HLLocalizable.strings in Resources */,
-				356F19F81B9DBF14002F1E2A /* Images.xcassets in Resources */,
+				354D0D701C48D6D8004D2AA1 /* KonotorModels.bundle in Resources */,
+				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
+				354D0D351C48D32D004D2AA1 /* chat.png in Resources */,
+				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
+				354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */,
+				354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */,
+				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
+				354D0D371C48D32D004D2AA1 /* settings.png in Resources */,
+				354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,11 +437,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				354D0D671C48D504004D2AA1 /* main.m in Sources */,
 				35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */,
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
 				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
-				356F19ED1B9DBF14002F1E2A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,10 +456,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		35591BA81B9EDF0900BC0B60 /* PBXTargetDependency */ = {
+		354D0D261C48D135004D2AA1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = HotlineSDK;
-			targetProxy = 35591BA71B9EDF0900BC0B60 /* PBXContainerItemProxy */;
+			targetProxy = 354D0D251C48D135004D2AA1 /* PBXContainerItemProxy */;
 		};
 		356F1A021B9DBF14002F1E2A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -468,26 +469,26 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		356F19F41B9DBF14002F1E2A /* Main.storyboard */ = {
+		354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				356F19F51B9DBF14002F1E2A /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		356F19F91B9DBF14002F1E2A /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				356F19FA1B9DBF14002F1E2A /* Base */,
+				354D0D5D1C48D504004D2AA1 /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
-		35ED5EDB1BB3EA4600E0052D /* HLLocalizable.strings */ = {
+		354D0D5E1C48D504004D2AA1 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				35ED5EDC1BB3EA4600E0052D /* en */,
+				354D0D5F1C48D504004D2AA1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				354D0D6B1C48D6D8004D2AA1 /* en */,
 			);
 			name = HLLocalizable.strings;
 			sourceTree = "<group>";
@@ -586,10 +587,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
-				INFOPLIST_FILE = Hotline/Info.plist;
+				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -604,10 +605,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
-				INFOPLIST_FILE = Hotline/Info.plist;
+				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -618,6 +619,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -630,6 +633,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Freshdesk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hotline.app/Hotline";
 			};
 			name = Debug;
@@ -638,6 +642,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -646,6 +652,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Freshdesk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hotline.app/Hotline";
 			};
 			name = Release;

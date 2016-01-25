@@ -9,10 +9,18 @@
 #import "FDSettingsController.h"
 #import "HotlineSDK/Hotline.h"
 
-@interface FDSettingsController () <UITableViewDelegate, UITableViewDataSource>
+@interface FDSettingsController ()
+@property (weak, nonatomic) IBOutlet UIScrollView *containerView;
+@property (weak, nonatomic) IBOutlet UITextField *domainField;
+@property (weak, nonatomic) IBOutlet UITextField *appIDField;
+@property (weak, nonatomic) IBOutlet UITextField *appKeyField;
+@property (weak, nonatomic) IBOutlet UITextField *userNameField;
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *phoneNumField;
+@property (weak, nonatomic) IBOutlet UITextField *externalIDField;
 
-@property (nonatomic, strong) NSArray *items;
-@property(nonatomic, strong) UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITextField *keyField;
+@property (weak, nonatomic) IBOutlet UITextField *valueField;
 
 @end
 
@@ -20,63 +28,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.items = @[@"List/Grid", @"Clear user data"];
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    self.navigationItem.leftBarButtonItem = closeButton;
-    [self setSubviews];
+    self.containerView.contentSize = CGSizeMake(320, 750);
+    [self updateFields];
 }
 
+- (IBAction)pushData:(id)sender {
+    [[Hotline sharedInstance]setCustomUserPropertyForKey:self.keyField.text withValue:self.valueField.text];
+}
 
--(void)closeButton:(id)sender{
+- (IBAction)closeButtonPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)setSubviews{
-    self.tableView = [[UITableView alloc]init];
-    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    [self.view addSubview:self.tableView];
-    
-    NSDictionary *views = @{@"tableView" : self.tableView };
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|" options:0 metrics:nil views:views]];
+- (IBAction)clearDataPressed:(id)sender {
+    [self updateFields];
+    [[Hotline sharedInstance]clearUserData];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = @"HLSettingsCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-    }
+-(void)updateFields{
+    self.domainField.text = [Hotline sharedInstance].config.domain;
+    self.appIDField.text = [Hotline sharedInstance].config.appID;
+    self.appKeyField.text = [Hotline sharedInstance].config.appKey;
     
-    NSString *item = self.items[indexPath.row];
-    
-    if ([item isEqualToString:@"List/Grid"]) {
-        UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
-        cell.accessoryView = switchView;
-        [switchView setOn:[Hotline sharedInstance].displaySolutionsAsGrid animated:NO];
-        [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-    }
-    
-    cell.textLabel.text = self.items[indexPath.row];
-    return cell;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.items.count;
-}
-
-- (void) switchChanged:(id)sender {
-    UISwitch* switchControl = sender;
-    [Hotline sharedInstance].displaySolutionsAsGrid = switchControl.on;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *item = self.items[indexPath.row];
-    if ([item isEqualToString:@"Clear user data"]) {
-        [[Hotline sharedInstance]clearUserData];
-    }
+    self.userNameField.text = [HotlineUser sharedInstance].userName;
+    self.emailField.text = [HotlineUser sharedInstance].emailAddress;
+    self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
+    self.externalIDField.text = [HotlineUser sharedInstance].externalID;
 }
 
 @end
