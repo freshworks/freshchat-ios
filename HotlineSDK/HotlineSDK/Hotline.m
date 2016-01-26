@@ -68,8 +68,8 @@
 -(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{
     self.config = config;
     [self storeConfig:config];
-    [self registerUser];
     [self updateUser:user];
+    [self registerUser];
     [HLCoreServices DAUCall];
     [self updateAppVersion];
     [self updateSDKBuildNumber];
@@ -98,19 +98,30 @@
 }
 
 -(void)storeConfig:(HotlineConfig *)config{
-    if ([self hasUpdatedConfigWith:config]) {
+    if ([self hasUpdatedConfig:config]) {
         KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
         [dataManager deleteAllSolutions:^(NSError *error) {
             FDLog(@"All solutions deleted");
             [dataManager deleteAllIndices:^(NSError *error) {
                 FDLog(@"Index cleared");
                 [self clearUserData];
+                [self updateConfig:config];
             }];
         }];
     }
-    
+    [self updateConfig:config];
+}
+
+
+-(BOOL)hasUpdatedConfig:(HotlineConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    
+    NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+}
+
+-(void)updateConfig:(HotlineConfig *)config{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
@@ -118,13 +129,6 @@
         [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
         [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     }
-}
-
--(BOOL)hasUpdatedConfigWith:(HotlineConfig *)config{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
-    NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
 }
 
 -(void)updateUser:(HotlineUser *)user{
