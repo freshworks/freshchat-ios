@@ -37,19 +37,19 @@
 -(NSURLSessionDataTask *)request:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler{
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        NSInteger statusCode = httpResponse.statusCode;
-                
+        NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
+        FDServiceRequestInfo *requestInfo = [[FDServiceRequestInfo alloc]initWithRequest:request andResponse:response];
+        requestInfo.responseHTTPBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
         if (statusCode >= 400) {
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             error = [NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info];
-            if (handler) handler(nil, error);
+            if (handler) handler(requestInfo,error);
         }else{
             if (!error) {
-                NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                if (handler) handler(responseDictionary, nil);
+                if (handler) handler(requestInfo,nil);
             }else{
-                if (handler) handler(nil,error);
+                if (handler) handler(requestInfo,error);
             }
         }
         
