@@ -11,8 +11,15 @@
 @interface FDResponseInfo : NSObject
 
 @property (nonatomic, strong) NSURLResponse *response;
-@property (nonatomic, strong) id responseHTTPBody;
 
--(instancetype)initWithResponse:(NSURLResponse *)response;
+-(instancetype)initWithResponse:(NSURLResponse *)response andHTTPBody:(NSData *)data;
+
+-(BOOL)isArray;
+
+-(BOOL)isDict;
+
+-(NSArray *)responseAsArray;
+
+-(NSDictionary *)responseAsDictionary;
 
 @end

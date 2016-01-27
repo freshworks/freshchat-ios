@@ -63,7 +63,7 @@
     request.HTTPBody = userData;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            NSString *userAlias = responseInfo.responseHTTPBody[@"alias"];
+            NSString *userAlias = [responseInfo responseAsDictionary][@"alias"];
             [FDUtilities storeUserAlias:userAlias];
             FDLog(@"User registered successfully 👍");
             if (handler) handler(nil);

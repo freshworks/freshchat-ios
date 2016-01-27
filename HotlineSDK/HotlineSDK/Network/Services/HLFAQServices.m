@@ -33,7 +33,7 @@
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        [self importSolutions:responseInfo.responseHTTPBody];
+        [self importSolutions:[responseInfo responseAsDictionary]];
         [FDIndexManager setIndexingCompleted:NO];
         [FDIndexManager updateIndex];
         [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
@@ -95,7 +95,7 @@
     request.HTTPBody = postData;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
-            FDLog(@"Article vote status: %@",responseInfo.responseHTTPBody);
+            FDLog(@"Article vote status: %@",[responseInfo responseAsDictionary]);
         }else{
             FDLog(@"Article voting failed :%@", error);
             FDLog(@"Response %@", responseInfo.response);

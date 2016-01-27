@@ -170,7 +170,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     [request setRelativePath:path andURLParams:@[token]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            [self importChannels:responseInfo.responseHTTPBody hanlder:handler];
+            [self importChannels:[responseInfo responseAsArray] hanlder:handler];
         }else{
             if (handler) handler(nil, error);
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
@@ -179,11 +179,10 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     return task;
 }
 
--(void)importChannels:(NSDictionary *)responseObject hanlder:(void (^)(NSArray *channels, NSError *error))handler;{
+-(void)importChannels:(NSArray *)channels hanlder:(void (^)(NSArray *channels, NSError *error))handler;{
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
-        NSArray *channels = (NSArray *)responseObject;
         NSInteger channelCount = [channels count];
         HLChannel *channel = nil;
         if (channelCount!=0) {
