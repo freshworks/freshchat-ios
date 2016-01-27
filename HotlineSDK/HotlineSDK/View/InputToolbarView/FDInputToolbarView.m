@@ -51,12 +51,14 @@
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
         UIImage *attachmentImage = [self.theme getImageWithKey:IMAGE_ATTACH_ICON];
         [attachButton setImage:attachmentImage forState:UIControlStateNormal];
+        attachButton.backgroundColor = [UIColor clearColor];
         [attachButton addTarget:self action:@selector(attachmentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
         micButton.translatesAutoresizingMaskIntoConstraints = NO;
         UIImage *micImage = [[HLTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
         [micButton setImage:micImage forState:UIControlStateNormal];
+        micButton.backgroundColor = [UIColor clearColor];
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
