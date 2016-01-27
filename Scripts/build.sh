@@ -15,7 +15,7 @@ HEADER
 }
 
 VERSION=1.0
-BUILD_NUMBER=`date +%Y%m%d%H%M`
+#BUILD_NUMBER=`date +%Y%m%d%H%M`
 
 #Clear Derived Data to have clean build
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
@@ -30,6 +30,8 @@ CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
 #fix version in file
 cp ${CONSTANTS_FILE} ${CONSTANTS_FILE}.original
 sed -e "s/HOTLINE_SDK_VERSION\(.*\)/HOTLINE_SDK_VERSION @\"${VERSION}\"/g" -i .old ${CONSTANTS_FILE}
+BUILD_NUMBER=`cat ${CONSTANTS_FILE} | grep HOTLINE_SDK_BUILD_NUMBER | awk -F'"' ' {print $2 }'`
+BUILD_NUMBER=`expr $BUILD_NUMBER + 1`
 sed -e "s/HOTLINE_SDK_BUILD_NUMBER\(.*\)/HOTLINE_SDK_BUILD_NUMBER @\"${BUILD_NUMBER}\"/g" -i .old ${CONSTANTS_FILE}
 
 
@@ -93,7 +95,6 @@ Documentation   : <API integration page>
 Support         : 
 Email           : support@freshdesk.com 
 Version         : $VERSION
-Build           : ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1` 
 
 RELEASEINFO
 )
@@ -109,3 +110,4 @@ cd ..
 mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
 rm ${CONSTANTS_FILE}.old
 printHeader "All Set for Version $VERSION.  Package Size = `ls -lh dist/*.zip | awk '{print $5}'` "
+printHeader " Build           : ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
