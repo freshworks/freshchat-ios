@@ -18,7 +18,7 @@
 #import "HLMacros.h"
 #import "FDUtilities.h"
 #import "FDIndexManager.h"
-#import "FDServiceRequestInfo.h"
+#import "FDResponseInfo.h"
 
 @implementation HLFAQServices
 
@@ -32,8 +32,8 @@
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
-        [self importSolutions:requestInfo.responseHTTPBody];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        [self importSolutions:responseInfo.responseHTTPBody];
         [FDIndexManager setIndexingCompleted:NO];
         [FDIndexManager updateIndex];
         [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
@@ -93,12 +93,12 @@
     }
     NSData *postData = [NSJSONSerialization dataWithJSONObject:voteInfo options:0 error:nil];
     request.HTTPBody = postData;
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo,NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
-            FDLog(@"Article vote status: %@",requestInfo.responseHTTPBody);
+            FDLog(@"Article vote status: %@",responseInfo.responseHTTPBody);
         }else{
             FDLog(@"Article voting failed :%@", error);
-            FDLog(@"Response %@", requestInfo.response);
+            FDLog(@"Response %@", responseInfo.response);
         }
     }];
     return task;

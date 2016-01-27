@@ -38,18 +38,18 @@
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-        FDServiceRequestInfo *requestInfo = [[FDServiceRequestInfo alloc]initWithRequest:request andResponse:response];
-        requestInfo.responseHTTPBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response];
+        responseInfo.responseHTTPBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         
         if (statusCode >= 400) {
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             error = [NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info];
-            if (handler) handler(requestInfo,error);
+            if (handler) handler(responseInfo,error);
         }else{
             if (!error) {
-                if (handler) handler(requestInfo,nil);
+                if (handler) handler(responseInfo,nil);
             }else{
-                if (handler) handler(requestInfo,error);
+                if (handler) handler(responseInfo,error);
             }
         }
         

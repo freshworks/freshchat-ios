@@ -14,7 +14,7 @@
 #import "FDUtilities.h"
 #import "KonotorDataManager.h"
 #import "HLConstants.h"
-#import "FDServiceRequestInfo.h"
+#import "FDResponseInfo.h"
 
 @implementation HLCoreServices
 
@@ -29,13 +29,13 @@
     [request setRelativePath:path andURLParams:@[appKey,clientVersion,@"clientType=2"]];
     request.HTTPMethod = HTTP_METHOD_PUT;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             [store setObject:HOTLINE_SDK_BUILD_NUMBER forKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
             FDLog(@"SDK build number updated to server");
         }else{
             FDLog(@"SDK build number could not be updated %@", error);
-            FDLog(@"Response : %@", requestInfo.response);
+            FDLog(@"Response : %@", responseInfo.response);
         }
     }];
     return task;
@@ -61,15 +61,15 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     request.HTTPMethod = HTTP_METHOD_POST;
     request.HTTPBody = userData;
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            NSString *userAlias = requestInfo.responseHTTPBody[@"alias"];
+            NSString *userAlias = responseInfo.responseHTTPBody[@"alias"];
             [FDUtilities storeUserAlias:userAlias];
             FDLog(@"User registered successfully 👍");
             if (handler) handler(nil);
         }else{
             FDLog(@"User registration failed :%@", error);
-            FDLog(@"Response : %@", requestInfo.response);
+            FDLog(@"Response : %@", responseInfo.response);
             if (handler) handler(error);
         }
     }];
@@ -87,13 +87,13 @@
     request.HTTPMethod = HTTP_METHOD_PUT;
     [request setRelativePath:path andURLParams:@[@"notification_type=2", notificationID, appKey]];
 
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
             FDLog(@"Device token updated on server 👍");
         }else{
             FDLog(@"Could not register app :%@", error);
-            FDLog(@"Response : %@", requestInfo.response);
+            FDLog(@"Response : %@", responseInfo.response);
         }
     }];
     return task;
@@ -111,14 +111,14 @@
     request.HTTPMethod = HTTP_METHOD_PUT;
     request.HTTPBody = encodedInfo;
     [request setRelativePath:path andURLParams:@[appKey]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"Pushed properties to server %@", info);
             if (handler) handler(nil);
         }else{
             if (handler) handler(error);
             FDLog(@"Could not update user properties %@", error);
-            FDLog(@"Response : %@", requestInfo.response);
+            FDLog(@"Response : %@", responseInfo.response);
         }
     }];
     return task;
@@ -134,12 +134,12 @@
     request.HTTPMethod = HTTP_METHOD_PUT;
     [request setRelativePath:path andURLParams:@[appKey]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"DAU call made");
         }else{
             FDLog(@"Could not make DAU call %@", error);
-            FDLog(@"Response : %@", requestInfo.response);
+            FDLog(@"Response : %@", responseInfo.response);
         }
     }];
     return task;

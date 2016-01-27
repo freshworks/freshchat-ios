@@ -1,5 +1,5 @@
 //
-//  FDServiceRequestInfo.h
+//  FDResponseInfo.h
 //  HotlineSDK
 //
 //  Created by Aravinth Chandran on 27/01/16.
@@ -8,14 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FDServiceRequestInfo : NSObject
+@interface FDResponseInfo : NSObject
 
-@property (nonatomic, strong) NSURLRequest *request;
 @property (nonatomic, strong) NSURLResponse *response;
 @property (nonatomic, strong) id responseHTTPBody;
 
--(NSDictionary *)requestHTTPBody;
-
--(instancetype)initWithRequest:(NSURLRequest *)request andResponse:(NSURLResponse *)response;
+-(instancetype)initWithResponse:(NSURLResponse *)response;
 
 @end

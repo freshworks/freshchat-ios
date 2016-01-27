@@ -20,7 +20,7 @@
 #import "KonotorMessage.h"
 #import "AFHTTPClient.h"
 #import "AFNetworking.h"
-#import "FDServiceRequestInfo.h"
+#import "FDResponseInfo.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
@@ -168,12 +168,12 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDServiceRequestInfo *requestInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            [self importChannels:requestInfo.responseHTTPBody hanlder:handler];
+            [self importChannels:responseInfo.responseHTTPBody hanlder:handler];
         }else{
             if (handler) handler(nil, error);
-            FDLog(@"channel fetch failed :%@ \n response : %@",error, requestInfo.response);
+            FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
         }
     }];
     return task;
