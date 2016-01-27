@@ -60,7 +60,8 @@ do
   xcodebuild $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target HotlineSDK -sdk $SDK -arch $ARCH -configuration Release clean build
   if [ $? -ne 0 ] 
   then 
-    printHeader "build Failed :(" 
+    printHeader "build Failed :("
+    osascript -e 'display notification ":(" with title "Build failed"'
     exit
   fi;
 
@@ -111,3 +112,4 @@ mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE}
 rm ${CONSTANTS_FILE}.old
 printHeader "All Set for Version $VERSION.  Package Size = `ls -lh dist/*.zip | awk '{print $5}'` "
 printHeader " Build           : ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
+osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
