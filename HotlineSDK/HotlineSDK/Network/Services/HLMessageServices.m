@@ -20,6 +20,7 @@
 #import "KonotorMessage.h"
 #import "AFHTTPClient.h"
 #import "AFNetworking.h"
+#import "FDResponseInfo.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
@@ -167,21 +168,21 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(id responseObject, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            [self importChannels:responseObject hanlder:handler];
+            [self importChannels:[responseInfo responseAsArray] handler:handler];
         }else{
             if (handler) handler(nil, error);
+            FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
         }
     }];
     return task;
 }
 
--(void)importChannels:(NSDictionary *)responseObject hanlder:(void (^)(NSArray *channels, NSError *error))handler;{
+-(void)importChannels:(NSArray *)channels handler:(void (^)(NSArray *channels, NSError *error))handler;{
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
-        NSArray *channels = (NSArray *)responseObject;
         NSInteger channelCount = [channels count];
         HLChannel *channel = nil;
         if (channelCount!=0) {
