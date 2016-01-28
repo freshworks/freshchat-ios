@@ -26,16 +26,11 @@
         self.theme = [HLTheme sharedInstance];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         self.imageView.backgroundColor = [self.theme gridViewItemBackgroundColor];
+        self.imageView.clipsToBounds = YES;
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
-        
-        CGSize maximumLabelSize = CGSizeMake(296, FLT_MAX);
-        CGSize expectedLabelSize = [self.label.text sizeWithFont:[[HLTheme sharedInstance] tableViewCellFont] constrainedToSize:maximumLabelSize lineBreakMode:self.label.lineBreakMode];
-        //adjust the label the the new height.
-        CGRect newFrame = self.label.frame;
-        newFrame.size.height = expectedLabelSize.height;
-        self.label.frame = newFrame;
-        self.label = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, self.bounds.size.width, 40)];
+    
+        self.label = [[UILabel alloc]init];
         self.label.font = [self.theme categoryTitleFont];
         self.label.lineBreakMode=NSLineBreakByTruncatingTail;
         self.label.textAlignment = NSTextAlignmentCenter;
@@ -47,7 +42,6 @@
         [self.contentView addSubview:self.label];
         
         NSDictionary *views = @{ @"imageView" : self.imageView, @"label" : self.label};
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
         [self.contentView addConstraint:
          [NSLayoutConstraint constraintWithItem:self.imageView
                                       attribute:NSLayoutAttributeCenterX
@@ -62,9 +56,25 @@
                                       relatedBy:NSLayoutRelationEqual
                                          toItem:self.contentView
                                       attribute:NSLayoutAttributeCenterY
-                                     multiplier:1
+                                     multiplier:0.8
                                        constant:0]];
-        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
+                                                                     attribute:NSLayoutAttributeWidth
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:self.contentView
+                                                                     attribute:NSLayoutAttributeWidth
+                                                                    multiplier:0.5
+                                                                      constant:0]];
+        
+        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
+                                                                     attribute:NSLayoutAttributeHeight
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:self.contentView
+                                                                     attribute:NSLayoutAttributeHeight
+                                                                    multiplier:0.5
+                                                                      constant:0]];
+        
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-|" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView]-[label]" options:0 metrics:nil views:views]];
     }
     return self;
@@ -72,6 +82,7 @@
 
 -(void)prepareForReuse{
     [super prepareForReuse];
+    
 }
 
 -(void)layoutSubviews{

@@ -270,11 +270,12 @@
         cell.backgroundColor = [self.theme itemBackgroundColor];
         cell.layer.borderWidth=0.3f;
         cell.layer.borderColor=[self.theme itemSeparatorColor].CGColor;
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
-            cell.imageView.contentMode = UIViewContentModeCenter;
+            //TODO: Add placeholder image
+            cell.imageView.image = nil;
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
-            [cell.label sizeToFit];
         }
     }
     return cell;
