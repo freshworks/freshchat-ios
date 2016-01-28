@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3503AAE01C58CBDA00A8DFDB /* FDResponseInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3503AADF1C58CBDA00A8DFDB /* FDResponseInfo.m */; };
 		3509983F1C3E77FC0049E269 /* FDNotificationBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 3509983E1C3E77FC0049E269 /* FDNotificationBanner.m */; };
 		350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 350EFDEC1BD673DD00F3410B /* FDIndexManager.m */; };
 		350FB0831C3143A500D31455 /* FDImagePreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 350FB0821C3143A500D31455 /* FDImagePreviewController.m */; };
@@ -126,6 +127,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3503AADE1C58CBDA00A8DFDB /* FDResponseInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDResponseInfo.h; sourceTree = "<group>"; };
+		3503AADF1C58CBDA00A8DFDB /* FDResponseInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDResponseInfo.m; sourceTree = "<group>"; };
 		3509983D1C3E77FC0049E269 /* FDNotificationBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDNotificationBanner.h; sourceTree = "<group>"; };
 		3509983E1C3E77FC0049E269 /* FDNotificationBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDNotificationBanner.m; sourceTree = "<group>"; };
 		350EFDEB1BD673DD00F3410B /* FDIndexManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDIndexManager.h; sourceTree = "<group>"; };
@@ -573,6 +576,8 @@
 				35D9F9E21BBAA7FA008C92E8 /* DataUpdater */,
 				3533F0BF1BB042C2000B2D9A /* Services */,
 				359E3E901BA6D80700B933C5 /* HLAPI.h */,
+				3503AADE1C58CBDA00A8DFDB /* FDResponseInfo.h */,
+				3503AADF1C58CBDA00A8DFDB /* FDResponseInfo.m */,
 				3533F0BB1BB020D3000B2D9A /* HLAPIClient.h */,
 				3533F0BC1BB020D3000B2D9A /* HLAPIClient.m */,
 			);
@@ -819,6 +824,7 @@
 				35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */,
 				35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */,
 				3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */,
+				3503AAE01C58CBDA00A8DFDB /* FDResponseInfo.m in Sources */,
 				358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */,
 				35591B921B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */,
