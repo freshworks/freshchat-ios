@@ -105,7 +105,7 @@ typedef struct {
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = @"Messages";
+    parent.title = self.channel.name;
     self.messagesDisplayedCount = 20;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
