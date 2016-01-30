@@ -226,6 +226,35 @@
     }];
 }
 
+-(UIViewController*) getHotlineViewController{
+    
+   UIViewController* containerController=nil;
+
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+    request.sortDescriptors = @[position];
+    NSArray *results = [context executeFetchRequest:request error:nil];
+    HLContainerController *preferredController = nil;
+    if (results.count == 1) {
+        FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:results.firstObject
+                                                                           andPresentModally:YES];
+        preferredController = [[HLContainerController alloc]initWithController:messageController];
+        containerController=(UIViewController*)preferredController;
+        
+    }else{
+        HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
+        preferredController = [[HLContainerController alloc]initWithController:channelViewController];
+        containerController=(UIViewController*)preferredController;
+    }
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+
+    return navigationController;
+}
+
+
 #pragma mark Push notifications
 
 -(void)addDeviceToken:(NSData *)deviceToken {

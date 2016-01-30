@@ -49,6 +49,8 @@
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
 
+-(UIViewController*) getHotlineViewController;
+
 /**
  *  Get the last updated unread messages count.
  *

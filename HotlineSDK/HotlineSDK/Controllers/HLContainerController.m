@@ -28,6 +28,10 @@
     return self;
 }
 
+-(UIRectEdge)edgesForExtendedLayout{
+    return UIRectEdgeNone;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];

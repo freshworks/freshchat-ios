@@ -18,6 +18,27 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self hotlineIntegration];
     [self registerAppForNotifications];
+    
+    UIViewController* mainView=[self.window rootViewController];
+    UIViewController* simpleViewController=[[UIViewController alloc] init];
+    [simpleViewController setTitle:@"TabTwo"];
+    [mainView setTitle:@"TabOne"];
+    
+    UITabBarController* tabBarController=[[UITabBarController alloc] init];
+    UIViewController* channelsView=[[Hotline sharedInstance] getHotlineViewController];
+    [channelsView setTitle:@"TabThree"];
+    
+    [tabBarController setViewControllers:[NSArray arrayWithObjects:mainView,simpleViewController,channelsView,nil]];
+    [tabBarController.tabBar setClipsToBounds:NO];
+    
+    [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
+    
+    [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
+    
+    
+    [self.window setRootViewController:tabBarController];
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
