@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3515E4411C5F9180001B9CEE /* option.png in Resources */ = {isa = PBXBuildFile; fileRef = 3515E4401C5F9180001B9CEE /* option.png */; };
 		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
 		354D0D351C48D32D004D2AA1 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D321C48D32D004D2AA1 /* chat.png */; };
-		354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D331C48D32D004D2AA1 /* homeScreen.png */; };
-		354D0D371C48D32D004D2AA1 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D341C48D32D004D2AA1 /* settings.png */; };
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
@@ -76,10 +75,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3515E4401C5F9180001B9CEE /* option.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = option.png; sourceTree = "<group>"; };
 		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		354D0D321C48D32D004D2AA1 /* chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat.png; sourceTree = "<group>"; };
-		354D0D331C48D32D004D2AA1 /* homeScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeScreen.png; sourceTree = "<group>"; };
-		354D0D341C48D32D004D2AA1 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		354D0D5D1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		354D0D5F1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		354D0D601C48D504004D2AA1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -157,9 +155,8 @@
 		354D0D311C48D32D004D2AA1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3515E4401C5F9180001B9CEE /* option.png */,
 				354D0D321C48D32D004D2AA1 /* chat.png */,
-				354D0D331C48D32D004D2AA1 /* homeScreen.png */,
-				354D0D341C48D32D004D2AA1 /* settings.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -401,9 +398,8 @@
 				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
 				354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */,
 				354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */,
+				3515E4411C5F9180001B9CEE /* option.png in Resources */,
 				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
-				354D0D371C48D32D004D2AA1 /* settings.png in Resources */,
-				354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
