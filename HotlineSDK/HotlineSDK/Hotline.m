@@ -112,12 +112,17 @@
     [self updateConfig:config];
 }
 
-
 -(BOOL)hasUpdatedConfig:(HotlineConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+    if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])) {
+        return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+    }else{
+        //This is first launch, do not treat this as config update.
+        FDLog(@"First launch");
+        return NO;
+    }
 }
 
 -(void)updateConfig:(HotlineConfig *)config{
