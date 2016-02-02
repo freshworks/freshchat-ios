@@ -47,7 +47,6 @@
 #define LOC_AUDIO_RECORDING @"audio_recording"
 #define LOC_AUDIO_RECORDING_STOPPED @"audio_recording_stopped"
 
-#define LOC_IMAGE_ATTACHMENT_OPTIONS @"image_attachment_options"
 #define LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT @"image_attachment_cancel_button_text"
 #define LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT @"image_attachment_select_existing_image"
 #define LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT @"image_attachment_select_new_image"

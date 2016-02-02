@@ -112,12 +112,17 @@
     [self updateConfig:config];
 }
 
-
 -(BOOL)hasUpdatedConfig:(HotlineConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+    if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])) {
+        return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+    }else{
+        //This is first launch, do not treat this as config update.
+        FDLog(@"First launch");
+        return NO;
+    }
 }
 
 -(void)updateConfig:(HotlineConfig *)config{
@@ -136,12 +141,12 @@
     NSMutableDictionary *userInfo = [NSMutableDictionary new];
     
     if (user) {
-        if (user.userName) {
+        if (user.userName && ![user.userName isEqualToString:@""]) {
             [store setObject:user.userName forKey:HOTLINE_DEFAULTS_USER_NAME];
             userInfo[@"name"] = user.userName;
         }
         
-        if ([FDUtilities isValidEmail:user.emailAddress]) {
+        if (user.emailAddress && [FDUtilities isValidEmail:user.emailAddress]) {
             [store setObject:user.emailAddress forKey:HOTLINE_DEFAULTS_USER_EMAIL];
             userInfo[@"email"] = user.emailAddress;
         }else{
@@ -150,12 +155,14 @@
             [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
         }
         
-        if (user.phoneNumber) {
+        //TODO: Need to add country code, once backend allows it
+        
+        if (user.phoneNumber && ![user.phoneNumber isEqualToString:@""]) {
             [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
             userInfo[@"phone"] = user.phoneNumber;
         }
         
-        if (user.externalID) {
+        if (user.externalID && ![user.externalID isEqualToString:@""]) {
             [store setObject:user.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
             userInfo[@"identifier"] = user.externalID;
         }

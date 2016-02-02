@@ -45,6 +45,9 @@
     [super viewDidLoad];
     [self setupSubviews];
     
+    [self setupTap];
+    self.view.userInteractionEnabled=YES;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -59,12 +62,14 @@
     if(!_theme) _theme = [HLTheme sharedInstance];
     return _theme;
 }
-
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self setupTap];
-    self.view.userInteractionEnabled=YES;
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 -(void)setupTap{
@@ -115,12 +120,10 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
     [self.view addSubview:self.tableView];
-
     
     [self setEmptySearchResultView];
 
     [self.view addSubview:self.searchBar];
-
     
     NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|"
@@ -297,6 +300,7 @@
         articlesDetailController.articleDescription = article.articleDescription;
         articlesDetailController.articleID = article.articleID;
         articlesDetailController.articleTitle = article.title;
+        articlesDetailController.isFromSearchView = TRUE;
         HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController];
         [self.navigationController pushViewController:containerController animated:YES];
     }
@@ -346,7 +350,7 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:NO];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
