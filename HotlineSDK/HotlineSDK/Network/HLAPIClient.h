@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "HLAPI.h"
+#import "FDResponseInfo.h"
 
 @interface HLAPIClient : NSObject
 
-typedef void(^HLNetworkCallback)(id responseObject, NSError *error);
+typedef void(^HLNetworkCallback)(FDResponseInfo *responseInfo, NSError *error);
 
 +(id)sharedInstance;
 

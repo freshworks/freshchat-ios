@@ -1,0 +1,45 @@
+//
+//  FDResponseInfo.h
+//  HotlineSDK
+//
+//  Created by Aravinth Chandran on 27/01/16.
+//  Copyright © 2016 Freshdesk. All rights reserved.
+//
+
+#import "FDResponseInfo.h"
+
+@interface FDResponseInfo ()
+
+@property (nonatomic, strong) id responseBody;
+@end
+
+@implementation FDResponseInfo
+
+-(instancetype)initWithResponse:(NSURLResponse *)response andHTTPBody:(NSData *)data{
+    self = [super init];
+    if (self) {
+        self.response = response;
+        if(data){
+            self.responseBody = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        }
+    }
+    return self;
+}
+
+-(BOOL)isArray{
+    return [self.responseBody isKindOfClass:[NSArray class]];
+}
+
+-(BOOL)isDict{
+    return [self.responseBody isKindOfClass:[NSDictionary class]];
+}
+
+-(NSDictionary *)responseAsDictionary {
+    return (NSDictionary *)self.responseBody;
+}
+
+-(NSArray *)responseAsArray{
+    return (NSArray *)self.responseBody;
+}
+
+@end
