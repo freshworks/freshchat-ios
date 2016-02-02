@@ -21,14 +21,10 @@
 		356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19F21B9DBF14002F1E2A /* ViewController.m */; };
 		356F1A071B9DBF14002F1E2A /* HotlineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F1A061B9DBF14002F1E2A /* HotlineTests.m */; };
 		356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A101B9DC48B002F1E2A /* CoreData.framework */; };
-		356F1A131B9DC492002F1E2A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */; };
 		356F1A151B9DC497002F1E2A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A141B9DC497002F1E2A /* ImageIO.framework */; };
 		356F1A171B9DC49C002F1E2A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */; };
-		356F1A191B9DC4A5002F1E2A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A181B9DC4A5002F1E2A /* UIKit.framework */; };
-		356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1A1B9DC4AF002F1E2A /* CoreGraphics.framework */; };
 		356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */; };
 		356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */; };
-		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
@@ -95,7 +91,6 @@
 		356F1A051B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		356F1A061B9DBF14002F1E2A /* HotlineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotlineTests.m; sourceTree = "<group>"; };
 		356F1A101B9DC48B002F1E2A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		356F1A141B9DC497002F1E2A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		356F1A181B9DC4A5002F1E2A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -120,14 +115,10 @@
 				CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */,
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
-				356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
 				356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */,
-				356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */,
-				356F1A191B9DC4A5002F1E2A /* UIKit.framework in Frameworks */,
 				356F1A171B9DC49C002F1E2A /* SystemConfiguration.framework in Frameworks */,
 				356F1A151B9DC497002F1E2A /* ImageIO.framework in Frameworks */,
-				356F1A131B9DC492002F1E2A /* MobileCoreServices.framework in Frameworks */,
 				356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,7 +249,6 @@
 				356F1A181B9DC4A5002F1E2A /* UIKit.framework */,
 				356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */,
 				356F1A141B9DC497002F1E2A /* ImageIO.framework */,
-				356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */,
 				356F1A101B9DC48B002F1E2A /* CoreData.framework */,
 			);
 			name = Framework;
