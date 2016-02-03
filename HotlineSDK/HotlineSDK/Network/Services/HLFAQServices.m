@@ -45,6 +45,11 @@
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
     [context performBlock:^{
         NSArray *categories = solutions[@"categories"];
+        
+        for (int i=0; i<categories.count; i++) {
+            NSLog(@"Category : %@, is enabled : %@", categories[i][@"title"], categories[i][@"enabled"]);
+        }
+        
         for(int i=0; i<categories.count; i++){
             NSDictionary *categoryInfo = categories[i];
             HLCategory *category = [HLCategory getWithID:categoryInfo[@"categoryId"] inContext:context];
@@ -61,12 +66,17 @@
                 }
                 
                 //Delete category with no articles
-                if (category.articles.count == 0)[context deleteObject:category];
+                if (category.articles.count == 0){
+                    FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't have any articles !",category.title, category.categoryID);
+                    [context deleteObject:category];
+                }
 
             }else{
                 
-                //Delete diabled categories
-                if (category) [context deleteObject:category];
+                if (category){
+                    FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
+                    [context deleteObject:category];
+                }
             }
         }
         [context save:nil];

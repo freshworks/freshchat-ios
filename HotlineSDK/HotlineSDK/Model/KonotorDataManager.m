@@ -83,6 +83,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    FDLog(@"StoreURL %@",storePath);
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
     
     NSError* error = nil;
