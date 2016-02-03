@@ -15,6 +15,8 @@
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 
+#import "FDArticleListCell.h"
+
 @interface HLArticlesController ()
 
 @property(nonatomic, strong)HLCategory *category;
@@ -45,6 +47,11 @@
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
     NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
     self.articles = sortedArticles;
+    
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
+    {
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     [self.tableView reloadData];
 }
 
@@ -83,20 +90,37 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLArticleCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    FDArticleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDArticleListCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        cell.textLabel.numberOfLines = 3;
-        cell.textLabel.textColor = [self.theme articleListFontColor];
-        cell.textLabel.font = [self.theme articleListFont];
-        cell.textLabel.text  = article.title;
+        cell.articleText.text = article.title;
     }
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell     forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([tableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 -(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{

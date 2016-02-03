@@ -74,6 +74,7 @@
 		35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E767BF1C2051120098CFA1 /* HotlineUser.m */; };
 		35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F7D4571C22A9390007DA9A /* FDImageView.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
+		68EC0ABD1C61F4F800E37C94 /* FDArticleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68EC0ABC1C61F4F800E37C94 /* FDArticleListCell.m */; };
 		91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
 		CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */; };
@@ -283,6 +284,8 @@
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
 		3C79B3961C2A820600DD8EE4 /* HLLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLLocalization.h; sourceTree = "<group>"; };
 		3CB483261C51EBD100A8097B /* HLVersionConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLVersionConstants.h; sourceTree = "<group>"; };
+		68EC0ABB1C61F4F800E37C94 /* FDArticleListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleListCell.h; sourceTree = "<group>"; };
+		68EC0ABC1C61F4F800E37C94 /* FDArticleListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDArticleListCell.m; sourceTree = "<group>"; };
 		91BBEAA01BE393DB00F55009 /* FDPictureMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPictureMessageView.h; sourceTree = "<group>"; };
 		91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPictureMessageView.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -605,6 +608,8 @@
 				35E001011C6091000082A036 /* FDMarginalView.m */,
 				35DCCB2A1BE001650039EFDD /* HLGridViewCell.h */,
 				35DCCB2B1BE001650039EFDD /* HLGridViewCell.m */,
+				68EC0ABB1C61F4F800E37C94 /* FDArticleListCell.h */,
+				68EC0ABC1C61F4F800E37C94 /* FDArticleListCell.m */,
 				35E000F91C6090B60082A036 /* FDChannelListViewCell.h */,
 				35E000FA1C6090B60082A036 /* FDChannelListViewCell.m */,
 				35E000F71C6090B60082A036 /* FDCategoryListViewCell.h */,
@@ -847,6 +852,7 @@
 				35DCCB361BE001650039EFDD /* HLGridViewCell.m in Sources */,
 				35E000FF1C6090DF0082A036 /* FDTableViewCellWithImage.m in Sources */,
 				35DCCB531BE002960039EFDD /* FDPromptView.m in Sources */,
+				68EC0ABD1C61F4F800E37C94 /* FDArticleListCell.m in Sources */,
 				3533F0B91BB01D38000B2D9A /* HLArticlesController.m in Sources */,
 				CE9D4D2C1BCE55FF006F2E66 /* FDArticleContent.m in Sources */,
 				35DCCB2F1BE001650039EFDD /* FDBadgeView.m in Sources */,
