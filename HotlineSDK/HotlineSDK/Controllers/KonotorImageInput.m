@@ -11,9 +11,13 @@
 #import "FDAttachmentImageController.h"
 #import "HLMacros.h"
 #import "HLLocalization.h"
+#import "FDSecureStore.h"
 
 
-@interface KonotorImageInput () <FDAttachmentImageControllerDelegate>
+@interface KonotorImageInput () <FDAttachmentImageControllerDelegate>{
+    
+    BOOL isCameraCaptureEnabled;
+}
 
 @property (strong, nonatomic) UIView* sourceView;
 @property (strong, nonatomic) UIViewController* sourceViewController;
@@ -40,8 +44,26 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
-    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:nil delegate:nil cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
-                                              destructiveButtonTitle:nil otherButtonTitles:HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT),nil];
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    isCameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+    NSArray *actionButtons;
+    if(isCameraCaptureEnabled){
+        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT)];
+    }
+    else{
+        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT)];
+    }
+    
+    UIActionSheet *inputOptions = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:nil];
+    
+    for (NSString *actionTitle in actionButtons) {
+        [inputOptions addButtonWithTitle:actionTitle];
+    }
     inputOptions.delegate = self;
     self.sourceViewController=viewController;
     self.sourceView=viewController.view;
@@ -50,10 +72,10 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (buttonIndex) {
-        case 0:
+        case 1:
             [self showImagePicker];
             break;
-        case 1:
+        case 2:
             [self showCamPicker];
             break;
         default:

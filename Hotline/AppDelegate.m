@@ -30,6 +30,10 @@
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
+    config.agentAvatarEnabled = YES;
+    config.notificationSoundEnabled = YES;
+    config.displaySolutionsAsGrid = YES;
+    config.cameraCaptureEnabled = YES;
     
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
@@ -37,7 +41,7 @@
     user.phoneNumber = @"9898989898";
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
-    [Hotline sharedInstance].displaySolutionsAsGrid = YES;
+    
     NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);

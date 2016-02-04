@@ -18,8 +18,6 @@
 		<string>konotor_supportprofile</string>
 		<key>UserProfileImageName</key>
 		<string>konotor_profile</string>
-		<key>ShowsBusinessProfileImage</key>
-		<true/>
 		<key>ShowsUserProfileImage</key>
 		<false/>
 		<key>PollingTimeChatInFocus</key>

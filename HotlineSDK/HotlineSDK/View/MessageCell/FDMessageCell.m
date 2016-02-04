@@ -10,6 +10,7 @@
 #import "FDUtilities.h"
 #import "HLTheme.h"
 #import "HLLocalization.h"
+#import "FDSecureStore.h"
 
 //Not exposed to theming
 #define KONOTOR_VERTICAL_PADDING 2
@@ -70,7 +71,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
 
-    showsProfile=YES;
+    showsProfile = YES;
     showsSenderName=NO;
     customFontName=[[HLTheme sharedInstance] conversationUIFontName];
     showsUploadStatus=YES;
@@ -258,7 +259,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     messageContentViewWidth=contentViewWidth;
     
-    showsProfile=isSenderOther?([HLTheme sharedInstance].showsBusinessProfileImage):([HLTheme sharedInstance].showsUserProfileImage);
+    //add for config into user file
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isAgentAvatarEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    showsProfile = isSenderOther?(isAgentAvatarEnabled):([HLTheme sharedInstance].showsUserProfileImage);
     
     // get the length of the textview if one line and calculate page sides
     
@@ -418,6 +423,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
        
        profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
        profileImageView.hidden = NO;
+       
+//       if(!isAgentAvatarEnabled){
+//           profileim
+//       }
        
     }else{
         profileImageView.hidden = YES;

@@ -14,7 +14,7 @@
 @interface Hotline : NSObject
 
 
-@property(nonatomic) BOOL displaySolutionsAsGrid;
+
 
 @property(nonatomic, strong, readonly) HotlineConfig *config;
 
@@ -77,6 +77,10 @@
 @property (strong, nonatomic) NSString *domain;
 @property (nonatomic, assign) BOOL voiceMessagingEnabled;
 @property (nonatomic, assign) BOOL pictureMessagingEnabled;
+@property (nonatomic, assign) BOOL displaySolutionsAsGrid;
+@property (nonatomic, assign) BOOL cameraCaptureEnabled;
+@property (nonatomic, assign) BOOL notificationSoundEnabled;
+@property (nonatomic, assign) BOOL agentAvatarEnabled;
 
 /**
  *  Initialize Hotline.

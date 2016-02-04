@@ -10,6 +10,7 @@
 #import "HLChannel.h"
 #import "FDChannelListViewCell.h"
 #import <AudioToolbox/AudioServices.h>
+#import "FDSecureStore.h"
 
 #define systemSoundID 1315
 
@@ -121,8 +122,12 @@
     self.currentChannel = channel;
     
     if (!TARGET_IPHONE_SIMULATOR) {
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        AudioServicesPlaySystemSound(systemSoundID);
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        BOOL isNotificationSoundEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+        if(isNotificationSoundEnabled){
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            AudioServicesPlaySystemSound(systemSoundID);
+        }
     }
 
     self.title.text = channel.name;
