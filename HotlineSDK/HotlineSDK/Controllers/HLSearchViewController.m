@@ -24,6 +24,7 @@
 #import "HLLocalization.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
+#define SEARCH_BAR_HEIGHT 44
 
 @interface  HLSearchViewController () <UISearchDisplayDelegate,UISearchBarDelegate,UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (strong, nonatomic) UITableView *tableView;
@@ -96,7 +97,7 @@
 }
 
 -(void)setupSubviews{
-    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SEARCH_BAR_HEIGHT)];
     self.searchBar.hidden = NO;
     self.searchBar.delegate = self;
     self.searchBar.placeholder = HLLocalizedString(LOC_SEARCH_PLACEHOLDER_TEXT);
@@ -120,6 +121,8 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
     [self.view addSubview:self.tableView];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
     
     [self setEmptySearchResultView];
 
