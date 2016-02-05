@@ -215,7 +215,7 @@
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
--(void)presentFeedback:(UIViewController *)controller{
+-(void)presentConversations:(UIViewController *)controller{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
