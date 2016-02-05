@@ -263,7 +263,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isAgentAvatarEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    showsProfile = isSenderOther?(isAgentAvatarEnabled):([HLTheme sharedInstance].showsUserProfileImage);
+    BOOL isUserAvatarEnabled = FALSE;//Set Default as false will use it in later versions
+    showsProfile = isSenderOther?isAgentAvatarEnabled:isUserAvatarEnabled;
     
     // get the length of the textview if one line and calculate page sides
     
@@ -273,7 +274,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         profileX=isSenderOther?KONOTOR_HORIZONTAL_PADDING:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION);
         profileY=KONOTOR_VERTICAL_PADDING;
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth);
+        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
         messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)-4:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
@@ -283,7 +284,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     else{
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth= MIN(messageDisplayWidth-8*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth);
+        messageContentViewWidth= MIN(messageDisplayWidth-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
         messageContentViewX=isSenderOther?(KONOTOR_HORIZONTAL_PADDING*2):(messageDisplayWidth-2*KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
         messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);
@@ -423,10 +424,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
        
        profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
        profileImageView.hidden = NO;
-       
-//       if(!isAgentAvatarEnabled){
-//           profileim
-//       }
        
     }else{
         profileImageView.hidden = YES;

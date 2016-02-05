@@ -28,13 +28,6 @@
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"mr.orange.konotor.com" withAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
-    config.voiceMessagingEnabled = YES;
-    config.pictureMessagingEnabled = YES;
-    config.agentAvatarEnabled = YES;
-    config.notificationSoundEnabled = YES;
-    config.displaySolutionsAsGrid = YES;
-    config.cameraCaptureEnabled = YES;
-    
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
     user.emailAddress = @"sid@freshdesk.com";

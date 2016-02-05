@@ -106,8 +106,6 @@
 -(UIColor *)userMessageTextColor;
 -(UIColor *)hyperlinkColor;
 -(BOOL)alwaysPollForMessages;
--(BOOL)showsBusinessProfileImage;
--(BOOL)showsUserProfileImage;
 -(BOOL)showsBusinessMessageSenderName;
 -(BOOL)showsUserMessageSenderName;
 -(NSString *)textInputHintText;

@@ -44,7 +44,7 @@
     
     if([currentMessage picThumbData]){
         UIImage *picture=[UIImage imageWithData:[currentMessage picThumbData]];
-        [self setFrame:CGRectMake((messageWidth-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth-4, height)];
+        [self setFrame:CGRectMake((messageWidth-imgwidth)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, imgwidth, height)];
         [self setImage:picture];
         
         if(![currentMessage picData]){

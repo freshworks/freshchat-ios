@@ -403,12 +403,6 @@
 -(BOOL)alwaysPollForMessages{
     return [[self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"] boolValue];
 }
--(BOOL)showsBusinessProfileImage{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"] boolValue];
-}
--(BOOL)showsUserProfileImage{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"] boolValue];
-}
 -(BOOL)showsBusinessMessageSenderName{
     return [[self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"] boolValue];
 }
