@@ -16,8 +16,7 @@
 #define CELL_OFFSET 36
 #define CEll_HORZ_OFFSET 40
 
-@implementation HLListViewController
-
+2
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];

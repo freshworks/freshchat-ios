@@ -20,15 +20,16 @@
     [self registerAppForNotifications];
     
     UIViewController* mainView=[self.window rootViewController];
-    UIViewController* simpleViewController=[[UIViewController alloc] init];
-    [simpleViewController setTitle:@"TabTwo"];
-    [mainView setTitle:@"TabOne"];
+    [mainView setTitle:@"Order"];
+    UIViewController* solutionsViewController=[[Hotline sharedInstance] getSolutionsControllerForEmbed];
+    [solutionsViewController setTitle:@"FAQs"];
+
     
     UITabBarController* tabBarController=[[UITabBarController alloc] init];
-    UIViewController* channelsView=[[Hotline sharedInstance] getHotlineViewController];
-    [channelsView setTitle:@"TabThree"];
+    UIViewController* channelsView=[[Hotline sharedInstance] getConversationsControllerForEmbed];
+    [channelsView setTitle:@"Channels"];
     
-    [tabBarController setViewControllers:[NSArray arrayWithObjects:mainView,simpleViewController,channelsView,nil]];
+    [tabBarController setViewControllers:[NSArray arrayWithObjects:mainView,solutionsViewController,channelsView,nil]];
     [tabBarController.tabBar setClipsToBounds:NO];
     
     [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];

@@ -226,34 +226,34 @@
     }];
 }
 
--(UIViewController*) getHotlineViewController{
+-(UIViewController *)getControllerForEmbed:(UIViewController*)controller{
+    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller];
     
-   UIViewController* containerController=nil;
-
-    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
-    request.sortDescriptors = @[position];
-    NSArray *results = [context executeFetchRequest:request error:nil];
-    HLContainerController *preferredController = nil;
-    if (results.count == 1) {
-        FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:results.firstObject
-                                                                           andPresentModally:YES];
-        preferredController = [[HLContainerController alloc]initWithController:messageController];
-        containerController=(UIViewController*)preferredController;
-        
-    }else{
-        HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-        preferredController = [[HLContainerController alloc]initWithController:channelViewController];
-        containerController=(UIViewController*)preferredController;
-    }
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-
     return navigationController;
 }
 
+-(UIViewController*) getSolutionsControllerForEmbed{
+    HLCategoriesListController *categoriesViewController = [[HLCategoriesListController alloc]init];
+    return [self getControllerForEmbed:categoriesViewController];
+}
+
+-(UIViewController*) getConversationsControllerForEmbed{
+    UIViewController *controller;
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+    NSArray *results = [context executeFetchRequest:request error:nil];
+    
+    if (results.count == 1){
+        controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+    }else{
+        controller = [[HLChannelViewController alloc]init];
+    }
+    controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+    return [self getControllerForEmbed:controller];
+}
 
 #pragma mark Push notifications
 

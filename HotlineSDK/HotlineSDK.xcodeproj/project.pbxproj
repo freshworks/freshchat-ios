@@ -73,6 +73,7 @@
 		35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E767BF1C2051120098CFA1 /* HotlineUser.m */; };
 		35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F7D4571C22A9390007DA9A /* FDImageView.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
+		3C051DEC1C6481DE00DDE80D /* HLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C051DEB1C6481DE00DDE80D /* HLController.m */; };
 		91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
 		CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B272B1C11D51B00D9A253 /* FDAudioMessageInputView.m */; };
@@ -275,6 +276,8 @@
 		35F7D4571C22A9390007DA9A /* FDImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDImageView.m; sourceTree = "<group>"; };
 		35FE04421BC4D1DD00EAA8E0 /* FDReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachabilityManager.h; sourceTree = "<group>"; };
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
+		3C051DEA1C64814F00DDE80D /* HLController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLController.h; sourceTree = "<group>"; };
+		3C051DEB1C6481DE00DDE80D /* HLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLController.m; sourceTree = "<group>"; };
 		3C79B3961C2A820600DD8EE4 /* HLLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLLocalization.h; sourceTree = "<group>"; };
 		3CB483261C51EBD100A8097B /* HLVersionConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLVersionConstants.h; sourceTree = "<group>"; };
 		843DD257178594180053E19E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -385,6 +388,8 @@
 				CE62452F1BFC8F9C0050C8EB /* FDDateUtil.m */,
 				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
 				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
+				3C051DEA1C64814F00DDE80D /* HLController.h */,
+				3C051DEB1C6481DE00DDE80D /* HLController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -850,6 +855,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */,
+				3C051DEC1C6481DE00DDE80D /* HLController.m in Sources */,
 				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
 				CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */,
 				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,
