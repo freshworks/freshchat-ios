@@ -32,6 +32,7 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 -(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
+-(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler;
 -(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler;
 -(void)deleteAllChannels:(void(^)(NSError *error))handler;
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler;

@@ -14,6 +14,7 @@
 #import "HLSearchViewController.h"
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
+#import "KonotorDataManager.h"
 
 #import "FDArticleListCell.h"
 
@@ -38,21 +39,24 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     parent.title = self.category.title;
-    [self updateDataSource];
     [self setNavigationItem];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self updateDataSource];
+}
+
 -(void)updateDataSource{
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
-    NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
-    self.articles = sortedArticles;
-    
-    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
-    {
-        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
-    }
-    [self.tableView reloadData];
+    [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+        NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        self.articles = sortedArticles;
+        [self.tableView reloadData];
+    }];
 }
 
 -(void)setNavigationItem{
