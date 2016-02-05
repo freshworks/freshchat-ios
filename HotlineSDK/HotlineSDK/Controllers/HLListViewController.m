@@ -13,8 +13,8 @@
 #import "HLChannelViewController.h"
 #import "Hotline.h"
 
-#define CELL_OFFSET 36
-#define CEll_HORZ_OFFSET 40
+#define CELL_OFFSET 32
+#define CEll_HORZ_OFFSET 20
 
 @implementation HLListViewController
 
