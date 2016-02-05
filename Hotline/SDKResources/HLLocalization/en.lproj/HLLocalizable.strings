@@ -37,6 +37,7 @@
 
 "audio_recording"="Audio Recording";
 "audio_recording_stopped"="Recording Stopped";
+"audio_recording_permission_denied"="Sorry! We need permission for the microphone.\nPlease go to your settings.";
 
 "empty_message_title"="Empty Message";
 "empty_message_info_text"="You cannot send an empty message. Please type a message to send";
@@ -55,6 +56,7 @@
 "camera_unavailable_title"="Camera Unavailable";
 "camera_unavailable_description"="Sorry! Your device doesn't have a camera, or the camera is not available for use.";
 "camera_unavailable_ok_button_text"="OK";
+"camera_permission_denied" ="Sorry! We need permission for the camera.\nPlease go to your settings.";
 
 /*Image Attachment*/
 "image_attachment_cancel_button_text"="Cancel";

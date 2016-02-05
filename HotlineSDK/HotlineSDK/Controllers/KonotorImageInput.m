@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Demach. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import "KonotorImageInput.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FDAttachmentImageController.h"
@@ -76,11 +77,46 @@
             [self showImagePicker];
             break;
         case 2:
-            [self showCamPicker];
+            [self checkCameraCapturePermission];
             break;
         default:
             break;
     }
+}
+
+- (void)checkCameraCapturePermission{
+    
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if(status == AVAuthorizationStatusAuthorized) {
+        [self showCamPicker];
+    } else if(status == AVAuthorizationStatusDenied){
+        // denied
+        [self showAccessDeniedAlert];
+    } else if(status == AVAuthorizationStatusRestricted){
+        // restricted
+        [self showAccessDeniedAlert];
+    } else if(status == AVAuthorizationStatusNotDetermined){
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if(granted){
+                //user granted
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self showCamPicker];
+                });
+                
+            } else {
+                //user denied
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self showAccessDeniedAlert];
+                });
+            }
+        }];
+    }
+}
+
+- (void) showAccessDeniedAlert{
+    
+    UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_CAMERA_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+    [permissionAlert show];
 }
 
 - (void)showImagePicker{

@@ -6,6 +6,7 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import "FDMessageController.h"
 #import "FDMessageCell.h"
 #import "KonotorImageInput.h"
@@ -354,11 +355,19 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
-    BOOL recording=[Konotor startRecording];
-    if(recording){
-        [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
-    }
-    NSLog(@"Mic button pressed");
+    
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            BOOL recording=[Konotor startRecording];
+            if(recording){
+                [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
+            }
+        }
+        else {
+            UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+            [permissionAlert show];
+        }
+    }];
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{

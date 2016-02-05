@@ -46,6 +46,7 @@
 
 #define LOC_AUDIO_RECORDING @"audio_recording"
 #define LOC_AUDIO_RECORDING_STOPPED @"audio_recording_stopped"
+#define LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT @"audio_recording_permission_denied"
 
 #define LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT @"image_attachment_cancel_button_text"
 #define LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT @"image_attachment_select_existing_image"
@@ -54,6 +55,7 @@
 #define LOC_CAMERA_UNAVAILABLE_TITLE @"camera_unavailable_title"
 #define LOC_CAMERA_UNAVAILABLE_DESCRIPTION @"camera_unavailable_description"
 #define LOC_CAMERA_UNAVAILABLE_OK_BUTTON @"camera_unavailable_ok_button_text"
+#define LOC_CAMERA_PERMISSION_DENIED_TEXT @"camera_permission_denied"
 
 #define LOC_SEND_BUTTON_TEXT @"send_button_text"
 
