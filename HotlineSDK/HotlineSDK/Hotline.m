@@ -158,8 +158,10 @@
             NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
             [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
         }
-        
-        //TODO: Need to add country code, once backend allows it
+        if(user.countryCode && ![user.countryCode isEqualToString:@""]){
+            [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
+            userInfo[@"phoneCountry"] = user.countryCode;
+        }
         
         if (user.phoneNumber && ![user.phoneNumber isEqualToString:@""]) {
             [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];

@@ -104,6 +104,7 @@
 @property (strong, nonatomic) NSString *emailAddress;
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *externalID;
+@property (strong, nonatomic) NSString *countryCode;
 
 +(instancetype)sharedInstance;
 
