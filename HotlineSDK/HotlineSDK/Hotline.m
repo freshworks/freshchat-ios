@@ -351,14 +351,11 @@
 }
 
 -(NSInteger)unreadCount{
-    NSInteger count = 0;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorConversation"];
-    NSArray *conversations = [context executeFetchRequest:request error:nil];
-    for (KonotorConversation *conversation in conversations) {
-        count += conversation.unreadMessagesCount.integerValue;
-    }
-    return count;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    request.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
+    NSArray *messages = [context executeFetchRequest:request error:nil];
+    return messages.count;
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{

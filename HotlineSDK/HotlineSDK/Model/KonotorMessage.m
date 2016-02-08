@@ -144,48 +144,25 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return message;
 }
 
-+(void)markAllMessagesAsRead{
++(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    [context performBlock:^{
-        NSError *pError;
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        [request setEntity:entityDescription];
-        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO"];
-        request.predicate = predicate;
-        NSArray *array = [context executeFetchRequest:request error:&pError];
-        if([array count]==0){
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
-            return;
-        }else{
-            for(int i=0;i<[array count];i++){
-                KonotorMessage *message = [array objectAtIndex:i];
-                if(message){
-                    if(![[message marketingId] isEqualToNumber:@0]){
-                        [message MarkMarketingMessageAsRead];
-                    }else{
-                        [message markAsReadwithNotif:NO];
-                    }
-                }
-            }
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
-        }
-    }];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
+    request.predicate = predicate;
+    NSArray *messages = [context executeFetchRequest:request error:nil];
+    return messages.count;
 }
 
-+(void)markAllMessagesAsReadForChannel:(HLChannel*)channel{
++(void)markAllMessagesAsReadForChannel:(HLChannel *)channel{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        [request setEntity:entityDescription];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
         request.predicate = predicate;
         NSArray *array = [context executeFetchRequest:request error:&pError];
         if([array count]==0){
             [KonotorMessage PostUnreadCountNotifWithNumber:@0];
-            return;
         }else{
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = [array objectAtIndex:i];
@@ -199,6 +176,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
             }
             [KonotorMessage PostUnreadCountNotifWithNumber:@0];
         }
+        [context save:nil];
     }];
 }
 

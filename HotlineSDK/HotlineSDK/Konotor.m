@@ -118,11 +118,6 @@ __weak static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void)markAllMessagesAsRead
-{
-    [KonotorMessage markAllMessagesAsRead];
-
-}
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {
     return [KonotorAudioPlayer playMessageWithMessageID:messageID];

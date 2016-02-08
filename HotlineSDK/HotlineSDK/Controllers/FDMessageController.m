@@ -114,6 +114,7 @@ typedef struct {
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
+    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
 }
 
 -(UIView *)tableHeaderView{

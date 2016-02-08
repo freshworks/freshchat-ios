@@ -130,17 +130,17 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                         
                         newMessage.belongsToConversation = conversation;
                         
-                        //INFO: Not incrementing unread count while restoring user
                         if (![lastUpdateTime isEqualToNumber:@0]) {
                             [conversation incrementUnreadCount];
-                        }
-                        
-                        if (newMessage.marketingId.integerValue !=0 ) {
-                            if (!newMessage.read.boolValue) {
-                                FDLog(@"Found a unread marketing message");
-                                [conversation incrementUnreadCount];
+                        }else{
+                            if (newMessage.marketingId.integerValue !=0 ) {
+                                if (newMessage.messageRead == NO) {
+                                    [conversation incrementUnreadCount];
+                                    FDLog(@"Found a unread marketing message in user restoration");
+                                }
                             }
                         }
+                        
 
                         
                     }
