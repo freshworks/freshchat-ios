@@ -126,6 +126,7 @@ typedef struct {
 -(void)viewWillAppear:(BOOL)animated{
     self.tableView.tableHeaderView = [self tableHeaderView];
     [super viewWillAppear:animated];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -726,8 +727,14 @@ typedef struct {
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
+
+
 -(void)dealloc{
     [self localNotificationUnSubscription];
 }
+
+//[[NSNotificationCenter defaultCenter]
+//postNotificationName:@"TestNotification"
+//object:self];
 
 @end

@@ -15,7 +15,7 @@
 #import "FDSecureStore.h"
 
 
-@interface KonotorImageInput () <FDAttachmentImageControllerDelegate>{
+@interface KonotorImageInput () <FDAttachmentImageControllerDelegate, UIPopoverControllerDelegate>{
     
     BOOL isCameraCaptureEnabled;
 }
@@ -45,7 +45,7 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
-    
+   
     FDSecureStore *store = [FDSecureStore sharedInstance];
     isCameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     NSArray *actionButtons;
@@ -69,6 +69,7 @@
     self.sourceViewController=viewController;
     self.sourceView=viewController.view;
     [inputOptions showInView:self.sourceView];
+    
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -82,6 +83,14 @@
         default:
             break;
     }
+}
+
+- (void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view
+{
+    CGRect rectInView = CGRectMake(self.sourceViewController.view.frame.origin.x,self.sourceViewController.view.frame.origin.y+sourceViewController.view.frame.size.height-20,40,40);
+    *rect = CGRectMake(CGRectGetMidX(rectInView), CGRectGetMaxY(rectInView)-40, 1, 1);
+    *view = self.sourceViewController.view;
+    
 }
 
 - (void)checkCameraCapturePermission{
@@ -126,8 +135,9 @@
     imagePicker.allowsEditing = NO;
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         popover=[[UIPopoverController alloc] initWithContentViewController:imagePicker];
+        popover.delegate = self;
         dispatch_async(dispatch_get_main_queue(), ^ {
-            [popover presentPopoverFromRect:CGRectMake(self.sourceViewController.view.frame.origin.x,self.sourceViewController.view.frame.origin.y+sourceViewController.view.frame.size.height-20,40,40) inView:self.sourceViewController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [popover presentPopoverFromRect:CGRectMake(self.sourceViewController.view.frame.origin.x,self.sourceViewController.view.frame.origin.y+sourceViewController.view.frame.size.height-20,40,40) inView:self.sourceViewController.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
         });
     }else{
         [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
@@ -143,6 +153,7 @@
         [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
         dispatch_async(dispatch_get_main_queue(), ^ {
             [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
+            
         });
     }else{
         UIAlertView *alertview=[[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_CAMERA_UNAVAILABLE_TITLE) message:HLLocalizedString(LOC_CAMERA_UNAVAILABLE_DESCRIPTION) delegate:nil
