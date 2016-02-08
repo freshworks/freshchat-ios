@@ -284,6 +284,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         HideNetworkActivityIndicator();
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         pMessage.messageAlias = messageInfo[@"alias"];
+        pMessage.createdMillis = messageInfo[@"createdMillis"];
         [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
