@@ -129,20 +129,6 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                         }
                         
                         newMessage.belongsToConversation = conversation;
-                        
-                        if (![lastUpdateTime isEqualToNumber:@0]) {
-                            [conversation incrementUnreadCount];
-                        }else{
-                            if (newMessage.marketingId.integerValue !=0 ) {
-                                if (newMessage.messageRead == NO) {
-                                    [conversation incrementUnreadCount];
-                                    FDLog(@"Found a unread marketing message in user restoration");
-                                }
-                            }
-                        }
-                        
-
-                        
                     }
                 }
             }
@@ -316,7 +302,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 }
 
 
-//TODO: Skip messages that are 'click registered' already
+//TODO: Skip messages that are 'click registered' already & use HLAPIClient
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
     NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
@@ -340,5 +326,38 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
     [operation start];
 }
+
+
+//TODO: Use HLAPIClient
++(void)markMarketingMessageAsRead:(KonotorMessage *)message{
+    if (message.messageRead == YES) return;
+    
+    NSNumber *marketingId = message.marketingId;
+    
+    if([marketingId intValue] ==0 || !marketingId) return;
+    
+    message.messageRead = YES;
+    
+    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
+    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
+    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    
+    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?seen=1&t=",appKey];
+    
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
+    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
+    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
+        FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
+        [message markAsUnread];
+    }];
+    [operation start];
+}
+
 
 @end

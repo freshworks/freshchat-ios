@@ -73,8 +73,6 @@ enum KonotorMessageUploadStatus
 
 +(void) sendAllUnsentMessages;
 
-+(void)MarkMessageAsRead:(NSString *) messageID;
-
 +(NSArray *) getAllMessagesForConversation:(NSString *)conversationID;
 
 @end

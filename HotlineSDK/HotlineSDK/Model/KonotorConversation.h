@@ -26,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel;
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId;
--(void) incrementUnreadCount;
--(void) decrementUnreadCount;
 
 @end
 

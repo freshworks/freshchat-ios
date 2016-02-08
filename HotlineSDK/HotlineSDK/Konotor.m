@@ -109,15 +109,6 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 
-+(void)MarkMessageAsRead:(NSString *) messageID
-{
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
-    if(message)
-    {
-        [message markAsReadwithNotif:YES];
-    }
-}
-
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {
     return [KonotorAudioPlayer playMessageWithMessageID:messageID];

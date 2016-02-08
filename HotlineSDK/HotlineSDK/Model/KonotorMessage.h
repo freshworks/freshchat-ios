@@ -15,6 +15,10 @@
 #import <UIKit/UIImage.h>
 #import "Konotor.h"
 
+#define MESSAGE_NOT_UPLOADED 0
+#define MESSAGE_UPLOADING 1
+#define MESSAGE_UPLOADED 2
+
 @class KonotorConversation;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -51,7 +55,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
 @property (nullable, nonatomic, retain) KonotorMessageBinary *hasMessageBinary;
 
-//@property (nonatomic, retain) NSString *marketingId;
 +(NSArray *) getAllMessagesForConversation: (NSString* )conversationID;
 +(KonotorMessage *)getWelcomeMessageForChannel:(HLChannel *)channel;
 +(KonotorMessage *) retriveMessageForMessageId: (NSString *)messageId;
@@ -62,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation;
 +(KonotorMessage *)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption onConversation:(KonotorConversation *)conversation;
 +(void)uploadAllUnuploadedMessages;
--(void) markAsReadwithNotif:(BOOL) notif;
+-(void) markAsRead;
 -(void) markAsUnread;
 +(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel;
 +(void) markAllMessagesAsReadForChannel:(HLChannel *)channel;
