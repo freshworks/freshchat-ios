@@ -556,7 +556,6 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         FDLog(@"Refreshing view to show new message");
         _flags.isLoading = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
         [self refreshView];
     }
 }

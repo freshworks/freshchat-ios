@@ -16,8 +16,6 @@
 #import "FDSolutionUpdater.h"
 #import "FDUtilities.h"
 
-static NSString *kon_unlock_key = nil;
-
 @implementation Konotor
 
 __weak static id <KonotorDelegate> _delegate;
@@ -28,11 +26,6 @@ __weak static id <KonotorDelegate> _delegate;
 
 +(void) setDelegate:(id)delegate{
     _delegate = delegate;
-}
-
-+(void) sendAllUnsentMessages{
-    //Check if app init is required before this call
-    [KonotorMessage uploadAllUnuploadedMessages];
 }
 
 +(double) getCurrentPlayingAudioTime
@@ -66,10 +59,6 @@ __weak static id <KonotorDelegate> _delegate;
 
 }
 
-+(float) getDecibelLevel
-{
-  return [KonotorAudioRecorder getDecibelLevel];
-}
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID
 {
     [KonotorAudioRecorder SendRecordingWithMessageID:MessageID];
@@ -128,11 +117,6 @@ __weak static id <KonotorDelegate> _delegate;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId
 {
     return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
-}
-
-+(NSArray *) getAllMessagesForConversation:(NSString *) conversationID
-{
-    return [KonotorMessage getAllMessagesForConversation:conversationID];
 }
 
 +(BOOL)isUserMe:(NSString *)userId{
@@ -229,13 +213,5 @@ __weak static id <KonotorDelegate> _delegate;
         }
     }
 }
-
-@end
-
-@implementation KonotorConversationData
-
-@end
-
-@implementation KonotorMessageData
 
 @end

@@ -156,7 +156,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
         request.predicate = predicate;
         NSArray *array = [context executeFetchRequest:request error:&pError];
         if([array count]==0){
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
+
         }else{
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = [array objectAtIndex:i];
@@ -168,7 +168,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
                     }
                 }
             }
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
         }
         [context save:nil];
     }];
@@ -218,10 +217,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
         return YES;
     }
     return NO;
-}
-
-+(void) PostUnreadCountNotifWithNumber:(NSNumber *)number{
-    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:number];
 }
 
 +(void)uploadAllUnuploadedMessages{
@@ -460,5 +455,11 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     return message;
 }
+
+
+@end
+
+
+@implementation KonotorMessageData
 
 @end
