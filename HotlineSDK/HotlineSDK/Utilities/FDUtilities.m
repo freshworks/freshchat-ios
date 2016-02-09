@@ -310,8 +310,8 @@ static NSInteger networkIndicator = 0;
 +(BOOL)isPoweredByHidden{
     FDSecureStore *store = [FDSecureStore sharedInstance];
 
-    NSString *secretKey = [store objectForKey:HOTLINE_DEFAULTS_FOOTER_SECRET_KEY];
-    if (!secretKey) return NO;
+    NSString *footerSecretKey = [store objectForKey:HOTLINE_DEFAULTS_HIDE_FOOTER_SECRET_KEY];
+    if (!footerSecretKey) return NO;
     
     NSString* myString=[[store objectForKey:HOTLINE_DEFAULTS_APP_KEY] stringByAppendingString:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
     
@@ -323,7 +323,7 @@ static NSInteger networkIndicator = 0;
                                   [reversedString appendString:substring];
                               }];
     
-    return ([[self convertIntoMD5:reversedString] isEqualToString:secretKey]) ? YES : NO;
+    return ([[self convertIntoMD5:reversedString] isEqualToString:footerSecretKey]) ? YES : NO;
 }
 
 @end

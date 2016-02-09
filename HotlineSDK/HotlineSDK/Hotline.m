@@ -137,7 +137,7 @@
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
-        [store setObject:config.footerSecretKey forKey:HOTLINE_DEFAULTS_FOOTER_SECRET_KEY];
+        [store setObject:config.hideFooterSecretKey forKey:HOTLINE_DEFAULTS_HIDE_FOOTER_SECRET_KEY];
     }
 }
 
