@@ -46,6 +46,7 @@
 }
 
 +(HLArticle *)updateArticle:(HLArticle *)article withInfo:(NSDictionary *)articleInfo{
+    article.categoryID           = [articleInfo valueForKey:@"categoryId"];
     article.articleID            = [articleInfo valueForKey:@"articleId"];
     article.title                = [articleInfo valueForKey:@"title"];
     article.articleDescription   = [articleInfo valueForKey:@"content"];

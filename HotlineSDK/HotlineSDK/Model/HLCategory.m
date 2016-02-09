@@ -76,7 +76,10 @@
                 [category addArticlesObject:article];
             }
         }else{
-            if (article) [context deleteObject:article];
+            if (article){
+                FDLog(@"Deleting article with title : %@ with ID : %@ because its disabled !",article.title, article.articleID);
+                [context deleteObject:article];
+            }
         }
     }
     return category;

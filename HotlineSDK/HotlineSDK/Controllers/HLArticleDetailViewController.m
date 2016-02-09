@@ -91,11 +91,6 @@
     });
 }
 
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self resetAudioPlayback];
-}
-
 -(void)theming{
     self.view.backgroundColor = [[HLTheme sharedInstance] backgroundColorSDK];
 }
@@ -110,12 +105,13 @@
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     self.parentViewController.navigationItem.leftBarButtonItem = backButton;
     
-    if (self.parentViewController) {
-        self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
-    }else{
-        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    if(!self.isFromSearchView){
+        if (self.parentViewController) {
+            self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
+        }else{
+            self.navigationController.interactivePopGestureRecognizer.delegate = self;
+        }
     }
-
 }
 
 
@@ -301,7 +297,7 @@
 
 -(void)buttonClickedEvent:(id)sender{
     [self hideBottomView];
-    [[Hotline sharedInstance] presentFeedback:self];
+    [[Hotline sharedInstance] presentConversations:self];
 }
 
 -(void)dealloc{

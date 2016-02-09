@@ -73,6 +73,16 @@
     
     [self.mediaProgressBar setMinimumTrackImage:[self.theme getImageWithKey:IMAGE_AUDIO_PROGRESS_BAR_MIN] forState:UIControlStateNormal];
     [self.mediaProgressBar setMaximumTrackImage:[self.theme getImageWithKey:IMAGE_AUDIO_PROGRESS_BAR_MAX] forState:UIControlStateNormal];
+    
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(progressLongPress:)];
+    [longPressGesture setMinimumPressDuration:0.50];
+    longPressGesture.delegate =self;
+    [mediaProgressBar addGestureRecognizer:longPressGesture];
+}
+
+-(void)progressLongPress:(UILongPressGestureRecognizer*)recognizer
+{
+    // disable long press
 }
 
 -(void) playMedia:(id)sender

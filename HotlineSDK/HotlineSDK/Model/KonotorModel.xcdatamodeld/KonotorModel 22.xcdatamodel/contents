@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D9c" minimumToolsVersion="Xcode 4.3">
     <entity name="FDIndex" representedClassName="FDIndex" syncable="YES">
         <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="descMatches" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -23,7 +23,7 @@
         <attribute name="lastUpdatedTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="articles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HLArticle" inverseName="category" inverseEntity="HLArticle" syncable="YES"/>
+        <relationship name="articles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HLArticle" inverseName="category" inverseEntity="HLArticle" syncable="YES"/>
     </entity>
     <entity name="HLChannel" representedClassName="HLChannel" syncable="YES">
         <attribute name="channelID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -119,7 +119,7 @@
     <elements>
         <element name="FDIndex" positionX="-117" positionY="-24" width="128" height="105"/>
         <element name="HLArticle" positionX="-371" positionY="590" width="128" height="148"/>
-        <element name="HLCategory" positionX="-576" positionY="420" width="128" height="165"/>
+        <element name="HLCategory" positionX="-576" positionY="420" width="128" height="163"/>
         <element name="HLChannel" positionX="-110" positionY="246" width="128" height="208"/>
         <element name="KonotorApp" positionX="-288" positionY="-27" width="128" height="195"/>
         <element name="KonotorConversation" positionX="106" positionY="180" width="128" height="178"/>

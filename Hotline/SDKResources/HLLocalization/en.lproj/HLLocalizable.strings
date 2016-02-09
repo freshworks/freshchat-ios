@@ -20,7 +20,7 @@
 "thank_you_prompt_contact_us_button_text"="Still need help? Contact Us";
 
 /*Channels*/
-"channels_title_text"="Channels";
+"channels_title_text"="Talk to us";
 "channels_close_button_text"="Close";
 
 /* Message UI */
@@ -57,7 +57,6 @@
 "camera_unavailable_ok_button_text"="OK";
 
 /*Image Attachment*/
-"image_attachment_options"="Options";
 "image_attachment_cancel_button_text"="Cancel";
 "image_attachment_select_existing_image"="Select Existing Image";
 "image_attachment_select_new_image"="New Image via Camera";

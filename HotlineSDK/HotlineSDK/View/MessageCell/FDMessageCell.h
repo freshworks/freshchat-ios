@@ -10,7 +10,7 @@
 #import "FDAudioMessageUnit.h"
 #import "FDPictureMessageView.h"
 #import "FDActionButton.h"
-#import "Konotor.h"
+#import "KonotorMessage.h"
 
 //TODO: Clean up and read from theme - Rex
 #define KONOTOR_MESSAGETEXT_FONT ([UIFont systemFontOfSize:12.0])//

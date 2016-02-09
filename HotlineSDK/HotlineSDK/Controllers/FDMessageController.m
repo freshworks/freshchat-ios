@@ -105,7 +105,7 @@ typedef struct {
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = @"Messages";
+    parent.title = self.channel.name;
     self.messagesDisplayedCount = 20;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
@@ -114,6 +114,7 @@ typedef struct {
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
+    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
 }
 
 -(UIView *)tableHeaderView{
@@ -558,7 +559,6 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         FDLog(@"Refreshing view to show new message");
         _flags.isLoading = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
         [self refreshView];
     }
 }

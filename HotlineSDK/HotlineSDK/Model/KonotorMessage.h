@@ -15,6 +15,24 @@
 #import <UIKit/UIImage.h>
 #import "Konotor.h"
 
+#define MESSAGE_NOT_UPLOADED 0
+#define MESSAGE_UPLOADING 1
+#define MESSAGE_UPLOADED 2
+
+enum KonotorMessageType {
+    KonotorMessageTypeText       = 1,
+    KonotorMessageTypeAudio      = 2,
+    KonotorMessageTypePicture    = 3,
+    KonotorMessageTypeHTML       = 4,
+    KonotorMessageTypePictureV2  = 5
+};
+
+enum KonotorMessageUploadStatus{
+    MessageNotUploaded = 0,
+    MessageUploading   = 1,
+    MessageUploaded    = 2
+};
+
 @class KonotorConversation;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -51,7 +69,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
 @property (nullable, nonatomic, retain) KonotorMessageBinary *hasMessageBinary;
 
-//@property (nonatomic, retain) NSString *marketingId;
 +(NSArray *) getAllMessagesForConversation: (NSString* )conversationID;
 +(KonotorMessage *)getWelcomeMessageForChannel:(HLChannel *)channel;
 +(KonotorMessage *) retriveMessageForMessageId: (NSString *)messageId;
@@ -62,15 +79,39 @@ NS_ASSUME_NONNULL_BEGIN
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation;
 +(KonotorMessage *)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption onConversation:(KonotorConversation *)conversation;
 +(void)uploadAllUnuploadedMessages;
--(void) markAsReadwithNotif:(BOOL) notif;
+-(void) markAsRead;
 -(void) markAsUnread;
-+(void)markAllMessagesAsRead;
-+(void)markAllMessagesAsReadForChannel:(HLChannel*)channel;
++(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel;
++(void) markAllMessagesAsReadForChannel:(HLChannel *)channel;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 -(BOOL) isMarketingMessage;
 +(NSArray *)getAllMesssageForChannel:(HLChannel *)channel;
 
-NS_ASSUME_NONNULL_END
+@end
+
+@interface KonotorMessageData : NSObject
+
+@property (nullable, nonatomic, retain) NSNumber *articleID;
+@property (nullable, nonatomic, retain) NSNumber * createdMillis;
+@property (nullable, nonatomic, retain) NSNumber * messageType;
+@property (nullable, nonatomic, retain) NSString * messageUserId;
+@property (nullable, nonatomic, retain) NSString * messageId;
+@property (nullable, nonatomic, retain) NSNumber * bytes;
+@property (nullable, nonatomic, retain) NSNumber * durationInSecs;
+@property (nullable, nonatomic, retain) NSNumber * read;
+@property (nullable, nonatomic, retain) NSNumber * uploadStatus;
+@property (nullable, nonatomic, retain) NSString * text;
+@property (nullable, nonatomic, retain) NSNumber * picHeight,*picWidth, *picThumbHeight, *picThumbWidth;
+@property (nullable, nonatomic, retain) NSData *picData, *picThumbData;
+@property (nullable, nonatomic, retain) NSString * picUrl, *picThumbUrl;
+@property (nullable, nonatomic, retain) NSString *picCaption;
+@property (nullable, nonatomic, retain) NSString *actionLabel, *actionURL;
+@property (nullable, nonatomic, retain) NSData *audioData;
+@property (nonatomic) BOOL  messageRead;
+@property (nonatomic) BOOL isMarketingMessage;
+@property (nullable, nonatomic, retain) NSNumber *marketingId;
 
 @end
+
+NS_ASSUME_NONNULL_END

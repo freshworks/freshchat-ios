@@ -18,5 +18,6 @@
 @property (strong, nonatomic) NSString *categoryTitle;
 @property (strong,nonatomic) NSString *articleTitle;
 @property (strong,nonatomic) NSNumber *categoryID;
+@property (nonatomic, assign) BOOL isFromSearchView;
 
 @end

@@ -121,7 +121,7 @@
         attachButtonWidthConstraint.constant = 0;
     }
     else{
-        attachButtonWidthConstraint.constant = 40.0;
+        attachButtonWidthConstraint.constant = 24.0;
     }
     
     [self addConstraint:attachButtonWidthConstraint];

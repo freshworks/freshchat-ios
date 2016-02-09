@@ -125,7 +125,15 @@
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
     
-    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];
+    NSArray *rightBarItems;
+    if(!self.categories.count){
+        rightBarItems = @[fixedItem,contactUsBarButton];
+    }
+    else{
+        rightBarItems = @[fixedItem,searchBarButton,contactUsBarButton];
+    }
+    
+    self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
@@ -139,7 +147,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]presentConversations:self];
 }
 
 -(void)updateCategories{
@@ -190,7 +198,7 @@
                 [self.emptyFAQImgView removeFromSuperview];
                 [self.emptyFAQLbl removeFromSuperview];
             }
-            
+            [self setNavigationItem];
             [self.collectionView reloadData];
         }
     }];
@@ -246,7 +254,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]presentConversations:self];
 }
 
 #pragma mark - Collection view delegate
@@ -320,6 +328,7 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self setNavigationItem];
     [self.collectionView reloadData];
 }
 

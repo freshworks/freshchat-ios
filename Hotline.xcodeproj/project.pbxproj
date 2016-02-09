@@ -7,31 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3515E4411C5F9180001B9CEE /* option.png in Resources */ = {isa = PBXBuildFile; fileRef = 3515E4401C5F9180001B9CEE /* option.png */; };
 		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
 		354D0D351C48D32D004D2AA1 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D321C48D32D004D2AA1 /* chat.png */; };
-		354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D331C48D32D004D2AA1 /* homeScreen.png */; };
-		354D0D371C48D32D004D2AA1 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D341C48D32D004D2AA1 /* settings.png */; };
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
 		354D0D671C48D504004D2AA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D621C48D504004D2AA1 /* main.m */; };
 		354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */; };
 		354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
-		354D0D701C48D6D8004D2AA1 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6D1C48D6D8004D2AA1 /* KonotorModels.bundle */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
 		356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19F21B9DBF14002F1E2A /* ViewController.m */; };
 		356F1A071B9DBF14002F1E2A /* HotlineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F1A061B9DBF14002F1E2A /* HotlineTests.m */; };
 		356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A101B9DC48B002F1E2A /* CoreData.framework */; };
-		356F1A131B9DC492002F1E2A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */; };
 		356F1A151B9DC497002F1E2A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A141B9DC497002F1E2A /* ImageIO.framework */; };
 		356F1A171B9DC49C002F1E2A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */; };
-		356F1A191B9DC4A5002F1E2A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A181B9DC4A5002F1E2A /* UIKit.framework */; };
-		356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1A1B9DC4AF002F1E2A /* CoreGraphics.framework */; };
 		356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1C1B9DC4B6002F1E2A /* AVFoundation.framework */; };
 		356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1A1E1B9DC4BB002F1E2A /* Foundation.framework */; };
-		356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */; };
 		356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C111B9DD223002F1E2A /* AudioToolbox.framework */; };
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
+		358589C81C622D2C008240B0 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 358589C71C622D2C008240B0 /* KonotorModels.bundle */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
@@ -76,10 +71,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3515E4401C5F9180001B9CEE /* option.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = option.png; sourceTree = "<group>"; };
 		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		354D0D321C48D32D004D2AA1 /* chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat.png; sourceTree = "<group>"; };
-		354D0D331C48D32D004D2AA1 /* homeScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeScreen.png; sourceTree = "<group>"; };
-		354D0D341C48D32D004D2AA1 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		354D0D5D1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		354D0D5F1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		354D0D601C48D504004D2AA1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -87,7 +81,6 @@
 		354D0D621C48D504004D2AA1 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		354D0D6B1C48D6D8004D2AA1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
-		354D0D6D1C48D6D8004D2AA1 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F19EE1B9DBF14002F1E2A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		356F19EF1B9DBF14002F1E2A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -97,7 +90,6 @@
 		356F1A051B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		356F1A061B9DBF14002F1E2A /* HotlineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotlineTests.m; sourceTree = "<group>"; };
 		356F1A101B9DC48B002F1E2A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		356F1A141B9DC497002F1E2A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		356F1A181B9DC4A5002F1E2A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -107,6 +99,7 @@
 		356F1B9C1B9DD146002F1E2A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		356F1C111B9DD223002F1E2A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		356F1C131B9DD23B002F1E2A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		358589C71C622D2C008240B0 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		35D707141BE2498B0035FD74 /* FDSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSettingsController.h; sourceTree = "<group>"; };
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
@@ -122,14 +115,10 @@
 				CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */,
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
-				356F1B9D1B9DD146002F1E2A /* CoreTelephony.framework in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
 				356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */,
-				356F1A1B1B9DC4AF002F1E2A /* CoreGraphics.framework in Frameworks */,
-				356F1A191B9DC4A5002F1E2A /* UIKit.framework in Frameworks */,
 				356F1A171B9DC49C002F1E2A /* SystemConfiguration.framework in Frameworks */,
 				356F1A151B9DC497002F1E2A /* ImageIO.framework in Frameworks */,
-				356F1A131B9DC492002F1E2A /* MobileCoreServices.framework in Frameworks */,
 				356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,9 +146,8 @@
 		354D0D311C48D32D004D2AA1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3515E4401C5F9180001B9CEE /* option.png */,
 				354D0D321C48D32D004D2AA1 /* chat.png */,
-				354D0D331C48D32D004D2AA1 /* homeScreen.png */,
-				354D0D341C48D32D004D2AA1 /* settings.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -179,9 +167,9 @@
 		354D0D681C48D6D8004D2AA1 /* SDKResources */ = {
 			isa = PBXGroup;
 			children = (
+				358589C71C622D2C008240B0 /* KonotorModels.bundle */,
 				354D0D691C48D6D8004D2AA1 /* HLLocalization */,
 				354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */,
-				354D0D6D1C48D6D8004D2AA1 /* KonotorModels.bundle */,
 			);
 			path = SDKResources;
 			sourceTree = "<group>";
@@ -261,7 +249,6 @@
 				356F1A181B9DC4A5002F1E2A /* UIKit.framework */,
 				356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */,
 				356F1A141B9DC497002F1E2A /* ImageIO.framework */,
-				356F1A121B9DC492002F1E2A /* MobileCoreServices.framework */,
 				356F1A101B9DC48B002F1E2A /* CoreData.framework */,
 			);
 			name = Framework;
@@ -395,15 +382,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				354D0D701C48D6D8004D2AA1 /* KonotorModels.bundle in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
 				354D0D351C48D32D004D2AA1 /* chat.png in Resources */,
 				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
 				354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */,
+				358589C81C622D2C008240B0 /* KonotorModels.bundle in Resources */,
 				354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */,
+				3515E4411C5F9180001B9CEE /* option.png in Resources */,
 				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
-				354D0D371C48D32D004D2AA1 /* settings.png in Resources */,
-				354D0D361C48D32D004D2AA1 /* homeScreen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

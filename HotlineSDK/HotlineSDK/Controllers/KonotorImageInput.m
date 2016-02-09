@@ -40,7 +40,7 @@
 }
 
 - (void) showInputOptions:(UIViewController*) viewController{
-    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_OPTIONS) delegate:nil cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
+    UIActionSheet* inputOptions=[[UIActionSheet alloc] initWithTitle:nil delegate:nil cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
                                               destructiveButtonTitle:nil otherButtonTitles:HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT),nil];
     inputOptions.delegate = self;
     self.sourceViewController=viewController;

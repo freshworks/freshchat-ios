@@ -88,6 +88,10 @@ static const CGFloat THROWING_THRESHOLD = 1600;
 
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 -(void)presentOnController:(UIViewController *)controller{
     [controller presentViewController:self animated:NO completion:nil];
 }

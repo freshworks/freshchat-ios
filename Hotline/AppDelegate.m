@@ -8,8 +8,11 @@
 
 #import "AppDelegate.h"
 #import "HotlineSDK/Hotline.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong)UIViewController *rootController;
 
 @end
 
@@ -85,7 +88,6 @@
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
-        UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
         [[Hotline sharedInstance]handleRemoteNotification:info withController:nil];
     }
 }

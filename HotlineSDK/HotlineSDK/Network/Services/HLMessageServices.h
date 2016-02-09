@@ -9,18 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "HLChannel.h"
 
-#define MESSAGE_NOT_UPLOADED 0
-#define MESSAGE_UPLOADING 1
-#define MESSAGE_UPLOADED 2
-
-#define PROPERTY_NOT_UPLOADED 0
-#define PROPERTY_UPLOADING 1
-#define PROPERTY_UPLOADED 2
-
-#define EVENT_NOT_UPLOADED 0
-#define EVENT_UPLOADING 1
-#define EVENT_UPLOADED 2
-
 @interface HLMessageServices : NSObject
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler;
@@ -31,5 +19,7 @@
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId;
+
++(void)markMarketingMessageAsRead:(KonotorMessage *)message;
 
 @end

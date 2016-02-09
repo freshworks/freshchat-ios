@@ -31,42 +31,60 @@
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
-    [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
+    NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
+
+    if (lastUpdateTime == nil) {
+        lastUpdateTime = @0;
+    }
+    
+    NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
+    [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         [self importSolutions:[responseInfo responseAsDictionary]];
         [FDIndexManager setIndexingCompleted:NO];
         [FDIndexManager updateIndex];
-        [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
+        NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
     }];
     return task;
 }
 
 -(void)importSolutions:(NSDictionary *)solutions{
+    
+    FDLog(@"%@", solutions);
+    
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
     [context performBlock:^{
         NSArray *categories = solutions[@"categories"];
+        
+        for (int i=0; i<categories.count; i++) {
+            NSLog(@"Category : %@, is enabled : %@", categories[i][@"title"], categories[i][@"enabled"]);
+        }
+        
         for(int i=0; i<categories.count; i++){
             NSDictionary *categoryInfo = categories[i];
             HLCategory *category = [HLCategory getWithID:categoryInfo[@"categoryId"] inContext:context];
             BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
             if (isCategoryEnabled) {
                 if (category) {
-                    NSDate *updateTime = [NSDate dateWithTimeIntervalSince1970:[categoryInfo[@"lastUpdatedAt"]doubleValue]];
-                    if ([category.lastUpdatedTime compare:updateTime] == NSOrderedAscending) {
-                        [category updateWithInfo:categoryInfo];
-                        FDLog(@"Category with ID:%@ updated", categoryInfo[@"categoryId"]);
-                    }
+                    FDLog(@"Updating category with info :%@", categoryInfo);
+                    [category updateWithInfo:categoryInfo];
                 }else{
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
                 
                 //Delete category with no articles
-                if (category.articles.count == 0)[context deleteObject:category];
+                if (category.articles.count == 0){
+                    FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !",category.title, category.categoryID);
+                    [context deleteObject:category];
+                }
 
             }else{
                 
-                //Delete diabled categories
-                if (category) [context deleteObject:category];
+                if (category){
+                    FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
+                    [context deleteObject:category];
+                }
             }
         }
         [context save:nil];
