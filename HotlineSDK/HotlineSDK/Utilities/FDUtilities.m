@@ -310,7 +310,7 @@ static NSInteger networkIndicator = 0;
 +(BOOL)isPoweredByHidden{
     FDSecureStore *store = [FDSecureStore sharedInstance];
 
-    NSString *secretKey = [store objectForKey:HOTLINE_DEFAULTS_SECRET_KEY];
+    NSString *secretKey = [store objectForKey:HOTLINE_DEFAULTS_FOOTER_SECRET_KEY];
     if (!secretKey) return NO;
     
     NSString* myString=[[store objectForKey:HOTLINE_DEFAULTS_APP_KEY] stringByAppendingString:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
