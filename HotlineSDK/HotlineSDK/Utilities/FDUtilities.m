@@ -13,6 +13,7 @@
 #import "HLMacros.h"
 #import "HLLocalization.h"
 #import <AdSupport/ASIdentifierManager.h>
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation FDUtilities
 
@@ -285,6 +286,44 @@ static NSInteger networkIndicator = 0;
 +(void) PostNotificationWithName :(NSString *) notName withObject: (id) object{
     NSNotification* not=[NSNotification notificationWithName:notName object:object];
     [[NSNotificationCenter defaultCenter] postNotification:not];
+}
+
++ (NSString*)convertIntoMD5 :(NSString *) str
+{
+    // Create pointer to the string as UTF8
+    const char *ptr = [str UTF8String];
+    
+    // Create byte array of unsigned chars
+    unsigned char md5Buffer[16];
+    
+    // Create 16 byte MD5 hash value, store in buffer
+    CC_MD5(ptr,(unsigned int) strlen(ptr), md5Buffer);
+    
+    // Convert MD5 value in the buffer to NSString of hex values
+    NSMutableString *output = [NSMutableString stringWithCapacity:16 * 2];
+    for(int i = 0; i < 16; i++)
+        [output appendFormat:@"%02x",md5Buffer[i]];
+    
+    return output;
+}
+
++(BOOL)isPoweredByHidden{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+
+    NSString *secretKey = [store objectForKey:HOTLINE_DEFAULTS_SECRET_KEY];
+    if (!secretKey) return NO;
+    
+    NSString* myString=[[store objectForKey:HOTLINE_DEFAULTS_APP_KEY] stringByAppendingString:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+    
+    NSMutableString *reversedString = [NSMutableString stringWithCapacity:[myString length]];
+    
+    [myString enumerateSubstringsInRange:NSMakeRange(0,[myString length])
+                                 options:(NSStringEnumerationReverse | NSStringEnumerationByComposedCharacterSequences)
+                              usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+                                  [reversedString appendString:substring];
+                              }];
+    
+    return ([[self convertIntoMD5:reversedString] isEqualToString:secretKey]) ? YES : NO;
 }
 
 @end
