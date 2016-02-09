@@ -228,9 +228,8 @@
 
 -(UIViewController *)getControllerForEmbed:(UIViewController*)controller{
     HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller];
-    
+    preferredController.isEmbeddable = YES;
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
-    
     return navigationController;
 }
 
@@ -251,7 +250,7 @@
     }else{
         controller = [[HLChannelViewController alloc]init];
     }
-    controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+
     return [self getControllerForEmbed:controller];
 }
 

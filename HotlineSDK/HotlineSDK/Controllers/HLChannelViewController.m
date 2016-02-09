@@ -136,8 +136,10 @@
 
 -(void)setNavigationItem{
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    BOOL isEmbeddable = ((HLContainerController *)self.parentViewController).isEmbeddable;
+    if (!isEmbeddable) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
 

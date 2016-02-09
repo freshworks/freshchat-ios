@@ -158,15 +158,18 @@ typedef struct {
 }
 
 -(void)setNavigationItem{
-    if([self isModal]){
+    BOOL isEmbeddable = ((HLContainerController *)self.parentViewController).isEmbeddable;
+    if(_flags.isModalPresentationPreferred){
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self.navigationController
-                                                                      action:@selector(popViewControllerAnimated:)];
-        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        if (!isEmbeddable) {
+            UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self.navigationController
+                                                                          action:@selector(popViewControllerAnimated:)];
+            self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        }
     }
     
     UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_TITLE_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];

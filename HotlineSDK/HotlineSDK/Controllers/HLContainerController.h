@@ -11,6 +11,7 @@
 @interface HLContainerController : UIViewController
 
 @property (nonatomic,strong)UIView *containerView;
+@property (nonatomic, assign)BOOL isEmbeddable;
 
 -(instancetype)initWithController:(UIViewController *)controller;
 
