@@ -146,7 +146,16 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     TapOnPictureRecognizer *imgViewTapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
     [messagePictureImageView setContentMode:UIViewContentModeCenter];
     imgViewTapGesture.numberOfTapsRequired=1;
+    imgViewTapGesture.numberOfTouchesRequired = 1;
     [messagePictureImageView addGestureRecognizer:imgViewTapGesture];
+    
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageLongPress:)];
+    [longPressGesture setMinimumPressDuration:0.50];
+    longPressGesture.delegate =self;
+    messagePictureImageView.userInteractionEnabled = YES;
+    [messagePictureImageView addGestureRecognizer:longPressGesture];
+    
+    [imgViewTapGesture requireGestureRecognizerToFail:longPressGesture];
 
     [messageTextView addSubview:messagePictureImageView];
     
@@ -156,6 +165,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
     [self addSubview:messageActionButton];
+}
+
+-(void)imageLongPress:(UILongPressGestureRecognizer*)recognizer
+{
+    // disable long press
 }
 
 -(void)openActionUrl:(id)sender{

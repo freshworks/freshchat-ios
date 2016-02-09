@@ -39,7 +39,7 @@
 
 -(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value;
 
--(void)presentFeedback:(UIViewController *)controller;
+-(void)presentConversations:(UIViewController *)controller;
 
 -(void)presentSolutions:(UIViewController *)controller;
 

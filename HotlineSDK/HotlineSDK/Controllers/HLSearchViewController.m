@@ -23,7 +23,10 @@
 #import "Hotline.h"
 #import "HLLocalization.h"
 
+#import "FDArticleListCell.h"
+
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
+#define SEARCH_BAR_HEIGHT 44
 
 @interface  HLSearchViewController () <UISearchDisplayDelegate,UISearchBarDelegate,UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (strong, nonatomic) UITableView *tableView;
@@ -96,7 +99,7 @@
 }
 
 -(void)setupSubviews{
-    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SEARCH_BAR_HEIGHT)];
     self.searchBar.hidden = NO;
     self.searchBar.delegate = self;
     self.searchBar.placeholder = HLLocalizedString(LOC_SEARCH_PLACEHOLDER_TEXT);
@@ -118,14 +121,20 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
+    {
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     [self.view addSubview:self.tableView];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
     
     [self setEmptySearchResultView];
 
     [self.view addSubview:self.searchBar];
     
     NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView};
+    
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|"
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[trial]|"
@@ -269,16 +278,16 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = SEARCH_CELL_REUSE_IDENTIFIER;
-    FDTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDArticleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDArticleListCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.textLabel.numberOfLines = 3;
         cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     if (indexPath.row < self.searchResults.count) {
         FDArticleContent *article = self.searchResults[indexPath.row];
         [cell.textLabel sizeToFit];
-        cell.textLabel.text = article.title;
+        cell.articleText.text = article.title;
     }
     return cell;
 }
@@ -303,6 +312,25 @@
         articlesDetailController.isFromSearchView = TRUE;
         HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController];
         [self.navigationController pushViewController:containerController animated:YES];
+    }
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell     forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([tableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
     }
 }
 
@@ -369,7 +397,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]presentConversations:self];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {

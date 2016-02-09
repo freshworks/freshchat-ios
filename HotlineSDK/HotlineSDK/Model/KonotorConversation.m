@@ -31,24 +31,6 @@
 @dynamic belongsToChannel;
 @dynamic hasMessages;
 
--(void)incrementUnreadCount{
-    int unread = self.unreadMessagesCount.intValue;
-    unread++;
-    self.unreadMessagesCount = @(unread);
-    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:[NSNumber numberWithInt:unread]];
-    [[KonotorDataManager sharedInstance]save];
-}
-
--(void)decrementUnreadCount{
-    int unread = [[self unreadMessagesCount]intValue];
-    if(unread > 0){
-        unread--;
-    }
-    [self setUnreadMessagesCount:[NSNumber numberWithInt:unread]];
-    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:[NSNumber numberWithInt:unread]];
-    [[KonotorDataManager sharedInstance]save];
-}
-
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId{
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
@@ -100,5 +82,9 @@
     
     return newConversation;
 }
+
+@end
+
+@implementation KonotorConversationData
 
 @end

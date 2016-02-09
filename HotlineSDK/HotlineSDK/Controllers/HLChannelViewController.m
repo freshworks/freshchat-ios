@@ -189,8 +189,8 @@
             }
         }
         
-        [cell.badgeView updateBadgeCount:conversation.unreadMessagesCount.integerValue];
-
+        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
+        [cell.badgeView updateBadgeCount:unreadCount];
     }
     return cell;
 }

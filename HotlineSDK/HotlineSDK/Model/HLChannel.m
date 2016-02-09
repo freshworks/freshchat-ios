@@ -66,8 +66,9 @@
         FDLog(@"Welcome message of channel: \"%@\" is updated !", channel.name);
     }else{
         welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
-        welcomeMessage.createdMillis = @([[NSDate date] timeIntervalSince1970] *1000);
+        welcomeMessage.createdMillis = @100;
         welcomeMessage.isWelcomeMessage = YES;
+        welcomeMessage.messageRead = YES;
         [channel addMessagesObject:welcomeMessage];
     }
     

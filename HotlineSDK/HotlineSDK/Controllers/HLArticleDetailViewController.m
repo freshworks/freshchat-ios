@@ -297,7 +297,7 @@
 
 -(void)buttonClickedEvent:(id)sender{
     [self hideBottomView];
-    [[Hotline sharedInstance] presentFeedback:self];
+    [[Hotline sharedInstance] presentConversations:self];
 }
 
 -(void)dealloc{

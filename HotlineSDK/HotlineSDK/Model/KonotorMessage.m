@@ -69,17 +69,11 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-
-    //TODO: why do we need to associate user alias to message (local cache) ?
     [message setMessageUserId:@"User"];
-
-    //TODO: Use defined message type instead of hardcoding
     [message setMessageType:@1];
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
-
-    //TODO: Test if all the messages are deleted when channel is deleted
     message.belongsToConversation = conversation;
     [datamanager save];
     return message;
@@ -144,61 +138,38 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return message;
 }
 
-+(void)markAllMessagesAsRead{
++(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    [context performBlock:^{
-        NSError *pError;
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        [request setEntity:entityDescription];
-        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO"];
-        request.predicate = predicate;
-        NSArray *array = [context executeFetchRequest:request error:&pError];
-        if([array count]==0){
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
-            return;
-        }else{
-            for(int i=0;i<[array count];i++){
-                KonotorMessage *message = [array objectAtIndex:i];
-                if(message){
-                    if(![[message marketingId] isEqualToNumber:@0]){
-                        [message MarkMarketingMessageAsRead];
-                    }else{
-                        [message markAsReadwithNotif:NO];
-                    }
-                }
-            }
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
-        }
-    }];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
+    request.predicate = predicate;
+    NSArray *messages = [context executeFetchRequest:request error:nil];
+    return messages.count;
 }
 
-+(void)markAllMessagesAsReadForChannel:(HLChannel*)channel{
++(void)markAllMessagesAsReadForChannel:(HLChannel *)channel{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        [request setEntity:entityDescription];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
         request.predicate = predicate;
         NSArray *array = [context executeFetchRequest:request error:&pError];
         if([array count]==0){
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
-            return;
+
         }else{
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
                     if(![[message marketingId] isEqualToNumber:@0]){
-                        [message MarkMarketingMessageAsRead];
+                        [HLMessageServices markMarketingMessageAsRead:message];
                     }else{
-                        [message markAsReadwithNotif:NO];
+                        [message markAsRead];
                     }
                 }
             }
-            [KonotorMessage PostUnreadCountNotifWithNumber:@0];
         }
+        [context save:nil];
     }];
 }
 
@@ -246,47 +217,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
         return YES;
     }
     return NO;
-}
-
-
-//TODO: Move this to HLCoreServices
-
--(void) MarkMarketingMessageAsRead{
-    
-    if([self messageRead])return;
-    
-    NSNumber *marketingId = [self marketingId];
-    
-    if([marketingId intValue] ==0 || !marketingId) return;
-    
-    //mark as read, if the call fails we can mark it as unread.
-    [self MarkAsRead];
-    
-    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    
-    //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?seen=1&t=",appKey];
-    
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
-        FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
-    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
-        [self markAsUnread];
-    }];
-    
-    [operation start];
-}
-
-+(void) PostUnreadCountNotifWithNumber:(NSNumber *)number{
-    [FDUtilities PostNotificationWithName:HOTLINE_UNREAD_MESSAGE_COUNT withObject:number];
 }
 
 +(void)uploadAllUnuploadedMessages{
@@ -360,10 +290,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
 }
 
--(KonotorConversation *) parentConversation{
-    return self.belongsToConversation;
-}
-
 -(NSString *)getJSON{
     NSMutableDictionary *messageDict = [[NSMutableDictionary alloc]init];
     [messageDict setObject:[self messageType] forKey:@"messageType"];
@@ -386,44 +312,14 @@ NSMutableDictionary *gkMessageIdMessageMap;
     return [[NSString alloc ]initWithData:pJsonString encoding:NSUTF8StringEncoding];
 }
 
--(void) markAsReadwithNotif:(BOOL) notif{
-    BOOL wasRead = [self messageRead];
- 
-    if(![[self marketingId] isEqualToNumber:@0]){
-        [self MarkMarketingMessageAsRead];
-    }else{
-        [self setMessageRead:YES];
-    }
-    KonotorConversation *parentConvo = [self parentConversation];
-    if(parentConvo){
-        if(!wasRead)
-            [parentConvo decrementUnreadCount];
-        
-        if(notif)
-            [KonotorMessage PostUnreadCountNotifWithNumber:[parentConvo unreadMessagesCount]];
-    }
-}
-
-//introducing this function to solve for the recursive calling of markmarketingasread
--(void) MarkAsRead{
-    BOOL wasRead = [self messageRead];
-
+-(void)markAsRead{
     [self setMessageRead:YES];
-    KonotorConversation *parentConvo = [self parentConversation];
-    if(parentConvo){
-        if(!wasRead)
-            [parentConvo decrementUnreadCount];
-    }
 }
 
 -(void)markAsUnread{
     BOOL wasRead = [self messageRead];
     if(!wasRead) return
     [self setMessageRead:NO];
-    KonotorConversation *parentConvo = [self parentConversation];
-    if(parentConvo){
-        [parentConvo incrementUnreadCount];
-    }
 }
 
 +(KonotorMessage *)createNewMessage:(NSDictionary *)message{
@@ -559,5 +455,11 @@ NSMutableDictionary *gkMessageIdMessageMap;
     
     return message;
 }
+
+
+@end
+
+
+@implementation KonotorMessageData
 
 @end

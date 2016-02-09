@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FDMessageCell.h"
-#import "Konotor.h"
+#import "KonotorMessage.h"
 
 @interface FDPictureMessageView : UIImageView
 
