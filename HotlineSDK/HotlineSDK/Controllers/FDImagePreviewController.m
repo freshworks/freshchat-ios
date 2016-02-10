@@ -74,8 +74,10 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     [closeButton addTarget:self
                action:@selector(dismissImagePicPreview)
      forControlEvents:UIControlEventTouchUpInside];
+    
     closeButton.translatesAutoresizingMaskIntoConstraints = NO;
     [closeButton setImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_CLOSE_PREVIEW] forState:UIControlStateNormal];
+    closeButton.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
     [self.view addSubview:closeButton];
     
     NSDictionary *views = @{ @"closeBtn" :closeButton, @"scrollView" :self.scrollView};
@@ -83,8 +85,8 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|" options:0 metrics:nil views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeBtn(20)]-15-|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[closeBtn(20)]" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeBtn(25)]-14-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-14-[closeBtn(25)]" options:0 metrics:nil views:views]];
 
 }
 
