@@ -9,12 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
-#import "FDMarginalView.h"
 
-@interface HLSearchViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, FDMarginalViewDelegate>
+@interface HLSearchViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSArray *searchResults;
-
-@property (nonatomic, strong)FDMarginalView *footerView;
 
 @end
