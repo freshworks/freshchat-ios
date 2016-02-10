@@ -85,8 +85,6 @@ typedef struct {
         self.loadmoreCount=20;
         
         self.channel = channel;
-        //Set  App state reference to current channel
-        [HotlineAppState sharedInstance].currentVisibleChannel = channel;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -125,6 +123,7 @@ typedef struct {
 
 -(void)viewWillAppear:(BOOL)animated{
     self.tableView.tableHeaderView = [self tableHeaderView];
+    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [super viewWillAppear:animated];
 }
 
