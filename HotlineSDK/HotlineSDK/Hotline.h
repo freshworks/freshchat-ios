@@ -14,7 +14,7 @@
 @interface Hotline : NSObject
 
 
-@property(nonatomic) BOOL displaySolutionsAsGrid;
+
 
 @property(nonatomic, strong, readonly) HotlineConfig *config;
 
@@ -70,7 +70,7 @@
  */
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
 
--(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller;
+-(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState;
 
 @end
 
@@ -81,6 +81,11 @@
 @property (strong, nonatomic) NSString *domain;
 @property (nonatomic, assign) BOOL voiceMessagingEnabled;
 @property (nonatomic, assign) BOOL pictureMessagingEnabled;
+@property (nonatomic, assign) BOOL displaySolutionsAsGrid;
+@property (nonatomic, assign) BOOL cameraCaptureEnabled;
+@property (nonatomic, assign) BOOL notificationSoundEnabled;
+@property (nonatomic, assign) BOOL agentAvatarEnabled;
+@property (nonatomic, strong) NSString *secretKey;
 
 /**
  *  Initialize Hotline.
@@ -104,6 +109,7 @@
 @property (strong, nonatomic) NSString *emailAddress;
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *externalID;
+@property (strong, nonatomic) NSString *countryCode;
 
 +(instancetype)sharedInstance;
 

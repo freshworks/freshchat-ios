@@ -22,6 +22,11 @@
     [self hotlineIntegration];
     [self registerAppForNotifications];
     [self setupRootController];
+    if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
+        [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
+    }
+
+    NSLog(@"launchoptions :%@", launchOptions);
     return YES;
 }
 
@@ -53,14 +58,13 @@
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
-    
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
     user.emailAddress = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
-    [Hotline sharedInstance].displaySolutionsAsGrid = YES;
+    
     NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
@@ -88,7 +92,7 @@
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
-        [[Hotline sharedInstance]handleRemoteNotification:info withController:nil];
+        [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }
 

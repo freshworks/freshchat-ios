@@ -9,6 +9,7 @@
 #import "HLContainerController.h"
 #import "HLTheme.h"
 #import "HotlineAppState.h"
+#import "FDUtilities.h"
 
 @interface HLContainerController ()
 
@@ -47,6 +48,8 @@
     footerView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:footerView];
     
+    BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    
     //Footerview label
     UILabel *footerLabel = [UILabel new];
     footerLabel.text = @"Powered by Hotline.io";
@@ -59,8 +62,14 @@
     
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView][footerView(20)]|" options:0 metrics:nil views:views]];
+    if(isSubscribed){
+        [footerView removeFromSuperview];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
+    }
+    else{
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView][footerView(20)]|" options:0 metrics:nil views:views]];
+    }
     
     self.childController.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self.containerView addSubview:self.childController.view];

@@ -26,6 +26,7 @@
     self.emailAddress = nil;
     self.phoneNumber = nil;
     self.externalID = nil;
+    self.countryCode = nil;
 
     [[FDSecureStore sharedInstance]clearStoreData];
 }

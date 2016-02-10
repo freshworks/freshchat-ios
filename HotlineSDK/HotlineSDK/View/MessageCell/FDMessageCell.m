@@ -10,6 +10,7 @@
 #import "FDUtilities.h"
 #import "HLTheme.h"
 #import "HLLocalization.h"
+#import "FDSecureStore.h"
 
 //Not exposed to theming
 #define KONOTOR_VERTICAL_PADDING 2
@@ -70,7 +71,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
 
-    showsProfile=YES;
+    showsProfile = YES;
     showsSenderName=NO;
     customFontName=[[HLTheme sharedInstance] conversationUIFontName];
     showsUploadStatus=YES;
@@ -258,7 +259,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     messageContentViewWidth=contentViewWidth;
     
-    showsProfile=isSenderOther?([HLTheme sharedInstance].showsBusinessProfileImage):([HLTheme sharedInstance].showsUserProfileImage);
+    //add for config into user file
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isAgentAvatarEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    BOOL isUserAvatarEnabled = FALSE;//Set Default as false will use it in later versions
+    showsProfile = isSenderOther?isAgentAvatarEnabled:isUserAvatarEnabled;
     
     // get the length of the textview if one line and calculate page sides
     
@@ -268,8 +274,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         profileX=isSenderOther?KONOTOR_HORIZONTAL_PADDING:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION);
         profileY=KONOTOR_VERTICAL_PADDING;
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth+8);
-        messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING):(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
+        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
+        messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)-4:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
         messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);
@@ -278,7 +284,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     else{
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth= MIN(messageDisplayWidth-8*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth);
+        messageContentViewWidth= MIN(messageDisplayWidth-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
         messageContentViewX=isSenderOther?(KONOTOR_HORIZONTAL_PADDING*2):(messageDisplayWidth-2*KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
         messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);

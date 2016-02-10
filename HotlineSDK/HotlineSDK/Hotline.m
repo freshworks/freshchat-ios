@@ -30,7 +30,6 @@
 @interface Hotline () <FDNotificationBannerDelegate>
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
-@property(nonatomic, strong) UIViewController *preferredControllerForNotification;
 @property(nonatomic, strong) FDReachabilityManager *globalReachabilityManager;
 
 @end
@@ -133,6 +132,11 @@
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
         [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
         [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+        [store setBoolValue:config.displaySolutionsAsGrid forKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
+        [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+        [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+        [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+        [store setObject:config.secretKey forKey:HOTLINE_DEFAULTS_SECRET_KEY];
     }
 }
 
@@ -154,8 +158,10 @@
             NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
             [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
         }
-        
-        //TODO: Need to add country code, once backend allows it
+        if(user.countryCode && ![user.countryCode isEqualToString:@""]){
+            [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
+            userInfo[@"phoneCountry"] = user.countryCode;
+        }
         
         if (user.phoneNumber && ![user.phoneNumber isEqualToString:@""]) {
             [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
@@ -205,7 +211,9 @@
 
 -(void)presentSolutions:(UIViewController *)controller{
     UIViewController *preferedController = nil;
-    if (self.displaySolutionsAsGrid) {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
+    if (isGridLayoutDisplayEnabled) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
@@ -273,40 +281,56 @@
     }
 }
 
--(BOOL)isHotlineNotification:(NSDictionary *)info{
-    return ([info[@"source"] isEqualToString:@"konotor"] || [info[@"source"] isEqualToString:@"hotline"]);
+-(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
+    NSDictionary *payload = info;
+    if (info[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
+        payload = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    }
+    return payload;
 }
 
--(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller{
-    
-    if (controller) {
-        self.preferredControllerForNotification = controller;
-    }else{
-        self.preferredControllerForNotification = nil;
-    }
-    
-    NSNumber *channelID = @([info[@"kon_c_ch_id"] integerValue]);
-    NSString *message = [info valueForKeyPath:@"aps.alert"];
-    HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-    
-    FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
-    banner.delegate = self;
-    banner.message.text = message;
-    
-    HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
+-(BOOL)isHotlineNotification:(NSDictionary *)info{
+    NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
+    return ([payload[@"source"] isEqualToString:@"konotor"] || [payload[@"source"] isEqualToString:@"hotline"]);
+}
 
-    if(visibleChannel){
-        if ([visibleChannel.channelID isEqual:channel.channelID]) {
-            FDLog(@"Do not display notification banner, user in the same channel");
+-(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [HLMessageServices downloadAllMessages:nil];
+
+        NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
+        
+        NSNumber *channelID = @([payload[@"kon_c_ch_id"] integerValue]);
+        NSString *message = [payload valueForKeyPath:@"aps.alert"];
+        HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+        if (!channel) return;
+        
+        FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+        banner.delegate = self;
+        banner.message.text = message;
+        
+        HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
+                
+        if(visibleChannel){
+            if ([visibleChannel.channelID isEqual:channel.channelID]) {
+                FDLog(@"Do not display notification banner / handle notification");
+            }else{
+                [banner displayBannerWithChannel:channel];
+                FDLog(@"Display notification banner, user is in some other channel");
+            }
         }else{
-            [banner displayBannerWithChannel:channel];
+            if (appState == UIApplicationStateInactive) {
+                [self launchMessageControllerOfChannel:channel];
+                FDLog(@"Take user to the appropriate message screen");
+            }else{
+                [banner displayBannerWithChannel:channel];
+                FDLog(@"Display notification banner, user is somewhere outside channel screen");
+            }
         }
-    }else{
-        [banner displayBannerWithChannel:channel];
-    }
-    
-    FDLog(@"Push Recieved :%@", info);
-    [HLMessageServices downloadAllMessages:nil];
+        
+        FDLog(@"Push Recieved :%@", payload);
+    });
 }
 
 -(void)clearUserData{
@@ -324,35 +348,30 @@
 }
 
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
-    HLChannel *currentChannel = banner.currentChannel;
+    [self launchMessageControllerOfChannel:banner.currentChannel];
+}
+
+-(void)launchMessageControllerOfChannel:(HLChannel *)channel{
     UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
     if (visibleSDKController) {
         FDLog(@"visible screen is inside SDK");
         if ([visibleSDKController isKindOfClass:[HLChannelViewController class]]) {
-            [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:currentChannel];
+            [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:channel];
         } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
             FDMessageController *msgController = (FDMessageController *)visibleSDKController;
             if (msgController.isModal) {
-                [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
+                [self presentMessageControllerOn:visibleSDKController withChannel:channel];
             }else{
-                HLChannel *currentControllerChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
-                if (![currentControllerChannel.channelID isEqualToNumber:currentChannel.channelID]) {
-                    UINavigationController *navController = msgController.navigationController;
-                    [navController popViewControllerAnimated:NO];
-                    [self pushMessageControllerFrom:navController withChannel:currentChannel];
-                }
+                UINavigationController *navController = msgController.navigationController;
+                [navController popViewControllerAnimated:NO];
+                [self pushMessageControllerFrom:navController withChannel:channel];
             }
         }else {
-            [self presentMessageControllerOn:visibleSDKController withChannel:currentChannel];
+            [self presentMessageControllerOn:visibleSDKController withChannel:channel];
         }
         
     }else{
-        FDLog(@"visible screen is outside SDK");
-        if (self.preferredControllerForNotification) {
-            [self presentMessageControllerOn:self.preferredControllerForNotification withChannel:currentChannel];
-        }else{
-            [self presentMessageControllerOn:[self topMostController] withChannel:currentChannel];
-        }
+        [self presentMessageControllerOn:[self topMostController] withChannel:channel];
     }
 }
 
