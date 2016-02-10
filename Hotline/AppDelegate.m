@@ -28,16 +28,13 @@
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"mr.orange.konotor.com" withAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
-    config.voiceMessagingEnabled = YES;
-    config.pictureMessagingEnabled = YES;
-    
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
     user.emailAddress = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
-    [Hotline sharedInstance].displaySolutionsAsGrid = YES;
+    
     NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);

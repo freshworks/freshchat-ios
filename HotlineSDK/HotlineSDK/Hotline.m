@@ -133,6 +133,11 @@
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
         [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
         [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+        [store setBoolValue:config.displaySolutionsAsGrid forKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
+        [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+        [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+        [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+        [store setObject:config.secretKey forKey:HOTLINE_DEFAULTS_SECRET_KEY];
     }
 }
 
@@ -154,8 +159,10 @@
             NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
             [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
         }
-        
-        //TODO: Need to add country code, once backend allows it
+        if(user.countryCode && ![user.countryCode isEqualToString:@""]){
+            [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
+            userInfo[@"phoneCountry"] = user.countryCode;
+        }
         
         if (user.phoneNumber && ![user.phoneNumber isEqualToString:@""]) {
             [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
@@ -205,7 +212,9 @@
 
 -(void)presentSolutions:(UIViewController *)controller{
     UIViewController *preferedController = nil;
-    if (self.displaySolutionsAsGrid) {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
+    if (isGridLayoutDisplayEnabled) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
         preferedController = [[HLCategoriesListController alloc]init];

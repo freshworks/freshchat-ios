@@ -20,6 +20,11 @@
         self.appKey = appKey;
         self.pictureMessagingEnabled = YES;
         self.voiceMessagingEnabled = YES;
+        self.agentAvatarEnabled = YES;
+        self.notificationSoundEnabled = YES;
+        self.displaySolutionsAsGrid = YES;
+        self.cameraCaptureEnabled = YES;
+        self.secretKey = nil;
     }
     return self;
 }
