@@ -37,6 +37,7 @@
 +(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule;
 +(void) PostNotificationWithName :(NSString *) notName withObject: (id) object;
 +(BOOL) isPoweredByHidden;
++(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 
 @end
 

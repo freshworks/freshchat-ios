@@ -326,4 +326,10 @@ static NSInteger networkIndicator = 0;
     return ([[self convertIntoMD5:reversedString] isEqualToString:secretKey]) ? YES : NO;
 }
 
++(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key{
+    NSNumber *lastUpdateTime = [[FDSecureStore sharedInstance] objectForKey:key];
+    if (lastUpdateTime == nil) lastUpdateTime = @0;
+    return lastUpdateTime;
+}
+
 @end

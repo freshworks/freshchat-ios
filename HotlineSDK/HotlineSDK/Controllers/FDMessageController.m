@@ -558,7 +558,6 @@ typedef struct {
 - (void) didFinishDownloadingMessages{
     NSInteger count = [self fetchMessages].count;
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
-        FDLog(@"Refreshing view to show new message");
         _flags.isLoading = NO;
         [self refreshView];
     }
