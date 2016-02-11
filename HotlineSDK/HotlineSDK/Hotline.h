@@ -66,7 +66,7 @@
  */
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
 
--(void)handleRemoteNotification:(NSDictionary *)info withController:(UIViewController *)controller;
+-(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState;
 
 @end
 
