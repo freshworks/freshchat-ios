@@ -33,6 +33,7 @@
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
+#define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
 
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"

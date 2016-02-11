@@ -51,7 +51,6 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    NSLog(@"Registered Device Token  %@", devToken);
     NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
     [[Hotline sharedInstance] addDeviceToken:devToken];
 }

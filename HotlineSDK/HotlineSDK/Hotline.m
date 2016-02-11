@@ -190,6 +190,7 @@
         if (!isUserRegistered) {
             [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
                 if (!error) {
+                    [self registerDeviceToken];
                     [self performPendingTasks];
                 }
             }];
@@ -198,6 +199,16 @@
             [self performPendingTasks];
         }
     });
+}
+
+-(void)registerDeviceToken{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+    if (!isAppRegistered) {
+        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+    }
 }
 
 -(void)performPendingTasks{
@@ -245,13 +256,12 @@
 #pragma mark Push notifications
 
 -(void)addDeviceToken:(NSData *)deviceToken {
-    NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
-    NSString *userAlias = [FDUtilities getUserAlias];
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
-    if (!isAppRegistered) {
-        [[[HLCoreServices alloc]init] registerAppWithToken:deviceTokenString forUser:userAlias handler:nil];
+    NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
+    if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
+        [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     }
+    [self registerDeviceToken];
 }
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info{
