@@ -103,7 +103,6 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     
     CGRect scrollViewFrame = self.scrollView.frame;
     CGFloat scaleWidth = scrollViewFrame.size.width / self.scrollView.contentSize.width;
-    CGFloat scaleHeight = scrollViewFrame.size.height / self.scrollView.contentSize.height;
     CGFloat minScale = MIN(scaleWidth, 1);
     
     self.scrollView.minimumZoomScale = minScale;

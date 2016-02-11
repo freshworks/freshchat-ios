@@ -43,7 +43,6 @@
 }
 
 
-//TODO: Add theming
 -(void)setSubViews{
     self.userInteractionEnabled = YES;
     
@@ -64,7 +63,6 @@
     self.message.textColor = [self.theme notificationMessageTextColor];
 
     self.imgView=[[UIImageView alloc] init];
-//    self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
     [self.imgView.layer setMasksToBounds:YES];
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     

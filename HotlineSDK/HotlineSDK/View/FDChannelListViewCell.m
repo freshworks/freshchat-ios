@@ -21,7 +21,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.theme = [HLTheme sharedInstance];
-        //TODO: use a seperate theme entry for this background .. Or a common one like earlier where we had tableViewCellBackgroundColor.
         self.backgroundColor     = [self.theme conversationListViewBackgroundColor];
         self.titleLabel.textColor = [self.theme channelTitleFontColor];
         self.titleLabel.font      = [self.theme channelTitleFont];

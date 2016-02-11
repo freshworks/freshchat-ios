@@ -35,7 +35,7 @@
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
     
-    NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
+    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];

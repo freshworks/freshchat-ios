@@ -12,10 +12,7 @@
 #import "FDActionButton.h"
 #import "KonotorMessage.h"
 
-//TODO: Clean up and read from theme - Rex
-#define KONOTOR_MESSAGETEXT_FONT ([UIFont systemFontOfSize:12.0])//
-#define KONOTOR_PROFILEIMAGE_DIMENSION 40.0//
-
+#define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
 #define KONOTOR_HORIZONTAL_PADDING 5
 #define KONOTOR_TEXTMESSAGE_MAXWIDTH 260.0
 #define KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING 10
