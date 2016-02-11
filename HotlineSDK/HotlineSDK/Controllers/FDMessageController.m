@@ -31,7 +31,6 @@
 typedef struct {
     BOOL isLoading;
     BOOL isShowingAlert;
-    BOOL canPromptForPush;
     BOOL isFirstWordOnLine;
     BOOL isKeyboardOpen;
     BOOL isModalPresentationPreferred;
@@ -76,7 +75,6 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
-        _flags.canPromptForPush = YES;
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
 
@@ -407,11 +405,8 @@ typedef struct {
     }
     
     if (!notificationEnabled) {
-        if(_flags.canPromptForPush){
             [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
                           andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
-            _flags.canPromptForPush = NO;
-        }
     }
 }
 
