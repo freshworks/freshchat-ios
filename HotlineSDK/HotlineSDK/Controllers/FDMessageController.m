@@ -135,6 +135,7 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
+    [Konotor stopRecording];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
 }
 
