@@ -289,8 +289,8 @@
         if (!channel) return;
         
         FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+        [banner setMessage:message];
         banner.delegate = self;
-        banner.message.text = message;
         
         HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
                 
