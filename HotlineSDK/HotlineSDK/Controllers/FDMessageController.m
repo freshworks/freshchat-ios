@@ -136,6 +136,8 @@ typedef struct {
     [super viewWillDisappear:animated];
     [self cancelPoller];
     [Konotor stopRecording];
+    if(self.audioMessageInputView.window)
+        [self audioMessageInput:self.audioMessageInputView dismissButtonPressed:nil];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
 }
 
