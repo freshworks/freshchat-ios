@@ -11,9 +11,12 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
+#import "HLTheme.h"
 #import "HLLocalization.h"
 #import <AdSupport/ASIdentifierManager.h>
 #import <CommonCrypto/CommonDigest.h>
+
+#define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
 @implementation FDUtilities
 
@@ -309,11 +312,11 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL)isPoweredByHidden{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-
-    NSString *footerSecretKey = [store objectForKey:HOTLINE_DEFAULTS_HIDE_FOOTER_SECRET_KEY];
-    if (!footerSecretKey) return NO;
     
-    NSString* myString=[[store objectForKey:HOTLINE_DEFAULTS_APP_KEY] stringByAppendingString:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+    NSString *secretKey = [[HLTheme sharedInstance] getFooterSecretKey];
+    if (!secretKey) return NO;
+    
+    NSString* myString = [NSString stringWithFormat:@"%@%@%@",[store objectForKey:HOTLINE_DEFAULTS_APP_ID],EXTRA_SECURE_STRING,[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     
     NSMutableString *reversedString = [NSMutableString stringWithCapacity:[myString length]];
     
@@ -323,7 +326,7 @@ static NSInteger networkIndicator = 0;
                                   [reversedString appendString:substring];
                               }];
     
-    return ([[self convertIntoMD5:reversedString] isEqualToString:footerSecretKey]) ? YES : NO;
+    return ([[self convertIntoMD5:reversedString] isEqualToString:secretKey]) ? YES : NO;
 }
 
 @end

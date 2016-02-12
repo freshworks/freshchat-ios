@@ -24,7 +24,6 @@
         self.notificationSoundEnabled = YES;
         self.displaySolutionsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
-        self.hideFooterSecretKey = nil;
     }
     return self;
 }

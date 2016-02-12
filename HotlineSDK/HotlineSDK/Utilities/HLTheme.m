@@ -543,6 +543,12 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+#pragma mark - Footer Settings
+
+- (NSString *) getFooterSecretKey{
+    return [self.themePreferences valueForKeyPath:@"HideFooterView.HotlineDisableFrame"];
+}
+
 #pragma mark - Voice Recording Prompt
 
 -(UIFont *)voiceRecordingTimeLabelFont{
