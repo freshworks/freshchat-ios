@@ -136,6 +136,7 @@
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+        [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
         [store setObject:config.secretKey forKey:HOTLINE_DEFAULTS_SECRET_KEY];
     }
 }
@@ -278,6 +279,10 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        BOOL canShowNotification = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+        if(!canShowNotification)
+        return ;
 
         [HLMessageServices downloadAllMessages:nil];
 

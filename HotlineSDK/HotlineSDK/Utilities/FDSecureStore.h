@@ -28,6 +28,7 @@
 #define HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED @"hotline_defaults_picture_message_enabled"
 #define HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED @"hotline_defaults_notification_sound_enabled"
 #define HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED @"hotline_defaults_agent_avatar_enabled"
+#define HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER @"hotline_defaults_show_notification_banner"
 #define HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID @"hotline_defaults_display_solutions_as_grid"
 #define HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED @"hotline_defaults_camera_capture_enabled"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
