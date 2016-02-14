@@ -339,7 +339,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     newMessage.durationInSecs = [message valueForKey:@"durationInSecs"];
     newMessage.read = [message valueForKey:@"read"];
     [newMessage setAudioURL:[message valueForKey:@"binaryUrl"]];
-    [newMessage setText:[message valueForKey:@"text"]];
+    newMessage.text = (message[@"text"]) ? message[@"text"] : @"";
     [newMessage setCreatedMillis:[message valueForKey:@"createdMillis"]];
     [newMessage setMarketingId:[message valueForKey:@"marketingId"]];
     [newMessage setActionLabel:[message valueForKey:@"messageActionLabel"]];
