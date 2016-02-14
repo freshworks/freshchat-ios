@@ -172,18 +172,11 @@ typedef struct {
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
     }
     
-    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_TITLE_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
-    self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
-    
     if (self.parentViewController) {
         self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
     }else{
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-}
-
--(void)FAQButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentSolutions:self];
 }
 
 -(void)closeButtonAction:(id)sender{
