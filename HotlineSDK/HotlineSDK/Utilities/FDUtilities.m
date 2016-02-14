@@ -80,14 +80,6 @@
     return  modifiedString;
 }
 
-+(void)assertMainThread{
-    if (![NSThread isMainThread]) {
-        NSString *exceptionName   = @"MOBIHELP_SDK_EXCEPTION_THREAD_BAD_ACCESS";
-        NSString *exceptionReason = @"You are attempting to access main thread stuff from a background thread";
-        [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
-    }
-}
-
 +(NSString *)replaceSpecialCharacters:(NSString *)term with:(NSString *)replaceString{
     NSString *modifiedString;
     if(term){

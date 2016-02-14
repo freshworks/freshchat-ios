@@ -24,8 +24,8 @@
         index.articleID    =  articleID;
         index.keyWord      =  key;
         NSDictionary * matches = obj;
-        index.titleMatches = matches[MOBIHELP_DB_INDEX_TITLE_MATCHES];
-        index.descMatches  = matches[MOBIHELP_DB_INDEX_DESC_MATCHES];
+        index.titleMatches = matches[HOTLINE_DB_INDEX_TITLE_MATCHES];
+        index.descMatches  = matches[HOTLINE_DB_INDEX_DESC_MATCHES];
         [indexArray addObject:index];
     }];
     return indexArray;
