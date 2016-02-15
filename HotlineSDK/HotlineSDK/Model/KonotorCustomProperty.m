@@ -20,25 +20,26 @@
 
 +(KonotorCustomProperty*)createNewPropertyForKey:(NSString *)key WithValue:(NSString *)value isUserProperty:(BOOL)isUserProperty{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    KonotorCustomProperty *property =  [KonotorCustomProperty getCustomPropertyWithKey:key withContext:context];
+    KonotorCustomProperty *property =  [KonotorCustomProperty getCustomPropertyWithKey:key andUserProperty:isUserProperty withContext:context];
     if (property) {
-        if (![value isEqualToString:property.value]) {
-            property.value = value;
-            property.uploadStatus = @0;
-            property.isUserProperty = isUserProperty;
+        if ([value isEqualToString:property.value]) {
+            return property;
         }
     }else{
         property = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorCustomProperty" inManagedObjectContext:context];
-        property.uploadStatus = @0;
         property.key = key;
-        property.value = value;
-        property.isUserProperty = isUserProperty;
     }
+    property.uploadStatus = @0;
+    property.value = value;
+    property.isUserProperty = isUserProperty;
+
     [[KonotorDataManager sharedInstance]save];
     return property;
 }
 
-+(KonotorCustomProperty *)getCustomPropertyWithKey:(NSString *)key withContext:(NSManagedObjectContext *)context{
+
+// (Key + userProperty) is unique
++(KonotorCustomProperty *)getCustomPropertyWithKey:(NSString *)key andUserProperty:(BOOL)userProperty withContext:(NSManagedObjectContext *)context{
     KonotorCustomProperty *property = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorCustomProperty"];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"key == %@",key];
