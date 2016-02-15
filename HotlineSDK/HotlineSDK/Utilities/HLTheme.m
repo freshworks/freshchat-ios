@@ -546,7 +546,7 @@
 #pragma mark - Footer Settings
 
 - (NSString *) getFooterSecretKey{
-    return [self.themePreferences valueForKeyPath:@"HideFooterView.HotlineDisableFrame"];
+    return [self.themePreferences valueForKeyPath:@"FooterView.HotlineDisableFrame"];
 }
 
 #pragma mark - Voice Recording Prompt
