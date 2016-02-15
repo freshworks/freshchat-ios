@@ -62,6 +62,7 @@
         <relationship name="hasMessages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="KonotorMessage" inverseName="belongsToConversation" inverseEntity="KonotorMessage" syncable="YES"/>
     </entity>
     <entity name="KonotorCustomProperty" representedClassName="KonotorCustomProperty" syncable="YES">
+        <attribute name="isUserProperty" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serializedData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -110,9 +111,11 @@
     </entity>
     <entity name="KonotorUser" representedClassName="KonotorUser" syncable="YES">
         <attribute name="appSpecificIdentifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isUserCreatedOnServer" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userAlias" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hasProperties" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="KonotorCustomProperty" syncable="YES"/>
     </entity>
@@ -123,10 +126,10 @@
         <element name="HLChannel" positionX="-110" positionY="246" width="128" height="208"/>
         <element name="KonotorApp" positionX="-288" positionY="-27" width="128" height="195"/>
         <element name="KonotorConversation" positionX="106" positionY="180" width="128" height="178"/>
-        <element name="KonotorCustomProperty" positionX="-371" positionY="327" width="128" height="105"/>
+        <element name="KonotorCustomProperty" positionX="-371" positionY="306" width="128" height="118"/>
         <element name="KonotorMessage" positionX="351" positionY="71" width="128" height="465"/>
         <element name="KonotorMessageBinary" positionX="576" positionY="324" width="128" height="105"/>
         <element name="KonotorShareMessageEvent" positionX="54" positionY="-25" width="128" height="88"/>
-        <element name="KonotorUser" positionX="-578" positionY="162" width="128" height="133"/>
+        <element name="KonotorUser" positionX="-578" positionY="162" width="128" height="163"/>
     </elements>
 </model>

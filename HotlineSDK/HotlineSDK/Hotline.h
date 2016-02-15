@@ -13,9 +13,6 @@
 
 @interface Hotline : NSObject
 
-
-
-
 @property(nonatomic, strong, readonly) HotlineConfig *config;
 
 /**
@@ -48,6 +45,8 @@
 -(void)addDeviceToken:(NSData *) deviceToken;
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
+
+-(void)newSession;
 
 /**
  *  Get the last updated unread messages count.
