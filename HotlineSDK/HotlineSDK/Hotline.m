@@ -259,7 +259,11 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
-        [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        if(![storedDeviceToken isEqualToString:deviceTokenString]){
+            [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+        }
     }
     [self registerDeviceToken];
 }
