@@ -90,7 +90,7 @@
 
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+            [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
             FDLog(@"Device token updated on server 👍");
         }else{
             FDLog(@"Could not register app :%@", error);

@@ -195,7 +195,6 @@
             }];
         }
         else {
-            [self registerDeviceToken];
             [self performPendingTasks];
         }
     });
@@ -203,7 +202,7 @@
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
     if (!isAppRegistered) {
         NSString *userAlias = [FDUtilities getUserAlias];
         NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
@@ -262,7 +261,7 @@
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         if(![storedDeviceToken isEqualToString:deviceTokenString]){
             [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
         }
     }
     [self registerDeviceToken];
