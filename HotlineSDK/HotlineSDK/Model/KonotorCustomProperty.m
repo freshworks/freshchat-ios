@@ -42,7 +42,7 @@
 +(KonotorCustomProperty *)getCustomPropertyWithKey:(NSString *)key andUserProperty:(BOOL)userProperty withContext:(NSManagedObjectContext *)context{
     KonotorCustomProperty *property = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorCustomProperty"];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"key == %@",key];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"key == %@ && isUserProperty == %@",key,[NSNumber numberWithBool:userProperty]];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 1) {
         property = matches.firstObject;
