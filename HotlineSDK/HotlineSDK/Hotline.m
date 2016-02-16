@@ -71,6 +71,14 @@
     [self storeConfig:config];
     [self updateUser:user];
     [self registerUser];
+    [self registerAppActiveListener];
+}
+
+-(void) registerAppActiveListener{
+    [[NSNotificationCenter defaultCenter]
+                    addObserver: self
+                    selector: @selector(newSession:)
+                    name: UIApplicationDidBecomeActiveNotification object: nil];
 }
 
 -(void)updateAppVersion{
@@ -175,7 +183,7 @@
     }
 }
 
--(void)newSession{
+-(void)newSession:(NSNotification *)notification{
     [self performPendingTasks];
 }
 

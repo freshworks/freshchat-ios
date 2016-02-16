@@ -102,9 +102,9 @@
     return task;
 }
 
-static dispatch_group_t serviceGroup = nil;
-
 +(void)uploadUnuploadedProperties{
+    
+    static dispatch_group_t serviceGroup = nil;
     
     if (!serviceGroup) {
         serviceGroup = dispatch_group_create();
@@ -157,7 +157,6 @@ static dispatch_group_t serviceGroup = nil;
             dispatch_group_leave(serviceGroup);
         }];
     });
-
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{

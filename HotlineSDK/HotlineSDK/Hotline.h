@@ -46,8 +46,6 @@
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
 
--(void)newSession;
-
 /**
  *  Get the last updated unread messages count.
  *
