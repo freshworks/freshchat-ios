@@ -161,12 +161,11 @@ typedef struct {
 }
 
 -(void)setNavigationItem{
-    BOOL isEmbeddable = ((HLContainerController *)self.parentViewController).isEmbeddable;
     if(_flags.isModalPresentationPreferred){
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
-        if (!isEmbeddable) {
+        if (!self.embedded) {
             UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self.navigationController
@@ -674,7 +673,7 @@ typedef struct {
                 articleDetailController.articleDescription = article.articleDescription;
                 articleDetailController.categoryTitle=article.category.title;
                 articleDetailController.categoryID = article.categoryID;
-                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
                 [self.navigationController pushViewController:container animated:YES];
             }
         }
