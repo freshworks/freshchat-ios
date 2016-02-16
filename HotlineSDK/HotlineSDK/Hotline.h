@@ -82,7 +82,6 @@
 @property (nonatomic, assign) BOOL notificationSoundEnabled;
 @property (nonatomic, assign) BOOL agentAvatarEnabled;
 @property (nonatomic, assign) BOOL showNotificationBanner;
-@property (nonatomic, strong) NSString *secretKey;
 
 /**
  *  Initialize Hotline.

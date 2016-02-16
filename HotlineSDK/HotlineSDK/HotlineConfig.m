@@ -25,7 +25,6 @@
         self.displaySolutionsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
-        self.secretKey = nil;
     }
     return self;
 }
