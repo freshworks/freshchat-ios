@@ -73,4 +73,4 @@
 "day_saturday"="Saturday";
 
 /*Notifications*/
-"default_text_message"="hey you got a new message";
+"notification_message_default"="Hey, you have a new message";

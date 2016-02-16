@@ -140,7 +140,7 @@
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
-        [store setObject:config.secretKey forKey:HOTLINE_DEFAULTS_SECRET_KEY];
+        [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     }
 }
 
@@ -175,7 +175,7 @@
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
     if (!isAppRegistered) {
         NSString *userAlias = [FDUtilities getUserAlias];
         NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
@@ -239,7 +239,11 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
-        [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        if(![storedDeviceToken isEqualToString:deviceTokenString]){
+            [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
+        }
     }
     [self registerDeviceToken];
 }
@@ -259,6 +263,10 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        BOOL canShowNotification = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+        if(!canShowNotification)
+        return ;
 
         [HLMessageServices downloadAllMessages:nil];
 
