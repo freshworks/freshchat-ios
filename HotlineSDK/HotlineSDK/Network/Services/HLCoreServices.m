@@ -102,9 +102,8 @@
     return task;
 }
 
-
-
 +(void)uploadUnuploadedProperties{
+    
     static dispatch_group_t serviceGroup = nil;
     
     if (!serviceGroup) {
@@ -113,47 +112,51 @@
     
     dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
-    dispatch_async(globalQueue,^{
+    dispatch_async(globalQueue, ^{
+        
         dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
-        dispatch_group_async(serviceGroup, globalQueue, ^{
-            
-            if (![FDUtilities getUserAlias]) {
-                return;
-            }
-            
-            NSMutableDictionary *info = [NSMutableDictionary new];
-            NSMutableDictionary *userInfo = [NSMutableDictionary new];
-            
-            NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
-            if (unuploadedProperties.count > 0) {
-                NSMutableDictionary *metaInfo = [NSMutableDictionary new];
-                for (int i=0; i<unuploadedProperties.count; i++) {
-                    KonotorCustomProperty *property = unuploadedProperties[i];
-                    if (property.key) {
-                        if (property.isUserProperty) {
-                            userInfo[property.key] = property.value;
-                        }else{
-                            metaInfo[property.key] = property.value;
-                        }
+        
+        dispatch_group_enter(serviceGroup);
+        
+        if (![FDUtilities getUserAlias]) {
+            dispatch_group_leave(serviceGroup);
+            return;
+        }
+        
+        NSMutableDictionary *info = [NSMutableDictionary new];
+        NSMutableDictionary *userInfo = [NSMutableDictionary new];
+        
+        NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
+        if (unuploadedProperties.count > 0) {
+            NSMutableDictionary *metaInfo = [NSMutableDictionary new];
+            for (int i=0; i<unuploadedProperties.count; i++) {
+                KonotorCustomProperty *property = unuploadedProperties[i];
+                if (property.key) {
+                    if (property.isUserProperty) {
+                        userInfo[property.key] = property.value;
+                    }else{
+                        metaInfo[property.key] = property.value;
                     }
                 }
-                userInfo[@"meta"] = metaInfo;
-                info[@"user"] = userInfo; //TODO: verify if partial user updates work - Rex
-           
-                [self updateUserProperties:info handler:^(NSError *error) {
-                    if (!error) {
-                        for (int i=0; i<unuploadedProperties.count; i++) {
-                            KonotorCustomProperty *property = unuploadedProperties[i];
-                            property.uploadStatus = @1;
-                        }
-                    }
-                    [[KonotorDataManager sharedInstance]save];
-                }];
             }
-        });
+            userInfo[@"meta"] = metaInfo;
+            info[@"user"] = userInfo;
+        }else{
+            dispatch_group_leave(serviceGroup);
+            return;
+        }
         
+        [self updateUserProperties:info handler:^(NSError *error) {
+            if (!error) {
+                for (int i=0; i<unuploadedProperties.count; i++) {
+                    KonotorCustomProperty *property = unuploadedProperties[i];
+                    property.uploadStatus = @1;
+                }
+            }
+            [[KonotorDataManager sharedInstance]save];
+            dispatch_group_leave(serviceGroup);
+        }];
     });
-
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
