@@ -20,8 +20,8 @@ static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 
 @interface FDNotificationBanner : UIView
 
-@property (nonatomic, strong) UILabel *title;
-@property (nonatomic, strong) UILabel *message;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
 @property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong, readonly) HLChannel *currentChannel;
 
@@ -29,5 +29,6 @@ static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 
 +(instancetype)sharedInstance;
 -(void)displayBannerWithChannel:(HLChannel *)channel;
+-(void)setMessage:(NSString *)message;
 
 @end

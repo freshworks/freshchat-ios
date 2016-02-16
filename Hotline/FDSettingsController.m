@@ -10,7 +10,7 @@
 #import "HotlineSDK/Hotline.h"
 #import "AppDelegate.h"
 
-@interface FDSettingsController () <UIActionSheetDelegate>
+@interface FDSettingsController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (strong, nonatomic) UIScrollView *containerView;
 

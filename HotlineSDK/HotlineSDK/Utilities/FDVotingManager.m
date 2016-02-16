@@ -10,9 +10,6 @@
 #import "FDSecureStore.h"
 #import "HLFAQServices.h"
 
-#define MOBIHELP_DEFAULTS_VOTED_ARTICLES @"mobihelp_defaults_voted_articles"
-
-
 @interface FDVotingManager()
 
 @property (strong,nonatomic) NSMutableDictionary *votedArticlesDictionary;
@@ -34,8 +31,8 @@
     self = [super init];
     if (self) {
         FDSecureStore *secureStore = [FDSecureStore sharedInstance];
-        if([secureStore checkItemWithKey:MOBIHELP_DEFAULTS_VOTED_ARTICLES]){
-            self.votedArticlesDictionary = [secureStore objectForKey:MOBIHELP_DEFAULTS_VOTED_ARTICLES];
+        if([secureStore checkItemWithKey:HOTLINE_DEFAULTS_VOTED_ARTICLES]){
+            self.votedArticlesDictionary = [secureStore objectForKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];
         }
         else{
             self.votedArticlesDictionary = [[NSMutableDictionary alloc]init];
@@ -78,7 +75,7 @@
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
     [self.votedArticlesDictionary setValue:@(vote) forKey:articleIDString];
-    [secureStore setObject:self.votedArticlesDictionary forKey:MOBIHELP_DEFAULTS_VOTED_ARTICLES];
+    [secureStore setObject:self.votedArticlesDictionary forKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];
 }
 
 @end

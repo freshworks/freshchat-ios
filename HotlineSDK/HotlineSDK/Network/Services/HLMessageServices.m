@@ -27,7 +27,6 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 @implementation HLMessageServices
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler{
-    FDLog(@"download message called");
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
@@ -40,7 +39,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
         if (!error) {
-            [self fetchAllMessagesInChannel:channels handler:handler];
+            [self fetchAllMessages:handler];
         }else{
             if(handler) handler(error);
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
@@ -48,21 +47,14 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
 }
 
-+(void)fetchAllMessagesInChannel:(NSArray *)channels handler:(void(^)(NSError *error))handler{
++(void)fetchAllMessages:(void(^)(NSError *error))handler{
     NSString *pBasePath = [FDUtilities getBaseURL];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
-    
-    if (lastUpdateTime == nil) {
-        lastUpdateTime = @0;
-        FDLog(@"Restoring user messages with alias :%@", userAlias);
-    }
-    
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
     NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
-    
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
     [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
@@ -73,9 +65,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];
-        
-        FDLog(@"Download all message call status :%d", statusCode);
-        
+
         if(error || statusCode >= 400){
             FDLog(@"Message fetch failed %@", error);
             HideNetworkActivityIndicator();
@@ -136,7 +126,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
         NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
-        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
         [[KonotorDataManager sharedInstance]save];
         MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
@@ -153,10 +143,15 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
-    [request setRelativePath:path andURLParams:@[token]];
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+    NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
+    [request setRelativePath:path andURLParams:@[token, afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
+            FDLog(@"Channels :%@", [responseInfo responseAsArray]);
             [self importChannels:[responseInfo responseAsArray] handler:handler];
+            NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+            [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         }else{
             if (handler) handler(nil, error);
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
@@ -176,11 +171,8 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
                 if (channel) {
-                    NSDate *updateTime = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
-                    if ([channel.lastUpdated compare:updateTime] == NSOrderedAscending) {
-                        [HLChannel updateChannel:channel withInfo:channelInfo];
-                        FDLog(@"Channel with ID:%@ updated", channel.channelID);
-                    }
+                    [HLChannel updateChannel:channel withInfo:channelInfo];
+                    FDLog(@"Channel with ID:%@ updated", channel.channelID);
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }

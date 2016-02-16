@@ -23,16 +23,20 @@
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
 #define HOTLINE_DEFAULTS_DOMAIN @"hotline_defaults_domain"
 #define HOTLINE_DEFAULTS_APP_KEY @"hotline_defaults_app_key"
-#define HOTLINE_DEFAULTS_SECRET_KEY @"hotline_defaults_secret_key"
 #define HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED @"hotline_defaults_voice_message_enabled"
 #define HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED @"hotline_defaults_picture_message_enabled"
 #define HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED @"hotline_defaults_notification_sound_enabled"
 #define HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED @"hotline_defaults_agent_avatar_enabled"
+#define HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER @"hotline_defaults_show_notification_banner"
 #define HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID @"hotline_defaults_display_solutions_as_grid"
 #define HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED @"hotline_defaults_camera_capture_enabled"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
+#define HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME @"hotline_defaults_conversations_last_updated_time"
+#define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
+
+#define HOTLINE_DEFAULTS_VOTED_ARTICLES @"hotline_defaults_voted_articles"
 
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"

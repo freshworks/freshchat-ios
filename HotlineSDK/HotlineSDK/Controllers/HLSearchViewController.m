@@ -36,8 +36,6 @@
 @property (strong, nonatomic) HLTheme *theme;
 @property (strong, nonatomic) UIImageView *emptySearchImgView;
 @property (strong, nonatomic) UILabel *emptyResultLbl;
-@property (strong, nonatomic) NSLayoutConstraint *contactBtnHeightConstraint;
-@property (strong, nonatomic) NSLayoutConstraint *contactBtnBottomConstraint;
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) BOOL isKeyboardOpen;
 @end
@@ -161,18 +159,12 @@
     self.emptyResultLbl.text = HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT);
     [self.view addSubview:self.emptyResultLbl];
     
-    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
-    [self.view addSubview:self.footerView];
-    
-    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"footerView" : self.footerView, @"emptyLabel":self.emptyResultLbl};
+    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"emptyLabel":self.emptyResultLbl};
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyLabel]-50-|" options:0 metrics:nil views:emptySubViews]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptySearchImageView(100)]" options:0 metrics:nil views:emptySubViews]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptySearchImageView(100)]-10-[emptyLabel]" options:0 metrics:nil views:emptySubViews]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:emptySubViews]];
-    
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
                                                           attribute:NSLayoutAttributeCenterX
@@ -198,26 +190,6 @@
                                                          multiplier:0.5
                                                            constant:0.0]];
     
-    
-    
-    self.contactBtnHeightConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
-                                                                   attribute:NSLayoutAttributeHeight
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1.0
-                                                                    constant:40];
-    
-    self.contactBtnBottomConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
-                                                                   attribute:NSLayoutAttributeBottom
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:self.view
-                                                                   attribute:NSLayoutAttributeBottom
-                                                                  multiplier:1.0 constant:0];
-    
-    
-    [self.view addConstraint:self.contactBtnBottomConstraint];
-    [self.view addConstraint:self.contactBtnHeightConstraint];
     self.emptySearchImgView.hidden = YES;
     self.emptyResultLbl.hidden = YES;
 }
@@ -247,7 +219,6 @@
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
-    self.contactBtnBottomConstraint.constant = - keyboardCoveredHeight;
     self.keyboardHeight = keyboardCoveredHeight;
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -258,7 +229,6 @@
     self.isKeyboardOpen = NO;
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.keyboardHeight = 0.0;
-    self.contactBtnBottomConstraint.constant = 0.0;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];

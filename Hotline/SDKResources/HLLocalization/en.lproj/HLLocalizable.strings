@@ -71,3 +71,6 @@
 "day_thursday"="Thursday";
 "day_friday"="Friday";
 "day_saturday"="Saturday";
+
+/*Notifications*/
+"notification_message_default"="Hey, you have a new message";

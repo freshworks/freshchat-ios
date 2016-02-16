@@ -31,7 +31,6 @@
 typedef struct {
     BOOL isLoading;
     BOOL isShowingAlert;
-    BOOL canPromptForPush;
     BOOL isFirstWordOnLine;
     BOOL isKeyboardOpen;
     BOOL isModalPresentationPreferred;
@@ -76,7 +75,6 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
-        _flags.canPromptForPush = YES;
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
 
@@ -137,6 +135,9 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
+    [Konotor stopRecording];
+    if(self.audioMessageInputView.window)
+        [self audioMessageInput:self.audioMessageInputView dismissButtonPressed:nil];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
 }
 
@@ -171,18 +172,11 @@ typedef struct {
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
     }
     
-    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_TITLE_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
-    self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
-    
     if (self.parentViewController) {
         self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
     }else{
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-}
-
--(void)FAQButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentSolutions:self];
 }
 
 -(void)closeButtonAction:(id)sender{
@@ -407,11 +401,8 @@ typedef struct {
     }
     
     if (!notificationEnabled) {
-        if(_flags.canPromptForPush){
             [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
                           andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
-            _flags.canPromptForPush = NO;
-        }
     }
 }
 
@@ -563,7 +554,6 @@ typedef struct {
 - (void) didFinishDownloadingMessages{
     NSInteger count = [self fetchMessages].count;
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
-        FDLog(@"Refreshing view to show new message");
         _flags.isLoading = NO;
         [self refreshView];
     }

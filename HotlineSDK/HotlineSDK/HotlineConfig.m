@@ -24,7 +24,7 @@
         self.notificationSoundEnabled = YES;
         self.displaySolutionsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
-        self.secretKey = nil;
+        self.showNotificationBanner = YES;
     }
     return self;
 }

@@ -12,7 +12,6 @@
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 
-//Not exposed to theming
 #define KONOTOR_VERTICAL_PADDING 2
 #define KONOTOR_USERNAMEFIELD_HEIGHT 18
 #define KONOTOR_TIMEFIELD_HEIGHT 16
@@ -305,8 +304,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     else
         [uploadStatusImageView setImage:sendingImage];
         
-    UIColor *otherTextColor = [[HLTheme sharedInstance] businessMessageTextColor];
-    UIColor *userTextColor = [[HLTheme sharedInstance] userMessageTextColor];
     UIImage *otherChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
     UIImage *userChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
     UIEdgeInsets otherChatBubbleInsets=UIEdgeInsetsMake(9, 12, 10, 7);

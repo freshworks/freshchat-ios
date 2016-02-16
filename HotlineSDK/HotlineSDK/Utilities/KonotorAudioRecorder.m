@@ -37,7 +37,6 @@ KonotorAlertView *pAlert;
             dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL status=[KonotorAudioRecorder startRecordingA];
                 if(status){
-                    //TODO: Moved these notification names to an enumeration or Constants. 
                     [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
                 }
                 else{

@@ -30,8 +30,9 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
-                                                       andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"mr.orange.konotor.com" withAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
+                                                       andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
+    config.displaySolutionsAsGrid = NO;
     
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
@@ -40,7 +41,7 @@
     [[Hotline sharedInstance]initWithConfig:config andUser:user];
     [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
     
-    NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
+    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];
@@ -56,7 +57,6 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    NSLog(@"Registered Device Token  %@", devToken);
     NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
     [[Hotline sharedInstance] addDeviceToken:devToken];
 }
