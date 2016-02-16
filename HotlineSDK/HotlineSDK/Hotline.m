@@ -195,6 +195,7 @@
             }];
         }
         else {
+            [self registerDeviceToken];
             [self performPendingTasks];
         }
     });

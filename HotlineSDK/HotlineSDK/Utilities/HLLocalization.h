@@ -72,6 +72,6 @@
 #define LOC_DAY_FRIDAY @"day_friday"
 #define LOC_DAY_SATURDAY @"day_saturday"
 
-#define LOC_DEFAULT_NOTIFICATION_MESSAGE @"default_text_message"
+#define LOC_DEFAULT_NOTIFICATION_MESSAGE @"notification_message_default"
 
 #endif /* HLLocalization_h */
