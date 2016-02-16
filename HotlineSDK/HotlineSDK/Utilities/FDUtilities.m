@@ -7,7 +7,7 @@
 //
 
 #import <asl.h>
-
+#import "KonotorUser.h"
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
@@ -110,8 +110,20 @@
 +(BOOL)isUserRegistered{
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
+    BOOL isUserRegistered = [persistedStore checkItemWithKey:uuIdLookupKey];
+    if (isUserRegistered) {
+        return YES;
+    }else{
+        KonotorUser *user = [KonotorUser getUser];
+        if (user.userAlias) {
+            [FDUtilities storeUserAlias:user.userAlias];
+            NSLog(@"Taken user alias %@ from Konotor build", user.userAlias);
+            return YES;
+        }
+    }
     return [persistedStore checkItemWithKey:uuIdLookupKey];
 }
+
 
 +(NSString *) getUUIDLookupKey{
     FDSecureStore *store = [FDSecureStore sharedInstance];

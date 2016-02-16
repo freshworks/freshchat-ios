@@ -35,6 +35,7 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler;
 -(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler;
 -(void)deleteAllChannels:(void(^)(NSError *error))handler;
+-(void)deleteAllMessages:(void(^)(NSError *error))handler;
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler;
 
 @end

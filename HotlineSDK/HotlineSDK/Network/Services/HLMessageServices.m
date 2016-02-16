@@ -149,7 +149,13 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"Channels :%@", [responseInfo responseAsArray]);
-            [self importChannels:[responseInfo responseAsArray] handler:handler];
+            if ([lastUpdateTime isEqualToNumber:@0]) {
+                [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
+                    [self importChannels:[responseInfo responseAsArray] handler:handler];
+                }];
+            }else{
+                [self importChannels:[responseInfo responseAsArray] handler:handler];
+            }
             NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
             [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         }else{
