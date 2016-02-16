@@ -11,7 +11,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define HOTLINE_DEFAULTS_IS_APP_REGISTERED @"hotline_defaults_is_app_registered"
 #define HOTLINE_DEFAULTS_USER_NAME @"hotline_defaults_user_name"
 #define HOTLINE_DEFAULTS_USER_EMAIL @"hotline_defaults_user_email"
 #define HOTLINE_DEFAULTS_USER_PHONE_NUMBER @"hotline_defaults_user_phone_number"
