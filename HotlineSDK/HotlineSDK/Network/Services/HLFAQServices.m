@@ -31,14 +31,9 @@
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
-    NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
-
-    if (lastUpdateTime == nil) {
-        lastUpdateTime = @0;
-    }
-    
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
     NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
-    [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios", afterTime]];
+    [request setRelativePath:path andURLParams:@[token, @"deep=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         [self importSolutions:[responseInfo responseAsDictionary]];
         [FDIndexManager setIndexingCompleted:NO];
@@ -65,7 +60,8 @@
             NSDictionary *categoryInfo = categories[i];
             HLCategory *category = [HLCategory getWithID:categoryInfo[@"categoryId"] inContext:context];
             BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
-            if (isCategoryEnabled) {
+            BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
+            if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
                     FDLog(@"Updating category with info :%@", categoryInfo);
                     [category updateWithInfo:categoryInfo];

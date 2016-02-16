@@ -161,7 +161,6 @@
     
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
-        KonotorConversation *conversation = channel.primaryConversation;
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;

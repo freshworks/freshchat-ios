@@ -150,6 +150,9 @@
 -(UIFont *)lastUpdatedFont;
 -(UIColor *)lastUpdatedFontColor;
 
+//Footer
+- (NSString *) getFooterSecretKey;
+
 //Voice Recording Prompt
 -(UIFont *)voiceRecordingTimeLabelFont;
 

@@ -11,9 +11,12 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
+#import "HLTheme.h"
 #import "HLLocalization.h"
 #import <AdSupport/ASIdentifierManager.h>
 #import <CommonCrypto/CommonDigest.h>
+
+#define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
 @implementation FDUtilities
 
@@ -78,14 +81,6 @@
     NSString *modifiedString = [regex stringByReplacingMatchesInString:string options:0
                                                                  range:NSMakeRange(0, [string length]) withTemplate:replaceString];
     return  modifiedString;
-}
-
-+(void)assertMainThread{
-    if (![NSThread isMainThread]) {
-        NSString *exceptionName   = @"MOBIHELP_SDK_EXCEPTION_THREAD_BAD_ACCESS";
-        NSString *exceptionReason = @"You are attempting to access main thread stuff from a background thread";
-        [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
-    }
 }
 
 +(NSString *)replaceSpecialCharacters:(NSString *)term with:(NSString *)replaceString{
@@ -309,11 +304,11 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL)isPoweredByHidden{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-
-    NSString *secretKey = [store objectForKey:HOTLINE_DEFAULTS_SECRET_KEY];
+    
+    NSString *secretKey = [[HLTheme sharedInstance] getFooterSecretKey];
     if (!secretKey) return NO;
     
-    NSString* myString=[[store objectForKey:HOTLINE_DEFAULTS_APP_KEY] stringByAppendingString:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+    NSString* myString = [NSString stringWithFormat:@"%@%@%@",[store objectForKey:HOTLINE_DEFAULTS_APP_ID],EXTRA_SECURE_STRING,[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     
     NSMutableString *reversedString = [NSMutableString stringWithCapacity:[myString length]];
     
@@ -324,6 +319,12 @@ static NSInteger networkIndicator = 0;
                               }];
     
     return ([[self convertIntoMD5:reversedString] isEqualToString:secretKey]) ? YES : NO;
+}
+
++(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key{
+    NSNumber *lastUpdateTime = [[FDSecureStore sharedInstance] objectForKey:key];
+    if (lastUpdateTime == nil) lastUpdateTime = @0;
+    return lastUpdateTime;
 }
 
 @end

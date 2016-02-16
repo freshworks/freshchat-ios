@@ -68,7 +68,8 @@
         NSDictionary *articleInfo = articles[j];
         HLArticle *article = [HLArticle getWithID:articleInfo[@"articleId"] inContext:context];
         BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
-        if (isArticleEnabled) {
+        BOOL isIOSPlatformAvail = [articleInfo[@"platforms"] containsObject:@"ios"];
+        if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
             }else{
