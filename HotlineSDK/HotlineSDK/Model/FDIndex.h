@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#define MOBIHELP_DB_INDEX_ARTICLE_ID    @"articleID"
-#define MOBIHELP_DB_INDEX_KEY_WORD      @"keyWord"
-#define MOBIHELP_DB_INDEX_TITLE_MATCHES @"titleMatches"
-#define MOBIHELP_DB_INDEX_DESC_MATCHES  @"descMatches"
+#define HOTLINE_DB_INDEX_ARTICLE_ID    @"articleID"
+#define HOTLINE_DB_INDEX_KEY_WORD      @"keyWord"
+#define HOTLINE_DB_INDEX_TITLE_MATCHES @"titleMatches"
+#define HOTLINE_DB_INDEX_DESC_MATCHES  @"descMatches"
 
 NS_ASSUME_NONNULL_BEGIN
 
