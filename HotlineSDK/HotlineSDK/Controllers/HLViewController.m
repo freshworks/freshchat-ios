@@ -1,5 +1,5 @@
 //
-//  HLController.m
+//  HLViewController.m
 //  HotlineSDK
 //
 //  Created by Hrishikesh on 05/02/16.
@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HLController.h"
+#import "HLViewController.h"
 
-@implementation HLController : UIViewController
+@implementation HLViewController : UIViewController
 
 
 @end

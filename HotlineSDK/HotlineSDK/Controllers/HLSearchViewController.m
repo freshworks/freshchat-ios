@@ -280,7 +280,7 @@
         articlesDetailController.articleID = article.articleID;
         articlesDetailController.articleTitle = article.title;
         articlesDetailController.isFromSearchView = TRUE;
-        HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController];
+        HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController andEmbed:FALSE];
         [self.navigationController pushViewController:containerController animated:YES];
     }
 }

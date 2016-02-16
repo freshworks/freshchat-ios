@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HLViewController.h"
 
-@interface HLCategoryGridViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UISearchDisplayDelegate>
+@interface HLCategoryGridViewController : HLViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UISearchDisplayDelegate>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *searchResults;

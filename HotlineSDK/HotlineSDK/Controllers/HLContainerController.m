@@ -13,17 +13,18 @@
 
 @interface HLContainerController ()
 
-@property (nonatomic, strong) UIViewController *childController;
+@property (nonatomic, strong) HLViewController *childController;
 @property (strong, nonatomic) HLTheme *theme;
 
 @end
 
 @implementation HLContainerController
 
--(instancetype)initWithController:(UIViewController *)controller{
+-(instancetype)initWithController:(HLViewController *)controller andEmbed:(BOOL) embed{
     self = [super init];
     if (self) {
         self.childController = controller;
+        self.childController.embedded = true;
         self.theme = [HLTheme sharedInstance];
     }
     return self;

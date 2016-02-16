@@ -222,7 +222,7 @@
 }
 
 -(void)presentSolutions:(UIViewController *)controller{
-    UIViewController *preferedController = nil;
+    HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     if (isGridLayoutDisplayEnabled) {
@@ -230,7 +230,7 @@
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
     }
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController andEmbed:FALSE];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
@@ -242,10 +242,10 @@
             if (channels.count == 1) {
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
                                                                                    andPresentModally:YES];
-                preferredController = [[HLContainerController alloc]initWithController:messageController];
+                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:FALSE];
             }else{
                 HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-                preferredController = [[HLContainerController alloc]initWithController:channelViewController];
+                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:FALSE];
             }
             UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
             [controller presentViewController:navigationController animated:YES completion:nil];
@@ -253,9 +253,8 @@
     }];
 }
 
--(UIViewController *)getControllerForEmbed:(UIViewController*)controller{
-    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller];
-    preferredController.isEmbeddable = YES;
+-(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
+    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:TRUE];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
     return navigationController;
 }
@@ -266,7 +265,7 @@
 }
 
 -(UIViewController*) getConversationsControllerForEmbed{
-    UIViewController *controller;
+    HLViewController *controller;
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
@@ -405,13 +404,13 @@
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:FALSE];
     [controller pushViewController:container animated:YES];
 }
 
 -(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:FALSE];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }

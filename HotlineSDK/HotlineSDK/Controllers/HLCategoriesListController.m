@@ -76,8 +76,8 @@
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
-    BOOL isEmbeddable = ((HLContainerController *)self.parentViewController).isEmbeddable;
-    if (!isEmbeddable) {
+    
+    if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
 
@@ -146,7 +146,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:FALSE];
     [self.navigationController pushViewController:container animated:YES];
 }
 

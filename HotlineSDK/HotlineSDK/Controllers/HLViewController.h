@@ -1,17 +1,17 @@
 //
-//  HLController.h
+//  HLViewController.h
 //  HotlineSDK
 //
 //  Created by Hrishikesh on 05/02/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#ifndef HLController_h
-#define HLController_h
+#ifndef HLViewController_h
+#define HLViewController_h
 
 #import <UIKit/UIKit.h>
 
-@interface HLController : UIViewController
+@interface HLViewController : UIViewController
 
 @property BOOL embedded;
 
@@ -19,4 +19,4 @@
 
 
 
-#endif /* HLController_h */
+#endif /* HLViewController_h */

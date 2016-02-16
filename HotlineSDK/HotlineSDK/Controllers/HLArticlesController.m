@@ -152,7 +152,7 @@
         articleDetailController.articleDescription = article.articleDescription;
         articleDetailController.categoryTitle = self.category.title;
         articleDetailController.categoryID = self.category.categoryID;
-        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:FALSE];
         [self.navigationController pushViewController:container animated:YES];
     }
 }
