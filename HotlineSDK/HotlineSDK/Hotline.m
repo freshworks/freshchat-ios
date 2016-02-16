@@ -230,7 +230,7 @@
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
     }
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController andEmbed:FALSE];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
@@ -242,10 +242,10 @@
             if (channels.count == 1) {
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
                                                                                    andPresentModally:YES];
-                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:FALSE];
+                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
                 HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:FALSE];
+                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
             }
             UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
             [controller presentViewController:navigationController animated:YES completion:nil];
@@ -254,7 +254,7 @@
 }
 
 -(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
-    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:TRUE];
+    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:YES];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
     return navigationController;
 }
@@ -404,13 +404,13 @@
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:FALSE];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
     [controller pushViewController:container animated:YES];
 }
 
 -(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:FALSE];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }

@@ -146,7 +146,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:FALSE];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
     [self.navigationController pushViewController:container animated:YES];
 }
 

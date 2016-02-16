@@ -248,7 +248,7 @@
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
         FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-        HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:FALSE];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
 }

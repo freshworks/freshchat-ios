@@ -673,7 +673,7 @@ typedef struct {
                 articleDetailController.articleDescription = article.articleDescription;
                 articleDetailController.categoryTitle=article.category.title;
                 articleDetailController.categoryID = article.categoryID;
-                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:FALSE];
+                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
                 [self.navigationController pushViewController:container animated:YES];
             }
         }
