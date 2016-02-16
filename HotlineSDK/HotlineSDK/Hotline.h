@@ -13,9 +13,6 @@
 
 @interface Hotline : NSObject
 
-
-
-
 @property(nonatomic, strong, readonly) HotlineConfig *config;
 
 /**

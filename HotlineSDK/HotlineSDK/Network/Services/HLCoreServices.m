@@ -15,6 +15,8 @@
 #import "KonotorDataManager.h"
 #import "HLConstants.h"
 #import "FDResponseInfo.h"
+#import "KonotorUser.h"
+#import "KonotorCustomProperty.h"
 
 @implementation HLCoreServices
 
@@ -100,14 +102,72 @@
     return task;
 }
 
--(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
++(void)uploadUnuploadedProperties{
+    
+    static dispatch_group_t serviceGroup = nil;
+    
+    if (!serviceGroup) {
+        serviceGroup = dispatch_group_create();
+    }
+    
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    dispatch_async(globalQueue, ^{
+        
+        dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
+        
+        dispatch_group_enter(serviceGroup);
+        
+        if (![FDUtilities getUserAlias]) {
+            dispatch_group_leave(serviceGroup);
+            return;
+        }
+        
+        NSMutableDictionary *info = [NSMutableDictionary new];
+        NSMutableDictionary *userInfo = [NSMutableDictionary new];
+        
+        NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
+        if (unuploadedProperties.count > 0) {
+            NSMutableDictionary *metaInfo = [NSMutableDictionary new];
+            for (int i=0; i<unuploadedProperties.count; i++) {
+                KonotorCustomProperty *property = unuploadedProperties[i];
+                if (property.key) {
+                    if (property.isUserProperty) {
+                        userInfo[property.key] = property.value;
+                    }else{
+                        metaInfo[property.key] = property.value;
+                    }
+                }
+            }
+            userInfo[@"meta"] = metaInfo;
+            info[@"user"] = userInfo;
+        }else{
+            dispatch_group_leave(serviceGroup);
+            return;
+        }
+        
+        [self updateUserProperties:info handler:^(NSError *error) {
+            if (!error) {
+                for (int i=0; i<unuploadedProperties.count; i++) {
+                    KonotorCustomProperty *property = unuploadedProperties[i];
+                    property.uploadStatus = @1;
+                }
+            }
+            [[KonotorDataManager sharedInstance]save];
+            dispatch_group_leave(serviceGroup);
+        }];
+    });
+}
+
++(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
+    if (!userAlias) return nil;
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_PROPERTIES_PATH,appID,userAlias];
-    NSData *encodedInfo = [NSJSONSerialization dataWithJSONObject:@{@"user" : info}  options:NSJSONWritingPrettyPrinted error:nil];
+    NSData *encodedInfo = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
     request.HTTPMethod = HTTP_METHOD_PUT;
     request.HTTPBody = encodedInfo;
