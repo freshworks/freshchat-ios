@@ -24,7 +24,7 @@
     self = [super init];
     if (self) {
         self.childController = controller;
-        self.childController.embedded = true;
+        self.childController.embedded = embed;
         self.theme = [HLTheme sharedInstance];
     }
     return self;
