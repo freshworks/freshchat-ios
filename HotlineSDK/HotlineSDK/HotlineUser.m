@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Hotline.h"
 #import "FDSecureStore.h"
+#import "FDUtilities.h"
 
 @implementation HotlineUser
 
