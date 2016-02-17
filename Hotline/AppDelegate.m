@@ -21,6 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self hotlineIntegration];
     [self registerAppForNotifications];
+    [self setupRootController];
     if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
@@ -29,11 +30,34 @@
     return YES;
 }
 
+-(void)setupRootController{
+    
+    BOOL isTabViewPreferred = YES;
+
+    if (isTabViewPreferred) {
+        UIViewController* mainView=[self.window rootViewController];
+        [mainView setTitle:@"Order"];
+        UIViewController* solutionsViewController=[[Hotline sharedInstance] getSolutionsControllerForEmbed];
+        [solutionsViewController setTitle:@"FAQs"];
+        UITabBarController* tabBarController=[[UITabBarController alloc] init];
+        UIViewController* channelsView=[[Hotline sharedInstance] getConversationsControllerForEmbed];
+        [channelsView setTitle:@"Channels"];
+        [tabBarController setViewControllers:@[mainView,solutionsViewController,channelsView]];
+        [tabBarController.tabBar setClipsToBounds:NO];
+        [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
+        [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
+        [self.window setRootViewController:tabBarController];
+        [self.window makeKeyAndVisible];
+    }
+}
+
 -(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
                                                        andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
     config.displaySolutionsAsGrid = NO;
     
+    config.voiceMessagingEnabled = YES;
+    config.pictureMessagingEnabled = YES;
     HotlineUser *user = [HotlineUser sharedInstance];
     user.userName = @"Sid";
     user.emailAddress = @"sid@freshdesk.com";

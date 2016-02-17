@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FDInputToolbarView.h"
 #import "HLChannel.h"
+#import "HLViewController.h"
 
-@interface FDMessageController : UIViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate>
+@interface FDMessageController : HLViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate>
 
 -(BOOL)isModal;
 
