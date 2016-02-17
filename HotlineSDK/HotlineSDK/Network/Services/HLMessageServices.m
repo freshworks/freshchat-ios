@@ -21,6 +21,7 @@
 #import "AFHTTPClient.h"
 #import "AFNetworking.h"
 #import "FDResponseInfo.h"
+#import "FDBackgroundTaskManager.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
@@ -258,6 +259,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
     
     ShowNetworkActivityIndicator();
+    UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
     
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     
@@ -274,6 +276,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         }
         
         HideNetworkActivityIndicator();
+        [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         pMessage.messageAlias = messageInfo[@"alias"];
         pMessage.createdMillis = messageInfo[@"createdMillis"];
@@ -282,14 +285,15 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
     }
      
-                                     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-                                         HideNetworkActivityIndicator();
-                                         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
-                                         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-                                         [channel addMessagesObject:pMessage];
-                                         [[KonotorDataManager sharedInstance]save];
-                                         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
-                                     }];
+     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
+         HideNetworkActivityIndicator();
+         [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
+         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+         [channel addMessagesObject:pMessage];
+         [[KonotorDataManager sharedInstance]save];
+         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
+     }];
     
     [operation start];
 }
