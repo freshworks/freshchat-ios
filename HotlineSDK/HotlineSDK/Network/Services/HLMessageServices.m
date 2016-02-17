@@ -276,23 +276,23 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         }
         
         HideNetworkActivityIndicator();
-        [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         pMessage.messageAlias = messageInfo[@"alias"];
         pMessage.createdMillis = messageInfo[@"createdMillis"];
         [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
+        [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
     }
      
      failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
          HideNetworkActivityIndicator();
-         [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
          pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
          pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
          [channel addMessagesObject:pMessage];
          [[KonotorDataManager sharedInstance]save];
          [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
+         [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
      }];
     
     [operation start];
