@@ -153,12 +153,20 @@
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_CONVERSATION_ACTIVITY,appID,userAlias];
-    NSDictionary *info = @{
-                           
-                            @"conversationId" : message.belongsToConversation.conversationAlias,
-                            @"channelId"  : message.belongsToChannel.channelID,
-                            @"readUpto"  : [message createdMillis]
-                           };
+    
+    NSMutableDictionary *info = [NSMutableDictionary new];
+    
+    if (message.belongsToConversation.conversationAlias) {
+        info[@"conversationId"] = message.belongsToConversation.conversationAlias;
+    }
+    
+    if (message.belongsToChannel.channelID) {
+        info[@"channelId"] = message.belongsToChannel.channelID;
+    }
+    
+    if (message.createdMillis) {
+        info[@"readUpto"] = message.createdMillis;
+    }
     
     NSData *userData = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
