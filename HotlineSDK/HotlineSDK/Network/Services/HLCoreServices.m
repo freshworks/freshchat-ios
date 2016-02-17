@@ -68,6 +68,7 @@
             NSString *userAlias = [responseInfo responseAsDictionary][@"alias"];
             [FDUtilities storeUserAlias:userAlias];
             FDLog(@"User registered successfully 👍");
+            [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             if (handler) handler(nil);
         }else{
             FDLog(@"User registration failed :%@", error);

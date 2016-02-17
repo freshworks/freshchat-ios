@@ -31,14 +31,14 @@
         user = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorUser" inManagedObjectContext:context];
     }
     
-    if (userInfo.userName && ![userInfo.userName isEqualToString:@""]) {
-        user.name = userInfo.userName;
-        [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.userName isUserProperty:YES];
+    if (userInfo.name && ![userInfo.name isEqualToString:@""]) {
+        user.name = userInfo.name;
+        [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
     }
     
-    if (userInfo.emailAddress && [FDUtilities isValidEmail:userInfo.emailAddress]) {
-        user.email = userInfo.emailAddress;
-        [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.emailAddress isUserProperty:YES];
+    if (userInfo.email && [FDUtilities isValidEmail:userInfo.email]) {
+        user.email = userInfo.email;
+        [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
     }else{
         NSString *exceptionName   = @"HOTLINE_SDK_INVALID_EMAIL_EXCEPTION";
         NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
@@ -55,9 +55,9 @@
         [KonotorCustomProperty createNewPropertyForKey:@"phone" WithValue:userInfo.phoneNumber isUserProperty:YES];
     }
     
-    if (userInfo.countryCode && ![userInfo.countryCode isEqualToString:@""]) {
-        user.countryCode = userInfo.countryCode;
-        [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.countryCode isUserProperty:YES];
+    if (userInfo.phoneCountryCode && ![userInfo.phoneCountryCode isEqualToString:@""]) {
+        user.countryCode = userInfo.phoneCountryCode;
+        [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.phoneCountryCode isUserProperty:YES];
     }
     
     [[KonotorDataManager sharedInstance]save];

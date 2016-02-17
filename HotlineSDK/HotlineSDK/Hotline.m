@@ -28,6 +28,7 @@
 #import "HLMessageServices.h"
 #import "KonotorCustomProperty.h"
 #import "KonotorUser.h"
+#import "HLVersionConstants.h"
 
 @interface Hotline () <FDNotificationBannerDelegate>
 
@@ -51,6 +52,10 @@
         sharedInstance = [[Hotline alloc]init];
     });
     return sharedInstance;
+}
+
++(NSString *)SDKVersion{
+    return HOTLINE_SDK_VERSION;
 }
 
 - (instancetype)init{
@@ -145,15 +150,15 @@
 }
 
 -(void)updateUser:(HotlineUser *)user{
-    [KonotorUser createUserWithInfo:user];
-    [HLCoreServices uploadUnuploadedProperties];
+    if(user){
+        [user update];
+    }
 }
 
--(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
-    if (key.length > 0 && value.length > 0){
-        [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
-        [HLCoreServices uploadUnuploadedProperties];
-    }
+-(void)setUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
+    HotlineUser *user = [HotlineUser sharedInstance];
+    [user setUserPropertyforKey:key withValue:value];
+    [user update];
 }
 
 -(void)registerUser{
@@ -197,11 +202,11 @@
         [HLCoreServices DAUCall];
         [self updateAppVersion];
         [self updateSDKBuildNumber];
-        [HLCoreServices uploadUnuploadedProperties];
+        [[HotlineUser sharedInstance] update];
     });
 }
 
--(void)presentSolutions:(UIViewController *)controller{
+-(void)presentFAQs:(UIViewController *)controller{
     UIViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
@@ -235,7 +240,7 @@
 
 #pragma mark Push notifications
 
--(void)addDeviceToken:(NSData *)deviceToken {
+-(void)updateDeviceToken:(NSData *)deviceToken {
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {

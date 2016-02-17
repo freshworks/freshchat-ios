@@ -161,24 +161,27 @@
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
-    [[Hotline sharedInstance]setCustomUserPropertyForKey:self.keyField.text withValue:self.valueField.text];
+    [[HotlineUser sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
+    [[HotlineUser sharedInstance] update];
 }
 
 -(void)updateConfigButtonAction:(id)sender{
     NSLog(@"Updating config");
-    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:self.domainField.text withAppID:self.appIDField.text
+    
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:self.appIDField.text
                                                        andAppKey:self.appKeyField.text];
+    config.domain = self.domainField.text;
     [[Hotline sharedInstance]initWithConfig:config];
 }
 
 -(void)updateUserPropertiesButtonAction:(id)sender{
     NSLog(@"updating user info");
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.userName = self.userNameField.text;
-    user.emailAddress = self.emailField.text;
+    user.name = self.userNameField.text;
+    user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
-    [[Hotline sharedInstance]updateUser:user];
+    [user update];
 }
 
 - (IBAction)editButtonPressed:(id)sender {
@@ -208,8 +211,8 @@
     self.appIDField.text = [Hotline sharedInstance].config.appID;
     self.appKeyField.text = [Hotline sharedInstance].config.appKey;
     
-    self.userNameField.text = [HotlineUser sharedInstance].userName;
-    self.emailField.text = [HotlineUser sharedInstance].emailAddress;
+    self.userNameField.text = [HotlineUser sharedInstance].name;
+    self.emailField.text = [HotlineUser sharedInstance].email;
     self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
     self.externalIDField.text = [HotlineUser sharedInstance].externalID;
 }
