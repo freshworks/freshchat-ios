@@ -76,6 +76,7 @@
 		35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E767BF1C2051120098CFA1 /* HotlineUser.m */; };
 		35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F7D4571C22A9390007DA9A /* FDImageView.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
+		3C051DEC1C6481DE00DDE80D /* HLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C051DEB1C6481DE00DDE80D /* HLViewController.m */; };
 		68EC0ABD1C61F4F800E37C94 /* FDArticleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68EC0ABC1C61F4F800E37C94 /* FDArticleListCell.m */; };
 		91BBEAA21BE393DB00F55009 /* FDPictureMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91BBEAA11BE393DB00F55009 /* FDPictureMessageView.m */; };
 		CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1064961BC55FDB00922494 /* FDVotingManager.m */; };
@@ -288,6 +289,8 @@
 		35F7D4571C22A9390007DA9A /* FDImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDImageView.m; sourceTree = "<group>"; };
 		35FE04421BC4D1DD00EAA8E0 /* FDReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachabilityManager.h; sourceTree = "<group>"; };
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
+		3C051DEA1C64814F00DDE80D /* HLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLViewController.h; sourceTree = "<group>"; };
+		3C051DEB1C6481DE00DDE80D /* HLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLViewController.m; sourceTree = "<group>"; };
 		3C79B3961C2A820600DD8EE4 /* HLLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLLocalization.h; sourceTree = "<group>"; };
 		3CB483261C51EBD100A8097B /* HLVersionConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLVersionConstants.h; sourceTree = "<group>"; };
 		68EC0ABB1C61F4F800E37C94 /* FDArticleListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleListCell.h; sourceTree = "<group>"; };
@@ -355,6 +358,8 @@
 				353AA00C1BDF7B4F008CDAB2 /* FDMessageController.m */,
 				CE80CBCA1BB2B6C500B1C74B /* HLCategoryGridViewController.h */,
 				CE80CBCB1BB2B6C500B1C74B /* HLCategoryGridViewController.m */,
+				35A82B1B1BB27BC0005BB983 /* HLCategoriesListController.h */,
+				35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */,
 				354D0D281C48D1A4004D2AA1 /* FDAttachmentImageController.h */,
 				354D0D291C48D1A4004D2AA1 /* FDAttachmentImageController.m */,
 				350FB0811C3143A500D31455 /* FDImagePreviewController.h */,
@@ -365,14 +370,14 @@
 				3533F0B81BB01D38000B2D9A /* HLContainerController.m */,
 				35D158B61BB2966B009CFEDF /* HLListViewController.h */,
 				35D158B71BB2966B009CFEDF /* HLListViewController.m */,
-				35A82B1B1BB27BC0005BB983 /* HLCategoriesListController.h */,
-				35A82B1C1BB27BC0005BB983 /* HLCategoriesListController.m */,
 				CE55ED081BE9E79B000E8434 /* HLChannelViewController.h */,
 				CE55ED091BE9E79B000E8434 /* HLChannelViewController.m */,
 				3533F0B51BB01D38000B2D9A /* HLArticlesController.h */,
 				3533F0B61BB01D38000B2D9A /* HLArticlesController.m */,
 				3533F0DA1BB06BD0000B2D9A /* HLArticleDetailViewController.h */,
 				3533F0DB1BB06BD0000B2D9A /* HLArticleDetailViewController.m */,
+				3C051DEA1C64814F00DDE80D /* HLViewController.h */,
+				3C051DEB1C6481DE00DDE80D /* HLViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -846,6 +851,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE2B272C1C11D51B00D9A253 /* FDAudioMessageInputView.m in Sources */,
+				3C051DEC1C6481DE00DDE80D /* HLViewController.m in Sources */,
 				35D158B81BB2966B009CFEDF /* HLListViewController.m in Sources */,
 				CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */,
 				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,

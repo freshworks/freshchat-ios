@@ -76,7 +76,11 @@
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    
+    if (!self.embedded) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
+
     self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
@@ -142,7 +146,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
     [self.navigationController pushViewController:container animated:YES];
 }
 

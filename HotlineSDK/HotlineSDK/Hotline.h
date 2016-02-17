@@ -42,6 +42,10 @@
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
 
+-(UIViewController*) getSolutionsControllerForEmbed;
+
+-(UIViewController*) getConversationsControllerForEmbed;
+
 /**
  *  Get the last updated unread messages count.
  *

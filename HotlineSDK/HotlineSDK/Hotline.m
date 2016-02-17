@@ -207,7 +207,7 @@
 }
 
 -(void)presentFAQs:(UIViewController *)controller{
-    UIViewController *preferedController = nil;
+    HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     if (isGridLayoutDisplayEnabled) {
@@ -215,7 +215,7 @@
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
     }
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
@@ -227,15 +227,42 @@
             if (channels.count == 1) {
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
                                                                                    andPresentModally:YES];
-                preferredController = [[HLContainerController alloc]initWithController:messageController];
+                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
                 HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-                preferredController = [[HLContainerController alloc]initWithController:channelViewController];
+                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
             }
             UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
             [controller presentViewController:navigationController animated:YES completion:nil];
         }
     }];
+}
+
+-(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
+    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
+    return navigationController;
+}
+
+-(UIViewController*) getSolutionsControllerForEmbed{
+    HLCategoriesListController *categoriesViewController = [[HLCategoriesListController alloc]init];
+    return [self getControllerForEmbed:categoriesViewController];
+}
+
+-(UIViewController*) getConversationsControllerForEmbed{
+    HLViewController *controller;
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+    NSArray *results = [context executeFetchRequest:request error:nil];
+    
+    if (results.count == 1){
+        controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+    }else{
+        controller = [[HLChannelViewController alloc]init];
+    }
+
+    return [self getControllerForEmbed:controller];
 }
 
 #pragma mark Push notifications
@@ -358,13 +385,13 @@
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
     [controller pushViewController:container animated:YES];
 }
 
 -(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }

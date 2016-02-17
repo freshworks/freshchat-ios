@@ -136,8 +136,9 @@
 
 -(void)setNavigationItem{
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    if (!self.embedded) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
 
@@ -247,7 +248,7 @@
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
         FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-        HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
 }
