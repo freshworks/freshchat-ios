@@ -146,4 +146,36 @@
     return task;
 }
 
++(NSURLSessionDataTask *)registerUserConversationActivity :(KonotorMessage *)message{
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_CONVERSATION_ACTIVITY,appID,userAlias];
+    NSDictionary *info = @{
+                           
+                            @"conversationId" : message.belongsToConversation.conversationAlias,
+                            @"channelId"  : message.belongsToChannel.channelID,
+                            @"readUpto"  : [message createdMillis]
+                           };
+    
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    request.HTTPMethod = HTTP_METHOD_POST;
+    request.HTTPBody = userData;
+    
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            FDLog(@"Successful conversation request")
+        }else{
+            FDLog(@"Could not make register user conversation call %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
+        }
+    }];
+    return task;
+}
+
 @end
