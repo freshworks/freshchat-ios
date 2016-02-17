@@ -119,7 +119,11 @@
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    //TODO: Need to revisit this to get rid of the repeated code
+
+    if (!self.embedded) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
     
     NSArray *rightBarItems;
     if(!self.categories.count){
@@ -304,7 +308,7 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
 }

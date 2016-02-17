@@ -26,6 +26,8 @@
 #import "HLConstants.h"
 #import "FDNotificationBanner.h"
 #import "HLMessageServices.h"
+#import "KonotorCustomProperty.h"
+#import "KonotorUser.h"
 
 @interface Hotline () <FDNotificationBannerDelegate>
 
@@ -69,9 +71,14 @@
     [self storeConfig:config];
     [self updateUser:user];
     [self registerUser];
-    [HLCoreServices DAUCall];
-    [self updateAppVersion];
-    [self updateSDKBuildNumber];
+    [self registerAppActiveListener];
+}
+
+-(void) registerAppActiveListener{
+    [[NSNotificationCenter defaultCenter]
+                    addObserver: self
+                    selector: @selector(newSession:)
+                    name: UIApplicationDidBecomeActiveNotification object: nil];
 }
 
 -(void)updateAppVersion{
@@ -79,11 +86,8 @@
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
     NSString *currentValue = [[[NSBundle mainBundle]infoDictionary]objectForKey:@"CFBundleShortVersionString"];
     if (![storedValue isEqualToString:currentValue]) {
-        [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta" : @{ @"app_version" : currentValue } } handler:^(NSError *error) {
-            if (!error) {
-                [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
-            }
-        }];
+        [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
+        [HLCoreServices uploadUnuploadedProperties];
     }
 }
 
@@ -141,45 +145,14 @@
 }
 
 -(void)updateUser:(HotlineUser *)user{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSMutableDictionary *userInfo = [NSMutableDictionary new];
-    
-    if (user) {
-        if (user.userName && ![user.userName isEqualToString:@""]) {
-            [store setObject:user.userName forKey:HOTLINE_DEFAULTS_USER_NAME];
-            userInfo[@"name"] = user.userName;
-        }
-        
-        if (user.emailAddress && [FDUtilities isValidEmail:user.emailAddress]) {
-            [store setObject:user.emailAddress forKey:HOTLINE_DEFAULTS_USER_EMAIL];
-            userInfo[@"email"] = user.emailAddress;
-        }else{
-            NSString *exceptionName   = @"HOTLINE_SDK_INVALID_EMAIL_EXCEPTION";
-            NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
-            [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
-        }
-        if(user.countryCode && ![user.countryCode isEqualToString:@""]){
-            [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
-            userInfo[@"phoneCountry"] = user.countryCode;
-        }
-        
-        if (user.phoneNumber && ![user.phoneNumber isEqualToString:@""]) {
-            [store setObject:user.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
-            userInfo[@"phone"] = user.phoneNumber;
-        }
-        
-        if (user.externalID && ![user.externalID isEqualToString:@""]) {
-            [store setObject:user.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
-            userInfo[@"identifier"] = user.externalID;
-        }
-    }
-
-    [[[HLCoreServices alloc]init]updateUserProperties:userInfo handler:nil];
+    [KonotorUser createUserWithInfo:user];
+    [HLCoreServices uploadUnuploadedProperties];
 }
 
 -(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
     if (key.length > 0 && value.length > 0){
-        [[[HLCoreServices alloc]init]updateUserProperties:@{@"meta": @{key : value}} handler:nil];
+        [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+        [HLCoreServices uploadUnuploadedProperties];
     }
 }
 
@@ -195,7 +168,6 @@
             }];
         }
         else {
-            [self registerDeviceToken];
             [self performPendingTasks];
         }
     });
@@ -203,12 +175,16 @@
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
     if (!isAppRegistered) {
         NSString *userAlias = [FDUtilities getUserAlias];
         NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
     }
+}
+
+-(void)newSession:(NSNotification *)notification{
+    [self performPendingTasks];
 }
 
 -(void)performPendingTasks{
@@ -218,11 +194,15 @@
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices downloadAllMessages:nil];
+        [HLCoreServices DAUCall];
+        [self updateAppVersion];
+        [self updateSDKBuildNumber];
+        [HLCoreServices uploadUnuploadedProperties];
     });
 }
 
 -(void)presentSolutions:(UIViewController *)controller{
-    UIViewController *preferedController = nil;
+    HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     if (isGridLayoutDisplayEnabled) {
@@ -230,7 +210,7 @@
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
     }
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
@@ -242,15 +222,42 @@
             if (channels.count == 1) {
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
                                                                                    andPresentModally:YES];
-                preferredController = [[HLContainerController alloc]initWithController:messageController];
+                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
                 HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-                preferredController = [[HLContainerController alloc]initWithController:channelViewController];
+                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
             }
             UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
             [controller presentViewController:navigationController animated:YES completion:nil];
         }
     }];
+}
+
+-(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
+    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
+    return navigationController;
+}
+
+-(UIViewController*) getSolutionsControllerForEmbed{
+    HLCategoriesListController *categoriesViewController = [[HLCategoriesListController alloc]init];
+    return [self getControllerForEmbed:categoriesViewController];
+}
+
+-(UIViewController*) getConversationsControllerForEmbed{
+    HLViewController *controller;
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+    NSArray *results = [context executeFetchRequest:request error:nil];
+    
+    if (results.count == 1){
+        controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+    }else{
+        controller = [[HLChannelViewController alloc]init];
+    }
+
+    return [self getControllerForEmbed:controller];
 }
 
 #pragma mark Push notifications
@@ -262,7 +269,7 @@
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         if(![storedDeviceToken isEqualToString:deviceTokenString]){
             [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_APP_REGISTERED];
+            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
         }
     }
     [self registerDeviceToken];
@@ -331,10 +338,6 @@
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");
     }];
-    [self newSession];
-}
-
--(void)newSession{
     [self registerUser];
 }
 
@@ -377,13 +380,13 @@
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
     [controller pushViewController:container animated:YES];
 }
 
 -(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
     FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
