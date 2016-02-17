@@ -119,6 +119,12 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                         }
                         
                         newMessage.belongsToConversation = conversation;
+                        
+                        //Do not mark restored mesages as unread
+                        if ([lastUpdateTime isEqualToNumber:@0]) {
+                            newMessage.messageRead = YES;
+                        }
+                        
                     }
                 }
             }
