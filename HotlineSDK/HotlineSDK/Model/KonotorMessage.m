@@ -18,6 +18,7 @@
 #import "AFHTTPRequestOperation.h"
 #import "HLMessageServices.h"
 #import "FDLocalNotification.h"
+#import "HLCoreServices.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -158,6 +159,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
         if([array count]==0){
 
         }else{
+            
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
@@ -168,9 +170,23 @@ NSMutableDictionary *gkMessageIdMessageMap;
                     }
                 }
             }
+            //call to
+            [self getUserLatestActivity:channel];
         }
         [context save:nil];
     }];
+}
+
++ (void) getUserLatestActivity :(HLChannel *)channel {
+    
+    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    request.predicate = [NSPredicate predicateWithFormat:@"messageRead == YES AND belongsToChannel == %@ AND messageUserId == %@",channel, @"Agent"];
+    NSArray *messages = [context executeFetchRequest:request error:nil];
+    
+    NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
+    KonotorMessage *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
+    [HLCoreServices registerUserConversationActivity:latestMessage];
 }
 
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId{
