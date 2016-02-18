@@ -50,7 +50,7 @@
     static NSBundle* frameworkBundle = nil;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        NSString* mainBundlePath      = [[NSBundle mainBundle] resourcePath];
+        NSString* mainBundlePath      = [[NSBundle bundleForClass:[self class]] resourcePath];
         NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:@"FreshdeskSDKResources.bundle"];
         frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
     });
@@ -226,7 +226,7 @@
     
     UIDevice *device = [UIDevice currentDevice];
     
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"app_version"];
+    [properties setValue:[[[NSBundle bundleForClass:[self class]] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"app_version"];
     [properties setValue:@"Apple" forKey:@"brand"];
     
     [properties setValue:@"Apple" forKey:@"manufacturer"];
