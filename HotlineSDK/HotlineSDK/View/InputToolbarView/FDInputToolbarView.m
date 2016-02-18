@@ -23,6 +23,7 @@
 @property (nonatomic, strong) HLTheme              *theme;
 @property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 @property (nonatomic) BOOL canShowAttachButton;
+@property (nonatomic, assign) BOOL isVoiceMessageEnabled;
 
 @end
 
@@ -114,7 +115,7 @@
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isPictureMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
-    BOOL isVoiceMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+    self.isVoiceMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     
     
     if(!isPictureMessageEnabled){
@@ -126,7 +127,7 @@
     
     [self addConstraint:attachButtonWidthConstraint];
     
-    if(!isVoiceMessageEnabled){
+    if(!self.isVoiceMessageEnabled){
         [self disableAudioMessaging];
     }
     else{
@@ -143,8 +144,13 @@
 
 -(void)updateActionButtons:(UITextView *)inputTextView{
     BOOL isTextViewEmpty = [inputTextView.text isEqualToString:@""];
-    self.sendButton.hidden = isTextViewEmpty;
-    self.micButton.hidden = !isTextViewEmpty;
+    if(!self.isVoiceMessageEnabled){
+        [self disableAudioMessaging];
+    }
+    else{
+        self.sendButton.hidden = isTextViewEmpty;
+        self.micButton.hidden = !isTextViewEmpty;
+    }
 }
 
 -(void)showAttachButton:(BOOL)state{
