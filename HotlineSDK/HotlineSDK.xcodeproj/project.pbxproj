@@ -42,6 +42,7 @@
 		358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 358DD4C31BB00EB700B36E4E /* HLCategory.m */; };
 		358DD4F51BB01A3400B36E4E /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E6A1BA6D20600B933C5 /* KonotorModel.xcdatamodeld */; };
 		359156121C24B1B4000AB9E0 /* HLChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 359156101C24B1B4000AB9E0 /* HLChannel.m */; };
+		359A51871C73EC980075E290 /* FDBackgroundTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 359A51861C73EC980075E290 /* FDBackgroundTaskManager.m */; };
 		359E3E851BA6D20600B933C5 /* KonotorConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E631BA6D20600B933C5 /* KonotorConversation.m */; };
 		359E3E871BA6D20600B933C5 /* KonotorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E671BA6D20600B933C5 /* KonotorMessage.m */; };
 		359E3E881BA6D20600B933C5 /* KonotorMessageBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 359E3E691BA6D20600B933C5 /* KonotorMessageBinary.m */; };
@@ -198,6 +199,8 @@
 		358DD4F11BB01A2100B36E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3591560F1C24B1B4000AB9E0 /* HLChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLChannel.h; sourceTree = "<group>"; };
 		359156101C24B1B4000AB9E0 /* HLChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLChannel.m; sourceTree = "<group>"; };
+		359A51851C73EC980075E290 /* FDBackgroundTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDBackgroundTaskManager.h; sourceTree = "<group>"; };
+		359A51861C73EC980075E290 /* FDBackgroundTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBackgroundTaskManager.m; sourceTree = "<group>"; };
 		359E3E621BA6D20600B933C5 /* KonotorConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversation.h; sourceTree = "<group>"; };
 		359E3E631BA6D20600B933C5 /* KonotorConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversation.m; sourceTree = "<group>"; };
 		359E3E661BA6D20600B933C5 /* KonotorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorMessage.h; sourceTree = "<group>"; };
@@ -421,6 +424,8 @@
 				35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */,
 				CE9D4D2D1BCE576A006F2E66 /* FDUtilities.h */,
 				CE9D4D2E1BCE576A006F2E66 /* FDUtilities.m */,
+				359A51851C73EC980075E290 /* FDBackgroundTaskManager.h */,
+				359A51861C73EC980075E290 /* FDBackgroundTaskManager.m */,
 				35DCCB5A1BE005370039EFDD /* KonotorAudioPlayer.h */,
 				35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */,
 				35DCCB5C1BE005370039EFDD /* KonotorAudioRecorder.h */,
@@ -879,6 +884,7 @@
 				3509983F1C3E77FC0049E269 /* FDNotificationBanner.m in Sources */,
 				CE9D4D2F1BCE576A006F2E66 /* FDUtilities.m in Sources */,
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
+				359A51871C73EC980075E290 /* FDBackgroundTaskManager.m in Sources */,
 				35E001021C6091000082A036 /* FDMarginalView.m in Sources */,
 				35E000FB1C6090B60082A036 /* FDCategoryListViewCell.m in Sources */,
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,

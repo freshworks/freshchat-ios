@@ -21,6 +21,7 @@
 #import "AFHTTPClient.h"
 #import "AFNetworking.h"
 #import "FDResponseInfo.h"
+#import "FDBackgroundTaskManager.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
@@ -258,6 +259,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
     
     ShowNetworkActivityIndicator();
+    UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
     
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     
@@ -280,16 +282,18 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
+        [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
     }
      
-                                     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-                                         HideNetworkActivityIndicator();
-                                         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
-                                         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-                                         [channel addMessagesObject:pMessage];
-                                         [[KonotorDataManager sharedInstance]save];
-                                         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
-                                     }];
+     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
+         HideNetworkActivityIndicator();
+         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
+         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+         [channel addMessagesObject:pMessage];
+         [[KonotorDataManager sharedInstance]save];
+         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
+         [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+     }];
     
     [operation start];
 }
