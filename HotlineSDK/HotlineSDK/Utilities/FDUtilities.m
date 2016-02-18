@@ -115,9 +115,7 @@
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
     BOOL isUserRegistered = [persistedStore checkItemWithKey:uuIdLookupKey];
-    if (isUserRegistered) {
-        isUserRegistered = YES;
-    }else{
+    if (!isUserRegistered) {
         KonotorUser *user = [KonotorUser getUser];
         if (user.userAlias) {
             [FDUtilities storeUserAlias:user.userAlias];
