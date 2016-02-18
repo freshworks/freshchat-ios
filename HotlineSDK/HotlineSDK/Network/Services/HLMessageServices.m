@@ -155,6 +155,10 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"Channels :%@", [responseInfo responseAsArray]);
+            
+            /* This check is added to delete all messages that are migrated from konotor SDK,
+               but this is also performed for new installs as well (a harmless side-effect). */
+            
             if ([lastUpdateTime isEqualToNumber:@0]) {
                 [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
                     [self importChannels:[responseInfo responseAsArray] handler:handler];

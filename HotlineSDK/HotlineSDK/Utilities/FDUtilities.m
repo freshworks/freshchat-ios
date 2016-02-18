@@ -107,21 +107,25 @@
     return image;
 }
 
+
+/* This function gets the user-alias from persisted secure store for new customers (Hotline),
+    it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
+
 +(BOOL)isUserRegistered{
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
     BOOL isUserRegistered = [persistedStore checkItemWithKey:uuIdLookupKey];
     if (isUserRegistered) {
-        return YES;
+        isUserRegistered = YES;
     }else{
         KonotorUser *user = [KonotorUser getUser];
         if (user.userAlias) {
             [FDUtilities storeUserAlias:user.userAlias];
             NSLog(@"Taken user alias %@ from Konotor build", user.userAlias);
-            return YES;
+            isUserRegistered = YES;
         }
     }
-    return [persistedStore checkItemWithKey:uuIdLookupKey];
+    return isUserRegistered;
 }
 
 
@@ -136,7 +140,6 @@
     return [[NSUUID UUID]UUIDString];
 }
 
-//TODO: store existing konotor uuid to the store when absent during migration - Rex
 +(NSString *)getUserAlias{
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     return [persistedStore objectForKey:[FDUtilities getUUIDLookupKey]];
