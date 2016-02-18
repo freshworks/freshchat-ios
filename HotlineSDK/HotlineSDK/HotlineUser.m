@@ -21,29 +21,18 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         hotlineUser = [[self alloc]init];
-        [hotlineUser copyFrom:[KonotorUser getUser]];
+        [hotlineUser copyValuesFromStore];
     });
     return hotlineUser;
 }
 
--(void)copyFrom:(KonotorUser *)konotorUser{
-    if(konotorUser){
-        if(konotorUser.email){
-            self.email =konotorUser.email;
-        }
-        if(konotorUser.name){
-            self.name =konotorUser.name;
-        }
-        if(konotorUser.countryCode){
-            self.phoneCountryCode =konotorUser.countryCode;
-        }
-        if(konotorUser.phoneNumber){
-            self.phoneNumber =konotorUser.phoneNumber;
-        }
-        if(konotorUser.appSpecificIdentifier){
-            self.externalID =konotorUser.appSpecificIdentifier;
-        }
-    }
+-(void)copyValuesFromStore{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    self.name = [store objectForKey:HOTLINE_DEFAULTS_USER_NAME];
+    self.email = [store objectForKey:HOTLINE_DEFAULTS_USER_EMAIL];
+    self.phoneNumber = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
+    self.phoneCountryCode = [store objectForKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
+    self.externalID = [store objectForKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
 }
 
 -(void)clearUserData{
@@ -52,7 +41,6 @@
     self.phoneNumber = nil;
     self.externalID = nil;
     self.phoneCountryCode = nil;
-
     [[FDSecureStore sharedInstance]clearStoreData];
 }
 
