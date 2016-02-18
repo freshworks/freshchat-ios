@@ -24,7 +24,7 @@
 @dynamic userAlias;
 @dynamic hasProperties;
 
-+(void)storeUserWithInfo:(HotlineUser *)userInfo{
++(void)storeUserInfo:(HotlineUser *)userInfo{
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
