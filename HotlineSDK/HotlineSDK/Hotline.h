@@ -32,11 +32,17 @@
 
 -(void)initWithConfig:(HotlineConfig *)config;
 
--(void)presentConversations:(UIViewController *)controller;
+-(void)showConversations:(UIViewController *)controller;
 
--(void)presentFAQs:(UIViewController *)controller;
+-(void)showFAQs:(UIViewController *)controller;
 
 -(void)clearUserData;
+
+-(void)updateUser:(HotlineUser *) user;
+
+-(void)updateUserProperties:(NSDictionary*)props;
+
+-(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
 
 -(void)updateDeviceToken:(NSData *) deviceToken;
 
@@ -85,8 +91,6 @@
  *
  *  @discussion In order to initialize Hotline, you'll need the three parameters mentioned above. Place the Hotline initialization code in your app delegate, preferably at the top of the application:didFinishLaunchingWithOptions method.
  *
- *  @param domain    The domain name for your portal.
- *
  *  @param appKey    The App Key assigned to your app when it was created on the portal.
  *
  *  @param appSecret The App Secret assigned to your app when it was created on the portal.
@@ -99,18 +103,11 @@
 
 @interface HotlineUser : NSObject
 
--(void) setUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
--(void) update;
-
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *externalID;
 @property (strong, nonatomic) NSString *phoneCountryCode;
-
-//-(NSDictionary *) getUserProperties;
-
-
 
 +(instancetype)sharedInstance;
 

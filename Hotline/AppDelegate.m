@@ -63,10 +63,14 @@
     user.name = @"Sid";
     user.email = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
+    user.phoneCountryCode = @"+91";
     
-    [user setUserPropertyforKey:@"Key1" withValue:@"Value1"];
-    [user setUserPropertyforKey:@"Key2" withValue:@"Value2"];
-    [user update];
+    [[Hotline sharedInstance] updateUser:user];
+    
+    [[Hotline sharedInstance] updateUserProperties:@{
+                                                     @"Key1" : @"Value1",
+                                                     @"Key2" : @"1"
+                                                     }];
     
     [[Hotline sharedInstance]initWithConfig:config];
     

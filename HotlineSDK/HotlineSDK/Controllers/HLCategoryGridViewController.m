@@ -147,7 +147,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentConversations:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 -(void)updateCategories{
@@ -254,7 +254,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentConversations:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 #pragma mark - Collection view delegate

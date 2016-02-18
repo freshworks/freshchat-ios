@@ -161,8 +161,7 @@
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
-    [[HotlineUser sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
-    [[HotlineUser sharedInstance] update];
+    [[Hotline sharedInstance] updateUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
 }
 
 -(void)updateConfigButtonAction:(id)sender{
@@ -181,7 +180,7 @@
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
-    [user update];
+    [[Hotline sharedInstance] updateUser:user];
 }
 
 - (IBAction)editButtonPressed:(id)sender {

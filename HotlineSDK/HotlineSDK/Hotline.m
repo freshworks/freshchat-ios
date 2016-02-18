@@ -61,7 +61,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.globalReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"www.google.com"];
+        self.globalReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"https://www.google.com"];
         [self.globalReachabilityManager start];
     }
     return self;
@@ -71,7 +71,7 @@
     [self initWithConfig:config andUser:nil];
 }
 
--(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{
+-(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{ // Not used
     self.config = config;
     [self storeConfig:config];
     [self updateUser:user];
@@ -150,15 +150,23 @@
 }
 
 -(void)updateUser:(HotlineUser *)user{
-    if(user){
-        [user update];
-    }
+    [KonotorUser createUserWithInfo:user];
+    [HLCoreServices uploadUnuploadedProperties];
 }
 
--(void)setUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
-    HotlineUser *user = [HotlineUser sharedInstance];
-    [user setUserPropertyforKey:key withValue:value];
-    [user update];
+
+-(void)updateUserProperties:(NSDictionary*)props{
+    if(props){
+        for(NSString *key in props){
+            NSString *value = props[key];
+            [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+        }
+    }
+    [HLCoreServices uploadUnuploadedProperties];
+}
+
+-(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
+    [self updateUserProperties:@{ key : value}];
 }
 
 -(void)registerUser{
@@ -202,11 +210,11 @@
         [HLCoreServices DAUCall];
         [self updateAppVersion];
         [self updateSDKBuildNumber];
-        [[HotlineUser sharedInstance] update];
+        [HLCoreServices uploadUnuploadedProperties];
     });
 }
 
--(void)presentFAQs:(UIViewController *)controller{
+-(void)showFAQs:(UIViewController *)controller{
     HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
@@ -220,7 +228,7 @@
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
--(void)presentConversations:(UIViewController *)controller{
+-(void)showConversations:(UIViewController *)controller{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;

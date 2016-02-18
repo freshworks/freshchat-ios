@@ -17,7 +17,6 @@
 #define HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE @"hotline_defaults_user_country_code"
 #define HOTLINE_DEFAULTS_USER_EXTERNAL_ID @"hotline_defaults_user_external_id"
 #define HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED @"hotline_defaults_is_device_registered"
-#define HOTLINE_DEFAULTS_IS_USER_REGISTERED @"hotline_defaults_is_user_registered"
 #define HOTLINE_DEFAULTS_APP_VERSION @"hotline_defaults_app_version"
 #define HOTLINE_DEFAULTS_SDK_BUILD_NUMBER @"hotline_defaults_sdk_build_number"
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
@@ -35,7 +34,6 @@
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
 #define HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME @"hotline_defaults_conversations_last_updated_time"
 #define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
-#define HOTLINE_DEFAULTS_DIRTY @"hotline_defaults_dirty"
 
 #define HOTLINE_DEFAULTS_VOTED_ARTICLES @"hotline_defaults_voted_articles"
 
