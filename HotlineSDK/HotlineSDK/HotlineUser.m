@@ -55,7 +55,7 @@
 }
 
 -(void) markDirty {
-    _dirty = TRUE;
+    _dirty = YES;
     [[FDSecureStore sharedInstance] setBoolValue:@YES forKey:HOTLINE_DEFAULTS_DIRTY];
 }
 
@@ -94,7 +94,7 @@
        
         [KonotorUser createUserWithInfo:self];
         [HLCoreServices uploadUnuploadedProperties];
-        _dirty = FALSE;
+        _dirty = NO;
     }
 }
 
