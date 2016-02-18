@@ -31,7 +31,7 @@
     self.name = [store objectForKey:HOTLINE_DEFAULTS_USER_NAME];
     self.email = [store objectForKey:HOTLINE_DEFAULTS_USER_EMAIL];
     self.phoneNumber = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
-    self.phoneCountryCode = [store objectForKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
+    self.phoneCountryCode = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
     self.externalID = [store objectForKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
 }
 

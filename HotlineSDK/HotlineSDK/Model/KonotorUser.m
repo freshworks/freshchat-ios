@@ -55,7 +55,7 @@
     }
     
     if (userInfo.phoneCountryCode && ![userInfo.phoneCountryCode isEqualToString:@""]) {
-        [store setObject:userInfo.phoneCountryCode forKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
+        [store setObject:userInfo.phoneCountryCode forKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
         [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.phoneCountryCode isUserProperty:YES];
     }
     
