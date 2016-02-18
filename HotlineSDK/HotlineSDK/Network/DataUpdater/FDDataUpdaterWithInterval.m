@@ -23,7 +23,7 @@
 }
 
 -(NSTimeInterval) lastFetchTime{
-    return [[self.secureStore objectForKey:self.intervalConfigKey]doubleValue];
+    return [[self.secureStore objectForKey:self.intervalConfigKey] doubleValue];
 }
 
 //TODO: when migrating mobihelp -> hotline, clear intervalconfigkey from secure store

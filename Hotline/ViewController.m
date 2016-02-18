@@ -35,7 +35,7 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance]presentConversations:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 @end

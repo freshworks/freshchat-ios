@@ -15,7 +15,6 @@
 #import "KonotorDataManager.h"
 #import "HLConstants.h"
 #import "FDResponseInfo.h"
-#import "KonotorUser.h"
 #import "KonotorCustomProperty.h"
 
 @implementation HLCoreServices
@@ -118,7 +117,7 @@
         
         dispatch_group_enter(serviceGroup);
         
-        if (![FDUtilities getUserAlias]) {
+        if (![FDUtilities isUserRegistered]) {
             dispatch_group_leave(serviceGroup);
             return;
         }
