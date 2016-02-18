@@ -68,6 +68,7 @@ typedef struct {
 
 #define INPUT_TOOLBAR_HEIGHT  40
 #define TABLE_VIEW_TOP_OFFSET 10
+#define CELL_HORIZONTAL_PADDING 4
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -269,6 +270,8 @@ typedef struct {
         cell.messageData = message;
         [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
+    
+    
     if(indexPath.row==0 && self.messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
         NSInteger oldnumber = self.messagesDisplayedCount;
@@ -313,17 +316,13 @@ typedef struct {
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
-        //TODO: If you have add + 4 here .. then I think this should be part of FDMessageCell getHeightForMessage - Rex
-        height = [self.messageHeightMap[key] floatValue]+ 4;
+        height = [self.messageHeightMap[key] floatValue];
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        //TODO: Give names to all the numeric contants used in code. Hard to understand what
-        // this 16 is . And there are too many 16s in the code base - Rex
         self.messageHeightMap[key] = @(height);
-        //TODO: We are missing a + 4 here - Rex
     }
-    return height;
+    return height+CELL_HORIZONTAL_PADDING;
 }
 
 

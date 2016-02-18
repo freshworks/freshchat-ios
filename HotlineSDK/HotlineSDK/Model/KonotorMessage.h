@@ -108,6 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *picCaption;
 @property (nullable, nonatomic, retain) NSString *actionLabel, *actionURL;
 @property (nullable, nonatomic, retain) NSData *audioData;
+@property (nonatomic) BOOL isWelcomeMessage;
 @property (nonatomic) BOOL  messageRead;
 @property (nonatomic) BOOL isMarketingMessage;
 @property (nullable, nonatomic, retain) NSNumber *marketingId;

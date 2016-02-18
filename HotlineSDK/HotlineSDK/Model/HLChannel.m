@@ -66,7 +66,7 @@
         welcomeMessage.text = updatedMessage;
     }else{
         welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
-        welcomeMessage.createdMillis = @100;
+        welcomeMessage.createdMillis = @0;
         welcomeMessage.isWelcomeMessage = YES;
         welcomeMessage.messageRead = YES;
         [channel addMessagesObject:welcomeMessage];

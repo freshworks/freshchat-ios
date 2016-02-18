@@ -409,6 +409,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     message.actionLabel = [self actionLabel];
     message.isMarketingMessage = [self isMarketingMessage];
     message.marketingId = self.marketingId;
+    message.isWelcomeMessage = self.isWelcomeMessage;
     
     if([message.messageType isEqualToNumber:[NSNumber numberWithInt:2]]){
         KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[self valueForKeyPath:@"hasMessageBinary"];
