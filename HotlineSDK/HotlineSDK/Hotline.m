@@ -150,7 +150,7 @@
 }
 
 -(void)updateUser:(HotlineUser *)user{
-    [KonotorUser createUserWithInfo:user];
+    [KonotorUser storeUserInfo:user];
     [HLCoreServices uploadUnuploadedProperties];
 }
 

@@ -11,6 +11,7 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
+#import "FDSecureStore.h"
 
 @implementation KonotorUser
 
@@ -23,22 +24,18 @@
 @dynamic userAlias;
 @dynamic hasProperties;
 
-+(KonotorUser *)createUserWithInfo:(HotlineUser *)userInfo{
-    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    KonotorUser *user = [self getUser];
++(void)storeUserWithInfo:(HotlineUser *)userInfo{
     
-    if (!user) {
-        user = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorUser" inManagedObjectContext:context];
-    }
+    FDSecureStore *store = [FDSecureStore sharedInstance];
     
     if (userInfo.name && ![userInfo.name isEqualToString:@""]) {
-        user.name = userInfo.name;
+        [store setObject:userInfo.name forKey:HOTLINE_DEFAULTS_USER_NAME];
         [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
     }
     
-    if (user.email) {
+    if (userInfo.email) {
         if ([FDUtilities isValidEmail:userInfo.email]) {
-            user.email = userInfo.email;
+            [store setObject:userInfo.email forKey:HOTLINE_DEFAULTS_USER_EMAIL];
             [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
         }else{
             NSString *exceptionName   = @"HOTLINE_SDK_INVALID_EMAIL_EXCEPTION";
@@ -48,22 +45,22 @@
     }
     
     if (userInfo.externalID && ![userInfo.externalID isEqualToString:@""]) {
-        user.appSpecificIdentifier = userInfo.externalID;
+        [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
         [KonotorCustomProperty createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
     }
-
+    
     if (userInfo.phoneNumber && ![userInfo.phoneNumber isEqualToString:@""]) {
-        user.phoneNumber = userInfo.phoneNumber;
+        [store setObject:userInfo.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
         [KonotorCustomProperty createNewPropertyForKey:@"phone" WithValue:userInfo.phoneNumber isUserProperty:YES];
     }
     
     if (userInfo.phoneCountryCode && ![userInfo.phoneCountryCode isEqualToString:@""]) {
-        user.countryCode = userInfo.phoneCountryCode;
+        [store setObject:userInfo.phoneCountryCode forKey:HOTLINE_DEFAULTS_USER_USER_COUNTRY_CODE];
         [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.phoneCountryCode isUserProperty:YES];
     }
     
     [[KonotorDataManager sharedInstance]save];
-    return user;
+    
 }
 
 +(KonotorUser *)getUser{
