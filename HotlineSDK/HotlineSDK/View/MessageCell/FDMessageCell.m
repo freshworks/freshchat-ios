@@ -322,7 +322,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
     
     if(currentMessage.isWelcomeMessage){
-        messageSentTimeLabel = nil;
+        messageSentTimeLabel.text = nil;
     }
     else{
         messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
@@ -492,6 +492,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     if(currentMessage.isWelcomeMessage){
         cellHeight= cellHeight-(KONOTOR_VERTICAL_PADDING+KONOTOR_TIMEFIELD_HEIGHT);
+        if(KONOTOR_PROFILEIMAGE_DIMENSION > cellHeight)//For setting minimum height
+            cellHeight = KONOTOR_PROFILEIMAGE_DIMENSION;
     }
     return cellHeight;
 }
@@ -567,8 +569,10 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PADDING):0;
     
-    if(!messageSentTimeLabel){
-        msgHeight-= KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING;
+    if(!messageSentTimeLabel.text.length){
+        msgHeight-= (KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING);
+        if(KONOTOR_PROFILEIMAGE_DIMENSION > msgHeight)// for minimum dimension
+            msgHeight = KONOTOR_PROFILEIMAGE_DIMENSION;
     }
     
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
