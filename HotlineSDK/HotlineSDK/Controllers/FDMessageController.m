@@ -624,8 +624,12 @@ typedef struct {
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSArray *messages = [KonotorMessage getAllMesssageForChannel:self.channel];
-    return [messages sortedArrayUsingDescriptors:@[desc]];
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[KonotorMessage getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
+    KonotorMessageData *firstMessage = messages.firstObject;
+    if (firstMessage.isWelcomeMessage && firstMessage.text == nil) {
+        [messages removeObject:firstMessage];
+    }
+    return messages;
 }
 
 #pragma Scrollview delegates
