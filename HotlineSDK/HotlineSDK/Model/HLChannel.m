@@ -61,11 +61,12 @@
      */
     
     KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
+    NSString *updatedMessage = channelInfo[@"welcomeMessage"][@"text"]; //set welcome message here
     if (welcomeMessage) {
-        NSString *updatedMessage = channelInfo[@"welcomeMessage"][@"text"]; //set welcome message here
         welcomeMessage.text = updatedMessage;
     }else{
         welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
+        welcomeMessage.text = updatedMessage;
         welcomeMessage.createdMillis = @0;
         welcomeMessage.isWelcomeMessage = YES;
         welcomeMessage.messageRead = YES;
