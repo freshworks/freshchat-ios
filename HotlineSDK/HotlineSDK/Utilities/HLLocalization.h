@@ -57,6 +57,8 @@
 #define LOC_CAMERA_UNAVAILABLE_OK_BUTTON @"camera_unavailable_ok_button_text"
 #define LOC_CAMERA_PERMISSION_DENIED_TEXT @"camera_permission_denied"
 
+#define LOC_AUDIO_RECORDING_CANCEL_MESSAGE @"cancel_audio_recording_alert"
+
 #define LOC_SEND_BUTTON_TEXT @"send_button_text"
 
 #define LOC_ARTICLE_VOTE_PROMPT_PARTIAL @"article_vote_prompt"
