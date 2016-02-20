@@ -626,7 +626,7 @@ typedef struct {
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSMutableArray *messages = [NSMutableArray arrayWithArray:[[KonotorMessage getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
     KonotorMessageData *firstMessage = messages.firstObject;
-    if (firstMessage.isWelcomeMessage && firstMessage.text == nil) {
+    if (firstMessage.isWelcomeMessage && !firstMessage.text.length) {
         [messages removeObject:firstMessage];
     }
     return messages;
