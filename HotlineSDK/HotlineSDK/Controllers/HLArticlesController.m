@@ -51,6 +51,8 @@
 }
 
 -(void)updateDataSource{
+    self.articles = self.category.articles.allObjects;
+    [self.tableView reloadData];
     [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
         NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
