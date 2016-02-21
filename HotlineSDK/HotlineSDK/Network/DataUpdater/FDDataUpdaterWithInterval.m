@@ -23,7 +23,7 @@
 }
 
 -(NSTimeInterval) lastFetchTime{
-    return [[self.secureStore objectForKey:self.intervalConfigKey]doubleValue];
+    return [[self.secureStore objectForKey:self.intervalConfigKey] doubleValue];
 }
 
 //TODO: when migrating mobihelp -> hotline, clear intervalconfigkey from secure store
@@ -47,7 +47,8 @@
     if([self hasTimedOut]){
         [self doFetch:^(NSError * error) {
             if(!error){
-                [self.secureStore setObject:[NSDate date] forKey:self.intervalConfigKey];
+                NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+                [self.secureStore setObject:lastUpdatedTime forKey:self.intervalConfigKey];
                 FDLog("%@ Completed Update", [[self class] debugDescription]);
             }
             if(completion) completion(YES,error);

@@ -68,6 +68,7 @@ typedef struct {
 
 #define INPUT_TOOLBAR_HEIGHT  40
 #define TABLE_VIEW_TOP_OFFSET 10
+#define CELL_HORIZONTAL_PADDING 4
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -112,6 +113,7 @@ typedef struct {
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
 }
 
 -(UIView *)tableHeaderView{
@@ -136,9 +138,18 @@ typedef struct {
     [super viewWillDisappear:animated];
     [self cancelPoller];
     [Konotor stopRecording];
+    if([Konotor getCurrentPlayingMessageID]){
+        [Konotor StopPlayback];
+    }
+    [self handleDismissMessageInputView];
+    [HotlineAppState sharedInstance].currentVisibleChannel = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+}
+
+- (void) handleDismissMessageInputView{
     if(self.audioMessageInputView.window)
         [self audioMessageInput:self.audioMessageInputView dismissButtonPressed:nil];
-    [HotlineAppState sharedInstance].currentVisibleChannel = nil;
+
 }
 
 -(void)startPoller{
@@ -195,6 +206,7 @@ typedef struct {
 }
 
 -(void)setSubviews{
+    
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -269,6 +281,8 @@ typedef struct {
         cell.messageData = message;
         [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
+    
+    
     if(indexPath.row==0 && self.messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
         NSInteger oldnumber = self.messagesDisplayedCount;
@@ -313,17 +327,13 @@ typedef struct {
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
-        //TODO: If you have add + 4 here .. then I think this should be part of FDMessageCell getHeightForMessage - Rex
-        height = [self.messageHeightMap[key] floatValue]+ 4;
+        height = [self.messageHeightMap[key] floatValue];
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        //TODO: Give names to all the numeric contants used in code. Hard to understand what
-        // this 16 is . And there are too many 16s in the code base - Rex
         self.messageHeightMap[key] = @(height);
-        //TODO: We are missing a + 4 here - Rex
     }
-    return height;
+    return height+CELL_HORIZONTAL_PADDING;
 }
 
 
@@ -353,6 +363,10 @@ typedef struct {
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
     
+    if([Konotor getCurrentPlayingMessageID]){
+        [Konotor StopPlayback];
+    }
+    
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted) {
             BOOL recording=[Konotor startRecording];
@@ -365,6 +379,16 @@ typedef struct {
             [permissionAlert show];
         }
     }];
+}
+
+-(void)messageCell:(FDMessageCell *)cell playButtonIsPressed:(id)sender{
+    //if recording
+    
+    //show prompt to continue of not
+    
+    //if cancel - play audio stop recording
+    
+    //
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -625,8 +649,12 @@ typedef struct {
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSArray *messages = [KonotorMessage getAllMesssageForChannel:self.channel];
-    return [messages sortedArrayUsingDescriptors:@[desc]];
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[KonotorMessage getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
+    KonotorMessageData *firstMessage = messages.firstObject;
+    if (firstMessage.isWelcomeMessage && !firstMessage.text.length) {
+        [messages removeObject:firstMessage];
+    }
+    return messages;
 }
 
 #pragma Scrollview delegates
@@ -714,6 +742,7 @@ typedef struct {
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
         [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+        [Konotor cancelRecording];
     }
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }

@@ -15,6 +15,8 @@
 
 @property(nonatomic, strong, readonly) HotlineConfig *config;
 
++(NSString *)SDKVersion;
+
 /**
  *  Access the Hotline instance.
  *
@@ -30,19 +32,19 @@
 
 -(void)initWithConfig:(HotlineConfig *)config;
 
--(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user;
+-(void)showConversations:(UIViewController *)controller;
 
--(void)updateUser:(HotlineUser *)user;
-
--(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value;
-
--(void)presentConversations:(UIViewController *)controller;
-
--(void)presentSolutions:(UIViewController *)controller;
+-(void)showFAQs:(UIViewController *)controller;
 
 -(void)clearUserData;
 
--(void)addDeviceToken:(NSData *) deviceToken;
+-(void)updateUser:(HotlineUser *) user;
+
+-(void)updateUserProperties:(NSDictionary*)props;
+
+-(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
+
+-(void)updateDeviceToken:(NSData *) deviceToken;
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info;
 
@@ -78,7 +80,7 @@
 @property (strong, nonatomic) NSString *domain;
 @property (nonatomic, assign) BOOL voiceMessagingEnabled;
 @property (nonatomic, assign) BOOL pictureMessagingEnabled;
-@property (nonatomic, assign) BOOL displaySolutionsAsGrid;
+@property (nonatomic, assign) BOOL displaySolutionsAsGrid;//Not present in Android
 @property (nonatomic, assign) BOOL cameraCaptureEnabled;
 @property (nonatomic, assign) BOOL notificationSoundEnabled;
 @property (nonatomic, assign) BOOL agentAvatarEnabled;
@@ -89,24 +91,23 @@
  *
  *  @discussion In order to initialize Hotline, you'll need the three parameters mentioned above. Place the Hotline initialization code in your app delegate, preferably at the top of the application:didFinishLaunchingWithOptions method.
  *
- *  @param domain    The domain name for your portal.
- *
  *  @param appKey    The App Key assigned to your app when it was created on the portal.
  *
  *  @param appSecret The App Secret assigned to your app when it was created on the portal.
  *
  */
--(instancetype)initWithDomain:(NSString*)domain withAppID:(NSString*)appID andAppKey:(NSString*)appKey;
+-(instancetype)initWithAppID:(NSString*)appID andAppKey:(NSString*)appKey;
+
 
 @end
 
 @interface HotlineUser : NSObject
 
-@property (strong, nonatomic) NSString *userName;
-@property (strong, nonatomic) NSString *emailAddress;
+@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *externalID;
-@property (strong, nonatomic) NSString *countryCode;
+@property (strong, nonatomic) NSString *phoneCountryCode;
 
 +(instancetype)sharedInstance;
 

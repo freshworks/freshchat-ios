@@ -52,18 +52,27 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
-                                                       andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"19ea2ca1-7480-429a-8248-58a5a89113a6"
+                                                       andAppKey:@"917285c2-2e1a-4ab8-ae3b-59dd26a2c061"];
+    config.domain=@"mr.orange.konotor.com";
     config.displaySolutionsAsGrid = NO;
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.userName = @"Sid";
-    user.emailAddress = @"sid@freshdesk.com";
+    user.name = @"Sid";
+    user.email = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
-    [[Hotline sharedInstance]initWithConfig:config andUser:user];
-    [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
+    user.phoneCountryCode = @"+91";
+    
+    [[Hotline sharedInstance] updateUser:user];
+    
+    [[Hotline sharedInstance] updateUserProperties:@{
+                                                     @"Key1" : @"Value1",
+                                                     @"Key2" : @"1"
+                                                     }];
+    
+    [[Hotline sharedInstance]initWithConfig:config];
     
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
@@ -82,7 +91,7 @@
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
-    [[Hotline sharedInstance] addDeviceToken:devToken];
+    [[Hotline sharedInstance] updateDeviceToken:devToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

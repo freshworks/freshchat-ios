@@ -12,10 +12,10 @@
 
 @implementation HotlineConfig
 
--(instancetype)initWithDomain:(NSString *)domain withAppID:(NSString *)appID andAppKey:(NSString *)appKey{
+-(instancetype)initWithAppID:(NSString *)appID andAppKey:(NSString *)appKey{
     self = [super init];
     if (self) {
-        self.domain = domain;
+        self.domain = @"app.hotline.io";
         self.appID = appID;
         self.appKey = appKey;
         self.pictureMessagingEnabled = YES;

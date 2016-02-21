@@ -28,6 +28,7 @@
 #import "HLMessageServices.h"
 #import "KonotorCustomProperty.h"
 #import "KonotorUser.h"
+#import "HLVersionConstants.h"
 
 @interface Hotline () <FDNotificationBannerDelegate>
 
@@ -53,10 +54,14 @@
     return sharedInstance;
 }
 
++(NSString *)SDKVersion{
+    return HOTLINE_SDK_VERSION;
+}
+
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.globalReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"www.google.com"];
+        self.globalReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"https://www.google.com"];
         [self.globalReachabilityManager start];
     }
     return self;
@@ -66,7 +71,7 @@
     [self initWithConfig:config andUser:nil];
 }
 
--(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{
+-(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{ // Not used
     self.config = config;
     [self storeConfig:config];
     [self updateUser:user];
@@ -145,15 +150,23 @@
 }
 
 -(void)updateUser:(HotlineUser *)user{
-    [KonotorUser createUserWithInfo:user];
+    [KonotorUser storeUserInfo:user];
     [HLCoreServices uploadUnuploadedProperties];
 }
 
--(void)setCustomUserPropertyForKey:(NSString *)key withValue:(NSString *)value{
-    if (key.length > 0 && value.length > 0){
-        [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
-        [HLCoreServices uploadUnuploadedProperties];
+
+-(void)updateUserProperties:(NSDictionary*)props{
+    if(props){
+        for(NSString *key in props){
+            NSString *value = props[key];
+            [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+        }
     }
+    [HLCoreServices uploadUnuploadedProperties];
+}
+
+-(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
+    [self updateUserProperties:@{ key : value}];
 }
 
 -(void)registerUser{
@@ -201,7 +214,7 @@
     });
 }
 
--(void)presentSolutions:(UIViewController *)controller{
+-(void)showFAQs:(UIViewController *)controller{
     HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
@@ -215,7 +228,7 @@
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
--(void)presentConversations:(UIViewController *)controller{
+-(void)showConversations:(UIViewController *)controller{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
@@ -262,7 +275,7 @@
 
 #pragma mark Push notifications
 
--(void)addDeviceToken:(NSData *)deviceToken {
+-(void)updateDeviceToken:(NSData *)deviceToken {
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {

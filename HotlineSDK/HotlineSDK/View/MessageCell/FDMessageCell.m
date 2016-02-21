@@ -320,7 +320,13 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-    messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
+    
+    if(currentMessage.isWelcomeMessage){
+        messageSentTimeLabel.text = nil;
+    }
+    else{
+        messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
+    }
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
@@ -483,6 +489,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     if([FDMessageCell hasButtonForURL:currentMessage.actionURL articleID:currentMessage.articleID])
         cellHeight+= ACTION_URL_HEIGHT;
+    
+    if(currentMessage.isWelcomeMessage){
+        cellHeight= cellHeight-(KONOTOR_VERTICAL_PADDING+KONOTOR_TIMEFIELD_HEIGHT);
+        if(KONOTOR_PROFILEIMAGE_DIMENSION > cellHeight)//For setting minimum height
+            cellHeight = KONOTOR_PROFILEIMAGE_DIMENSION;
+    }
     return cellHeight;
 }
 
@@ -556,6 +568,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     msgHeight=msgHeight+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
     msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PADDING):0;
+    
+    if(!messageSentTimeLabel.text.length){
+        msgHeight-= (KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING);
+        if(KONOTOR_PROFILEIMAGE_DIMENSION > msgHeight)// for minimum dimension
+            msgHeight = KONOTOR_PROFILEIMAGE_DIMENSION;
+    }
     
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }

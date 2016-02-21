@@ -279,6 +279,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
+-(void)deleteAllMessages:(void (^)(NSError *))handler{
+    [self deleteAllEntriesOfEntity:@"KonotorMessage" handler:handler inContext:self.mainObjectContext];
+}
+
 - (void)dealloc {
     [self save];
 }

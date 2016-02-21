@@ -98,7 +98,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentConversations:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 -(void)localNotificationSubscription{

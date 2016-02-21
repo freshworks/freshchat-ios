@@ -263,11 +263,13 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     UIFont *cellFont = [self.theme tableViewCellFont];
     HLArticle *searchArticle = self.searchResults[indexPath.row];
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
-    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
+    CGFloat heightOfcell = 0;
+    if (searchArticle) {
+        NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
+        heightOfcell = [HLListViewController heightOfCell:title];
+    }
     return heightOfcell;
 }
 
@@ -279,7 +281,7 @@
         articlesDetailController.articleDescription = article.articleDescription;
         articlesDetailController.articleID = article.articleID;
         articlesDetailController.articleTitle = article.title;
-        articlesDetailController.isFromSearchView = TRUE;
+        articlesDetailController.isFromSearchView = YES;
         HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController andEmbed:NO];
         [self.navigationController pushViewController:containerController animated:YES];
     }
@@ -367,7 +369,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentConversations:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
