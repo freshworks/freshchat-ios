@@ -39,6 +39,8 @@
 "audio_recording_stopped"="Recording Stopped";
 "audio_recording_permission_denied"="Permission missing. Please enable Microphone permission under Settings.";
 
+"cancel_audio_recording_alert"="Are you sure you want to cancel recording!";
+
 "empty_message_title"="Empty Message";
 "empty_message_info_text"="You cannot send an empty message. Please type a message to send";
 "modify_push_setting_title"="Modify Push Setting";

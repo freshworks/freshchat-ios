@@ -322,7 +322,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
         
         if([self picCaption])
             [messageDict setObject:[self picCaption] forKey:@"picCaption"];
-    }
+}
     NSError *error;
     NSData *pJsonString = [NSJSONSerialization dataWithJSONObject:messageDict options:0 error:&error];
     return [[NSString alloc ]initWithData:pJsonString encoding:NSUTF8StringEncoding];

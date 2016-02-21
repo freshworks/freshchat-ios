@@ -279,7 +279,7 @@ KonotorAlertView *pAlert;
         
         [KonotorAudioRecorder SaveAudioMessageInCoreData:gkAudioRecorder];
         
-        
+        gkAudioRecorder = nil;
     }
     
     [KonotorAudioRecorder UnInitRecorder];
@@ -319,6 +319,12 @@ KonotorAlertView *pAlert;
     return YES;
 }
 
++(BOOL) isRecording{
+    
+    if(gkAudioRecorder)
+        return YES;
+    return NO;
+}
 
 +(BOOL) cancelRecording
 {
@@ -326,6 +332,7 @@ KonotorAlertView *pAlert;
     {
         [gkAudioRecorder stop];
         [gkAudioRecorder deleteRecording];
+        gkAudioRecorder = nil;
     }
     
     [KonotorAudioRecorder UnInitRecorder];

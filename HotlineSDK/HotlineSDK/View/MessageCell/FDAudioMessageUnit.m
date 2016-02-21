@@ -8,6 +8,8 @@
 
 #import "FDAudioMessageUnit.h"
 #import "HLTheme.h"
+#import "KonotorAudioRecorder.h"
+#import "HLLocalization.h"
 
 @interface FDAudioMessageUnit ()
 
@@ -87,6 +89,31 @@
 
 -(void) playMedia:(id)sender
 {
+    
+    if([KonotorAudioRecorder isRecording]){
+        UIAlertView *actionAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_RECORDING_CANCEL_MESSAGE) message:nil delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [actionAlert show];
+    }
+    else{
+        [self playAudioMessage];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        //Donot do any thing ....
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"CLOSE_AUDIO_RECORDING" object:nil];
+        [self playAudioMessage];
+    }
+}
+
+- (void) playAudioMessage{
+    
     if([[Konotor getCurrentPlayingMessageID] isEqualToString:self.messageID])
     {
         [Konotor StopPlayback];
@@ -94,7 +121,7 @@
     }
     BOOL playing=[Konotor playMessageWithMessageID:self.messageID];
     if(playing)
-       [self startAnimating];
+        [self startAnimating];
 }
 
 - (void) displayMessage:(KonotorMessageData*) currentMessage

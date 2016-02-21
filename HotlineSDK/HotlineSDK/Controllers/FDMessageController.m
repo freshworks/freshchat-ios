@@ -113,6 +113,7 @@ typedef struct {
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
 }
 
 -(UIView *)tableHeaderView{
@@ -137,9 +138,18 @@ typedef struct {
     [super viewWillDisappear:animated];
     [self cancelPoller];
     [Konotor stopRecording];
+    if([Konotor getCurrentPlayingMessageID]){
+        [Konotor StopPlayback];
+    }
+    [self handleDismissMessageInputView];
+    [HotlineAppState sharedInstance].currentVisibleChannel = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+}
+
+- (void) handleDismissMessageInputView{
     if(self.audioMessageInputView.window)
         [self audioMessageInput:self.audioMessageInputView dismissButtonPressed:nil];
-    [HotlineAppState sharedInstance].currentVisibleChannel = nil;
+
 }
 
 -(void)startPoller{
@@ -196,6 +206,7 @@ typedef struct {
 }
 
 -(void)setSubviews{
+    
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -352,6 +363,10 @@ typedef struct {
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
     
+    if([Konotor getCurrentPlayingMessageID]){
+        [Konotor StopPlayback];
+    }
+    
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted) {
             BOOL recording=[Konotor startRecording];
@@ -364,6 +379,16 @@ typedef struct {
             [permissionAlert show];
         }
     }];
+}
+
+-(void)messageCell:(FDMessageCell *)cell playButtonIsPressed:(id)sender{
+    //if recording
+    
+    //show prompt to continue of not
+    
+    //if cancel - play audio stop recording
+    
+    //
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -717,6 +742,7 @@ typedef struct {
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
         [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+        [Konotor cancelRecording];
     }
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
