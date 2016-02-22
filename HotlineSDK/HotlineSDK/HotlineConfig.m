@@ -19,10 +19,10 @@
         self.appID = appID;
         self.appKey = appKey;
         self.pictureMessagingEnabled = YES;
-        self.voiceMessagingEnabled = YES;
+        self.voiceMessagingEnabled = NO;
         self.agentAvatarEnabled = YES;
         self.notificationSoundEnabled = YES;
-        self.displaySolutionsAsGrid = YES;
+        self.displayFAQsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
     }
