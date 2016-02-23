@@ -13,7 +13,6 @@
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
 @property (strong, nonatomic) UIFont *systemFont;
-@property (strong,nonatomic) NSString * themeName;
 
 @end
 

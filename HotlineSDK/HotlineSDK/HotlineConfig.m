@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Hotline.h"
-
+#import "HLTheme.h"
 
 @implementation HotlineConfig
 
@@ -18,11 +18,12 @@
         self.domain = @"app.hotline.io";
         self.appID = appID;
         self.appKey = appKey;
+        self.themeName = @"HLTheme";
         self.pictureMessagingEnabled = YES;
-        self.voiceMessagingEnabled = YES;
+        self.voiceMessagingEnabled = NO;
         self.agentAvatarEnabled = YES;
         self.notificationSoundEnabled = YES;
-        self.displaySolutionsAsGrid = YES;
+        self.displayFAQsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
     }

@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		35E56EDF1C7CC6420089CEFB /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 35E56EE21C7CC6420089CEFB /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				35E56EE31C7CC6500089CEFB /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Documentation;
+			productName = Documentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		3503AAE01C58CBDA00A8DFDB /* FDResponseInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3503AADF1C58CBDA00A8DFDB /* FDResponseInfo.m */; };
 		3509983F1C3E77FC0049E269 /* FDNotificationBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 3509983E1C3E77FC0049E269 /* FDNotificationBanner.m */; };
@@ -776,6 +790,9 @@
 					358DD4ED1BB01A2100B36E4E = {
 						CreatedOnToolsVersion = 6.4;
 					};
+					35E56EDF1C7CC6420089CEFB = {
+						CreatedOnToolsVersion = 7.2;
+					};
 				};
 			};
 			buildConfigurationList = 843DD24E178594180053E19E /* Build configuration list for PBXProject "HotlineSDK" */;
@@ -793,6 +810,7 @@
 				35591A9B1B9ED58100BC0B60 /* HotlineSDK */,
 				35591A771B9ED53700BC0B60 /* HotlineAPI */,
 				358DD4ED1BB01A2100B36E4E /* KonotorModels */,
+				35E56EDF1C7CC6420089CEFB /* Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -806,6 +824,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		35E56EE31C7CC6500089CEFB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#appledoc Xcode script\n# Start constants\ncompany=\"Freshdesk\";\ncompanyID=\"com.freshdesk\";\ncompanyURL=\"http://hotline.io\";\ntarget=\"iphoneos\";\noutputPath=\"${PROJECT_DIR}/../docs\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"Hotline\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--exit-threshold 2 \\\n--ignore Vendor \\\n\"${PROJECT_DIR}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		35591A781B9ED53700BC0B60 /* Sources */ = {
@@ -1071,6 +1105,20 @@
 			};
 			name = Release;
 		};
+		35E56EE01C7CC6420089CEFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		35E56EE11C7CC6420089CEFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		843DD260178594180053E19E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1153,6 +1201,15 @@
 			buildConfigurations = (
 				358DD4F31BB01A2100B36E4E /* Debug */,
 				358DD4F41BB01A2100B36E4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		35E56EE21C7CC6420089CEFB /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				35E56EE01C7CC6420089CEFB /* Debug */,
+				35E56EE11C7CC6420089CEFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
