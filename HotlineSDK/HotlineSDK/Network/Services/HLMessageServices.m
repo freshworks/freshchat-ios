@@ -136,8 +136,14 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
         [[KonotorDataManager sharedInstance]save];
         MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+        [self postUnreadCountNotification];
         [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
     }];
+}
+
++(void)postUnreadCountNotification{
+    NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
+    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil userInfo:@{ @"count" : @(unreadCount)}];
 }
 
 -(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
