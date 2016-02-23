@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Hotline.h"
-
+#import "HLTheme.h"
 
 @implementation HotlineConfig
 
@@ -27,6 +27,10 @@
         self.showNotificationBanner = YES;
     }
     return self;
+}
+
+-(void)setThemeName:(NSString *)themeName{
+    [[HLTheme sharedInstance]setThemeName:themeName];
 }
 
 @end

@@ -69,6 +69,17 @@
  */
 -(instancetype)initWithAppID:(NSString*)appID andAppKey:(NSString*)appKey;
 
+/**
+ *  Set the theme name.
+ *
+ *  @discussion Use this method to supply the SDK with your theme file's name. Make sure themeName is the same as the theme plist file's name. Hotline needs this for theming to work.
+ *
+ *  @param themeName Set Theme Name.
+ *
+ *  @warning The setter method throws an exception for an invalid filename.
+ *
+ */
+- (void)setThemeName:(NSString *) themeName;
 
 @end
 
@@ -210,8 +221,6 @@
  *
  */
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
-
-
 
 @end
 
