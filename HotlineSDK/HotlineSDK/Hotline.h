@@ -35,6 +35,12 @@
  * Enable/disable picture messages. When enabled, users can send images over chat. Default is set to YES.
  */
 @property (nonatomic, assign) BOOL pictureMessagingEnabled;
+/**
+ * Option to supply the SDK with your theme file's name. Make sure themeName is the same as the
+ * theme plist file's name. Hotline needs this for theming to work.
+ * The setter throws an exception for an invalid filename
+ */
+@property (nonatomic, strong) NSString *themeName;
 /*
  * Option to Switch between Grid and List view in FAQs. Shows FAQ categories as a list when set to NO.
  * Default set to YES which presents a Grid view
@@ -68,18 +74,6 @@
  *
  */
 -(instancetype)initWithAppID:(NSString*)appID andAppKey:(NSString*)appKey;
-
-/**
- *  Set the theme name.
- *
- *  @discussion Use this method to supply the SDK with your theme file's name. Make sure themeName is the same as the theme plist file's name. Hotline needs this for theming to work.
- *
- *  @param themeName Set Theme Name.
- *
- *  @warning The setter method throws an exception for an invalid filename.
- *
- */
-- (void)setThemeName:(NSString *) themeName;
 
 @end
 

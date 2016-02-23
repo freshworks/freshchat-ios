@@ -18,6 +18,7 @@
         self.domain = @"app.hotline.io";
         self.appID = appID;
         self.appKey = appKey;
+        self.themeName = @"HLTheme";
         self.pictureMessagingEnabled = YES;
         self.voiceMessagingEnabled = NO;
         self.agentAvatarEnabled = YES;
@@ -27,10 +28,6 @@
         self.showNotificationBanner = YES;
     }
     return self;
-}
-
--(void)setThemeName:(NSString *)themeName{
-    [[HLTheme sharedInstance]setThemeName:themeName];
 }
 
 @end
