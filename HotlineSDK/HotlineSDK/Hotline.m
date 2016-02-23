@@ -89,7 +89,7 @@
 -(void)updateAppVersion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
-    NSString *currentValue = [[[NSBundle mainBundle]infoDictionary]objectForKey:@"CFBundleShortVersionString"];
+    NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
     if (![storedValue isEqualToString:currentValue]) {
         [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
         [HLCoreServices uploadUnuploadedProperties];

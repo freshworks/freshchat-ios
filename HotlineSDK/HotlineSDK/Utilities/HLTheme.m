@@ -62,7 +62,7 @@
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *path = [[NSBundle mainBundle] pathForResource:theme ofType:@"plist"];
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:@"plist"];
     if (!path) {
         NSBundle *HLResourcesBundle = [self getHLResourceBundle];
         path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
@@ -71,7 +71,7 @@
 }
 
 -(NSBundle *)getHLResourceBundle{
-    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"HLResources" withExtension:@"bundle"]];
     return HLResourcesBundle;
 }
 
