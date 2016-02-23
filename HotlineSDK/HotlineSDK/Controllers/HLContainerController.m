@@ -53,7 +53,7 @@
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];
-    footerLabel.text = @"Powered by Hotline.io";
+    footerLabel.text = @"Powered by hotline.io";
     footerLabel.font = [UIFont systemFontOfSize:11];
     footerLabel.textColor = [UIColor whiteColor];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;

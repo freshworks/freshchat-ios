@@ -68,13 +68,8 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
-    [self initWithConfig:config andUser:nil];
-}
-
--(void)initWithConfig:(HotlineConfig *)config andUser:(HotlineUser *)user{ // Not used
     self.config = config;
     [self storeConfig:config];
-    [self updateUser:user];
     [self registerUser];
     [self registerAppActiveListener];
 }
@@ -180,9 +175,6 @@
                 }
             }];
         }
-        else {
-            [self performPendingTasks];
-        }
     });
 }
 
@@ -195,6 +187,10 @@
         [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
     }
 }
+
+
+/*  This function is called during every launch &
+    when the SDK's app is transitioned from background to foreground  */
 
 -(void)newSession:(NSNotification *)notification{
     [self performPendingTasks];

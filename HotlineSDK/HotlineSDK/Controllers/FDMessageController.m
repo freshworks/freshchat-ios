@@ -427,8 +427,11 @@ typedef struct {
     }
     
     if (!notificationEnabled) {
+        if([Konotor showDisableNotifAlert]){
             [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
                           andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
+            [Konotor setShowDisableNotifAlert:0];
+        }
     }
 }
 

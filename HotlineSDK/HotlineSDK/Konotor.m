@@ -20,6 +20,8 @@
 
 __weak static id <KonotorDelegate> _delegate;
 
+static int showDisableNotifAlert = 1;
+
 +(id) delegate{
     return _delegate;
 }
@@ -212,6 +214,14 @@ __weak static id <KonotorDelegate> _delegate;
             [[Konotor delegate] didEncounterErrorWhileDownloadingConversations];
         }
     }
+}
+
++ (int) showDisableNotifAlert {
+    return showDisableNotifAlert;
+}
+
++ (void) setShowDisableNotifAlert:(int)value {
+    showDisableNotifAlert = value;
 }
 
 @end
