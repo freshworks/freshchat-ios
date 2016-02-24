@@ -265,6 +265,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     [self deleteAllEntriesOfEntity:HOTLINE_CHANNEL_ENTITY handler:handler inContext:self.mainObjectContext];
 }
 
+-(void)deleteAllProperties:(void (^)(NSError *))handler{
+    [self deleteAllEntriesOfEntity:@"KonotorCustomProperty" handler:handler inContext:self.mainObjectContext];
+}
+
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
     NSManagedObjectContext *context = self.mainObjectContext;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];

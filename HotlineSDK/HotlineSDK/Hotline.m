@@ -348,12 +348,13 @@
 
 -(void)clearUserData{
     [[HotlineUser sharedInstance]clearUserData];
-    
     [[FDSecureStore persistedStoreInstance]clearStoreData];
+    [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
+        FDLog(@"Deleted all meta properties");
+    }];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");
     }];
-    [self registerUser];
 }
 
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
