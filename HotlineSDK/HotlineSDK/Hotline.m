@@ -171,7 +171,6 @@
         if (!isUserRegistered) {
             [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
                 if (!error) {
-                    [self registerDeviceToken];
                     [self performPendingTasks];
                 }
             }];
@@ -181,11 +180,16 @@
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
-    if (!isAppRegistered) {
-        NSString *userAlias = [FDUtilities getUserAlias];
-        NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-        [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+    if([FDUtilities isUserRegistered]){
+        BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
+        if (!isDeviceTokenRegistered) {
+            NSString *userAlias = [FDUtilities getUserAlias];
+            NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+            [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+        }
+    }
+    else {
+        FDLog(@"WARNING: deviceToken is not being updated now");
     }
 }
 
@@ -205,6 +209,7 @@
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices downloadAllMessages:nil];
         [HLCoreServices DAUCall];
+        [self registerDeviceToken];
         [self updateAppVersion];
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
@@ -279,7 +284,7 @@
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         if(![storedDeviceToken isEqualToString:deviceTokenString]){
             [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
+            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         }
     }
     [self registerDeviceToken];
