@@ -142,7 +142,7 @@
     NSString *userAlias;
     if(![[FDSecureStore sharedInstance] checkItemWithKey:HOTLINE_DEFAULTS_APP_ID]){
         FDLog(@"WARNING : getUserAlias Called before init");
-        return NULL; // safety check for functions called before init.
+        return nil; // safety check for functions called before init.
     }
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];

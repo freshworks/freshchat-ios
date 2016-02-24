@@ -64,11 +64,6 @@
     request.HTTPBody = userData;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            NSString *userAlias = [responseInfo responseAsDictionary][@"alias"];
-            if(! [userAlias isEqualToString:[FDUtilities getUserAlias]] ){
-                FDLog(@"WARNING userAlias is different here[%@] there [%@]", [FDUtilities getUserAlias] , userAlias);
-            }
-            
             [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             FDLog(@"User registered successfully 👍");
             if (handler) handler(nil);
