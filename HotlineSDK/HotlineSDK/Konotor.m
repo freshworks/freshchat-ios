@@ -122,11 +122,9 @@ static int showDisableNotifAlert = 1;
 }
 
 +(BOOL)isUserMe:(NSString *)userId{
-    NSString *currentUserID = @"User";
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *currentUserID = USER_TYPE_MOBILE;
     if(currentUserID){
-        if([userId isEqualToString:currentUserID] ||
-           [userId isEqualToString:userAlias]){
+        if([userId isEqualToString:currentUserID]){
             return YES;
         }
     }

@@ -107,25 +107,9 @@
     return image;
 }
 
-
-/* This function gets the user-alias from persisted secure store for new customers (Hotline),
-    it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
-
 +(BOOL)isUserRegistered{
-    FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
-    NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
-    BOOL isUserRegistered = [persistedStore checkItemWithKey:uuIdLookupKey];
-    if (!isUserRegistered) {
-        KonotorUser *user = [KonotorUser getUser];
-        if (user.userAlias) {
-            [FDUtilities storeUserAlias:user.userAlias];
-            NSLog(@"Taken user alias %@ from Konotor build", user.userAlias);
-            isUserRegistered = YES;
-        }
-    }
-    return isUserRegistered;
+    return [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
 }
-
 
 +(NSString *) getUUIDLookupKey{
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -138,9 +122,48 @@
     return [[NSUUID UUID]UUIDString];
 }
 
+/* This function gets the user-alias from persisted secure store for new customers (Hotline),
+ it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
 +(NSString *)getUserAlias{
+    NSString* userAlias = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    if(userAlias){
+        return userAlias;
+    }
+    else {
+        userAlias = [FDUtilities generateUserAlias];
+        if(userAlias){
+            [[FDSecureStore sharedInstance] setObject:userAlias forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+        }
+    }
+    return userAlias;
+}
+
++(NSString *)generateUserAlias{
+    NSString *userAlias;
+    if(![[FDSecureStore sharedInstance] checkItemWithKey:HOTLINE_DEFAULTS_APP_ID]){
+        FDLog(@"WARNING : getUserAlias Called before init");
+        return nil; // safety check for functions called before init.
+    }
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
-    return [persistedStore objectForKey:[FDUtilities getUUIDLookupKey]];
+    NSString *uuIdLookupKey = [FDUtilities getUUIDLookupKey];
+    BOOL isExistingUser = [persistedStore checkItemWithKey:uuIdLookupKey];
+    if (!isExistingUser) {
+        KonotorUser *user = [KonotorUser getUser];
+        if (user.userAlias) {
+            userAlias = user.userAlias;
+            FDLog(@"Migrating Konotor User");
+        }
+        else {
+            userAlias = [self generateUUID];
+            FDLog(@"New Hotline User");
+        }
+        [FDUtilities storeUserAlias:userAlias];
+    }
+    else {
+        FDLog(@"Existing Konotor user");
+    }
+    userAlias = [persistedStore objectForKey:uuIdLookupKey];
+    return userAlias;
 }
 
 +(void)storeUserAlias:(NSString *)alias{
