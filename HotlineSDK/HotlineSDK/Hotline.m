@@ -109,6 +109,7 @@
                 FDLog(@"Index cleared");
                 [self clearUserData];
                 [self updateConfig:config];
+                [self registerUser];
             }];
         }];
     }

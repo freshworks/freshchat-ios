@@ -14,7 +14,7 @@ $*
 HEADER
 }
 
-VERSION=1.0
+VERSION=1.0.0
 #BUILD_NUMBER=`date +%Y%m%d%H%M`
 
 #Clear Derived Data to have clean build
