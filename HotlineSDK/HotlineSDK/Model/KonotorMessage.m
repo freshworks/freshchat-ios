@@ -170,7 +170,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
                     }
                 }
             }
-            //call to
+            //
             [self sendLatestUserActivity:channel];
         }
         [context save:nil];
@@ -181,7 +181,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
     
-    request.predicate = [NSPredicate predicateWithFormat:@"(messageRead == YES AND belongsToChannel == %@) AND isWelcomeMessage == NO AND messageUserId != %@",channel, USER_TYPE_MOBILE];
+    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"messageRead == 1 AND belongsToChannel == %@", channel];
+    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserId != %@", USER_TYPE_MOBILE];
+    request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[queryChannelAndRead, queryType]];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
@@ -343,11 +345,10 @@ NSMutableDictionary *gkMessageIdMessageMap;
 +(KonotorMessage *)createNewMessage:(NSDictionary *)message{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    newMessage.isWelcomeMessage = NO;
     newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
-    
     newMessage.messageUserId = [message[@"messageUserType"]stringValue];
-    
     newMessage.bytes = [message valueForKey:@"bytes"];
     newMessage.durationInSecs = [message valueForKey:@"durationInSecs"];
     newMessage.read = [message valueForKey:@"read"];
