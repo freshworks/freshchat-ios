@@ -70,7 +70,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
-    [message setMessageUserId:@"User"];
+    [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageType:@1];
     [message setMessageRead:YES];
     [message setText:text];
@@ -85,7 +85,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:@"User"];
+    [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
     [message setMessageType:@3];
     [message setMessageRead:YES];
@@ -171,22 +171,24 @@ NSMutableDictionary *gkMessageIdMessageMap;
                 }
             }
             //call to
-            [self getUserLatestActivity:channel];
+            [self sendLatestUserActivity:channel];
         }
         [context save:nil];
     }];
 }
 
-+ (void) getUserLatestActivity :(HLChannel *)channel {
-    
++ (void) sendLatestUserActivity :(HLChannel *)channel {
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
-    request.predicate = [NSPredicate predicateWithFormat:@"messageRead == YES AND belongsToChannel == %@ AND messageUserId == %@",channel, @"Agent"];
+    
+    request.predicate = [NSPredicate predicateWithFormat:@"(messageRead == YES AND belongsToChannel == %@) AND isWelcomeMessage == NO AND messageUserId != %@",channel, USER_TYPE_MOBILE];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
     KonotorMessage *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
-    [HLCoreServices registerUserConversationActivity:latestMessage];
+    if(latestMessage){
+        [HLCoreServices registerUserConversationActivity:latestMessage];
+    }
 }
 
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId{
@@ -344,12 +346,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
     
-    //TODO: Use message user type once its ready
-    if ([message[@"messageUserAlias"] isEqualToString:[FDUtilities getUserAlias]]) {
-        newMessage.messageUserId = @"User";
-    }else{
-        newMessage.messageUserId = @"Agent";
-    }
+    newMessage.messageUserId = [message[@"messageUserType"]stringValue];
     
     newMessage.bytes = [message valueForKey:@"bytes"];
     newMessage.durationInSecs = [message valueForKey:@"durationInSecs"];
