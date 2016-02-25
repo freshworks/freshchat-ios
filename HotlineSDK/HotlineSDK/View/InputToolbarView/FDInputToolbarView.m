@@ -104,7 +104,6 @@
 
 -(void)sendButtonAction:(id)sender{
     [self.delegate inputToolbar:self sendButtonPressed:sender];
-    self.textView.text = placeHolderText;
     [self updateActionButtons:self.textView];
 }
 
