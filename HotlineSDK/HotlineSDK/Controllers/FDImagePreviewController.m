@@ -136,13 +136,11 @@ static const CGFloat THROWING_THRESHOLD = 1600;
         CGFloat magnitude = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
         
         if ( lroundf(self.originalBounds.height) == lroundf(self.scrollView.contentSize.height)) {
-            NSLog(@"state ended");
             
             if (magnitude > THROWING_THRESHOLD){
                 
                 if (velocity.y >0)   // panning down
                 {
-                    NSLog (@"down");
                     [UIView animateWithDuration:.2 delay:0.0
                                         options: UIViewAnimationCurveEaseIn
                                      animations:^{
@@ -159,7 +157,6 @@ static const CGFloat THROWING_THRESHOLD = 1600;
                 }
                 else                // panning up
                 {
-                    NSLog (@"up");
                     [UIView animateWithDuration:.5 delay:0.0
                                         options: UIViewAnimationCurveEaseIn animations:^{
                                             self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, -(self.view.frame.size.height+self.imageView.frame.size.height), 0, 0);
