@@ -63,6 +63,8 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:getPath parameters:nil];
     
+    FDLog(@"Fetching messages for user %@", userAlias);
+    
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];

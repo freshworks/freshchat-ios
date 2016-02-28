@@ -19,6 +19,10 @@
 #define MESSAGE_UPLOADING 1
 #define MESSAGE_UPLOADED 2
 
+#define USER_TYPE_MOBILE @"0"
+#define USER_TYPE_OWNER @"1"
+#define USER_TYPE_AGENT @"2"
+
 enum KonotorMessageType {
     KonotorMessageTypeText       = 1,
     KonotorMessageTypeAudio      = 2,

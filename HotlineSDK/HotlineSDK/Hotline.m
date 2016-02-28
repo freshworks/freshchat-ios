@@ -84,7 +84,7 @@
 -(void)updateAppVersion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
-    NSString *currentValue = [[[NSBundle mainBundle]infoDictionary]objectForKey:@"CFBundleShortVersionString"];
+    NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
     if (![storedValue isEqualToString:currentValue]) {
         [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
         [HLCoreServices uploadUnuploadedProperties];
@@ -109,6 +109,7 @@
                 FDLog(@"Index cleared");
                 [self clearUserData];
                 [self updateConfig:config];
+                [self registerUser];
             }];
         }];
     }
@@ -136,11 +137,12 @@
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
         [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
         [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
-        [store setBoolValue:config.displaySolutionsAsGrid forKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
+        [store setBoolValue:config.displayFAQsAsGrid forKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+        [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
 }
 
@@ -170,7 +172,6 @@
         if (!isUserRegistered) {
             [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
                 if (!error) {
-                    [self registerDeviceToken];
                     [self performPendingTasks];
                 }
             }];
@@ -180,11 +181,16 @@
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isAppRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
-    if (!isAppRegistered) {
-        NSString *userAlias = [FDUtilities getUserAlias];
-        NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-        [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+    if([FDUtilities isUserRegistered]){
+        BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
+        if (!isDeviceTokenRegistered) {
+            NSString *userAlias = [FDUtilities getUserAlias];
+            NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+            [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+        }
+    }
+    else {
+        FDLog(@"WARNING: deviceToken is not being updated now");
     }
 }
 
@@ -204,6 +210,7 @@
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices downloadAllMessages:nil];
         [HLCoreServices DAUCall];
+        [self registerDeviceToken];
         [self updateAppVersion];
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
@@ -248,7 +255,7 @@
     return navigationController;
 }
 
--(UIViewController*) getSolutionsControllerForEmbed{
+-(UIViewController*) getFAQsControllerForEmbed{
     HLCategoriesListController *categoriesViewController = [[HLCategoriesListController alloc]init];
     return [self getControllerForEmbed:categoriesViewController];
 }
@@ -278,7 +285,7 @@
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         if(![storedDeviceToken isEqualToString:deviceTokenString]){
             [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
+            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         }
     }
     [self registerDeviceToken];
@@ -342,12 +349,13 @@
 
 -(void)clearUserData{
     [[HotlineUser sharedInstance]clearUserData];
-    
     [[FDSecureStore persistedStoreInstance]clearStoreData];
+    [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
+        FDLog(@"Deleted all meta properties");
+    }];
     [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
         FDLog(@"Deleted all channels and conversations");
     }];
-    [self registerUser];
 }
 
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{

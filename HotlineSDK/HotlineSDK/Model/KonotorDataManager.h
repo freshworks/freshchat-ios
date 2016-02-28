@@ -36,6 +36,7 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 -(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler;
 -(void)deleteAllChannels:(void(^)(NSError *error))handler;
 -(void)deleteAllMessages:(void(^)(NSError *error))handler;
+-(void)deleteAllProperties:(void(^)(NSError *error))handler;
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler;
 
 @end

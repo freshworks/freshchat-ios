@@ -37,7 +37,7 @@
     if (isTabViewPreferred) {
         UIViewController* mainView=[self.window rootViewController];
         [mainView setTitle:@"Order"];
-        UIViewController* solutionsViewController=[[Hotline sharedInstance] getSolutionsControllerForEmbed];
+        UIViewController* solutionsViewController=[[Hotline sharedInstance] getFAQsControllerForEmbed];
         [solutionsViewController setTitle:@"FAQs"];
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
         UIViewController* channelsView=[[Hotline sharedInstance] getConversationsControllerForEmbed];
@@ -56,7 +56,7 @@
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
     config.domain=@"mr.orange.konotor.com";
-    config.displaySolutionsAsGrid = NO;
+    config.displayFAQsAsGrid = NO;
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;

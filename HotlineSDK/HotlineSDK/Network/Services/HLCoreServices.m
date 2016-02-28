@@ -50,7 +50,7 @@
 
     NSDictionary *info = @{
                            @"user" : @{
-                                   @"alias" : [FDUtilities generateUUID],
+                                   @"alias" : [FDUtilities getUserAlias],
                                    @"meta"  : [FDUtilities deviceInfoProperties],
                                    @"adId"  : [FDUtilities getAdID]
                                    }
@@ -64,8 +64,7 @@
     request.HTTPBody = userData;
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            NSString *userAlias = [responseInfo responseAsDictionary][@"alias"];
-            [FDUtilities storeUserAlias:userAlias];
+            [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             FDLog(@"User registered successfully 👍");
             if (handler) handler(nil);
         }else{
@@ -91,7 +90,7 @@
 
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_DEVICE_REGISTERED];
+            [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
             FDLog(@"Device token updated on server 👍");
         }else{
             FDLog(@"Could not register app :%@", error);

@@ -33,15 +33,9 @@
         [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
     }
     
-    if (userInfo.email) {
-        if ([FDUtilities isValidEmail:userInfo.email]) {
-            [store setObject:userInfo.email forKey:HOTLINE_DEFAULTS_USER_EMAIL];
-            [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
-        }else{
-            NSString *exceptionName   = @"HOTLINE_SDK_INVALID_EMAIL_EXCEPTION";
-            NSString *exceptionReason = @"You are attempting to set a null/invalid email address, Please provide a valid one";
-            [[[NSException alloc]initWithName:exceptionName reason:exceptionReason userInfo:nil]raise];
-        }
+    if (userInfo.email && [FDUtilities isValidEmail:userInfo.email]) {
+        [store setObject:userInfo.email forKey:HOTLINE_DEFAULTS_USER_EMAIL];
+        [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
     }
     
     if (userInfo.externalID && ![userInfo.externalID isEqualToString:@""]) {

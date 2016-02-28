@@ -35,7 +35,10 @@
 
 @interface HLTheme : NSObject
 
+@property (strong, nonatomic) NSString *themeName;
+
 + (instancetype)sharedInstance;
+-(void)setThemeName:(NSString *)themeName;
 -(UIColor *)searchBarInnerBackgroundColor;
 -(UIColor *)gridViewItemBackgroundColor;
 +(UIColor *)colorWithHex:(NSString *)value;
