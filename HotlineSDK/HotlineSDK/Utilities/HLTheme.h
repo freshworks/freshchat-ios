@@ -72,6 +72,8 @@
 -(UIColor *)badgeButtonBackgroundColor;
 -(UIColor *)badgeButtonTitleColor;
 -(UIColor *)noItemsFoundMessageColor;
+-(UIColor *)channelPalceholderImageBackgroundColor;
+-(UIFont *)channelPlaceholderImageCharFont;
 
 //Talk to us button
 -(UIFont *)talkToUsButtonFont;

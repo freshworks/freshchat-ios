@@ -185,6 +185,12 @@
 		<string>HelveticaNeue</string>
 		<key>UnreadBadgeFontSize</key>
 		<string>14.0f</string>
+		<key>ChannelPlaceholderBackgroundColor</key>
+		<string>555555</string>
+		<key>ChannelPlaceholderCharFontSize</key>
+		<string>20.0f</string>
+		<key>ChannelPlaceholderCharFontName</key>
+		<string>HelveticaNeue</string>
 	</dict>
 	<key>NavigationBar</key>
 	<dict>

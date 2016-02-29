@@ -542,6 +542,16 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+-(UIColor *)channelPalceholderImageBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelPlaceholderBackgroundColor"];
+    return color ? color : [UIColor darkGrayColor];
+}
+
+-(UIFont *)channelPlaceholderImageCharFont{
+    return [self getFontWithKey:@"ChannelListView.ChannelPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
+}
+
+
 #pragma mark - Footer Settings
 
 - (NSString *) getFooterSecretKey{
