@@ -43,4 +43,17 @@
     [self.reachability startNotifier];
 }
 
+-(BOOL)isReachable{
+    return self.reachability.isReachable;
+}
+
++(instancetype)sharedInstance{
+    static FDReachabilityManager *fdReachabilityManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        fdReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"https://www.google.com"];
+    });
+    return fdReachabilityManager;
+}
+
 @end

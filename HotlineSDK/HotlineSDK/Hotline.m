@@ -33,7 +33,6 @@
 @interface Hotline () <FDNotificationBannerDelegate>
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
-@property(nonatomic, strong) FDReachabilityManager *globalReachabilityManager;
 
 @end
 
@@ -61,8 +60,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.globalReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"https://www.google.com"];
-        [self.globalReachabilityManager start];
+        [[FDReachabilityManager sharedInstance] start];
     }
     return self;
 }
