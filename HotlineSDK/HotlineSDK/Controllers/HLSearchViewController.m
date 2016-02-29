@@ -354,10 +354,11 @@
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    NSInteger searchStringLength = searchText.length;
+    NSString *searchString = trimString(searchText);
+    NSInteger searchStringLength = searchString.length;
     if (searchStringLength!=0) {
         self.tableView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-        [self filterArticlesForSearchTerm:searchText];
+        [self filterArticlesForSearchTerm:searchString];
         [self.view removeGestureRecognizer:self.recognizer];
     }else{
         [self.view addGestureRecognizer:self.recognizer];
