@@ -19,6 +19,9 @@
 "thank_you_prompt_text"="Thanks for your feedback";
 "thank_you_prompt_contact_us_button_text"="Still need help? Contact Us";
 
+/* Article Detail */
+"offline_missing_content_text"="You seem to be offline. Some media content may not be available";
+
 /*Channels*/
 "channels_title_text"="Talk to us";
 "channels_close_button_text"="Close";

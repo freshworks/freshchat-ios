@@ -10,6 +10,7 @@
 #import "HLLocalization.h"
 #import "HLMacros.h"
 
+
 @implementation FDStringUtil
 
 +(NSString *)base64EncodedStringFromString:(NSString *)string{
@@ -38,13 +39,13 @@
 
 
 +(NSString *)sanitizeStringForNewLineCharacter:(NSString *)string{
-    NSString *modifiedString = [FDStringUtil replaceInString:string usingRegex:@"\\s+" replaceWith:@" "];
+    NSString *modifiedString = [FDStringUtil replaceInString:string usingRegex:REGEX_WHITESPACE replaceWith:@" "];
     modifiedString = [modifiedString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     return modifiedString;
 }
 
 +(NSString *)sanitizeStringForUTF8:(NSString *)string {
-    NSString *modifiedString = [FDStringUtil replaceInString:string usingRegex:@"[\U00010000-\U0010ffff]" replaceWith:@" "];
+    NSString *modifiedString = [FDStringUtil replaceInString:string usingRegex:REGEX_NON_UTF8 replaceWith:@" "];
     return modifiedString;
 }
 
@@ -134,5 +135,17 @@
     }
     return timeString;
     
+}
+
+
++(BOOL) checkRegexPattern:(NSString *)regexStr inString:(NSString *)string{
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexStr
+                                                                           options:NSRegularExpressionCaseInsensitive error:&error];
+    if (error) {
+        FDLog(@"Regex error : %@",error);
+    }
+    NSArray<NSTextCheckingResult *> *matches =  [regex matchesInString:string options:NSRegularExpressionCaseInsensitive range:NSMakeRange(0, [string length])];
+    return [matches count] > 0;
 }
 @end

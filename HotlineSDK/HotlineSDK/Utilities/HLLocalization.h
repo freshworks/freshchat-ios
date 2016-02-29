@@ -76,4 +76,6 @@
 
 #define LOC_DEFAULT_NOTIFICATION_MESSAGE @"notification_message_default"
 
+#define LOC_OFFLINE_MISSING_CONTENT_TEXT @"offline_missing_content_text"
+
 #endif /* HLLocalization_h */

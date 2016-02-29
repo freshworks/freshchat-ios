@@ -21,7 +21,7 @@
 -(instancetype)initWithDomain:(NSString *)domain{
     self = [super init];
     if (self) {
-        self.reachability = [FDReachability reachabilityWithHostname:domain];
+        self.reachability = [FDReachability reachabilityForInternetConnection];
         __weak typeof(self)weakSelf = self;
         self.reachability.reachableBlock = ^(FDReachability*reach){
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -44,7 +44,7 @@
 }
 
 -(BOOL)isReachable{
-    return self.reachability.isReachable;
+    return ([self.reachability currentReachabilityStatus] != NotReachable);
 }
 
 +(instancetype)sharedInstance{
