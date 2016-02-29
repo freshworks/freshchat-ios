@@ -70,10 +70,10 @@
     NSString *firstLetter = [labelText substringToIndex:1];
     firstLetter = [firstLetter uppercaseString];
     label.text = firstLetter;
-    label.font = [theme channelPlaceholderImageCharFont];
+    label.font = [theme channelIconPlaceholderImageCharFont];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [theme channelPalceholderImageBackgroundColor];
+    label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
     label.layer.cornerRadius = label.frame.size.height / 2.0f;
     UIGraphicsBeginImageContext(label.frame.size);
     [[label layer] renderInContext:UIGraphicsGetCurrentContext()];
