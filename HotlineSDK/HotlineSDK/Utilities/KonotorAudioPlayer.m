@@ -71,7 +71,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [audioSession setActive:YES error:&error];
     
-    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error: &error];
+    [audioSession setCategory:AVAudioSessionCategoryPlayback error: &error];
     
     gCurrentlyPlaying = messageObject;
     
@@ -108,8 +108,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
             [KonotorAudioPlayer currentPlaying:nil set:YES] ;
         //return YES;
     }
-    
-    
     
     return YES;
     

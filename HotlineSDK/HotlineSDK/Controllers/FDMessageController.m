@@ -602,6 +602,12 @@ typedef struct {
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     _flags.isShowingAlert = NO;
+    
+    if([alertView.title isEqualToString:HLLocalizedString(LOC_AUDIO_SIZE_LARGE_ALERT_TITLE)]){
+        if(buttonIndex == 1){
+            [self sendMessage];
+        }
+    }
 }
 
 - (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
@@ -744,20 +750,36 @@ typedef struct {
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
-        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
-        [Konotor cancelRecording];
+        
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+        float audioMsgDuration = [[[KonotorMessage retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
+        
+        if(audioMsgDuration <= 1){
+            
+            UIAlertView *shortMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_SMALL_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SMALL_ALERT_DESCR) delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [shortMessageAlert show];
+            return;
+        }
+        
+        else if(audioMsgDuration > 120){
+            
+            UIAlertView *longMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_LARGE_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SMALL_ALERT_DESCR) delegate:self cancelButtonTitle:@"No" otherButtonTitles:HLLocalizedString(LOC_AUDIO_SIZE_LARGE_ALERT_POST_BTN_TITLE), nil];
+            [longMessageAlert show];
+        }
+        else{
+            [self sendMessage];
+        }
     }
-    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
-
+- (void) sendMessage{
+    
+    [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+    [Konotor cancelRecording];
+}
 
 -(void)dealloc{
     [self localNotificationUnSubscription];
 }
-
-//[[NSNotificationCenter defaultCenter]
-//postNotificationName:@"TestNotification"
-//object:self];
 
 @end

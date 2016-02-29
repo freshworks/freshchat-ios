@@ -48,6 +48,13 @@
 "message_unsent_title"="Message not sent";
 "message_unsent_info_text"="We could not send your message(s) at this time. Check your internet or try later.";
 
+/*audio message sending alerts */
+"small_audio_alert_title" = "Failed message sending!";
+"small_audio_alert_descr" = "The message you are trying to send is too small to send";
+"large_audio_alert_title" = "Was it intentional?";
+"large_audio_alert_description" = "The message you are trying to send is more than 2 minutes, Are you sure you want to send?";
+"large_audio_alert_post_button_title" = "Send it";
+
 /* Search View Place Holder */
 "search_placeholder_text"="Search for FAQs";
 "search_empty_result_text"="Whoops! we couldn't found what you are looking for.";
