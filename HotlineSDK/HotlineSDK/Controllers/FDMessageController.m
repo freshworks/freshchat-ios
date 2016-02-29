@@ -603,7 +603,7 @@ typedef struct {
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     _flags.isShowingAlert = NO;
     
-    if([alertView.title isEqualToString:HLLocalizedString(LOC_AUDIO_SIZE_LARGE_ALERT_TITLE)]){
+    if([alertView.title isEqualToString:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_TITLE)]){
         if(buttonIndex == 1){
             [self sendMessage];
         }
@@ -756,14 +756,14 @@ typedef struct {
         
         if(audioMsgDuration <= 1){
             
-            UIAlertView *shortMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_SMALL_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SMALL_ALERT_DESCR) delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            UIAlertView *shortMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_SHORT_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SHORT_ALERT_DESCRIPTION) delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
             [shortMessageAlert show];
             return;
         }
         
         else if(audioMsgDuration > 120){
             
-            UIAlertView *longMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_LARGE_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SMALL_ALERT_DESCR) delegate:self cancelButtonTitle:@"No" otherButtonTitles:HLLocalizedString(LOC_AUDIO_SIZE_LARGE_ALERT_POST_BTN_TITLE), nil];
+            UIAlertView *longMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_DESCRIPTION) delegate:self cancelButtonTitle:@"No" otherButtonTitles:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_POST_BUTTON_TITLE), nil];
             [longMessageAlert show];
         }
         else{
