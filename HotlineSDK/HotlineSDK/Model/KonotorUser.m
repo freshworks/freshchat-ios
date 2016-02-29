@@ -33,7 +33,7 @@
         [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
     }
     
-    if (userInfo.email && [FDUtilities isValidEmail:userInfo.email]) {
+    if (userInfo.email && [FDStringUtil isValidEmail:userInfo.email]) {
         [store setObject:userInfo.email forKey:HOTLINE_DEFAULTS_USER_EMAIL];
         [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
     }

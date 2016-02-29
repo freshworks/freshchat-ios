@@ -14,6 +14,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
+#import "FDStringUtil.h"
 
 static BOOL INDEX_INPROGRESS = NO;
 #define HOTLINE_DEFAULTS_IS_INDEX_CREATED @"hotline_defaults_is_index_created"
@@ -64,8 +65,8 @@ static BOOL INDEX_INPROGRESS = NO;
 }
 
 +(void)insertIndexforArticleWithContent:(FDArticleContent *)articleContent{
-    articleContent.title = [FDUtilities replaceSpecialCharacters:articleContent.title with:@" "];
-    articleContent.articleDescription = [FDUtilities replaceSpecialCharacters:articleContent.articleDescription with:@" "];
+    articleContent.title = [FDStringUtil replaceSpecialCharacters:articleContent.title with:@" "];
+    articleContent.articleDescription = [FDStringUtil replaceSpecialCharacters:articleContent.articleDescription with:@" "];
     [self stringByStrippingHTML:articleContent.articleDescription];
     NSMutableDictionary *indexInfo = [[NSMutableDictionary alloc] init];
     NSArray *substrings = [articleContent.title componentsSeparatedByString:@" "];

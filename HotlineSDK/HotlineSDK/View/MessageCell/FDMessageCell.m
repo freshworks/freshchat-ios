@@ -222,7 +222,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
-        NSString *strDate = [FDUtilities stringRepresentationForDate:date];
+        NSString *strDate = [FDStringUtil stringRepresentationForDate:date];
         
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
         [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
@@ -325,7 +325,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         messageSentTimeLabel.text = nil;
     }
     else{
-        messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
+        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
     }
     
     NSString* actionUrl=currentMessage.actionURL;
