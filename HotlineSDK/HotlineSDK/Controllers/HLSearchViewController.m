@@ -308,7 +308,7 @@
 
 -(void)filterArticlesForSearchTerm:(NSString *)term{
     if (term.length > 2){
-        term = [FDUtilities replaceSpecialCharacters:term with:@""];
+        term = [FDStringUtil replaceSpecialCharacters:term with:@""];
         NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext ;
         [context performBlock:^{
             NSArray *articles = [FDRanking rankTheArticleForSearchTerm:term withContext:context];

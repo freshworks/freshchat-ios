@@ -21,7 +21,7 @@
 -(instancetype)initWithDomain:(NSString *)domain{
     self = [super init];
     if (self) {
-        self.reachability = [FDReachability reachabilityWithHostname:domain];
+        self.reachability = [FDReachability reachabilityForInternetConnection];
         __weak typeof(self)weakSelf = self;
         self.reachability.reachableBlock = ^(FDReachability*reach){
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -41,6 +41,19 @@
 
 -(void)start{
     [self.reachability startNotifier];
+}
+
+-(BOOL)isReachable{
+    return ([self.reachability currentReachabilityStatus] != NotReachable);
+}
+
++(instancetype)sharedInstance{
+    static FDReachabilityManager *fdReachabilityManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        fdReachabilityManager = [[FDReachabilityManager alloc]initWithDomain:@"https://www.google.com"];
+    });
+    return fdReachabilityManager;
 }
 
 @end

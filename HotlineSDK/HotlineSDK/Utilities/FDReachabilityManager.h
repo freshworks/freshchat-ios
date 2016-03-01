@@ -12,5 +12,8 @@
 
 -(instancetype)initWithDomain:(NSString *)domain;
 -(void)start;
+-(BOOL)isReachable;
+
++(instancetype)sharedInstance;
 
 @end

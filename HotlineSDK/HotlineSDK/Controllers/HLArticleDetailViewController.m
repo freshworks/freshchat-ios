@@ -15,6 +15,8 @@
 #import "FDLocalNotification.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
+#import "FDReachabilityManager.h"
+#import "FDStringUtil.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -44,8 +46,7 @@
 }
 
 -(NSString *)embedHTML{
-    NSString *article = [self.articleDescription stringByReplacingOccurrencesOfString:@"src=\"//" withString:@"src=\"https://"];
-    article = [article stringByReplacingOccurrencesOfString:@"value=\"//" withString:@"value=\"https://"];
+    NSString *article = [self fixLinksForiOS9:self.articleDescription];
     return [NSString stringWithFormat:@""
             "<html>"
             "<style type=\"text/css\">"
@@ -54,12 +55,32 @@
             "<body>"
             "<div class='article-title'><h3>"
             "%@" // Article Title
-            "<h3></div>"
+            "</h3></div>"
+            "%@" // Offline warning message
             "<div class='article-body'>"
             "%@" // Article Content
             "</div>"
             "</body>"
-            "</html>", [self normalizeCssContent],self.articleTitle,article];
+            "</html>", [self normalizeCssContent],self.articleTitle, [self offLineMessageForContent:article],article];
+}
+
+-(NSString *)fixLinksForiOS9:(NSString *) content{
+    NSString *fixedContent = [content stringByReplacingOccurrencesOfString:@"src=\"//" withString:@"src=\"https://"];
+    fixedContent = [fixedContent stringByReplacingOccurrencesOfString:@"value=\"//" withString:@"value=\"https://"];
+    return fixedContent;
+}
+
+-(NSString *)offLineMessageForContent:(NSString *) content{
+    if([[FDReachabilityManager sharedInstance] isReachable] ||
+       ![FDStringUtil checkRegexPattern:@"<\\s*(img|iframe).*?src\\s*=[ '\"]+http[s]?:\\/\\/.*?>" inString:content]){
+        return @"";
+    }
+    //Offline message
+    return [NSString stringWithFormat:@""
+                        "<div class='offline-article-message'>"
+                        "%@"
+                        "</div>"
+            , HLLocalizedString(LOC_OFFLINE_MISSING_CONTENT_TEXT)];
 }
 
 -(NSString *)normalizeCssContent{
