@@ -164,13 +164,12 @@ NSMutableDictionary *gkMessageIdMessageMap;
                 KonotorMessage *message = [array objectAtIndex:i];
                 if(message){
                     if(![[message marketingId] isEqualToNumber:@0]){
-                        [HLMessageServices markMarketingMessageAsRead:message];
+                        [HLMessageServices markMarketingMessageAsRead:message context:context];
                     }else{
                         [message markAsRead];
                     }
                 }
             }
-            //
             [self sendLatestUserActivity:channel];
         }
         [context save:nil];

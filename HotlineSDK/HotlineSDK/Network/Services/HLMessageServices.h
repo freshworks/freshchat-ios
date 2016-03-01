@@ -20,6 +20,6 @@
 
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId;
 
-+(void)markMarketingMessageAsRead:(KonotorMessage *)message;
++(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context;
 
 @end
