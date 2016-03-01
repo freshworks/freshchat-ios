@@ -55,6 +55,7 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
+@property (strong, nonatomic) NSString *appAudioCategory;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
@@ -109,6 +110,7 @@ typedef struct {
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
+    [self registerAppAudioCategory];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
@@ -137,6 +139,7 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
+    [self resetAudioSessionCategory];
     [Konotor stopRecording];
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
@@ -144,6 +147,24 @@ typedef struct {
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+}
+
+-(void)registerAppAudioCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    self.appAudioCategory = audioSession.category;
+}
+
+-(void)resetAudioSessionCategory{
+        [self setAudioCategory:self.appAudioCategory];
+}
+
+-(void)setAudioCategory:(NSString *) audioSessionCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *setCategoryError = nil;
+    
+    if (![audioSession setCategory:audioSessionCategory error:&setCategoryError]) {
+        FDLog(@"%s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
+    }
 }
 
 - (void) handleDismissMessageInputView{
