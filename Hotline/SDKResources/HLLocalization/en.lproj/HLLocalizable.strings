@@ -20,7 +20,7 @@
 "thank_you_prompt_contact_us_button_text"="Still need help? Contact Us";
 
 /* Article Detail */
-"offline_missing_content_text"="You seem to be offline. Some media content may not be available";
+"offline_missing_content_text"="Please connect to the internet to view media content available on this article.";
 
 /*Channels*/
 "channels_title_text"="Talk to us";
