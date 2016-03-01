@@ -139,11 +139,11 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
-    [self resetAudioSessionCategory];
     [Konotor stopRecording];
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
+    [self resetAudioSessionCategory];
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
