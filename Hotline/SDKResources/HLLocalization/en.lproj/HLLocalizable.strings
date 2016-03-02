@@ -24,7 +24,7 @@
 "channels_close_button_text"="Close";
 
 /* Message UI */
-"Message Placeholder Text"="Message";
+"message_placeholder_text" = "Type a message";
 "messages_close_button_text"="Close";
 "send_button_text"="Send";
 "messages_support_label_text"="Support";
@@ -48,8 +48,7 @@
 "message_unsent_title"="Message not sent";
 "message_unsent_info_text"="We could not send your message(s) at this time. Check your internet or try later.";
 
-/*Conversation text placeholder*/
- "conversation_placeholder_text" = "Type your query here...";
+
 
 /* Search View Place Holder */
 "search_placeholder_text"="Search for FAQs";

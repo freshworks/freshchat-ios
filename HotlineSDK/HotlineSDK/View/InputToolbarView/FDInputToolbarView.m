@@ -50,7 +50,7 @@
         textView.layer.borderWidth=1.0;
         textView.delegate = self;
         [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        placeHolderText = HLLocalizedString(LOC_CONVERSATION_PLACEHOLDER_TEXT);
+        placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
         textView.text = placeHolderText;
         textView.delegate = self;
 
