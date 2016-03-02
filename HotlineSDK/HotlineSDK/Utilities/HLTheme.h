@@ -156,6 +156,10 @@
 //Footer
 - (NSString *) getFooterSecretKey;
 
+//Chat bubble insets
+- (UIEdgeInsets) getAgentBubbleInsets;
+- (UIEdgeInsets) getUserBubbleInsets;
+
 //Voice Recording Prompt
 -(UIFont *)voiceRecordingTimeLabelFont;
 

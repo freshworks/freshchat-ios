@@ -242,6 +242,19 @@
     return [UIFont fontWithName:preferredFontName size:preferredFontSize];
 }
 
+- (UIEdgeInsets) getInsetWithKey :(NSString *)chatOwner{
+    
+    float resolution = [UIScreen mainScreen].scale;
+    
+    float topInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Top"]] floatValue] *resolution;
+    float leftInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Left"]] floatValue] * resolution;
+    float bottomInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Bottom"]] floatValue] * resolution;
+    float rightInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Right"]] floatValue] * resolution;
+    UIEdgeInsets bubbleInset = UIEdgeInsetsMake(topInset, leftInset, bottomInset, rightInset);
+    return bubbleInset;
+}
+
+
 #pragma mark - Table View
 
 -(UIFont *)tableViewCellFont{
@@ -546,6 +559,16 @@
 
 - (NSString *) getFooterSecretKey{
     return [self.themePreferences valueForKeyPath:@"FooterView.HotlineDisableFrame"];
+}
+
+#pragma mark chat bubble inset
+
+- (UIEdgeInsets) getAgentBubbleInsets{
+    return [self getInsetWithKey:@"ChatBubbleInsets.AgentBubble"];
+}
+
+- (UIEdgeInsets) getUserBubbleInsets{
+    return [self getInsetWithKey:@"ChatBubbleInsets.UserBubble"];
 }
 
 #pragma mark - Voice Recording Prompt
