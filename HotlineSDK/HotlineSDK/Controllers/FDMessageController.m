@@ -55,6 +55,7 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
+@property (strong, nonatomic) NSString *appAudioCategory;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
@@ -109,6 +110,7 @@ typedef struct {
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
+    [self registerAppAudioCategory];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
@@ -141,9 +143,28 @@ typedef struct {
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
+    [self resetAudioSessionCategory];
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+}
+
+-(void)registerAppAudioCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    self.appAudioCategory = audioSession.category;
+}
+
+-(void)resetAudioSessionCategory{
+        [self setAudioCategory:self.appAudioCategory];
+}
+
+-(void)setAudioCategory:(NSString *) audioSessionCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *setCategoryError = nil;
+    
+    if (![audioSession setCategory:audioSessionCategory error:&setCategoryError]) {
+        FDLog(@"%s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
+    }
 }
 
 - (void) handleDismissMessageInputView{
@@ -602,6 +623,12 @@ typedef struct {
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     _flags.isShowingAlert = NO;
+    
+    if([alertView.title isEqualToString:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_TITLE)]){
+        if(buttonIndex == 1){
+            [self sendMessage];
+        }
+    }
 }
 
 - (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
@@ -744,20 +771,36 @@ typedef struct {
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
-        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
-        [Konotor cancelRecording];
+        
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+        float audioMsgDuration = [[[KonotorMessage retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
+        
+        if(audioMsgDuration <= 1){
+            
+            UIAlertView *shortMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_SHORT_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SHORT_ALERT_DESCRIPTION) delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [shortMessageAlert show];
+            return;
+        }
+        
+        else if(audioMsgDuration > 120){
+            
+            UIAlertView *longMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_DESCRIPTION) delegate:self cancelButtonTitle:@"No" otherButtonTitles:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_POST_BUTTON_TITLE), nil];
+            [longMessageAlert show];
+        }
+        else{
+            [self sendMessage];
+        }
     }
-    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
-
+- (void) sendMessage{
+    
+    [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+    [Konotor cancelRecording];
+}
 
 -(void)dealloc{
     [self localNotificationUnSubscription];
 }
-
-//[[NSNotificationCenter defaultCenter]
-//postNotificationName:@"TestNotification"
-//object:self];
 
 @end

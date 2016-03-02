@@ -48,6 +48,12 @@
 #define LOC_AUDIO_RECORDING_STOPPED @"audio_recording_stopped"
 #define LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT @"audio_recording_permission_denied"
 
+#define LOC_AUDIO_SIZE_SHORT_ALERT_TITLE @"short_audio_alert_title"
+#define LOC_AUDIO_SIZE_SHORT_ALERT_DESCRIPTION @"short_audio_alert_description_text"
+#define LOC_AUDIO_SIZE_LONG_ALERT_TITLE @"long_audio_alert_title"
+#define LOC_AUDIO_SIZE_LONG_ALERT_DESCRIPTION @"long_audio_alert_description_text"
+#define LOC_AUDIO_SIZE_LONG_ALERT_POST_BUTTON_TITLE @"long_audio_alert_post_button_text"
+
 #define LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT @"image_attachment_cancel_button_text"
 #define LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT @"image_attachment_select_existing_image"
 #define LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT @"image_attachment_select_new_image"

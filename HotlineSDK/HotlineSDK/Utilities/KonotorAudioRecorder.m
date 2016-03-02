@@ -424,57 +424,8 @@ KonotorAlertView *pAlert;
     if(!message)
         return NO;
     
-    
-    float audioDurationSeconds = [[message durationInSecs]floatValue];
-    if(audioDurationSeconds < 0.5)
-    {
-        
-        KonotorAlertView *alert = [[KonotorAlertView alloc]
-                                   initWithTitle: @"Message too short"
-                                   message: @"The message you are trying to send is less than half a second, Are you sure you want to send?"
-                                   delegate: nil
-                                   cancelButtonTitle:@"No"
-                                   otherButtonTitles:@"Send it",nil];
-        alert.messageToBeSent = message;
-        alert.conversation = conversation;
-        alert.channel=channel;
-        
-        [alert setDelegate:gkAudioRecorder];
-        [alert show];
-        pAlert = alert;
-        
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
         return YES;
-        
-    }
-    
-    else if(audioDurationSeconds >120)
-    {
-        
-        KonotorAlertView *alert = [[KonotorAlertView alloc]
-                                   initWithTitle: @"Was it intentional?"
-                                   message: @"The message you are trying to send is more than 2 minutes, Are you sure you want to send?"
-                                   delegate: nil
-                                   cancelButtonTitle:@"No"
-                                   otherButtonTitles:@"Send it",nil];
-        
-        alert.messageToBeSent = message;
-        alert.conversation = conversation;
-        alert.channel=channel;
-        [alert setDelegate:gkAudioRecorder];
-        [alert show];
-        pAlert = alert;
-        
-        return YES;
-        
-    }
-    
-    
-    else
-    {
-        [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
-        return YES;
-        
-    }
     
 }
 
