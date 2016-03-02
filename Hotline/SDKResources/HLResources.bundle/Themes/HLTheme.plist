@@ -77,6 +77,25 @@
 		<key>SentMessageFontColor</key>
 		<string>FFFFFF</string>
 	</dict>
+	<key>ChatBubbleInsets</key>
+	<dict>
+		<key>AgentBubbleTop</key>
+		<string>3</string>
+		<key>AgentBubbleLeft</key>
+		<string>4</string>
+		<key>AgentBubbleBottom</key>
+		<string>3</string>
+		<key>AgentBubbleRight</key>
+		<string>2</string>
+		<key>UserBubbleTop</key>
+		<string>3</string>
+		<key>UserBubbleLeft</key>
+		<string>2</string>
+		<key>UserBubbleBottom</key>
+		<string>3</string>
+		<key>UserBubbleRight</key>
+		<string>4</string>
+	</dict>
 	<key>Dialogues</key>
 	<dict>
 		<key>YesButtonFontColor</key>
