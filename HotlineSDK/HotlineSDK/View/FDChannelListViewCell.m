@@ -64,14 +64,16 @@
 
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{
+    
+    HLTheme *theme = [HLTheme sharedInstance];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     NSString *firstLetter = [labelText substringToIndex:1];
     firstLetter = [firstLetter uppercaseString];
     label.text = firstLetter;
-    label.font = [UIFont boldSystemFontOfSize:16];
+    label.font = [theme channelIconPlaceholderImageCharFont];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [UIColor lightGrayColor];
+    label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
     label.layer.cornerRadius = label.frame.size.height / 2.0f;
     UIGraphicsBeginImageContext(label.frame.size);
     [[label layer] renderInContext:UIGraphicsGetCurrentContext()];

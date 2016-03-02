@@ -242,6 +242,19 @@
     return [UIFont fontWithName:preferredFontName size:preferredFontSize];
 }
 
+- (UIEdgeInsets) getInsetWithKey :(NSString *)chatOwner{
+    
+    float resolution = [UIScreen mainScreen].scale;
+    
+    float topInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Top"]] floatValue] *resolution;
+    float leftInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Left"]] floatValue] * resolution;
+    float bottomInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Bottom"]] floatValue] * resolution;
+    float rightInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Right"]] floatValue] * resolution;
+    UIEdgeInsets bubbleInset = UIEdgeInsetsMake(topInset, leftInset, bottomInset, rightInset);
+    return bubbleInset;
+}
+
+
 #pragma mark - Table View
 
 -(UIFont *)tableViewCellFont{
@@ -542,10 +555,30 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+-(UIColor *)channelIconPalceholderImageBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelIconPlaceholderBackgroundColor"];
+    return color ? color : [UIColor darkGrayColor];
+}
+
+-(UIFont *)channelIconPlaceholderImageCharFont{
+    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
+}
+
+
 #pragma mark - Footer Settings
 
 - (NSString *) getFooterSecretKey{
     return [self.themePreferences valueForKeyPath:@"FooterView.HotlineDisableFrame"];
+}
+
+#pragma mark chat bubble inset
+
+- (UIEdgeInsets) getAgentBubbleInsets{
+    return [self getInsetWithKey:@"ChatBubbleInsets.AgentBubble"];
+}
+
+- (UIEdgeInsets) getUserBubbleInsets{
+    return [self getInsetWithKey:@"ChatBubbleInsets.UserBubble"];
 }
 
 #pragma mark - Voice Recording Prompt

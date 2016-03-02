@@ -81,6 +81,9 @@
                 FDLog(@"Deleting article with title : %@ with ID : %@ because its disabled !",article.title, article.articleID);
                 [context deleteObject:article];
             }
+            else {
+               FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
+            }
         }
     }
     return category;

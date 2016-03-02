@@ -72,6 +72,8 @@
 -(UIColor *)badgeButtonBackgroundColor;
 -(UIColor *)badgeButtonTitleColor;
 -(UIColor *)noItemsFoundMessageColor;
+-(UIColor *)channelIconPalceholderImageBackgroundColor;
+-(UIFont *)channelIconPlaceholderImageCharFont;
 
 //Talk to us button
 -(UIFont *)talkToUsButtonFont;
@@ -155,6 +157,10 @@
 
 //Footer
 - (NSString *) getFooterSecretKey;
+
+//Chat bubble insets
+- (UIEdgeInsets) getAgentBubbleInsets;
+- (UIEdgeInsets) getUserBubbleInsets;
 
 //Voice Recording Prompt
 -(UIFont *)voiceRecordingTimeLabelFont;
