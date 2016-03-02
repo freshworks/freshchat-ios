@@ -51,11 +51,6 @@
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
     [context performBlock:^{
         NSArray *categories = solutions[@"categories"];
-        
-        for (int i=0; i<categories.count; i++) {
-            NSLog(@"Category : %@, is enabled : %@", categories[i][@"title"], categories[i][@"enabled"]);
-        }
-        
         for(int i=0; i<categories.count; i++){
             NSDictionary *categoryInfo = categories[i];
             HLCategory *category = [HLCategory getWithID:categoryInfo[@"categoryId"] inContext:context];

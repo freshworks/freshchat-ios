@@ -15,7 +15,10 @@
 #include "HLLocalization.h"
 #import "FDSecureStore.h"
 
-@interface FDInputToolbarView () <UITextViewDelegate>
+@interface FDInputToolbarView () <UITextViewDelegate>{
+    
+    NSString *placeHolderText;
+}
 
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
@@ -41,11 +44,14 @@
         self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
    
         textView=[[UITextView alloc] init];
-        [textView setTextColor:[self.theme inputTextFontColor]];
+        [textView setTextColor:[UIColor lightGrayColor]];
         textView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
         textView.layer.cornerRadius=5.0;
         textView.layer.borderWidth=1.0;
+        textView.delegate = self;
         [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
+        textView.text = placeHolderText;
         textView.delegate = self;
 
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
@@ -76,13 +82,28 @@
     return self;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)chatTextView{
+    if ([chatTextView.text isEqualToString:placeHolderText]){
+        chatTextView.text = @"";
+    }
+    [chatTextView setTextColor:[self.theme inputTextFontColor]];
+    [chatTextView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)chatTextView{
+    NSString *currentText = trimString(chatTextView.text);
+    if ([currentText isEqualToString:@""]) {
+        chatTextView.text = placeHolderText;
+        chatTextView.textColor = [UIColor lightGrayColor]; //optional
+    }
+}
+
 -(void)attachmentButtonAction:(id)sender{
     [self.delegate inputToolbar:self attachmentButtonPressed:sender];
 }
 
 -(void)sendButtonAction:(id)sender{
     [self.delegate inputToolbar:self sendButtonPressed:sender];
-    self.textView.text = @"";
     [self updateActionButtons:self.textView];
 }
 
@@ -143,7 +164,7 @@
 }
 
 -(void)updateActionButtons:(UITextView *)inputTextView{
-    BOOL isTextViewEmpty = [inputTextView.text isEqualToString:@""];
+    BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);
     if(!self.isVoiceMessageEnabled){
         [self disableAudioMessaging];
     }

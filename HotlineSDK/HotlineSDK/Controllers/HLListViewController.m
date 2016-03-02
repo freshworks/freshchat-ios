@@ -64,12 +64,12 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"WARNING: Unimplemented method. %@ should implement tableView:cellForRowAtIndexPath" , self.class);
+    FDLog(@"WARNING: Unimplemented method. %@ should implement tableView:cellForRowAtIndexPath" , self.class);
     return nil;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"WARNING: Unimplemented method. %@ should implement tableView:numberOfRowsInSection" , self.class);
+    FDLog(@"WARNING: Unimplemented method. %@ should implement tableView:numberOfRowsInSection" , self.class);
     return 0;
 }
 

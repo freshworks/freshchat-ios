@@ -67,7 +67,19 @@
 
 -(void)initWithConfig:(HotlineConfig *)config{
     self.config = config;
-    [self storeConfig:config];
+    
+    if ([self hasUpdatedConfig:config]) {
+        [self cleanUpData:^{
+            [self initConfigAndUser:config];
+        }];
+    }
+    else {
+        [self initConfigAndUser:config];
+    }
+}
+
+-(void)initConfigAndUser:(HotlineConfig *)config{
+    [self updateConfig:config];
     [self registerUser];
     [self registerAppActiveListener];
 }
@@ -98,20 +110,17 @@
     }
 }
 
--(void)storeConfig:(HotlineConfig *)config{
-    if ([self hasUpdatedConfig:config]) {
-        KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
-        [dataManager deleteAllSolutions:^(NSError *error) {
-            FDLog(@"All solutions deleted");
-            [dataManager deleteAllIndices:^(NSError *error) {
-                FDLog(@"Index cleared");
-                [self clearUserData];
-                [self updateConfig:config];
-                [self registerUser];
-            }];
+
+-(void)cleanUpData:(void (^)())completion{
+    KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
+    [dataManager deleteAllSolutions:^(NSError *error) {
+        FDLog(@"All solutions deleted");
+        [dataManager deleteAllIndices:^(NSError *error) {
+            FDLog(@"Index cleared");
+            [self clearUserData];
+            completion();
         }];
-    }
-    [self updateConfig:config];
+    }];
 }
 
 -(BOOL)hasUpdatedConfig:(HotlineConfig *)config{

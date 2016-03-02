@@ -61,12 +61,6 @@ static int showDisableNotifAlert = 1;
 
 }
 
-+(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID
-{
-    [KonotorAudioRecorder SendRecordingWithMessageID:MessageID];
-    [[Konotor delegate] didStartUploadingNewMessage];
-}
-
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel{
     [KonotorAudioRecorder SendRecordingWithMessageID:MessageID toConversationID:ConversationID onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
@@ -130,8 +124,6 @@ static int showDisableNotifAlert = 1;
     }
     return NO;
 }
-
-//////Start of undocumented functions/////
 
 +(void) conversationsDownloaded
 {

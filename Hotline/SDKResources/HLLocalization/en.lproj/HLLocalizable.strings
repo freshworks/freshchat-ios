@@ -27,7 +27,7 @@
 "channels_close_button_text"="Close";
 
 /* Message UI */
-"Message Placeholder Text"="Message";
+"message_placeholder_text" = "Type a message";
 "messages_close_button_text"="Close";
 "send_button_text"="Send";
 "messages_support_label_text"="Support";

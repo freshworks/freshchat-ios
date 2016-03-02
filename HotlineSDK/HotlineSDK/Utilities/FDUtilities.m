@@ -170,9 +170,6 @@ static NSInteger networkIndicator = 0;
         if(networkIndicator > 0){
             networkIndicator--;
         }
-        else{
-            //NSLog(@"%@", @"Something wrong");
-        }
     }
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(networkIndicator > 0)];

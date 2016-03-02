@@ -322,35 +322,42 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     [operation start];
 }
 
-
-//TODO: Skip messages that are 'click registered' already & use HLAPIClient
-+(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
-    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    
++(HLServiceRequest *)statusUpdateRequestForMarketingID:(NSNumber *)marketingID{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+
     
-    if([marketingId intValue] ==0 || !marketingId) return;
     
-    //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?clicked=1&t=",appKey];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
-        FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
-    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
-        FDLog(@"Failed to register marketing message click event to server");
-    }];
-    [operation start];
 }
 
+//TODO: Skip messages that are clicked before
 
-//TODO: Use HLAPIClient
-+(void)markMarketingMessageAsRead:(KonotorMessage *)message{
++(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
+    if([marketingId intValue] ==0 || !marketingId) return;
+
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    
+    NSString *userAlias = [FDUtilities getUserAlias];
+    
+    if (!userAlias) return;
+
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
+    [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
+    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
+        }else{
+            FDLog(@"Failed to register marketing message click event to server");
+        }
+    }];
+}
+
++(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context{
     if (message.messageRead == YES) return;
     
     NSNumber *marketingId = message.marketingId;
@@ -359,26 +366,26 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     message.messageRead = YES;
     
-    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?seen=1&t=",appKey];
-    
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
-        FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
-    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
-        [message markAsUnread];
-    }];
-    [operation start];
-}
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
 
+    if (!userAlias) return;
+
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
+    [request setRelativePath:path andURLParams:@[@"seen=1",appKey]];
+    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+        }else{
+            FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
+            [message markAsUnread];
+        }
+        [context save:nil];
+    }];
+}
 
 @end
