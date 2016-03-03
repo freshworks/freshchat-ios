@@ -195,6 +195,7 @@ typedef struct {
 -(void)setNavigationItem{
     if(_flags.isModalPresentationPreferred){
         UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
+        
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
         if (!self.embedded) {

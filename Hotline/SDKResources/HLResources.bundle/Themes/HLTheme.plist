@@ -146,23 +146,6 @@
 		<key>BackgroundColor</key>
 		<string>525454</string>
 	</dict>
-	<key>FeedbackView</key>
-	<dict>
-		<key>FontColor</key>
-		<string>000000</string>
-		<key>FontName</key>
-		<string>HelveticaNeue</string>
-		<key>FontSize</key>
-		<string>15.0f</string>
-		<key>TicketBodyBackgroundColor</key>
-		<string>EFEFF4</string>
-		<key>TicketBodyPlaceholderColor</key>
-		<string>B3B3B3</string>
-		<key>UserFieldBackgroundColor</key>
-		<string>F5F5F5</string>
-		<key>UserFieldPlaceholderColor</key>
-		<string>B3B3B3</string>
-	</dict>
 	<key>MyConversationsCell</key>
 	<dict>
 		<key>BackgroundColor</key>
