@@ -69,8 +69,6 @@
 
 //Overall SDK
 -(UIColor *)backgroundColorSDK;
--(UIColor *)badgeButtonBackgroundColor;
--(UIColor *)badgeButtonTitleColor;
 -(UIColor *)noItemsFoundMessageColor;
 -(UIColor *)channelIconPalceholderImageBackgroundColor;
 -(UIFont *)channelIconPlaceholderImageCharFont;
@@ -154,6 +152,9 @@
 -(UIColor *)channelDescriptionFontColor;
 -(UIFont *)lastUpdatedFont;
 -(UIColor *)lastUpdatedFontColor;
+-(UIFont *)badgeButtonFont;
+-(UIColor *)badgeButtonBackgroundColor;
+-(UIColor *)badgeButtonTitleColor;
 
 //Footer
 - (NSString *) getFooterSecretKey;

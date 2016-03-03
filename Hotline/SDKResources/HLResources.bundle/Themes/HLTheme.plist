@@ -240,10 +240,6 @@
 		<string>Helvetica</string>
 		<key>TalkToUsButtonFontSize</key>
 		<string>14.0f</string>
-		<key>UnreadBadgeColor</key>
-		<string>DE2021</string>
-		<key>UnreadBadgeTitleColor</key>
-		<string>FFFFFF</string>
 	</dict>
 	<key>SearchBar</key>
 	<dict>
