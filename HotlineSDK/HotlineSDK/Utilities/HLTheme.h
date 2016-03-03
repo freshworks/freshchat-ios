@@ -109,8 +109,6 @@
 -(UIColor *)actionButtonSelectedTextColor;
 -(UIColor *)actionButtonColor;
 -(UIColor *)actionButtonBorderColor;
--(UIColor *)businessMessageTextColor;
--(UIColor *)userMessageTextColor;
 -(UIColor *)hyperlinkColor;
 //-(NSString *)chatBubbleFontName;
 -(NSString *)conversationUIFontName;

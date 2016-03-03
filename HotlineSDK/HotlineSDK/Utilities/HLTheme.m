@@ -415,14 +415,6 @@
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 
--(UIColor *)businessMessageTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BusinessMessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUSINESS_MESSAGE_TEXT_COLOR];
-}
--(UIColor *)userMessageTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_USER_MESSAGE_TEXT_COLOR];
-}
 
 -(UIColor *)hyperlinkColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];

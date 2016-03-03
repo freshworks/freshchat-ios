@@ -22,8 +22,6 @@
 		<string>FFFFFF</string>
 		<key>ConversationUIFontName</key>
 		<string>HelveticaNeue</string>
-		<key>ShowsUserProfileImage</key>
-		<false/>
 		<key>ActionButtonTextColor</key>
 		<string>FFFFFF</string>
 		<key>ActionButtonSelectedTextColor</key>
@@ -32,10 +30,6 @@
 		<string>F5F5F5</string>
 		<key>ActionButtonBorderColor</key>
 		<string>F1F1F1</string>
-		<key>BusinessMessageTextColor</key>
-		<string>000000</string>
-		<key>UserMessageTextColor</key>
-		<string>5a5a5a</string>
 		<key>HyperlinkColor</key>
 		<string>2701A0</string>
 		<key>InputTextFontColor</key>
