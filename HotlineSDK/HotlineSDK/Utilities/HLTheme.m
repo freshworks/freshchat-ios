@@ -123,6 +123,17 @@
         return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
+
+-(UIColor *)navigationBarButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"NavigationBar.ButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+}
+
+
+-(UIFont *)navigationBarButtonFont{
+    return [self getFontWithKey:@"NavigationBar.Button" andDefaultSize:17];
+}
+
 #pragma mark - Search Bar
 
 -(UIFont *)searchBarFont{

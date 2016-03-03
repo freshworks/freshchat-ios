@@ -8,6 +8,8 @@
 
 #import "FDAttachmentImageController.h"
 #import "Konotor.h"
+#import "FDBarButtonItem.h"
+#import "HLTheme.h"
 
 @interface FDAttachmentImageController ()
 
@@ -40,11 +42,12 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *sendButton = [[UIBarButtonItem alloc]initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendButton:)];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
+    UIBarButtonItem *sendButton = [[FDBarButtonItem alloc]initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendButton:)];
+    UIBarButtonItem *backButton = [[FDBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
     self.navigationItem.rightBarButtonItem = sendButton;
     self.navigationItem.leftBarButtonItem = backButton;
     self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [[HLTheme sharedInstance ]navigationBarBackgroundColor];
 }
 
 -(void)sendButton:(UIBarButtonItem *)button{

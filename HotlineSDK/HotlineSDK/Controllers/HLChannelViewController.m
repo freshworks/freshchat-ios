@@ -21,6 +21,7 @@
 #import "FDUtilities.h"
 #import "HLLocalization.h"
 #import "FDNotificationBanner.h"
+#import "FDBarButtonItem.h"
 
 @interface HLChannelViewController ()
 
@@ -135,7 +136,7 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }

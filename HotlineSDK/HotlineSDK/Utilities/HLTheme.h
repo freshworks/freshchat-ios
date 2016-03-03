@@ -95,6 +95,9 @@
 -(UIColor *)navigationBarBackgroundColor;
 -(UIFont *)navigationBarTitleFont;
 -(UIColor *)navigationBarFontColor;
+-(UIColor *)navigationBarButtonColor;
+-(UIFont *)navigationBarButtonFont;
+
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
