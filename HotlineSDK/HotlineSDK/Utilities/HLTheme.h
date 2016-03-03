@@ -111,23 +111,11 @@
 -(UIColor *)businessMessageTextColor;
 -(UIColor *)userMessageTextColor;
 -(UIColor *)hyperlinkColor;
--(BOOL)alwaysPollForMessages;
--(BOOL)showsBusinessMessageSenderName;
--(BOOL)showsUserMessageSenderName;
--(NSString *)textInputHintText;
--(NSString *)businessProfileImageName;
--(NSString *)userProfileImageName;
--(NSString *)businessMessageSenderName;
--(NSString *)userMessageSenderName;
--(NSString *)businessChatBubbleImageName;
--(NSString *)userChatBubbleImageName;
 //-(NSString *)chatBubbleFontName;
 -(NSString *)conversationUIFontName;
 //-(float)chatBubbleFontSize;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
--(int)pollingTimeChatInFocus;
--(int)pollingTimeChatNotInFocus;
 
 //Notification
 -(UIColor *)notificationBackgroundColor;
@@ -153,8 +141,8 @@
 -(UIFont *)channelTitleFont;
 -(UIColor *)channelTitleFontColor;
 -(UIColor *)channelDescriptionFontColor;
--(UIFont *)lastUpdatedFont;
--(UIColor *)lastUpdatedFontColor;
+-(UIFont *)channelLastUpdatedFont;
+-(UIColor *)channelLastUpdatedFontColor;
 -(UIFont *)badgeButtonFont;
 -(UIColor *)badgeButtonBackgroundColor;
 -(UIColor *)badgeButtonTitleColor;

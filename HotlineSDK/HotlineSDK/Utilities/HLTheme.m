@@ -419,39 +419,10 @@
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_USER_MESSAGE_TEXT_COLOR];
 }
+
 -(UIColor *)hyperlinkColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];
     return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
-}
--(BOOL)alwaysPollForMessages{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"] boolValue];
-}
--(BOOL)showsBusinessMessageSenderName{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"] boolValue];
-}
--(BOOL)showsUserMessageSenderName{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"] boolValue];
-}
--(NSString *)textInputHintText{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.TextInputHintText"];
-}
--(NSString *)businessProfileImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
-}
--(NSString *)userProfileImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
-}
--(NSString *)businessMessageSenderName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserProfileImageName"];
-}
--(NSString *)userMessageSenderName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserMessageSenderName"];
-}
--(NSString *)businessChatBubbleImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessChatBubbleImageName"];
-}
--(NSString *)userChatBubbleImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserChatBubbleImageName"];
 }
 
 -(UIFont *)getChatBubbleMessageFont{
@@ -462,23 +433,9 @@
     return [self getFontWithKey:@"ConversationsUI.ChatBubbleTime" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
-/*-(NSString *)chatBubbleFontName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontName"];
-}*/
 -(NSString *)conversationUIFontName{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
 }
-/*
--(float)chatBubbleFontSize{
-   return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontSize"] floatValue];
-}*/
--(int)pollingTimeChatInFocus{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatInFocus"] intValue];
-}
--(int)pollingTimeChatNotInFocus{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatNotInFocus"] intValue];
-}
-
 
 
 #pragma mark - Grid View
@@ -543,11 +500,11 @@
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
--(UIFont *)lastUpdatedFont{
+-(UIFont *)channelLastUpdatedFont{
     return [self getFontWithKey:@"ChannelListView.LastUpdatedTime" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
--(UIColor *)lastUpdatedFontColor{
+-(UIColor *)channelLastUpdatedFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedTimeFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }

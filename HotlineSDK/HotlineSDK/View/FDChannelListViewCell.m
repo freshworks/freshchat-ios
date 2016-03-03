@@ -38,8 +38,8 @@
 
     self.lastUpdatedLabel = [[UILabel alloc] init];
     self.lastUpdatedLabel.textAlignment = UITextAlignmentRight;
-    self.lastUpdatedLabel.font = [self.theme lastUpdatedFont];
-    self.lastUpdatedLabel.textColor = [self.theme lastUpdatedFontColor];
+    self.lastUpdatedLabel.font = [self.theme channelLastUpdatedFont];
+    self.lastUpdatedLabel.textColor = [self.theme channelLastUpdatedFontColor];
     self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.lastUpdatedLabel];
     
