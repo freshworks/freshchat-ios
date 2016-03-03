@@ -101,6 +101,7 @@
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
+-(UIFont *) inputTextFont;
 -(UIColor *)sendButtonColor;
 -(UIColor *)conversationViewTitleTextColor;
 -(UIColor *)conversationViewBackgroundColor;

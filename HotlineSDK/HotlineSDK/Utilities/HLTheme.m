@@ -377,6 +377,10 @@
     return [UIColor blackColor];
 }
 
+-(UIFont *)inputTextFont{
+    return [self getFontWithKey:@"ConversationsUI.InputText" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
 -(UIColor *)sendButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
     return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
