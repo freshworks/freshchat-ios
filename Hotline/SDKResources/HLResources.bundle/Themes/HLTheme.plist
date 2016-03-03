@@ -4,10 +4,6 @@
 <dict>
 	<key>ConversationsUI</key>
 	<dict>
-		<key>InputTextFontName</key>
-		<string>HelveticaNeue</string>
-		<key>InputTextFontSize</key>
-		<string>14.0f</string>
 		<key>ChatBubbleMessageFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChatBubbleMessageFontSize</key>
@@ -34,10 +30,12 @@
 		<string>2701A0</string>
 		<key>InputTextFontColor</key>
 		<string>000000</string>
+		<key>InputTextFontName</key>
+		<string>HelveticaNeue</string>
+		<key>InputTextFontSize</key>
+		<string>14.0f</string>
 		<key>SendButtonColor</key>
 		<string>0079FF</string>
-		<key>SentMessageFontColor</key>
-		<string>FFFFFF</string>
 	</dict>
 	<key>ChatBubbleInsets</key>
 	<dict>
