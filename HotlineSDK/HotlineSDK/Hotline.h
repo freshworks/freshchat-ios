@@ -65,6 +65,7 @@
  */
 @property (nonatomic, assign) BOOL showNotificationBanner;
 
+@property (nonatomic, assign) BOOL showChannelThumbnail;
 /**
  *  Initialize Hotline.
  *
