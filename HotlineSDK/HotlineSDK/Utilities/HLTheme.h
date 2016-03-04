@@ -122,14 +122,13 @@
 -(UIFont *)notificationTitleFont;
 -(UIFont *)notificationMessageFont;
 
-//Grid View
--(UIColor *) gridViewItemSeperatorColor;
 
 //Grid View Cell
 -(UIFont *)gridViewCellTitleFont;
 -(UIColor *)gridViewCellTitleFontColor;
 -(UIColor *)gridViewCellBackgroundColor;
 -(UIColor *)gridViewImageBackgroundColor;
+-(UIColor *) gridViewCellBorderColor;
 
 //Conversation List View
 -(UIColor *)conversationListViewBackgroundColor;

@@ -224,11 +224,6 @@
 		<key>FontSize</key>
 		<string>14.0f</string>
 	</dict>
-	<key>GridView</key>
-	<dict>
-		<key>ItemSeparatorColor</key>
-		<string>F2F2F2</string>
-	</dict>
 	<key>GridViewCell</key>
 	<dict>
 		<key>CategoryTitleFontColor</key>
@@ -239,6 +234,8 @@
 		<string>14.0f</string>
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
+		<key>BorderColor</key>
+		<string>F2F2F2</string>
 	</dict>
 	<key>Images</key>
 	<dict>

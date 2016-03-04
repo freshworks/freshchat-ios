@@ -426,8 +426,8 @@
 
 
 #pragma mark - Grid View
--(UIColor *)gridViewItemSeperatorColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ItemSeparatorColor"];
+-(UIColor *)gridViewCellBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.BorderColor"];
     return color ? color : [HLTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 

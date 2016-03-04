@@ -283,7 +283,7 @@
         cell.label.text = category.title;
         cell.backgroundColor = [self.theme gridViewCellBackgroundColor];
         cell.layer.borderWidth=0.3f;
-        cell.layer.borderColor=[self.theme gridViewItemSeperatorColor].CGColor;
+        cell.layer.borderColor=[self.theme gridViewCellBorderColor].CGColor;
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
             //TODO: Add placeholder image
