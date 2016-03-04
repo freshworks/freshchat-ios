@@ -29,7 +29,7 @@
         self.userInteractionEnabled = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
         
-        self.backgroundColor = [UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1];
+        self.backgroundColor = [theme talkToUsButtonBackgroundColor];
         UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
         [self addGestureRecognizer:tapGesture];
         
@@ -44,7 +44,7 @@
         self.actionLabel.textAlignment = UITextAlignmentCenter;
         self.actionLabel.font = [theme talkToUsButtonFont];
         self.actionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.actionLabel.textColor = [theme talkToUsButtonColor];
+        self.actionLabel.textColor = [theme talkToUsButtonTextColor];
         [self addSubview:self.actionLabel];
         
         [self addConstraint: [NSLayoutConstraint constraintWithItem:self.contactUsImgView

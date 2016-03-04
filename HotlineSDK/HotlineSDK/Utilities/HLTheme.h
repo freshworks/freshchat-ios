@@ -75,7 +75,8 @@
 
 //Talk to us button
 -(UIFont *)talkToUsButtonFont;
--(UIColor *)talkToUsButtonColor;
+-(UIColor *)talkToUsButtonTextColor;
+-(UIColor *)talkToUsButtonBackgroundColor;
 
 //Dialogues
 -(UIFont *)dialogueTitleFont;
@@ -127,8 +128,6 @@
 
 -(UIColor *)itemBackgroundColor;
 -(UIColor *)itemSeparatorColor;
--(UIFont *)contactUsFont;
--(UIColor *)contactUsFontColor;
 
 //Grid View Cell
 -(UIFont *)categoryTitleFont;

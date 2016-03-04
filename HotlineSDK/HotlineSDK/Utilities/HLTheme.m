@@ -359,9 +359,14 @@
     return color ? color : [HLTheme colorWithHex:FD_BACKGROUND_COLOR];
 }
 
--(UIColor *)talkToUsButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonColor"];
+-(UIColor *)talkToUsButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)talkToUsButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_TALK_TO_US_BG_COLOR];
 }
 
 -(UIFont *)talkToUsButtonFont{
@@ -446,14 +451,6 @@
     return color ? color : [HLTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 
--(UIFont *)contactUsFont{
-    return [self getFontWithKey:@"GridView.ContactUs" andDefaultSize:FD_FONT_SIZE_MEDIUM];
-}
-
--(UIColor *)contactUsFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ContactUsFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
 
 #pragma mark - Grid View Cell
 
