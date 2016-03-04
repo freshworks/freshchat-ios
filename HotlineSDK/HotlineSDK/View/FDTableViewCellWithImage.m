@@ -7,6 +7,8 @@
 //
 
 #import "FDTableViewCellWithImage.h"
+#import "FDSecureStore.h"
+
 @interface FDTableViewCellWithImage ()
 
 @property (strong, nonatomic) HLTheme *theme;
@@ -45,6 +47,9 @@
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.detailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
+        
         [self.contentView addSubview:self.contentEncloser];
         [self.contentEncloser addSubview:self.imgView];
         [self.contentEncloser addSubview:self.titleLabel];
@@ -57,10 +62,16 @@
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[contentEncloser]" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentEncloser]|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[title]-5-[subtitle]" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]-|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]-|" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[title][subtitle]-2-|" options:0 metrics:nil views:views]];
+        if(showChannelThumbnail){
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]|" options:0 metrics:nil views:views]];
+        }
+        else{
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
+        }
         [self addAccessoryView];
         [self setupTheme];
     }
