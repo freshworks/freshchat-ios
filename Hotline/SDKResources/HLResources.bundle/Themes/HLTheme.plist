@@ -226,11 +226,11 @@
 	</dict>
 	<key>GridViewCell</key>
 	<dict>
-		<key>CategoryTitleFontColor</key>
+		<key>TitleFontColor</key>
 		<string>222222</string>
-		<key>CategoryTitleFontName</key>
+		<key>TitleFontName</key>
 		<string>HelveticaNeue</string>
-		<key>CategoryTitleFontSize</key>
+		<key>TitleFontSize</key>
 		<string>14.0f</string>
 		<key>ImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
