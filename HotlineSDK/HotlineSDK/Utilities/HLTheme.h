@@ -40,7 +40,6 @@
 + (instancetype)sharedInstance;
 -(void)setThemeName:(NSString *)themeName;
 -(UIColor *)searchBarInnerBackgroundColor;
--(UIColor *)gridViewItemBackgroundColor;
 +(UIColor *)colorWithHex:(NSString *)value;
 
 //Search Bar
@@ -69,15 +68,14 @@
 
 //Overall SDK
 -(UIColor *)backgroundColorSDK;
--(UIColor *)badgeButtonBackgroundColor;
--(UIColor *)badgeButtonTitleColor;
 -(UIColor *)noItemsFoundMessageColor;
 -(UIColor *)channelIconPalceholderImageBackgroundColor;
 -(UIFont *)channelIconPlaceholderImageCharFont;
 
 //Talk to us button
 -(UIFont *)talkToUsButtonFont;
--(UIColor *)talkToUsButtonColor;
+-(UIColor *)talkToUsButtonTextColor;
+-(UIColor *)talkToUsButtonBackgroundColor;
 
 //Dialogues
 -(UIFont *)dialogueTitleFont;
@@ -96,37 +94,26 @@
 //NavigationBar
 -(UIColor *)navigationBarBackgroundColor;
 -(UIFont *)navigationBarTitleFont;
--(UIColor *)navigationBarFontColor;
+-(UIColor *)navigationBarTitleColor;
+-(UIColor *)navigationBarButtonColor;
+-(UIFont *)navigationBarButtonFont;
+
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
+-(UIFont *) inputTextFont;
 -(UIColor *)sendButtonColor;
--(UIColor *)conversationViewTitleTextColor;
--(UIColor *)conversationViewBackgroundColor;
+
 -(UIColor *)actionButtonTextColor;
 -(UIColor *)actionButtonSelectedTextColor;
 -(UIColor *)actionButtonColor;
 -(UIColor *)actionButtonBorderColor;
--(UIColor *)businessMessageTextColor;
--(UIColor *)userMessageTextColor;
 -(UIColor *)hyperlinkColor;
--(BOOL)alwaysPollForMessages;
--(BOOL)showsBusinessMessageSenderName;
--(BOOL)showsUserMessageSenderName;
--(NSString *)textInputHintText;
--(NSString *)businessProfileImageName;
--(NSString *)userProfileImageName;
--(NSString *)businessMessageSenderName;
--(NSString *)userMessageSenderName;
--(NSString *)businessChatBubbleImageName;
--(NSString *)userChatBubbleImageName;
 //-(NSString *)chatBubbleFontName;
 -(NSString *)conversationUIFontName;
 //-(float)chatBubbleFontSize;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
--(int)pollingTimeChatInFocus;
--(int)pollingTimeChatNotInFocus;
 
 //Notification
 -(UIColor *)notificationBackgroundColor;
@@ -135,25 +122,24 @@
 -(UIFont *)notificationTitleFont;
 -(UIFont *)notificationMessageFont;
 
-//Grid View
-
--(UIColor *)itemBackgroundColor;
--(UIColor *)itemSeparatorColor;
--(UIFont *)contactUsFont;
--(UIColor *)contactUsFontColor;
 
 //Grid View Cell
--(UIFont *)categoryTitleFont;
--(UIColor *)categoryTitleFontColor;
--(UIColor *)imageViewItemBackgroundColor;
+-(UIFont *)gridViewCellTitleFont;
+-(UIColor *)gridViewCellTitleFontColor;
+-(UIColor *)gridViewCellBackgroundColor;
+-(UIColor *)gridViewImageBackgroundColor;
+-(UIColor *) gridViewCellBorderColor;
 
 //Conversation List View
 -(UIColor *)conversationListViewBackgroundColor;
 -(UIFont *)channelTitleFont;
 -(UIColor *)channelTitleFontColor;
 -(UIColor *)channelDescriptionFontColor;
--(UIFont *)lastUpdatedFont;
--(UIColor *)lastUpdatedFontColor;
+-(UIFont *)channelLastUpdatedFont;
+-(UIColor *)channelLastUpdatedFontColor;
+-(UIFont *)badgeButtonFont;
+-(UIColor *)badgeButtonBackgroundColor;
+-(UIColor *)badgeButtonTitleColor;
 
 //Footer
 - (NSString *) getFooterSecretKey;

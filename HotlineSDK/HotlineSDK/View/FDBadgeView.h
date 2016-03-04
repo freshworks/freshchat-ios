@@ -16,9 +16,6 @@
 //Initializer - requires only origin for the badgeView
 -(instancetype)initWithFrame:(CGRect)frame andBadgeNumber:(NSInteger)count;
 
-//Customization
--(void)badgeButtonTitleColor:(UIColor *)color;
--(void)badgeButtonBackgroundColor:(UIColor *)color;
 -(void)updateBadgeCount:(NSInteger)count;
 
 @end

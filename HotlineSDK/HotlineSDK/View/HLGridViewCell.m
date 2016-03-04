@@ -25,17 +25,17 @@
         self.imageView = [[UIImageView alloc]init];
         self.theme = [HLTheme sharedInstance];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        self.imageView.backgroundColor = [self.theme gridViewItemBackgroundColor];
+        self.imageView.backgroundColor = [self.theme gridViewImageBackgroundColor];
         self.imageView.clipsToBounds = YES;
         self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.imageView];
     
         self.label = [[UILabel alloc]init];
-        self.label.font = [self.theme categoryTitleFont];
+        self.label.font = [self.theme gridViewCellTitleFont];
         self.label.lineBreakMode=NSLineBreakByTruncatingTail;
         self.label.textAlignment = NSTextAlignmentCenter;
-        self.label.backgroundColor = [self.theme imageViewItemBackgroundColor];
-        self.label.textColor = [self.theme categoryTitleFontColor];
+        self.label.backgroundColor = [self.theme gridViewCellBackgroundColor];
+        self.label.textColor = [self.theme gridViewCellTitleFontColor];
         [self.label  setNumberOfLines:2];
         [self.label sizeToFit];
         self.label.translatesAutoresizingMaskIntoConstraints = NO;

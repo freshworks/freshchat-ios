@@ -226,7 +226,7 @@
     });
 }
 
--(void)showFAQs:(UIViewController *)controller{
+-(HLViewController *)getPreferredFAQsController{
     HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
@@ -235,7 +235,12 @@
     }else{
         preferedController = [[HLCategoriesListController alloc]init];
     }
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferedController andEmbed:NO];
+    return preferedController;
+}
+
+-(void)showFAQs:(UIViewController *)controller{
+    HLViewController *preferredController = [self getPreferredFAQsController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
@@ -260,13 +265,11 @@
 
 -(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
     HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:YES];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
-    return navigationController;
+    return preferredController;
 }
 
 -(UIViewController*) getFAQsControllerForEmbed{
-    HLCategoriesListController *categoriesViewController = [[HLCategoriesListController alloc]init];
-    return [self getControllerForEmbed:categoriesViewController];
+    return [self getControllerForEmbed:[self getPreferredFAQsController]];
 }
 
 -(UIViewController*) getConversationsControllerForEmbed{

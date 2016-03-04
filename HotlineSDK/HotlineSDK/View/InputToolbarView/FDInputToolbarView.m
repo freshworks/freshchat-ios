@@ -44,6 +44,7 @@
         self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
    
         textView=[[UITextView alloc] init];
+        [textView setFont:[self.theme inputTextFont]];
         [textView setTextColor:[UIColor lightGrayColor]];
         textView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
         textView.layer.cornerRadius=5.0;

@@ -7,6 +7,7 @@
 //
 
 #import "FDBadgeView.h"
+#import "HLTheme.h"
 
 @interface FDBadgeView ()
 
@@ -17,25 +18,18 @@
 -(instancetype)initWithFrame:(CGRect)frame andBadgeNumber:(NSInteger)count{
     self = [super initWithFrame:frame];
     if (self) {
+        HLTheme *theme = [HLTheme sharedInstance];
         self.badgeButton                    = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.badgeButton.backgroundColor    = [UIColor redColor];
+        self.badgeButton.backgroundColor    = [theme badgeButtonBackgroundColor];
         self.badgeButton.layer.cornerRadius = 13.0;
-        self.badgeButton.titleLabel.font    = [UIFont boldSystemFontOfSize:12.0];
+        self.badgeButton.titleLabel.font    = [theme badgeButtonFont];
         NSString *countString               = [NSString stringWithFormat:@"%ld",(long)count];
         if (count > 999) countString = [NSString stringWithFormat:@"999+"];
         [self.badgeButton setTitle:countString forState:UIControlStateNormal];
-        [self.badgeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.badgeButton setTitleColor:[theme badgeButtonTitleColor] forState:UIControlStateNormal];
         [self.badgeButton sizeToFit];
     }
     return self;
-}
-
--(void)badgeButtonBackgroundColor:(UIColor *)color{
-    self.badgeButton.backgroundColor = color;
-}
-
--(void)badgeButtonTitleColor:(UIColor *)color{
-    [self.badgeButton setTitleColor:color forState:UIControlStateNormal];
 }
 
 -(void)updateBadgeCount:(NSInteger)count{

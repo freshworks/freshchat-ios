@@ -21,6 +21,7 @@
 #import "Hotline.h"
 #import "HLLocalization.h"
 #import "FDUtilities.h"
+#import "FDBarButtonItem.h"
 
 @interface HLCategoriesListController ()
 
@@ -74,7 +75,7 @@
     [contactUsButton addTarget:self action:@selector(contactUsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *contactUsBarButton = [[UIBarButtonItem alloc] initWithCustomView:contactUsButton];
     
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
     
     if (!self.embedded) {

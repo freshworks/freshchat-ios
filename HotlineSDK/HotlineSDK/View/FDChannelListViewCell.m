@@ -38,14 +38,12 @@
 
     self.lastUpdatedLabel = [[UILabel alloc] init];
     self.lastUpdatedLabel.textAlignment = UITextAlignmentRight;
-    self.lastUpdatedLabel.font = [self.theme lastUpdatedFont];
-    self.lastUpdatedLabel.textColor = [self.theme lastUpdatedFontColor];
+    self.lastUpdatedLabel.font = [self.theme channelLastUpdatedFont];
+    self.lastUpdatedLabel.textColor = [self.theme channelLastUpdatedFontColor];
     self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.lastUpdatedLabel];
     
     self.badgeView  = [[FDBadgeView alloc]initWithFrame:CGRectZero andBadgeNumber:0];
-    [self.badgeView badgeButtonBackgroundColor:[UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1]];
-    [self.badgeView badgeButtonTitleColor:[self.theme badgeButtonTitleColor]];
     self.badgeView.translatesAutoresizingMaskIntoConstraints = NO;
     self.badgeView.badgeButton.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.badgeView.badgeButton];

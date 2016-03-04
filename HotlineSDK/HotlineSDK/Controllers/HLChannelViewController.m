@@ -21,6 +21,7 @@
 #import "FDUtilities.h"
 #import "HLLocalization.h"
 #import "FDNotificationBanner.h"
+#import "FDBarButtonItem.h"
 
 @interface HLChannelViewController ()
 
@@ -40,6 +41,11 @@
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
                                                            NSFontAttributeName: [theme channelTitleFont]
                                                            }];
+    self.navigationController.navigationBar.barTintColor = [theme navigationBarBackgroundColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{
+                                                                    NSForegroundColorAttributeName: [theme navigationBarTitleColor],
+                                                                    NSFontAttributeName: [theme navigationBarTitleFont]
+                                                                    };
     self.channels = [[NSMutableArray alloc] init];
     [self setNavigationItem];
     [self localNotificationSubscription];
@@ -135,7 +141,7 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }

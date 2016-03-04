@@ -11,5 +11,10 @@
 
 @implementation HLViewController : UIViewController
 
+-(void)viewWillAppear:(BOOL)animated{
+    if (self.navigationController == nil) {
+        NSLog(@"Warning: Use Hotline controllers inside navigation controller");
+    }
+}
 
 @end

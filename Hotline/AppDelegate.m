@@ -37,12 +37,20 @@
     if (isTabViewPreferred) {
         UIViewController* mainView=[self.window rootViewController];
         [mainView setTitle:@"Order"];
-        UIViewController* solutionsViewController=[[Hotline sharedInstance] getFAQsControllerForEmbed];
-        [solutionsViewController setTitle:@"FAQs"];
+        
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
-        UIViewController* channelsView=[[Hotline sharedInstance] getConversationsControllerForEmbed];
-        [channelsView setTitle:@"Channels"];
-        [tabBarController setViewControllers:@[mainView,solutionsViewController,channelsView]];
+
+        
+        UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
+                                                        [[Hotline sharedInstance] getFAQsControllerForEmbed]];
+        [FAQController setTitle:@"FAQs"];
+        
+        UIViewController* channelsController = [[UINavigationController alloc]initWithRootViewController:
+                                                [[Hotline sharedInstance] getConversationsControllerForEmbed]];
+        
+        [channelsController setTitle:@"Channels"];
+        
+        [tabBarController setViewControllers:@[mainView, FAQController, channelsController]];
         [tabBarController.tabBar setClipsToBounds:NO];
         [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
@@ -56,7 +64,17 @@
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
     config.domain=@"mr.orange.konotor.com";
-    config.displayFAQsAsGrid = NO;
+
+//    prod 
+//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
+//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
+//    config.domain = @"app.hotline.io";
+    
+//      config.domain = @"satheeshjm.pagekite.me";
+//      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+//      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
+    
+    config.displayFAQsAsGrid = YES;
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
@@ -74,6 +92,8 @@
                                                      }];
     
     [[Hotline sharedInstance]initWithConfig:config];
+    
+    [[Hotline sharedInstance] updateUser:user];
     
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
