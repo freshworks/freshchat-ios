@@ -37,12 +37,20 @@
     if (isTabViewPreferred) {
         UIViewController* mainView=[self.window rootViewController];
         [mainView setTitle:@"Order"];
-        UIViewController* solutionsViewController=[[Hotline sharedInstance] getFAQsControllerForEmbed];
-        [solutionsViewController setTitle:@"FAQs"];
+        
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
-        UIViewController* channelsView=[[Hotline sharedInstance] getConversationsControllerForEmbed];
-        [channelsView setTitle:@"Channels"];
-        [tabBarController setViewControllers:@[mainView,solutionsViewController,channelsView]];
+
+        
+        UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
+                                                        [[Hotline sharedInstance] getFAQsControllerForEmbed]];
+        [FAQController setTitle:@"FAQs"];
+        
+        UIViewController* channelsController = [[UINavigationController alloc]initWithRootViewController:
+                                                [[Hotline sharedInstance] getConversationsControllerForEmbed]];
+        
+        [channelsController setTitle:@"Channels"];
+        
+        [tabBarController setViewControllers:@[mainView, FAQController, channelsController]];
         [tabBarController.tabBar setClipsToBounds:NO];
         [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
@@ -56,7 +64,7 @@
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
     config.domain=@"mr.orange.konotor.com";
-    config.displayFAQsAsGrid = NO;
+    config.displayFAQsAsGrid = YES;
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
