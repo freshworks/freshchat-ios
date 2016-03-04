@@ -40,7 +40,6 @@
 + (instancetype)sharedInstance;
 -(void)setThemeName:(NSString *)themeName;
 -(UIColor *)searchBarInnerBackgroundColor;
--(UIColor *)gridViewItemBackgroundColor;
 +(UIColor *)colorWithHex:(NSString *)value;
 
 //Search Bar
@@ -104,8 +103,7 @@
 -(UIColor *)inputTextFontColor;
 -(UIFont *) inputTextFont;
 -(UIColor *)sendButtonColor;
--(UIColor *)conversationViewTitleTextColor;
--(UIColor *)conversationViewBackgroundColor;
+
 -(UIColor *)actionButtonTextColor;
 -(UIColor *)actionButtonSelectedTextColor;
 -(UIColor *)actionButtonColor;
@@ -125,14 +123,13 @@
 -(UIFont *)notificationMessageFont;
 
 //Grid View
-
--(UIColor *)itemBackgroundColor;
--(UIColor *)itemSeparatorColor;
+-(UIColor *) gridViewItemSeperatorColor;
 
 //Grid View Cell
--(UIFont *)categoryTitleFont;
--(UIColor *)categoryTitleFontColor;
--(UIColor *)imageViewItemBackgroundColor;
+-(UIFont *)gridViewCellTitleFont;
+-(UIColor *)gridViewCellTitleFontColor;
+-(UIColor *)gridViewCellBackgroundColor;
+-(UIColor *)gridViewImageBackgroundColor;
 
 //Conversation List View
 -(UIColor *)conversationListViewBackgroundColor;

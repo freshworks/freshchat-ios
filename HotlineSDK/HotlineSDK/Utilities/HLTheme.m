@@ -80,11 +80,6 @@
     return image;
 }
 
--(UIColor *)gridViewItemBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ItemBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
-}
-
 -(UIColor *)getColorForKeyPath:(NSString *)path{
     NSString *hexString = [self.themePreferences valueForKeyPath:path];
     return hexString ? [HLTheme colorWithHex:hexString] : nil;
@@ -360,7 +355,7 @@
 }
 
 -(UIColor *)talkToUsButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonTextColor"];
+    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
@@ -391,15 +386,6 @@
     return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
 }
 
-/* Additions by Sri - to be checked */
--(UIColor *)conversationViewTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewTitleTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_TITLE_TEXT_COLOR];
-}
--(UIColor *)conversationViewBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_BACKGROUND_COLOR];
-}
 -(UIColor *)actionButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
@@ -440,31 +426,29 @@
 
 
 #pragma mark - Grid View
-
--(UIColor *)itemBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ItemBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
-}
-
--(UIColor *)itemSeparatorColor{
+-(UIColor *)gridViewItemSeperatorColor{
     UIColor *color = [self getColorForKeyPath:@"GridView.ItemSeparatorColor"];
     return color ? color : [HLTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 
 
 #pragma mark - Grid View Cell
-
--(UIFont *)categoryTitleFont{
-    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:14];
+-(UIFont *)gridViewCellTitleFont{
+    return [self getFontWithKey:@"GridViewCell.Title" andDefaultSize:14];
 }
 
--(UIColor *)categoryTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.CategoryTitleFontColor"];
+-(UIColor *)gridViewCellTitleFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.TitleFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
--(UIColor *)imageViewItemBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewbackgroundColor"];
+-(UIColor *)gridViewCellBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)gridViewImageBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewBackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
@@ -472,7 +456,7 @@
 
 -(UIColor *)conversationListViewBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)channelTitleFont{

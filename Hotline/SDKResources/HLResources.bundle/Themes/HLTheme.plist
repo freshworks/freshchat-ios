@@ -12,10 +12,6 @@
 		<string>HelveticaNeue</string>
 		<key>ChatBubbleTimeFontSize</key>
 		<string>11.0f</string>
-		<key>ConversationViewTitleTextColor</key>
-		<string>000000</string>
-		<key>ConversationViewBackgroundColor</key>
-		<string>FFFFFF</string>
 		<key>ConversationUIFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ActionButtonTextColor</key>
@@ -166,7 +162,7 @@
 		<string>EFEFF4</string>
 		<key>NoItemsFoundMessageColor</key>
 		<string>000000</string>
-		<key>TalkToUsButtonTextColor</key>
+		<key>TalkToUsButtonFontColor</key>
 		<string>FFFFFF</string>
 		<key>TalkToUsButtonBackgroundColor</key>
 		<string>4D90E9</string>
@@ -230,16 +226,8 @@
 	</dict>
 	<key>GridView</key>
 	<dict>
-		<key>ItemBackgroundColor</key>
-		<string>FFFFFF</string>
 		<key>ItemSeparatorColor</key>
 		<string>F2F2F2</string>
-		<key>CategoryTitleFontColor</key>
-		<string>222222</string>
-		<key>CategoryTitleFontName</key>
-		<string>HelveticaNeue</string>
-		<key>CategoryTitleFontSize</key>
-		<string>15.0f</string>
 	</dict>
 	<key>GridViewCell</key>
 	<dict>
