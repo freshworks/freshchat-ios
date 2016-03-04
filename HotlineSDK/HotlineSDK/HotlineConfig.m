@@ -26,7 +26,6 @@
         self.displayFAQsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
-        self.showChannelThumbnail = YES;
     }
     return self;
 }
