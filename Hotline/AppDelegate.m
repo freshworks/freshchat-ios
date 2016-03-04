@@ -64,6 +64,16 @@
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
     config.domain=@"mr.orange.konotor.com";
+
+//    prod 
+//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
+//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
+//    config.domain = @"app.hotline.io";
+    
+//      config.domain = @"satheeshjm.pagekite.me";
+//      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+//      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
+    
     config.displayFAQsAsGrid = YES;
     
     config.voiceMessagingEnabled = YES;
@@ -82,6 +92,8 @@
                                                      }];
     
     [[Hotline sharedInstance]initWithConfig:config];
+    
+    [[Hotline sharedInstance] updateUser:user];
     
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
