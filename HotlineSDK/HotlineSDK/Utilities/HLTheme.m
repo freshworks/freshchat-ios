@@ -339,12 +339,12 @@
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ArticlesList.FontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ArticlesList.TitleFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
 }
 
 -(UIFont *)articleListFont{
-    return [self getFontWithKey:@"ArticlesList.FontName" andDefaultSize:14];
+    return [self getFontWithKey:@"ArticlesList.Title" andDefaultSize:14];
 }
 
 #pragma mark - Overall SDK

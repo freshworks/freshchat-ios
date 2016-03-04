@@ -217,11 +217,11 @@
 	</dict>
 	<key>ArticlesList</key>
 	<dict>
-		<key>FontColor</key>
+		<key>TitleFontColor</key>
 		<string>525252</string>
-		<key>FontName</key>
+		<key>TitleFontName</key>
 		<string>HelveticaNeue</string>
-		<key>FontSize</key>
+		<key>TitleFontSize</key>
 		<string>14.0f</string>
 	</dict>
 	<key>GridViewCell</key>
