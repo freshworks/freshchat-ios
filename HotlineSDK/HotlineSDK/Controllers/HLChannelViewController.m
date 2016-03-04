@@ -41,6 +41,11 @@
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
                                                            NSFontAttributeName: [theme channelTitleFont]
                                                            }];
+    self.navigationController.navigationBar.barTintColor = [theme navigationBarBackgroundColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{
+                                                                    NSForegroundColorAttributeName: [theme navigationBarTitleColor],
+                                                                    NSFontAttributeName: [theme navigationBarTitleFont]
+                                                                    };
     self.channels = [[NSMutableArray alloc] init];
     [self setNavigationItem];
     [self localNotificationSubscription];

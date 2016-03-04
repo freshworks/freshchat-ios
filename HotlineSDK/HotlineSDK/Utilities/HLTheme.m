@@ -118,7 +118,7 @@
     return [self getFontWithKey:@"NavigationBar.Title" andDefaultSize:17];
 }
 
--(UIColor *)navigationBarFontColor{
+-(UIColor *)navigationBarTitleColor{
         UIColor *color = [self getColorForKeyPath:@"NavigationBar.TitleColor"];
         return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }

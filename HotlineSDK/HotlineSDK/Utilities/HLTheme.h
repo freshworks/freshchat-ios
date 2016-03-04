@@ -94,7 +94,7 @@
 //NavigationBar
 -(UIColor *)navigationBarBackgroundColor;
 -(UIFont *)navigationBarTitleFont;
--(UIColor *)navigationBarFontColor;
+-(UIColor *)navigationBarTitleColor;
 -(UIColor *)navigationBarButtonColor;
 -(UIFont *)navigationBarButtonFont;
 

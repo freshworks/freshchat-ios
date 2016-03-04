@@ -97,7 +97,7 @@
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{
-                                                                      NSForegroundColorAttributeName: [self.theme navigationBarFontColor],
+                                                                      NSForegroundColorAttributeName: [self.theme navigationBarTitleColor],
                                                                       NSFontAttributeName: [self.theme navigationBarTitleFont]
                                                                       }];
 }
