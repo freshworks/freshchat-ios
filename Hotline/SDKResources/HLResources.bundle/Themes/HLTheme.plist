@@ -36,21 +36,21 @@
 	<key>ChatBubbleInsets</key>
 	<dict>
 		<key>AgentBubbleTop</key>
-		<string>3</string>
+		<string>2.5</string>
 		<key>AgentBubbleLeft</key>
-		<string>4</string>
+		<string>4.5</string>
 		<key>AgentBubbleBottom</key>
-		<string>3</string>
-		<key>AgentBubbleRight</key>
-		<string>2</string>
-		<key>UserBubbleTop</key>
-		<string>3</string>
-		<key>UserBubbleLeft</key>
-		<string>2</string>
-		<key>UserBubbleBottom</key>
-		<string>3</string>
-		<key>UserBubbleRight</key>
 		<string>4</string>
+		<key>AgentBubbleRight</key>
+		<string>3</string>
+		<key>UserBubbleTop</key>
+		<string>2.5</string>
+		<key>UserBubbleLeft</key>
+		<string>3</string>
+		<key>UserBubbleBottom</key>
+		<string>4</string>
+		<key>UserBubbleRight</key>
+		<string>4.5</string>
 	</dict>
 	<key>Dialogues</key>
 	<dict>
