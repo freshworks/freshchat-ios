@@ -115,6 +115,7 @@
     
     self.tableView = [[UITableView alloc] init];
     self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
+    self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints=NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -263,7 +264,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UIFont *cellFont = [self.theme tableViewCellFont];
+    UIFont *cellFont = [self.theme articleListFont];
     HLArticle *searchArticle = self.searchResults[indexPath.row];
     CGFloat heightOfcell = 0;
     if (searchArticle) {

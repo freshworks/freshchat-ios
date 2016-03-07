@@ -263,15 +263,6 @@
 
 #pragma mark - Table View
 
--(UIFont *)tableViewCellFont{
-    return [self getFontWithKey:@"TableView." andDefaultSize:FD_FONT_SIZE_MEDIUM];
-}
-
--(UIColor *)tableViewCellFontColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.FontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
-
 -(UIFont *)tableViewCellTitleFont{
     return [self getFontWithKey:@"TableView.Title" andDefaultSize:14];
 }
@@ -295,20 +286,10 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
--(UIColor *)tableViewCellImageBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.ImageViewBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
-}
-
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
     return color ? color : [HLTheme colorWithHex:@"F2F2F2"];
-}
-
--(UIColor *)timeDetailTextColor {
-    UIColor *color = [self getColorForKeyPath:@"TableView.TimeDetailTextColor"];
-    return color ? color : [UIColor lightGrayColor];
 }
 
 #pragma mark - Notifictaion
@@ -454,8 +435,8 @@
 
 #pragma mark - Channel List View
 
--(UIColor *)conversationListViewBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.BackgroundColor"];
+-(UIColor *)channelListCellBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.cellBackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 

@@ -201,7 +201,7 @@
 		<key>TitleFontColor</key>
 		<string>222222</string>
 		<key>TitleFontName</key>
-		<string>HelveticaNeue-Medium</string>
+		<string>HelveticaNeue</string>
 		<key>TitleFontSize</key>
 		<string>14.0f</string>
 		<key>DetailFontColor</key>
@@ -210,10 +210,6 @@
 		<string>HelveticaNeue</string>
 		<key>DetailFontSize</key>
 		<string>14.0f</string>
-		<key>TimeDetailTextColor</key>
-		<string>D3D3D3</string>
-		<key>ImageViewBackgroundColor</key>
-		<string>FFFFFF</string>
 	</dict>
 	<key>ArticlesList</key>
 	<dict>

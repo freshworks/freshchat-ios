@@ -51,16 +51,12 @@
 -(UIColor *)searchBarCursorColor;
 
 //Table View
--(UIFont *)tableViewCellFont;
--(UIColor *)tableViewCellFontColor;
 -(UIFont *)tableViewCellTitleFont;
 -(UIColor *)tableViewCellTitleFontColor;
 -(UIFont *)tableViewCellDetailFont;
 -(UIColor *)tableViewCellDetailFontColor;
 -(UIColor *)tableViewCellBackgroundColor;
--(UIColor *)tableViewCellImageBackgroundColor;
 -(UIColor *)tableViewCellSeparatorColor;
--(UIColor *)timeDetailTextColor;
 
 //Article Table View
 -(UIColor *)articleListFontColor;
@@ -131,9 +127,10 @@
 -(UIColor *) gridViewCellBorderColor;
 
 //Conversation List View
--(UIColor *)conversationListViewBackgroundColor;
+-(UIColor *)channelListCellBackgroundColor;
 -(UIFont *)channelTitleFont;
 -(UIColor *)channelTitleFontColor;
+-(UIFont *)channelDescriptionFont;
 -(UIColor *)channelDescriptionFontColor;
 -(UIFont *)channelLastUpdatedFont;
 -(UIColor *)channelLastUpdatedFontColor;
