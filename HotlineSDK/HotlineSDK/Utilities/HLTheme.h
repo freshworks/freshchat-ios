@@ -138,6 +138,12 @@
 -(UIColor *)badgeButtonBackgroundColor;
 -(UIColor *)badgeButtonTitleColor;
 
+//Message Conversation Overlay
+
+- (UIColor *) conversationOverlayBackgroundColor;
+- (UIFont *) conversationOverlayTextFont;
+- (UIColor *) conversationOverlayTextColor;
+
 //Footer
 - (NSString *) getFooterSecretKey;
 

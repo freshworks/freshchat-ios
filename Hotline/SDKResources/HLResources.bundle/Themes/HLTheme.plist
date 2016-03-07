@@ -32,6 +32,17 @@
 		<string>14.0f</string>
 		<key>SendButtonColor</key>
 		<string>0079FF</string>
+		<key>Banner</key>
+		<dict>
+			<key>BackgroundColor</key>
+			<string>34AADC</string>
+			<key>MessageFontName</key>
+			<string>HelveticaNeue</string>
+			<key>MessageFontSize</key>
+			<string>14.0f</string>
+			<key>MessageTextColor</key>
+			<string>FFFFFF</string>
+		</dict>
 	</dict>
 	<key>ChatBubbleInsets</key>
 	<dict>

@@ -155,6 +155,12 @@
     }
 }
 
+-(void) updateConversationBannerMessage:(NSString *) message{
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
+}
+
 -(void)updateUser:(HotlineUser *)user{
     [KonotorUser storeUserInfo:user];
     [HLCoreServices uploadUnuploadedProperties];
