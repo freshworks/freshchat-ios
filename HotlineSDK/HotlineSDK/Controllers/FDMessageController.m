@@ -28,6 +28,7 @@
 #import "HLMessageServices.h"
 #import "HotlineAppState.h"
 #import "FDBarButtonItem.h"
+#import "FDSecureStore.h"
 
 typedef struct {
     BOOL isLoading;
@@ -230,6 +231,23 @@ typedef struct {
 
 -(void)setSubviews{
     
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_OVERLAY_MESSAGE];
+    
+    UIView *overMessageView= [UIView new];
+    overMessageView.translatesAutoresizingMaskIntoConstraints = NO;
+    overMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
+    [self.view addSubview:overMessageView];
+    
+    UILabel *overlayMesagelabel = [[UILabel alloc] init];
+    overlayMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    overlayMesagelabel.text = overlayText;
+    overlayMesagelabel.numberOfLines = 2;
+    overlayMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
+    overlayMesagelabel.textAlignment = UITextAlignmentCenter;
+    overlayMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [overMessageView addSubview:overlayMesagelabel];
+    
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -261,13 +279,27 @@ typedef struct {
                                                              multiplier:1.0 constant:0];
 
     //Initial Constraints
-    NSDictionary *views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
+    NSDictionary *views;
+    if(overlayText.length >0){
+        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView, @"messageOverlayView": overMessageView, @"overlayText" : overlayMesagelabel};
+        
+        [overMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[overlayText]-|" options:0 metrics:nil views:views]];
+        [overMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[overlayText]-|" options:0 metrics:nil views:views]];
+        
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(30)][tableView][bottomView]" options:0 metrics:nil views:views]];
+        
+    }
+    else{
+        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
+    }
+    
     [self.view addConstraint:self.bottomViewBottomConstraint];
     [self.view addConstraint:self.bottomViewHeightConstraint];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:views]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
     
     if([self.channel.type isEqualToString:CHANNEL_TYPE_BOTH]){
         

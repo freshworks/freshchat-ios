@@ -85,6 +85,17 @@
 		<key>LabelFontSize</key>
 		<string>15</string>
 	</dict>
+	<key>ConversationOverlay</key>
+	<dict>
+		<key>BackgroundColor</key>
+		<string>34AADC</string>
+		<key>MessageFontName</key>
+		<string>HelveticaNeue</string>
+		<key>MessageFontSize</key>
+		<string>14.0f</string>
+		<key>MessageTextColor</key>
+		<string>FFFFFF</string>
+	</dict>
 	<key>Notification</key>
 	<dict>
 		<key>ChannelTitleFontName</key>

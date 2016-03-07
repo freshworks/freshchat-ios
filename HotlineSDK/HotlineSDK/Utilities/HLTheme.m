@@ -452,6 +452,23 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+#pragma mark - Conversation Overlay
+
+- (UIColor *) conversationOverlayBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationOverlay.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+- (UIFont *) conversationOverlayTextFont{
+    return [self getFontWithKey:@"ConversationOverlay.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+- (UIColor *) conversationOverlayTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationOverlay.MessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+
 #pragma mark - Channel List View
 
 -(UIColor *)conversationListViewBackgroundColor{

@@ -65,6 +65,8 @@
  */
 @property (nonatomic, assign) BOOL showNotificationBanner;
 
+@property (nonatomic, assign) NSString *conversationOverlayMessage;
+
 /**
  *  Initialize Hotline.
  *

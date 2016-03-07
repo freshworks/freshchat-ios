@@ -31,6 +31,7 @@
 #define HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID @"hotline_defaults_display_solutions_as_grid"
 #define HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED @"hotline_defaults_camera_capture_enabled"
 #define HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL @"hotline_defaults_show_channel_thumbnail"
+#define HOTLINE_DEFAULTS_CONVERSATION_OVERLAY_MESSAGE @"hotline_conversation_overlay_message"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME @"hotline_defaults_solutions_last_updated_time"
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"

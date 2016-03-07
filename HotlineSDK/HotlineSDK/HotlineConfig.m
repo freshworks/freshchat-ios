@@ -26,6 +26,7 @@
         self.displayFAQsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
+        self.conversationOverlayMessage = nil;
     }
     return self;
 }
