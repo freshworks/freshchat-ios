@@ -155,7 +155,7 @@
     }
 }
 
-+(void) updateBannerConfigurationMessage :(NSString *) message{
+-(void) updateConversationBannerMessage:(NSString *) message{
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];

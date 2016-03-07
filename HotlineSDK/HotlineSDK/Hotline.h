@@ -217,7 +217,7 @@
  */
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
 
-+ (void) updateBannerConfigurationMessage :(NSString *) message;
+-(void) updateConversationBannerMessage :(NSString *) message;
 
 @end
 

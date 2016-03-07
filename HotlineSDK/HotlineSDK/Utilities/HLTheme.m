@@ -452,19 +452,19 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
-#pragma mark - Conversation Overlay
+#pragma mark - Conversation Banner
 
 - (UIColor *) conversationOverlayBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationOverlay.BackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 - (UIFont *) conversationOverlayTextFont{
-    return [self getFontWithKey:@"ConversationOverlay.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontWithKey:@"ConversationsUI.Banner.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 - (UIColor *) conversationOverlayTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationOverlay.MessageTextColor"];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.MessageTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
