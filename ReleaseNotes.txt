@@ -1,4 +1,12 @@
 
+Ver 1.0.1
+__________________________
+
+Offline indicator for rich media FAQs 
+Theming updates and fixes 
+Fixed Duplicate user when changing API keys
+Minor UI fixes.
+
 Ver 1.0
 __________________________
 
