@@ -25,8 +25,6 @@
         self.articleText = [[UILabel alloc] init];
         [self.articleText setNumberOfLines:3];
         [self.articleText setLineBreakMode:NSLineBreakByTruncatingTail];
-        self.articleText.font = [self.theme tableViewCellDetailFont];
-        self.articleText.textColor = [self.theme tableViewCellDetailFontColor];
         
         [self.articleText setTranslatesAutoresizingMaskIntoConstraints:NO];
         

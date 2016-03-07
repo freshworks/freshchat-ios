@@ -29,18 +29,13 @@
         self.titleLabel = [[UILabel alloc] init];
         [self.titleLabel setNumberOfLines:2];
         [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        self.titleLabel.font = [self.theme tableViewCellDetailFont];
-        self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
         self.imgView=[[FDImageView alloc] init];
-        self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         
         self.detailLabel = [[UILabel alloc] init];
         [self.detailLabel setNumberOfLines:2];
-        self.detailLabel.font = [self.theme tableViewCellDetailFont];
-        self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
         [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
         [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -85,9 +80,10 @@
 -(void)setupTheme{
     if (self) {
         self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
-        self.titleLabel.textColor = [self.theme tableViewCellFontColor];
-        self.titleLabel.font      = [self.theme tableViewCellFont];
+        self.titleLabel.textColor = [self.theme tableViewCellTitleFontColor];
+        self.titleLabel.font      = [self.theme tableViewCellTitleFont];
         self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
+        self.detailLabel.font = [self.theme tableViewCellDetailFont];
     }
 }
 

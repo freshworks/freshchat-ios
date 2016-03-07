@@ -21,9 +21,10 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.theme = [HLTheme sharedInstance];
-        self.backgroundColor     = [self.theme conversationListViewBackgroundColor];
+        self.backgroundColor     = [self.theme channelListCellBackgroundColor];
         self.titleLabel.textColor = [self.theme channelTitleFontColor];
         self.titleLabel.font      = [self.theme channelTitleFont];
+        self.detailLabel.font = [self.theme channelDescriptionFont];
         self.detailLabel.textColor = [self.theme channelDescriptionFontColor];
     }
     return self;
