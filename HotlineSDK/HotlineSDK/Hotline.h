@@ -65,8 +65,6 @@
  */
 @property (nonatomic, assign) BOOL showNotificationBanner;
 
-@property (nonatomic, assign) NSString *conversationBannerMessage;
-
 /**
  *  Initialize Hotline.
  *
@@ -218,6 +216,8 @@
  *
  */
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
+
++ (void) updateBannerConfigurationMessage :(NSString *) message;
 
 @end
 

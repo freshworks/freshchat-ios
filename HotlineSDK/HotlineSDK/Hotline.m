@@ -151,9 +151,14 @@
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
         [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
-        [store setObject:config.conversationBannerMessage forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
+}
+
++(void) updateBannerConfigurationMessage :(NSString *) message{
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
 }
 
 -(void)updateUser:(HotlineUser *)user{
