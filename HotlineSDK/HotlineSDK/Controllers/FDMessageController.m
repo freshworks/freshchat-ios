@@ -232,21 +232,25 @@ typedef struct {
 -(void)setSubviews{
     
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
-    NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_OVERLAY_MESSAGE];
+    NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
     
-    UIView *overMessageView= [UIView new];
-    overMessageView.translatesAutoresizingMaskIntoConstraints = NO;
-    overMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
-    [self.view addSubview:overMessageView];
+    UIView *bannerMessageView= [UIView new];
+    bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
+    bannerMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
+    [self.view addSubview:bannerMessageView];
     
-    UILabel *overlayMesagelabel = [[UILabel alloc] init];
-    overlayMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
-    overlayMesagelabel.text = overlayText;
-    overlayMesagelabel.numberOfLines = 2;
-    overlayMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
-    overlayMesagelabel.textAlignment = UITextAlignmentCenter;
-    overlayMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [overMessageView addSubview:overlayMesagelabel];
+    UILabel *bannerMesagelabel = [[UILabel alloc] init];
+    bannerMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    bannerMesagelabel.text = overlayText;
+    bannerMesagelabel.numberOfLines = 3;
+    bannerMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
+    bannerMesagelabel.textAlignment = UITextAlignmentCenter;
+    
+    float overlayViewHeight = (MIN([self lineCountForLabel:bannerMesagelabel],3.0) *bannerMesagelabel.font.pointSize)+15;
+    
+    bannerMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [bannerMessageView addSubview:bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -255,7 +259,6 @@ typedef struct {
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    //self.tableView.tableHeaderView = [self headerView];
     [self.view addSubview:self.tableView];
     
     //Bottomview
@@ -279,15 +282,20 @@ typedef struct {
                                                              multiplier:1.0 constant:0];
 
     //Initial Constraints
+    
+    
     NSDictionary *views;
+    
+    NSDictionary *metrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
+
     if(overlayText.length >0){
-        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView, @"messageOverlayView": overMessageView, @"overlayText" : overlayMesagelabel};
+        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView, @"messageOverlayView": bannerMessageView, @"overlayText" : bannerMesagelabel};
         
-        [overMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[overlayText]-|" options:0 metrics:nil views:views]];
-        [overMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[overlayText]-|" options:0 metrics:nil views:views]];
+        [bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlayText]|" options:0 metrics:nil views:views]];
+        [bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[overlayText]-5-|" options:0 metrics:nil views:views]];
         
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:views]];
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(30)][tableView][bottomView]" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:metrics views:views]];
         
     }
     else{
@@ -312,6 +320,16 @@ typedef struct {
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }
+}
+
+- (float)lineCountForLabel:(UILabel *)label {
+    CGSize maximumLabelSize = CGSizeMake(self.view.frame.size.width-10,9999);
+    CGSize sizeOfText = [label.text sizeWithFont:label.font
+                                constrainedToSize:maximumLabelSize
+                                    lineBreakMode:label.lineBreakMode];
+    int numberOfLines = sizeOfText.height / label.font.pointSize;
+    
+    return numberOfLines;
 }
 
 -(void)updateBottomViewWith:(UIView *)view andHeight:(CGFloat) height{
