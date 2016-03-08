@@ -8,8 +8,11 @@
 
 #import "AppDelegate.h"
 #import "HotlineSDK/Hotline.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong)UIViewController *rootController;
 
 @end
 
@@ -18,26 +21,87 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self hotlineIntegration];
     [self registerAppForNotifications];
+    [self setupRootController];
+    if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
+        [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
+    }
+
+    NSLog(@"launchoptions :%@", launchOptions);
     return YES;
 }
 
+-(void)setupRootController{
+    
+    BOOL isTabViewPreferred = YES;
+
+    if (isTabViewPreferred) {
+        UIViewController* mainView=[self.window rootViewController];
+        [mainView setTitle:@"Order"];
+        
+        UITabBarController* tabBarController=[[UITabBarController alloc] init];
+
+        
+        UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
+                                                        [[Hotline sharedInstance] getFAQsControllerForEmbed]];
+        [FAQController setTitle:@"FAQs"];
+        
+        UIViewController* channelsController = [[UINavigationController alloc]initWithRootViewController:
+                                                [[Hotline sharedInstance] getConversationsControllerForEmbed]];
+        
+        [channelsController setTitle:@"Channels"];
+        
+        [tabBarController setViewControllers:@[mainView, FAQController, channelsController]];
+        [tabBarController.tabBar setClipsToBounds:NO];
+        [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
+        [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
+        [self.window setRootViewController:tabBarController];
+        [self.window makeKeyAndVisible];
+    }
+}
+
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithDomain:@"hline.pagekite.me" withAppID:@"0e611e03-572a-4c49-82a9-e63ae6a3758e"
-                                                       andAppKey:@"be346b63-59d7-4cbc-9a47-f3a01e35f093"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
+                                                       andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
+    
+    config.domain=@"mr.orange.konotor.com";
+
+//    prod 
+//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
+//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
+//    config.domain = @"app.hotline.io";
+    
+//      config.domain = @"satheeshjm.pagekite.me";
+//      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
+//      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
+    
+    config.displayFAQsAsGrid = YES;
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
-    
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.userName = @"Sid";
-    user.emailAddress = @"sid@freshdesk.com";
+    user.name = @"Sid";
+    user.email = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
-    [[Hotline sharedInstance]initWithConfig:config andUser:user];
-    [[Hotline sharedInstance]setCustomUserPropertyForKey:@"CustomerID" withValue:@"10231023"];
-    [Hotline sharedInstance].displaySolutionsAsGrid = YES;
-    NSLog(@"Unread messages count :%ld", [[Hotline sharedInstance]unreadCount]);
+    user.phoneCountryCode = @"+91";
+    
+    [[Hotline sharedInstance] updateUser:user];
+    
+    [[Hotline sharedInstance] updateUserProperties:@{
+                                                     @"Key1" : @"Value1",
+                                                     @"Key2" : @"1"
+                                                     }];
+    
+    [[Hotline sharedInstance]initWithConfig:config];
+    
+    [[Hotline sharedInstance] updateUser:user];
+    
+    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
+    }];
+    
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSLog(@"updated unread messages count %@", note.userInfo[@"count"]);
     }];
 }
 
@@ -51,9 +115,8 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    NSLog(@"Registered Device Token  %@", devToken);
     NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
-    [[Hotline sharedInstance] addDeviceToken:devToken];
+    [[Hotline sharedInstance] updateDeviceToken:devToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -62,8 +125,7 @@
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
-        UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
-        [[Hotline sharedInstance]handleRemoteNotification:info withController:nil];
+        [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }
 

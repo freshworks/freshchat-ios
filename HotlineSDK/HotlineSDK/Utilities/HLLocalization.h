@@ -22,6 +22,8 @@
 #define LOC_SEARCH_PLACEHOLDER_TEXT @"search_placeholder_text"
 #define LOC_SEARCH_EMPTY_RESULT_TEXT @"search_empty_result_text"
 
+#define LOC_MESSAGE_PLACEHOLDER_TEXT @"message_placeholder_text"
+
 #define LOC_EMPTY_CHANNEL_TEXT @"empty_channel_text"
 #define LOC_EMPTY_FAQ_TEXT @"empty_faq_text"
 
@@ -46,8 +48,14 @@
 
 #define LOC_AUDIO_RECORDING @"audio_recording"
 #define LOC_AUDIO_RECORDING_STOPPED @"audio_recording_stopped"
+#define LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT @"audio_recording_permission_denied"
 
-#define LOC_IMAGE_ATTACHMENT_OPTIONS @"image_attachment_options"
+#define LOC_AUDIO_SIZE_SHORT_ALERT_TITLE @"short_audio_alert_title"
+#define LOC_AUDIO_SIZE_SHORT_ALERT_DESCRIPTION @"short_audio_alert_description_text"
+#define LOC_AUDIO_SIZE_LONG_ALERT_TITLE @"long_audio_alert_title"
+#define LOC_AUDIO_SIZE_LONG_ALERT_DESCRIPTION @"long_audio_alert_description_text"
+#define LOC_AUDIO_SIZE_LONG_ALERT_POST_BUTTON_TITLE @"long_audio_alert_post_button_text"
+
 #define LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT @"image_attachment_cancel_button_text"
 #define LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT @"image_attachment_select_existing_image"
 #define LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT @"image_attachment_select_new_image"
@@ -55,6 +63,9 @@
 #define LOC_CAMERA_UNAVAILABLE_TITLE @"camera_unavailable_title"
 #define LOC_CAMERA_UNAVAILABLE_DESCRIPTION @"camera_unavailable_description"
 #define LOC_CAMERA_UNAVAILABLE_OK_BUTTON @"camera_unavailable_ok_button_text"
+#define LOC_CAMERA_PERMISSION_DENIED_TEXT @"camera_permission_denied"
+
+#define LOC_AUDIO_RECORDING_CANCEL_MESSAGE @"cancel_audio_recording_alert"
 
 #define LOC_SEND_BUTTON_TEXT @"send_button_text"
 
@@ -71,6 +82,8 @@
 #define LOC_DAY_FRIDAY @"day_friday"
 #define LOC_DAY_SATURDAY @"day_saturday"
 
+#define LOC_DEFAULT_NOTIFICATION_MESSAGE @"notification_message_default"
 
+#define LOC_OFFLINE_MISSING_CONTENT_TEXT @"offline_missing_content_text"
 
 #endif /* HLLocalization_h */

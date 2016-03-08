@@ -23,7 +23,10 @@
 #import "Hotline.h"
 #import "HLLocalization.h"
 
+#import "FDArticleListCell.h"
+
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
+#define SEARCH_BAR_HEIGHT 44
 
 @interface  HLSearchViewController () <UISearchDisplayDelegate,UISearchBarDelegate,UIGestureRecognizerDelegate,UIScrollViewDelegate>
 @property (strong, nonatomic) UITableView *tableView;
@@ -33,8 +36,6 @@
 @property (strong, nonatomic) HLTheme *theme;
 @property (strong, nonatomic) UIImageView *emptySearchImgView;
 @property (strong, nonatomic) UILabel *emptyResultLbl;
-@property (strong, nonatomic) NSLayoutConstraint *contactBtnHeightConstraint;
-@property (strong, nonatomic) NSLayoutConstraint *contactBtnBottomConstraint;
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) BOOL isKeyboardOpen;
 @end
@@ -44,6 +45,9 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupSubviews];
+    
+    [self setupTap];
+    self.view.userInteractionEnabled=YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -59,12 +63,14 @@
     if(!_theme) _theme = [HLTheme sharedInstance];
     return _theme;
 }
-
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self setupTap];
-    self.view.userInteractionEnabled=YES;
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 -(void)setupTap{
@@ -91,7 +97,7 @@
 }
 
 -(void)setupSubviews{
-    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SEARCH_BAR_HEIGHT)];
     self.searchBar.hidden = NO;
     self.searchBar.delegate = self;
     self.searchBar.placeholder = HLLocalizedString(LOC_SEARCH_PLACEHOLDER_TEXT);
@@ -109,20 +115,25 @@
     
     self.tableView = [[UITableView alloc] init];
     self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
+    self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints=NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
+    {
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     [self.view addSubview:self.tableView];
-
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
     
     [self setEmptySearchResultView];
 
     [self.view addSubview:self.searchBar];
-
     
     NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView};
+    
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|"
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[trial]|"
@@ -149,18 +160,12 @@
     self.emptyResultLbl.text = HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT);
     [self.view addSubview:self.emptyResultLbl];
     
-    self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
-    [self.view addSubview:self.footerView];
-    
-    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"footerView" : self.footerView, @"emptyLabel":self.emptyResultLbl};
+    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"emptyLabel":self.emptyResultLbl};
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyLabel]-50-|" options:0 metrics:nil views:emptySubViews]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptySearchImageView(100)]" options:0 metrics:nil views:emptySubViews]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptySearchImageView(100)]-10-[emptyLabel]" options:0 metrics:nil views:emptySubViews]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:emptySubViews]];
-    
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
                                                           attribute:NSLayoutAttributeCenterX
@@ -186,26 +191,6 @@
                                                          multiplier:0.5
                                                            constant:0.0]];
     
-    
-    
-    self.contactBtnHeightConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
-                                                                   attribute:NSLayoutAttributeHeight
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1.0
-                                                                    constant:40];
-    
-    self.contactBtnBottomConstraint = [NSLayoutConstraint constraintWithItem:self.footerView
-                                                                   attribute:NSLayoutAttributeBottom
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:self.view
-                                                                   attribute:NSLayoutAttributeBottom
-                                                                  multiplier:1.0 constant:0];
-    
-    
-    [self.view addConstraint:self.contactBtnBottomConstraint];
-    [self.view addConstraint:self.contactBtnHeightConstraint];
     self.emptySearchImgView.hidden = YES;
     self.emptyResultLbl.hidden = YES;
 }
@@ -235,7 +220,6 @@
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
-    self.contactBtnBottomConstraint.constant = - keyboardCoveredHeight;
     self.keyboardHeight = keyboardCoveredHeight;
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -246,7 +230,6 @@
     self.isKeyboardOpen = NO;
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.keyboardHeight = 0.0;
-    self.contactBtnBottomConstraint.constant = 0.0;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -266,26 +249,28 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = SEARCH_CELL_REUSE_IDENTIFIER;
-    FDTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDArticleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDArticleListCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.textLabel.numberOfLines = 3;
         cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     if (indexPath.row < self.searchResults.count) {
         FDArticleContent *article = self.searchResults[indexPath.row];
         [cell.textLabel sizeToFit];
-        cell.textLabel.text = article.title;
+        cell.articleText.text = article.title;
     }
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    UIFont *cellFont = [self.theme tableViewCellFont];
+    UIFont *cellFont = [self.theme articleListFont];
     HLArticle *searchArticle = self.searchResults[indexPath.row];
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
-    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
+    CGFloat heightOfcell = 0;
+    if (searchArticle) {
+        NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
+        heightOfcell = [HLListViewController heightOfCell:title];
+    }
     return heightOfcell;
 }
 
@@ -297,14 +282,34 @@
         articlesDetailController.articleDescription = article.articleDescription;
         articlesDetailController.articleID = article.articleID;
         articlesDetailController.articleTitle = article.title;
-        HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController];
+        articlesDetailController.isFromSearchView = YES;
+        HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController andEmbed:NO];
         [self.navigationController pushViewController:containerController animated:YES];
+    }
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell     forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([tableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
     }
 }
 
 -(void)filterArticlesForSearchTerm:(NSString *)term{
     if (term.length > 2){
-        term = [FDUtilities replaceSpecialCharacters:term with:@""];
+        term = [FDStringUtil replaceSpecialCharacters:term with:@""];
         NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext ;
         [context performBlock:^{
             NSArray *articles = [FDRanking rankTheArticleForSearchTerm:term withContext:context];
@@ -346,12 +351,12 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:NO];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    NSInteger searchStringLength = searchText.length;
-    if (searchStringLength!=0) {
+    searchText = trimString(searchText);
+    if (searchText.length!=0) {
         self.tableView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         [self filterArticlesForSearchTerm:searchText];
         [self.view removeGestureRecognizer:self.recognizer];
@@ -365,7 +370,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {

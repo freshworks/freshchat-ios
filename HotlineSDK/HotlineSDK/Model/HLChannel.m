@@ -43,31 +43,33 @@
     channel.type = channelInfo[@"type"];
     channel.channelID = channelInfo[@"channelId"];
     channel.iconURL = channelInfo[@"iconUrl"];
+    channel.icon = nil;
     channel.position = channelInfo[@"position"];
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
     
-    //TODO: Use this prefetch when channel is created with background context
-    
-    //Prefetch category icon
-    
-    //    __block NSData *imageData = nil;
-    //    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    //        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
-    //    });
-    //    channel.icon = imageData;
-    
+    /*
+        Icon prefetch when channel is created with background context
+     
+        __block NSData *imageData = nil;
+        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
+        });
+        channel.icon = imageData;
+
+     */
     
     KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
+    NSString *updatedMessage = trimString(channelInfo[@"welcomeMessage"][@"text"]); //set welcome message here
     if (welcomeMessage) {
-        NSString *updatedMessage = channelInfo[@"welcomeMessage"][@"text"]; //set welcome message here
         welcomeMessage.text = updatedMessage;
-        FDLog(@"Welcome message of channel: \"%@\" is updated !", channel.name);
     }else{
         welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
-        welcomeMessage.createdMillis = @([[NSDate date] timeIntervalSince1970] *1000);
+        welcomeMessage.text = updatedMessage;
+        welcomeMessage.createdMillis = @0;
         welcomeMessage.isWelcomeMessage = YES;
+        welcomeMessage.messageRead = YES;
         [channel addMessagesObject:welcomeMessage];
     }
     

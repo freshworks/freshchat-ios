@@ -13,8 +13,8 @@
 #import "HLChannelViewController.h"
 #import "Hotline.h"
 
-#define CELL_OFFSET 36
-#define CEll_HORZ_OFFSET 40
+#define CELL_OFFSET 32
+#define CEll_HORZ_OFFSET 20
 
 @implementation HLListViewController
 
@@ -60,16 +60,16 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"WARNING: Unimplemented method. %@ should implement tableView:cellForRowAtIndexPath" , self.class);
+    FDLog(@"WARNING: Unimplemented method. %@ should implement tableView:cellForRowAtIndexPath" , self.class);
     return nil;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"WARNING: Unimplemented method. %@ should implement tableView:numberOfRowsInSection" , self.class);
+    FDLog(@"WARNING: Unimplemented method. %@ should implement tableView:numberOfRowsInSection" , self.class);
     return 0;
 }
 

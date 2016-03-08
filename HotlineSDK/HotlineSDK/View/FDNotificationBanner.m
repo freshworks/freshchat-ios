@@ -10,6 +10,8 @@
 #import "HLChannel.h"
 #import "FDChannelListViewCell.h"
 #import <AudioToolbox/AudioServices.h>
+#import "FDSecureStore.h"
+#import "HLLocalization.h"
 
 #define systemSoundID 1315
 
@@ -41,8 +43,14 @@
     return self;
 }
 
+-(void)setMessage:(NSString *)message{
+    if (message && ![message isKindOfClass:[NSNull class]]) {
+        self.messageLabel.text = message;
+    }else{
+        self.messageLabel.text = HLLocalizedString(LOC_DEFAULT_NOTIFICATION_MESSAGE);
+    }
+}
 
-//TODO: Add theming
 -(void)setSubViews{
     self.userInteractionEnabled = YES;
     
@@ -50,20 +58,19 @@
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bannerTapped:)];
     [self addGestureRecognizer:singleFingerTap];
     
-    self.title = [[UILabel alloc] init];
-    [self.title setNumberOfLines:2];
-    [self.title setLineBreakMode:NSLineBreakByTruncatingTail];
-    self.title.font = [self.theme notificationTitleFont];
-    self.title.textColor = [self.theme notificationTitleTextColor];
+    self.titleLabel = [[UILabel alloc] init];
+    [self.titleLabel setNumberOfLines:2];
+    [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    self.titleLabel.font = [self.theme notificationTitleFont];
+    self.titleLabel.textColor = [self.theme notificationTitleTextColor];
     
-    self.message = [[UILabel alloc] init];
-    [self.message setNumberOfLines:2];
-    [self.message setLineBreakMode:NSLineBreakByTruncatingTail];
-    self.message.font = [self.theme notificationMessageFont];
-    self.message.textColor = [self.theme notificationMessageTextColor];
+    self.messageLabel = [[UILabel alloc] init];
+    [self.messageLabel setNumberOfLines:2];
+    [self.messageLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    self.messageLabel.font = [self.theme notificationMessageFont];
+    self.messageLabel.textColor = [self.theme notificationMessageTextColor];
 
     self.imgView=[[UIImageView alloc] init];
-//    self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
     [self.imgView.layer setMasksToBounds:YES];
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     
@@ -71,18 +78,18 @@
     [closeButton setBackgroundImage:[self.theme getImageWithKey:IMAGE_NOTIFICATION_CANCEL_ICON] forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(dismissBanner:) forControlEvents:UIControlEventTouchUpInside];
 
-    [self.title setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.message setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.messageLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [closeButton setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    [self addSubview:self.title];
-    [self addSubview:self.message];
+    [self addSubview:self.titleLabel];
+    [self addSubview:self.messageLabel];
     [self addSubview:self.imgView];
     [self addSubview:closeButton];
     
-    NSDictionary *views = @{@"banner" : self, @"title" : self.title,
-                            @"message" : self.message, @"imgView" : self.imgView, @"closeButton" : closeButton};
+    NSDictionary *views = @{@"banner" : self, @"title" : self.titleLabel,
+                            @"message" : self.messageLabel, @"imgView" : self.imgView, @"closeButton" : closeButton};
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:closeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
@@ -111,7 +118,6 @@
     self.layer.borderWidth = 0.6;
     self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
     self.imgView.layer.masksToBounds = YES;
-//    self.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
 }
 
 -(void)displayBannerWithChannel:(HLChannel *)channel{
@@ -121,11 +127,15 @@
     self.currentChannel = channel;
     
     if (!TARGET_IPHONE_SIMULATOR) {
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        AudioServicesPlaySystemSound(systemSoundID);
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        BOOL isNotificationSoundEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+        if(isNotificationSoundEnabled){
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            AudioServicesPlaySystemSound(systemSoundID);
+        }
     }
 
-    self.title.text = channel.name;
+    self.titleLabel.text = channel.name;
     
     if (channel.icon) {
         self.imgView.image = [UIImage imageWithData:channel.icon];

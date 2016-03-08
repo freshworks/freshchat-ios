@@ -10,12 +10,6 @@
 #import "FDDataUpdaterWithInterval.h"
 #import "HLMacros.h"
 
-@interface FDDataUpdaterWithInterval ()
-
--(NSDate *) lastFetchTime;
-
-@end
-
 @implementation FDDataUpdaterWithInterval
 
 #pragma mark - Lazy Instantiations
@@ -28,16 +22,20 @@
     return self;
 }
 
--(NSDate *) lastFetchTime{
-    return [self.secureStore objectForKey:self.intervalConfigKey];
+-(NSTimeInterval) lastFetchTime{
+    return [[self.secureStore objectForKey:self.intervalConfigKey] doubleValue];
 }
 
+//TODO: when migrating mobihelp -> hotline, clear intervalconfigkey from secure store
 -(BOOL)hasTimedOut{
-    NSDate *lastUpdatedTime = [self lastFetchTime];
+    NSTimeInterval lastUpdatedTime = [self lastFetchTime];
     if (!lastUpdatedTime) return YES;
-    NSDate *currentTime = [NSDate date];
-    NSTimeInterval intervalInSeconds = [currentTime timeIntervalSinceDate:lastUpdatedTime];
-    return (intervalInSeconds > self.intervalInSecs) ? YES : NO;
+    NSTimeInterval currentTime = round([[NSDate date] timeIntervalSince1970]*1000);
+    if ((currentTime-lastUpdatedTime)>self.intervalInSecs * 1000) {
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 - (void) noUpdate
@@ -49,7 +47,8 @@
     if([self hasTimedOut]){
         [self doFetch:^(NSError * error) {
             if(!error){
-                [self.secureStore setObject:[NSDate date] forKey:self.intervalConfigKey];
+                NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+                [self.secureStore setObject:lastUpdatedTime forKey:self.intervalConfigKey];
                 FDLog("%@ Completed Update", [[self class] debugDescription]);
             }
             if(completion) completion(YES,error);

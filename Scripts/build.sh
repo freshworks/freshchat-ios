@@ -14,7 +14,7 @@ $*
 HEADER
 }
 
-VERSION=1.0
+VERSION=1.0.1
 #BUILD_NUMBER=`date +%Y%m%d%H%M`
 
 #Clear Derived Data to have clean build
@@ -113,3 +113,7 @@ rm ${CONSTANTS_FILE}.old
 printHeader "All Set for Version $VERSION.  Package Size = `ls -lh dist/*.zip | awk '{print $5}'` "
 printHeader " Build           : ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
 osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
+
+#Documentation
+printHeader "Generating docs"
+xcodebuild -project HotlineSDK/HotlineSDK.xcodeproj -target Documentation -configuration build

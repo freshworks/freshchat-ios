@@ -17,6 +17,5 @@
 #define HOTLINE_AUDIO_RECORDING_STARTED @"com.freshdesk.hotline_recording_started"
 #define HOTLINE_AUDIO_RECORDING_FAILED @"com.freshdesk.hotline_recording_failed"
 #define HOTLINE_AUDIO_MIC_PERMISSION_DENIED @"com.freshdesk.hotline_microphone_permission_denied"
-#define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
 
 #endif

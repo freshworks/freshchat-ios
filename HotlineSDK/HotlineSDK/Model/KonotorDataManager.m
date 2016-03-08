@@ -78,11 +78,12 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)preparePersistantStoreCoordinator{
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KonotorModels" ofType:@"bundle"];
+    NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"KonotorModels" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    FDLog(@"StoreURL %@",storePath);
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
     
     NSError* error = nil;
@@ -175,7 +176,31 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         NSMutableArray *fetchedSolutions = [NSMutableArray new];
         [mainContext performBlock:^{
             for (int i=0; i< results.count; i++) {
+                NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
+                [mainContext refreshObject:newSolution mergeChanges:YES];
+                [fetchedSolutions addObject:newSolution];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(fetchedSolutions,nil);
+            });
+        }];
+    }];
+}
+
+-(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler{
+    NSManagedObjectContext *backgroundContext = [KonotorDataManager sharedInstance].backgroundContext;
+    NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
+    [backgroundContext performBlock:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        request.predicate = [NSPredicate predicateWithFormat:@"categoryID == %@",categoryID];
+        request.sortDescriptors = @[position];
+        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+        NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        [mainContext performBlock:^{
+            for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
+                [mainContext refreshObject:newSolution mergeChanges:YES];
                 [fetchedSolutions addObject:newSolution];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -240,6 +265,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     [self deleteAllEntriesOfEntity:HOTLINE_CHANNEL_ENTITY handler:handler inContext:self.mainObjectContext];
 }
 
+-(void)deleteAllProperties:(void (^)(NSError *))handler{
+    [self deleteAllEntriesOfEntity:@"KonotorCustomProperty" handler:handler inContext:self.mainObjectContext];
+}
+
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
     NSManagedObjectContext *context = self.mainObjectContext;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
@@ -252,6 +281,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             if (handler) handler(count == 0);
         });
     }];
+}
+
+-(void)deleteAllMessages:(void (^)(NSError *))handler{
+    [self deleteAllEntriesOfEntity:@"KonotorMessage" handler:handler inContext:self.mainObjectContext];
 }
 
 - (void)dealloc {

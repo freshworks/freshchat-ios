@@ -17,16 +17,13 @@
     self = [super init];
     if (self) {
         self.intervalInSecs = CHANNELS_FETCH_INTERVAL;
-        self.intervalConfigKey = HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME;
+        self.intervalConfigKey = HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME;
     }
     return self;
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    HLMessageServices *service = [[HLMessageServices alloc]init];
-    [service fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
-        [HLMessageServices downloadAllMessages:nil];
-    }];    
+    [HLMessageServices downloadAllMessages:nil];
 }
 
 @end

@@ -21,13 +21,13 @@
 #import "AFHTTPClient.h"
 #import "AFNetworking.h"
 #import "FDResponseInfo.h"
+#import "FDBackgroundTaskManager.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
 @implementation HLMessageServices
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler{
-    FDLog(@"download message called");
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
@@ -40,7 +40,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
         if (!error) {
-            [self fetchAllMessagesInChannel:channels handler:handler];
+            [self fetchAllMessages:handler];
         }else{
             if(handler) handler(error);
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
@@ -48,21 +48,14 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
 }
 
-+(void)fetchAllMessagesInChannel:(NSArray *)channels handler:(void(^)(NSError *error))handler{
++(void)fetchAllMessages:(void(^)(NSError *error))handler{
     NSString *pBasePath = [FDUtilities getBaseURL];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    NSNumber *lastUpdateTime = [store objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
-    
-    if (lastUpdateTime == nil) {
-        lastUpdateTime = @0;
-        FDLog(@"Restoring user messages with alias :%@", userAlias);
-    }
-    
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
     NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
-    
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
     [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
@@ -70,12 +63,12 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:getPath parameters:nil];
     
+    FDLog(@"Fetching messages for user %@", userAlias);
+    
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];
-        
-        FDLog(@"Download all message call status :%d", statusCode);
-        
+
         if(error || statusCode >= 400){
             FDLog(@"Message fetch failed %@", error);
             HideNetworkActivityIndicator();
@@ -130,18 +123,10 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                         
                         newMessage.belongsToConversation = conversation;
                         
-                        //INFO: Not incrementing unread count while restoring user
-                        if (![lastUpdateTime isEqualToNumber:@0]) {
-                            [conversation incrementUnreadCount];
+                        //Do not mark restored mesages as unread
+                        if ([lastUpdateTime isEqualToNumber:@0]) {
+                            newMessage.messageRead = YES;
                         }
-                        
-                        if (newMessage.marketingId.integerValue !=0 ) {
-                            if (!newMessage.read.boolValue) {
-                                FDLog(@"Found a unread marketing message");
-                                [conversation incrementUnreadCount];
-                            }
-                        }
-
                         
                     }
                 }
@@ -150,11 +135,17 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
         NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
-        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
         [[KonotorDataManager sharedInstance]save];
         MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+        [self postUnreadCountNotification];
         [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
     }];
+}
+
++(void)postUnreadCountNotification{
+    NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
+    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil userInfo:@{ @"count" : @(unreadCount)}];
 }
 
 -(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
@@ -167,10 +158,25 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
-    [request setRelativePath:path andURLParams:@[token]];
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+    NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
+    [request setRelativePath:path andURLParams:@[token, afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            [self importChannels:[responseInfo responseAsArray] handler:handler];
+            FDLog(@"Channels :%@", [responseInfo responseAsArray]);
+            
+            /* This check is added to delete all messages that are migrated from konotor SDK,
+               but this is also performed for new installs as well (a harmless side-effect). */
+            
+            if ([lastUpdateTime isEqualToNumber:@0]) {
+                [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
+                    [self importChannels:[responseInfo responseAsArray] handler:handler];
+                }];
+            }else{
+                [self importChannels:[responseInfo responseAsArray] handler:handler];
+            }
+            NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+            [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         }else{
             if (handler) handler(nil, error);
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
@@ -190,11 +196,8 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
                 if (channel) {
-                    NSDate *updateTime = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
-                    if ([channel.lastUpdated compare:updateTime] == NSOrderedAscending) {
-                        [HLChannel updateChannel:channel withInfo:channelInfo];
-                        FDLog(@"Channel with ID:%@ updated", channel.channelID);
-                    }
+                    [HLChannel updateChannel:channel withInfo:channelInfo];
+                    FDLog(@"Channel with ID:%@ updated", channel.channelID);
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
@@ -280,6 +283,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
     
     ShowNetworkActivityIndicator();
+    UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
     
     AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
     
@@ -298,47 +302,90 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         HideNetworkActivityIndicator();
         pMessage.uploadStatus = @(MESSAGE_UPLOADED);
         pMessage.messageAlias = messageInfo[@"alias"];
+        pMessage.createdMillis = messageInfo[@"createdMillis"];
         [channel addMessagesObject:pMessage];
         [[KonotorDataManager sharedInstance]save];
         [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
+        [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
     }
      
-                                     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-                                         HideNetworkActivityIndicator();
-                                         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
-                                         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-                                         [channel addMessagesObject:pMessage];
-                                         [[KonotorDataManager sharedInstance]save];
-                                         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
-                                     }];
+     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
+         HideNetworkActivityIndicator();
+         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
+         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+         [channel addMessagesObject:pMessage];
+         [[KonotorDataManager sharedInstance]save];
+         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
+         [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+     }];
     
     [operation start];
 }
 
++(HLServiceRequest *)statusUpdateRequestForMarketingID:(NSNumber *)marketingID{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
 
-//TODO: Skip messages that are 'click registered' already
+    
+    
+}
+
+//TODO: Skip messages that are clicked before
+
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
-    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
+    if([marketingId intValue] ==0 || !marketingId) return;
+
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    
+    NSString *userAlias = [FDUtilities getUserAlias];
+    
+    if (!userAlias) return;
+
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
+    [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
+    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
+        }else{
+            FDLog(@"Failed to register marketing message click event to server");
+        }
+    }];
+}
+
++(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context{
+    if (message.messageRead == YES) return;
+    
+    NSNumber *marketingId = message.marketingId;
+    
+    if([marketingId intValue] ==0 || !marketingId) return;
+    
+    message.messageRead = YES;
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    
-    if([marketingId intValue] ==0 || !marketingId) return;
-    
-    //PUT {appId}/user/{alias}/message/marketing/{marketingId}/status?delivered=1&clicked=1&seen=1&t={appkey}
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/message/marketing/",[marketingId stringValue ],@"/status?clicked=1&t=",appKey];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"PUT" path:postPath parameters:nil];
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject) {
-        FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
-    } failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error) {
-        FDLog(@"Failed to register marketing message click event to server");
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+
+    if (!userAlias) return;
+
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    request.HTTPMethod = HTTP_METHOD_PUT;
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
+    [request setRelativePath:path andURLParams:@[@"seen=1",appKey]];
+    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+        }else{
+            FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
+            [message markAsUnread];
+        }
+        [context save:nil];
     }];
-    [operation start];
 }
 
 @end

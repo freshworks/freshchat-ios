@@ -26,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel;
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId;
--(void) incrementUnreadCount;
--(void) decrementUnreadCount;
 
 @end
 
@@ -38,6 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addHasMessages:(NSSet<KonotorMessage *> *)values;
 - (void)removeHasMessages:(NSSet<KonotorMessage *> *)values;
 
-NS_ASSUME_NONNULL_END
 
 @end
+
+@interface KonotorConversationData : NSObject
+
+@property (nullable, strong, nonatomic) NSString *conversationAlias;
+@property (nullable, strong, nonatomic) NSNumber *lastUpdated;
+@property (nullable, strong, nonatomic) NSNumber *unreadMessagesCount;
+
+@end
+
+NS_ASSUME_NONNULL_END

@@ -14,6 +14,9 @@
 #import "HLSearchViewController.h"
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
+#import "KonotorDataManager.h"
+
+#import "FDArticleListCell.h"
 
 @interface HLArticlesController ()
 
@@ -36,16 +39,27 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
+    self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     parent.title = self.category.title;
-    [self updateDataSource];
     [self setNavigationItem];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self updateDataSource];
+}
+
 -(void)updateDataSource{
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
-    NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
-    self.articles = sortedArticles;
+    self.articles = self.category.articles.allObjects;
     [self.tableView reloadData];
+    [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+        NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        self.articles = sortedArticles;
+        [self.tableView reloadData];
+    }];
 }
 
 -(void)setNavigationItem{
@@ -83,20 +97,37 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLArticleCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    FDArticleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDArticleListCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        cell.textLabel.numberOfLines = 3;
-        cell.textLabel.textColor = [self.theme articleListFontColor];
-        cell.textLabel.font = [self.theme articleListFont];
-        cell.textLabel.text  = article.title;
+        cell.articleText.text = article.title;
     }
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell     forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([tableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 -(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
@@ -124,7 +155,7 @@
         articleDetailController.articleDescription = article.articleDescription;
         articleDetailController.categoryTitle = self.category.title;
         articleDetailController.categoryID = self.category.categoryID;
-        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
 }

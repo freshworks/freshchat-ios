@@ -23,6 +23,7 @@
 #import "FDUtilities.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
+#import "FDBarButtonItem.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -117,10 +118,23 @@
     [contactUsButton addTarget:self action:@selector(contactUsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *contactUsBarButton = [[UIBarButtonItem alloc] initWithCustomView:contactUsButton];
     
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
-    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];
+    //TODO: Need to revisit this to get rid of the repeated code
+
+    if (!self.embedded) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
+    
+    NSArray *rightBarItems;
+    if(!self.categories.count){
+        rightBarItems = @[fixedItem,contactUsBarButton];
+    }
+    else{
+        rightBarItems = @[fixedItem,searchBarButton,contactUsBarButton];
+    }
+    
+    self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
@@ -134,7 +148,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 -(void)updateCategories{
@@ -185,7 +199,7 @@
                 [self.emptyFAQImgView removeFromSuperview];
                 [self.emptyFAQLbl removeFromSuperview];
             }
-            
+            [self setNavigationItem];
             [self.collectionView reloadData];
         }
     }];
@@ -241,7 +255,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 #pragma mark - Collection view delegate
@@ -267,14 +281,15 @@
     if (indexPath.row < self.categories.count){
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
-        cell.backgroundColor = [self.theme itemBackgroundColor];
+        cell.backgroundColor = [self.theme gridViewCellBackgroundColor];
         cell.layer.borderWidth=0.3f;
-        cell.layer.borderColor=[self.theme itemSeparatorColor].CGColor;
+        cell.layer.borderColor=[self.theme gridViewCellBorderColor].CGColor;
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
-            cell.imageView.contentMode = UIViewContentModeCenter;
+            //TODO: Add placeholder image
+            cell.imageView.image = nil;
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
-            [cell.label sizeToFit];
         }
     }
     return cell;
@@ -294,7 +309,7 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
 }
@@ -314,6 +329,7 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self setNavigationItem];
     [self.collectionView reloadData];
 }
 

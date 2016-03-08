@@ -6,6 +6,7 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import "FDMessageController.h"
 #import "FDMessageCell.h"
 #import "KonotorImageInput.h"
@@ -26,11 +27,12 @@
 #import "FDImagePreviewController.h"
 #import "HLMessageServices.h"
 #import "HotlineAppState.h"
+#import "FDBarButtonItem.h"
+#import "FDSecureStore.h"
 
 typedef struct {
     BOOL isLoading;
     BOOL isShowingAlert;
-    BOOL canPromptForPush;
     BOOL isFirstWordOnLine;
     BOOL isKeyboardOpen;
     BOOL isModalPresentationPreferred;
@@ -55,6 +57,7 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
+@property (strong, nonatomic) NSString *appAudioCategory;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
@@ -68,6 +71,7 @@ typedef struct {
 
 #define INPUT_TOOLBAR_HEIGHT  40
 #define TABLE_VIEW_TOP_OFFSET 10
+#define CELL_HORIZONTAL_PADDING 4
 
 -(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -75,7 +79,6 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
-        _flags.canPromptForPush = YES;
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
 
@@ -85,8 +88,6 @@ typedef struct {
         self.loadmoreCount=20;
         
         self.channel = channel;
-        //Set  App state reference to current channel
-        [HotlineAppState sharedInstance].currentVisibleChannel = channel;
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -105,15 +106,18 @@ typedef struct {
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = @"Messages";
+    parent.title = self.channel.name;
     self.messagesDisplayedCount = 20;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
+    [self registerAppAudioCategory];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices downloadAllMessages:nil];
+    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
 }
 
 -(UIView *)tableHeaderView{
@@ -124,7 +128,9 @@ typedef struct {
 
 -(void)viewWillAppear:(BOOL)animated{
     self.tableView.tableHeaderView = [self tableHeaderView];
+    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [super viewWillAppear:animated];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -135,7 +141,38 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
+    [Konotor stopRecording];
+    if([Konotor getCurrentPlayingMessageID]){
+        [Konotor StopPlayback];
+    }
+    [self resetAudioSessionCategory];
+    [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+}
+
+-(void)registerAppAudioCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    self.appAudioCategory = audioSession.category;
+}
+
+-(void)resetAudioSessionCategory{
+        [self setAudioCategory:self.appAudioCategory];
+}
+
+-(void)setAudioCategory:(NSString *) audioSessionCategory{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *setCategoryError = nil;
+    
+    if (![audioSession setCategory:audioSessionCategory error:&setCategoryError]) {
+        FDLog(@"%s setCategoryError=%@", __PRETTY_FUNCTION__, setCategoryError);
+    }
+}
+
+- (void) handleDismissMessageInputView{
+    if(self.audioMessageInputView.window)
+        [self audioMessageInput:self.audioMessageInputView dismissButtonPressed:nil];
+
 }
 
 -(void)startPoller{
@@ -159,28 +196,24 @@ typedef struct {
 
 -(void)setNavigationItem{
     if(_flags.isModalPresentationPreferred){
-        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
+        UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
+        
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self.navigationController
-                                                                      action:@selector(popViewControllerAnimated:)];
-        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        if (!self.embedded) {
+            UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self.navigationController
+                                                                          action:@selector(popViewControllerAnimated:)];
+            self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        }
     }
-    
-    UIBarButtonItem *FAQButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_TITLE_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(FAQButtonAction:)];
-    self.parentViewController.navigationItem.rightBarButtonItem = FAQButton;
     
     if (self.parentViewController) {
         self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
     }else{
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-}
-
--(void)FAQButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentSolutions:self];
 }
 
 -(void)closeButtonAction:(id)sender{
@@ -197,6 +230,28 @@ typedef struct {
 }
 
 -(void)setSubviews{
+    
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
+    
+    UIView *bannerMessageView= [UIView new];
+    bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
+    bannerMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
+    [self.view addSubview:bannerMessageView];
+    
+    UILabel *bannerMesagelabel = [[UILabel alloc] init];
+    bannerMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    bannerMesagelabel.text = overlayText;
+    bannerMesagelabel.numberOfLines = 3;
+    bannerMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
+    bannerMesagelabel.textAlignment = UITextAlignmentCenter;
+    
+    float overlayViewHeight = (MIN([self lineCountForLabel:bannerMesagelabel],3.0) *bannerMesagelabel.font.pointSize)+15;
+    
+    bannerMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [bannerMessageView addSubview:bannerMesagelabel];
+    
     self.tableView = [[UITableView alloc]init];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -204,7 +259,6 @@ typedef struct {
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    //self.tableView.tableHeaderView = [self headerView];
     [self.view addSubview:self.tableView];
     
     //Bottomview
@@ -228,13 +282,32 @@ typedef struct {
                                                              multiplier:1.0 constant:0];
 
     //Initial Constraints
-    NSDictionary *views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
+    
+    
+    NSDictionary *views;
+    
+    NSDictionary *metrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
+
+    if(overlayText.length >0){
+        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView, @"messageOverlayView": bannerMessageView, @"overlayText" : bannerMesagelabel};
+        
+        [bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlayText]|" options:0 metrics:nil views:views]];
+        [bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[overlayText]-5-|" options:0 metrics:nil views:views]];
+        
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:metrics views:views]];
+        
+    }
+    else{
+        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
+    }
+    
     [self.view addConstraint:self.bottomViewBottomConstraint];
     [self.view addConstraint:self.bottomViewHeightConstraint];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:views]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
     
     if([self.channel.type isEqualToString:CHANNEL_TYPE_BOTH]){
         
@@ -247,6 +320,16 @@ typedef struct {
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }
+}
+
+- (float)lineCountForLabel:(UILabel *)label {
+    CGSize maximumLabelSize = CGSizeMake(self.view.frame.size.width-10,9999);
+    CGSize sizeOfText = [label.text sizeWithFont:label.font
+                                constrainedToSize:maximumLabelSize
+                                    lineBreakMode:label.lineBreakMode];
+    int numberOfLines = sizeOfText.height / label.font.pointSize;
+    
+    return numberOfLines;
 }
 
 -(void)updateBottomViewWith:(UIView *)view andHeight:(CGFloat) height{
@@ -271,6 +354,8 @@ typedef struct {
         cell.messageData = message;
         [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
+    
+    
     if(indexPath.row==0 && self.messagesDisplayedCount<self.messages.count){
         UITableViewCell* cell=[self getRefreshStatusCell];
         NSInteger oldnumber = self.messagesDisplayedCount;
@@ -315,17 +400,13 @@ typedef struct {
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(self.messageHeightMap[key]){
-        //TODO: If you have add + 4 here .. then I think this should be part of FDMessageCell getHeightForMessage - Rex
-        height = [self.messageHeightMap[key] floatValue]+ 4;
+        height = [self.messageHeightMap[key] floatValue];
     }
     else {
         height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        //TODO: Give names to all the numeric contants used in code. Hard to understand what
-        // this 16 is . And there are too many 16s in the code base - Rex
         self.messageHeightMap[key] = @(height);
-        //TODO: We are missing a + 4 here - Rex
     }
-    return height;
+    return height+CELL_HORIZONTAL_PADDING;
 }
 
 
@@ -354,11 +435,33 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
-    BOOL recording=[Konotor startRecording];
-    if(recording){
-        [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
+    
+    if([Konotor getCurrentPlayingMessageID]){
+        [Konotor StopPlayback];
     }
-    NSLog(@"Mic button pressed");
+    
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            BOOL recording=[Konotor startRecording];
+            if(recording){
+                [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
+            }
+        }
+        else {
+            UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+            [permissionAlert show];
+        }
+    }];
+}
+
+-(void)messageCell:(FDMessageCell *)cell playButtonIsPressed:(id)sender{
+    //if recording
+    
+    //show prompt to continue of not
+    
+    //if cancel - play audio stop recording
+    
+    //
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -397,10 +500,10 @@ typedef struct {
     }
     
     if (!notificationEnabled) {
-        if(_flags.canPromptForPush){
+        if([Konotor showDisableNotifAlert]){
             [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
                           andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
-            _flags.canPromptForPush = NO;
+            [Konotor setShowDisableNotifAlert:0];
         }
     }
 }
@@ -553,9 +656,7 @@ typedef struct {
 - (void) didFinishDownloadingMessages{
     NSInteger count = [self fetchMessages].count;
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
-        FDLog(@"Refreshing view to show new message");
         _flags.isLoading = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Konotor_FinishedMessagePull" object:nil];
         [self refreshView];
     }
 }
@@ -574,6 +675,12 @@ typedef struct {
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     _flags.isShowingAlert = NO;
+    
+    if([alertView.title isEqualToString:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_TITLE)]){
+        if(buttonIndex == 1){
+            [self sendMessage];
+        }
+    }
 }
 
 - (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
@@ -624,8 +731,12 @@ typedef struct {
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSArray *messages = [KonotorMessage getAllMesssageForChannel:self.channel];
-    return [messages sortedArrayUsingDescriptors:@[desc]];
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[KonotorMessage getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
+    KonotorMessageData *firstMessage = messages.firstObject;
+    if (firstMessage.isWelcomeMessage && !firstMessage.text.length) {
+        [messages removeObject:firstMessage];
+    }
+    return messages;
 }
 
 #pragma Scrollview delegates
@@ -672,7 +783,7 @@ typedef struct {
                 articleDetailController.articleDescription = article.articleDescription;
                 articleDetailController.categoryTitle=article.category.title;
                 articleDetailController.categoryID = article.categoryID;
-                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController];
+                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
                 [self.navigationController pushViewController:container animated:YES];
             }
         }
@@ -712,9 +823,32 @@ typedef struct {
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
     if(self.currentRecordingMessageId!=nil){
-        [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+        
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+        float audioMsgDuration = [[[KonotorMessage retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
+        
+        if(audioMsgDuration <= 1){
+            
+            UIAlertView *shortMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_SHORT_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_SHORT_ALERT_DESCRIPTION) delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [shortMessageAlert show];
+            return;
+        }
+        
+        else if(audioMsgDuration > 120){
+            
+            UIAlertView *longMessageAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_TITLE) message:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_DESCRIPTION) delegate:self cancelButtonTitle:@"No" otherButtonTitles:HLLocalizedString(LOC_AUDIO_SIZE_LONG_ALERT_POST_BUTTON_TITLE), nil];
+            [longMessageAlert show];
+        }
+        else{
+            [self sendMessage];
+        }
     }
-    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+}
+
+- (void) sendMessage{
+    
+    [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+    [Konotor cancelRecording];
 }
 
 -(void)dealloc{

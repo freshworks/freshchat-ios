@@ -20,7 +20,7 @@
 
 @end
 
-@interface FDInputToolbarView : UIView
+@interface FDInputToolbarView : UIView<UITextViewDelegate>
 
 @property (strong, nonatomic) FDButton *micButton;
 @property (strong, nonatomic) FDButton *sendButton;

@@ -37,7 +37,6 @@ KonotorAlertView *pAlert;
             dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL status=[KonotorAudioRecorder startRecordingA];
                 if(status){
-                    //TODO: Moved these notification names to an enumeration or Constants. 
                     [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
                 }
                 else{
@@ -280,7 +279,7 @@ KonotorAlertView *pAlert;
         
         [KonotorAudioRecorder SaveAudioMessageInCoreData:gkAudioRecorder];
         
-        
+        gkAudioRecorder = nil;
     }
     
     [KonotorAudioRecorder UnInitRecorder];
@@ -320,6 +319,12 @@ KonotorAlertView *pAlert;
     return YES;
 }
 
++(BOOL) isRecording{
+    
+    if(gkAudioRecorder)
+        return YES;
+    return NO;
+}
 
 +(BOOL) cancelRecording
 {
@@ -327,6 +332,7 @@ KonotorAlertView *pAlert;
     {
         [gkAudioRecorder stop];
         [gkAudioRecorder deleteRecording];
+        gkAudioRecorder = nil;
     }
     
     [KonotorAudioRecorder UnInitRecorder];
@@ -418,57 +424,8 @@ KonotorAlertView *pAlert;
     if(!message)
         return NO;
     
-    
-    float audioDurationSeconds = [[message durationInSecs]floatValue];
-    if(audioDurationSeconds < 0.5)
-    {
-        
-        KonotorAlertView *alert = [[KonotorAlertView alloc]
-                                   initWithTitle: @"Message too short"
-                                   message: @"The message you are trying to send is less than half a second, Are you sure you want to send?"
-                                   delegate: nil
-                                   cancelButtonTitle:@"No"
-                                   otherButtonTitles:@"Send it",nil];
-        alert.messageToBeSent = message;
-        alert.conversation = conversation;
-        alert.channel=channel;
-        
-        [alert setDelegate:gkAudioRecorder];
-        [alert show];
-        pAlert = alert;
-        
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
         return YES;
-        
-    }
-    
-    else if(audioDurationSeconds >120)
-    {
-        
-        KonotorAlertView *alert = [[KonotorAlertView alloc]
-                                   initWithTitle: @"Was it intentional?"
-                                   message: @"The message you are trying to send is more than 2 minutes, Are you sure you want to send?"
-                                   delegate: nil
-                                   cancelButtonTitle:@"No"
-                                   otherButtonTitles:@"Send it",nil];
-        
-        alert.messageToBeSent = message;
-        alert.conversation = conversation;
-        alert.channel=channel;
-        [alert setDelegate:gkAudioRecorder];
-        [alert show];
-        pAlert = alert;
-        
-        return YES;
-        
-    }
-    
-    
-    else
-    {
-        [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
-        return YES;
-        
-    }
     
 }
 
@@ -514,7 +471,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:@"User"];
+    [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];
@@ -554,7 +511,7 @@ float gKonoDecibels;
     
     KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
     
-    [message setMessageUserId:@"User"];
+    [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:pRec.messageID];
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];

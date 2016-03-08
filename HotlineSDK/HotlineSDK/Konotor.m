@@ -16,11 +16,11 @@
 #import "FDSolutionUpdater.h"
 #import "FDUtilities.h"
 
-static NSString *kon_unlock_key = nil;
-
 @implementation Konotor
 
 __weak static id <KonotorDelegate> _delegate;
+
+static int showDisableNotifAlert = 1;
 
 +(id) delegate{
     return _delegate;
@@ -28,11 +28,6 @@ __weak static id <KonotorDelegate> _delegate;
 
 +(void) setDelegate:(id)delegate{
     _delegate = delegate;
-}
-
-+(void) sendAllUnsentMessages{
-    //Check if app init is required before this call
-    [KonotorMessage uploadAllUnuploadedMessages];
 }
 
 +(double) getCurrentPlayingAudioTime
@@ -64,16 +59,6 @@ __weak static id <KonotorDelegate> _delegate;
 {
     return[KonotorAudioRecorder cancelRecording];
 
-}
-
-+(float) getDecibelLevel
-{
-  return [KonotorAudioRecorder getDecibelLevel];
-}
-+(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID
-{
-    [KonotorAudioRecorder SendRecordingWithMessageID:MessageID];
-    [[Konotor delegate] didStartUploadingNewMessage];
 }
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel{
@@ -109,20 +94,6 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 
-+(void)MarkMessageAsRead:(NSString *) messageID
-{
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
-    if(message)
-    {
-        [message markAsReadwithNotif:YES];
-    }
-}
-
-+(void)markAllMessagesAsRead
-{
-    [KonotorMessage markAllMessagesAsRead];
-
-}
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {
     return [KonotorAudioPlayer playMessageWithMessageID:messageID];
@@ -144,24 +115,15 @@ __weak static id <KonotorDelegate> _delegate;
     return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
 }
 
-+(NSArray *) getAllMessagesForConversation:(NSString *) conversationID
-{
-    return [KonotorMessage getAllMessagesForConversation:conversationID];
-}
-
 +(BOOL)isUserMe:(NSString *)userId{
-    NSString *currentUserID = @"User";
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *currentUserID = USER_TYPE_MOBILE;
     if(currentUserID){
-        if([userId isEqualToString:currentUserID] ||
-           [userId isEqualToString:userAlias]){
+        if([userId isEqualToString:currentUserID]){
             return YES;
         }
     }
     return NO;
 }
-
-//////Start of undocumented functions/////
 
 +(void) conversationsDownloaded
 {
@@ -244,12 +206,12 @@ __weak static id <KonotorDelegate> _delegate;
     }
 }
 
-@end
++ (int) showDisableNotifAlert {
+    return showDisableNotifAlert;
+}
 
-@implementation KonotorConversationData
-
-@end
-
-@implementation KonotorMessageData
++ (void) setShowDisableNotifAlert:(int)value {
+    showDisableNotifAlert = value;
+}
 
 @end

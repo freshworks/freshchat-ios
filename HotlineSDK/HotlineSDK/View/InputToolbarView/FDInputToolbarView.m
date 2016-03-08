@@ -15,7 +15,10 @@
 #include "HLLocalization.h"
 #import "FDSecureStore.h"
 
-@interface FDInputToolbarView () <UITextViewDelegate>
+@interface FDInputToolbarView () <UITextViewDelegate>{
+    
+    NSString *placeHolderText;
+}
 
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
@@ -23,6 +26,7 @@
 @property (nonatomic, strong) HLTheme              *theme;
 @property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 @property (nonatomic) BOOL canShowAttachButton;
+@property (nonatomic, assign) BOOL isVoiceMessageEnabled;
 
 @end
 
@@ -40,11 +44,15 @@
         self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
    
         textView=[[UITextView alloc] init];
-        [textView setTextColor:[self.theme inputTextFontColor]];
+        [textView setFont:[self.theme inputTextFont]];
+        [textView setTextColor:[UIColor lightGrayColor]];
         textView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
         textView.layer.cornerRadius=5.0;
         textView.layer.borderWidth=1.0;
+        textView.delegate = self;
         [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
+        textView.text = placeHolderText;
         textView.delegate = self;
 
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
@@ -75,13 +83,28 @@
     return self;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)chatTextView{
+    if ([chatTextView.text isEqualToString:placeHolderText]){
+        chatTextView.text = @"";
+    }
+    [chatTextView setTextColor:[self.theme inputTextFontColor]];
+    [chatTextView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)chatTextView{
+    NSString *currentText = trimString(chatTextView.text);
+    if ([currentText isEqualToString:@""]) {
+        chatTextView.text = placeHolderText;
+        chatTextView.textColor = [UIColor lightGrayColor]; //optional
+    }
+}
+
 -(void)attachmentButtonAction:(id)sender{
     [self.delegate inputToolbar:self attachmentButtonPressed:sender];
 }
 
 -(void)sendButtonAction:(id)sender{
     [self.delegate inputToolbar:self sendButtonPressed:sender];
-    self.textView.text = @"";
     [self updateActionButtons:self.textView];
 }
 
@@ -114,19 +137,19 @@
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isPictureMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
-    BOOL isVoiceMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+    self.isVoiceMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     
     
     if(!isPictureMessageEnabled){
         attachButtonWidthConstraint.constant = 0;
     }
     else{
-        attachButtonWidthConstraint.constant = 40.0;
+        attachButtonWidthConstraint.constant = 24.0;
     }
     
     [self addConstraint:attachButtonWidthConstraint];
     
-    if(!isVoiceMessageEnabled){
+    if(!self.isVoiceMessageEnabled){
         [self disableAudioMessaging];
     }
     else{
@@ -142,9 +165,14 @@
 }
 
 -(void)updateActionButtons:(UITextView *)inputTextView{
-    BOOL isTextViewEmpty = [inputTextView.text isEqualToString:@""];
-    self.sendButton.hidden = isTextViewEmpty;
-    self.micButton.hidden = !isTextViewEmpty;
+    BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);
+    if(!self.isVoiceMessageEnabled){
+        [self disableAudioMessaging];
+    }
+    else{
+        self.sendButton.hidden = isTextViewEmpty;
+        self.micButton.hidden = !isTextViewEmpty;
+    }
 }
 
 -(void)showAttachButton:(BOOL)state{

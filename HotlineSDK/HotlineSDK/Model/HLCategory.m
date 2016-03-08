@@ -68,7 +68,8 @@
         NSDictionary *articleInfo = articles[j];
         HLArticle *article = [HLArticle getWithID:articleInfo[@"articleId"] inContext:context];
         BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
-        if (isArticleEnabled) {
+        BOOL isIOSPlatformAvail = [articleInfo[@"platforms"] containsObject:@"ios"];
+        if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
             }else{
@@ -76,7 +77,13 @@
                 [category addArticlesObject:article];
             }
         }else{
-            if (article) [context deleteObject:article];
+            if (article){
+                FDLog(@"Deleting article with title : %@ with ID : %@ because its disabled !",article.title, article.articleID);
+                [context deleteObject:article];
+            }
+            else {
+               FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
+            }
         }
     }
     return category;

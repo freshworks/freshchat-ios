@@ -33,3 +33,7 @@
 #define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/category/%@/article/%@"
 
 #define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"
+
+#define HOTLINE_API_USER_CONVERSATION_ACTIVITY @"app/services/app/%@/user/%@/conversation/read"
+
+#define HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH @"/app/services/app/%@/user/%@/message/marketing/%@/status"

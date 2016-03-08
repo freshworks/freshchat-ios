@@ -21,10 +21,10 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.theme = [HLTheme sharedInstance];
-        //TODO: use a seperate theme entry for this background .. Or a common one like earlier where we had tableViewCellBackgroundColor.
-        self.backgroundColor     = [self.theme conversationListViewBackgroundColor];
+        self.backgroundColor     = [self.theme channelListCellBackgroundColor];
         self.titleLabel.textColor = [self.theme channelTitleFontColor];
         self.titleLabel.font      = [self.theme channelTitleFont];
+        self.detailLabel.font = [self.theme channelDescriptionFont];
         self.detailLabel.textColor = [self.theme channelDescriptionFontColor];
     }
     return self;
@@ -39,14 +39,12 @@
 
     self.lastUpdatedLabel = [[UILabel alloc] init];
     self.lastUpdatedLabel.textAlignment = UITextAlignmentRight;
-    self.lastUpdatedLabel.font = [self.theme lastUpdatedFont];
-    self.lastUpdatedLabel.textColor = [self.theme lastUpdatedFontColor];
+    self.lastUpdatedLabel.font = [self.theme channelLastUpdatedFont];
+    self.lastUpdatedLabel.textColor = [self.theme channelLastUpdatedFontColor];
     self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.lastUpdatedLabel];
     
     self.badgeView  = [[FDBadgeView alloc]initWithFrame:CGRectZero andBadgeNumber:0];
-    [self.badgeView badgeButtonBackgroundColor:[UIColor colorWithHue:0.59 saturation:0.67 brightness:0.89 alpha:1]];
-    [self.badgeView badgeButtonTitleColor:[self.theme badgeButtonTitleColor]];
     self.badgeView.translatesAutoresizingMaskIntoConstraints = NO;
     self.badgeView.badgeButton.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.badgeView.badgeButton];
@@ -65,14 +63,16 @@
 
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{
+    
+    HLTheme *theme = [HLTheme sharedInstance];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     NSString *firstLetter = [labelText substringToIndex:1];
     firstLetter = [firstLetter uppercaseString];
     label.text = firstLetter;
-    label.font = [UIFont boldSystemFontOfSize:16];
+    label.font = [theme channelIconPlaceholderImageCharFont];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [UIColor lightGrayColor];
+    label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
     label.layer.cornerRadius = label.frame.size.height / 2.0f;
     UIGraphicsBeginImageContext(label.frame.size);
     [[label layer] renderInContext:UIGraphicsGetCurrentContext()];

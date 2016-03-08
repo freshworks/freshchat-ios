@@ -21,6 +21,7 @@
 #import "Hotline.h"
 #import "HLLocalization.h"
 #import "FDUtilities.h"
+#import "FDBarButtonItem.h"
 
 @interface HLCategoriesListController ()
 
@@ -74,9 +75,13 @@
     [contactUsButton addTarget:self action:@selector(contactUsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *contactUsBarButton = [[UIBarButtonItem alloc] initWithCustomView:contactUsButton];
     
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    
+    if (!self.embedded) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
+
     self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton,contactUsBarButton];
     
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
@@ -94,7 +99,7 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]presentFeedback:self];
+    [[Hotline sharedInstance]showConversations:self];
 }
 
 -(void)localNotificationSubscription{
@@ -142,7 +147,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController];
+    HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
     [self.navigationController pushViewController:container animated:YES];
 }
 

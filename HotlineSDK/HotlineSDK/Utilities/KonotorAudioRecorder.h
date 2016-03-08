@@ -17,6 +17,7 @@
 @property (strong ) NSString *textFeedback;
 
 +(BOOL) startRecording;
++(BOOL) isRecording;
 +(NSString *) stopRecording;
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 +(BOOL) cancelRecording;

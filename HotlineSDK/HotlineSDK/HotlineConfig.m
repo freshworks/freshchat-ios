@@ -8,18 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import "Hotline.h"
-
+#import "HLTheme.h"
 
 @implementation HotlineConfig
 
--(instancetype)initWithDomain:(NSString *)domain withAppID:(NSString *)appID andAppKey:(NSString *)appKey{
+-(instancetype)initWithAppID:(NSString *)appID andAppKey:(NSString *)appKey{
     self = [super init];
     if (self) {
-        self.domain = domain;
+        self.domain = @"app.hotline.io";
         self.appID = appID;
         self.appKey = appKey;
+        self.themeName = @"HLTheme";
         self.pictureMessagingEnabled = YES;
-        self.voiceMessagingEnabled = YES;
+        self.voiceMessagingEnabled = NO;
+        self.agentAvatarEnabled = YES;
+        self.notificationSoundEnabled = YES;
+        self.displayFAQsAsGrid = YES;
+        self.cameraCaptureEnabled = YES;
+        self.showNotificationBanner = YES;
     }
     return self;
 }

@@ -21,6 +21,7 @@
 #import "FDUtilities.h"
 #import "HLLocalization.h"
 #import "FDNotificationBanner.h"
+#import "FDBarButtonItem.h"
 
 @interface HLChannelViewController ()
 
@@ -40,6 +41,11 @@
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
                                                            NSFontAttributeName: [theme channelTitleFont]
                                                            }];
+    self.navigationController.navigationBar.barTintColor = [theme navigationBarBackgroundColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{
+                                                                    NSForegroundColorAttributeName: [theme navigationBarTitleColor],
+                                                                    NSFontAttributeName: [theme navigationBarTitleFont]
+                                                                    };
     self.channels = [[NSMutableArray alloc] init];
     [self setNavigationItem];
     [self localNotificationSubscription];
@@ -135,9 +141,10 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    
-    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    if (!self.embedded) {
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
     self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
 }
 
@@ -159,7 +166,6 @@
     
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
-        KonotorConversation *conversation = channel.primaryConversation;
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
@@ -169,28 +175,33 @@
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
         
-        if (channel.icon) {
-            cell.imgView.image = [UIImage imageWithData:channel.icon];
-        }
-        else{
-            UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
-            if(channel.iconURL){
-                NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
-                NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
-                __weak FDChannelListViewCell *weakCell = cell;
-                [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                    weakCell.imgView.image = image;
-                    channel.icon = UIImagePNGRepresentation(image);
-                    [[KonotorDataManager sharedInstance]save];
-                } failure:nil];
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
+        
+        if(showChannelThumbnail){
+            if (channel.icon) {
+                cell.imgView.image = [UIImage imageWithData:channel.icon];
             }
             else{
-                cell.imgView.image = placeholderImage;
+                UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
+                if(channel.iconURL){
+                    NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
+                    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
+                    __weak FDChannelListViewCell *weakCell = cell;
+                    [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                        weakCell.imgView.image = image;
+                        channel.icon = UIImagePNGRepresentation(image);
+                        [[KonotorDataManager sharedInstance]save];
+                    } failure:nil];
+                }
+                else{
+                    cell.imgView.image = placeholderImage;
+                }
             }
         }
         
-        [cell.badgeView updateBadgeCount:conversation.unreadMessagesCount.integerValue];
-
+        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
+        [cell.badgeView updateBadgeCount:unreadCount];
     }
     return cell;
 }
@@ -248,7 +259,7 @@
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
         FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-        HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController];
+        HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
 }

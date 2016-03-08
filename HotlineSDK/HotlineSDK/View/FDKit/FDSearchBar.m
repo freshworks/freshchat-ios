@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "FDUtilities.h"
 #import "HLTheme.h"
+#import "FDBarButtonItem.h"
 
 @interface FDSearchBar ()
 
@@ -33,7 +34,7 @@
         //Search bar cancel button color
         NSDictionary *attrDict = @{NSFontAttributeName:[self.theme searchBarCancelButtonFont],
                                    NSForegroundColorAttributeName:[self.theme searchBarCancelButtonColor]};
-        UIBarButtonItem *buttonItemProxy = [UIBarButtonItem appearanceWhenContainedIn:[FDSearchBar class], nil];
+        UIBarButtonItem *buttonItemProxy = [FDBarButtonItem appearanceWhenContainedIn:[FDSearchBar class], nil];
         [buttonItemProxy setTitleTextAttributes:attrDict forState:UIControlStateNormal];
         
         //Search text font color

@@ -9,23 +9,29 @@
 #import "HLContainerController.h"
 #import "HLTheme.h"
 #import "HotlineAppState.h"
+#import "FDUtilities.h"
 
 @interface HLContainerController ()
 
-@property (nonatomic, strong) UIViewController *childController;
+@property (nonatomic, strong) HLViewController *childController;
 @property (strong, nonatomic) HLTheme *theme;
 
 @end
 
 @implementation HLContainerController
 
--(instancetype)initWithController:(UIViewController *)controller{
+-(instancetype)initWithController:(HLViewController *)controller andEmbed:(BOOL) embed{
     self = [super init];
     if (self) {
         self.childController = controller;
+        self.childController.embedded = embed;
         self.theme = [HLTheme sharedInstance];
     }
     return self;
+}
+
+-(UIRectEdge)edgesForExtendedLayout{
+    return UIRectEdgeNone;
 }
 
 - (void)viewDidLoad {
@@ -43,9 +49,11 @@
     footerView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:footerView];
     
+    BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    
     //Footerview label
     UILabel *footerLabel = [UILabel new];
-    footerLabel.text = @"Powered by Hotline.io";
+    footerLabel.text = @"Powered by hotline.io";
     footerLabel.font = [UIFont systemFontOfSize:11];
     footerLabel.textColor = [UIColor whiteColor];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -55,8 +63,14 @@
     
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView][footerView(20)]|" options:0 metrics:nil views:views]];
+    if(isSubscribed){
+        [footerView removeFromSuperview];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
+    }
+    else{
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView][footerView(20)]|" options:0 metrics:nil views:views]];
+    }
     
     self.childController.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self.containerView addSubview:self.childController.view];
@@ -83,7 +97,7 @@
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     [self.navigationController.navigationBar setTitleTextAttributes:@{
-                                                                      NSForegroundColorAttributeName: [self.theme navigationBarFontColor],
+                                                                      NSForegroundColorAttributeName: [self.theme navigationBarTitleColor],
                                                                       NSFontAttributeName: [self.theme navigationBarTitleFont]
                                                                       }];
 }

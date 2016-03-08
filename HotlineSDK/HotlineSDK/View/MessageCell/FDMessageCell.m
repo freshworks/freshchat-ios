@@ -10,8 +10,8 @@
 #import "FDUtilities.h"
 #import "HLTheme.h"
 #import "HLLocalization.h"
+#import "FDSecureStore.h"
 
-//Not exposed to theming
 #define KONOTOR_VERTICAL_PADDING 2
 #define KONOTOR_USERNAMEFIELD_HEIGHT 18
 #define KONOTOR_TIMEFIELD_HEIGHT 16
@@ -70,7 +70,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
 
-    showsProfile=YES;
+    showsProfile = YES;
     showsSenderName=NO;
     customFontName=[[HLTheme sharedInstance] conversationUIFontName];
     showsUploadStatus=YES;
@@ -146,7 +146,16 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     TapOnPictureRecognizer *imgViewTapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
     [messagePictureImageView setContentMode:UIViewContentModeCenter];
     imgViewTapGesture.numberOfTapsRequired=1;
+    imgViewTapGesture.numberOfTouchesRequired = 1;
     [messagePictureImageView addGestureRecognizer:imgViewTapGesture];
+    
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageLongPress:)];
+    [longPressGesture setMinimumPressDuration:0.50];
+    longPressGesture.delegate =self;
+    messagePictureImageView.userInteractionEnabled = YES;
+    [messagePictureImageView addGestureRecognizer:longPressGesture];
+    
+    [imgViewTapGesture requireGestureRecognizerToFail:longPressGesture];
 
     [messageTextView addSubview:messagePictureImageView];
     
@@ -156,6 +165,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
     [self addSubview:messageActionButton];
+}
+
+-(void)imageLongPress:(UILongPressGestureRecognizer*)recognizer
+{
+    // disable long press
 }
 
 -(void)openActionUrl:(id)sender{
@@ -208,7 +222,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
-        NSString *strDate = [FDUtilities stringRepresentationForDate:date];
+        NSString *strDate = [FDStringUtil stringRepresentationForDate:date];
         
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
         [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
@@ -244,7 +258,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     messageContentViewWidth=contentViewWidth;
     
-    showsProfile=isSenderOther?([HLTheme sharedInstance].showsBusinessProfileImage):([HLTheme sharedInstance].showsUserProfileImage);
+    //add for config into user file
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    BOOL isAgentAvatarEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    BOOL isUserAvatarEnabled = FALSE;//Set Default as false will use it in later versions
+    showsProfile = isSenderOther?isAgentAvatarEnabled:isUserAvatarEnabled;
     
     // get the length of the textview if one line and calculate page sides
     
@@ -254,8 +273,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         profileX=isSenderOther?KONOTOR_HORIZONTAL_PADDING:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION);
         profileY=KONOTOR_VERTICAL_PADDING;
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-3*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth+8);
-        messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING):(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
+        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
+        messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)-4:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
         messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);
@@ -264,7 +283,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     else{
         messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth= MIN(messageDisplayWidth-8*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth);
+        messageContentViewWidth= MIN(messageDisplayWidth-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
         messageContentViewX=isSenderOther?(KONOTOR_HORIZONTAL_PADDING*2):(messageDisplayWidth-2*KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
         messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
         messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);
@@ -285,12 +304,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     else
         [uploadStatusImageView setImage:sendingImage];
         
-    UIColor *otherTextColor = [[HLTheme sharedInstance] businessMessageTextColor];
-    UIColor *userTextColor = [[HLTheme sharedInstance] userMessageTextColor];
     UIImage *otherChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
     UIImage *userChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
-    UIEdgeInsets otherChatBubbleInsets=UIEdgeInsetsMake(9, 12, 10, 7);
-    UIEdgeInsets userChatBubbleInsets=UIEdgeInsetsMake(10, 7, 9, 12);
+    
+    UIEdgeInsets otherChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
+    UIEdgeInsets userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
     
     if(isSenderOther){
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_SUPPORT_LABEL_TEXT);
@@ -303,7 +321,13 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-    messageSentTimeLabel.text = [FDUtilities stringRepresentationForDate:date];
+    
+    if(currentMessage.isWelcomeMessage){
+        messageSentTimeLabel.text = nil;
+    }
+    else{
+        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
+    }
     
     NSString* actionUrl=currentMessage.actionURL;
     NSString* actionLabel=currentMessage.actionLabel;
@@ -466,6 +490,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     if([FDMessageCell hasButtonForURL:currentMessage.actionURL articleID:currentMessage.articleID])
         cellHeight+= ACTION_URL_HEIGHT;
+    
+    if(currentMessage.isWelcomeMessage){
+        cellHeight= cellHeight-(KONOTOR_VERTICAL_PADDING+KONOTOR_TIMEFIELD_HEIGHT);
+        if(KONOTOR_PROFILEIMAGE_DIMENSION > cellHeight)//For setting minimum height
+            cellHeight = KONOTOR_PROFILEIMAGE_DIMENSION;
+    }
     return cellHeight;
 }
 
@@ -539,6 +569,12 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     msgHeight=msgHeight+(showSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+(showSenderName?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     
     msgHeight+=([FDMessageCell hasButtonForURL:actionUrl articleID:articleID])?(KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PADDING):0;
+    
+    if(!messageSentTimeLabel.text.length){
+        msgHeight-= (KONOTOR_TIMEFIELD_HEIGHT+KONOTOR_VERTICAL_PADDING);
+        if(KONOTOR_PROFILEIMAGE_DIMENSION > msgHeight)// for minimum dimension
+            msgHeight = KONOTOR_PROFILEIMAGE_DIMENSION;
+    }
     
     messageBackground.frame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, msgHeight);
 }

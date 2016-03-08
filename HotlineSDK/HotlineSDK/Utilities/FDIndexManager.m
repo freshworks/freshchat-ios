@@ -14,9 +14,10 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
+#import "FDStringUtil.h"
 
 static BOOL INDEX_INPROGRESS = NO;
-#define MOBIHELP_DEFAULTS_IS_INDEX_CREATED @"mobihelp_defaults_is_index_created"
+#define HOTLINE_DEFAULTS_IS_INDEX_CREATED @"hotline_defaults_is_index_created"
 
 @implementation FDIndexManager
 
@@ -26,7 +27,7 @@ static BOOL INDEX_INPROGRESS = NO;
     if(INDEX_INPROGRESS){
         return;
     }
-    BOOL indexState = [[FDSecureStore sharedInstance] boolValueForKey:MOBIHELP_DEFAULTS_IS_INDEX_CREATED];
+    BOOL indexState = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_INDEX_CREATED];
     if (!indexState) {
         [self createIndex];
     }
@@ -60,12 +61,12 @@ static BOOL INDEX_INPROGRESS = NO;
 }
 
 +(void)setIndexingCompleted:(BOOL)state{
-    [[FDSecureStore sharedInstance] setBoolValue:state forKey:MOBIHELP_DEFAULTS_IS_INDEX_CREATED];
+    [[FDSecureStore sharedInstance] setBoolValue:state forKey:HOTLINE_DEFAULTS_IS_INDEX_CREATED];
 }
 
 +(void)insertIndexforArticleWithContent:(FDArticleContent *)articleContent{
-    articleContent.title = [FDUtilities replaceSpecialCharacters:articleContent.title with:@" "];
-    articleContent.articleDescription = [FDUtilities replaceSpecialCharacters:articleContent.articleDescription with:@" "];
+    articleContent.title = [FDStringUtil replaceSpecialCharacters:articleContent.title with:@" "];
+    articleContent.articleDescription = [FDStringUtil replaceSpecialCharacters:articleContent.articleDescription with:@" "];
     [self stringByStrippingHTML:articleContent.articleDescription];
     NSMutableDictionary *indexInfo = [[NSMutableDictionary alloc] init];
     NSArray *substrings = [articleContent.title componentsSeparatedByString:@" "];

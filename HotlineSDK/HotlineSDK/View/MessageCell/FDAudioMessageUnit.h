@@ -22,7 +22,7 @@ enum FDAudioMessageMediaState {
 #define KONOTOR_PLAYBUTTON_DIMENSION 30
 
 
-@interface FDAudioMessageUnit : NSObject
+@interface FDAudioMessageUnit : NSObject<UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UIButton* audioPlayButton;
 @property (strong, nonatomic) NSString* messageID;

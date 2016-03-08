@@ -8,6 +8,8 @@
 
 #import "FDAudioMessageUnit.h"
 #import "HLTheme.h"
+#import "KonotorAudioRecorder.h"
+#import "HLLocalization.h"
 
 @interface FDAudioMessageUnit ()
 
@@ -73,10 +75,45 @@
     
     [self.mediaProgressBar setMinimumTrackImage:[self.theme getImageWithKey:IMAGE_AUDIO_PROGRESS_BAR_MIN] forState:UIControlStateNormal];
     [self.mediaProgressBar setMaximumTrackImage:[self.theme getImageWithKey:IMAGE_AUDIO_PROGRESS_BAR_MAX] forState:UIControlStateNormal];
+    
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(progressLongPress:)];
+    [longPressGesture setMinimumPressDuration:0.50];
+    longPressGesture.delegate =self;
+    [mediaProgressBar addGestureRecognizer:longPressGesture];
+}
+
+-(void)progressLongPress:(UILongPressGestureRecognizer*)recognizer
+{
+    // disable long press
 }
 
 -(void) playMedia:(id)sender
 {
+    
+    if([KonotorAudioRecorder isRecording]){
+        UIAlertView *actionAlert = [[UIAlertView alloc] initWithTitle:HLLocalizedString(LOC_AUDIO_RECORDING_CANCEL_MESSAGE) message:nil delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [actionAlert show];
+    }
+    else{
+        [self playAudioMessage];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        //Donot do any thing ....
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"CLOSE_AUDIO_RECORDING" object:nil];
+        [self playAudioMessage];
+    }
+}
+
+- (void) playAudioMessage{
+    
     if([[Konotor getCurrentPlayingMessageID] isEqualToString:self.messageID])
     {
         [Konotor StopPlayback];
@@ -84,7 +121,7 @@
     }
     BOOL playing=[Konotor playMessageWithMessageID:self.messageID];
     if(playing)
-       [self startAnimating];
+        [self startAnimating];
 }
 
 - (void) displayMessage:(KonotorMessageData*) currentMessage

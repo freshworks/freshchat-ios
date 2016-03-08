@@ -13,7 +13,6 @@
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
 @property (strong, nonatomic) UIFont *systemFont;
-@property (strong,nonatomic) NSString * themeName;
 
 @end
 
@@ -62,7 +61,7 @@
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *path = [[NSBundle mainBundle] pathForResource:theme ofType:@"plist"];
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:@"plist"];
     if (!path) {
         NSBundle *HLResourcesBundle = [self getHLResourceBundle];
         path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
@@ -71,7 +70,7 @@
 }
 
 -(NSBundle *)getHLResourceBundle{
-    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"HLResources" withExtension:@"bundle"]];
     return HLResourcesBundle;
 }
 
@@ -79,11 +78,6 @@
     NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
     return image;
-}
-
--(UIColor *)gridViewItemBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ItemBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
 }
 
 -(UIColor *)getColorForKeyPath:(NSString *)path{
@@ -116,12 +110,23 @@
 }
 
 -(UIFont *)navigationBarTitleFont{
-    return [self getFontWithKey:@"NavigationBar.TitleFont" andDefaultSize:17];
+    return [self getFontWithKey:@"NavigationBar.Title" andDefaultSize:17];
 }
 
--(UIColor *)navigationBarFontColor{
+-(UIColor *)navigationBarTitleColor{
         UIColor *color = [self getColorForKeyPath:@"NavigationBar.TitleColor"];
         return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+
+-(UIColor *)navigationBarButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"NavigationBar.ButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+}
+
+
+-(UIFont *)navigationBarButtonFont{
+    return [self getFontWithKey:@"NavigationBar.Button" andDefaultSize:17];
 }
 
 #pragma mark - Search Bar
@@ -243,16 +248,20 @@
     return [UIFont fontWithName:preferredFontName size:preferredFontSize];
 }
 
+- (UIEdgeInsets) getInsetWithKey :(NSString *)chatOwner{
+    
+    float resolution = [UIScreen mainScreen].scale;
+    
+    float topInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Top"]] floatValue] *resolution;
+    float leftInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Left"]] floatValue] * resolution;
+    float bottomInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Bottom"]] floatValue] * resolution;
+    float rightInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Right"]] floatValue] * resolution;
+    UIEdgeInsets bubbleInset = UIEdgeInsetsMake(topInset, leftInset, bottomInset, rightInset);
+    return bubbleInset;
+}
+
+
 #pragma mark - Table View
-
--(UIFont *)tableViewCellFont{
-    return [self getFontWithKey:@"TableView." andDefaultSize:FD_FONT_SIZE_MEDIUM];
-}
-
--(UIColor *)tableViewCellFontColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.FontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
 
 -(UIFont *)tableViewCellTitleFont{
     return [self getFontWithKey:@"TableView.Title" andDefaultSize:14];
@@ -277,20 +286,10 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
--(UIColor *)tableViewCellImageBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.ImageViewBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
-}
-
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
     return color ? color : [HLTheme colorWithHex:@"F2F2F2"];
-}
-
--(UIColor *)timeDetailTextColor {
-    UIColor *color = [self getColorForKeyPath:@"TableView.TimeDetailTextColor"];
-    return color ? color : [UIColor lightGrayColor];
 }
 
 #pragma mark - Notifictaion
@@ -321,12 +320,12 @@
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ArticlesList.FontColor"];
+    UIColor *color = [self getColorForKeyPath:@"ArticlesList.TitleFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
 }
 
 -(UIFont *)articleListFont{
-    return [self getFontWithKey:@"ArticlesList.FontName" andDefaultSize:14];
+    return [self getFontWithKey:@"ArticlesList.Title" andDefaultSize:14];
 }
 
 #pragma mark - Overall SDK
@@ -336,9 +335,14 @@
     return color ? color : [HLTheme colorWithHex:FD_BACKGROUND_COLOR];
 }
 
--(UIColor *)talkToUsButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonColor"];
+-(UIColor *)talkToUsButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)talkToUsButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_TALK_TO_US_BG_COLOR];
 }
 
 -(UIFont *)talkToUsButtonFont{
@@ -354,20 +358,15 @@
     return [UIColor blackColor];
 }
 
+-(UIFont *)inputTextFont{
+    return [self getFontWithKey:@"ConversationsUI.InputText" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
 -(UIColor *)sendButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
     return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
 }
 
-/* Additions by Sri - to be checked */
--(UIColor *)conversationViewTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewTitleTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_TITLE_TEXT_COLOR];
-}
--(UIColor *)conversationViewBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ConversationViewBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_CONVERSATION_VIEW_BACKGROUND_COLOR];
-}
 -(UIColor *)actionButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
@@ -388,53 +387,10 @@
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 
--(UIColor *)businessMessageTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BusinessMessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUSINESS_MESSAGE_TEXT_COLOR];
-}
--(UIColor *)userMessageTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_USER_MESSAGE_TEXT_COLOR];
-}
+
 -(UIColor *)hyperlinkColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];
     return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
-}
--(BOOL)alwaysPollForMessages{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.AlwaysPollForMessages"] boolValue];
-}
--(BOOL)showsBusinessProfileImage{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsBusinessProfileImage"] boolValue];
-}
--(BOOL)showsUserProfileImage{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserProfileImage"] boolValue];
-}
--(BOOL)showsBusinessMessageSenderName{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.showsBusinessMessageSenderName"] boolValue];
-}
--(BOOL)showsUserMessageSenderName{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ShowsUserMessageSenderName"] boolValue];
-}
--(NSString *)textInputHintText{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.TextInputHintText"];
-}
--(NSString *)businessProfileImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
-}
--(NSString *)userProfileImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessProfileImageName"];
-}
--(NSString *)businessMessageSenderName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserProfileImageName"];
-}
--(NSString *)userMessageSenderName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserMessageSenderName"];
-}
--(NSString *)businessChatBubbleImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.BusinessChatBubbleImageName"];
-}
--(NSString *)userChatBubbleImageName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.UserChatBubbleImageName"];
 }
 
 -(UIFont *)getChatBubbleMessageFont{
@@ -445,67 +401,60 @@
     return [self getFontWithKey:@"ConversationsUI.ChatBubbleTime" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
-/*-(NSString *)chatBubbleFontName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontName"];
-}*/
 -(NSString *)conversationUIFontName{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
 }
-/*
--(float)chatBubbleFontSize{
-   return [[self.themePreferences valueForKeyPath:@"ConversationsUI.ChatBubbleFontSize"] floatValue];
-}*/
--(int)pollingTimeChatInFocus{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatInFocus"] intValue];
-}
--(int)pollingTimeChatNotInFocus{
-    return [[self.themePreferences valueForKeyPath:@"ConversationsUI.PollingTimeChatNotInFocus"] intValue];
-}
-
 
 
 #pragma mark - Grid View
-
--(UIColor *)itemBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ItemBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
-}
-
--(UIColor *)itemSeparatorColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ItemSeparatorColor"];
+-(UIColor *)gridViewCellBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.BorderColor"];
     return color ? color : [HLTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 
--(UIFont *)contactUsFont{
-    return [self getFontWithKey:@"GridView.ContactUs" andDefaultSize:FD_FONT_SIZE_MEDIUM];
-}
-
--(UIColor *)contactUsFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridView.ContactUsFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
 
 #pragma mark - Grid View Cell
-
--(UIFont *)categoryTitleFont{
-    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:14];
+-(UIFont *)gridViewCellTitleFont{
+    return [self getFontWithKey:@"GridViewCell.Title" andDefaultSize:14];
 }
 
--(UIColor *)categoryTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.CategoryTitleFontColor"];
+-(UIColor *)gridViewCellTitleFontColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.TitleFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
--(UIColor *)imageViewItemBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewbackgroundColor"];
+-(UIColor *)gridViewCellBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+-(UIColor *)gridViewImageBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+#pragma mark - Conversation Banner
+
+- (UIColor *) conversationOverlayBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+- (UIFont *) conversationOverlayTextFont{
+    return [self getFontWithKey:@"ConversationsUI.Banner.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+- (UIColor *) conversationOverlayTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.MessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+
 #pragma mark - Channel List View
 
--(UIColor *)conversationListViewBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:@"FFFFFF"];
+-(UIColor *)channelListCellBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.cellBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)channelTitleFont{
@@ -526,11 +475,11 @@
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
--(UIFont *)lastUpdatedFont{
+-(UIFont *)channelLastUpdatedFont{
     return [self getFontWithKey:@"ChannelListView.LastUpdatedTime" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
--(UIColor *)lastUpdatedFontColor{
+-(UIColor *)channelLastUpdatedFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedTimeFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
@@ -547,6 +496,32 @@
 -(UIColor *)badgeButtonTitleColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeTitleColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)channelIconPalceholderImageBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelIconPlaceholderBackgroundColor"];
+    return color ? color : [UIColor darkGrayColor];
+}
+
+-(UIFont *)channelIconPlaceholderImageCharFont{
+    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
+}
+
+
+#pragma mark - Footer Settings
+
+- (NSString *) getFooterSecretKey{
+    return [self.themePreferences valueForKeyPath:@"FooterView.HotlineDisableFrame"];
+}
+
+#pragma mark chat bubble inset
+
+- (UIEdgeInsets) getAgentBubbleInsets{
+    return [self getInsetWithKey:@"ChatBubbleInsets.AgentBubble"];
+}
+
+- (UIEdgeInsets) getUserBubbleInsets{
+    return [self getInsetWithKey:@"ChatBubbleInsets.UserBubble"];
 }
 
 #pragma mark - Voice Recording Prompt

@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "FDYesNoPromptView.h"
 #import "FDAlertView.h"
+#import "HLViewController.h"
 
 //Implement FDYesNoPromptViewDelegate if needed
-@interface HLArticleDetailViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate, FDYesNoPromptViewDelegate, FDAlertViewDelegate>
+@interface HLArticleDetailViewController : HLViewController <UIWebViewDelegate, UIScrollViewDelegate, FDYesNoPromptViewDelegate, FDAlertViewDelegate>
 
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;
 @property (strong, nonatomic) NSString *categoryTitle;
 @property (strong,nonatomic) NSString *articleTitle;
 @property (strong,nonatomic) NSNumber *categoryID;
+@property (nonatomic, assign) BOOL isFromSearchView;
 
 @end

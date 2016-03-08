@@ -44,7 +44,7 @@
     self = [super init];
     if (self) {
         FDKeyChainStore *store = nil;
-        NSString *appID = [[NSBundle mainBundle] infoDictionary][@"CFBundleIdentifier"];
+        NSString *appID = [[NSBundle bundleForClass:[self class]] infoDictionary][@"CFBundleIdentifier"];
         NSString *serviceName = [NSMutableString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
         NSString *persistedStoreServiceName = [NSString stringWithFormat:@"%@%@",serviceName,@"-persistedStore"];
         

@@ -7,6 +7,8 @@
 //
 
 #import "FDTableViewCellWithImage.h"
+#import "FDSecureStore.h"
+
 @interface FDTableViewCellWithImage ()
 
 @property (strong, nonatomic) HLTheme *theme;
@@ -27,23 +29,21 @@
         self.titleLabel = [[UILabel alloc] init];
         [self.titleLabel setNumberOfLines:2];
         [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        self.titleLabel.font = [self.theme tableViewCellDetailFont];
-        self.titleLabel.textColor = [self.theme tableViewCellDetailFontColor];
         
         self.imgView=[[FDImageView alloc] init];
-        self.imgView.backgroundColor=[self.theme tableViewCellImageBackgroundColor];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         
         self.detailLabel = [[UILabel alloc] init];
         [self.detailLabel setNumberOfLines:2];
-        self.detailLabel.font = [self.theme tableViewCellDetailFont];
-        self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
         [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
         [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.detailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
         
         [self.contentView addSubview:self.contentEncloser];
         [self.contentEncloser addSubview:self.imgView];
@@ -57,10 +57,16 @@
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[contentEncloser]" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentEncloser]|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[title]-5-[subtitle]" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]-|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]-|" options:0 metrics:nil views:views]];
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[title][subtitle]-2-|" options:0 metrics:nil views:views]];
+        if(showChannelThumbnail){
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]|" options:0 metrics:nil views:views]];
+        }
+        else{
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
+        }
         [self addAccessoryView];
         [self setupTheme];
     }
@@ -74,9 +80,10 @@
 -(void)setupTheme{
     if (self) {
         self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
-        self.titleLabel.textColor = [self.theme tableViewCellFontColor];
-        self.titleLabel.font      = [self.theme tableViewCellFont];
+        self.titleLabel.textColor = [self.theme tableViewCellTitleFontColor];
+        self.titleLabel.font      = [self.theme tableViewCellTitleFont];
         self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
+        self.detailLabel.font = [self.theme tableViewCellDetailFont];
     }
 }
 

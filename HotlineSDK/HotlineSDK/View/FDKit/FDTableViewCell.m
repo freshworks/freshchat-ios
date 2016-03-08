@@ -39,9 +39,6 @@
 -(void)setupTheme{
      if (self) {
          self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
-         self.textLabel.textColor = [self.theme tableViewCellFontColor];
-         self.textLabel.font      = [self.theme tableViewCellFont];
-         self.detailTextLabel.textColor = [self.theme timeDetailTextColor];
      }
 }
 
