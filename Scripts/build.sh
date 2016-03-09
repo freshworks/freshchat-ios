@@ -153,7 +153,6 @@ RELEASE_NOTES_M
 cat /tmp/rel_notes.txt  |  sed '/^\s*#/d;/^\s*$/d'  >> ReleaseNotes.txt
 cat ReleaseNotes_v.txt >> ReleaseNotes.txt
 
-rm ReleaseNotes_v.txt
 
 cat ReleaseNotes.txt >> $REL_NOTES
 
@@ -170,9 +169,11 @@ then
   git tag v${VERSION}
   git tag build_${BUILD_NUMBER}
   rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
+  rm ReleaseNotes_v.txt
 else
   mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
   rm ${CONSTANTS_FILE}.old
+  mv ReleaseNotes_v.txt ReleaseNotes.txt
 fi;
 printHeader "Version [$VERSION] Package Size[`ls -lh dist/hotline_sdk_ios.zip | awk '{print $5}'`] Build[${BUILD_NUMBER}] Commit[`git log --pretty=format:'%h' -n 1`]"
 osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
