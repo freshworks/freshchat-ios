@@ -14,7 +14,7 @@ $*
 HEADER
 }
 
-VERSION=1.0.1
+VERSION=DEV_VERSION
 #BUILD_NUMBER=`date +%Y%m%d%H%M`
 
 #Clear Derived Data to have clean build
@@ -25,6 +25,23 @@ rm -rf HotlineSDK/build
 rm -rf buildtmp
 mkdir buildtmp
 
+IS_RELEASE="NO"
+if [ "$1" == "release" ]
+then 
+  IS_RELEASE="YES"
+  if [ $# -ge 2 ]
+  then
+    VERSION=$2
+    if [ `git tag -l | grep "${VERSION} | wc -l` -gt 0 ] 
+    then 
+      printHeader "Version ${VERSION} already exists"
+      exit; 
+    fi;
+  else
+    printHeader "Please provide a version Number for release"
+    exit;
+  fi;
+fi;
 
 CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
 #fix version in file
@@ -92,9 +109,8 @@ REL_NOTES=$OUTPUTDIR/ReleaseNotes.txt
 RELEASE_HEADER=$( cat <<RELEASEINFO
 Hotline iOS SDK - Powered by Freshdesk
 
-Documentation   : <API integration page>
-Support         : 
-Email           : support@freshdesk.com 
+Documentation   : https://hotline.freshdesk.com/support/solutions
+Support Email   : support@hotline.io 
 Version         : $VERSION
 
 RELEASEINFO
@@ -108,8 +124,17 @@ zip -rv ${REL_NAME}.zip *
 cp ${REL_NAME}.zip hotline_sdk_ios.zip 
 cd ..
 
-mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
-rm ${CONSTANTS_FILE}.old
+if [ "$IS_RELEASE" == "YES" ] 
+then 
+  git add ${CONSTANTS_FILE}
+  git commit -m "Release commit for version [${VERSION}] Build [${BUILD_NUMBER}" 
+  git tag v${VERSION}
+  git tag build_${BUILD_NUMBER}
+  rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
+else
+  mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
+  rm ${CONSTANTS_FILE}.old
+fi;
 printHeader "All Set for Version $VERSION.  Package Size = `ls -lh dist/*.zip | awk '{print $5}'` "
 printHeader " Build           : ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
 osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
