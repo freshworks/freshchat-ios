@@ -45,6 +45,7 @@ fi;
 
 CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
 #fix version in file
+git checkout ${CONSTANTS_FILE} # make pristine
 cp ${CONSTANTS_FILE} ${CONSTANTS_FILE}.original
 PREV_VERSION=`cat ${CONSTANTS_FILE} | grep HOTLINE_SDK_VERSION | awk -F'"' ' {print $2 }'`
 sed -e "s/HOTLINE_SDK_VERSION\(.*\)/HOTLINE_SDK_VERSION @\"${VERSION}\"/g" -i .old ${CONSTANTS_FILE}
@@ -125,7 +126,7 @@ cat << HELP_TXT > /tmp/rel_notes.txt
 # Changes/Commits from ${PREV_VERSION}" 
 # 
 HELP_TXT
-git log --pretty=oneline --abbrev-commit v${PREV_VERSION}...HEAD | sed -e 's/^/#/g' >> /tmp/rel_notes.txt
+git log --pretty=oneline --abbrev-commit v${PREV_VERSION}...HEAD | sed -e 's/^/# /g' >> /tmp/rel_notes.txt
 
 if [ "$IS_RELEASE" == "YES" ] 
 then 
@@ -150,7 +151,6 @@ RELEASE_NOTES_M
 
 
 cat /tmp/rel_notes.txt  |  sed '/^\s*#/d;/^\s*$/d'  >> ReleaseNotes.txt
-echo "  " >> ReleaseNotes.txt
 cat ReleaseNotes_v.txt >> ReleaseNotes.txt
 
 rm ReleaseNotes_v.txt
