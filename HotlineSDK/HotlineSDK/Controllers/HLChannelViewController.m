@@ -22,12 +22,12 @@
 #import "HLLocalization.h"
 #import "FDNotificationBanner.h"
 #import "FDBarButtonItem.h"
+#import "HLEmptyResultView.h"
 
 @interface HLChannelViewController ()
 
 @property (nonatomic, strong) NSArray *channels;
-@property (strong, nonatomic) UIImageView *emptyChannelImgView;
-@property (strong, nonatomic) UILabel *emptyChanneltLbl;
+@property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 
 @end
 
@@ -92,24 +92,12 @@
             
             self.channels = sortedChannel;
             if(!self.channels.count){
-                
-                self.emptyChannelImgView = [[UIImageView alloc] init];
                 HLTheme *theme = [HLTheme sharedInstance];
-                self.emptyChannelImgView.image = [theme getImageWithKey:IMAGE_CHANNEL_ICON];
-                [self.emptyChannelImgView setTranslatesAutoresizingMaskIntoConstraints:NO];
-                [self.view addSubview:self.emptyChannelImgView];
+                self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
+                self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                [self.view addSubview:self.emptyResultView];
                 
-                self.emptyChanneltLbl = [[UILabel alloc]init];
-                self.emptyChanneltLbl.translatesAutoresizingMaskIntoConstraints = NO;
-                self.emptyChanneltLbl.textColor = [theme dialogueTitleTextColor];
-                self.emptyChanneltLbl.font = [theme dialogueTitleFont];
-                self.emptyChanneltLbl.lineBreakMode = NSLineBreakByWordWrapping;
-                self.emptyChanneltLbl.numberOfLines = 2;
-                self.emptyChanneltLbl.textAlignment= NSTextAlignmentCenter;
-                self.emptyChanneltLbl.text = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-                [self.view addSubview:self.emptyChanneltLbl];
-                
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyChannelImgView
+                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
                                                                       attribute:NSLayoutAttributeCenterX
                                                                       relatedBy:NSLayoutRelationEqual
                                                                          toItem:self.tableView
@@ -117,7 +105,7 @@
                                                                      multiplier:1.0
                                                                        constant:0.0]];
                 
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyChannelImgView
+                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
                                                                       attribute:NSLayoutAttributeCenterY
                                                                       relatedBy:NSLayoutRelationEqual
                                                                          toItem:self.tableView
@@ -125,15 +113,9 @@
                                                                      multiplier:1.0
                                                                        constant:0.0]];
                 
-                NSDictionary *emptychannelViews = @{@"emptyChannelImag":self.emptyChannelImgView, @"emptyChannelLbl" : self.emptyChanneltLbl};
-                
-                [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyChannelLbl]-50-|" options:0 metrics:nil views:emptychannelViews]];
-                
-                [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptyChannelImag]-10-[emptyChannelLbl]" options:0 metrics:nil views:emptychannelViews]];
             }
             else{
-                [self.emptyChannelImgView removeFromSuperview];
-                [self.emptyChanneltLbl removeFromSuperview];
+                [self.emptyResultView removeFromSuperview];
             }
             [self.tableView reloadData];
         }

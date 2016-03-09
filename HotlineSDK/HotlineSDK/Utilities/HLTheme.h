@@ -32,6 +32,7 @@
 #define IMAGE_NOTIFICATION_CANCEL_ICON @"NotificationCancel"
 #define IMAGE_CHANNEL_ICON @"ChannelImage"
 #define IMAGE_FAQ_ICON @"FAQImage"
+#define IMAGE_EMPTY_SEARCH_ICON @"EmptySearchImage"
 
 @interface HLTheme : NSObject
 
@@ -143,6 +144,10 @@
 - (UIColor *) conversationOverlayBackgroundColor;
 - (UIFont *) conversationOverlayTextFont;
 - (UIColor *) conversationOverlayTextColor;
+
+//Empty Result
+-(UIColor *)emptyResultMessageFontColor;
+-(UIFont *)emptyResultMessageFont;
 
 //Footer
 - (NSString *) getFooterSecretKey;

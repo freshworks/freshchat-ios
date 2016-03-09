@@ -150,6 +150,15 @@
 		<key>ChannelIconPlaceholderCharFontName</key>
 		<string>HelveticaNeue</string>
 	</dict>
+	<key>EmptyResultView</key>
+	<dict>
+		<key>MessageFontName</key>
+		<string>HelveticaNeue</string>
+		<key>MessageTextColor</key>
+		<string>525454</string>
+		<key>MessageFontSize</key>
+		<string>15.0f</string>
+	</dict>
 	<key>NavigationBar</key>
 	<dict>
 		<key>BackgroundColor</key>
