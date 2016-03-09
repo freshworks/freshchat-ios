@@ -127,7 +127,7 @@ cd ..
 if [ "$IS_RELEASE" == "YES" ] 
 then 
   git add ${CONSTANTS_FILE}
-  git commit -m "Release commit for version [${VERSION}] Build [${BUILD_NUMBER}" 
+  git commit -m "Release commit for version [${VERSION}] Build [${BUILD_NUMBER}] - `git config user.name`" 
   git tag v${VERSION}
   git tag build_${BUILD_NUMBER}
   rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
@@ -135,10 +135,10 @@ else
   mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
   rm ${CONSTANTS_FILE}.old
 fi;
-printHeader "All Set for Version $VERSION.  Package Size = `ls -lh dist/*.zip | awk '{print $5}'` "
-printHeader " Build           : ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
+printHeader "All Set. Version = $VERSION. Package Size = `ls -lh dist/*.zip | awk '{print $5}'`  Build = ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
 osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
 
 #Documentation
+command -v appledoc >/dev/null 2>&1 || { echo "Appledoc not installed. Skipping Docs" >&2; exit 1; }
 printHeader "Generating docs"
 xcodebuild -project HotlineSDK/HotlineSDK.xcodeproj -target Documentation -configuration build
