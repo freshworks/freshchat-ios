@@ -128,7 +128,7 @@
     
     NSArray *rightBarItems;
     if(!self.categories.count){
-        rightBarItems = @[fixedItem,contactUsBarButton];
+        rightBarItems = @[contactUsBarButton,fixedItem];
     }
     else{
         rightBarItems = @[fixedItem,searchBarButton,contactUsBarButton];
