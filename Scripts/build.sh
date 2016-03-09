@@ -179,7 +179,7 @@ osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is rea
 
 if [ "$IS_RELEASE" == "YES" ] 
 then 
-  echo "All good. run [git push --tags] to release to git"
+  printHeader "All good. run [git push --tags] to release to git"
 fi;
 #Documentation
 command -v appledoc >/dev/null 2>&1 || { echo "Appledoc not installed. Skipping Docs" >&2; exit 1; }
