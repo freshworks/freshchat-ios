@@ -14,7 +14,7 @@ $*
 HEADER
 }
 
-VERSION=DEV_VERSION
+VERSION=DEV
 #BUILD_NUMBER=`date +%Y%m%d%H%M`
 
 #Clear Derived Data to have clean build
@@ -32,7 +32,7 @@ then
   if [ $# -ge 2 ]
   then
     VERSION=$2
-    if [ `git tag -l | grep "${VERSION} | wc -l` -gt 0 ] 
+    if [ `git tag -l | grep "${VERSION}" | wc -l` -gt 0 ] 
     then 
       printHeader "Version ${VERSION} already exists"
       exit; 
@@ -46,6 +46,7 @@ fi;
 CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
 #fix version in file
 cp ${CONSTANTS_FILE} ${CONSTANTS_FILE}.original
+PREV_VERSION=`cat ${CONSTANTS_FILE} | grep HOTLINE_SDK_VERSION | awk -F'"' ' {print $2 }'`
 sed -e "s/HOTLINE_SDK_VERSION\(.*\)/HOTLINE_SDK_VERSION @\"${VERSION}\"/g" -i .old ${CONSTANTS_FILE}
 BUILD_NUMBER=`cat ${CONSTANTS_FILE} | grep HOTLINE_SDK_BUILD_NUMBER | awk -F'"' ' {print $2 }'`
 BUILD_NUMBER=`expr $BUILD_NUMBER + 1`
@@ -116,7 +117,44 @@ Version         : $VERSION
 RELEASEINFO
 )
 
+cat << HELP_TXT > /tmp/rel_notes.txt
+
+
+# Please enter the Release notes. Line starting with # will be removed" 
+# 
+# Changes/Commits from ${PREV_VERSION}" 
+# 
+HELP_TXT
+git log --pretty=oneline --abbrev-commit v${PREV_VERSION}...HEAD | sed -e 's/^/#/g' >> /tmp/rel_notes.txt
+
+if [ "$IS_RELEASE" == "YES" ] 
+then 
+  vim /tmp/rel_notes.txt
+  if [ `cat /tmp/rel_notes.txt | sed '/^\s*#/d;/^\s*$/d' | wc -l` -eq 0 ] 
+  then
+    printHeader "No release notes added. Exiting" 
+    exit
+  fi;
+fi;
+
 echo "${RELEASE_HEADER}" >> $REL_NOTES
+
+git checkout ReleaseNotes.txt # make sure it is pristine
+mv ReleaseNotes.txt ReleaseNotes_v.txt
+
+cat <<RELEASE_NOTES_M > ReleaseNotes.txt
+
+Ver ${VERSION} 
+__________________________
+RELEASE_NOTES_M
+
+
+cat /tmp/rel_notes.txt  |  sed '/^\s*#/d;/^\s*$/d'  >> ReleaseNotes.txt
+echo "  " >> ReleaseNotes.txt
+cat ReleaseNotes_v.txt >> ReleaseNotes.txt
+
+rm ReleaseNotes_v.txt
+
 cat ReleaseNotes.txt >> $REL_NOTES
 
 cd dist 
@@ -127,7 +165,8 @@ cd ..
 if [ "$IS_RELEASE" == "YES" ] 
 then 
   git add ${CONSTANTS_FILE}
-  git commit -m "Release commit for version [${VERSION}] Build [${BUILD_NUMBER}] - `git config user.name`" 
+  git add ReleaseNotes.txt
+  git commit -m "Release [${VERSION}] Build[${BUILD_NUMBER}] - `git config user.name`" 
   git tag v${VERSION}
   git tag build_${BUILD_NUMBER}
   rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
@@ -135,9 +174,13 @@ else
   mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
   rm ${CONSTANTS_FILE}.old
 fi;
-printHeader "All Set. Version = $VERSION. Package Size = `ls -lh dist/*.zip | awk '{print $5}'`  Build = ${BUILD_NUMBER}_`git log --pretty=format:'%h' -n 1`"
+printHeader "Version [$VERSION] Package Size[`ls -lh dist/hotline_sdk_ios.zip | awk '{print $5}'`] Build[${BUILD_NUMBER}] Commit[`git log --pretty=format:'%h' -n 1`]"
 osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
 
+if [ "$IS_RELEASE" == "YES" ] 
+then 
+  echo "All good. run [git push --tags] to release to git"
+fi;
 #Documentation
 command -v appledoc >/dev/null 2>&1 || { echo "Appledoc not installed. Skipping Docs" >&2; exit 1; }
 printHeader "Generating docs"
