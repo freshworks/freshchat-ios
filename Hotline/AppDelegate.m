@@ -39,6 +39,8 @@
         [mainView setTitle:@"Order"];
         
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
+        
+        [[UINavigationBar appearance]setTintColor:[UIColor redColor]];
 
         
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
@@ -56,12 +58,16 @@
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
         [self.window setRootViewController:tabBarController];
         [self.window makeKeyAndVisible];
+        
     }
 }
 
 -(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
                                                        andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
+    
+//    config.appID = @"51590df9-ab7e-4ca7-9a25-b2279bc5cc7c";
+//    config.appKey = @"e9021572-383c-4b6f-997e-3fea9d32e2c7";
     
     config.domain=@"mr.orange.konotor.com";
 
@@ -94,6 +100,7 @@
     [[Hotline sharedInstance]initWithConfig:config];
     
     [[Hotline sharedInstance] updateUser:user];
+
     
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {

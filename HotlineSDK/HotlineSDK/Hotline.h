@@ -135,6 +135,16 @@
  */
 -(void)clearUserData;
 /**
+ *  Clear User Data
+ *
+ *  @discussion Use this function when your user needs to log out of the app .
+ *  This will clean up all the data associated with the SDK for the user.
+ *  
+ * @param Completion block to be called when clearData is completed
+ *
+ */
+-(void)clearUserDataWithCompletion:(void (^)())completion;
+/**
  *  Update User properties
  *
  *  @discussion Tag users with custom properties (key-value pairs) . The user properties associated here will be shown on the dashboard for the agent and also be used for segmentation for campaigns

@@ -16,7 +16,6 @@
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
 		354D0D671C48D504004D2AA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D621C48D504004D2AA1 /* main.m */; };
 		354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */; };
-		354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
 		356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19F21B9DBF14002F1E2A /* ViewController.m */; };
 		356F1A071B9DBF14002F1E2A /* HotlineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F1A061B9DBF14002F1E2A /* HotlineTests.m */; };
@@ -29,6 +28,7 @@
 		356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 356F1C131B9DD23B002F1E2A /* CoreMedia.framework */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
+		3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
 		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
@@ -382,12 +382,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
 				354D0D351C48D32D004D2AA1 /* chat.png in Resources */,
 				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
 				354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */,
 				3538A97B1C7159E100D8E216 /* KonotorModels.bundle in Resources */,
-				354D0D6F1C48D6D8004D2AA1 /* HLResources.bundle in Resources */,
 				3515E4411C5F9180001B9CEE /* option.png in Resources */,
 				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
 			);

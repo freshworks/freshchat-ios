@@ -191,12 +191,17 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
+                                                      andAppKey:[Hotline sharedInstance].config.appKey];
+    config.domain = [Hotline sharedInstance].config.domain;
+
     switch (buttonIndex) {
         case 0:
-            [[Hotline sharedInstance]clearUserData];
-            [self updateFields];
-            break;
-        default:
+            [[Hotline sharedInstance]clearUserDataWithCompletion:^{
+                [[Hotline sharedInstance]initWithConfig:config];
+                [self updateFields];
+            }];
             break;
     }
 }
