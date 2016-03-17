@@ -25,8 +25,6 @@
     self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
     self.layer.borderWidth=0.5;
     self.layer.cornerRadius=5.0;
-    [self setTitleColor:[theme actionButtonTextColor] forState:UIControlStateNormal];
-    [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
 }
 
 - (void) setupWithLabel:(NSString*)actionLabel frame:(CGRect)messageFrame
@@ -38,8 +36,8 @@
     float horizontalPadding=KONOTOR_HORIZONTAL_PADDING*3;
     float padding = 10;
     float maxButtonWidth =messageFrameWidth-horizontalPadding*2;
-    
-    UIFont *actionLabelFont=[[HLTheme sharedInstance] getChatBubbleMessageFont];
+    HLTheme *theme = [HLTheme sharedInstance];
+    UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
     
     if([actionLabel isEqualToString:@""]||(actionLabel==nil))
         actionLabel=HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
@@ -64,7 +62,8 @@
         [self setHidden:NO];
    
         [self setAttributedTitle:
-         [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[UIColor blackColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
+         [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
+        [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
     }
     else{
         [self setHidden:YES];

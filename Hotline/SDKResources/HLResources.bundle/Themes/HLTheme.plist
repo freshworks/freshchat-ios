@@ -19,7 +19,7 @@
 		<key>ConversationUIFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ActionButtonTextColor</key>
-		<string>FFFFFF</string>
+		<string>000000</string>
 		<key>ActionButtonSelectedTextColor</key>
 		<string>000000</string>
 		<key>ActionButtonColor</key>

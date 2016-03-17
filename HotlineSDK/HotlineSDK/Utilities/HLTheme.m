@@ -355,7 +355,8 @@
 }
 
 -(UIColor *)inputTextFontColor{
-    return [UIColor blackColor];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)inputTextFont{
