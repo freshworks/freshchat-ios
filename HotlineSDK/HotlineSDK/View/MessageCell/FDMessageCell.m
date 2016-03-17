@@ -113,7 +113,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     [messageTextView setBackgroundColor:[UIColor clearColor]];
     [messageTextView setDataDetectorTypes:UIDataDetectorTypeAll];
     [messageTextView setTextAlignment:NSTextAlignmentLeft];
-    [messageTextView setTextColor:[UIColor blackColor]];
     [messageTextView setEditable:NO];
     [messageTextView setScrollEnabled:NO];
     messageTextView.scrollsToTop=NO;
@@ -309,15 +308,22 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     UIEdgeInsets otherChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
     UIEdgeInsets userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
-    
+    UIColor *messageTextColor;
     if(isSenderOther){
+        messageTextColor = [[HLTheme sharedInstance] agentMessageFontColor];
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_SUPPORT_LABEL_TEXT);
         [uploadStatusImageView setImage:nil];
         [chatCalloutImageView setImage:[otherChatBubble resizableImageWithCapInsets:otherChatBubbleInsets]];
+        [messageTextView setTextColor:messageTextColor];
+        [messageSentTimeLabel setTextColor:messageTextColor];
     }
     else{
+        messageTextColor = [[HLTheme sharedInstance] userMessageFontColor];
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_USER_LABEL_TEXT);
         [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
+        [messageTextView setTextColor:[UIColor redColor]];
+        [messageTextView setTextColor:messageTextColor];
+        [messageSentTimeLabel setTextColor:messageTextColor];
     }
     
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];

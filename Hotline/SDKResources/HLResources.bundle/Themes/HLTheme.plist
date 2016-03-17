@@ -8,6 +8,10 @@
 		<string>HelveticaNeue</string>
 		<key>ChatBubbleMessageFontSize</key>
 		<string>14.0f</string>
+		<key>AgentMessageTextColor</key>
+		<string>000000</string>
+		<key>UserMessageTextColor</key>
+		<string>000000</string>
 		<key>ChatBubbleTimeFontName</key>
 		<string>HelveticaNeue</string>
 		<key>ChatBubbleTimeFontSize</key>
