@@ -118,8 +118,7 @@
         FDLog(@"All solutions deleted");
         [dataManager deleteAllIndices:^(NSError *error) {
             FDLog(@"Index cleared");
-            [self clearUserData];
-            completion();
+            [self clearUserDataWithCompletion:completion andInit:false];
         }];
     }];
 }
@@ -297,8 +296,13 @@
 #pragma mark Push notifications
 
 -(void)updateDeviceToken:(NSData *)deviceToken {
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+   
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
+    [self updateDeviceTokenInternal:deviceTokenString];
+}
+
+-(void) updateDeviceTokenInternal:(NSString *) deviceTokenString{
+     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         if(![storedDeviceToken isEqualToString:deviceTokenString]){
@@ -308,6 +312,8 @@
     }
     [self registerDeviceToken];
 }
+
+
 
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
     NSDictionary *payload = info;
@@ -366,14 +372,45 @@
 }
 
 -(void)clearUserData{
+    [self clearUserDataWithCompletion:nil andInit:true];
+}
+
+-(void)clearUserDataWithCompletion:(void (^)())completion andInit:(BOOL)doInit{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
+                                                       andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    config.agentAvatarEnabled =[store objectForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+    config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+    config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+    config.displayFAQsAsGrid = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
+    config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+    
+    NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+    
     [[HotlineUser sharedInstance]clearUserData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
         FDLog(@"Deleted all meta properties");
+        [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
+            // Initiate a init
+            if(doInit){
+                [self initWithConfig:config];
+            }
+            [self updateDeviceTokenInternal:deviceToken];
+            if(completion){
+                completion();
+            }
+        }];
     }];
-    [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
-        FDLog(@"Deleted all channels and conversations");
-    }];
+    
+}
+
+
+-(void)clearUserDataWithCompletion:(void (^)())completion{
+    [self clearUserDataWithCompletion:completion andInit:true];
 }
 
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{

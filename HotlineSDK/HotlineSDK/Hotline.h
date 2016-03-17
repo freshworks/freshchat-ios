@@ -133,7 +133,17 @@
  *  This will clean up all the data associated with the SDK for the user.
  *
  */
--(void)clearUserData;
+-(void)clearUserData __deprecated;
+/**
+ *  Clear User Data
+ *
+ *  @discussion Use this function when your user needs to log out of the app .
+ *  This will clean up all the data associated with the SDK for the user.
+ *  
+ * @param Completion block to be called when clearData is completed
+ *
+ */
+-(void)clearUserDataWithCompletion:(void (^)())completion;
 /**
  *  Update User properties
  *
