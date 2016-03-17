@@ -120,7 +120,7 @@
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[textView]-5-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(20)]-10-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[attachButton(24)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(24)]-7-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton(24)]-[textView]-[sendButton(40)]-5-|" options:0 metrics:nil views:views]];
     
     //Mic button constraints
