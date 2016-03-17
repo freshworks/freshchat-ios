@@ -118,8 +118,7 @@
         FDLog(@"All solutions deleted");
         [dataManager deleteAllIndices:^(NSError *error) {
             FDLog(@"Index cleared");
-            [self clearUserData];
-            completion();
+            [self clearUserDataWithCompletion:completion andInit:false];
         }];
     }];
 }
@@ -366,10 +365,10 @@
 }
 
 -(void)clearUserData{
-    [self clearUserDataWithCompletion:nil];
+    [self clearUserDataWithCompletion:nil andInit:true];
 }
 
--(void)clearUserDataWithCompletion:(void (^)())completion{
+-(void)clearUserDataWithCompletion:(void (^)())completion andInit:(BOOL)doInit{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
@@ -381,20 +380,29 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.displayFAQsAsGrid = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-
+    
+    NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+    
     [[HotlineUser sharedInstance]clearUserData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
         FDLog(@"Deleted all meta properties");
         [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
             // Initiate a init
-            [self initWithConfig:config];
+            if(doInit){
+                [self initWithConfig:config];
+            }
             if(completion){
                 completion();
             }
         }];
     }];
     
+}
+
+
+-(void)clearUserDataWithCompletion:(void (^)())completion{
+    [self clearUserDataWithCompletion:completion andInit:true];
 }
 
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{

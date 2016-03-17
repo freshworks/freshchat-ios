@@ -133,7 +133,7 @@
  *  This will clean up all the data associated with the SDK for the user.
  *
  */
--(void)clearUserData;
+-(void)clearUserData __deprecated;
 /**
  *  Clear User Data
  *
