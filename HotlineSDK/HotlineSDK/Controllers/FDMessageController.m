@@ -473,8 +473,9 @@ typedef struct {
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
-    if([toSend isEqualToString:@""]){
+    if(([toSend isEqualToString:@""]) || ([toSend isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)])){
         [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
+        
     }else{
         [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
