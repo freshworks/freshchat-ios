@@ -52,8 +52,8 @@
 +(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
-+ (int) showDisableNotifAlert;
-+ (void) setShowDisableNotifAlert:(int)value;
++ (BOOL) showNotificationDisabledAlert;
++ (void) setDisabledNotificationAlertShown:(BOOL) shown;
 
 
 @end
