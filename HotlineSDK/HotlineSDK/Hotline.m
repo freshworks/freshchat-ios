@@ -296,8 +296,13 @@
 #pragma mark Push notifications
 
 -(void)updateDeviceToken:(NSData *)deviceToken {
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+   
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
+    [self updateDeviceTokenInternal:deviceTokenString];
+}
+
+-(void) updateDeviceTokenInternal:(NSString *) deviceTokenString{
+     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         if(![storedDeviceToken isEqualToString:deviceTokenString]){
@@ -307,6 +312,8 @@
     }
     [self registerDeviceToken];
 }
+
+
 
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
     NSDictionary *payload = info;
@@ -381,7 +388,7 @@
     config.displayFAQsAsGrid = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
-    NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+    NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
     [[HotlineUser sharedInstance]clearUserData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
@@ -392,6 +399,7 @@
             if(doInit){
                 [self initWithConfig:config];
             }
+            [self updateDeviceTokenInternal:deviceToken];
             if(completion){
                 completion();
             }
