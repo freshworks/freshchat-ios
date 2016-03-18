@@ -34,6 +34,7 @@
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
+@property (nonatomic, strong) NSTimer *pollingTimer;
 
 @end
 
@@ -83,6 +84,10 @@
     [self updateConfig:config];
     [self registerUser];
     [self registerAppActiveListener];
+    if(config.pollWhenAppActive){
+        [self startPoller];
+        [self localNotificationSubscription];
+    }
 }
 
 -(void) registerAppActiveListener{
@@ -438,6 +443,46 @@
     [HLMessageServices downloadAllMessages:^(NSError *error) {
         if (completion) completion([self unreadCount]);
     }];
+}
+
+// Polling changes
+
+-(void)startPoller{
+    if(![self.pollingTimer isValid]){
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(pollNewMessages:)
+                                                           userInfo:nil repeats:YES];
+        FDLog(@"Starting Poller");
+    }
+}
+
+-(void) pollNewMessages:(id)sender{
+    [[[FDChannelUpdater alloc]init] fetch];
+}
+
+-(void)cancelPoller{
+    if([self.pollingTimer isValid]){
+        [self.pollingTimer invalidate];
+        FDLog(@"Cancelled Poller");
+    }
+}
+
+-(void)localNotificationSubscription{
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleBecameActive:)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+}
+
+-(void)handleBecameActive:(NSNotification *)notification{
+    [self startPoller];
+}
+
+-(void)handleEnteredBackground:(NSNotification *)notification{
+    [self cancelPoller];
 }
 
 @end
