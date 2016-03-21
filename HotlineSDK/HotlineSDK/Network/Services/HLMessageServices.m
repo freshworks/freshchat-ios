@@ -323,10 +323,9 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 }
 
 +(HLServiceRequest *)statusUpdateRequestForMarketingID:(NSNumber *)marketingID{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+//    FDSecureStore *store = [FDSecureStore sharedInstance];
 
-    
-    
+    return nil;
 }
 
 //TODO: Skip messages that are clicked before

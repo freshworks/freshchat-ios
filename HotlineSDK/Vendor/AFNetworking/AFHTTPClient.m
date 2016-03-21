@@ -755,8 +755,6 @@ static NSString * const kAFKonotorMultipartFormBoundary = @"Boundary+0xAbCdEfGbO
 
 static NSString * const kAFKonotorMultipartFormCRLF = @"\r\n";
 
-static NSInteger const kAFKonotorStreamToStreamBufferSize = 1024 * 1024; //1 meg default
-
 static inline NSString * AFKonotorMultipartFormInitialBoundary() {
     return [NSString stringWithFormat:@"--%@%@", kAFKonotorMultipartFormBoundary, kAFKonotorMultipartFormCRLF];
 }
