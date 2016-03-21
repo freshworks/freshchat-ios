@@ -111,6 +111,8 @@
 //-(float)chatBubbleFontSize;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
+- (UIColor *) agentMessageFontColor;
+- (UIColor *) userMessageFontColor;
 
 //Notification
 -(UIColor *)notificationBackgroundColor;

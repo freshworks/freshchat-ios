@@ -355,7 +355,8 @@
 }
 
 -(UIColor *)inputTextFontColor{
-    return [UIColor blackColor];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)inputTextFont{
@@ -403,6 +404,15 @@
 
 -(NSString *)conversationUIFontName{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
+}
+
+- (UIColor *) agentMessageFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentMessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+- (UIColor *) userMessageFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 

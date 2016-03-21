@@ -88,6 +88,7 @@
         chatTextView.text = @"";
     }
     [chatTextView setTextColor:[self.theme inputTextFontColor]];
+    chatTextView.textColor = [[HLTheme sharedInstance] inputTextFontColor];
     [chatTextView becomeFirstResponder];
 }
 
