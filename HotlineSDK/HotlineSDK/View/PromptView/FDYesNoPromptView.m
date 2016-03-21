@@ -42,7 +42,7 @@
         self.NoButton = [self createBorderedPromptButton:@"no" withKey:key];
         [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
         [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
-        [self.NoButton.titleLabel setFont:[self.theme dialogueYesButtonFont]];
+        [self.NoButton.titleLabel setFont:[self.theme dialogueNoButtonFont]];
         self.NoButton.layer.borderColor = [[self.theme dialogueNoButtonBorderColor] CGColor];
 
         [self.NoButton addTarget:self.delegate action:@selector(noButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
