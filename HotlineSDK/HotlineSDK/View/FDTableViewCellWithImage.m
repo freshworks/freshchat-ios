@@ -12,6 +12,8 @@
 @interface FDTableViewCellWithImage ()
 
 @property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) NSLayoutConstraint *titleBottomConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *detailLabelHeightConstraint;
 
 @end
 
@@ -26,17 +28,19 @@
         self.contentEncloser = [[UIView alloc]init];
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
     
-        self.titleLabel = [[UILabel alloc] init];
-        [self.titleLabel setNumberOfLines:2];
-        [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+        self.titleLabel = [[FDLabel alloc] init];
+        [self.titleLabel setNumberOfLines:0];
+//        self.titleLabel.backgroundColor = [UIColor yellowColor];
+        [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         self.imgView=[[FDImageView alloc] init];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         
-        self.detailLabel = [[UILabel alloc] init];
+        self.detailLabel = [[FDLabel alloc] init];
+//        self.detailLabel.backgroundColor = [UIColor orangeColor];
         [self.detailLabel setNumberOfLines:2];
-        [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+        [self.detailLabel setLineBreakMode:NSLineBreakByWordWrapping];
 
         [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -57,16 +61,28 @@
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[contentEncloser]" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentEncloser]|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[title][subtitle]-2-|" options:0 metrics:nil views:views]];
+        
+        self.titleBottomConstraint = [NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.imgView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
+        
+        
+        self.detailLabelHeightConstraint = [NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+        
+        [self.contentEncloser addConstraint:self.detailLabelHeightConstraint];
+        [self.contentEncloser addConstraint:self.titleBottomConstraint];
+        
         if(showChannelThumbnail){
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
-            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]" options:0 metrics:nil views:views]];
         }
         else{
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
         }
+        
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[title][subtitle]" options:0 metrics:nil  views:views]];
+
+        
         [self addAccessoryView];
         [self setupTheme];
     }
@@ -87,8 +103,37 @@
     }
 }
 
-- (void)layoutSubviews {
+-(void)layoutSubviews{
     [super layoutSubviews];
+
+    CGFloat titleHeight = self.titleLabel.frame.size.height;
+    CGFloat detailHeight = self.detailLabel.frame.size.height;
+    
+    NSLog(@"height of title :%f", titleHeight);
+    NSLog(@"height of detail :%f", detailHeight);
+    
+    CGFloat MAX_HEIGHT = 30;
+    
+    self.detailLabelHeightConstraint.constant = self.detailLabel.intrinsicContentSize.height;
+    
+    if (titleHeight !=0 && detailHeight !=0) {
+        
+        if (titleHeight > MAX_HEIGHT && detailHeight > MAX_HEIGHT) {
+            self.detailLabelHeightConstraint.constant = detailHeight/2;
+            self.titleBottomConstraint.constant = 5;
+        }else{
+            
+            if (fabs(titleHeight - detailHeight) > 5 ) {
+                if (titleHeight > detailHeight) {
+                    self.titleBottomConstraint.constant = 5;
+                }else{
+                    self.titleBottomConstraint.constant = -5;
+                }
+            }
+        }
+    }
+    
+    [self layoutIfNeeded];
     
 }
 
@@ -96,5 +141,21 @@
     [super prepareForReuse];
     self.imgView.image = [[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"];
 }
+
+- (CGFloat)getLabelHeight:(UILabel*)label{
+    CGSize constraint = CGSizeMake(label.frame.size.width, 20000.0f);
+    CGSize size;
+    
+    NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
+    CGSize boundingBox = [label.text boundingRectWithSize:constraint
+                                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                               attributes:@{NSFontAttributeName:label.font}
+                                                  context:context].size;
+    
+    size = CGSizeMake(ceil(boundingBox.width), ceil(boundingBox.height));
+    
+    return size.height;
+}
+
 
 @end

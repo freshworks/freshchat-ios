@@ -188,7 +188,6 @@
     return cell;
 }
 
-
 -(NSString *)getDetailDescriptionForMessage:(KonotorMessage *)message{
     
     NSString *description = nil;

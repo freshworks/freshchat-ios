@@ -30,6 +30,8 @@
     return self;
 }
 
+
+
 -(void)addAccessoryView{
     
     UIImageView *accessoryView = [[UIImageView alloc] init];
@@ -51,12 +53,17 @@
     [self.contentView addSubview:self.badgeView];
         
     NSDictionary *views = @{@"lastUpdated":self.lastUpdatedLabel,@"badgeView":self.badgeView.badgeButton,@"accessoryView":accessoryView,
-                            @"contentEncloser" : self.contentEncloser};
+                            @"contentEncloser" : self.contentEncloser, @"subTitle" : self.detailLabel};
     
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-5-[lastUpdated]" options:0 metrics:nil views:views]];
+    //if no badge we need to update constrints accordingly
+    
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser][lastUpdated]" options:0 metrics:nil views:views]];
+    
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[subTitle][badgeView]" options:0 metrics:nil views:views]];
+
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(21)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[lastUpdated(70)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[lastUpdated(55)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeCenterY
                                                                  relatedBy:NSLayoutRelationEqual toItem:accessoryView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 }
