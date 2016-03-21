@@ -507,6 +507,15 @@
     return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
 }
 
+#pragma mark - Empty Result
+-(UIColor *)emptyResultMessageFontColor{
+    UIColor *color = [self getColorForKeyPath:@"EmptyResultView.MessageTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *)emptyResultMessageFont{
+    return [self getFontWithKey:@"EmptyResultView.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
 
 #pragma mark - Footer Settings
 

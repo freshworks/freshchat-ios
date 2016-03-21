@@ -24,6 +24,7 @@
 #import "HLLocalization.h"
 
 #import "FDArticleListCell.h"
+#import "HLEmptyResultView.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -38,6 +39,7 @@
 @property (strong, nonatomic) UILabel *emptyResultLbl;
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) BOOL isKeyboardOpen;
+@property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @end
 
 @implementation HLSearchViewController
@@ -144,62 +146,33 @@
 
 - (void) setEmptySearchResultView{
     
-    self.emptySearchImgView = [[UIImageView alloc] init];
-    self.emptySearchImgView.image = [self.theme getImageWithKey:@"EmptySearchImage"];
-    [self.emptySearchImgView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:self.emptySearchImgView];
+    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_EMPTY_SEARCH_ICON] andText:HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT)];
+    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.emptyResultView];
     
-    HLTheme *theme = [HLTheme sharedInstance];
-    self.emptyResultLbl = [[UILabel alloc]init];
-    self.emptyResultLbl.translatesAutoresizingMaskIntoConstraints = NO;
-    self.emptyResultLbl.textColor = [theme dialogueTitleTextColor];
-    self.emptyResultLbl.font = [theme dialogueTitleFont];
-    self.emptyResultLbl.lineBreakMode = NSLineBreakByWordWrapping;
-    self.emptyResultLbl.numberOfLines = 2;
-    self.emptyResultLbl.textAlignment= NSTextAlignmentCenter;
-    self.emptyResultLbl.text = HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT);
-    [self.view addSubview:self.emptyResultLbl];
-    
-    NSDictionary *emptySubViews = @{@"searchBar":self.searchBar ,@"emptySearchImageView":self.emptySearchImgView, @"emptyLabel":self.emptyResultLbl};
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[emptyLabel]-50-|" options:0 metrics:nil views:emptySubViews]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptySearchImageView(100)]" options:0 metrics:nil views:emptySubViews]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptySearchImageView(100)]-10-[emptyLabel]" options:0 metrics:nil views:emptySubViews]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
                                                           attribute:NSLayoutAttributeCenterX
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
+                                                             toItem:self.tableView
                                                           attribute:NSLayoutAttributeCenterX
                                                          multiplier:1.0
                                                            constant:0.0]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultLbl
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0.0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptySearchImgView
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
                                                           attribute:NSLayoutAttributeCenterY
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
+                                                             toItem:self.tableView
                                                           attribute:NSLayoutAttributeCenterY
                                                          multiplier:0.5
                                                            constant:0.0]];
     
-    self.emptySearchImgView.hidden = YES;
-    self.emptyResultLbl.hidden = YES;
+    self.emptyResultView.hidden = YES;
 }
 
 - (void) showEmptySearchView{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.emptySearchImgView.hidden = NO;
-        self.emptyResultLbl.hidden = NO;
+        self.emptyResultView.hidden = NO;
     });
 }
 
@@ -207,8 +180,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.emptySearchImgView.hidden = YES;
-        self.emptyResultLbl.hidden = YES;
+        self.emptyResultView.hidden = YES;
     });
 }
 
