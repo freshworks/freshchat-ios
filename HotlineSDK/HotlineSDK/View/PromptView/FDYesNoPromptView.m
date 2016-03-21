@@ -33,6 +33,8 @@
         self.YesButton = [self createBorderedPromptButton:@"yes" withKey:key];
         [self.YesButton setTitleColor:[self.theme dialogueYesButtonTextColor] forState:UIControlStateNormal];
         [self.YesButton setBackgroundColor:[self.theme dialogueYesButtonBackgroundColor]];
+        [self.YesButton.titleLabel setFont:[self.theme dialogueYesButtonFont]];
+        self.YesButton.layer.borderColor = [[self.theme dialogueYesButtonBorderColor] CGColor];
 
         [self.YesButton addTarget:self.delegate action:@selector(yesButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.YesButton];
@@ -40,7 +42,8 @@
         self.NoButton = [self createBorderedPromptButton:@"no" withKey:key];
         [self.NoButton setTitleColor:[self.theme dialogueNoButtonTextColor] forState:UIControlStateNormal];
         [self.NoButton setBackgroundColor:[self.theme dialogueNoButtonBackgroundColor]];
-
+        [self.NoButton.titleLabel setFont:[self.theme dialogueNoButtonFont]];
+        self.NoButton.layer.borderColor = [[self.theme dialogueNoButtonBorderColor] CGColor];
 
         [self.NoButton addTarget:self.delegate action:@selector(noButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.NoButton];
