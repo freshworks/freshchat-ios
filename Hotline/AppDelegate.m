@@ -89,6 +89,7 @@
     user.email = @"sid@freshdesk.com";
     user.phoneNumber = @"9898989898";
     user.phoneCountryCode = @"+91";
+    config.pollWhenAppActive = YES;
     
     [[Hotline sharedInstance] updateUser:user];
     

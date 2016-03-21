@@ -34,6 +34,7 @@
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
+@property (nonatomic, strong) NSTimer *pollingTimer;
 
 @end
 
@@ -82,14 +83,21 @@
 -(void)initConfigAndUser:(HotlineConfig *)config{
     [self updateConfig:config];
     [self registerUser];
-    [self registerAppActiveListener];
+    [self registerAppNotificationListeners];
+    if(config.pollWhenAppActive){
+        [self startPoller];
+    }
 }
 
--(void) registerAppActiveListener{
+-(void) registerAppNotificationListeners{
     [[NSNotificationCenter defaultCenter]
                     addObserver: self
                     selector: @selector(newSession:)
                     name: UIApplicationDidBecomeActiveNotification object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
 }
 
 -(void)updateAppVersion{
@@ -213,7 +221,14 @@
     when the SDK's app is transitioned from background to foreground  */
 
 -(void)newSession:(NSNotification *)notification{
+    if(self.config.pollWhenAppActive){
+        [self startPoller];
+    }
     [self performPendingTasks];
+}
+
+-(void)handleEnteredBackground:(NSNotification *)notification{
+    [self cancelPoller];
 }
 
 -(void)performPendingTasks{
@@ -475,6 +490,27 @@
     [HLMessageServices downloadAllMessages:^(NSError *error) {
         if (completion) completion([self unreadCount]);
     }];
+}
+
+// Polling changes
+
+-(void)startPoller{
+    if(![self.pollingTimer isValid]){
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(pollNewMessages:)
+                                                           userInfo:nil repeats:YES];
+        FDLog(@"Start off-screen message poller");
+    }
+}
+
+-(void) pollNewMessages:(id)sender{
+    [[[FDChannelUpdater alloc]init] fetch];
+}
+
+-(void)cancelPoller{
+    if([self.pollingTimer isValid]){
+        [self.pollingTimer invalidate];
+        FDLog(@"Cancel off-screen message poller");
+    }
 }
 
 @end
