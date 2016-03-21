@@ -503,7 +503,6 @@ typedef struct {
         if([Konotor showNotificationDisabledAlert]){
             [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
                           andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
-            [Konotor setDisabledNotificationAlertShown:@YES];
         }
     }
 }
@@ -516,7 +515,6 @@ typedef struct {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeNewsstandContentAvailability| UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
 }
-
 
 -(void)localNotificationSubscription{
     
@@ -692,6 +690,7 @@ typedef struct {
     }
     if([alertView.title isEqualToString:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)]){
         //TODO: Handle this better. Checking for title looks bad
+        [Konotor setDisabledNotificationAlertShown:YES];
         [self askForNotifications];
     }
 }
