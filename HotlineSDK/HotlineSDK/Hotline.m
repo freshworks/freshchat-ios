@@ -83,21 +83,17 @@
 -(void)initConfigAndUser:(HotlineConfig *)config{
     [self updateConfig:config];
     [self registerUser];
-    [self registerAppActiveListener];
+    [self registerAppNotificationListeners];
     if(config.pollWhenAppActive){
         [self startPoller];
-        [self registerAppBackgoundListener];
     }
 }
 
--(void) registerAppActiveListener{
+-(void) registerAppNotificationListeners{
     [[NSNotificationCenter defaultCenter]
                     addObserver: self
                     selector: @selector(newSession:)
                     name: UIApplicationDidBecomeActiveNotification object: nil];
-}
-
--(void)registerAppBackgoundListener{
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
