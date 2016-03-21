@@ -508,6 +508,15 @@ typedef struct {
     }
 }
 
+-(void) askForNotifications{
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }else{
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeNewsstandContentAvailability| UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    }
+}
+
 
 -(void)localNotificationSubscription{
     
@@ -681,6 +690,10 @@ typedef struct {
             [self sendMessage];
         }
     }
+    if([alertView.title isEqualToString:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)]){
+        //TODO: Handle this better. Checking for title looks bad
+        [self askForNotifications];
+    }
 }
 
 - (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
@@ -705,9 +718,9 @@ typedef struct {
         self.messagesDisplayedCount = self.messageCount;
     }
 }
+
 - (void) refreshView{
     [self refreshView:nil];
-
 }
 
 - (void) refreshView:(id)obj{
@@ -740,7 +753,6 @@ typedef struct {
 }
 
 #pragma Scrollview delegates
-
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (_flags.isKeyboardOpen){
         CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
