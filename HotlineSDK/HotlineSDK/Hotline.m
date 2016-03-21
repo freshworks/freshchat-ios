@@ -86,7 +86,7 @@
     [self registerAppActiveListener];
     if(config.pollWhenAppActive){
         [self startPoller];
-        [self localNotificationSubscription];
+        [self registerAppBackgoundListener];
     }
 }
 
@@ -95,6 +95,13 @@
                     addObserver: self
                     selector: @selector(newSession:)
                     name: UIApplicationDidBecomeActiveNotification object: nil];
+}
+
+-(void)registerAppBackgoundListener{
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
 }
 
 -(void)updateAppVersion{
@@ -219,7 +226,14 @@
     when the SDK's app is transitioned from background to foreground  */
 
 -(void)newSession:(NSNotification *)notification{
+    if(self.config.pollWhenAppActive){
+        [self startPoller];
+    }
     [self performPendingTasks];
+}
+
+-(void)handleEnteredBackground:(NSNotification *)notification{
+    [self cancelPoller];
 }
 
 -(void)performPendingTasks{
@@ -451,7 +465,7 @@
     if(![self.pollingTimer isValid]){
         self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
-        FDLog(@"Starting Poller");
+        FDLog(@"Start off-screen message poller");
     }
 }
 
@@ -462,27 +476,8 @@
 -(void)cancelPoller{
     if([self.pollingTimer isValid]){
         [self.pollingTimer invalidate];
-        FDLog(@"Cancelled Poller");
+        FDLog(@"Cancel off-screen message poller");
     }
-}
-
--(void)localNotificationSubscription{
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground:)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleBecameActive:)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-}
-
--(void)handleBecameActive:(NSNotification *)notification{
-    [self startPoller];
-}
-
--(void)handleEnteredBackground:(NSNotification *)notification{
-    [self cancelPoller];
 }
 
 @end
