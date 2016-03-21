@@ -1,4 +1,8 @@
 
+Ver 1.0.2 
+__________________________
+Fix bundle executable warning for appstore submission.
+
 Ver 1.0.1
 __________________________
 
