@@ -30,7 +30,6 @@
     
         self.titleLabel = [[FDLabel alloc] init];
         [self.titleLabel setNumberOfLines:0];
-//        self.titleLabel.backgroundColor = [UIColor yellowColor];
         [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         self.imgView=[[FDImageView alloc] init];
@@ -38,7 +37,6 @@
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         
         self.detailLabel = [[FDLabel alloc] init];
-//        self.detailLabel.backgroundColor = [UIColor orangeColor];
         [self.detailLabel setNumberOfLines:2];
         [self.detailLabel setLineBreakMode:NSLineBreakByWordWrapping];
 
@@ -108,11 +106,10 @@
 
     CGFloat titleHeight = self.titleLabel.frame.size.height;
     CGFloat detailHeight = self.detailLabel.frame.size.height;
-    
-    NSLog(@"height of title :%f", titleHeight);
-    NSLog(@"height of detail :%f", detailHeight);
-    
+
     CGFloat MAX_HEIGHT = 30;
+    
+    NSInteger PREFERRED_PADDING = 5;
     
     self.detailLabelHeightConstraint.constant = self.detailLabel.intrinsicContentSize.height;
     
@@ -120,14 +117,14 @@
         
         if (titleHeight > MAX_HEIGHT && detailHeight > MAX_HEIGHT) {
             self.detailLabelHeightConstraint.constant = detailHeight/2;
-            self.titleBottomConstraint.constant = 5;
+            self.titleBottomConstraint.constant = PREFERRED_PADDING;
         }else{
             
-            if (fabs(titleHeight - detailHeight) > 5 ) {
+            if (fabs(titleHeight - detailHeight) > PREFERRED_PADDING) {
                 if (titleHeight > detailHeight) {
-                    self.titleBottomConstraint.constant = 5;
+                    self.titleBottomConstraint.constant = PREFERRED_PADDING;
                 }else{
-                    self.titleBottomConstraint.constant = -5;
+                    self.titleBottomConstraint.constant = -PREFERRED_PADDING;
                 }
             }
         }
