@@ -321,7 +321,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         messageTextColor = [[HLTheme sharedInstance] userMessageFontColor];
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_USER_LABEL_TEXT);
         [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
-        [messageTextView setTextColor:[UIColor redColor]];
         [messageTextView setTextColor:messageTextColor];
         [messageSentTimeLabel setTextColor:messageTextColor];
     }
