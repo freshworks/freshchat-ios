@@ -103,14 +103,17 @@
 +(void)uploadUnuploadedProperties{
     
     static dispatch_group_t serviceGroup = nil;
+    static dispatch_queue_t dispatchQueue = nil;
     
     if (!serviceGroup) {
         serviceGroup = dispatch_group_create();
     }
     
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    if(!dispatchQueue){
+        dispatchQueue = dispatch_queue_create("com.freshdesk.hotline.uploadprops",DISPATCH_QUEUE_SERIAL);
+    }
     
-    dispatch_async(globalQueue, ^{
+    dispatch_async(dispatchQueue, ^{
         
         dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
         

@@ -98,10 +98,7 @@
                                                      @"Key2" : @"1"
                                                      }];
     
-    [[Hotline sharedInstance]initWithConfig:config];
-    
-    [[Hotline sharedInstance] updateUser:user];
-
+        [[Hotline sharedInstance]initWithConfig:config];
     
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
