@@ -92,22 +92,12 @@
     
     [[Hotline sharedInstance] updateUser:user];
     
-//    [[Hotline sharedInstance] updateUserProperties:@{
-//                                                     @"Key1" : @"Value1",
-//                                                     @"Key2" : @"1"
-//                                                     }];
+    [[Hotline sharedInstance] updateUserProperties:@{
+                                                     @"Key1" : @"Value1",
+                                                     @"Key2" : @"1"
+                                                     }];
     
-    
-    
-    [[Hotline sharedInstance]initWithConfig:config];
-    for(int i=0 ; i< 100;i++){
-        [[Hotline sharedInstance] updateUserProperties:@{
-                                                         [NSString stringWithFormat:@"%@-%d", @"Key" , i] : [NSString stringWithFormat:@"%@-%f", @"Value" , [NSDate timeIntervalSinceReferenceDate]]
-                                                         }];
-    }
-    
-    [[Hotline sharedInstance] updateUser:user];
-
+        [[Hotline sharedInstance]initWithConfig:config];
     
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
