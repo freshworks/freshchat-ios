@@ -12,8 +12,6 @@
 @interface FDTableViewCellWithImage ()
 
 @property (strong, nonatomic) HLTheme *theme;
-@property (strong, nonatomic) NSLayoutConstraint *titleBottomConstraint;
-@property (strong, nonatomic) NSLayoutConstraint *detailLabelHeightConstraint;
 
 @end
 
@@ -29,7 +27,7 @@
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
     
         self.titleLabel = [[FDLabel alloc] init];
-        [self.titleLabel setNumberOfLines:0];
+        [self.titleLabel setNumberOfLines:2];
         [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         self.imgView=[[FDImageView alloc] init];
@@ -101,58 +99,9 @@
     }
 }
 
--(void)layoutSubviews{
-    [super layoutSubviews];
-
-    CGFloat titleHeight = self.titleLabel.frame.size.height;
-    CGFloat detailHeight = self.detailLabel.frame.size.height;
-
-    CGFloat MAX_HEIGHT = 30;
-    
-    NSInteger PREFERRED_PADDING = 5;
-    
-    self.detailLabelHeightConstraint.constant = self.detailLabel.intrinsicContentSize.height;
-    
-    if (titleHeight !=0 && detailHeight !=0) {
-        
-        if (titleHeight > MAX_HEIGHT && detailHeight > MAX_HEIGHT) {
-            self.detailLabelHeightConstraint.constant = detailHeight/2;
-            self.titleBottomConstraint.constant = PREFERRED_PADDING;
-        }else{
-            
-            if (fabs(titleHeight - detailHeight) > PREFERRED_PADDING) {
-                if (titleHeight > detailHeight) {
-                    self.titleBottomConstraint.constant = PREFERRED_PADDING;
-                }else{
-                    self.titleBottomConstraint.constant = -PREFERRED_PADDING;
-                }
-            }
-        }
-    }
-    
-    [self layoutIfNeeded];
-    
-}
-
 -(void)prepareForReuse{
     [super prepareForReuse];
     self.imgView.image = [[HLTheme sharedInstance] getImageWithKey:@"FAQLoadingIcon"];
 }
-
-- (CGFloat)getLabelHeight:(UILabel*)label{
-    CGSize constraint = CGSizeMake(label.frame.size.width, 20000.0f);
-    CGSize size;
-    
-    NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
-    CGSize boundingBox = [label.text boundingRectWithSize:constraint
-                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                               attributes:@{NSFontAttributeName:label.font}
-                                                  context:context].size;
-    
-    size = CGSizeMake(ceil(boundingBox.width), ceil(boundingBox.height));
-    
-    return size.height;
-}
-
 
 @end

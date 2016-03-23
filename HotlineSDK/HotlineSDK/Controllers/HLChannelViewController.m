@@ -156,7 +156,7 @@
         cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
-        
+                
         FDSecureStore *store = [FDSecureStore sharedInstance];
         BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
         
@@ -185,6 +185,9 @@
         NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
         [cell.badgeView updateBadgeCount:unreadCount];
     }
+    
+    [cell adjustPadding];
+    
     return cell;
 }
 

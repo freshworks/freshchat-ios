@@ -17,6 +17,8 @@
 @property (strong, nonatomic) FDLabel *titleLabel;
 @property (strong, nonatomic) FDLabel *detailLabel;
 @property (strong, nonatomic) UIView *contentEncloser;
+@property (strong, nonatomic) NSLayoutConstraint *detailLabelHeightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *titleBottomConstraint;
 
 -(void)setupTheme;
 

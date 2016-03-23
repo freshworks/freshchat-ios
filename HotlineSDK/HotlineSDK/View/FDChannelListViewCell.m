@@ -30,8 +30,6 @@
     return self;
 }
 
-
-
 -(void)addAccessoryView{
     
     UIImageView *accessoryView = [[UIImageView alloc] init];
@@ -68,6 +66,35 @@
                                                                  relatedBy:NSLayoutRelationEqual toItem:accessoryView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 }
 
+-(void)adjustPadding{
+    CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
+    CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
+    
+    CGFloat MAX_HEIGHT = 30;
+    
+    NSInteger PREFERRED_PADDING = 5;
+    
+    self.detailLabelHeightConstraint.constant = detailHeight;
+    
+    if (titleHeight !=0 && detailHeight !=0) {
+        
+        if (titleHeight > MAX_HEIGHT && detailHeight > MAX_HEIGHT) {
+            self.detailLabelHeightConstraint.constant = detailHeight/2;
+            self.titleBottomConstraint.constant = 2 * PREFERRED_PADDING;
+        }else{
+            
+            if (fabs(titleHeight - detailHeight) > PREFERRED_PADDING) {
+                if (titleHeight > detailHeight) {
+                    self.titleBottomConstraint.constant = PREFERRED_PADDING;
+                }else{
+                    self.titleBottomConstraint.constant = -PREFERRED_PADDING;
+                }
+            }else{
+                self.titleBottomConstraint.constant = 0;
+            }
+        }
+    }
+}
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{
     
