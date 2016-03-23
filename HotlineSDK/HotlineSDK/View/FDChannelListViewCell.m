@@ -67,6 +67,9 @@
 }
 
 -(void)adjustPadding{
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    
     CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
     CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
     
