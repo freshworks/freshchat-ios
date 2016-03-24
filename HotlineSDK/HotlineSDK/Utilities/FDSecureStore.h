@@ -37,6 +37,7 @@
 #define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME @"hotline_defaults_channels_last_updated_time"
 #define HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME @"hotline_defaults_conversations_last_updated_time"
 #define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
+#define HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN @"hotline_defaults_notification_disabled_alert_shown"
 
 #define HOTLINE_DEFAULTS_VOTED_ARTICLES @"hotline_defaults_voted_articles"
 

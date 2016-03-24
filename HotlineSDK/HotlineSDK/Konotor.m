@@ -20,8 +20,6 @@
 
 __weak static id <KonotorDelegate> _delegate;
 
-static int showDisableNotifAlert = 1;
-
 +(id) delegate{
     return _delegate;
 }
@@ -206,12 +204,12 @@ static int showDisableNotifAlert = 1;
     }
 }
 
-+ (int) showDisableNotifAlert {
-    return showDisableNotifAlert;
++ (BOOL) showNotificationDisabledAlert {
+    return ![[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN];
 }
 
-+ (void) setShowDisableNotifAlert:(int)value {
-    showDisableNotifAlert = value;
++ (void) setDisabledNotificationAlertShown:(BOOL) shown{
+    [[FDSecureStore sharedInstance] setBoolValue:shown forKey:HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN];
 }
 
 @end
