@@ -49,7 +49,7 @@ NSString *const kFDReachabilityChangedNotification = @"kFDReachabilityChangedNot
 
 @end
 
-static NSString *reachabilityFlags(SCNetworkReachabilityFlags flags) 
+static NSString *reachabilityFlagsFD(SCNetworkReachabilityFlags flags)
 {
     return [NSString stringWithFormat:@"%c%c %c%c%c%c%c%c%c",
 #if	TARGET_OS_IPHONE
@@ -68,7 +68,7 @@ static NSString *reachabilityFlags(SCNetworkReachabilityFlags flags)
 }
 
 // Start listening for reachability notifications on the current run loop
-static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void* info) 
+static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void* info)
 {
 #pragma unused (target)
 #if __has_feature(objc_arc)
@@ -228,7 +228,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     context.info = (void *)self;
 #endif
     
-    if (!SCNetworkReachabilitySetCallback(self.reachabilityRef, TMReachabilityCallback, &context)) 
+    if (!SCNetworkReachabilitySetCallback(self.reachabilityRef, FDTMReachabilityCallback, &context))
     {
 #ifdef DEBUG
         FDLog(@"SCNetworkReachabilitySetCallback() failed: %s", SCErrorString(SCError()));
@@ -440,7 +440,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 #pragma mark - reachability status stuff
 
--(NetworkStatus)currentReachabilityStatus
+-(FDNetworkStatus)currentReachabilityStatus
 {
     if([self isReachable])
     {
@@ -469,7 +469,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 -(NSString*)currentReachabilityString
 {
-	NetworkStatus temp = [self currentReachabilityStatus];
+	FDNetworkStatus temp = [self currentReachabilityStatus];
 	
 	if(temp == reachableOnWWAN)
 	{
@@ -486,7 +486,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 -(NSString*)currentReachabilityFlags
 {
-    return reachabilityFlags([self reachabilityFlags]);
+    return reachabilityFlagsFD([self reachabilityFlags]);
 }
 
 #pragma mark - Callback function calls this method

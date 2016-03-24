@@ -57,9 +57,7 @@
 #define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
 #endif
 
-extern NSString *const kReachabilityChangedNotification;
-
-typedef NS_ENUM(NSInteger, NetworkStatus) {
+typedef NS_ENUM(NSInteger, FDNetworkStatus) {
     // Apple NetworkStatus Compatible Names.
     NotReachable = 0,
     ReachableViaWiFi = 2,
@@ -68,13 +66,13 @@ typedef NS_ENUM(NSInteger, NetworkStatus) {
 
 @class FDReachability;
 
-typedef void (^NetworkReachable)(FDReachability * reachability);
-typedef void (^NetworkUnreachable)(FDReachability * reachability);
+typedef void (^FDNetworkReachable)(FDReachability * reachability);
+typedef void (^FDNetworkUnreachable)(FDReachability * reachability);
 
 @interface FDReachability : NSObject
 
-@property (nonatomic, copy) NetworkReachable    reachableBlock;
-@property (nonatomic, copy) NetworkUnreachable  unreachableBlock;
+@property (nonatomic, copy) FDNetworkReachable    reachableBlock;
+@property (nonatomic, copy) FDNetworkUnreachable  unreachableBlock;
 
 
 @property (nonatomic, assign) BOOL reachableOnWWAN;
@@ -105,7 +103,7 @@ typedef void (^NetworkUnreachable)(FDReachability * reachability);
 // Is user intervention required?
 -(BOOL)isInterventionRequired;
 
--(NetworkStatus)currentReachabilityStatus;
+-(FDNetworkStatus)currentReachabilityStatus;
 -(SCNetworkReachabilityFlags)reachabilityFlags;
 -(NSString*)currentReachabilityString;
 -(NSString*)currentReachabilityFlags;

@@ -76,7 +76,7 @@
 
 #define LOC_DAY_SUNDAY @"day_sunday"
 #define LOC_DAY_MONDAY @"day_monday"
-#define LOC_DAY_TUEDAY @"day_tueday"
+#define LOC_DAY_TUESDAY @"day_tuesday"
 #define LOC_DAY_WEDNESDAY @"day_wednesday"
 #define LOC_DAY_THURSDAY @"day_thursday"
 #define LOC_DAY_FRIDAY @"day_friday"

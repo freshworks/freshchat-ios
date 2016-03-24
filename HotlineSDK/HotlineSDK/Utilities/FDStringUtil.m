@@ -91,7 +91,7 @@
     NSArray* weekdays=[NSArray arrayWithObjects:
                        HLLocalizedString( LOC_DAY_SUNDAY ),
                        HLLocalizedString( LOC_DAY_MONDAY ),
-                       HLLocalizedString( LOC_DAY_TUEDAY ),
+                       HLLocalizedString( LOC_DAY_TUESDAY ),
                        HLLocalizedString( LOC_DAY_WEDNESDAY ),
                        HLLocalizedString( LOC_DAY_THURSDAY ),
                        HLLocalizedString( LOC_DAY_FRIDAY ),
