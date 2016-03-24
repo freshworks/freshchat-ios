@@ -58,17 +58,7 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-}
-
--(void)setNavigationItem{
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
-    
-    if (!isBackButtonImageExist) {
-        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
-        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
-                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
-                                                                                                     target:nil action:nil];
-    }
+    [self configureBackButton];
 }
 
 -(HLTheme *)theme{
@@ -77,7 +67,6 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self setNavigationItem];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
