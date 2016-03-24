@@ -93,7 +93,7 @@
     }
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
-    self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
+    [self configureBackButton];
 }
 
 -(void)closeButton:(id)sender{

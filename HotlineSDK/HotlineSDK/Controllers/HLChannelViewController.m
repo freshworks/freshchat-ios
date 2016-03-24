@@ -124,10 +124,12 @@
 
 -(void)setNavigationItem{
     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
-    self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
+    
+    [self configureBackButton];
 }
 
 -(void)localNotificationSubscription{

@@ -15,6 +15,8 @@
 
 @property BOOL embedded;
 
+-(void)configureBackButton;
+
 @end
 
 

@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
+#import "HLViewController.h"
 
-@interface HLSearchViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface HLSearchViewController : HLViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSArray *searchResults;
 

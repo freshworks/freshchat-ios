@@ -22,7 +22,7 @@
 #import "HLListViewController.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
-
+#import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
 #import "HLEmptyResultView.h"
 
@@ -47,7 +47,6 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupSubviews];
-    
     [self setupTap];
     self.view.userInteractionEnabled=YES;
     
@@ -59,6 +58,7 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    [self configureBackButton];
 }
 
 -(HLTheme *)theme{
@@ -66,7 +66,6 @@
     return _theme;
 }
 -(void)viewWillAppear:(BOOL)animated{
-    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
