@@ -51,16 +51,53 @@
     [self.contentView addSubview:self.badgeView];
         
     NSDictionary *views = @{@"lastUpdated":self.lastUpdatedLabel,@"badgeView":self.badgeView.badgeButton,@"accessoryView":accessoryView,
-                            @"contentEncloser" : self.contentEncloser};
+                            @"contentEncloser" : self.contentEncloser, @"subTitle" : self.detailLabel};
     
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-5-[lastUpdated]" options:0 metrics:nil views:views]];
+    //if no badge we need to update constrints accordingly
+    
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser][lastUpdated]" options:0 metrics:nil views:views]];
+    
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[subTitle][badgeView]" options:0 metrics:nil views:views]];
+
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(21)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[lastUpdated(70)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[lastUpdated(55)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeCenterY
                                                                  relatedBy:NSLayoutRelationEqual toItem:accessoryView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 }
 
+-(void)adjustPadding{
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    
+    CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
+    CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
+    
+    CGFloat MAX_HEIGHT = 30;
+    
+    NSInteger PREFERRED_PADDING = 5;
+    
+    self.detailLabelHeightConstraint.constant = detailHeight;
+    
+    if (titleHeight !=0 && detailHeight !=0) {
+        
+        if (titleHeight > MAX_HEIGHT && detailHeight > MAX_HEIGHT) {
+            self.detailLabelHeightConstraint.constant = detailHeight/2;
+            self.titleBottomConstraint.constant = 2 * PREFERRED_PADDING;
+        }else{
+            
+            if (fabs(titleHeight - detailHeight) > PREFERRED_PADDING) {
+                if (titleHeight > detailHeight) {
+                    self.titleBottomConstraint.constant = PREFERRED_PADDING;
+                }else{
+                    self.titleBottomConstraint.constant = -PREFERRED_PADDING;
+                }
+            }else{
+                self.titleBottomConstraint.constant = 0;
+            }
+        }
+    }
+}
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{
     

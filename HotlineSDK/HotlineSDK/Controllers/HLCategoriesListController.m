@@ -171,6 +171,9 @@
         cell.layer.borderColor = [self.theme tableViewCellSeparatorColor].CGColor;
         cell.imgView.image = [UIImage imageWithData:category.icon];
     }
+    
+    cell.detailLabelHeightConstraint.constant = cell.detailLabel.intrinsicContentSize.height;
+    
     return cell;
 }
 

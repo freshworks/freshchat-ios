@@ -15,5 +15,6 @@
 @property (nonatomic,strong) UILabel *lastUpdatedLabel;
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText;
+-(void)adjustPadding;
 
 @end

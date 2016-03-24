@@ -9,13 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "HLTheme.h"
 #import "FDImageView.h"
+#import "FDLabel.h"
 
 @interface FDTableViewCellWithImage : UITableViewCell
 
 @property (strong, nonatomic) FDImageView *imgView;
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *detailLabel;
+@property (strong, nonatomic) FDLabel *titleLabel;
+@property (strong, nonatomic) FDLabel *detailLabel;
 @property (strong, nonatomic) UIView *contentEncloser;
+@property (strong, nonatomic) NSLayoutConstraint *detailLabelHeightConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *titleBottomConstraint;
 
 -(void)setupTheme;
 

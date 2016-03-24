@@ -26,17 +26,17 @@
         self.contentEncloser = [[UIView alloc]init];
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
     
-        self.titleLabel = [[UILabel alloc] init];
+        self.titleLabel = [[FDLabel alloc] init];
         [self.titleLabel setNumberOfLines:2];
-        [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+        [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         self.imgView=[[FDImageView alloc] init];
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
         
-        self.detailLabel = [[UILabel alloc] init];
+        self.detailLabel = [[FDLabel alloc] init];
         [self.detailLabel setNumberOfLines:2];
-        [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+        [self.detailLabel setLineBreakMode:NSLineBreakByWordWrapping];
 
         [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -57,16 +57,28 @@
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[contentEncloser]" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentEncloser]|" options:0 metrics:nil views:views]];
-        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[title][subtitle]-2-|" options:0 metrics:nil views:views]];
+        
+        self.titleBottomConstraint = [NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.imgView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
+        
+        
+        self.detailLabelHeightConstraint = [NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+        
+        [self.contentEncloser addConstraint:self.detailLabelHeightConstraint];
+        [self.contentEncloser addConstraint:self.titleBottomConstraint];
+        
         if(showChannelThumbnail){
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView(50)]-[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imageView(50)]" options:0 metrics:nil views:views]];
-            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]-[subtitle]" options:0 metrics:nil views:views]];
         }
         else{
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
         }
+        
+        [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[title][subtitle]" options:0 metrics:nil  views:views]];
+
+        
         [self addAccessoryView];
         [self setupTheme];
     }
@@ -85,11 +97,6 @@
         self.detailLabel.textColor = [self.theme tableViewCellDetailFontColor];
         self.detailLabel.font = [self.theme tableViewCellDetailFont];
     }
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
 }
 
 -(void)prepareForReuse{
