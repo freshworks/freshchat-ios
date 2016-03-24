@@ -82,7 +82,6 @@
                                                                       target:self.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
         self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
     }else{
         self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
@@ -90,6 +89,7 @@
                                                                                                       style:self.parentViewController.navigationItem.backBarButtonItem.style
                                                                                                      target:nil action:nil];
     }
+    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
 }
 
 -(void)searchButtonAction:(id)sender{
