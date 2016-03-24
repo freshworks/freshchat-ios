@@ -124,10 +124,20 @@
 
 -(void)setNavigationItem{
     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
-    self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
+
+    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
+
+    if (!isBackButtonImageExist) {
+        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
+        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
+                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
+                                                                                                     target:nil action:nil];
+    }
+
 }
 
 -(void)localNotificationSubscription{

@@ -15,7 +15,7 @@
 #import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 #import "KonotorDataManager.h"
-
+#import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
 
 @interface HLArticlesController ()
@@ -73,19 +73,23 @@
     [searchBarButton setStyle:UIBarButtonItemStylePlain];
     UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     fixedItem.width = -20.0f;
+
+    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
     
-    //self.parentViewController.navigationItem.rightBarButtonItem = searchBarButton;
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self.navigationController
-                                                                  action:@selector(popViewControllerAnimated:)];
-    self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
-    /*
-     Fix: setting bar button image, disables edge swipe swipe navigation
-     http://stackoverflow.com/questions/19054625
-     */
-    self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
+    if (isBackButtonImageExist) {
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_BACK_BUTTON]
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self.navigationController
+                                                                      action:@selector(popViewControllerAnimated:)];
+        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
+        self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }else{
+        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
+        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
+                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
+                                                                                                     target:nil action:nil];
+    }
 }
 
 -(void)searchButtonAction:(id)sender{

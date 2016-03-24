@@ -93,7 +93,15 @@
     }
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
-    self.searchDisplayController.displaysSearchBarInNavigationBar = YES;
+    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
+    
+    if (!isBackButtonImageExist) {
+        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
+        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
+                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
+                                                                                                     target:nil action:nil];
+    }
+    
 }
 
 -(void)closeButton:(id)sender{

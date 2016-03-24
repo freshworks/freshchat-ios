@@ -40,9 +40,6 @@
         
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
         
-        [[UINavigationBar appearance]setTintColor:[UIColor redColor]];
-
-        
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
                                                         [[Hotline sharedInstance] getFAQsControllerForEmbed]];
         [FAQController setTitle:@"FAQs"];
@@ -80,7 +77,7 @@
 //      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
 //      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
     
-    config.displayFAQsAsGrid = YES;
+    config.displayFAQsAsGrid = NO;
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
