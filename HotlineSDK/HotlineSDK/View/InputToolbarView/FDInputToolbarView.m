@@ -70,6 +70,7 @@
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
+        sendButton.backgroundColor = [UIColor clearColor];
         [sendButton setTitle:HLLocalizedString(LOC_SEND_BUTTON_TEXT) forState:UIControlStateNormal];
         [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
