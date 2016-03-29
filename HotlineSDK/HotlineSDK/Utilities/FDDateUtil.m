@@ -105,18 +105,18 @@
     return [formatter stringFromDate:date];
 }
 
-+(NSString *)solutionsLastUpdatedWebFriendlyTime{
-    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
-    NSDate *lastUpdatedTime = [secureStore objectForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME];
-    NSString *lastUpdatedTimeString = [[FDDateUtil getDateFormatter] stringFromDate:lastUpdatedTime];
-//    return [lastUpdatedTimeString stringByReplacingOccurrencesOfString:@"+0000" withString:@"%2B00:00"];
-    return lastUpdatedTimeString;
-}
-
 +(NSString *)getWebFriendlyTimeStamp{
     NSString *timeStamp = [self getRFC3339TimeStamp];
     return timeStamp;
 }
 
+
++(NSNumber *) maxDateOfNumber:(NSNumber *) lastUpdatedTime andStr:(NSString*) lastUpdatedStr{
+    NSNumber *lastUpdatedStrVal = [NSNumber numberWithDouble:[lastUpdatedStr doubleValue]];
+    if([lastUpdatedTime compare:lastUpdatedStrVal] != NSOrderedDescending){
+        return lastUpdatedStrVal;
+    }
+    return lastUpdatedTime;
+}
 
 @end

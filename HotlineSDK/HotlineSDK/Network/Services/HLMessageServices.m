@@ -22,6 +22,7 @@
 #import "AFNetworking.h"
 #import "FDResponseInfo.h"
 #import "FDBackgroundTaskManager.h"
+#import "FDDateUtil.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
@@ -54,13 +55,14 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
+    __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
     NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
     AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
     [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
     [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
     [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
     
+    BOOL isRestore = [lastUpdateTime isEqualToNumber:@0];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:getPath parameters:nil];
     
     FDLog(@"Fetching messages for user %@", userAlias);
@@ -68,7 +70,6 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         int statusCode = (int)[httpResponse statusCode];
-
         if(error || statusCode >= 400){
             FDLog(@"Message fetch failed %@", error);
             HideNetworkActivityIndicator();
@@ -107,7 +108,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
                 NSArray *messages = conversationInfo[@"messages"];
                 for (int j=0; j<messages.count; j++) {
-                    NSDictionary *messageInfo = messages[j];
+                    __block NSDictionary *messageInfo = messages[j];
                     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
                     if (!message) {
                         KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
@@ -124,18 +125,18 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                         newMessage.belongsToConversation = conversation;
                         
                         //Do not mark restored mesages as unread
-                        if ([lastUpdateTime isEqualToNumber:@0]) {
+                        if (isRestore) {
                             newMessage.messageRead = YES;
                         }
-                        
+                        lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
                     }
                 }
             }
             if(handler) handler(nil);
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
-        NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
-        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_TIME];
+        
+        [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         [[KonotorDataManager sharedInstance]save];
         MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [self postUnreadCountNotification];
@@ -158,8 +159,9 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
-    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
     NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
+    BOOL isRestore = [lastUpdateTime isEqualToNumber:@0];
     [request setRelativePath:path andURLParams:@[token, afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
@@ -168,15 +170,13 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             /* This check is added to delete all messages that are migrated from konotor SDK,
                but this is also performed for new installs as well (a harmless side-effect). */
             
-            if ([lastUpdateTime isEqualToNumber:@0]) {
+            if (isRestore) {
                 [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
                     [self importChannels:[responseInfo responseAsArray] handler:handler];
                 }];
             }else{
                 [self importChannels:[responseInfo responseAsArray] handler:handler];
             }
-            NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
-            [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_TIME];
         }else{
             if (handler) handler(nil, error);
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
@@ -189,6 +189,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
+        NSNumber *lastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         NSInteger channelCount = [channels count];
         HLChannel *channel = nil;
         if (channelCount!=0) {
@@ -202,8 +203,12 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
                 [channelList addObject:channel];
+                if(channelInfo[@"updated"]){
+                    lastUpdatedTime = [FDDateUtil maxDateOfNumber:lastUpdatedTime andStr:channelInfo[@"updated"]];
+                }
             }
         }
+        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         [context save:nil];
         if (handler) handler(channelList,nil);
         [self postNotification];

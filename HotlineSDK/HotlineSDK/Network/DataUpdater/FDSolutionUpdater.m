@@ -23,7 +23,7 @@
     self = [super init];
     if (self) {
         self.intervalInSecs = SOLUTIONS_FETCH_INTERVAL;
-        self.intervalConfigKey = HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_TIME;
+        self.intervalConfigKey = HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME;
     }
     return self;
 }
