@@ -15,8 +15,8 @@
 +(NSDate *)getRFC3339DateFromString:(NSString *)dateString;
 // Not used currently
 //+(NSString *)itemCreatedDurationSinceDate:(NSDate*)date;
-+(NSString *)solutionsLastUpdatedWebFriendlyTime;
 +(NSString *)stringForUnixTime:(NSInteger)unixTime;
 +(NSString *)getStringFromDate:(NSDate *)date;
++(NSNumber *) maxDateOfNumber:(NSNumber *) lastUpdatedTime andStr:(NSString*) lastUpdatedStr;
 
 @end
