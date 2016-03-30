@@ -44,13 +44,11 @@
     self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.lastUpdatedLabel];
     
-    self.badgeView  = [[FDBadgeView alloc]initWithFrame:CGRectZero andBadgeNumber:0];
+    self.badgeView  = [[FDBadgeView alloc]initWithFrame:CGRectZero];
     self.badgeView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.badgeView.badgeButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:self.badgeView.badgeButton];
     [self.contentView addSubview:self.badgeView];
         
-    NSDictionary *views = @{@"lastUpdated":self.lastUpdatedLabel,@"badgeView":self.badgeView.badgeButton,@"accessoryView":accessoryView,
+    NSDictionary *views = @{@"lastUpdated":self.lastUpdatedLabel,@"accessoryView":accessoryView,
                             @"contentEncloser" : self.contentEncloser, @"subTitle" : self.detailLabel};
     
     
@@ -97,25 +95,6 @@
             }
         }
     }
-}
-
-+(UIImage *)generateImageForLabel:(NSString *)labelText{
-    
-    HLTheme *theme = [HLTheme sharedInstance];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-    NSString *firstLetter = [labelText substringToIndex:1];
-    firstLetter = [firstLetter uppercaseString];
-    label.text = firstLetter;
-    label.font = [theme channelIconPlaceholderImageCharFont];
-    label.textColor = [UIColor whiteColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
-    label.layer.cornerRadius = label.frame.size.height / 2.0f;
-    UIGraphicsBeginImageContext(label.frame.size);
-    [[label layer] renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
 }
 
 -(void)prepareForReuse{

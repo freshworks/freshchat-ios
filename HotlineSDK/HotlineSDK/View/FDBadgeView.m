@@ -15,32 +15,38 @@
 
 @implementation FDBadgeView
 
--(instancetype)initWithFrame:(CGRect)frame andBadgeNumber:(NSInteger)count{
+-(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         HLTheme *theme = [HLTheme sharedInstance];
-        self.badgeButton                    = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.badgeButton.backgroundColor    = [theme badgeButtonBackgroundColor];
-        self.badgeButton.layer.cornerRadius = 13.0;
-        self.badgeButton.titleLabel.font    = [theme badgeButtonFont];
-        NSString *countString               = [NSString stringWithFormat:@"%ld",(long)count];
-        if (count > 999) countString = [NSString stringWithFormat:@"999+"];
-        [self.badgeButton setTitle:countString forState:UIControlStateNormal];
-        [self.badgeButton setTitleColor:[theme badgeButtonTitleColor] forState:UIControlStateNormal];
-        [self.badgeButton sizeToFit];
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.countLabel = [FDLabel new];
+        self.countLabel.textColor = [UIColor blackColor];
+        self.backgroundColor = [theme badgeButtonBackgroundColor];
+        self.countLabel.font = [theme badgeButtonFont];
+        [self addSubview:self.countLabel];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.countLabel attribute:NSLayoutAttributeCenterX
+                                                         relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.countLabel attribute:NSLayoutAttributeCenterY
+                                                         relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     }
     return self;
+}
+
+-(void)drawRect:(CGRect)rect{
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = self.frame.size.width/3;
 }
 
 -(void)updateBadgeCount:(NSInteger)count{
     if (count) {
         NSString *countString = [NSString stringWithFormat:@"%ld",(long)count];
-        [self.badgeButton setTitle:countString forState:UIControlStateNormal];
-        [self.badgeButton sizeToFit];
-        [self.badgeButton.layer setCornerRadius:self.badgeButton.frame.size.width/3];
-        [self.badgeButton setHidden:NO];
+        if (count > 999) countString = [NSString stringWithFormat:@"999+"];
+        self.countLabel.text = countString;
+        self.hidden = NO;
     }else{
-        [self.badgeButton setHidden:YES];
+        self.hidden = YES;
     }
 }
 

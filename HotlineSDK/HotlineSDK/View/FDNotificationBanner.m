@@ -8,10 +8,11 @@
 
 #import "FDNotificationBanner.h"
 #import "HLChannel.h"
-#import "FDChannelListViewCell.h"
+#import "FDCell.h"
 #import <AudioToolbox/AudioServices.h>
 #import "FDSecureStore.h"
 #import "HLLocalization.h"
+#import "HLTheme.h"
 
 #define systemSoundID 1315
 
@@ -140,7 +141,7 @@
     if (channel.icon) {
         self.imgView.image = [UIImage imageWithData:channel.icon];
     }else{
-        UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
+        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
         self.imgView.image = placeholderImage;
     }
     

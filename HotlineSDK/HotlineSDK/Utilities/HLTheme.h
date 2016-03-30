@@ -134,6 +134,7 @@
 -(UIFont *)channelTitleFont;
 -(UIColor *)channelTitleFontColor;
 -(UIFont *)channelDescriptionFont;
+-(UIFont *)channelDescriptinLines;
 -(UIColor *)channelDescriptionFontColor;
 -(UIFont *)channelLastUpdatedFont;
 -(UIColor *)channelLastUpdatedFontColor;
