@@ -28,12 +28,21 @@
         self.detailLabel = [[FDLabel alloc] init];
         [self.detailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         
-        //TODO: get number of lines from theme file
         if(isChannel){
-            [self.detailLabel setNumberOfLines:[theme numberOfChannelListDescriptionLines]];
+            if(![theme numberOfChannelListDescriptionLines]){
+                [self.detailLabel setNumberOfLines:1];
+            }
+            else{
+                [self.detailLabel setNumberOfLines:[theme numberOfChannelListDescriptionLines]];
+            }
         }
         else{
-            [self.detailLabel setNumberOfLines:[theme numberOfCategoryListDescriptionLines]];
+            if(![theme numberOfCategoryListDescriptionLines]){
+                [self.detailLabel setNumberOfLines:1];
+            }
+            else{
+                [self.detailLabel setNumberOfLines:[theme numberOfCategoryListDescriptionLines]];
+            }
         }
         [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
