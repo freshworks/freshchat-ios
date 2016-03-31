@@ -108,6 +108,8 @@
 		<string>14</string>
 		<key>ChannelTitleFontColor</key>
 		<string>EFEFEF</string>
+		<key>ChannelIconBorderColor</key>
+		<string>FFFFFF</string>
 		<key>MessageFontName</key>
 		<string>HelveticaNeue</string>
 		<key>MessageFontSize</key>
@@ -234,6 +236,10 @@
 		<string>HelveticaNeue</string>
 		<key>DetailFontSize</key>
 		<string>14.0f</string>
+		<key>NosChannelListDescriptionLines</key>
+		<string>2.0</string>
+		<key>NosFAQListDescriptionLines</key>
+		<string>1.0</string>
 	</dict>
 	<key>ArticlesList</key>
 	<dict>

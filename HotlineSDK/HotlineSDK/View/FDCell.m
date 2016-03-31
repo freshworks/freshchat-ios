@@ -16,7 +16,7 @@
     if (self) {
         
         self.isChannelCell = isChannel;
-        
+        HLTheme *theme = [HLTheme sharedInstance];
         self.contentEncloser = [[UIView alloc]init];
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
         
@@ -29,7 +29,12 @@
         [self.detailLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         
         //TODO: get number of lines from theme file
-        [self.detailLabel setNumberOfLines:1];
+        if(isChannel){
+            [self.detailLabel setNumberOfLines:[theme numberOfChannelListDescriptionLines]];
+        }
+        else{
+            [self.detailLabel setNumberOfLines:[theme numberOfCategoryListDescriptionLines]];
+        }
         [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
         self.imgView=[[FDImageView alloc] init];

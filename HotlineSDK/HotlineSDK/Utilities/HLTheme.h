@@ -58,6 +58,8 @@
 -(UIColor *)tableViewCellDetailFontColor;
 -(UIColor *)tableViewCellBackgroundColor;
 -(UIColor *)tableViewCellSeparatorColor;
+- (int)numberOfChannelListDescriptionLines;
+- (int)numberOfCategoryListDescriptionLines;
 
 //Article Table View
 -(UIColor *)articleListFontColor;
@@ -120,7 +122,7 @@
 -(UIColor *)notificationMessageTextColor;
 -(UIFont *)notificationTitleFont;
 -(UIFont *)notificationMessageFont;
-
+-(UIColor *)notificationChannelIconBorderColor;
 
 //Grid View Cell
 -(UIFont *)gridViewCellTitleFont;

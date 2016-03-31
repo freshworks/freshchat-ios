@@ -168,11 +168,6 @@
 
         NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
         
-        if (indexPath.row %2 == 0) {
-            unreadCount = indexPath.row;
-        }
-
-        
         [cell.badgeView updateBadgeCount:unreadCount];
 
         FDSecureStore *store = [FDSecureStore sharedInstance];
