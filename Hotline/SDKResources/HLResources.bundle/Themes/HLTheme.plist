@@ -146,7 +146,7 @@
 		<key>UnreadBadgeFontName</key>
 		<string>HelveticaNeue</string>
 		<key>UnreadBadgeFontSize</key>
-		<string>14.0f</string>
+		<string>13f</string>
 		<key>ChannelIconPlaceholderBackgroundColor</key>
 		<string>555555</string>
 		<key>ChannelIconPlaceholderCharFontSize</key>

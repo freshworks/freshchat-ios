@@ -169,7 +169,7 @@
         NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
         
         if (indexPath.row %2 == 0) {
-            unreadCount = 5;
+            unreadCount = indexPath.row;
         }
 
         

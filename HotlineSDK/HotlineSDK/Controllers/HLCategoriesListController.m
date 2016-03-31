@@ -22,6 +22,7 @@
 #import "HLLocalization.h"
 #import "FDUtilities.h"
 #import "FDBarButtonItem.h"
+#import "FDCell.h"
 #import "HLEmptyResultView.h"
 
 @interface HLCategoriesListController ()
@@ -159,9 +160,9 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLCategoriesCell";
-    FDCategoryListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    FDCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDCategoryListViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[FDCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];
@@ -172,7 +173,7 @@
         cell.imgView.image = [UIImage imageWithData:category.icon];
     }
     
-    cell.detailLabelHeightConstraint.constant = cell.detailLabel.intrinsicContentSize.height;
+    [cell adjustPadding];
     
     return cell;
 }

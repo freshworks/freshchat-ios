@@ -19,9 +19,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         HLTheme *theme = [HLTheme sharedInstance];
-        self.translatesAutoresizingMaskIntoConstraints = NO;
         self.countLabel = [FDLabel new];
-        self.countLabel.textColor = [UIColor blackColor];
+        self.countLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        self.countLabel.textColor = [theme badgeButtonTitleColor];
         self.backgroundColor = [theme badgeButtonBackgroundColor];
         self.countLabel.font = [theme badgeButtonFont];
         [self addSubview:self.countLabel];
@@ -42,7 +42,7 @@
 -(void)updateBadgeCount:(NSInteger)count{
     if (count) {
         NSString *countString = [NSString stringWithFormat:@"%ld",(long)count];
-        if (count > 999) countString = [NSString stringWithFormat:@"999+"];
+        if (count > 99) countString = [NSString stringWithFormat:@"99+"];
         self.countLabel.text = countString;
         self.hidden = NO;
     }else{

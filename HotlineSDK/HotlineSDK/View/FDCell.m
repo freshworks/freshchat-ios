@@ -16,7 +16,7 @@
     if (self) {
         
         self.contentEncloser = [[UIView alloc]init];
-        self.contentEncloser.backgroundColor = [UIColor greenColor];
+        //self.contentEncloser.backgroundColor = [UIColor greenColor];
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.titleLabel = [[FDLabel alloc] init];
@@ -61,6 +61,12 @@
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
         
         if (YES) {
+            
+            UIImageView *accessoryView = [[UIImageView alloc] init];
+            accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
+            accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
+            [self.contentView addSubview:accessoryView];
+
             self.lastUpdatedLabel = [[UILabel alloc] init];
             self.lastUpdatedLabel.textAlignment = UITextAlignmentRight;
             self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -72,18 +78,22 @@
             
             views[@"lastUpdated"] = self.lastUpdatedLabel;
             views[@"badgeView"] = self.badgeView;
+            views[@"accessoryView"] = accessoryView;
             
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
             
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[badgeView(20)]" options:0 metrics:nil views:views]];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[badgeView(30)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
             
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(21)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(20)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-(>=0)-[lastUpdated(55)]-|" options:0 metrics:nil views:views]];
+
+            [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:accessoryView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 
         }else{
             
-            //TODO: Add content encloser right here
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-|" options:0 metrics:nil views:views]];
+
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
         }
@@ -102,6 +112,10 @@
     CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
     
     self.encloserHeightConstraint.constant = titleHeight + detailHeight;
+    
+    if (self.badgeView.isHidden) {
+        NSLog(@"Badge view for %@, is hidden so use all the space of subtitle", self.titleLabel.text);
+    }
     
     
 }
