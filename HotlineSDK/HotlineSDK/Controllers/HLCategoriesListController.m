@@ -17,7 +17,6 @@
 #import "FDSolutionUpdater.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
-#import "FDCategoryListViewCell.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
 #import "FDUtilities.h"

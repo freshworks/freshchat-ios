@@ -14,7 +14,6 @@
 #import "HLChannel.h"
 #import "HLContainerController.h"
 #import "FDMessageController.h"
-#import "FDChannelListViewCell.h"
 #import "KonotorMessage.h"
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
@@ -23,7 +22,6 @@
 #import "FDNotificationBanner.h"
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"
-
 #import "FDCell.h"
 
 @interface HLChannelViewController ()
