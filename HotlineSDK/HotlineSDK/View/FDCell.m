@@ -124,8 +124,6 @@
 
 -(void)theme{
     HLTheme *theme = [HLTheme sharedInstance];
-    
-    if (self.isChannelCell) {
         self.backgroundColor     = [theme channelListCellBackgroundColor];
         self.titleLabel.textColor = [theme channelTitleFontColor];
         self.titleLabel.font      = [theme channelTitleFont];
@@ -133,10 +131,6 @@
         self.detailLabel.textColor = [theme channelDescriptionFontColor];
         self.lastUpdatedLabel.font = [theme channelLastUpdatedFont];
         self.lastUpdatedLabel.textColor = [theme channelLastUpdatedFontColor];
-    }else{
-        //TODO: Add theme entry for category list
-    }
-    
 }
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{
@@ -150,6 +144,7 @@
     label.textAlignment = NSTextAlignmentCenter;
     label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
     label.layer.cornerRadius = label.frame.size.height / 2.0f;
+    label.clipsToBounds = YES;
     UIGraphicsBeginImageContext(label.frame.size);
     [[label layer] renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();

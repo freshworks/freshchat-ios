@@ -170,7 +170,12 @@
         cell.detailLabel.text = category.categoryDescription;
         cell.layer.borderWidth = 0.5f;
         cell.layer.borderColor = [self.theme tableViewCellSeparatorColor].CGColor;
-        cell.imgView.image = [UIImage imageWithData:category.icon];
+        if(!category.icon){
+            cell.imgView.image = [FDCell generateImageForLabel:category.title];
+        }
+        else{
+            cell.imgView.image = [UIImage imageWithData:category.icon];
+        }
     }
     
     [cell adjustPadding];
