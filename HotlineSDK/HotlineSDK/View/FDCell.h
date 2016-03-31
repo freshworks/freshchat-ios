@@ -20,7 +20,10 @@
 @property (strong, nonatomic) FDBadgeView *badgeView;
 @property (strong, nonatomic) UILabel *lastUpdatedLabel;
 @property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
-@property (assign, nonatomic) BOOL showAdditionalAccessories;
+@property (strong, nonatomic) NSLayoutConstraint *detailLableRightConstraint;
+@property (assign, nonatomic) BOOL isChannelCell;
+
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannelCell;
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText;
 

@@ -11,12 +11,13 @@
 
 @implementation FDCell
 
--(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannel{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
+        self.isChannelCell = isChannel;
+        
         self.contentEncloser = [[UIView alloc]init];
-        //self.contentEncloser.backgroundColor = [UIColor greenColor];
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.titleLabel = [[FDLabel alloc] init];
@@ -60,13 +61,16 @@
         
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
         
-        if (YES) {
-            
-            UIImageView *accessoryView = [[UIImageView alloc] init];
-            accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
-            accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
-            [self.contentView addSubview:accessoryView];
-
+        UIImageView *accessoryView = [[UIImageView alloc] init];
+        accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
+        accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
+        [self.contentView addSubview:accessoryView];
+        
+        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:accessoryView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        
+        views[@"accessoryView"] = accessoryView;
+        
+        if (isChannel) {
             self.lastUpdatedLabel = [[UILabel alloc] init];
             self.lastUpdatedLabel.textAlignment = UITextAlignmentRight;
             self.lastUpdatedLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -78,24 +82,24 @@
             
             views[@"lastUpdated"] = self.lastUpdatedLabel;
             views[@"badgeView"] = self.badgeView;
-            views[@"accessoryView"] = accessoryView;
             
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
-            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
+            [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]" options:0 metrics:nil views:views]];
             
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[badgeView(30)][accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
+            self.detailLableRightConstraint = [NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.contentEncloser attribute:NSLayoutAttributeTrailing multiplier:1 constant:0];
+            
+            [self.contentEncloser addConstraint:self.detailLableRightConstraint];
+            
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[badgeView(30)]-10-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
             
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(20)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-(>=0)-[lastUpdated(55)]-|" options:0 metrics:nil views:views]];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser][lastUpdated(55)]" options:0 metrics:nil views:views]];
 
-            [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:accessoryView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 
         }else{
-            
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-|" options:0 metrics:nil views:views]];
-
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]|" options:0 metrics:nil views:views]];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
         }
         
         
@@ -114,27 +118,25 @@
     self.encloserHeightConstraint.constant = titleHeight + detailHeight;
     
     if (self.badgeView.isHidden) {
-        NSLog(@"Badge view for %@, is hidden so use all the space of subtitle", self.titleLabel.text);
+        self.detailLableRightConstraint.constant = 45;
     }
-    
-    
 }
 
 -(void)theme{
     HLTheme *theme = [HLTheme sharedInstance];
-    self.backgroundColor     = [theme channelListCellBackgroundColor];
-    self.titleLabel.textColor = [theme channelTitleFontColor];
-    self.titleLabel.font      = [theme channelTitleFont];
-    self.detailLabel.font = [theme channelDescriptionFont];
-    self.detailLabel.textColor = [theme channelDescriptionFontColor];
     
-    self.lastUpdatedLabel.font = [theme channelLastUpdatedFont];
-    self.lastUpdatedLabel.textColor = [theme channelLastUpdatedFontColor];
-
+    if (self.isChannelCell) {
+        self.backgroundColor     = [theme channelListCellBackgroundColor];
+        self.titleLabel.textColor = [theme channelTitleFontColor];
+        self.titleLabel.font      = [theme channelTitleFont];
+        self.detailLabel.font = [theme channelDescriptionFont];
+        self.detailLabel.textColor = [theme channelDescriptionFontColor];
+        self.lastUpdatedLabel.font = [theme channelLastUpdatedFont];
+        self.lastUpdatedLabel.textColor = [theme channelLastUpdatedFontColor];
+    }else{
+        //TODO: Add theme entry for category list
+    }
     
-//    //TODO: remove these
-//    self.titleLabel.backgroundColor = [UIColor orangeColor];
-//    self.detailLabel.backgroundColor = [UIColor yellowColor];
 }
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{

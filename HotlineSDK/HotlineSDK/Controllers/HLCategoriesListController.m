@@ -162,7 +162,7 @@
     NSString *cellIdentifier = @"HLCategoriesCell";
     FDCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[FDCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier isChannelCell:NO];
     }
     if (indexPath.row < self.categories.count) {
         HLCategory *category =  self.categories[indexPath.row];

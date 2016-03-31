@@ -148,7 +148,7 @@
     FDCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (!cell) {
-        cell = [[FDCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier isChannelCell:YES];
     }
     
     //Update cell properties
@@ -201,6 +201,8 @@
         }
 
     }
+    
+    
     
     [cell adjustPadding];
 
