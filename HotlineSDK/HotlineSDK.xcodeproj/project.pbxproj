@@ -86,9 +86,6 @@
 		35DCCB5F1BE005370039EFDD /* KonotorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5B1BE005370039EFDD /* KonotorAudioPlayer.m */; };
 		35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */; };
 		35E000F61C6090810082A036 /* FDDateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E000F51C6090810082A036 /* FDDateUtil.m */; };
-		35E000FB1C6090B60082A036 /* FDCategoryListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E000F81C6090B60082A036 /* FDCategoryListViewCell.m */; };
-		35E000FC1C6090B60082A036 /* FDChannelListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E000FA1C6090B60082A036 /* FDChannelListViewCell.m */; };
-		35E000FF1C6090DF0082A036 /* FDTableViewCellWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E000FE1C6090DF0082A036 /* FDTableViewCellWithImage.m */; };
 		35E001021C6091000082A036 /* FDMarginalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E001011C6091000082A036 /* FDMarginalView.m */; };
 		35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E767BF1C2051120098CFA1 /* HotlineUser.m */; };
 		35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F7D4571C22A9390007DA9A /* FDImageView.m */; };
@@ -300,12 +297,6 @@
 		35DCCB5D1BE005370039EFDD /* KonotorAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorAudioRecorder.m; sourceTree = "<group>"; };
 		35E000F41C6090810082A036 /* FDDateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDDateUtil.h; sourceTree = "<group>"; };
 		35E000F51C6090810082A036 /* FDDateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDateUtil.m; sourceTree = "<group>"; };
-		35E000F71C6090B60082A036 /* FDCategoryListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCategoryListViewCell.h; sourceTree = "<group>"; };
-		35E000F81C6090B60082A036 /* FDCategoryListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCategoryListViewCell.m; sourceTree = "<group>"; };
-		35E000F91C6090B60082A036 /* FDChannelListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDChannelListViewCell.h; sourceTree = "<group>"; };
-		35E000FA1C6090B60082A036 /* FDChannelListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDChannelListViewCell.m; sourceTree = "<group>"; };
-		35E000FD1C6090DF0082A036 /* FDTableViewCellWithImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTableViewCellWithImage.h; sourceTree = "<group>"; };
-		35E000FE1C6090DF0082A036 /* FDTableViewCellWithImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTableViewCellWithImage.m; sourceTree = "<group>"; };
 		35E001001C6091000082A036 /* FDMarginalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMarginalView.h; sourceTree = "<group>"; };
 		35E001011C6091000082A036 /* FDMarginalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMarginalView.m; sourceTree = "<group>"; };
 		35E767BF1C2051120098CFA1 /* HotlineUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotlineUser.m; sourceTree = "<group>"; };
@@ -662,16 +653,10 @@
 				35DCCB2B1BE001650039EFDD /* HLGridViewCell.m */,
 				68EC0ABB1C61F4F800E37C94 /* FDArticleListCell.h */,
 				68EC0ABC1C61F4F800E37C94 /* FDArticleListCell.m */,
-				35E000F91C6090B60082A036 /* FDChannelListViewCell.h */,
 				355EEB3C1CABD97800229780 /* FDCell.h */,
 				355EEB3D1CABD97800229780 /* FDCell.m */,
-				35E000FA1C6090B60082A036 /* FDChannelListViewCell.m */,
-				35E000F71C6090B60082A036 /* FDCategoryListViewCell.h */,
-				35E000F81C6090B60082A036 /* FDCategoryListViewCell.m */,
-				35E000FD1C6090DF0082A036 /* FDTableViewCellWithImage.h */,
 				35155DE71C9FAC1D00479BD8 /* FDLabel.h */,
 				35155DE81C9FAC1D00479BD8 /* FDLabel.m */,
-				35E000FE1C6090DF0082A036 /* FDTableViewCellWithImage.m */,
 				3509983D1C3E77FC0049E269 /* FDNotificationBanner.h */,
 				3509983E1C3E77FC0049E269 /* FDNotificationBanner.m */,
 				3CA2B6C21C885B3D000BF719 /* FDBarButtonItem.h */,
@@ -922,7 +907,6 @@
 				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,
 				354D0D301C48D23E004D2AA1 /* HotlineAppState.m in Sources */,
 				35DCCB511BE002960039EFDD /* FDTableViewCell.m in Sources */,
-				35E000FC1C6090B60082A036 /* FDChannelListViewCell.m in Sources */,
 				CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */,
 				35DCCB3E1BE002220039EFDD /* FDActionButton.m in Sources */,
 				3533F0DC1BB06BD0000B2D9A /* HLArticleDetailViewController.m in Sources */,
@@ -933,7 +917,6 @@
 				353AA00D1BDF7B4F008CDAB2 /* FDMessageController.m in Sources */,
 				CE1064971BC55FDB00922494 /* FDVotingManager.m in Sources */,
 				35DCCB361BE001650039EFDD /* HLGridViewCell.m in Sources */,
-				35E000FF1C6090DF0082A036 /* FDTableViewCellWithImage.m in Sources */,
 				683CBFB91C8F0FE70084D2DE /* HLEmptyResultView.m in Sources */,
 				35DCCB531BE002960039EFDD /* FDPromptView.m in Sources */,
 				68EC0ABD1C61F4F800E37C94 /* FDArticleListCell.m in Sources */,
@@ -948,7 +931,6 @@
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
 				359A51871C73EC980075E290 /* FDBackgroundTaskManager.m in Sources */,
 				35E001021C6091000082A036 /* FDMarginalView.m in Sources */,
-				35E000FB1C6090B60082A036 /* FDCategoryListViewCell.m in Sources */,
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,
 				3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */,
 				354D0D2C1C48D1A4004D2AA1 /* FDAttachmentImageController.m in Sources */,
