@@ -357,32 +357,18 @@
         
         if (!channel) return;
         
-        BOOL canShowBanner = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-        if(!canShowBanner){
-            if (appState == UIApplicationStateInactive) {
-                [self launchMessageControllerOfChannel:channel];
-            }
-        }else{
-            FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
-            [banner setMessage:message];
-            banner.delegate = self;
-            
-            HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
-            
-            if(visibleChannel){
-                if ([visibleChannel.channelID isEqual:channel.channelID]) {
-                    FDLog(@"Do not display notification banner / handle notification");
-                }else{
+        if (appState == UIApplicationStateInactive) {
+            [self launchMessageControllerOfChannel:channel];
+        }
+        else {
+            BOOL canShowBanner = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+            if(canShowBanner){
+                HLChannel *currentVisibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
+                if(![currentVisibleChannel.channelID isEqual:channel.channelID]) {
+                    FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+                    [banner setMessage:message];
+                    banner.delegate = self;
                     [banner displayBannerWithChannel:channel];
-                    FDLog(@"Display notification banner, user is in some other channel");
-                }
-            }else{
-                if (appState == UIApplicationStateInactive) {
-                    [self launchMessageControllerOfChannel:channel];
-                    FDLog(@"Take user to the appropriate message screen");
-                }else{
-                    [banner displayBannerWithChannel:channel];
-                    FDLog(@"Display notification banner, user is somewhere outside channel screen");
                 }
             }
         }
