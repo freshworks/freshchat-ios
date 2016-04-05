@@ -292,6 +292,16 @@
     return color ? color : [HLTheme colorWithHex:@"F2F2F2"];
 }
 
+- (int)numberOfChannelListDescriptionLines{
+    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NumChannelListDescriptionLines"] intValue];
+    return MIN(linesNo, 2);
+}
+
+- (int)numberOfCategoryListDescriptionLines{
+    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NumFAQListDescriptionLines"] intValue];
+    return MIN(linesNo, 2);
+}
+
 #pragma mark - Notifictaion
 
 -(UIColor *)notificationBackgroundColor{
@@ -315,6 +325,11 @@
 
 -(UIFont *)notificationMessageFont{
     return [self getFontWithKey:@"Notification.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)notificationChannelIconBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Article list
@@ -414,6 +429,7 @@
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
+
 
 
 #pragma mark - Grid View

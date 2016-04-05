@@ -25,6 +25,7 @@
 #import "HLLocalization.h"
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"
+#import "FDCell.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -268,8 +269,7 @@
         cell.layer.borderColor=[self.theme gridViewCellBorderColor].CGColor;
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
-            //TODO: Add placeholder image
-            cell.imageView.image = nil;
+            cell.imageView.image = [FDCell generateImageForLabel:category.title];
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
         }

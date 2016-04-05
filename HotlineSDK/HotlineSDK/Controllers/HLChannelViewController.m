@@ -14,7 +14,6 @@
 #import "HLChannel.h"
 #import "HLContainerController.h"
 #import "FDMessageController.h"
-#import "FDChannelListViewCell.h"
 #import "KonotorMessage.h"
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
@@ -23,6 +22,7 @@
 #import "FDNotificationBanner.h"
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"
+#import "FDCell.h"
 
 @interface HLChannelViewController ()
 
@@ -141,37 +141,46 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = @"HLChannelsCell";
-    FDChannelListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    static NSString *cellIdentifier = @"HLChannelsCell";
+    
+    FDCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (!cell) {
-        cell = [[FDChannelListViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[FDCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier isChannelCell:YES];
     }
+    
+    //Update cell properties
     
     if (indexPath.row < self.channels.count) {
         HLChannel *channel =  self.channels[indexPath.row];
+
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
-        
+
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
         cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
-                
+
+
+        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
+        
+        [cell.badgeView updateBadgeCount:unreadCount];
+
         FDSecureStore *store = [FDSecureStore sharedInstance];
         BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
-        
+
         if(showChannelThumbnail){
             if (channel.icon) {
                 cell.imgView.image = [UIImage imageWithData:channel.icon];
             }
             else{
-                UIImage *placeholderImage = [FDChannelListViewCell generateImageForLabel:channel.name];
+                UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
                 if(channel.iconURL){
                     NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
                     NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
-                    __weak FDChannelListViewCell *weakCell = cell;
+                    __weak FDCell *weakCell = cell;
                     [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                         weakCell.imgView.image = image;
                         channel.icon = UIImagePNGRepresentation(image);
@@ -183,13 +192,13 @@
                 }
             }
         }
-        
-        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
-        [cell.badgeView updateBadgeCount:unreadCount];
+
     }
     
-    [cell adjustPadding];
     
+    
+    [cell adjustPadding];
+
     return cell;
 }
 

@@ -7,14 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FDLabel.h"
 
 @interface FDBadgeView : UIView
 
-//Composite Views
-@property (strong,nonatomic) UIButton *badgeButton;
+@property (nonatomic, strong) FDLabel *countLabel;
 
-//Initializer - requires only origin for the badgeView
--(instancetype)initWithFrame:(CGRect)frame andBadgeNumber:(NSInteger)count;
+-(instancetype)initWithFrame:(CGRect)frame;
 
 -(void)updateBadgeCount:(NSInteger)count;
 
