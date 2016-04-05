@@ -132,7 +132,7 @@
 #pragma mark - Status Bar
 
 -(UIStatusBarStyle *)statusBarStyle{
-    NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"StatusBar.Style"];
+    NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"OverallSettings.StatusBarStyle"];
     if([statusBarStyle isEqualToString:@"UIStatusBarStyleLightContent"]){
         return UIStatusBarStyleLightContent;
     }
