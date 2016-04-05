@@ -345,44 +345,30 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        BOOL canShowNotification = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-        if(!canShowNotification)
-        return ;
 
         [HLMessageServices downloadAllMessages:nil];
-
+        
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
+        FDLog(@"Push Recieved :%@", payload);
         
         NSNumber *channelID = @([payload[@"kon_c_ch_id"] integerValue]);
         NSString *message = [payload valueForKeyPath:@"aps.alert"];
         HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+        
         if (!channel) return;
         
-        FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
-        [banner setMessage:message];
-        banner.delegate = self;
-        
-        HLChannel *visibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
-                
-        if(visibleChannel){
-            if ([visibleChannel.channelID isEqual:channel.channelID]) {
-                FDLog(@"Do not display notification banner / handle notification");
-            }else{
+        if (appState == UIApplicationStateInactive) {
+            [self launchMessageControllerOfChannel:channel];
+        }
+        else {
+            BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+            if(bannerEnabled && ![channel isActiveChannel]){
+                FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+                [banner setMessage:message];
+                banner.delegate = self;
                 [banner displayBannerWithChannel:channel];
-                FDLog(@"Display notification banner, user is in some other channel");
-            }
-        }else{
-            if (appState == UIApplicationStateInactive) {
-                [self launchMessageControllerOfChannel:channel];
-                FDLog(@"Take user to the appropriate message screen");
-            }else{
-                [banner displayBannerWithChannel:channel];
-                FDLog(@"Display notification banner, user is somewhere outside channel screen");
             }
         }
-        
-        FDLog(@"Push Recieved :%@", payload);
     });
 }
 

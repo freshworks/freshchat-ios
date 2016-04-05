@@ -31,6 +31,8 @@
 
 @property (strong, nonatomic) UIButton *selectImageButton;
 
+@property (strong, nonatomic) UIButton *testNotificationButton;
+
 @end
 
 @implementation FDSettingsController
@@ -73,6 +75,8 @@
     
     self.selectImageButton = [self getCustomAutoLayoutButtonWithTitle:@"choose image (+) from camera roll" withAction:@selector(selectImageButtonAction:)];
     
+    self.testNotificationButton = [self getCustomAutoLayoutButtonWithTitle:@"Test Notification" withAction:@selector(testNotification:)];
+    
     self.updateCustomPropertiesButton.backgroundColor = [UIColor colorWithHue:0.38 saturation:0.74 brightness:0.76 alpha:1];
     
     [self.view addSubview:self.containerView];
@@ -82,6 +86,7 @@
     [self.containerView addSubview:self.valueField];
     [self.containerView addSubview:self.updateCustomPropertiesButton];
     [self.containerView addSubview:self.selectImageButton];
+    [self.containerView addSubview:self.testNotificationButton];
     
     NSDictionary *configFields = @{ @"domainField":self.domainField, @"appIDField":self.appIDField, @"appKeyField":self.appKeyField, @"userNameField":self.userNameField, @"emailField":self.emailField, @"phoneNumField":self.phoneNumField, @"externalIDField":self.externalIDField, @"selectImageButton": self.selectImageButton};
     
@@ -91,7 +96,8 @@
                                      @"updateConfigButton":self.updateConfigButton,
                                      @"updateUserPropertiesButton":self.updateUserPropertiesButton,
                                      @"keyField":self.keyField, @"valueField":self.valueField,
-                                      @"updateCustomPropButton":self.updateCustomPropertiesButton }];
+                                      @"updateCustomPropButton":self.updateCustomPropertiesButton,
+                                      @"testNotificationButton": self.testNotificationButton }];
     
     [self setupHorizontalConstraintsForViews:configFields onSuperView:self.containerView];
     
@@ -107,7 +113,9 @@
     
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[keyField]-[valueField(keyField)]-[updateCustomPropButton(50)]-|" options:NSLayoutFormatAlignAllCenterY metrics:nil views:views]];
     
-    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyField]-50-[selectImageButton]" options:0 metrics:nil views:views]];
+    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyField]-50-[selectImageButton]-50-[testNotificationButton]" options:0 metrics:nil views:views]];
+    
+    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[testNotificationButton(contentWidth)]-10-|" options:0 metrics:metrics views:views]];
 
     [self updateFields];
 }
@@ -221,4 +229,14 @@
     self.externalIDField.text = [HotlineUser sharedInstance].externalID;
 }
 
+-(void)testNotification:(id)sender{
+    NSNumber *channelId = @1213;
+    [[Hotline sharedInstance] handleRemoteNotification:@{
+                                                                  @"kon_c_ch_id" : channelId,
+                                                                      @"aps" : @{
+                                                                          @"alert" : @"Sample Test Message"
+                                                                          }
+                                                                  }
+                                                    andAppstate:UIApplicationStateActive];
+         }
 @end
