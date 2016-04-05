@@ -10,6 +10,7 @@
 #import "KonotorConversation.h"
 #import "KonotorMessage.h"
 #import "HLMacros.h"
+#import "HotlineAppState.h"
 
 @implementation HLChannel
 
@@ -36,6 +37,14 @@
 
 - (KonotorConversation*) primaryConversation{
     return self.conversations.allObjects.firstObject;
+}
+
+-(BOOL)isActiveChannel{
+    HLChannel *currentVisibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
+    if(currentVisibleChannel && [currentVisibleChannel.channelID isEqual:self.channelID]){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo{

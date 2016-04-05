@@ -361,15 +361,12 @@
             [self launchMessageControllerOfChannel:channel];
         }
         else {
-            BOOL canShowBanner = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-            if(canShowBanner){
-                HLChannel *currentVisibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
-                if(![currentVisibleChannel.channelID isEqual:channel.channelID]) {
-                    FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
-                    [banner setMessage:message];
-                    banner.delegate = self;
-                    [banner displayBannerWithChannel:channel];
-                }
+            BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+            if(bannerEnabled && ![channel isActiveChannel]){
+                FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
+                [banner setMessage:message];
+                banner.delegate = self;
+                [banner displayBannerWithChannel:channel];
             }
         }
     });
