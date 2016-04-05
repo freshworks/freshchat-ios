@@ -32,17 +32,22 @@
     return self;
 }
 
-- (void) showNorificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
+-(void) showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message{
+    
+    BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+    if(bannerEnabled && ![channel isActiveChannel]){
+        [self.banner setMessage:message];
+        [self.banner displayBannerWithChannel:channel];
+    }
+}
+
+- (void) handleNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
     
     if (state == UIApplicationStateInactive) {
         [self launchMessageControllerOfChannel:channel];
     }
     else {
-        BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-        if(bannerEnabled && ![channel isActiveChannel]){
-            [self.banner setMessage:message];
-            [self.banner displayBannerWithChannel:channel];
-        }
+        [self showActiveStateNotificationBanner:channel withMessage:message];
     }
 }
 

@@ -26,7 +26,7 @@
 #import "HLNotificationHandler.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-
+static HLNotificationHandler *handleUpdateNotification;
 @implementation HLMessageServices
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler{
@@ -137,10 +137,8 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                     }
                 }
                 if(![self areNotificationsEnabled] && messageText){
-                    UIApplication *app = [UIApplication sharedApplication];
-                    HLNotificationHandler *showNotification = [[HLNotificationHandler alloc] init];
-                    [showNotification showNorificationBanner:channel withMessage:messageText andState:app.applicationState];
-
+                    handleUpdateNotification = [[HLNotificationHandler alloc] init];
+                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
                 }
                 
             }
