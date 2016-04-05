@@ -23,6 +23,7 @@
 #import "FDResponseInfo.h"
 #import "FDBackgroundTaskManager.h"
 #import "FDDateUtil.h"
+#import "HLNotificationHandler.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 
@@ -99,10 +100,11 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
-            
+            NSString *messageText;
+            NSNumber *channelId;
             for (int i=0; i<pArrayOfConversations.count; i++) {
                 NSDictionary *conversationInfo = pArrayOfConversations[i];
-                NSNumber *channelId = conversationInfo[@"channelId"];
+                channelId = conversationInfo[@"channelId"];
                 HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
@@ -129,9 +131,20 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                             newMessage.messageRead = YES;
                         }
                         lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
+                        if([newMessage.messageType intValue] == 1){
+                            messageText = newMessage.text;
+                        }
                     }
                 }
+                if(![self areNotificationsEnabled] && messageText){
+                    UIApplication *app = [UIApplication sharedApplication];
+                    HLNotificationHandler *showNotification = [[HLNotificationHandler alloc] init];
+                    [showNotification showNorificationBanner:channel withMessage:messageText andState:app.applicationState];
+
+                }
+                
             }
+            
             if(handler) handler(nil);
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
@@ -143,6 +156,22 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
     }];
 }
+
++(BOOL) areNotificationsEnabled{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){
+        UIUserNotificationSettings *noticationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (!noticationSettings || (noticationSettings.types == UIUserNotificationTypeNone)) {
+            return NO;
+        }
+        return YES;
+    }
+    UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+    if (types & UIRemoteNotificationTypeAlert){
+        return YES;
+    } else{
+    }
+}
+
 
 +(void)postUnreadCountNotification{
     NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];

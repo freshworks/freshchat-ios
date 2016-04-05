@@ -16,7 +16,6 @@
 #import "FDMessageController.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
-#import "HotlineAppState.h"
 #import "Konotor.h"
 #import "HLCoreServices.h"
 #import "FDUtilities.h"
@@ -24,17 +23,18 @@
 #import "FDSolutionUpdater.h"
 #import "KonotorMessage.h"
 #import "HLConstants.h"
-#import "FDNotificationBanner.h"
 #import "HLMessageServices.h"
 #import "KonotorCustomProperty.h"
 #import "KonotorUser.h"
 #import "HLVersionConstants.h"
+#import "HLNotificationHandler.h"
 
-@interface Hotline () <FDNotificationBannerDelegate>
+@interface Hotline ()
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
 @property (nonatomic, strong) NSTimer *pollingTimer;
+@property (nonatomic, strong) HLNotificationHandler *notificationHandler;
 
 @end
 
@@ -357,18 +357,8 @@
         
         if (!channel) return;
         
-        if (appState == UIApplicationStateInactive) {
-            [self launchMessageControllerOfChannel:channel];
-        }
-        else {
-            BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-            if(bannerEnabled && ![channel isActiveChannel]){
-                FDNotificationBanner *banner = [FDNotificationBanner sharedInstance];
-                [banner setMessage:message];
-                banner.delegate = self;
-                [banner displayBannerWithChannel:channel];
-            }
-        }
+        self.notificationHandler = [[HLNotificationHandler alloc] init];
+        [self.notificationHandler showNorificationBanner:channel withMessage:message andState:appState];
     });
 }
 
@@ -409,59 +399,8 @@
     
 }
 
-
 -(void)clearUserDataWithCompletion:(void (^)())completion{
     [self clearUserDataWithCompletion:completion andInit:true];
-}
-
--(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
-    [self launchMessageControllerOfChannel:banner.currentChannel];
-}
-
--(void)launchMessageControllerOfChannel:(HLChannel *)channel{
-    UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
-    if (visibleSDKController) {
-        FDLog(@"visible screen is inside SDK");
-        if ([visibleSDKController isKindOfClass:[HLChannelViewController class]]) {
-            [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:channel];
-        } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
-            FDMessageController *msgController = (FDMessageController *)visibleSDKController;
-            if (msgController.isModal) {
-                [self presentMessageControllerOn:visibleSDKController withChannel:channel];
-            }else{
-                UINavigationController *navController = msgController.navigationController;
-                [navController popViewControllerAnimated:NO];
-                [self pushMessageControllerFrom:navController withChannel:channel];
-            }
-        }else {
-            [self presentMessageControllerOn:visibleSDKController withChannel:channel];
-        }
-        
-    }else{
-        [self presentMessageControllerOn:[self topMostController] withChannel:channel];
-    }
-}
-
--(UIViewController*) topMostController {
-    UIViewController *topController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    while (topController.presentedViewController) {
-        topController = topController.presentedViewController;
-    }
-    return topController;
-}
-
-
--(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
-    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
-    HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
-    [controller pushViewController:container animated:YES];
-}
-
--(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
-    FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-    [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
 -(NSInteger)unreadCount{

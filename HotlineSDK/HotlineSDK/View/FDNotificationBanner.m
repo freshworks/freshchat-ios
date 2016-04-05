@@ -96,11 +96,11 @@
 
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[title]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeButton(20)]-15-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeButton(22)]-13-|" options:0 metrics:nil views:views]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[title]-5-[message]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[imgView]-[message]-[closeButton]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(20)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(22)]" options:0 metrics:nil views:views]];
     
     self.backgroundColor = [self.theme notificationBackgroundColor];
     
