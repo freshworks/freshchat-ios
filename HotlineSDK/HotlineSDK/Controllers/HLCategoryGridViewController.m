@@ -114,6 +114,9 @@
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
+    else {
+        [self configureBackButtonWithGestureDelegate:nil];
+    }
     
     NSArray *rightBarItems;
     if(!self.categories.count){
@@ -125,7 +128,7 @@
     
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
-    [self configureBackButtonWithGestureDelegate:self];
+    
 }
 
 -(void)searchButtonAction:(id)sender{

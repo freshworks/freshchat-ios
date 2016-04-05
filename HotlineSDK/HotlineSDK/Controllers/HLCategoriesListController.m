@@ -70,6 +70,9 @@
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
+    else {
+        [self configureBackButtonWithGestureDelegate:nil];
+    }
     NSArray *rightBarItems;
     if(!self.categories.count){
         rightBarItems = @[contactUsBarButton];
@@ -78,8 +81,6 @@
         rightBarItems = @[searchBarButton,contactUsBarButton];
     }
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
-    
-    [self configureBackButtonWithGestureDelegate:self];
 }
 
 -(void)closeButton:(id)sender{

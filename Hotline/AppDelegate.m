@@ -81,6 +81,8 @@
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
+    //config.displayFAQsAsGrid = YES;
+    
     HotlineUser *user = [HotlineUser sharedInstance];
     user.name = @"Sid";
     user.email = @"sid@freshdesk.com";
