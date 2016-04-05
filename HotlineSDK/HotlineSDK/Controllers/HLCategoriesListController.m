@@ -93,7 +93,7 @@
     }
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
-    [self configureBackButton];
+    [self configureBackButtonWithGestureDelegate:self];
 }
 
 -(void)closeButton:(id)sender{

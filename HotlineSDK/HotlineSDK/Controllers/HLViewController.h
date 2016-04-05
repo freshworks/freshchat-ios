@@ -15,7 +15,7 @@
 
 @property BOOL embedded;
 
--(void)configureBackButton;
+-(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate;
 
 @end
 

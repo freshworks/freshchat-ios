@@ -122,31 +122,7 @@
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
 
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
-
-    if (isBackButtonImageExist) {
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self.navigationController
-                                                                      action:@selector(popViewControllerAnimated:)];
-        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        
-
-        if(self.isFromSearchView){
-            self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-        }else{
-            if (self.parentViewController) {
-                self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
-            }else{
-                self.navigationController.interactivePopGestureRecognizer.delegate = self;
-            }
-        }
-    }else{
-        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
-        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
-                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
-                                                                                                     target:nil action:nil];
-    }
+    [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
 }
 
 

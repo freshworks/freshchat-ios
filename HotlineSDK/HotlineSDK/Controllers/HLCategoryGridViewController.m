@@ -137,7 +137,7 @@
     
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
     
-    [self configureBackButton];
+    [self configureBackButtonWithGestureDelegate:self];
 }
 
 -(void)searchButtonAction:(id)sender{
