@@ -17,6 +17,9 @@
     if (self.navigationController == nil) {
         NSLog(@"Warning: Use Hotline controllers inside navigation controller");
     }
+    else {
+        self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle];
+    }
 }
 
 -(void)configureBackButton{

@@ -129,6 +129,17 @@
     return [self getFontWithKey:@"NavigationBar.Button" andDefaultSize:17];
 }
 
+#pragma mark - Status Bar
+
+-(UIStatusBarStyle *)statusBarStyle{
+    NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"StatusBar.Style"];
+    if([statusBarStyle isEqualToString:@"UIStatusBarStyleLightContent"]){
+        return UIStatusBarStyleLightContent;
+    }
+    return UIStatusBarStyleDefault;
+}
+
+
 #pragma mark - Search Bar
 
 -(UIFont *)searchBarFont{

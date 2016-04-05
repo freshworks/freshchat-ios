@@ -97,6 +97,9 @@
 -(UIColor *)navigationBarButtonColor;
 -(UIFont *)navigationBarButtonFont;
 
+//StatusBarStyle
+-(UIStatusBarStyle *)statusBarStyle;
+
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
