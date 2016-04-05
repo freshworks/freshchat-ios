@@ -293,12 +293,12 @@
 }
 
 - (int)numberOfChannelListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NosChannelListDescriptionLines"] intValue];
+    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NumChannelListDescriptionLines"] intValue];
     return MIN(linesNo, 2);
 }
 
 - (int)numberOfCategoryListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NosFAQListDescriptionLines"] intValue];
+    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NumFAQListDescriptionLines"] intValue];
     return MIN(linesNo, 2);
 }
 
