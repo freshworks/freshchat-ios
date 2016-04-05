@@ -196,6 +196,8 @@
 		<string>Helvetica</string>
 		<key>TalkToUsButtonFontSize</key>
 		<string>14.0f</string>
+		<key>StatusBarStyle</key>
+		<string>UIStatusBarStyleDefault</string>
 	</dict>
 	<key>SearchBar</key>
 	<dict>
