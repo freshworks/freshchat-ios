@@ -51,4 +51,16 @@
     }
 }
 
+//TODO: Refactor this to FDBarButtonItem
+-(UIBarButtonItem *) getBarButtonItemForImage:(NSString *)imageKey andAction:(SEL)action {
+    HLTheme *theme = [HLTheme sharedInstance];
+    UIImage *buttonImage = [theme getImageWithKey:imageKey];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(0, 0, 44, 44);
+    [button setImage:buttonImage forState:UIControlStateNormal];
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *uiBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [uiBarButtonItem setStyle:UIBarButtonItemStylePlain];
+    return uiBarButtonItem;
+}
 @end

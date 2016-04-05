@@ -63,14 +63,7 @@
 }
 
 -(void)setNavigationItem{
-    
-    UIImage *searchButtonImage = [self.theme getImageWithKey:IMAGE_SEARCH_ICON];
-    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    searchButton.frame = CGRectMake(0, 0, 44, 44);
-    [searchButton setImage:searchButtonImage forState:UIControlStateNormal];
-    [searchButton addTarget:self action:@selector(searchButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
-    [searchBarButton setStyle:UIBarButtonItemStylePlain];
+    UIBarButtonItem *searchBarButton = [self getBarButtonItemForImage:IMAGE_SEARCH_ICON andAction:@selector(searchButtonAction:)];
     UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     fixedItem.width = -20.0f;
     [self configureBackButtonWithGestureDelegate:self];

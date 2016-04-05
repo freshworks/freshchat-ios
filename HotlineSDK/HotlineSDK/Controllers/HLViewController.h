@@ -16,6 +16,7 @@
 @property BOOL embedded;
 
 -(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate;
+-(UIBarButtonItem *) getBarButtonItemForImage:(NSString *)imageKey andAction:(SEL)action;
 
 @end
 
