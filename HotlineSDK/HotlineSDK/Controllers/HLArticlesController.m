@@ -63,11 +63,10 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *searchBarButton = [self getBarButtonItemForImage:IMAGE_SEARCH_ICON andAction:@selector(searchButtonAction:)];
-    UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    fixedItem.width = -20.0f;
+    UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
+                                                                        style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     [self configureBackButtonWithGestureDelegate:self];
-    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
+    self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
 }
 
 -(void)searchButtonAction:(id)sender{

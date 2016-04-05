@@ -101,11 +101,11 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    fixedItem.width = -20.0f; // or whatever you want
-    
-    UIBarButtonItem *contactUsBarButton = [self getBarButtonItemForImage:IMAGE_CONTACT_US_ICON andAction:@selector(contactUsButtonAction:)];
-    UIBarButtonItem *searchBarButton = [self getBarButtonItemForImage:IMAGE_SEARCH_ICON andAction:@selector(searchButtonAction:)];
+
+    UIBarButtonItem *contactUsBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_CONTACT_US_ICON]
+                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
+    UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
+                                                                        style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     
     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
@@ -117,10 +117,10 @@
     
     NSArray *rightBarItems;
     if(!self.categories.count){
-        rightBarItems = @[contactUsBarButton,fixedItem];
+        rightBarItems = @[contactUsBarButton];
     }
     else{
-        rightBarItems = @[fixedItem,searchBarButton,contactUsBarButton];
+        rightBarItems = @[searchBarButton,contactUsBarButton];
     }
     
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
