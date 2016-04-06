@@ -42,7 +42,6 @@
 }
 
 - (void) handleNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
-    
     if (state == UIApplicationStateInactive) {
         [self launchMessageControllerOfChannel:channel];
     }
@@ -58,13 +57,14 @@
 -(void)launchMessageControllerOfChannel:(HLChannel *)channel{
     UIViewController *visibleSDKController = [HotlineAppState sharedInstance].currentVisibleController;
     if (visibleSDKController) {
-        FDLog(@"visible screen is inside SDK");
         if ([visibleSDKController isKindOfClass:[HLChannelViewController class]]) {
             [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:channel];
         } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
             FDMessageController *msgController = (FDMessageController *)visibleSDKController;
             if (msgController.isModal) {
-                [self presentMessageControllerOn:visibleSDKController withChannel:channel];
+                if (![channel isActiveChannel]) {
+                    [self presentMessageControllerOn:visibleSDKController withChannel:channel];
+                }
             }else{
                 UINavigationController *navController = msgController.navigationController;
                 [navController popViewControllerAnimated:NO];
