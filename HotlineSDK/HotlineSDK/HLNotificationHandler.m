@@ -33,7 +33,10 @@
 }
 
 -(void) showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message{
-    
+    //Check active state because HLMessageServices can run in background and call this.
+    if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive){
+        return;
+    }
     BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     if(bannerEnabled && ![channel isActiveChannel]){
         [self.banner setMessage:message];
@@ -41,7 +44,7 @@
     }
 }
 
-- (void) handleNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
+- (void) handleNotification :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
     
     if (state == UIApplicationStateInactive) {
         [self launchMessageControllerOfChannel:channel];

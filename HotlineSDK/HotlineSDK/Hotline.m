@@ -358,7 +358,7 @@
         if (!channel) return;
         
         self.notificationHandler = [[HLNotificationHandler alloc] init];
-        [self.notificationHandler handleNotificationBanner:channel withMessage:message andState:appState];
+        [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
     });
 }
 

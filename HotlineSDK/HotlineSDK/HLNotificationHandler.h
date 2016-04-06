@@ -12,7 +12,7 @@
 
 @interface HLNotificationHandler : NSObject<FDNotificationBannerDelegate>
 
-- (void) handleNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state;
+- (void) handleNotification :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state;
 -(void) showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message;
 
 +(BOOL) areNotificationsEnabled;
