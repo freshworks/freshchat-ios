@@ -100,4 +100,20 @@
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
+
++(BOOL) areNotificationsEnabled{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){
+        UIUserNotificationSettings *noticationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (!noticationSettings || (noticationSettings.types == UIUserNotificationTypeNone)) {
+            return NO;
+        }
+        return YES;
+    }
+    UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+    if (types & UIRemoteNotificationTypeAlert){
+        return YES;
+    }
+    return NO;
+}
+
 @end

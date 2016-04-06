@@ -23,6 +23,4 @@
 
 +(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context;
 
-+(BOOL) areNotificationsEnabled;
-
 @end

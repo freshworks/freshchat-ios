@@ -29,6 +29,7 @@
 #import "HotlineAppState.h"
 #import "FDBarButtonItem.h"
 #import "FDSecureStore.h"
+#import "HLNotificationHandler.h"
 
 typedef struct {
     BOOL isLoading;
@@ -497,7 +498,7 @@ typedef struct {
 
 -(void)checkPushNotificationState{
     
-    BOOL notificationEnabled = [HLMessageServices areNotificationsEnabled];
+    BOOL notificationEnabled = [HLNotificationHandler areNotificationsEnabled];
     
     if (!notificationEnabled) {
         if([Konotor showNotificationDisabledAlert]){

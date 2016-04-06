@@ -15,4 +15,6 @@
 - (void) handleNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state;
 -(void) showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message;
 
++(BOOL) areNotificationsEnabled;
+
 @end
