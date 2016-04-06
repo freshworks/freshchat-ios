@@ -131,7 +131,7 @@ static HLNotificationHandler *handleUpdateNotification;
                             newMessage.messageRead = YES;
                         }
                         lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
-                        if([newMessage.messageType intValue] == 1){
+                        if([newMessage.messageType intValue] == KonotorMessageTypeText){
                             messageText = newMessage.text;
                         }
                     }
