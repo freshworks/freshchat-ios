@@ -19,14 +19,32 @@
     }
     else {
         self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle];
+        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
     }
 }
 
--(void)configureBackButton{
+-(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate{
     BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
     
-    if (!isBackButtonImageExist) {
-        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
+    if (isBackButtonImageExist && ![self embedded]) {
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self.navigationController
+                                                                      action:@selector(popViewControllerAnimated:)];
+        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        
+        if([self conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
+            if(gestureDelegate){
+                if (self.parentViewController) {
+                    self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = gestureDelegate;
+                }else{
+                    self.navigationController.interactivePopGestureRecognizer.delegate = gestureDelegate;
+                }
+            }else{
+                self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+            }
+        }
+    }else{
         self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
                                                                                                       style:self.parentViewController.navigationItem.backBarButtonItem.style
                                                                                                      target:nil action:nil];

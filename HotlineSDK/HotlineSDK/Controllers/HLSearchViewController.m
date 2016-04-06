@@ -58,7 +58,7 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-    [self configureBackButton];
+    [self configureBackButtonWithGestureDelegate:self];
 }
 
 -(HLTheme *)theme{

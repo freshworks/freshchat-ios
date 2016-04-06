@@ -63,33 +63,10 @@
 }
 
 -(void)setNavigationItem{
-    
-    UIImage *searchButtonImage = [self.theme getImageWithKey:IMAGE_SEARCH_ICON];
-    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    searchButton.frame = CGRectMake(0, 0, 44, 44);
-    [searchButton setImage:searchButtonImage forState:UIControlStateNormal];
-    [searchButton addTarget:self action:@selector(searchButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
-    [searchBarButton setStyle:UIBarButtonItemStylePlain];
-    UIBarButtonItem *fixedItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    fixedItem.width = -20.0f;
-
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
-    
-    if (isBackButtonImageExist) {
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self.navigationController
-                                                                      action:@selector(popViewControllerAnimated:)];
-        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = self;
-    }else{
-        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
-        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
-                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
-                                                                                                     target:nil action:nil];
-    }
-    self.parentViewController.navigationItem.rightBarButtonItems = @[fixedItem,searchBarButton];
+    UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
+                                                                        style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
+    [self configureBackButtonWithGestureDelegate:self];
+    self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
 }
 
 -(void)searchButtonAction:(id)sender{

@@ -128,8 +128,9 @@
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
-    
-    [self configureBackButton];
+    else {
+        [self configureBackButtonWithGestureDelegate:nil];
+    }
 }
 
 -(void)localNotificationSubscription{
