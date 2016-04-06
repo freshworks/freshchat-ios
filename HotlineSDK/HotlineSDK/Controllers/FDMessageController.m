@@ -29,6 +29,7 @@
 #import "HotlineAppState.h"
 #import "FDBarButtonItem.h"
 #import "FDSecureStore.h"
+#import "HLNotificationHandler.h"
 
 typedef struct {
     BOOL isLoading;
@@ -496,19 +497,8 @@ typedef struct {
 }
 
 -(void)checkPushNotificationState{
-    BOOL notificationEnabled = NO;
-#if(__IPHONE_OS_VERSION_MAX_ALLOWED >=80000)
-    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
-        notificationEnabled=[[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
-    }
-    else
-#endif
-    {
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
-        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-        if(types != UIRemoteNotificationTypeNone) notificationEnabled=YES;
-#endif
-    }
+    
+    BOOL notificationEnabled = [HLNotificationHandler areNotificationsEnabled];
     
     if (!notificationEnabled) {
         if([Konotor showNotificationDisabledAlert]){

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HLChannel.h"
 
+
 @interface HLMessageServices : NSObject
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler;

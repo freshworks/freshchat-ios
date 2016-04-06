@@ -23,9 +23,10 @@
 #import "FDResponseInfo.h"
 #import "FDBackgroundTaskManager.h"
 #import "FDDateUtil.h"
+#import "HLNotificationHandler.h"
 
 static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-
+static HLNotificationHandler *handleUpdateNotification;
 @implementation HLMessageServices
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler{
@@ -99,10 +100,11 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
-            
+            NSString *messageText;
+            NSNumber *channelId;
             for (int i=0; i<pArrayOfConversations.count; i++) {
                 NSDictionary *conversationInfo = pArrayOfConversations[i];
-                NSNumber *channelId = conversationInfo[@"channelId"];
+                channelId = conversationInfo[@"channelId"];
                 HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
@@ -129,9 +131,18 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                             newMessage.messageRead = YES;
                         }
                         lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
+                        if([newMessage.messageType intValue] == KonotorMessageTypeText){
+                            messageText = newMessage.text;
+                        }
                     }
                 }
+                if(![HLNotificationHandler areNotificationsEnabled] && messageText){
+                    handleUpdateNotification = [[HLNotificationHandler alloc] init];
+                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
+                }
+                
             }
+            
             if(handler) handler(nil);
             [Konotor performSelector:@selector(conversationsDownloaded)];
         }
