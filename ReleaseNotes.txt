@@ -1,4 +1,12 @@
 
+Ver 1.0.5 
+__________________________
+In-App notification banner is now shown when push notification is disabled and a message arrives
+SDK now uses tint color instead of images for Navigation bar
+Fixed alignment issue when scrolling on Category and Channel views
+New theme entry to customize status bar ( can be set to UIStatusBarStyleLightContent )  
+Minor UI fixes and enhancements. 
+
 Ver 1.0.4 
 __________________________
 Fixed polling issue on iOS 9.1 & 9.2
