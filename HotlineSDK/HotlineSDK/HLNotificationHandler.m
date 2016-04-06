@@ -33,7 +33,10 @@
 }
 
 -(void) showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message{
-    
+    //Check active state because HLMessageServices can run in background and call this.
+    if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive){
+        return;
+    }
     BOOL bannerEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     if(bannerEnabled && ![channel isActiveChannel]){
         [self.banner setMessage:message];
@@ -41,7 +44,7 @@
     }
 }
 
-- (void) handleNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
+- (void) handleNotification :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
     if (state == UIApplicationStateInactive) {
         [self launchMessageControllerOfChannel:channel];
     }
@@ -98,6 +101,22 @@
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
+}
+
+
++(BOOL) areNotificationsEnabled{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){
+        UIUserNotificationSettings *noticationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (!noticationSettings || (noticationSettings.types == UIUserNotificationTypeNone)) {
+            return NO;
+        }
+        return YES;
+    }
+    UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+    if (types & UIRemoteNotificationTypeAlert){
+        return YES;
+    }
+    return NO;
 }
 
 @end

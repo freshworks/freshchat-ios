@@ -131,12 +131,12 @@ static HLNotificationHandler *handleUpdateNotification;
                             newMessage.messageRead = YES;
                         }
                         lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
-                        if([newMessage.messageType intValue] == 1){
+                        if([newMessage.messageType intValue] == KonotorMessageTypeText){
                             messageText = newMessage.text;
                         }
                     }
                 }
-                if(![self areNotificationsEnabled] && messageText){
+                if(![HLNotificationHandler areNotificationsEnabled] && messageText){
                     handleUpdateNotification = [[HLNotificationHandler alloc] init];
                     [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
                 }
@@ -154,22 +154,6 @@ static HLNotificationHandler *handleUpdateNotification;
         [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
     }];
 }
-
-+(BOOL) areNotificationsEnabled{
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){
-        UIUserNotificationSettings *noticationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-        if (!noticationSettings || (noticationSettings.types == UIUserNotificationTypeNone)) {
-            return NO;
-        }
-        return YES;
-    }
-    UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-    if (types & UIRemoteNotificationTypeAlert){
-        return YES;
-    } else{
-    }
-}
-
 
 +(void)postUnreadCountNotification{
     NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
