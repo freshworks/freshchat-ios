@@ -1,4 +1,8 @@
 
+Ver 1.0.6 
+__________________________
+Fix chat bubble image
+
 Ver 1.0.5 
 __________________________
 In-App notification banner is now shown when push notification is disabled and a message arrives
