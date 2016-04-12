@@ -126,7 +126,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     
     NSError *error = nil;
     if (![self.mainObjectContext save:&error]) {
-        //NSLog(@"[Konotor] Error while saving: %@\n%@", [error localizedDescription], [error userInfo]);
         [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
                                                             object:error];
         return NO;
