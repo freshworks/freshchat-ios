@@ -9,6 +9,10 @@
 #import "HLMacros.h"
 #import "FDUtilities.h"
 #import "HLConstants.h"
+#import "FDMemLogger.h"
+
+#define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
+#define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
 
 NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
 NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
@@ -16,8 +20,7 @@ NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFail
 @interface KonotorDataManager ()
 
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
-//TODO: Make this generic later for use across SDK - Rex
-@property (nonatomic, strong) NSMutableDictionary *logInfo;
+@property FDMemLogger *logger;
 
 @end
 
@@ -28,33 +31,29 @@ NSString * const kDataManagerModelName = @"KonotorModel";
 NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 + (KonotorDataManager*)sharedInstance {
-	static dispatch_once_t pred;
-	static KonotorDataManager *sharedInstance = nil;
-	dispatch_once(&pred, ^{
+    static dispatch_once_t pred;
+    static KonotorDataManager *sharedInstance = nil;
+    dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
     });
+    if(!sharedInstance.persistentStoreCoordinator){
+        @synchronized(sharedInstance) {
+            if(!sharedInstance.persistentStoreCoordinator){
+                [sharedInstance preparePersistantStoreCoordinator];
+                [sharedInstance setMainQueueContext];
+            }
+        }
+    }
 	return sharedInstance;
 }
 
 -(id)init{
     self = [super init];
     if (self) {
-        self.logInfo = [NSMutableDictionary new];
-        [self preparePersistantStoreCoordinator];
-        [self setMainQueueContext];
+        self.logger = [[FDMemLogger alloc] init];
     }
     return  self;
 }
-
--(void)appendLogInfo:(NSString *)info forKey:(NSString *)key{
-    self.logInfo[key]=info;
-    FDLog(@"%@",self.logInfo);
-}
-
--(void)appendLogInfo:(NSDictionary *)info{
-    [self.logInfo addEntriesFromDictionary:info];
-}
-
 
 - (NSString*)sharedDocumentsPath {
     NSString *SharedDocumentsPath = nil;
@@ -67,11 +66,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
         [manager createDirectoryAtPath:SharedDocumentsPath withIntermediateDirectories:YES attributes:attr error:&error];
         if (error){
-            NSDictionary *errorInfo = @{@"Folder creation failed" :@{
-                                                @"Reason :"   : error.description,
-                                                @"Folder path used" : SharedDocumentsPath
+            NSDictionary *errorInfo = @{@"Folder Creation Failed" :@{
+                                                @"Reason:"   : error.description,
+                                                @"FolderPath" : SharedDocumentsPath
                                                 }};
-            [self appendLogInfo:errorInfo];
+            logInfo(errorInfo);
         }
     }
     return SharedDocumentsPath;
@@ -91,43 +90,37 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
                                                             URL:persistentStoreURL options:options error:&error];
     if (error) {
-        [self appendLogInfo:persistentStoreURL.description forKey:@"SQLite file path"];
-        [self appendLogInfo:@{@"Persistent store creation failed" :@{ @"Reason" : error.description}}];
+        logInfo((@{@"Persistent store creation failed" :@{
+                          @"Reason" : error.description,
+                          @"SQLLiteFilePath" : persistentStoreURL.description
+                          }}));
         [self retryPersistentStoreCreation:persistentStoreURL];
     }
 }
 
 -(void)retryPersistentStoreCreation:(NSURL *)storeURL{
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
-    
-    if (error) {
-        [self appendLogInfo:@{@"could not delete existing persistent store " : @{ @"Reason" : error.description }}];
-    }
-    
-    [self appendLogInfo:@{@"Attempting to re-create persistent store at URL" : storeURL}];
+    NSError *error = nil;    
+    logInfo((@{@"Attempting to re-create persistent store at URL" : storeURL}));
     
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                    configuration:nil URL:storeURL options:nil error:&error]) {
         if (error) {
             
-            [self appendLogInfo:@{@"Persistent store re-creation failed " : @{ @"Reason" : error.description}}];
+            logInfo ((@{@"Persistent store re-creation failed " : @{ @"Reason" : error.description}}));
             
-            NSDictionary *additionalInfo = @{
-                                             @"Time stamp" : [NSDate date],
-                                             @"SDK Version" : HOTLINE_SDK_VERSION,
-                                             @"Device Info" : [FDUtilities deviceInfoProperties]
-            };
-            [self appendLogInfo:additionalInfo];
-            NSException *e= [[NSException alloc]
-                                initWithName:@"Perisistent store exception"                                                     reason:[NSString stringWithFormat:@"%@", self.logInfo]                                                     userInfo:[error userInfo]];
-            @throw e;
+            [self.logger upload];
+            
+            // OK now lets try to create this on next attempt
+            _persistentStoreCoordinator = NULL;
         }
     }
 
 }
 
 -(void)setMainQueueContext{
+    if(!self.persistentStoreCoordinator){
+        return;
+    }
     self.mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     self.mainObjectContext.undoManager = nil;
     self.mainObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;

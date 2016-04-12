@@ -91,6 +91,7 @@
 		35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F7D4571C22A9390007DA9A /* FDImageView.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
 		3C051DEC1C6481DE00DDE80D /* HLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C051DEB1C6481DE00DDE80D /* HLViewController.m */; };
+		3C3F15001CBF5129009C040D /* FDMemLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3F14FF1CBF5129009C040D /* FDMemLogger.m */; };
 		3CA2B6C01C83F157000BF719 /* FDStringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA2B6BF1C83ECC2000BF719 /* FDStringUtil.m */; };
 		3CA2B6C41C885B7D000BF719 /* FDBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA2B6C31C885B7D000BF719 /* FDBarButtonItem.m */; };
 		683CBFB91C8F0FE70084D2DE /* HLEmptyResultView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683CBFB81C8F0FE70084D2DE /* HLEmptyResultView.m */; };
@@ -308,6 +309,8 @@
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
 		3C051DEA1C64814F00DDE80D /* HLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLViewController.h; sourceTree = "<group>"; };
 		3C051DEB1C6481DE00DDE80D /* HLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLViewController.m; sourceTree = "<group>"; };
+		3C3F14FE1CBF4AF0009C040D /* FDMemLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDMemLogger.h; sourceTree = "<group>"; };
+		3C3F14FF1CBF5129009C040D /* FDMemLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMemLogger.m; sourceTree = "<group>"; };
 		3C79B3961C2A820600DD8EE4 /* HLLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLLocalization.h; sourceTree = "<group>"; };
 		3CA2B6BE1C83EC7B000BF719 /* FDStringUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDStringUtil.h; sourceTree = "<group>"; };
 		3CA2B6BF1C83ECC2000BF719 /* FDStringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStringUtil.m; sourceTree = "<group>"; };
@@ -459,6 +462,8 @@
 				3CB483261C51EBD100A8097B /* HLVersionConstants.h */,
 				3CA2B6BE1C83EC7B000BF719 /* FDStringUtil.h */,
 				3CA2B6BF1C83ECC2000BF719 /* FDStringUtil.m */,
+				3C3F14FE1CBF4AF0009C040D /* FDMemLogger.h */,
+				3C3F14FF1CBF5129009C040D /* FDMemLogger.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -912,6 +917,7 @@
 				CE55ED0D1BE9FD4B000E8434 /* FDChannelUpdater.m in Sources */,
 				35DCCB401BE002220039EFDD /* FDMessageCell.m in Sources */,
 				354D0D301C48D23E004D2AA1 /* HotlineAppState.m in Sources */,
+				3C3F15001CBF5129009C040D /* FDMemLogger.m in Sources */,
 				35DCCB511BE002960039EFDD /* FDTableViewCell.m in Sources */,
 				CE55ED0A1BE9E79B000E8434 /* HLChannelViewController.m in Sources */,
 				35DCCB3E1BE002220039EFDD /* FDActionButton.m in Sources */,
