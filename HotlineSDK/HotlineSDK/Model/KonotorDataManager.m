@@ -97,7 +97,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         [self.logger upload];
         
         // OK now lets try to create this on next attempt
-        _persistentStoreCoordinator = NULL;
+        _persistentStoreCoordinator = nil;
     }
 }
 
