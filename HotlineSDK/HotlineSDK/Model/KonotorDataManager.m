@@ -94,27 +94,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                           @"Reason" : error.description,
                           @"SQLLiteFilePath" : persistentStoreURL.description
                           }}));
-        [self retryPersistentStoreCreation:persistentStoreURL];
+        [self.logger upload];
+        
+        // OK now lets try to create this on next attempt
+        _persistentStoreCoordinator = NULL;
     }
-}
-
--(void)retryPersistentStoreCreation:(NSURL *)storeURL{
-    NSError *error = nil;    
-    logInfo((@{@"Attempting to re-create persistent store at URL" : storeURL}));
-    
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                                                   configuration:nil URL:storeURL options:nil error:&error]) {
-        if (error) {
-            
-            logInfo ((@{@"Persistent store re-creation failed " : @{ @"Reason" : error.description}}));
-            
-            [self.logger upload];
-            
-            // OK now lets try to create this on next attempt
-            _persistentStoreCoordinator = NULL;
-        }
-    }
-
 }
 
 -(void)setMainQueueContext{
