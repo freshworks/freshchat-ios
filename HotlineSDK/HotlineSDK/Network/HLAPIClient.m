@@ -36,19 +36,21 @@
 
 -(NSURLSessionDataTask *)request:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler{
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-        FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
-        if (statusCode >= 400) {
-            NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
-            error = [NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info];
-            if (handler) handler(responseInfo,error);
-        }else{
-            if (!error) {
-                if (handler) handler(responseInfo,nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
+            FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
+            if (statusCode >= 400) {
+                NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
+                if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
             }else{
-                if (handler) handler(responseInfo,error);
+                if (!error) {
+                    if (handler) handler(responseInfo,nil);
+                }else{
+                    if (handler) handler(responseInfo,error);
+                }
             }
-        }
+        });
+        
     }];
     [task resume];
     return task;

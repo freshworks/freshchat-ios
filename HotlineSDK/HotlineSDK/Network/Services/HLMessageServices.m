@@ -51,49 +51,43 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 +(void)fetchAllMessages:(void(^)(NSError *error))handler{
-    NSString *pBasePath = [FDUtilities getBaseURL];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    request.HTTPMethod = HTTP_METHOD_GET;
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
     __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-    NSString *getPath = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",pBasePath,@"services/app/",appID,@"/user/",userAlias,@"/conversation/v2?t=",appKey,@"&messageAfter=",lastUpdateTime];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:pBasePath]];
-    [httpClient setDefaultHeader:@"Accept" value:@"application/json"];
-    [httpClient setDefaultHeader:@"Content-Type" value:@"application/json"];
-    [httpClient setParameterEncoding:AFKonotorJSONParameterEncoding];
+    NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
+    [request setRelativePath:path andURLParams:@[appKey, afterTime]];
     
     BOOL isRestore = [lastUpdateTime isEqualToNumber:@0];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:getPath parameters:nil];
-    
-    FDLog(@"Fetching messages for user %@", userAlias);
-    
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        int statusCode = (int)[httpResponse statusCode];
-        if(error || statusCode >= 400){
+
+    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        
+        if (error) {
             FDLog(@"Message fetch failed %@", error);
             HideNetworkActivityIndicator();
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             [Konotor performSelector:@selector(conversationsDownloadFailed)];
             if(handler) handler(error);
             return;
-            
         }else{
-            
             HideNetworkActivityIndicator();
-            id JSON  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:&error];
-            NSDictionary *toplevel = [NSDictionary dictionaryWithDictionary:JSON];
-            
+
+            NSDictionary *toplevel = responseInfo.responseAsDictionary;
+
             FDLog(@"Messages :%@", toplevel);
-            
+
             if(!toplevel){
                 MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
                 [Konotor performSelector:@selector(conversationsDownloaded)];
                 return;
             }
             
-            NSMutableArray *pArrayOfConversations = [NSMutableArray arrayWithArray:[toplevel valueForKey:@"conversations"]];
+            NSArray *pArrayOfConversations = toplevel[@"conversations"];
             
             if(!pArrayOfConversations){
                 MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
@@ -152,6 +146,7 @@ static HLNotificationHandler *handleUpdateNotification;
         MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [self postUnreadCountNotification];
         [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
+        
     }];
 }
 
