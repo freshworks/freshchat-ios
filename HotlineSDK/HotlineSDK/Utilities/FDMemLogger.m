@@ -50,6 +50,7 @@
     NSDictionary *additionalInfo = @{
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
+                                     @"App Name" : [FDUtilities appName],
                                      @"Device Info" : [FDUtilities deviceInfoProperties]
                                      };
     

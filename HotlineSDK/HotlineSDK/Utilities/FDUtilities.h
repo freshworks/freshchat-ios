@@ -32,6 +32,7 @@
 +(void) PostNotificationWithName :(NSString *) notName withObject: (id) object;
 +(BOOL) isPoweredByHidden;
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
++(NSString *)appName;
 
 @end
 
