@@ -243,4 +243,13 @@ static NSInteger networkIndicator = 0;
     return lastUpdateTime;
 }
 
++(NSString *)appName{
+    NSString *appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+    if (appName) {
+        return appName;
+    }else{
+        return [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
+    }
+}
+
 @end

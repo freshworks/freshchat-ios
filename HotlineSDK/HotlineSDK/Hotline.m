@@ -52,11 +52,21 @@
     dispatch_once(&oncetoken,^{
         sharedInstance = [[Hotline alloc]init];
     });
+    if(![sharedInstance checkPersistence]) {
+        return nil;
+    }
     return sharedInstance;
 }
 
 +(NSString *)SDKVersion{
     return HOTLINE_SDK_VERSION;
+}
+
+-(BOOL)checkPersistence {
+    if(![KonotorDataManager sharedInstance].persistentStoreCoordinator){
+        return false;
+    }
+    return true;
 }
 
 - (instancetype)init{
