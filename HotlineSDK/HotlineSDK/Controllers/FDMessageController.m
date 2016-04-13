@@ -70,7 +70,7 @@ typedef struct {
 
 @implementation FDMessageController
 
-#define INPUT_TOOLBAR_HEIGHT  40
+#define INPUT_TOOLBAR_HEIGHT  43
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
 
