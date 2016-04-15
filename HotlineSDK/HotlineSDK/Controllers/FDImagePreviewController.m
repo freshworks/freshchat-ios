@@ -252,7 +252,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
 }
 
 -(void) dismissImagePicPreview{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:NO];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
