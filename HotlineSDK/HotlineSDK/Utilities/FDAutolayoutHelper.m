@@ -12,22 +12,32 @@
 
 +(void)center:(UIView *)subView onView:(UIView *)superView{
     
-    NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:superView
+    NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:subView
                                                                attribute:NSLayoutAttributeCenterX
                                                                relatedBy:NSLayoutRelationEqual
-                                                                  toItem:subView
+                                                                  toItem:superView
                                                                attribute:NSLayoutAttributeCenterX
                                                               multiplier:1.0
                                                                 constant:0.0];
     
-    NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:superView
+    NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:subView
                                                                attribute:NSLayoutAttributeCenterY
                                                                relatedBy:NSLayoutRelationEqual
-                                                                  toItem:subView
+                                                                  toItem:superView
                                                                attribute:NSLayoutAttributeCenterY
                                                               multiplier:1.0
                                                                 constant:0.0];
     [superView addConstraints:@[centerX, centerY]];
+}
+
++(NSLayoutConstraint *)bottomAlign:(UIView *)subView toView:(UIView *)superView{
+    return [NSLayoutConstraint constraintWithItem:subView
+                                        attribute:NSLayoutAttributeBottom
+                                        relatedBy:NSLayoutRelationEqual
+                                           toItem:superView
+                                        attribute:NSLayoutAttributeBottom
+                                       multiplier:1.0
+                                         constant:0.0];
 }
 
 +(NSLayoutConstraint *)leftAlign:(UIView *)subView toView:(UIView *)superView{

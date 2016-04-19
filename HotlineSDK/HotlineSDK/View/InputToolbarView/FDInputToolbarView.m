@@ -114,40 +114,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 }
 
 -(void)addVariableConstraints{
-    attachButtonYConstraint = [NSLayoutConstraint constraintWithItem:attachButton
-                                                           attribute:NSLayoutAttributeBottom
-                                                           relatedBy:NSLayoutRelationEqual
-                                                              toItem:self
-                                                           attribute:NSLayoutAttributeBottom
-                                                          multiplier:1.0
-                                                            constant:0.0];
     
-    attachButtonWidthConstraint = [FDAutolayoutHelper setWidth:0 forView:attachButton];
-    
-    [NSLayoutConstraint constraintWithItem:attachButton
-                                                               attribute:NSLayoutAttributeWidth
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:nil
-                                                               attribute:NSLayoutAttributeNotAnAttribute
-                                                              multiplier:1.0
-                                                                constant:0.0];
-    
-    accessoryViewYConstraint = [NSLayoutConstraint constraintWithItem:accessoryViewContainer
-                                                            attribute:NSLayoutAttributeBottom
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:self
-                                                            attribute:NSLayoutAttributeBottom
-                                                           multiplier:1.0
-                                                             constant:0.0];
-    
-    accessoryViewWidthConstraint = [NSLayoutConstraint constraintWithItem:accessoryViewContainer
-                                                                attribute:NSLayoutAttributeWidth
-                                                                relatedBy:NSLayoutRelationEqual
-                                                                   toItem:nil
-                                                                attribute:NSLayoutAttributeNotAnAttribute
-                                                               multiplier:1.0
-                                                                 constant:0.0];
-    
+    attachButtonYConstraint       = [FDAutolayoutHelper bottomAlign:attachButton toView:self];
+    attachButtonWidthConstraint   = [FDAutolayoutHelper setWidth:0 forView:attachButton];
+    accessoryViewYConstraint      = [FDAutolayoutHelper bottomAlign:accessoryViewContainer toView:self];
+    accessoryViewWidthConstraint  = [FDAutolayoutHelper setWidth:0 forView:accessoryViewContainer];
     accessoryViewHeightConstraint = [FDAutolayoutHelper setHeight:20 forView:accessoryViewContainer];
     
     [self addConstraint:attachButtonYConstraint];

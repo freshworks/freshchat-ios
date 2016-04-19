@@ -15,5 +15,6 @@
 +(NSLayoutConstraint *)leftAlign:(UIView *)subView toView:(UIView *)superView;
 +(NSLayoutConstraint *)setHeight:(CGFloat)height forView:(UIView *)view;
 +(NSLayoutConstraint *)setWidth:(CGFloat)width forView:(UIView *)view;
++(NSLayoutConstraint *)bottomAlign:(UIView *)subView toView:(UIView *)superView;
 
 @end
