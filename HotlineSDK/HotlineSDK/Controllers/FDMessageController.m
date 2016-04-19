@@ -119,6 +119,13 @@ typedef struct {
     [HLMessageServices downloadAllMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
+    [self prepareInputToolbar];
+    
+}
+
+-(void)prepareInputToolbar{
+    [self setHeightForTextView:self.inputToolbar.textView];
+    [self.inputToolbar prepareView];
 }
 
 -(UIView *)tableHeaderView{
@@ -564,37 +571,34 @@ typedef struct {
 
 #pragma mark Text view delegates
 
--(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{    
+-(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{
+    [self setHeightForTextView:textView];
+    [self scrollTableViewToLastCell];
+}
+
+-(void)setHeightForTextView:(UITextView *)textView{
+
+    CGFloat NUM_OF_LINES = 5;
     
-    CGSize txtSize = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, 140)];
-    float height=txtSize.height;
-    if((height)>=67){
-        height=67;
-        if(_flags.isFirstWordOnLine == YES){
-            _flags.isFirstWordOnLine = NO;
-        }else{
-            textView.scrollEnabled=YES;
-        }
+    CGFloat MAX_HEIGHT = textView.font.lineHeight * NUM_OF_LINES;
+    
+    CGFloat preferredTextViewHeight = 0;
+    
+    CGFloat messageHeight = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, CGFLOAT_MAX)].height;
+    
+    if(messageHeight > MAX_HEIGHT){
+        preferredTextViewHeight = MAX_HEIGHT;
+        textView.scrollEnabled=YES;
     }
     else{
+        preferredTextViewHeight = messageHeight;
         textView.scrollEnabled=NO;
     }
     
-    if (height > self.bottomViewHeightConstraint.constant) {
-        self.bottomViewHeightConstraint.constant = height+10; //Fix this
-        self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
-    }
-    else{
-        self.bottomViewHeightConstraint.constant = height+10; //Fix this
-        self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
-    }
+    self.bottomViewHeightConstraint.constant = preferredTextViewHeight + 10;
+    self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     
-    [UIView animateWithDuration:0.2 animations:^{
-        textView.frame=CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,height);
-        [self scrollTableViewToLastCell];
-
-    }];
-    
+    textView.frame=CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, preferredTextViewHeight);
 }
 
 -(void)scrollTableViewToLastCell{

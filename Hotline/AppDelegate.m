@@ -78,7 +78,6 @@
 //      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
     
     config.displayFAQsAsGrid = NO;
-    
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
     //config.displayFAQsAsGrid = YES;
