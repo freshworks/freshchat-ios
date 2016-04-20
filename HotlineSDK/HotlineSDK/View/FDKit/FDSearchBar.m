@@ -32,10 +32,10 @@
         [self setBackgroundImage:[FDUtilities imageWithColor:[self.theme searchBarOuterBackgroundColor]] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 
         //Search bar cancel button color
-        NSDictionary *attrDict = @{NSFontAttributeName:[self.theme searchBarCancelButtonFont],
-                                   NSForegroundColorAttributeName:[self.theme searchBarCancelButtonColor]};
-        UIBarButtonItem *buttonItemProxy = [FDBarButtonItem appearanceWhenContainedIn:[FDSearchBar class], nil];
-        [buttonItemProxy setTitleTextAttributes:attrDict forState:UIControlStateNormal];
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+         [self.theme searchBarCancelButtonColor], NSForegroundColorAttributeName, [self.theme searchBarCancelButtonFont], NSFontAttributeName, nil];
+        
+        [[UIBarButtonItem appearanceWhenContainedIn:[FDSearchBar class], nil] setTitleTextAttributes:[NSDictionary dictionaryWithDictionary:attributes] forState:UIControlStateNormal];
         
         //Search text font color
         NSDictionary *textAttrDict = @{NSFontAttributeName:[self.theme searchBarFont],
