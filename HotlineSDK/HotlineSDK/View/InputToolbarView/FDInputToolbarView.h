@@ -29,5 +29,6 @@
 
 -(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate;
 -(void)showAttachButton:(BOOL)state;
+-(void)prepareView;
 
 @end
