@@ -23,6 +23,7 @@
 #import "FDBarButtonItem.h"
 #import "FDCell.h"
 #import "HLEmptyResultView.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLCategoriesListController ()
 
@@ -58,22 +59,7 @@
                 self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:HLLocalizedString(LOC_EMPTY_FAQ_TEXT)];
                 self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
                 [self.view addSubview:self.emptyResultView];
-                
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                      attribute:NSLayoutAttributeCenterX
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.tableView
-                                                                      attribute:NSLayoutAttributeCenterX
-                                                                     multiplier:1.0
-                                                                       constant:0.0]];
-                
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                      attribute:NSLayoutAttributeCenterY
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.tableView
-                                                                      attribute:NSLayoutAttributeCenterY
-                                                                     multiplier:1.0
-                                                                       constant:0.0]];
+                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
             }
             else{
                 [self.emptyResultView removeFromSuperview];
