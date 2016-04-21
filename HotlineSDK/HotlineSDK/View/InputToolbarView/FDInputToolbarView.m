@@ -11,28 +11,36 @@
 #import "HLMacros.h"
 #import "Hotline.h"
 #import <AudioToolbox/AudioServices.h>
-#include "TargetConditionals.h"
-#include "HLLocalization.h"
+#import "TargetConditionals.h"
+#import "HLLocalization.h"
 #import "FDSecureStore.h"
+#import "FDAutolayoutHelper.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>{
     
     NSString *placeHolderText;
 }
-
+@property (strong, nonatomic) UIView               *accessoryViewContainer;
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
 @property (nonatomic, strong) HLTheme              *theme;
+@property (nonatomic, strong) NSLayoutConstraint   *attachButtonYConstraint;
 @property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 @property (nonatomic) BOOL canShowAttachButton;
+
+@property (nonatomic, strong) NSLayoutConstraint   *accessoryViewWidthConstraint;
+@property (nonatomic, strong) NSLayoutConstraint   *accessoryViewHeightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint   *accessoryViewYConstraint;
+
 @property (nonatomic, assign) BOOL isVoiceMessageEnabled;
 
 @end
 
 @implementation FDInputToolbarView
 
-@synthesize innerImageView, outerImageView,textView, sendButton, attachButton, attachButtonWidthConstraint, micButton;
+@synthesize innerImageView, outerImageView,textView, sendButton, attachButton, attachButtonWidthConstraint,
+micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewContainer, accessoryViewHeightConstraint, accessoryViewWidthConstraint;
 
 -(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate{
     self = [super init];
@@ -42,7 +50,6 @@
         self.theme = [HLTheme sharedInstance];
         
         self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
-   
         textView=[[UITextView alloc] init];
         [textView setFont:[self.theme inputTextFont]];
         [textView setTextColor:[UIColor lightGrayColor]];
@@ -63,6 +70,7 @@
         [attachButton addTarget:self action:@selector(attachmentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
+        micButton.backgroundColor = [UIColor clearColor];
         micButton.translatesAutoresizingMaskIntoConstraints = NO;
         UIImage *micImage = [[HLTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
         [micButton setImage:micImage forState:UIControlStateNormal];
@@ -76,12 +84,96 @@
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
+        accessoryViewContainer = [UIView new];
+        accessoryViewContainer.translatesAutoresizingMaskIntoConstraints = NO;
+        
         [self addSubview:textView];
+        [self addSubview:accessoryViewContainer];
         [self addSubview:attachButton];
-        [self addSubview:micButton];
-        [self addSubview:sendButton];
+        
+        [accessoryViewContainer addSubview:micButton];
+        [accessoryViewContainer addSubview:sendButton];
+        
+        NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(attachButton,textView,
+                                                                                                                  sendButton, micButton, accessoryViewContainer)];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[textView]-5-|" options:0 metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton]-5-[textView]-5-[accessoryViewContainer]-5-|" options:0 metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(24)]" options:0 metrics:nil views:views]];
+
+        [accessoryViewContainer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[micButton(20)]" options:0 metrics:nil views:views]];
+        [accessoryViewContainer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[micButton(24)]" options:0 metrics:nil views:views]];
+        
+        [FDAutolayoutHelper center:sendButton onView:accessoryViewContainer];
+        [FDAutolayoutHelper center:micButton onView:accessoryViewContainer];
+        
+        [self addVariableConstraints];
+        
     }
     return self;
+}
+
+-(void)addVariableConstraints{
+    
+    attachButtonYConstraint       = [FDAutolayoutHelper bottomAlign:attachButton toView:self];
+    attachButtonWidthConstraint   = [FDAutolayoutHelper setWidth:0 forView:attachButton];
+    accessoryViewYConstraint      = [FDAutolayoutHelper bottomAlign:accessoryViewContainer toView:self];
+    accessoryViewWidthConstraint  = [FDAutolayoutHelper setWidth:0 forView:accessoryViewContainer];
+    accessoryViewHeightConstraint = [FDAutolayoutHelper setHeight:20 forView:accessoryViewContainer];
+    
+    [self addConstraint:attachButtonYConstraint];
+    [self addConstraint:attachButtonWidthConstraint];
+    [self addConstraint:accessoryViewYConstraint];
+    [self addConstraint:accessoryViewWidthConstraint];
+    [self addConstraint:accessoryViewHeightConstraint];
+}
+
+
+-(void)prepareView{
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    
+    BOOL isPictureMessageEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+    attachButtonWidthConstraint.constant = (isPictureMessageEnabled) ? 24.0 : 0;
+    self.isVoiceMessageEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+
+    [self updateActionButtons:textView];
+    
+    //Vertically center buttons in the toolbar
+    CGFloat attachButtonYpos = (self.frame.size.height - self.attachButton.frame.size.height)/2.0;
+    attachButtonYConstraint.constant = - attachButtonYpos;
+    
+    CGFloat accessoryViewYpos = (self.frame.size.height - self.accessoryViewContainer.frame.size.height)/2.0;
+    accessoryViewYConstraint.constant = - accessoryViewYpos;
+}
+
+-(void)showAttachButton:(BOOL)state{
+    self.canShowAttachButton = state;
+}
+
+#pragma mark Button Actions
+
+-(void)attachmentButtonAction:(id)sender{
+    [self.delegate inputToolbar:self attachmentButtonPressed:sender];
+}
+
+-(void)sendButtonAction:(id)sender{
+    [self.delegate inputToolbar:self sendButtonPressed:sender];
+    [self updateActionButtons:self.textView];
+}
+
+-(void)micButtonAction:(id)sender{
+    if (!TARGET_IPHONE_SIMULATOR) {
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    }
+    [self.delegate inputToolbar:self micButtonPressed:sender];
+}
+
+#pragma mark Text view delegates
+
+- (void)textViewDidChange:(UITextView *)inputTextView{
+    [self updateActionButtons:inputTextView];
+    [self.delegate inputToolbar:self textViewDidChange:inputTextView];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)chatTextView{
@@ -101,89 +193,25 @@
     }
 }
 
--(void)attachmentButtonAction:(id)sender{
-    [self.delegate inputToolbar:self attachmentButtonPressed:sender];
-}
-
--(void)sendButtonAction:(id)sender{
-    [self.delegate inputToolbar:self sendButtonPressed:sender];
-    [self updateActionButtons:self.textView];
-}
-
--(void)micButtonAction:(id)sender{
-    if (!TARGET_IPHONE_SIMULATOR) {
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-    }
-    [self.delegate inputToolbar:self micButtonPressed:sender];
-}
-
--(void)layoutSubviews{
-    NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(attachButton,textView, sendButton, micButton)];
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[textView]-5-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sendButton(20)]-10-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(24)]-7-|" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton(24)]-[textView]-[sendButton(40)]-5-|" options:0 metrics:nil views:views]];
-    
-    //Mic button constraints
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[micButton(24)]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[textView]-[micButton(40)]-5-|" options:0 metrics:nil views:views]];
-
-    attachButtonWidthConstraint = [NSLayoutConstraint constraintWithItem:attachButton
-                                                               attribute:NSLayoutAttributeWidth
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:nil
-                                                               attribute:NSLayoutAttributeNotAnAttribute
-                                                              multiplier:1.0
-                                                                constant:0.0];
-    
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isPictureMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
-    self.isVoiceMessageEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
-    
-    
-    if(!isPictureMessageEnabled){
-        attachButtonWidthConstraint.constant = 0;
-    }
-    else{
-        attachButtonWidthConstraint.constant = 24.0;
-    }
-    
-    [self addConstraint:attachButtonWidthConstraint];
-    
-    if(!self.isVoiceMessageEnabled){
-        [self disableAudioMessaging];
-    }
-    else{
-        [self updateActionButtons:textView];
-    }
-    [super layoutSubviews];
-}
-
-- (void) disableAudioMessaging{
-    
-    self.micButton.hidden = YES;
-    self.sendButton.hidden = NO;
-}
-
 -(void)updateActionButtons:(UITextView *)inputTextView{
-    BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);
     if(!self.isVoiceMessageEnabled){
-        [self disableAudioMessaging];
-    }
-    else{
-        self.sendButton.hidden = isTextViewEmpty;
-        self.micButton.hidden = !isTextViewEmpty;
+        [self showMicButton:NO];
+    }else{
+        BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);
+        [self showMicButton:isTextViewEmpty];
     }
 }
 
--(void)showAttachButton:(BOOL)state{
-    self.canShowAttachButton = state;
-}
-
-- (void) textViewDidChange:(UITextView *)inputTextView{
-    [self updateActionButtons:inputTextView];
-    [self.delegate inputToolbar:self textViewDidChange:inputTextView];
+-(void)showMicButton:(BOOL)canShow{
+    if (canShow) {
+        self.micButton.hidden = NO;
+        self.sendButton.hidden = YES;
+        accessoryViewWidthConstraint.constant = self.micButton.frame.size.width;
+    }else{
+        self.micButton.hidden = YES;
+        self.sendButton.hidden = NO;
+        accessoryViewWidthConstraint.constant = self.sendButton.frame.size.width;
+    }
 }
 
 @end
