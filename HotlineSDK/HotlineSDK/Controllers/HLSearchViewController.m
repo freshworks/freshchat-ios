@@ -239,8 +239,7 @@
     HLArticle *searchArticle = self.searchResults[indexPath.row];
     CGFloat heightOfcell = 0;
     if (searchArticle) {
-        NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
-        heightOfcell = [HLListViewController heightOfCell:title];
+        heightOfcell = [HLListViewController heightOfCell:cellFont];
     }
     return heightOfcell;
 }

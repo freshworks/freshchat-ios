@@ -17,6 +17,6 @@
 
 -(BOOL)canDisplayFooterView;
 
-+ (float) heightOfCell: (NSAttributedString *)textContent;
++ (float) heightOfCell: (UIFont *)font;
 
 @end
