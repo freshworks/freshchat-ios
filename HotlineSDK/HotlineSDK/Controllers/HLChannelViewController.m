@@ -35,7 +35,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
+    parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     HLTheme *theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
