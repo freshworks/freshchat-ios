@@ -115,8 +115,9 @@
     
     dispatch_async(dispatchQueue, ^{
         
+        dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
+        
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
             
             dispatch_group_enter(serviceGroup);
             
