@@ -43,7 +43,7 @@
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
-    parent.title = self.category.title;
+    parent.navigationItem.title = self.category.title;
     [self setNavigationItem];
 }
 

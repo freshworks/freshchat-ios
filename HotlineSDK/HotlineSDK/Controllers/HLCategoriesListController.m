@@ -37,7 +37,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+    parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
     [self updateCategories];
     [self localNotificationSubscription];
