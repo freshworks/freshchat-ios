@@ -1,11 +1,4 @@
 
-Ver 1.0.8 
-__________________________
-Fixed Jiggle in message box when typing
-Fixed Issue where empty view image was overlayed over article list
-Removed unused keys in Theming file
-Fixed tab bar title getting overridden when using embedded controller
-
 Ver 1.0.7 
 __________________________
 Fixed time being truncated on the channel list 
