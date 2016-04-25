@@ -13,8 +13,8 @@
 #import "HLChannelViewController.h"
 #import "Hotline.h"
 
-#define CELL_OFFSET 32
-#define CEll_HORZ_OFFSET 20
+#define CELL_OFFSET 16
+#define MAX_ARTICLE_LINES 3
 
 @implementation HLListViewController
 
@@ -52,11 +52,8 @@
 }
 
 //method to return height of text rect
-+ (float) heightOfCell: (NSAttributedString *)textContent{
-    
-    CGRect rect = [textContent boundingRectWithSize:(CGSize){[UIScreen mainScreen].bounds.size.width - CEll_HORZ_OFFSET, CGFLOAT_MAX} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-    CGSize rectSize = rect.size;
-    return rectSize.height + CELL_OFFSET;
++ (float) heightOfCell: (UIFont *)font{
+    return font.pointSize* MAX_ARTICLE_LINES + CELL_OFFSET;
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{

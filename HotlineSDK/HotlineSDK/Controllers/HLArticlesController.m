@@ -43,7 +43,7 @@
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
-    parent.title = self.category.title;
+    parent.navigationItem.title = self.category.title;
     [self setNavigationItem];
 }
 
@@ -117,11 +117,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    //UIFont *cellFont = [self.theme tableViewCellFont];
     UIFont *cellFont = [self.theme articleListFont];
-    HLArticle *searchArticle = self.articles[indexPath.row];
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:searchArticle.title attributes:@{NSFontAttributeName:cellFont}];
-    CGFloat heightOfcell = [HLListViewController heightOfCell:title];
+    CGFloat heightOfcell = [HLListViewController heightOfCell:cellFont];
     return heightOfcell;
 }
 
