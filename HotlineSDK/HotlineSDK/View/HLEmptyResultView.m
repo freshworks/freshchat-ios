@@ -38,11 +38,9 @@
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptyResultImageView(100)]" options:0 metrics:nil views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptyResultImageView(100)]-10-[emptyResultLabel]" options:0 metrics:nil views:views]];
         
-        [self addConstraint:[FDAutolayoutHelper centerX:self.emptyResultLabel onView:self]];
-        
-        [self addConstraint:[FDAutolayoutHelper centerX:self.emptyResultImage onView:self]];
-
-        [self addConstraint:[FDAutolayoutHelper centerY:self.emptyResultImage onView:self M:0.5 C:0.0]];
+        [FDAutolayoutHelper centerX:self.emptyResultLabel onView:self];
+        [FDAutolayoutHelper centerX:self.emptyResultImage onView:self];
+        [FDAutolayoutHelper centerY:self.emptyResultImage onView:self M:0.5 C:0.0];
     }
     return self;
 }

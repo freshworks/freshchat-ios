@@ -265,7 +265,7 @@ typedef struct {
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
     
-    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView];
+    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
 
     NSDictionary *views;
@@ -287,8 +287,6 @@ typedef struct {
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
     }
     
-    [self.view addConstraint:self.bottomViewBottomConstraint];
-    [self.view addConstraint:self.bottomViewHeightConstraint];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:views]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];

@@ -68,19 +68,17 @@
         
         [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title][subtitle]|" options:0 metrics:nil  views:views]];
         
-        self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.contentEncloser];
-        
-        [self.contentView addConstraint:self.encloserHeightConstraint];
-        
-        [self.contentView addConstraint:[FDAutolayoutHelper centerY:self.contentEncloser onView:self.contentView]];
-        [self.contentView addConstraint:[FDAutolayoutHelper centerY:self.imgView onView:self.contentView]];
+        self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.contentEncloser inView:self.contentView];
+
+        [FDAutolayoutHelper centerY:self.contentEncloser onView:self.contentView];
+        [FDAutolayoutHelper centerY:self.imgView onView:self.contentView];
         
         UIImageView *accessoryView = [[UIImageView alloc] init];
         accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
         accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
         [self.contentView addSubview:accessoryView];
         
-        [self.contentView addConstraint:[FDAutolayoutHelper centerY:accessoryView onView:self.contentView]];
+        [FDAutolayoutHelper centerY:accessoryView onView:self.contentView];
         
         views[@"accessoryView"] = accessoryView;
         
@@ -100,8 +98,7 @@
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]" options:0 metrics:nil views:views]];
             
-            self.lastUpdatedTimeWidthConstraint = [FDAutolayoutHelper setWidth:55 forView:self.lastUpdatedLabel];
-            [self.contentView addConstraint:self.lastUpdatedTimeWidthConstraint];
+            self.lastUpdatedTimeWidthConstraint = [FDAutolayoutHelper setWidth:55 forView:self.lastUpdatedLabel inView:self.contentView];
             
             self.detailLableRightConstraint = [NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.contentEncloser attribute:NSLayoutAttributeTrailing multiplier:1 constant:0];
             

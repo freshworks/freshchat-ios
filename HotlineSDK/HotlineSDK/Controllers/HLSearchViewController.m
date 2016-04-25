@@ -148,8 +148,8 @@
     self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_EMPTY_SEARCH_ICON] andText:HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT)];
     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.emptyResultView];
-    [self.view addConstraint:[FDAutolayoutHelper centerX:self.emptyResultView onView:self.view]];
-    [self.view addConstraint:[FDAutolayoutHelper centerY:self.emptyResultView onView:self.view M:0.5 C:0]];
+    [FDAutolayoutHelper centerX:self.emptyResultView onView:self.view];
+    [FDAutolayoutHelper centerY:self.emptyResultView onView:self.view M:0.5 C:0];
     self.emptyResultView.hidden = YES;
 }
 

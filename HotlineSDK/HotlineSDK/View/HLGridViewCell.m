@@ -44,8 +44,8 @@
         
         NSDictionary *views = @{ @"imageView" : self.imageView, @"label" : self.label};
         
-        [self.contentView addConstraint:[FDAutolayoutHelper centerX:self.imageView onView:self.contentView]];
-        [self.contentView addConstraint:[FDAutolayoutHelper centerY:self.imageView onView:self.contentView M:0.8 C:0]];
+        [FDAutolayoutHelper centerX:self.imageView onView:self.contentView];
+        [FDAutolayoutHelper centerY:self.imageView onView:self.contentView M:0.8 C:0];
         
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
                                                                      attribute:NSLayoutAttributeWidth

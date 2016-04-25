@@ -39,7 +39,7 @@
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title]|" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[title]-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraint:[FDAutolayoutHelper centerY:self.contentView onView:accessoryView]];
+        [FDAutolayoutHelper centerY:accessoryView onView:self.contentView];
         [self setupTheme];
     }
     return self;

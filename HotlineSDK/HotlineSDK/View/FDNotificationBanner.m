@@ -93,8 +93,8 @@
     NSDictionary *views = @{@"banner" : self, @"title" : self.titleLabel,
                             @"message" : self.messageLabel, @"imgView" : self.imgView, @"closeButton" : closeButton};
     
-    [self addConstraint:[FDAutolayoutHelper centerY:closeButton onView:self]];
-    [self addConstraint:[FDAutolayoutHelper centerY:self.imgView onView:self]];
+    [FDAutolayoutHelper centerY:closeButton onView:self];
+    [FDAutolayoutHelper centerY:self.imgView onView:self];
 
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[title]" options:0 metrics:nil views:views]];

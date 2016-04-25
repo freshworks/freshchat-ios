@@ -142,7 +142,7 @@
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
     
-    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView];
+    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     
     //Article Vote Prompt View
     self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:LOC_ARTICLE_VOTE_PROMPT_PARTIAL];
@@ -157,9 +157,6 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[webView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[webView][bottomView]|" options:0 metrics:nil views:views]];
-    
-    [self.view addConstraint:self.bottomViewHeightConstraint];
-
 }
 
 -(void)modifyConstraint:(NSLayoutConstraint *)constraint withHeight:(CGFloat)height{

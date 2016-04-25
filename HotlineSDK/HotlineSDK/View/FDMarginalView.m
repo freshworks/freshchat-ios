@@ -48,7 +48,7 @@
         self.actionLabel.textColor = [theme talkToUsButtonTextColor];
         [self addSubview:self.actionLabel];
         
-        [self addConstraint: [FDAutolayoutHelper centerY:self.contactUsImgView onView:self]];
+        [FDAutolayoutHelper centerY:self.contactUsImgView onView:self];
         
         [FDAutolayoutHelper center:self.actionLabel onView:self];
         
