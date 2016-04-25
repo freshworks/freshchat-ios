@@ -25,6 +25,7 @@
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
 #import "HLEmptyResultView.h"
+#import "FDAutolayoutHelper.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -144,27 +145,11 @@
 }
 
 - (void) setEmptySearchResultView{
-    
     self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_EMPTY_SEARCH_ICON] andText:HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT)];
     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.emptyResultView];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.tableView
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0.0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                          attribute:NSLayoutAttributeCenterY
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.tableView
-                                                          attribute:NSLayoutAttributeCenterY
-                                                         multiplier:0.5
-                                                           constant:0.0]];
-    
+    [self.view addConstraint:[FDAutolayoutHelper centerX:self.emptyResultView onView:self.view]];
+    [self.view addConstraint:[FDAutolayoutHelper centerY:self.emptyResultView onView:self.view M:0.5 C:0]];
     self.emptyResultView.hidden = YES;
 }
 

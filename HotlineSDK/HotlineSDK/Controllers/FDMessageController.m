@@ -30,6 +30,7 @@
 #import "FDBarButtonItem.h"
 #import "FDSecureStore.h"
 #import "HLNotificationHandler.h"
+#import "FDAutolayoutHelper.h"
 
 typedef struct {
     BOOL isLoading;
@@ -264,24 +265,9 @@ typedef struct {
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
     
-    self.bottomViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:nil
-                                                              attribute:NSLayoutAttributeNotAnAttribute
-                                                             multiplier:1.0
-                                                               constant:0];
-    
-    self.bottomViewBottomConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
-                                                              attribute:NSLayoutAttributeBottom
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.view
-                                                              attribute:NSLayoutAttributeBottom
-                                                             multiplier:1.0 constant:0];
+    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView];
+    self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
 
-    //Initial Constraints
-    
-    
     NSDictionary *views;
     
     NSDictionary *metrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};

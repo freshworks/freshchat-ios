@@ -18,6 +18,7 @@
 #import "FDReachabilityManager.h"
 #import "FDStringUtil.h"
 #import "FDBarButtonItem.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -141,13 +142,7 @@
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
     
-    self.bottomViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
-                                                                   attribute:NSLayoutAttributeHeight
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1.0
-                                                                    constant:0];
+    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView];
     
     //Article Vote Prompt View
     self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:LOC_ARTICLE_VOTE_PROMPT_PARTIAL];
