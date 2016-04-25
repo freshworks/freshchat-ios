@@ -22,6 +22,8 @@ static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *messageLabel;
+@property (strong, nonatomic) UIView *contentEncloser;
+@property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
 @property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong, readonly) HLChannel *currentChannel;
 
@@ -30,5 +32,6 @@ static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 +(instancetype)sharedInstance;
 -(void)displayBannerWithChannel:(HLChannel *)channel;
 -(void)setMessage:(NSString *)message;
+-(void)adjustPadding;
 
 @end
