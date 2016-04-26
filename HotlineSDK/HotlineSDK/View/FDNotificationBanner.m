@@ -101,8 +101,6 @@
 
     [FDAutolayoutHelper centerY:self.imgView onView:self];
     
-    self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.contentEncloser inView:self];
-    
     [FDAutolayoutHelper centerY:self.contentEncloser onView:self];
     
     [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title][message]|" options:0 metrics:nil  views:views]];
@@ -112,7 +110,6 @@
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[contentEncloser]-[closeButton(22)]-|" options:0 metrics:nil views:views]];
-
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(22)]" options:0 metrics:nil views:views]];
     
     self.backgroundColor = [self.theme notificationBackgroundColor];
@@ -132,8 +129,7 @@
     [self layoutIfNeeded];
     CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
     CGFloat messageHeight = self.messageLabel.intrinsicContentSize.height;
-    
-    self.encloserHeightConstraint.constant = titleHeight + messageHeight;
+    self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:(messageHeight+titleHeight) forView:self.contentEncloser inView:self];
 }
 
 -(void)drawRect:(CGRect)rect{
@@ -179,7 +175,7 @@
         myFrame.origin.y = 0;
         self.frame = myFrame;
     }];
-    
+    [self adjustPadding];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(dismissBanner:) object:nil];
     [self performSelector:@selector(dismissBanner:) withObject:nil afterDelay:5.0f];
 

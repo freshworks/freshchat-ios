@@ -41,7 +41,6 @@
     if(bannerEnabled && ![channel isActiveChannel]){
         [self.banner setMessage:message];
         [self.banner displayBannerWithChannel:channel];
-        [self.banner adjustPadding];
     }
 }
 
