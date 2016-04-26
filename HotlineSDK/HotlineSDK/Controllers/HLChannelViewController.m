@@ -23,6 +23,7 @@
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"
 #import "FDCell.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLChannelViewController ()
 
@@ -97,21 +98,7 @@
                 self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
                 [self.view addSubview:self.emptyResultView];
                 
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                      attribute:NSLayoutAttributeCenterX
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.tableView
-                                                                      attribute:NSLayoutAttributeCenterX
-                                                                     multiplier:1.0
-                                                                       constant:0.0]];
-                
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                      attribute:NSLayoutAttributeCenterY
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.tableView
-                                                                      attribute:NSLayoutAttributeCenterY
-                                                                     multiplier:1.0
-                                                                       constant:0.0]];
+                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
                 
             }
             else{
