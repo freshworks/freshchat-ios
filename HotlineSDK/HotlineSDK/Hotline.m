@@ -78,6 +78,8 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    config.appID  = trimString(config.appID);
+    config.appKey = trimString(config.appKey);
     self.config = config;
     
     if ([self hasUpdatedConfig:config]) {
