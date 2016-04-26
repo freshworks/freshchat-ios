@@ -103,8 +103,6 @@
     
     self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.contentEncloser inView:self];
     
-    [self addConstraint:self.encloserHeightConstraint];
-    
     [FDAutolayoutHelper centerY:self.contentEncloser onView:self];
     
     [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title][message]|" options:0 metrics:nil  views:views]];
