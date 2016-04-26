@@ -8,6 +8,7 @@
 
 #import "HLGridViewCell.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLGridViewCell()
 
@@ -42,22 +43,10 @@
         [self.contentView addSubview:self.label];
         
         NSDictionary *views = @{ @"imageView" : self.imageView, @"label" : self.label};
-        [self.contentView addConstraint:
-         [NSLayoutConstraint constraintWithItem:self.imageView
-                                      attribute:NSLayoutAttributeCenterX
-                                      relatedBy:NSLayoutRelationEqual
-                                         toItem:self.contentView
-                                      attribute:NSLayoutAttributeCenterX
-                                     multiplier:1
-                                       constant:0]];
-        [self.contentView addConstraint:
-         [NSLayoutConstraint constraintWithItem:self.imageView
-                                      attribute:NSLayoutAttributeCenterY
-                                      relatedBy:NSLayoutRelationEqual
-                                         toItem:self.contentView
-                                      attribute:NSLayoutAttributeCenterY
-                                     multiplier:0.8
-                                       constant:0]];
+        
+        [FDAutolayoutHelper centerX:self.imageView onView:self.contentView];
+        [FDAutolayoutHelper centerY:self.imageView onView:self.contentView M:0.8 C:0];
+        
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
                                                                      attribute:NSLayoutAttributeWidth
                                                                      relatedBy:NSLayoutRelationEqual

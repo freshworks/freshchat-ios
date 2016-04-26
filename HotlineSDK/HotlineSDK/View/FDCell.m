@@ -8,6 +8,7 @@
 
 #import "FDCell.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 @implementation FDCell
 
@@ -67,20 +68,17 @@
         
         [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title][subtitle]|" options:0 metrics:nil  views:views]];
         
-        
-        self.encloserHeightConstraint = [NSLayoutConstraint constraintWithItem:self.contentEncloser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
-        [self.contentView addConstraint:self.encloserHeightConstraint];
+        self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.contentEncloser inView:self.contentView];
 
-        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentEncloser attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
-        
-        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [FDAutolayoutHelper centerY:self.contentEncloser onView:self.contentView];
+        [FDAutolayoutHelper centerY:self.imgView onView:self.contentView];
         
         UIImageView *accessoryView = [[UIImageView alloc] init];
         accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
         accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
         [self.contentView addSubview:accessoryView];
         
-        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:accessoryView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [FDAutolayoutHelper centerY:accessoryView onView:self.contentView];
         
         views[@"accessoryView"] = accessoryView;
         
@@ -100,15 +98,19 @@
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]" options:0 metrics:nil views:views]];
             
+            self.lastUpdatedTimeWidthConstraint = [FDAutolayoutHelper setWidth:55 forView:self.lastUpdatedLabel inView:self.contentView];
+            
             self.detailLableRightConstraint = [NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.contentEncloser attribute:NSLayoutAttributeTrailing multiplier:1 constant:0];
             
             [self.contentEncloser addConstraint:self.detailLableRightConstraint];
             
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[badgeView(30)]-10-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
             
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(20)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser][lastUpdated(55)]" options:0 metrics:nil views:views]];
-
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(20)]" options:0 metrics:nil views:views]];
+            
+            [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lastUpdatedLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:accessoryView attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
+            
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser][lastUpdated]" options:0 metrics:nil views:views]];
 
         }else{
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
@@ -128,16 +130,21 @@
     
     CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
     CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
+    CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
     
+    self.lastUpdatedTimeWidthConstraint.constant = lastUpdatedTimeWidth;
     self.encloserHeightConstraint.constant = titleHeight + detailHeight;
     
     if (self.badgeView.isHidden) {
         self.detailLableRightConstraint.constant = 45;
+    }else{
+        self.detailLableRightConstraint.constant = 0;
     }
 }
 
 -(void)theme{
     HLTheme *theme = [HLTheme sharedInstance];
+    if (self.isChannelCell) {
         self.backgroundColor     = [theme channelListCellBackgroundColor];
         self.titleLabel.textColor = [theme channelTitleFontColor];
         self.titleLabel.font      = [theme channelTitleFont];
@@ -145,6 +152,13 @@
         self.detailLabel.textColor = [theme channelDescriptionFontColor];
         self.lastUpdatedLabel.font = [theme channelLastUpdatedFont];
         self.lastUpdatedLabel.textColor = [theme channelLastUpdatedFontColor];
+    }else{
+        self.backgroundColor = [theme tableViewCellBackgroundColor];
+        self.titleLabel.textColor = [theme tableViewCellTitleFontColor];
+        self.titleLabel.font      = [theme tableViewCellTitleFont];
+        self.detailLabel.font = [theme tableViewCellDetailFont];
+        self.detailLabel.textColor = [theme tableViewCellDetailFontColor];
+    }
 }
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{

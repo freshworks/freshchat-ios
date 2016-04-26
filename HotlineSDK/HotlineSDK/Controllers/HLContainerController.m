@@ -10,6 +10,7 @@
 #import "HLTheme.h"
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLContainerController ()
 
@@ -58,8 +59,7 @@
     footerLabel.textColor = [UIColor whiteColor];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [footerView addSubview:footerLabel];
-    [footerView addConstraint:[NSLayoutConstraint constraintWithItem:footerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:footerLabel attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
-    [footerView addConstraint:[NSLayoutConstraint constraintWithItem:footerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:footerLabel attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+    [FDAutolayoutHelper center:footerLabel onView:footerView];
     
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];

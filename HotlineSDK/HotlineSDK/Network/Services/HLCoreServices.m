@@ -16,6 +16,7 @@
 #import "HLConstants.h"
 #import "FDResponseInfo.h"
 #import "KonotorCustomProperty.h"
+#import "FDMemLogger.h"
 
 @implementation HLCoreServices
 
@@ -47,16 +48,32 @@
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
-
+    NSString *adId = [FDUtilities getAdID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    
+    if (adId == nil || userAlias == nil) {
+        FDMemLogger *memLogger = [[FDMemLogger alloc]init];
+        [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
+        if(!adId){
+            [memLogger addErrorInfo:@{ @"Reason": @"Ad id is nil"}];
+        }
+        if(!userAlias){
+            [memLogger addErrorInfo:@{ @"Reason": @"userAlias is nil"}];
+        }
+        [memLogger upload];
+        return nil;
+    }
+    
     NSDictionary *info = @{
                            @"user" : @{
-                                   @"alias" : [FDUtilities getUserAlias],
+                                   @"alias" : userAlias,
                                    @"meta"  : [FDUtilities deviceInfoProperties],
-                                   @"adId"  : [FDUtilities getAdID]
+                                   @"adId"  : adId
                                    }
                            };
     
     NSData *userData = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
+    
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
     [request setRelativePath:path andURLParams:@[appKey]];
@@ -114,11 +131,10 @@
     }
     
     dispatch_async(dispatchQueue, ^{
+        dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
+        dispatch_group_enter(serviceGroup);
         
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
-            
-            dispatch_group_enter(serviceGroup);
             
             if (![FDUtilities isUserRegistered]) {
                 dispatch_group_leave(serviceGroup);

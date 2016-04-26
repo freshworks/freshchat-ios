@@ -30,6 +30,7 @@
 #import "FDBarButtonItem.h"
 #import "FDSecureStore.h"
 #import "HLNotificationHandler.h"
+#import "FDAutolayoutHelper.h"
 
 typedef struct {
     BOOL isLoading;
@@ -70,7 +71,7 @@ typedef struct {
 
 @implementation FDMessageController
 
-#define INPUT_TOOLBAR_HEIGHT  40
+#define INPUT_TOOLBAR_HEIGHT  43
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
 
@@ -107,7 +108,7 @@ typedef struct {
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.title = self.channel.name;
+    parent.navigationItem.title = self.channel.name;
     self.messagesDisplayedCount = 20;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
@@ -119,6 +120,13 @@ typedef struct {
     [HLMessageServices downloadAllMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
+    [self prepareInputToolbar];
+    
+}
+
+-(void)prepareInputToolbar{
+    [self setHeightForTextView:self.inputToolbar.textView];
+    [self.inputToolbar prepareView];
 }
 
 -(UIView *)tableHeaderView{
@@ -257,24 +265,9 @@ typedef struct {
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
     
-    self.bottomViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:nil
-                                                              attribute:NSLayoutAttributeNotAnAttribute
-                                                             multiplier:1.0
-                                                               constant:0];
-    
-    self.bottomViewBottomConstraint = [NSLayoutConstraint constraintWithItem:self.bottomView
-                                                              attribute:NSLayoutAttributeBottom
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.view
-                                                              attribute:NSLayoutAttributeBottom
-                                                             multiplier:1.0 constant:0];
+    self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
+    self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
 
-    //Initial Constraints
-    
-    
     NSDictionary *views;
     
     NSDictionary *metrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
@@ -294,8 +287,6 @@ typedef struct {
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
     }
     
-    [self.view addConstraint:self.bottomViewBottomConstraint];
-    [self.view addConstraint:self.bottomViewHeightConstraint];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:views]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
@@ -564,37 +555,34 @@ typedef struct {
 
 #pragma mark Text view delegates
 
--(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{    
+-(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{
+    [self setHeightForTextView:textView];
+    [self scrollTableViewToLastCell];
+}
+
+-(void)setHeightForTextView:(UITextView *)textView{
+
+    CGFloat NUM_OF_LINES = 5;
     
-    CGSize txtSize = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, 140)];
-    float height=txtSize.height;
-    if((height)>=67){
-        height=67;
-        if(_flags.isFirstWordOnLine == YES){
-            _flags.isFirstWordOnLine = NO;
-        }else{
-            textView.scrollEnabled=YES;
-        }
+    CGFloat MAX_HEIGHT = textView.font.lineHeight * NUM_OF_LINES;
+    
+    CGFloat preferredTextViewHeight = 0;
+    
+    CGFloat messageHeight = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, CGFLOAT_MAX)].height;
+    
+    if(messageHeight > MAX_HEIGHT){
+        preferredTextViewHeight = MAX_HEIGHT;
+        textView.scrollEnabled=YES;
     }
     else{
+        preferredTextViewHeight = messageHeight;
         textView.scrollEnabled=NO;
     }
     
-    if (height > self.bottomViewHeightConstraint.constant) {
-        self.bottomViewHeightConstraint.constant = height+10; //Fix this
-        self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
-    }
-    else{
-        self.bottomViewHeightConstraint.constant = height+10; //Fix this
-        self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
-    }
+    self.bottomViewHeightConstraint.constant = preferredTextViewHeight + 10;
+    self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
     
-    [UIView animateWithDuration:0.2 animations:^{
-        textView.frame=CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,height);
-        [self scrollTableViewToLastCell];
-
-    }];
-    
+    textView.frame=CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, preferredTextViewHeight);
 }
 
 -(void)scrollTableViewToLastCell{

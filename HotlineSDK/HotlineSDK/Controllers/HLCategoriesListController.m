@@ -23,6 +23,7 @@
 #import "FDBarButtonItem.h"
 #import "FDCell.h"
 #import "HLEmptyResultView.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLCategoriesListController ()
 
@@ -37,7 +38,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
-    parent.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+    parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
     [self updateCategories];
     [self localNotificationSubscription];
@@ -53,6 +54,17 @@
         if (!error) {
             self.categories = solutions;
             [self setNavigationItem];
+            
+            if(![self.categories count]){
+                self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:HLLocalizedString(LOC_EMPTY_FAQ_TEXT)];
+                self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                [self.view addSubview:self.emptyResultView];
+                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+            }
+            else{
+                [self.emptyResultView removeFromSuperview];
+            }
+            
             [self.tableView reloadData];
         }
     }];
@@ -110,33 +122,8 @@
     FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
         if(isEmpty){
-            
             [updater resetTime];
-            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:HLLocalizedString(LOC_EMPTY_FAQ_TEXT)];
-            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.view addSubview:self.emptyResultView];
-            
-            [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                  attribute:NSLayoutAttributeCenterX
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:self.tableView
-                                                                  attribute:NSLayoutAttributeCenterX
-                                                                 multiplier:1.0
-                                                                   constant:0.0]];
-            
-            [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                  attribute:NSLayoutAttributeCenterY
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:self.tableView
-                                                                  attribute:NSLayoutAttributeCenterY
-                                                                 multiplier:1.0
-                                                                   constant:0.0]];
-            
         }
-        else{
-            [self.emptyResultView removeFromSuperview];
-        }
-        
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
             if (!isFetchPerformed) HideNetworkActivityIndicator();

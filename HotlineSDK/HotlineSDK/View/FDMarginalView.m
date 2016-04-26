@@ -9,6 +9,7 @@
 #import "FDMarginalView.h"
 #import "HLMacros.h"
 #import "HLLocalization.h"
+#import "FDAutolayoutHelper.h"
 
 @interface FDMarginalView ()
 
@@ -47,29 +48,9 @@
         self.actionLabel.textColor = [theme talkToUsButtonTextColor];
         [self addSubview:self.actionLabel];
         
-        [self addConstraint: [NSLayoutConstraint constraintWithItem:self.contactUsImgView
-                                                          attribute:NSLayoutAttributeCenterY
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self
-                                                          attribute:NSLayoutAttributeCenterY
-                                                         multiplier:1
-                                                           constant:0]];
+        [FDAutolayoutHelper centerY:self.contactUsImgView onView:self];
         
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.actionLabel
-                                                         attribute:NSLayoutAttributeCenterX
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeCenterX
-                                                        multiplier:1
-                                                          constant:0]];
-        
-        [self addConstraint: [NSLayoutConstraint constraintWithItem:self.actionLabel
-                                                          attribute:NSLayoutAttributeCenterY
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self
-                                                          attribute:NSLayoutAttributeCenterY
-                                                         multiplier:1
-                                                           constant:0]];
+        [FDAutolayoutHelper center:self.actionLabel onView:self];
         
         NSDictionary *views = @{@"contactusIcon":self.contactUsImgView, @"contactusLabel":self.actionLabel};
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[contactusIcon(12)]" options:0 metrics:nil views:views]];

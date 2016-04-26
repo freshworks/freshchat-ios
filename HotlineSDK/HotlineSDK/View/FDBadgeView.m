@@ -8,6 +8,7 @@
 
 #import "FDBadgeView.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 @interface FDBadgeView ()
 
@@ -25,11 +26,7 @@
         self.backgroundColor = [theme badgeButtonBackgroundColor];
         self.countLabel.font = [theme badgeButtonFont];
         [self addSubview:self.countLabel];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.countLabel attribute:NSLayoutAttributeCenterX
-                                                         relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-        
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.countLabel attribute:NSLayoutAttributeCenterY
-                                                         relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [FDAutolayoutHelper center:self.countLabel onView:self];
     }
     return self;
 }
