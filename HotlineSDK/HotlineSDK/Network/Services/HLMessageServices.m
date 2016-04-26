@@ -25,26 +25,37 @@
 #import "FDDateUtil.h"
 #import "HLNotificationHandler.h"
 
-static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
 static HLNotificationHandler *handleUpdateNotification;
 @implementation HLMessageServices
 
 +(void)downloadAllMessages:(void(^)(NSError *error))handler{
     
+    static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+    
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
-        FDLog(@"download message in progress, so skip");
         return;
     }
-    
+
+    ShowNetworkActivityIndicator();
     MESSAGES_DOWNLOAD_IN_PROGRESS = YES;
     
-    ShowNetworkActivityIndicator();
     HLMessageServices *messageService = [[HLMessageServices alloc]init];
     [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
         if (!error) {
-            [self fetchAllMessages:handler];
+            [self fetchAllMessages:^(NSError *error) {
+                if (!error) {
+                    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
+                    if(handler) handler(nil);
+                }else{
+                    [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
+                    if(handler) handler(error);
+                }
+                HideNetworkActivityIndicator();
+                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+            }];
         }else{
             if(handler) handler(error);
+            HideNetworkActivityIndicator();
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         }
     }];
@@ -55,9 +66,9 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
     request.HTTPMethod = HTTP_METHOD_GET;
+    
     NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
     __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
     NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
@@ -67,37 +78,24 @@ static HLNotificationHandler *handleUpdateNotification;
 
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         
-        if (error) {
-            FDLog(@"Message fetch failed %@", error);
-            HideNetworkActivityIndicator();
-            MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-            [Konotor performSelector:@selector(conversationsDownloadFailed)];
-            if(handler) handler(error);
-            return;
-        }else{
-            HideNetworkActivityIndicator();
-
-            NSDictionary *toplevel = responseInfo.responseAsDictionary;
-
-            FDLog(@"Messages :%@", toplevel);
-
-            if(!toplevel){
-                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-                [Konotor performSelector:@selector(conversationsDownloaded)];
+        if (!error) {
+            
+            NSDictionary *response = responseInfo.responseAsDictionary;
+            NSArray *conversations = response[@"conversations"];
+            
+            if(!response || !conversations){
+                //TODO: If this is a special case to handle, We can track this scenario in loggly.
+                NSLog(@"Download failed : Empty response from server");
+                handler([NSError errorWithDomain:@"HOTLINE_ERROR_DOMAIN" code:1000 userInfo:@{@"Reason" : @"Empty response !!!"}]);
                 return;
             }
             
-            NSArray *pArrayOfConversations = toplevel[@"conversations"];
+            FDLog(@"Messages : %@", conversations);
             
-            if(!pArrayOfConversations){
-                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-                [Konotor performSelector:@selector(conversationsDownloaded)];
-                return;
-            }
             NSString *messageText;
             NSNumber *channelId;
-            for (int i=0; i<pArrayOfConversations.count; i++) {
-                NSDictionary *conversationInfo = pArrayOfConversations[i];
+            for (int i=0; i<conversations.count; i++) {
+                NSDictionary *conversationInfo = conversations[i];
                 channelId = conversationInfo[@"channelId"];
                 HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
@@ -130,22 +128,23 @@ static HLNotificationHandler *handleUpdateNotification;
                         }
                     }
                 }
+                
                 if(![HLNotificationHandler areNotificationsEnabled] && messageText){
                     handleUpdateNotification = [[HLNotificationHandler alloc] init];
                     [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
                 }
                 
             }
-            
-            if(handler) handler(nil);
-            [Konotor performSelector:@selector(conversationsDownloaded)];
+
+            [[KonotorDataManager sharedInstance]save];
+            [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+            [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
+            handler(nil);
+        }else{
+            handler(error);
         }
-        
-        [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-        [[KonotorDataManager sharedInstance]save];
-        MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+
         [self postUnreadCountNotification];
-        [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
         
     }];
 }
