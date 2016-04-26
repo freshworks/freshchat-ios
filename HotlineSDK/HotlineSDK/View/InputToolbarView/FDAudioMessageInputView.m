@@ -10,6 +10,7 @@
 #import "HLTheme.h"
 #import "Konotor.h"
 #import "HLLocalization.h"
+#import "FDAutolayoutHelper.h"
 
 @interface FDAudioMessageInputView ()
 
@@ -66,13 +67,7 @@ int timeMin;
 -(void)layoutSubviews{
     NSDictionary *views = @{@"dismissButton":self.dismissButton,@"stopButton":self.stopButton,@"sendButton":self.sendButton,@"timeLabel":self.timeLabel,@"recordingLabel":self.recordingLabel};
     
-    [self addConstraint: [NSLayoutConstraint constraintWithItem:self.recordingLabel
-                                  attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self
-                                  attribute:NSLayoutAttributeCenterX  multiplier:1 constant:0]];
-    
-    [self addConstraint: [NSLayoutConstraint constraintWithItem:self.recordingLabel
-                                  attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self
-                                  attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [FDAutolayoutHelper center:self.recordingLabel onView:self];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[dismissButton]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[dismissButton]-|" options:0 metrics:nil views:views]];

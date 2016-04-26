@@ -8,6 +8,7 @@
 
 #import "FDArticleListCell.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 @interface FDArticleListCell ()
 
@@ -25,22 +26,20 @@
         self.articleText = [[UILabel alloc] init];
         [self.articleText setNumberOfLines:3];
         [self.articleText setLineBreakMode:NSLineBreakByTruncatingTail];
-        
         [self.articleText setTranslatesAutoresizingMaskIntoConstraints:NO];
         
         UIImageView *accessoryView = [[UIImageView alloc] init];
         accessoryView.image = [self.theme getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
         accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
+
         [self.contentView addSubview:accessoryView];
-        
         [self.contentView addSubview:self.articleText];
         
         NSDictionary *views = @{@"title" : self.articleText, @"accessoryView":accessoryView};
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title]|" options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[title]-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeCenterY
-                                                                     relatedBy:NSLayoutRelationEqual toItem:accessoryView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        [FDAutolayoutHelper centerY:accessoryView onView:self.contentView];
         [self setupTheme];
     }
     return self;

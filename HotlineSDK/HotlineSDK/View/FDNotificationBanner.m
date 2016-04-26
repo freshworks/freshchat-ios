@@ -13,6 +13,7 @@
 #import "FDSecureStore.h"
 #import "HLLocalization.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 #define systemSoundID 1315
 
@@ -95,9 +96,10 @@
     
     NSDictionary *views = @{@"banner" : self, @"title" : self.titleLabel,
                             @"message" : self.messageLabel, @"imgView" : self.imgView, @"closeButton" : closeButton, @"contentEncloser" : self.contentEncloser};
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:closeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [FDAutolayoutHelper centerY:closeButton onView:self];
+
+    [FDAutolayoutHelper centerY:self.imgView onView:self];
     
     self.encloserHeightConstraint = [NSLayoutConstraint constraintWithItem:self.contentEncloser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
     [self addConstraint:self.encloserHeightConstraint];
