@@ -247,7 +247,7 @@
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices downloadAllMessages:nil];
+        [HLMessageServices fetchMessagesWithChannel:YES handler:nil];
         [HLCoreServices DAUCall];
         [self registerDeviceToken];
         [self updateAppVersion];
@@ -356,7 +356,7 @@
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        [HLMessageServices downloadAllMessages:nil];
+        [HLMessageServices fetchMessagesWithChannel:NO handler:nil];
         
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
         FDLog(@"Push Recieved :%@", payload);
@@ -422,7 +422,7 @@
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    [HLMessageServices downloadAllMessages:^(NSError *error) {
+    [HLMessageServices fetchMessagesWithChannel:YES handler:^(NSError *error) {
         if (completion) completion([self unreadCount]);
     }];
 }

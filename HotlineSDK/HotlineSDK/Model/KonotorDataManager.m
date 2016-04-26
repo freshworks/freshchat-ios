@@ -14,9 +14,6 @@
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
 
-NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
-NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
-
 @interface KonotorDataManager ()
 
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
@@ -120,19 +117,17 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     return _backgroundContext;
 }
 
-- (BOOL)save {
-    if (![self.mainObjectContext hasChanges])
-        return YES;
-    
-    NSError *error = nil;
-    if (![self.mainObjectContext save:&error]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
-                                                            object:error];
-        return NO;
-    }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveNotification object:nil];
-    return YES;
+- (void)save {
+    [self.mainObjectContext performBlock:^{
+        if (![self.mainObjectContext hasChanges]){
+            return;
+        }
+        
+        NSError *error = nil;
+        if (![self.mainObjectContext save:&error]) {
+            //If save fail for some reason can we capture this with stack trace in loggly..
+        }
+    }];
 }
 
 
@@ -261,10 +256,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllMessages:(void (^)(NSError *))handler{
     [self deleteAllEntriesOfEntity:@"KonotorMessage" handler:handler inContext:self.mainObjectContext];
-}
-
-- (void)dealloc {
-    [self save];
 }
 
 @end

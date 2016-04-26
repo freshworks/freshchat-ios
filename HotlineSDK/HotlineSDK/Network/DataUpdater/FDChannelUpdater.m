@@ -23,7 +23,7 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLMessageServices downloadAllMessages:nil];
+    [HLMessageServices fetchMessagesWithChannel:YES handler:nil];
 }
 
 @end

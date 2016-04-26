@@ -28,37 +28,25 @@
 static HLNotificationHandler *handleUpdateNotification;
 @implementation HLMessageServices
 
-+(void)downloadAllMessages:(void(^)(NSError *error))handler{
-    
-    static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+
++(void)fetchMessagesWithChannel:(BOOL)canFetchChannel handler:(void(^)(NSError *error))handler{
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         return;
     }
-
+    
     ShowNetworkActivityIndicator();
     MESSAGES_DOWNLOAD_IN_PROGRESS = YES;
     
-    HLMessageServices *messageService = [[HLMessageServices alloc]init];
-    [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
-        if (!error) {
-            [self fetchAllMessages:^(NSError *error) {
-                if (!error) {
-                    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
-                    if(handler) handler(nil);
-                }else{
-                    [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
-                    if(handler) handler(error);
-                }
-                HideNetworkActivityIndicator();
-                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-            }];
-        }else{
-            if(handler) handler(error);
-            HideNetworkActivityIndicator();
-            MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-        }
-    }];
+    if (canFetchChannel) {
+        [[[HLMessageServices alloc]init] fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+            [self fetchAllMessages:handler];
+        }];
+    }else{
+        [self fetchAllMessages:handler];
+    }
+    
 }
 
 +(void)fetchAllMessages:(void(^)(NSError *error))handler{
@@ -139,11 +127,15 @@ static HLNotificationHandler *handleUpdateNotification;
             [[KonotorDataManager sharedInstance]save];
             [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
             [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
-            handler(nil);
+            [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
+            if(handler) handler(nil);
         }else{
-            handler(error);
+            [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
+            if(handler) handler(error);
         }
-
+        
+        HideNetworkActivityIndicator();
+        MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         [self postUnreadCountNotification];
         
     }];

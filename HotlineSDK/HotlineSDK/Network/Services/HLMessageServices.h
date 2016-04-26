@@ -12,7 +12,7 @@
 
 @interface HLMessageServices : NSObject
 
-+(void)downloadAllMessages:(void(^)(NSError *error))handler;
++(void)fetchMessagesWithChannel:(BOOL)canFetchChannel handler:(void(^)(NSError *error))handler;
 
 /* fetches channel list, updates existing channels including hidden channels */
 -(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler;
