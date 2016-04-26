@@ -101,17 +101,18 @@
 
     [FDAutolayoutHelper centerY:self.imgView onView:self];
     
-    self.encloserHeightConstraint = [NSLayoutConstraint constraintWithItem:self.contentEncloser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+    self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.contentEncloser inView:self];
+    
     [self addConstraint:self.encloserHeightConstraint];
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.contentEncloser attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [FDAutolayoutHelper centerY:self.contentEncloser onView:self];
     
     [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title][message]|" options:0 metrics:nil  views:views]];
     
     [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil  views:views]];
     [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[message]|" options:0 metrics:nil  views:views]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]-|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[contentEncloser]-[closeButton(22)]-|" options:0 metrics:nil views:views]];
 
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(22)]" options:0 metrics:nil views:views]];
