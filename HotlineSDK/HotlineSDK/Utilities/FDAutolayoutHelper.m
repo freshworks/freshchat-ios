@@ -16,29 +16,30 @@
 
 +(NSLayoutConstraint *)centerX:(UIView *)subView onView:(UIView *)superView{
     NSLayoutConstraint *centerX = [self centerX:subView onView:superView M:1 C:0];
-    [superView addConstraint:centerX];
     return centerX;
 }
 
 +(NSLayoutConstraint *)centerY:(UIView *)subView onView:(UIView *)superView{
     NSLayoutConstraint *centerY = [self centerY:subView onView:superView M:1 C:0];
-    [superView addConstraint:centerY];
     return centerY;
 }
 
 +(NSLayoutConstraint *)centerX:(UIView *)subView onView:(UIView *)superView M:(CGFloat)m C:(CGFloat)c{
-    return  [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX
+    NSLayoutConstraint *centerXConstraint = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX
                                     relatedBy:NSLayoutRelationEqual
                                     toItem:superView attribute:NSLayoutAttributeCenterX
                                     multiplier:m constant:c];
-
+    [superView addConstraint:centerXConstraint];
+    return centerXConstraint;
 }
 
 +(NSLayoutConstraint *)centerY:(UIView *)subView onView:(UIView *)superView M:(CGFloat)m C:(CGFloat)c{
-    return [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterY
+    NSLayoutConstraint *centerYConstraint = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterY
                                     relatedBy:NSLayoutRelationEqual
                                     toItem:superView attribute:NSLayoutAttributeCenterY
                                     multiplier:m constant:c];
+    [superView addConstraint:centerYConstraint];
+    return centerYConstraint;
 }
 
 +(NSLayoutConstraint *)bottomAlign:(UIView *)subView toView:(UIView *)superView{
