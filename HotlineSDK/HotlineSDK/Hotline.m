@@ -78,6 +78,7 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    config.domain = [self validateDomain: config.domain];
     self.config = config;
     
     if ([self hasUpdatedConfig:config]) {
@@ -338,8 +339,6 @@
     [self registerDeviceToken];
 }
 
-
-
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
     NSDictionary *payload = info;
     if (info[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
@@ -425,6 +424,18 @@
     [HLMessageServices downloadAllMessages:^(NSError *error) {
         if (completion) completion([self unreadCount]);
     }];
+}
+
+- (NSString *)validateDomain:(NSString*)domain
+{
+    NSString *searchKey = @"://";
+    NSRange range = [domain rangeOfString:searchKey];
+    if (range.location == NSNotFound) {
+        FDLog(@"No domain refactor req");
+    } else {
+       domain = [domain stringByReplacingOccurrencesOfString:[domain substringWithRange:NSMakeRange(0, range.location+searchKey.length)] withString:@""];
+    }
+    return domain;
 }
 
 // Polling changes
