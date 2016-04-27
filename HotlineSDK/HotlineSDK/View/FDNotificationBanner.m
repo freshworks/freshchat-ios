@@ -19,9 +19,14 @@
 
 @interface FDNotificationBanner ()
 
+@property (nonatomic, strong) UIImageView *imgView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
+@property (strong, nonatomic) UIView *contentEncloser;
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) NSLayoutConstraint *bannerTopConstraint;
 @property (nonatomic, strong, readwrite) HLChannel *currentChannel;
+@property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
 
 @end
 
