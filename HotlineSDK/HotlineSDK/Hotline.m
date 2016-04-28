@@ -428,14 +428,7 @@
 
 - (NSString *)validateDomain:(NSString*)domain
 {
-    NSString *searchKey = @"://";
-    NSRange range = [domain rangeOfString:searchKey];
-    if (range.location == NSNotFound) {
-        FDLog(@"No domain refactor req");
-    } else {
-       domain = [domain stringByReplacingOccurrencesOfString:[domain substringWithRange:NSMakeRange(0, range.location+searchKey.length)] withString:@""];
-    }
-    return domain;
+    return [FDStringUtil replaceInString:domain usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
 }
 
 // Polling changes
