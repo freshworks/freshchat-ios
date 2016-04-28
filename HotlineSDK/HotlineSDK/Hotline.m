@@ -197,7 +197,9 @@
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
-    [self updateUserProperties:@{ key : value}];
+    if (key && value) {
+        [self updateUserProperties:@{ key : value}];
+    }
 }
 
 -(void)registerUser{

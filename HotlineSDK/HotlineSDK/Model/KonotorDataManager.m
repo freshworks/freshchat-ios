@@ -39,8 +39,12 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     if(!sharedInstance.persistentStoreCoordinator){
         @synchronized(sharedInstance) {
             if(!sharedInstance.persistentStoreCoordinator){
-                [sharedInstance preparePersistantStoreCoordinator];
-                [sharedInstance setMainQueueContext];
+                @try {
+                    [sharedInstance preparePersistantStoreCoordinator];
+                    [sharedInstance setMainQueueContext];
+                } @catch (NSException *exception) {
+                    [[FDMemLogger new]addMessage:exception.description];
+                }
             }
         }
     }
@@ -55,25 +59,25 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     return  self;
 }
 
-- (NSString*)sharedDocumentsPath {
-    NSString *SharedDocumentsPath = nil;
+- (NSString*)sharedLibraryPath {
+    NSString *sharedLibraryPath = nil;
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-    SharedDocumentsPath = [libraryPath stringByAppendingPathComponent:@"Database"];
+    sharedLibraryPath = [libraryPath stringByAppendingPathComponent:@"Database"];
     NSFileManager *manager = [NSFileManager defaultManager];
     BOOL isDirectory;
-    if (![manager fileExistsAtPath:SharedDocumentsPath isDirectory:&isDirectory] || !isDirectory) {
+    if (![manager fileExistsAtPath:sharedLibraryPath isDirectory:&isDirectory] || !isDirectory) {
         NSError *error = nil;
         NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
-        [manager createDirectoryAtPath:SharedDocumentsPath withIntermediateDirectories:YES attributes:attr error:&error];
+        [manager createDirectoryAtPath:sharedLibraryPath withIntermediateDirectories:YES attributes:attr error:&error];
         if (error){
             NSDictionary *errorInfo = @{@"Folder Creation Failed" :@{
                                                 @"Reason:"   : error.description,
-                                                @"FolderPath" : SharedDocumentsPath
+                                                @"FolderPath" : sharedLibraryPath
                                                 }};
             logInfo(errorInfo);
         }
     }
-    return SharedDocumentsPath;
+    return sharedLibraryPath;
 }
 
 -(void)preparePersistantStoreCoordinator{
@@ -81,7 +85,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-    NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    NSString *storePath = [[self sharedLibraryPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
     FDLog(@"StoreURL %@",storePath);
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
     

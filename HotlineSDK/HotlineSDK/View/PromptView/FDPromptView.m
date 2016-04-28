@@ -17,7 +17,6 @@
     UILabel *promptLabel = [[UILabel alloc] init];
     HLTheme *theme = [HLTheme sharedInstance];
     self.backgroundColor = [theme dialogueBackgroundColor];
-    promptLabel = [[UILabel alloc]init];
     promptLabel.translatesAutoresizingMaskIntoConstraints = NO;
     promptLabel.textColor = [theme dialogueTitleTextColor];
     promptLabel.font = [theme dialogueTitleFont];
