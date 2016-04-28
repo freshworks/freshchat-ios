@@ -428,7 +428,7 @@
 
 - (NSString *)validateDomain:(NSString*)domain
 {
-    return [FDStringUtil replaceInString:domain usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
+    return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
 }
 
 // Polling changes
