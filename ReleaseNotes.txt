@@ -1,4 +1,8 @@
 
+Ver 1.0.9 
+__________________________
+Fix duplicate symbol error
+
 Ver 1.0.8 
 __________________________
 Fixed Jiggle in message box when typing
