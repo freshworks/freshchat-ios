@@ -12,10 +12,11 @@
 
 @interface HLMessageServices : NSObject
 
-+(void)fetchMessagesWithChannel:(BOOL)canFetchChannel handler:(void(^)(NSError *error))handler;
++(void)fetchChannelsAndMessages:(void (^)(NSError *))handler;
 
-/* fetches channel list, updates existing channels including hidden channels */
--(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler;
++(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler;
+
++(void)fetchMessages:(void(^)(NSError *error))handler;
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 

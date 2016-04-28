@@ -117,7 +117,7 @@ typedef struct {
     [self registerAppAudioCategory];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
-    [HLMessageServices fetchMessagesWithChannel:NO handler:nil];
+    [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
     [self prepareInputToolbar];
@@ -200,7 +200,7 @@ typedef struct {
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    [HLMessageServices fetchMessagesWithChannel:NO handler:nil];
+    [HLMessageServices fetchChannelsAndMessages:nil];
 }
 
 -(void)setNavigationItem{

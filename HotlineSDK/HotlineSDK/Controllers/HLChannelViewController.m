@@ -69,7 +69,7 @@
         if(isEmpty)[updater resetTime];
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+            HideNetworkActivityIndicator();
         }];
     }];
 }

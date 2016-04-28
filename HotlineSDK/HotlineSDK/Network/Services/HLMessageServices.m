@@ -24,13 +24,17 @@
 #import "FDBackgroundTaskManager.h"
 #import "FDDateUtil.h"
 #import "HLNotificationHandler.h"
+#import "FDChannelUpdater.h"
+#import "FDMessagesUpdater.h"
+#import "FDMemLogger.h"
 
 static HLNotificationHandler *handleUpdateNotification;
+
 @implementation HLMessageServices
 
-static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
++(void)fetchChannelsAndMessages:(void (^)(NSError *))handler{
 
-+(void)fetchMessagesWithChannel:(BOOL)canFetchChannel handler:(void(^)(NSError *error))handler{
+    static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         return;
@@ -39,17 +43,23 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     ShowNetworkActivityIndicator();
     MESSAGES_DOWNLOAD_IN_PROGRESS = YES;
     
-    if (canFetchChannel) {
-        [[[HLMessageServices alloc]init] fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
-            [self fetchAllMessages:handler];
-        }];
-    }else{
-        [self fetchAllMessages:handler];
-    }
+    [[FDChannelUpdater new]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+        if (!error) {
+            [[FDMessagesUpdater new]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+                if(handler) handler(error);
+                HideNetworkActivityIndicator();
+                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+            }];
+        }else{
+            if (handler) handler(error);
+            HideNetworkActivityIndicator();
+            MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+        }
+    }];
     
 }
 
-+(void)fetchAllMessages:(void(^)(NSError *error))handler{
++(void)fetchMessages:(void(^)(NSError *error))handler{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
@@ -72,8 +82,10 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             NSArray *conversations = response[@"conversations"];
             
             if(!response || !conversations){
-                //TODO: If this is a special case to handle, We can track this scenario in loggly.
-                NSLog(@"Download failed : Empty response from server");
+                FDMemLogger *memLogger = [[FDMemLogger alloc]init];
+                [memLogger addMessage:@"Empty response from server when fetching messages"
+                       withMethodName:NSStringFromSelector(_cmd)];
+                [memLogger upload];
                 handler([NSError errorWithDomain:@"HOTLINE_ERROR_DOMAIN" code:1000 userInfo:@{@"Reason" : @"Empty response !!!"}]);
                 return;
             }
@@ -85,7 +97,16 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             for (int i=0; i<conversations.count; i++) {
                 NSDictionary *conversationInfo = conversations[i];
                 channelId = conversationInfo[@"channelId"];
-                HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                
+                if (!channel) {
+                     // Channel does not exist; reset channel interval key to force fetch channels
+                     // skipping fetched msg import to DB in the current run.
+                    [[FDChannelUpdater new]resetTime];
+                    handler(nil);
+                    return;
+                }
+                
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
                 NSArray *messages = conversationInfo[@"messages"];
@@ -129,13 +150,13 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
             [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
             if(handler) handler(nil);
+            
         }else{
+            
             [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
             if(handler) handler(error);
         }
-        
-        HideNetworkActivityIndicator();
-        MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+
         [self postUnreadCountNotification];
         
     }];
@@ -146,7 +167,8 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil userInfo:@{ @"count" : @(unreadCount)}];
 }
 
--(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
+/* fetches channel list, updates existing channels including hidden channels */
++(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     //TODO: This is repeated multitimes. Needs refactor.
@@ -182,7 +204,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     return task;
 }
 
--(void)importChannels:(NSArray *)channels handler:(void (^)(NSArray *channels, NSError *error))handler;{
++(void)importChannels:(NSArray *)channels handler:(void (^)(NSArray *channels, NSError *error))handler;{
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
@@ -212,7 +234,7 @@ static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     }];
 }
 
--(void)postNotification{
++(void)postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_CHANNELS_UPDATED object:self];
 }
 
