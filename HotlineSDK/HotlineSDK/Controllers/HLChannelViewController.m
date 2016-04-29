@@ -202,8 +202,6 @@
 
     }
     
-    
-    
     [cell adjustPadding];
 
     return cell;
@@ -272,6 +270,12 @@
 
 -(void)closeButton:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
+                     withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 @end
