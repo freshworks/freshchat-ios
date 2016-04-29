@@ -122,7 +122,6 @@
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
         }
         
-        
         [self theme];
     }
     return self;
@@ -140,7 +139,12 @@
     self.encloserHeightConstraint.constant = titleHeight + detailHeight;
     
     if (self.badgeView.isHidden) {
-        self.detailLableRightConstraint.constant = 45;
+        if(!self.lastUpdatedLabel.text){
+            self.detailLableRightConstraint.constant = 0;
+        }
+        else{
+            self.detailLableRightConstraint.constant = 45;
+        }
     }else{
         self.detailLableRightConstraint.constant = 0;
     }

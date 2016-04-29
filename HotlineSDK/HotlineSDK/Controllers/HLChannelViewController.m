@@ -160,7 +160,13 @@
         cell.titleLabel.text  = channel.name;
 
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        
+        if([lastMessage.createdMillis intValue]){
+           cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        }
+        else{
+            cell.lastUpdatedLabel.text = nil;
+        }
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
