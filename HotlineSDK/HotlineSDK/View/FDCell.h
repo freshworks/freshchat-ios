@@ -22,7 +22,7 @@
 @property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint *detailLableRightConstraint;
 @property (strong, nonatomic) NSLayoutConstraint *lastUpdatedTimeWidthConstraint;
-
+@property (strong, nonatomic) UIView *rightArrowImageView;
 @property (assign, nonatomic) BOOL isChannelCell;
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannelCell;
