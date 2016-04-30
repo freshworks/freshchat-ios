@@ -82,6 +82,8 @@
         
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:accessoryView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
         
+        self.rightArrowImageView = accessoryView;
+        
         views[@"accessoryView"] = accessoryView;
         
         if (isChannel) {
@@ -122,28 +124,30 @@
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-[accessoryView(6)]-10-|" options:0 metrics:nil views:views]];
         }
         
-        
         [self theme];
     }
     return self;
 }
 
 -(void)adjustPadding{
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
-    
-    CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
-    CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
-    CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
-    
-    self.lastUpdatedTimeWidthConstraint.constant = lastUpdatedTimeWidth;
-    self.encloserHeightConstraint.constant = titleHeight + detailHeight;
-    
-    if (self.badgeView.isHidden) {
-        self.detailLableRightConstraint.constant = 45;
-    }else{
-        self.detailLableRightConstraint.constant = 0;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setNeedsLayout];
+        [self layoutIfNeeded];
+
+        CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
+        CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
+        
+        CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
+        
+        self.lastUpdatedTimeWidthConstraint.constant = lastUpdatedTimeWidth;
+        self.encloserHeightConstraint.constant = titleHeight + detailHeight;
+        
+        if (self.badgeView.isHidden) {
+            self.detailLableRightConstraint.constant = lastUpdatedTimeWidth - self.rightArrowImageView.frame.size.width;
+        }else{
+            self.detailLableRightConstraint.constant = 0;
+        }
+    });
 }
 
 -(void)theme{

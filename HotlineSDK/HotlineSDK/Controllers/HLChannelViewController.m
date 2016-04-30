@@ -160,7 +160,13 @@
         cell.titleLabel.text  = channel.name;
 
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        
+        if([lastMessage.createdMillis intValue]){
+           cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        }
+        else{
+            cell.lastUpdatedLabel.text = nil;
+        }
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
@@ -195,8 +201,6 @@
         }
 
     }
-    
-    
     
     [cell adjustPadding];
 
@@ -266,6 +270,12 @@
 
 -(void)closeButton:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
+                     withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 @end
