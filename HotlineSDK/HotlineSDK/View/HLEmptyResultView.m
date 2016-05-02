@@ -8,9 +8,9 @@
 
 #import "HLEmptyResultView.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 @implementation HLEmptyResultView
-
 
 -(id)initWithImage:(UIImage *)image andText:(NSString *)text {
     self = [super init];
@@ -35,46 +35,14 @@
         NSDictionary *views = @{@"emptyResultImageView":self.emptyResultImage, @"emptyResultLabel":self.emptyResultLabel};
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptyResultLabel(240)]" options:0 metrics:nil views:views]];
-        
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[emptyResultImageView(100)]" options:0 metrics:nil views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emptyResultImageView(100)]-10-[emptyResultLabel]" options:0 metrics:nil views:views]];
         
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultImage
-                                                              attribute:NSLayoutAttributeCenterX
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeCenterX
-                                                             multiplier:1.0
-                                                               constant:0.0]];
-        
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultLabel
-                                                              attribute:NSLayoutAttributeCenterX
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeCenterX
-                                                             multiplier:1.0
-                                                               constant:0.0]];
-        
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultImage
-                                                              attribute:NSLayoutAttributeCenterY
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeCenterY
-                                                             multiplier:0.5
-                                                               constant:0.0]];
+        [FDAutolayoutHelper centerX:self.emptyResultLabel onView:self];
+        [FDAutolayoutHelper centerX:self.emptyResultImage onView:self];
+        [FDAutolayoutHelper centerY:self.emptyResultImage onView:self M:0.5 C:0.0];
     }
     return self;
 }
-
-
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

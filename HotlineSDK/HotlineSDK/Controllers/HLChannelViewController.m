@@ -23,6 +23,7 @@
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"
 #import "FDCell.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLChannelViewController ()
 
@@ -97,21 +98,7 @@
                 self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
                 [self.view addSubview:self.emptyResultView];
                 
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                      attribute:NSLayoutAttributeCenterX
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.tableView
-                                                                      attribute:NSLayoutAttributeCenterX
-                                                                     multiplier:1.0
-                                                                       constant:0.0]];
-                
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.emptyResultView
-                                                                      attribute:NSLayoutAttributeCenterY
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.tableView
-                                                                      attribute:NSLayoutAttributeCenterY
-                                                                     multiplier:1.0
-                                                                       constant:0.0]];
+                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
                 
             }
             else{
@@ -160,7 +147,13 @@
         cell.titleLabel.text  = channel.name;
 
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        
+        if([lastMessage.createdMillis intValue]){
+           cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        }
+        else{
+            cell.lastUpdatedLabel.text = nil;
+        }
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
@@ -195,8 +188,6 @@
         }
 
     }
-    
-    
     
     [cell adjustPadding];
 
@@ -266,6 +257,12 @@
 
 -(void)closeButton:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
+                     withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 @end

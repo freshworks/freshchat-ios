@@ -40,8 +40,7 @@
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
         if (statusCode >= 400) {
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
-            error = [NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info];
-            if (handler) handler(responseInfo,error);
+            if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
         }else{
             if (!error) {
                 if (handler) handler(responseInfo,nil);

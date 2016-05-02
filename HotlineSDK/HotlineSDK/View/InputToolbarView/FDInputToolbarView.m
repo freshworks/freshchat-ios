@@ -114,18 +114,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 }
 
 -(void)addVariableConstraints{
-    
     attachButtonYConstraint       = [FDAutolayoutHelper bottomAlign:attachButton toView:self];
-    attachButtonWidthConstraint   = [FDAutolayoutHelper setWidth:0 forView:attachButton];
+    attachButtonWidthConstraint   = [FDAutolayoutHelper setWidth:0 forView:attachButton inView:self];
     accessoryViewYConstraint      = [FDAutolayoutHelper bottomAlign:accessoryViewContainer toView:self];
-    accessoryViewWidthConstraint  = [FDAutolayoutHelper setWidth:0 forView:accessoryViewContainer];
-    accessoryViewHeightConstraint = [FDAutolayoutHelper setHeight:20 forView:accessoryViewContainer];
-    
-    [self addConstraint:attachButtonYConstraint];
-    [self addConstraint:attachButtonWidthConstraint];
-    [self addConstraint:accessoryViewYConstraint];
-    [self addConstraint:accessoryViewWidthConstraint];
-    [self addConstraint:accessoryViewHeightConstraint];
+    accessoryViewWidthConstraint  = [FDAutolayoutHelper setWidth:0 forView:accessoryViewContainer inView:self];
+    accessoryViewHeightConstraint = [FDAutolayoutHelper setHeight:20 forView:accessoryViewContainer inView:self];
 }
 
 

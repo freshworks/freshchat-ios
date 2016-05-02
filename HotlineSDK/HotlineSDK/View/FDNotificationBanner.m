@@ -13,14 +13,20 @@
 #import "FDSecureStore.h"
 #import "HLLocalization.h"
 #import "HLTheme.h"
+#import "FDAutolayoutHelper.h"
 
 #define systemSoundID 1315
 
 @interface FDNotificationBanner ()
 
+@property (nonatomic, strong) UIImageView *imgView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
+@property (strong, nonatomic) UIView *contentEncloser;
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) NSLayoutConstraint *bannerTopConstraint;
 @property (nonatomic, strong, readwrite) HLChannel *currentChannel;
+@property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
 
 @end
 
@@ -55,12 +61,14 @@
 -(void)setSubViews{
     self.userInteractionEnabled = YES;
     
-
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bannerTapped:)];
     [self addGestureRecognizer:singleFingerTap];
     
+    self.contentEncloser = [[UIView alloc]init];
+    self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
+    
     self.titleLabel = [[UILabel alloc] init];
-    [self.titleLabel setNumberOfLines:2];
+    [self.titleLabel setNumberOfLines:1];
     [self.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     self.titleLabel.font = [self.theme notificationTitleFont];
     self.titleLabel.textColor = [self.theme notificationTitleTextColor];
@@ -83,24 +91,30 @@
     [self.messageLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [closeButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-
-    [self addSubview:self.titleLabel];
-    [self addSubview:self.messageLabel];
+    
     [self addSubview:self.imgView];
     [self addSubview:closeButton];
     
+    [self addSubview:self.contentEncloser];
+    [self.contentEncloser addSubview:self.titleLabel];
+    [self.contentEncloser addSubview:self.messageLabel];
+    
     NSDictionary *views = @{@"banner" : self, @"title" : self.titleLabel,
-                            @"message" : self.messageLabel, @"imgView" : self.imgView, @"closeButton" : closeButton};
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+                            @"message" : self.messageLabel, @"imgView" : self.imgView, @"closeButton" : closeButton, @"contentEncloser" : self.contentEncloser};
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:closeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [FDAutolayoutHelper centerY:closeButton onView:self];
 
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[title]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeButton(22)]-13-|" options:0 metrics:nil views:views]];
+    [FDAutolayoutHelper centerY:self.imgView onView:self];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[title]-5-[message]" options:0 metrics:nil views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[imgView]-[message]-[closeButton]" options:0 metrics:nil views:views]];
+    [FDAutolayoutHelper centerY:self.contentEncloser onView:self];
+    
+    [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title][message]|" options:0 metrics:nil  views:views]];
+    
+    [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil  views:views]];
+    [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[message]|" options:0 metrics:nil  views:views]];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[imgView(50)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imgView(50)]-[contentEncloser]-[closeButton(22)]-|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[closeButton(22)]" options:0 metrics:nil views:views]];
     
     self.backgroundColor = [self.theme notificationBackgroundColor];
@@ -112,6 +126,15 @@
     self.hidden = YES;
     
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+}
+
+-(void)adjustPadding{
+    
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
+    CGFloat messageHeight = self.messageLabel.intrinsicContentSize.height;
+    self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:(messageHeight+titleHeight) forView:self.contentEncloser inView:self];
 }
 
 -(void)drawRect:(CGRect)rect{
@@ -157,7 +180,7 @@
         myFrame.origin.y = 0;
         self.frame = myFrame;
     }];
-    
+    [self adjustPadding];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(dismissBanner:) object:nil];
     [self performSelector:@selector(dismissBanner:) withObject:nil afterDelay:5.0f];
 
