@@ -300,7 +300,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     if(currentMessage.isWelcomeMessage){
         messageSentTimeLabel.text = nil;
         if([FDMessageCell getNoOfLines : currentMessage.text]==1){
-            messageTextBoxY= KONOTOR_HORIZONTAL_PADDING *1.5;
+            messageTextBoxY= ((self.contentView.frame.size.height)/2) - (KONOTOR_VERTICAL_PADDING+6+(messageTextFont.pointSize/2));
         }
     }
     else{
