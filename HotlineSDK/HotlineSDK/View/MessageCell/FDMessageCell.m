@@ -210,9 +210,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     //check if message occupies a single line
     NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
-    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
-    int numLines = (sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]]);
-
+    int numLines = [FDMessageCell getNoOfLines:messageText];
+    
     //if message is single line, calculate larger width of the message text and date string
     if (numLines >= 1){
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
@@ -245,6 +244,13 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     }
     
     return messageContentViewWidth;
+}
+
++ (int) getNoOfLines :(NSString *)messageText {
+    
+    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
+    
+    return ((sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]]));
 }
 
 
@@ -289,6 +295,18 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         messageTextBoxY=messageContentViewY;
     }
     
+    NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
+    
+    if(currentMessage.isWelcomeMessage){
+        messageSentTimeLabel.text = nil;
+        if([FDMessageCell getNoOfLines : currentMessage.text]==1){
+            messageTextBoxY= ((self.contentView.frame.size.height)/2) - (KONOTOR_VERTICAL_PADDING+6+(messageTextFont.pointSize/2));
+        }
+    }
+    else{
+        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
+    }
+    
     CGRect messageTextBoxFrame=CGRectMake(messageTextBoxX,messageTextBoxY,messageTextBoxWidth,0);
     CGRect messageContentViewFrame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, 0);
     
@@ -323,15 +341,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
         [messageTextView setTextColor:messageTextColor];
         [messageSentTimeLabel setTextColor:messageTextColor];
-    }
-    
-    NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-    
-    if(currentMessage.isWelcomeMessage){
-        messageSentTimeLabel.text = nil;
-    }
-    else{
-        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
     }
     
     NSString* actionUrl=currentMessage.actionURL;
@@ -404,7 +413,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         }
         else
             [messageTextView setText:@""];
-        
         
         float msgHeight=16+height+txtheight;
         float textViewY=(showsSenderName?KONOTOR_USERNAMEFIELD_HEIGHT:0);
