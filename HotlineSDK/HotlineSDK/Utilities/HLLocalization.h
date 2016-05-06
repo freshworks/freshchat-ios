@@ -6,12 +6,12 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
+#import "FDUtilities.h"
+
 #ifndef HLLocalization_h
 #define HLLocalization_h
 
-//Localization Helper Macro
-#define HLLocalizedString(name) NSLocalizedStringFromTable(name, @"HLLocalizable", nil)
-
+#define HLLocalizedString(name) [FDUtilities localize:name]
 
 //Keys to lookup in HLLocalizable.strings
 #define LOC_CONTACT_US_BUTTON_TEXT @"contact_us_button_text"

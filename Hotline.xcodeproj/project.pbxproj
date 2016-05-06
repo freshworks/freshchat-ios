@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */; };
+		3513FF821CDCF48B009A7034 /* HLLocalizationPod.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF811CDCF48B009A7034 /* HLLocalizationPod.bundle */; };
 		3515E4411C5F9180001B9CEE /* option.png in Resources */ = {isa = PBXBuildFile; fileRef = 3515E4401C5F9180001B9CEE /* option.png */; };
 		3538A97B1C7159E100D8E216 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3538A97A1C7159E100D8E216 /* KonotorModels.bundle */; };
 		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
@@ -15,7 +17,6 @@
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
 		354D0D671C48D504004D2AA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D621C48D504004D2AA1 /* main.m */; };
-		354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */; };
 		356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19EF1B9DBF14002F1E2A /* AppDelegate.m */; };
 		356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F19F21B9DBF14002F1E2A /* ViewController.m */; };
 		356F1A071B9DBF14002F1E2A /* HotlineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 356F1A061B9DBF14002F1E2A /* HotlineTests.m */; };
@@ -71,6 +72,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLLocalization.bundle; sourceTree = "<group>"; };
+		3513FF811CDCF48B009A7034 /* HLLocalizationPod.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLLocalizationPod.bundle; sourceTree = "<group>"; };
 		3515E4401C5F9180001B9CEE /* option.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = option.png; sourceTree = "<group>"; };
 		3538A97A1C7159E100D8E216 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
@@ -80,7 +83,6 @@
 		354D0D601C48D504004D2AA1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		354D0D611C48D504004D2AA1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		354D0D621C48D504004D2AA1 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		354D0D6B1C48D6D8004D2AA1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HLLocalizable.strings; sourceTree = "<group>"; };
 		354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
 		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F19EE1B9DBF14002F1E2A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -167,19 +169,12 @@
 		354D0D681C48D6D8004D2AA1 /* SDKResources */ = {
 			isa = PBXGroup;
 			children = (
+				3513FF811CDCF48B009A7034 /* HLLocalizationPod.bundle */,
+				3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */,
 				3538A97A1C7159E100D8E216 /* KonotorModels.bundle */,
-				354D0D691C48D6D8004D2AA1 /* HLLocalization */,
 				354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */,
 			);
 			path = SDKResources;
-			sourceTree = "<group>";
-		};
-		354D0D691C48D6D8004D2AA1 /* HLLocalization */ = {
-			isa = PBXGroup;
-			children = (
-				354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */,
-			);
-			path = HLLocalization;
 			sourceTree = "<group>";
 		};
 		356F19DE1B9DBF14002F1E2A = {
@@ -384,11 +379,12 @@
 			files = (
 				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
+				3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */,
 				354D0D351C48D32D004D2AA1 /* chat.png in Resources */,
 				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
-				354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */,
 				3538A97B1C7159E100D8E216 /* KonotorModels.bundle in Resources */,
 				3515E4411C5F9180001B9CEE /* option.png in Resources */,
+				3513FF821CDCF48B009A7034 /* HLLocalizationPod.bundle in Resources */,
 				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,14 +465,6 @@
 				354D0D5F1C48D504004D2AA1 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		354D0D6A1C48D6D8004D2AA1 /* HLLocalizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				354D0D6B1C48D6D8004D2AA1 /* en */,
-			);
-			name = HLLocalizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -34,6 +34,8 @@
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
 
++(NSString *)localize:(NSString *)key;
+
 @end
 
 #endif

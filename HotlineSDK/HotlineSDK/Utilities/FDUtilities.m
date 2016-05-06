@@ -34,9 +34,6 @@
     return frameworkBundle;
 }
 
-
-
-
 +(UIImage *)imageWithColor:(UIColor *)color{
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
     UIGraphicsBeginImageContext(rect.size);
@@ -250,6 +247,47 @@ static NSInteger networkIndicator = 0;
     }else{
         return [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
     }
+}
+
+static NSString *DEFAULT_LANG = @"en";
+static NSString *DEFAULT_BUNDLE_NAME = @"HLLocalizationPod";
+static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
+
++(NSBundle *)bundleWithName:(NSString *)bundleName andLang:(NSString *)langCode{
+    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:bundleName ofType:@"bundle"]];
+    return [NSBundle bundleWithPath:[bundle pathForResource:langCode ofType:@"lproj"]];
+}
+
++(NSString *)getPreferredLang{
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0]; //sample "en-US"
+    NSDictionary *languageDic = [NSLocale componentsFromLocaleIdentifier:language];
+    return [languageDic objectForKey:@"kCFLocaleLanguageCodeKey"]; //sample "en"
+}
+
++(BOOL)isKey:(NSString *)key localized:(NSString *)value{
+    return ![key isEqualToString:value];
+}
+
++(NSString *)localize:(NSString *)key{
+    NSString *bundleName = @"HLLocalization";
+    NSBundle *bundle = [self bundleWithName:bundleName ? bundleName : DEFAULT_BUNDLE_NAME andLang:[self getPreferredLang]];
+    NSString *localizedString = NSLocalizedStringWithDefaultValue(key, DEFAULT_LOCALIZATION_TABLE, bundle, nil, nil);
+    
+    BOOL isLocalized = [self isKey:key localized:localizedString];
+    
+    if (!isLocalized) {
+        NSBundle *userFallbackBundle = [self bundleWithName:bundleName andLang:DEFAULT_LANG];
+        localizedString = NSLocalizedStringWithDefaultValue(key, DEFAULT_LOCALIZATION_TABLE, userFallbackBundle, nil, nil);
+        
+        isLocalized = [self isKey:key localized:localizedString];
+        
+        if (!isLocalized) {
+            NSBundle *podFallbackBundle = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
+            localizedString = NSLocalizedStringWithDefaultValue(key, DEFAULT_LOCALIZATION_TABLE, podFallbackBundle, nil, nil);
+        }
+        
+    }
+    return localizedString;
 }
 
 @end
