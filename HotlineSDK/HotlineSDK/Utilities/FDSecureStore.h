@@ -41,8 +41,8 @@
 #define HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME @"hotline_defaults_conversations_last_updated_itv_time"
 #define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
 #define HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN @"hotline_defaults_notification_disabled_alert_shown"
-
 #define HOTLINE_DEFAULTS_VOTED_ARTICLES @"hotline_defaults_voted_articles"
+#define HOTLINE_DEFAULTS_STRINGS_BUNDLE @"hotline_defaults_strings_bundle"
 
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
