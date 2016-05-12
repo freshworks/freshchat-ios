@@ -358,9 +358,6 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
-
-        [HLMessageServices fetchChannelsAndMessages:nil];
-        
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
         FDLog(@"Push Recieved :%@", payload);
         
@@ -368,10 +365,22 @@
         NSString *message = [payload valueForKeyPath:@"aps.alert"];
         HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         
-        if (!channel) return;
+        if (!channel){
+            [[[FDChannelUpdater alloc] init]resetTime];
+            [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
+                self.notificationHandler = [[HLNotificationHandler alloc] init];
+                [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+            }];
+        }
+        else {
+            [HLMessageServices fetchChannelsAndMessages:nil];
+            self.notificationHandler = [[HLNotificationHandler alloc] init];
+            [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+        }
         
-        self.notificationHandler = [[HLNotificationHandler alloc] init];
-        [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+        
+        
+        
     });
 }
 

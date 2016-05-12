@@ -98,18 +98,27 @@ static HLNotificationHandler *handleUpdateNotification;
             
             NSString *messageText;
             NSNumber *channelId;
+            
+            //Check if we have all the channels locally
             for (int i=0; i<conversations.count; i++) {
                 NSDictionary *conversationInfo = conversations[i];
                 channelId = conversationInfo[@"channelId"];
                 HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                 
                 if (!channel) {
-                     // Channel does not exist; reset channel interval key to force fetch channels
-                     // skipping fetched msg import to DB in the current run.
+                    // Channel does not exist; reset channel interval key to force fetch channels
+                    // skipping fetched msg import to DB in the current run.
                     [[FDChannelUpdater new]resetTime];
                     handler(nil);
                     return;
                 }
+            }
+            
+            
+            for (int i=0; i<conversations.count; i++) {
+                NSDictionary *conversationInfo = conversations[i];
+                channelId = conversationInfo[@"channelId"];
+                HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                 
                 NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
                 KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
