@@ -193,8 +193,8 @@
                 [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
             }
         }
+        [HLCoreServices uploadUnuploadedProperties];
     }];
-    [HLCoreServices uploadUnuploadedProperties];
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
