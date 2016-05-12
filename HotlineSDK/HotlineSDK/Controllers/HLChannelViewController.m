@@ -24,6 +24,7 @@
 #import "HLEmptyResultView.h"
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
+#import "HLMessageServices.h"
 
 @interface HLChannelViewController ()
 
@@ -64,11 +65,10 @@
 
 -(void)fetchUpdates{
     [self updateChannels];
-    FDChannelUpdater *updater = [[FDChannelUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
-        if(isEmpty)[updater resetTime];
+        if(isEmpty)[[[FDChannelUpdater alloc]init] resetTime];
         ShowNetworkActivityIndicator();
-        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
             HideNetworkActivityIndicator();
         }];
     }];
