@@ -117,7 +117,7 @@ typedef struct {
     [self registerAppAudioCategory];
     [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
-    [HLMessageServices downloadAllMessages:nil];
+    [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
     [self prepareInputToolbar];
@@ -200,7 +200,7 @@ typedef struct {
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    [HLMessageServices downloadAllMessages:nil];
+    [HLMessageServices fetchChannelsAndMessages:nil];
 }
 
 -(void)setNavigationItem{
@@ -423,16 +423,18 @@ typedef struct {
     }
     
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        if (granted) {
-            BOOL recording=[Konotor startRecording];
-            if(recording){
-                [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                BOOL recording=[Konotor startRecording];
+                if(recording){
+                    [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
+                }
             }
-        }
-        else {
-            UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
-            [permissionAlert show];
-        }
+            else {
+                UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+                [permissionAlert show];
+            }
+        });
     }];
 }
 

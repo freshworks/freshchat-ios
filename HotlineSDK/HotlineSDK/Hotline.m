@@ -78,6 +78,10 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    config.appID  = trimString(config.appID);
+    config.appKey = trimString(config.appKey);
+    config.domain = [self validateDomain: config.domain];
+
     self.config = config;
     
     if ([self hasUpdatedConfig:config]) {
@@ -114,10 +118,11 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
     NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
-    if (![storedValue isEqualToString:currentValue]) {
+    if (storedValue && ![storedValue isEqualToString:currentValue]) {
         [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
         [HLCoreServices uploadUnuploadedProperties];
     }
+    [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
 }
 
 -(void)updateSDKBuildNumber{
@@ -185,17 +190,21 @@
 
 
 -(void)updateUserProperties:(NSDictionary*)props{
-    if(props){
-        for(NSString *key in props){
-            NSString *value = props[key];
-            [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        if(props){
+            for(NSString *key in props){
+                NSString *value = props[key];
+                [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+            }
         }
-    }
-    [HLCoreServices uploadUnuploadedProperties];
+        [HLCoreServices uploadUnuploadedProperties];
+    }];
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
-    [self updateUserProperties:@{ key : value}];
+    if (key && value) {
+        [self updateUserProperties:@{ key : value}];
+    }
 }
 
 -(void)registerUser{
@@ -247,7 +256,7 @@
         [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices downloadAllMessages:nil];
+        [HLMessageServices fetchChannelsAndMessages:nil];
         [HLCoreServices DAUCall];
         [self registerDeviceToken];
         [self updateAppVersion];
@@ -338,8 +347,6 @@
     [self registerDeviceToken];
 }
 
-
-
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
     NSDictionary *payload = info;
     if (info[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
@@ -355,9 +362,6 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
-
-        [HLMessageServices downloadAllMessages:nil];
-        
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
         FDLog(@"Push Recieved :%@", payload);
         
@@ -365,10 +369,22 @@
         NSString *message = [payload valueForKeyPath:@"aps.alert"];
         HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         
-        if (!channel) return;
+        if (!channel){
+            [[[FDChannelUpdater alloc] init]resetTime];
+            [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
+                self.notificationHandler = [[HLNotificationHandler alloc] init];
+                [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+            }];
+        }
+        else {
+            [HLMessageServices fetchChannelsAndMessages:nil];
+            self.notificationHandler = [[HLNotificationHandler alloc] init];
+            [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+        }
         
-        self.notificationHandler = [[HLNotificationHandler alloc] init];
-        [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+        
+        
+        
     });
 }
 
@@ -422,9 +438,14 @@
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    [HLMessageServices downloadAllMessages:^(NSError *error) {
+    [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
         if (completion) completion([self unreadCount]);
     }];
+}
+
+- (NSString *)validateDomain:(NSString*)domain
+{
+    return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
 }
 
 // Polling changes

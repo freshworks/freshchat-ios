@@ -24,6 +24,7 @@
 #import "HLEmptyResultView.h"
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
+#import "HLMessageServices.h"
 
 @interface HLChannelViewController ()
 
@@ -64,12 +65,11 @@
 
 -(void)fetchUpdates{
     [self updateChannels];
-    FDChannelUpdater *updater = [[FDChannelUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
-        if(isEmpty)[updater resetTime];
+        if(isEmpty)[[[FDChannelUpdater alloc]init] resetTime];
         ShowNetworkActivityIndicator();
-        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
+            HideNetworkActivityIndicator();
         }];
     }];
 }
@@ -80,7 +80,9 @@
             NSMutableArray *messages = [NSMutableArray array];
             for(HLChannel *channel in channels){
                 KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
-                [messages addObject:lastMessage];
+                if (lastMessage) {
+                    [messages addObject:lastMessage];
+                }
             }
             
             id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
@@ -88,7 +90,9 @@
             
             NSMutableArray *sortedChannel = [[NSMutableArray alloc] init];
             for(KonotorMessage *message in messages){
-                [sortedChannel addObject:message.belongsToChannel];
+                if (message.belongsToChannel) {
+                    [sortedChannel addObject:message.belongsToChannel];
+                }
             }
             
             self.channels = sortedChannel;
@@ -147,7 +151,13 @@
         cell.titleLabel.text  = channel.name;
 
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
-        cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        
+        if([lastMessage.createdMillis intValue]){
+           cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+        }
+        else{
+            cell.lastUpdatedLabel.text = nil;
+        }
 
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
@@ -182,8 +192,6 @@
         }
 
     }
-    
-    
     
     [cell adjustPadding];
 
@@ -253,6 +261,12 @@
 
 -(void)closeButton:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
+                     withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 @end

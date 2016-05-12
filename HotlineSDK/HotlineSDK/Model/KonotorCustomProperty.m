@@ -33,6 +33,7 @@
     property.value = value;
     property.isUserProperty = isUserProperty;
 
+    //TODO : Too many redundant saves .. Needs refactor - Rex
     [[KonotorDataManager sharedInstance]save];
     return property;
 }

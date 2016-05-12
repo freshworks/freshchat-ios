@@ -10,9 +10,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-extern NSString * const DataManagerDidSaveNotification;
-extern NSString * const DataManagerDidSaveFailedNotification;
-
 #define HOTLINE_ARTICLE_ENTITY @"HLArticle"
 #define HOTLINE_CATEGORY_ENTITY @"HLCategory"
 #define HOTLINE_CHANNEL_ENTITY @"HLChannel"
@@ -27,7 +24,7 @@ extern NSString * const DataManagerDidSaveFailedNotification;
 @property (nonatomic, strong) NSManagedObjectContext *backgroundContext;
 
 +(KonotorDataManager*)sharedInstance;
--(BOOL)save;
+-(void)save;
 -(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler;
 -(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
