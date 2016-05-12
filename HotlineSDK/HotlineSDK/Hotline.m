@@ -78,7 +78,10 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    config.appID  = trimString(config.appID);
+    config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
+
     self.config = config;
     
     if ([self hasUpdatedConfig:config]) {
@@ -196,7 +199,9 @@
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
-    [self updateUserProperties:@{ key : value}];
+    if (key && value) {
+        [self updateUserProperties:@{ key : value}];
+    }
 }
 
 -(void)registerUser{

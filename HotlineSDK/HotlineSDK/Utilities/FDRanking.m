@@ -47,9 +47,7 @@
     articleDictionary = [FDRanking randomWordMatchFor:wordsArray forArticle:articleDictionary inContext:context];
     articleDictionary = [FDRanking exactWordMatchFor:term withPredicateString:@"title like[cd] %@" forArticle:articleDictionary inContext:context withRankValue:2];
     articleDictionary = [FDRanking exactWordMatchFor:term withPredicateString:@"articleDescription like[cd] %@" forArticle:articleDictionary inContext:context withRankValue:1];
-    NSMutableArray *articles = [[NSMutableArray alloc]init];
-    articles = [FDRanking sortArticles:articleDictionary inContext:context];
-    return articles;
+    return [FDRanking sortArticles:articleDictionary inContext:context];
 }
 
 /*
