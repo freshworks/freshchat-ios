@@ -129,6 +129,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                                        @"Call stack" : [NSThread callStackSymbols] }};
         
         logInfo(info);
+        [self.logger upload];
         
     }
     
@@ -144,6 +145,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                                                 }};
             
             logInfo(errorInfo);
+            [self.logger upload];
         }
         return NO;
     }
