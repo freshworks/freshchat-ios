@@ -382,8 +382,10 @@ NSMutableDictionary *gkMessageIdMessageMap;
         NSMutableArray *pMessages = [NSMutableArray arrayWithArray:[pMessagesSet allObjects]];
         NSMutableArray *pMessageArrayToReturn = [[NSMutableArray alloc]init];
         for(int i =0;i<[pMessages count];i++){
-            KonotorMessageData *message = [[pMessages objectAtIndex:i] ReturnMessageDataFromManagedObject] ;
-            [pMessageArrayToReturn addObject:message];
+            KonotorMessageData *message = [[pMessages objectAtIndex:i] ReturnMessageDataFromManagedObject];
+            if (message) {
+                [pMessageArrayToReturn addObject:message];
+            }
         }
         return pMessageArrayToReturn;
     }
@@ -448,7 +450,9 @@ NSMutableDictionary *gkMessageIdMessageMap;
     NSArray *matches = channel.messages.allObjects;
     for (int i=0; i<matches.count; i++) {
         KonotorMessageData *message = [matches[i] ReturnMessageDataFromManagedObject];
-        [messages addObject:message];
+        if (message) {
+            [messages addObject:message];
+        }        
     }
     return messages;
 }

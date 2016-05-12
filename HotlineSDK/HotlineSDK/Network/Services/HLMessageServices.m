@@ -33,6 +33,9 @@ static HLNotificationHandler *handleUpdateNotification;
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
+        if(handler){
+            handler(nil);
+        }
         return;
     }
     
@@ -213,7 +216,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
-                [channelList addObject:channel];
+                
+                if (channel) {
+                    [channelList addObject:channel];
+                }
+                
                 if(channelInfo[@"updated"]){
                     lastUpdatedTime = [FDDateUtil maxDateOfNumber:lastUpdatedTime andStr:channelInfo[@"updated"]];
                 }

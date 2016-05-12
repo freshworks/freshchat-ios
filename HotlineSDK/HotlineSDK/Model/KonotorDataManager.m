@@ -121,17 +121,35 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 - (BOOL)save {
+    
+    if (![[NSThread currentThread]isMainThread]) {
+        NSDictionary *info = @{
+                               @"Core data thred violation" : @{
+                                       @"Reason" : @"Main context saved in a wrong thread",
+                                       @"Call stack" : [NSThread callStackSymbols] }};
+        
+        logInfo(info);
+        [self.logger upload];
+        
+    }
+    
     if (![self.mainObjectContext hasChanges])
         return YES;
     
     NSError *error = nil;
     if (![self.mainObjectContext save:&error]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
-                                                            object:error];
+        if (error) {
+            NSDictionary *errorInfo = @{@"Main context save failed" : @{
+                                                @"Error" : error,
+                                                @"call stack" : [NSThread callStackSymbols]
+                                                }};
+            
+            logInfo(errorInfo);
+            [self.logger upload];
+        }
         return NO;
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveNotification object:nil];
     return YES;
 }
 
@@ -154,7 +172,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
                 [mainContext refreshObject:newSolution mergeChanges:YES];
-                [fetchedSolutions addObject:newSolution];
+                
+                if (newSolution) {
+                    [fetchedSolutions addObject:newSolution];
+                }
+                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(fetchedSolutions,nil);
@@ -177,7 +199,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
                 [mainContext refreshObject:newSolution mergeChanges:YES];
-                [fetchedSolutions addObject:newSolution];
+                
+                if (newSolution) {
+                    [fetchedSolutions addObject:newSolution];
+                }
+                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(fetchedSolutions,nil);
@@ -196,16 +222,29 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
-        NSArray *results = [context executeFetchRequest:request error:nil];
-        for (int i=0; i<results.count; i++) {
-            NSManagedObject *object = results[i];
-            [context deleteObject:object];
+        @try {
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
+            NSArray *results = [context executeFetchRequest:request error:nil];
+            for (int i=0; i<results.count; i++) {
+                NSManagedObject *object = results[i];
+                [context deleteObject:object];
+            }
+            [context save:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (handler) handler(nil);
+            });
         }
-        [context save:nil];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (handler) handler(nil);
-        });
+        @catch(NSException *exception) {
+            NSDictionary *errorInfo = @{
+                                        @"msg" : @"Error deleting all Entries",
+                                        @"entity" : entity,
+                                        @"excp_desc" : [exception description],
+                                        @"exception_stack_trace" : [exception callStackSymbols],
+                                        @"call_stack_trace" : [NSThread callStackSymbols]
+                                        };
+            logInfo(errorInfo);
+            [self.logger upload];
+        }
     }];
 }
 
