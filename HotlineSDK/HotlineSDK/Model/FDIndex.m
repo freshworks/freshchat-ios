@@ -26,7 +26,9 @@
         NSDictionary * matches = obj;
         index.titleMatches = matches[HOTLINE_DB_INDEX_TITLE_MATCHES];
         index.descMatches  = matches[HOTLINE_DB_INDEX_DESC_MATCHES];
-        [indexArray addObject:index];
+        if (index) {
+            [indexArray addObject:index];
+        }
     }];
     return indexArray;
 }

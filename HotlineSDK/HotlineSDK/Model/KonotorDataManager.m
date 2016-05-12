@@ -154,7 +154,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
                 [mainContext refreshObject:newSolution mergeChanges:YES];
-                [fetchedSolutions addObject:newSolution];
+                
+                if (newSolution) {
+                    [fetchedSolutions addObject:newSolution];
+                }
+                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(fetchedSolutions,nil);
@@ -177,7 +181,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
                 [mainContext refreshObject:newSolution mergeChanges:YES];
-                [fetchedSolutions addObject:newSolution];
+                
+                if (newSolution) {
+                    [fetchedSolutions addObject:newSolution];
+                }
+                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(fetchedSolutions,nil);

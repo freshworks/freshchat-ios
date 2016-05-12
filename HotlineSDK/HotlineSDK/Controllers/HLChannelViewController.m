@@ -79,7 +79,9 @@
             NSMutableArray *messages = [NSMutableArray array];
             for(HLChannel *channel in channels){
                 KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
-                [messages addObject:lastMessage];
+                if (lastMessage) {
+                    [messages addObject:lastMessage];
+                }
             }
             
             id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
@@ -87,7 +89,9 @@
             
             NSMutableArray *sortedChannel = [[NSMutableArray alloc] init];
             for(KonotorMessage *message in messages){
-                [sortedChannel addObject:message.belongsToChannel];
+                if (message.belongsToChannel) {
+                    [sortedChannel addObject:message.belongsToChannel];
+                }
             }
             
             self.channels = sortedChannel;

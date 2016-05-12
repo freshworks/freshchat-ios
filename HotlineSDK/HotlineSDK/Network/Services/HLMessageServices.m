@@ -213,7 +213,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
-                [channelList addObject:channel];
+                
+                if (channel) {
+                    [channelList addObject:channel];
+                }
+                
                 if(channelInfo[@"updated"]){
                     lastUpdatedTime = [FDDateUtil maxDateOfNumber:lastUpdatedTime andStr:channelInfo[@"updated"]];
                 }
