@@ -1,4 +1,9 @@
 
+Ver 1.0.10 
+__________________________
+Fix 24 hour time alignment issue 
+Fix jitter in channel view
+
 Ver 1.0.9 
 __________________________
 Fix duplicate symbol error
