@@ -114,10 +114,11 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
     NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
-    if (![storedValue isEqualToString:currentValue]) {
+    if (storedValue && ![storedValue isEqualToString:currentValue]) {
         [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
         [HLCoreServices uploadUnuploadedProperties];
     }
+    [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
 }
 
 -(void)updateSDKBuildNumber{
@@ -185,13 +186,15 @@
 
 
 -(void)updateUserProperties:(NSDictionary*)props{
-    if(props){
-        for(NSString *key in props){
-            NSString *value = props[key];
-            [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        if(props){
+            for(NSString *key in props){
+                NSString *value = props[key];
+                [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+            }
         }
-    }
-    [HLCoreServices uploadUnuploadedProperties];
+        [HLCoreServices uploadUnuploadedProperties];
+    }];
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{

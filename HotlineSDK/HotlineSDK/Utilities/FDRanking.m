@@ -171,7 +171,9 @@
         NSNumber *myNumber = [f numberFromString:articleID];
         HLArticle *article = [HLArticle getWithID:myNumber inContext:context];
         FDArticleContent *articleContent = [[FDArticleContent alloc] initWithArticle:article];
-        [articles addObject:articleContent];
+        if (articleContent) {
+            [articles addObject:articleContent];
+        }
     }
     return articles;
 }

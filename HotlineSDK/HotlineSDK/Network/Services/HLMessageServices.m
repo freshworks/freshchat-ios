@@ -37,6 +37,10 @@ static HLNotificationHandler *handleUpdateNotification;
     static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
+        FDLog(@"download message in progress, so skip");
+        if(handler){
+            handler(nil);
+        }
         return;
     }
     
@@ -113,6 +117,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 for (int j=0; j<messages.count; j++) {
                     __block NSDictionary *messageInfo = messages[j];
                     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
+                    lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
                     if (!message) {
                         KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                         newMessage.uploadStatus = @2;
@@ -131,7 +136,6 @@ static HLNotificationHandler *handleUpdateNotification;
                         if (isRestore) {
                             newMessage.messageRead = YES;
                         }
-                        lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
                         if([newMessage.messageType intValue] == KonotorMessageTypeText){
                             messageText = newMessage.text;
                         }
@@ -221,7 +225,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
-                [channelList addObject:channel];
+                
+                if (channel) {
+                    [channelList addObject:channel];
+                }
+                
                 if(channelInfo[@"updated"]){
                     lastUpdatedTime = [FDDateUtil maxDateOfNumber:lastUpdatedTime andStr:channelInfo[@"updated"]];
                 }
