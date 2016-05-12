@@ -171,9 +171,11 @@
                         property.uploadStatus = @1;
                     }
                 }
-
-                [[KonotorDataManager sharedInstance]save];
                 
+                [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+                    [[KonotorDataManager sharedInstance]save];
+                }];
+
                 dispatch_group_leave(serviceGroup);
             }];
         }];

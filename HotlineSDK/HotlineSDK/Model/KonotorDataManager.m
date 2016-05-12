@@ -121,17 +121,33 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 - (BOOL)save {
+    
+    if (![[NSThread currentThread]isMainThread]) {
+        NSDictionary *info = @{
+                               @"Core data thred violation" : @{
+                                       @"Reason" : @"Main context saved in a wrong thread",
+                                       @"Call stack" : [NSThread callStackSymbols] }};
+        
+        logInfo(info);
+        
+    }
+    
     if (![self.mainObjectContext hasChanges])
         return YES;
     
     NSError *error = nil;
     if (![self.mainObjectContext save:&error]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
-                                                            object:error];
+        if (error) {
+            NSDictionary *errorInfo = @{@"Main context save failed" : @{
+                                                @"Error" : error,
+                                                @"call stack" : [NSThread callStackSymbols]
+                                                }};
+            
+            logInfo(errorInfo);
+        }
         return NO;
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveNotification object:nil];
     return YES;
 }
 
