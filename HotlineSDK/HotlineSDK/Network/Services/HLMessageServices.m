@@ -112,6 +112,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 for (int j=0; j<messages.count; j++) {
                     __block NSDictionary *messageInfo = messages[j];
                     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
+                    lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
                     if (!message) {
                         KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
                         newMessage.uploadStatus = @2;
@@ -130,7 +131,6 @@ static HLNotificationHandler *handleUpdateNotification;
                         if (isRestore) {
                             newMessage.messageRead = YES;
                         }
-                        lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
                         if([newMessage.messageType intValue] == KonotorMessageTypeText){
                             messageText = newMessage.text;
                         }
