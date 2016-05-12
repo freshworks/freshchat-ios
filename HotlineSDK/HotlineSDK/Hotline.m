@@ -78,6 +78,10 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    config.appID  = trimString(config.appID);
+    config.appKey = trimString(config.appKey);
+    config.domain = [self validateDomain: config.domain];
+
     self.config = config;
     
     if ([self hasUpdatedConfig:config]) {
@@ -198,7 +202,9 @@
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
-    [self updateUserProperties:@{ key : value}];
+    if (key && value) {
+        [self updateUserProperties:@{ key : value}];
+    }
 }
 
 -(void)registerUser{
@@ -341,8 +347,6 @@
     [self registerDeviceToken];
 }
 
-
-
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
     NSDictionary *payload = info;
     if (info[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
@@ -437,6 +441,11 @@
     [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
         if (completion) completion([self unreadCount]);
     }];
+}
+
+- (NSString *)validateDomain:(NSString*)domain
+{
+    return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
 }
 
 // Polling changes

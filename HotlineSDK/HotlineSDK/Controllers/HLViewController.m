@@ -14,6 +14,7 @@
 @implementation HLViewController : UIViewController
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (self.navigationController == nil) {
         NSLog(@"Warning: Use Hotline controllers inside navigation controller");
     }
