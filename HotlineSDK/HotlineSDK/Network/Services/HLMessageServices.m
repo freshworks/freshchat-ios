@@ -33,6 +33,9 @@ static HLNotificationHandler *handleUpdateNotification;
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
+        if(handler){
+            handler(nil);
+        }
         return;
     }
     

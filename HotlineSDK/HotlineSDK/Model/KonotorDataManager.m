@@ -222,16 +222,29 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
-        NSArray *results = [context executeFetchRequest:request error:nil];
-        for (int i=0; i<results.count; i++) {
-            NSManagedObject *object = results[i];
-            [context deleteObject:object];
+        @try {
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
+            NSArray *results = [context executeFetchRequest:request error:nil];
+            for (int i=0; i<results.count; i++) {
+                NSManagedObject *object = results[i];
+                [context deleteObject:object];
+            }
+            [context save:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (handler) handler(nil);
+            });
         }
-        [context save:nil];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (handler) handler(nil);
-        });
+        @catch(NSException *exception) {
+            NSDictionary *errorInfo = @{
+                                        @"msg" : @"Error deleting all Entries",
+                                        @"entity" : entity,
+                                        @"excp_desc" : [exception description],
+                                        @"exception_stack_trace" : [exception callStackSymbols],
+                                        @"call_stack_trace" : [NSThread callStackSymbols]
+                                        };
+            logInfo(errorInfo);
+            [self.logger upload];
+        }
     }];
 }
 
