@@ -98,15 +98,17 @@
             self.channels = sortedChannel;
             if(!self.channels.count){
                 HLTheme *theme = [HLTheme sharedInstance];
-                self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
-                self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                [self.view addSubview:self.emptyResultView];
-                
-                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-                
+                if (!self.emptyResultView) {
+                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
+                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                    [self.view addSubview:self.emptyResultView];
+                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+                }
             }
             else{
+                self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
+                
             }
             [self.tableView reloadData];
         }

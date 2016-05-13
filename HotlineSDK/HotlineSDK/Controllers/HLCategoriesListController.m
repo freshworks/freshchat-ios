@@ -49,6 +49,8 @@
     [self fetchUpdates];
 }
 
+
+//TODO: Remove duplicate code
 -(void)updateCategories{
     [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
         if (!error) {
@@ -56,12 +58,15 @@
             [self setNavigationItem];
             
             if(![self.categories count]){
-                self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:HLLocalizedString(LOC_EMPTY_FAQ_TEXT)];
-                self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                [self.view addSubview:self.emptyResultView];
-                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+                if (!self.emptyResultView) {
+                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:HLLocalizedString(LOC_EMPTY_FAQ_TEXT)];
+                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                    [self.view addSubview:self.emptyResultView];
+                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+                }
             }
             else{
+                self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
             }
             
