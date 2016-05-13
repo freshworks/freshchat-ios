@@ -21,6 +21,7 @@
 #import "FDUtilities.h"
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
+#import "FDMessagesUpdater.h"
 #import "KonotorMessage.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
@@ -365,6 +366,8 @@
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
         FDLog(@"Push Recieved :%@", payload);
         
+        [[[FDMessagesUpdater alloc]init]resetTime];
+        
         NSNumber *channelID = @([payload[@"kon_c_ch_id"] integerValue]);
         NSString *message = [payload valueForKeyPath:@"aps.alert"];
         HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
@@ -372,8 +375,12 @@
         if (!channel){
             [[[FDChannelUpdater alloc] init]resetTime];
             [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
-                self.notificationHandler = [[HLNotificationHandler alloc] init];
-                [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+                NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+                [mContext performBlock:^{
+                    HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
+                    self.notificationHandler = [[HLNotificationHandler alloc] init];
+                    [self.notificationHandler handleNotification:ch withMessage:message andState:appState];
+                }];
             }];
         }
         else {
@@ -381,10 +388,6 @@
             self.notificationHandler = [[HLNotificationHandler alloc] init];
             [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
         }
-        
-        
-        
-        
     });
 }
 
