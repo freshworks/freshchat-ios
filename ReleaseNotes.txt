@@ -1,6 +1,10 @@
 
 Ver 1.0.11 
 __________________________
+Final Release 1.0.11 
+
+Ver 1.0.11 
+__________________________
 Improved message fetch 
 Fixed crashes for property updates 
 Minor UI Fixes 
