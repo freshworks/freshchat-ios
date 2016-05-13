@@ -29,4 +29,8 @@
     [HLMessageServices fetchMessages:completion];
 }
 
+- (void) resetTime{
+    [self.secureStore setObject:@(1) forKey:self.intervalConfigKey]; //TODO: Hacky .. We need to do a better way - Rex
+}
+
 @end
