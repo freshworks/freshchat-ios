@@ -1,4 +1,8 @@
 
+Ver 1.0.12 
+__________________________
+Fixed Headsup Notification popping up when Push is disabled 
+
 Ver 1.0.11 
 __________________________
 Final Release 1.0.11 
