@@ -466,7 +466,7 @@
 }
 
 -(void) pollNewMessages:(id)sender{
-    [[[FDChannelUpdater alloc]init] fetch];
+    [HLMessageServices fetchChannelsAndMessages:nil];
 }
 
 -(void)cancelPoller{
