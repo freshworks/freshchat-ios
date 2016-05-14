@@ -15,7 +15,7 @@
 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler;
 
-+(NSURLSessionDataTask *)DAUCall;
++(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion;
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 

@@ -206,7 +206,7 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)DAUCall{
++(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
@@ -222,6 +222,9 @@
         }else{
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
+        }
+        if(completion){
+            completion(error);
         }
     }];
     return task;

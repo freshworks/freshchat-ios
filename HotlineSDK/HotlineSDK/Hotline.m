@@ -22,6 +22,7 @@
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
+#import "FDDAUUpdater.h"
 #import "KonotorMessage.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
@@ -254,11 +255,10 @@
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
-        [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices fetchChannelsAndMessages:nil];
-        [HLCoreServices DAUCall];
+        [[[FDDAUUpdater alloc]init] fetch];
         [self registerDeviceToken];
         [self updateAppVersion];
         [self updateSDKBuildNumber];
