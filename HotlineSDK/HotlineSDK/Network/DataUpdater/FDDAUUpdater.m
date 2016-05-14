@@ -24,7 +24,9 @@
 
 -(void)doFetch:(void(^)(NSError *error))completion{
     [HLCoreServices DAUCall:^(NSError *error) {
-        completion(error);
+        if(completion){
+            completion(error);
+        }
     }];
 }
 @end
