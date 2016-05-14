@@ -23,7 +23,7 @@
 
 @implementation HLFAQServices
 
--(NSURLSessionDataTask *)fetchAllCategories{
+-(NSURLSessionDataTask *)fetchAllCategories:(void (^)(NSError *))completion{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
@@ -37,9 +37,12 @@
     NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        [self importSolutions:[responseInfo responseAsDictionary]];
-        [FDIndexManager setIndexingCompleted:NO];
-        [FDIndexManager updateIndex];
+        if(!error){
+            [self importSolutions:[responseInfo responseAsDictionary]];
+            [FDIndexManager setIndexingCompleted:NO];
+            [FDIndexManager updateIndex];
+        }
+        completion(error);
     }];
     return task;
 }

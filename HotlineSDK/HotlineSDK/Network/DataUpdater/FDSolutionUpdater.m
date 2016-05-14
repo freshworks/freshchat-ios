@@ -30,7 +30,9 @@
 
 -(void)doFetch:(void(^)(NSError *error))completion{
     HLFAQServices *service = [[HLFAQServices alloc]init];
-    [service fetchAllCategories];
+    [service fetchAllCategories:^(NSError *error) {
+        completion(error);
+    }];
 }
 
 @end
