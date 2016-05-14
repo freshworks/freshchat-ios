@@ -42,7 +42,9 @@
             [FDIndexManager setIndexingCompleted:NO];
             [FDIndexManager updateIndex];
         }
-        completion(error);
+        if(completion){
+            completion(error);
+        }
     }];
     return task;
 }

@@ -255,7 +255,6 @@
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
-        [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices fetchChannelsAndMessages:nil];

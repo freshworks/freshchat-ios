@@ -223,7 +223,9 @@
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
-        completion(error);
+        if(completion){
+            completion(error);
+        }
     }];
     return task;
 }
