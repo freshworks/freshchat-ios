@@ -176,14 +176,15 @@ static HLNotificationHandler *handleUpdateNotification;
                 //Do not mark restored mesages as unread
                 if (isRestore) {
                     newMessage.messageRead = YES;
-                }
-                if([newMessage.messageType intValue] == KonotorMessageTypeText){
-                    messageText = newMessage.text;
+                }else {
+                    if([newMessage.messageType intValue] == KonotorMessageTypeText){
+                        messageText = newMessage.text;
+                    }
                 }
             }
         }
         
-        if(![HLNotificationHandler areNotificationsEnabled] && messageText){
+        if(!isRestore && ![HLNotificationHandler areNotificationsEnabled] && messageText){
             handleUpdateNotification = [[HLNotificationHandler alloc] init];
             [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
         }

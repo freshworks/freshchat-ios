@@ -442,7 +442,11 @@
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
     [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-        if (completion) completion([self unreadCount]);
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 completion([self unreadCount]);
+            });
+        }
     }];
 }
 
@@ -462,7 +466,7 @@
 }
 
 -(void) pollNewMessages:(id)sender{
-    [[[FDChannelUpdater alloc]init] fetch];
+    [HLMessageServices fetchChannelsAndMessages:nil];
 }
 
 -(void)cancelPoller{
