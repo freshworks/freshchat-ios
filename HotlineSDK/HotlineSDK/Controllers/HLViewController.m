@@ -52,4 +52,8 @@
     }
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return [[HLTheme sharedInstance]statusBarStyle];
+}
+
 @end
