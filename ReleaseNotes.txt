@@ -1,4 +1,8 @@
 
+Ver 1.0.13 
+__________________________
+Add Statusbar customization
+
 Ver 1.0.12 
 __________________________
 Fixed Headsup Notification popping up when Push is disabled 
