@@ -25,6 +25,7 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "HLMessageServices.h"
+#import "FDChannelUpdater.h"
 
 @interface HLChannelViewController ()
 
@@ -55,6 +56,11 @@
 
 -(BOOL)canDisplayFooterView{
     return NO;
+}
+
+-(void)viewDidLoad{
+    [super viewDidLoad];
+    [[[FDChannelUpdater alloc] init] resetTime];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

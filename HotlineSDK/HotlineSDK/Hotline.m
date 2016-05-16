@@ -362,6 +362,9 @@
 }
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
+    if(![self isHotlineNotification:info]){
+        return;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
         FDLog(@"Push Recieved :%@", payload);
@@ -375,12 +378,16 @@
         if (!channel){
             [[[FDChannelUpdater alloc] init]resetTime];
             [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
-                NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-                [mContext performBlock:^{
-                    HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
-                    self.notificationHandler = [[HLNotificationHandler alloc] init];
-                    [self.notificationHandler handleNotification:ch withMessage:message andState:appState];
-                }];
+                if(!error){
+                    NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+                    [mContext performBlock:^{
+                        HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
+                        if(ch){
+                            self.notificationHandler = [[HLNotificationHandler alloc] init];
+                            [self.notificationHandler handleNotification:ch withMessage:message andState:appState];
+                        }
+                    }];
+                }
             }];
         }
         else {
