@@ -166,6 +166,8 @@
     UIImage* selectedImage = info[UIImagePickerControllerOriginalImage];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     appDelegate.pickedImage = selectedImage;
+    [[[UIAlertView alloc] initWithTitle:nil message: @"Background updated" delegate:nil
+                      cancelButtonTitle:@"ok" otherButtonTitles:nil]show];
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
