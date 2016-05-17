@@ -54,6 +54,12 @@
         [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
         [self.window setRootViewController:tabBarController];
+        NSArray* items = [tabBarController.tabBar items];
+        if(items){
+            [[items objectAtIndex:0] setImage:[[UIImage imageNamed:@"tab1Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            [[items objectAtIndex:1] setImage:[[UIImage imageNamed:@"tab2Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            [[items objectAtIndex:2] setImage:[[UIImage imageNamed:@"tab3Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        }
         [self.window makeKeyAndVisible];
         
     }
