@@ -68,7 +68,7 @@
     NSString *logglyURL = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:logglyURL]];
-    request.HTTPBody = postData;
+    [request setBody:postData];
     request.HTTPMethod = HTTP_METHOD_POST;
     [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {

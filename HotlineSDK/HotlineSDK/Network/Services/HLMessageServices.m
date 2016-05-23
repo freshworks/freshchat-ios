@@ -68,8 +68,7 @@ static HLNotificationHandler *handleUpdateNotification;
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
         NSString *userAlias = [FDUtilities getUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-        HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-        request.HTTPMethod = HTTP_METHOD_GET;
+        HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
         __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
@@ -207,8 +206,7 @@ static HLNotificationHandler *handleUpdateNotification;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     //TODO: This is repeated multitimes. Needs refactor.
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-    request.HTTPMethod = HTTP_METHOD_GET;
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
@@ -404,9 +402,7 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-    
-    request.HTTPMethod = HTTP_METHOD_PUT;
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
     [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
@@ -434,8 +430,7 @@ static HLNotificationHandler *handleUpdateNotification;
 
     if (!userAlias) return;
 
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-    request.HTTPMethod = HTTP_METHOD_PUT;
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
     [request setRelativePath:path andURLParams:@[@"seen=1",appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
