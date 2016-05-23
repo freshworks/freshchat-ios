@@ -13,6 +13,7 @@
 #import "HLMacros.h"
 #import "HLAPIClient.h"
 #import "HLServiceRequest.h"
+#import "HLNotificationHandler.h"
 
 @interface FDMemLogger ()
 
@@ -47,7 +48,26 @@
 }
 
 -(NSString *)toString {
+    
+    NSString *pushNotifState = ([HLNotificationHandler areNotificationsEnabled]) ? @"Yes" : @"No";
+    
+    NSString *appState = nil;
+
+    UIApplicationState state = [[UIApplication sharedApplication] applicationState];
+
+    if (state == UIApplicationStateActive){
+        appState = @"Active";
+    }else if(state == UIApplicationStateInactive){
+        appState = @"Inactive";
+    }else{
+        appState = @"Background";
+    }
+    
     NSDictionary *additionalInfo = @{
+                                     @"Device Model" : [FDUtilities deviceModelName],
+                                     @"Application state" : appState,
+                                     @"User alias" : [FDUtilities getUserAlias],
+                                     @"Push notification enabled" : pushNotifState,
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
                                      @"App Name" : [FDUtilities appName],
@@ -56,7 +76,6 @@
     
     [self addErrorInfo:additionalInfo withMethodName:@"AdditionalInfo"];
 
-    
     NSString *log = [self.logList componentsJoinedByString:@"\n"];
     return log;
 }
