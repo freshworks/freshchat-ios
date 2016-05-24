@@ -102,7 +102,6 @@ static inline NSString * FDMultipartFormFinalBoundary() {
 
 -(void)setBody:(NSData *)body{
     self.HTTPBody = body;
-    [self setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[body length]] forHTTPHeaderField:@"Content-Length"];
 }
 
 -(void)appendPartWithFormData:(NSData *)data name:(NSString *)name{
