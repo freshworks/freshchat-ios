@@ -157,6 +157,8 @@
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
+        
+        cell.tag = indexPath.row;
 
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
         
@@ -183,15 +185,29 @@
             }
             else{
                 UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
-                if(channel.iconURL){
-                    NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
-                    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
-                    __weak FDCell *weakCell = cell;
-                    [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                        weakCell.imgView.image = image;
-                        channel.icon = UIImagePNGRepresentation(image);
-                        [[KonotorDataManager sharedInstance]save];
-                    } failure:nil];
+                NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
+                if(iconURL){
+                    if (cell.tag == indexPath.row) {
+                        cell.imgView.image = placeholderImage;
+                        [cell setNeedsLayout];
+                    }
+                    dispatch_queue_t lazyImageQueue = dispatch_queue_create("com.freshdesk.hotline_sdk", NULL);
+                    dispatch_async(lazyImageQueue, ^(void) {
+                        NSData *imageData = [NSData dataWithContentsOfURL:iconURL];
+                        UIImage *image = [[UIImage alloc] initWithData:imageData];
+                        if (image) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if (cell.tag == indexPath.row) {
+                                    cell.imgView.image = image;
+                                    [cell setNeedsLayout];
+                                    channel.icon = UIImagePNGRepresentation(image);
+                                    [[KonotorDataManager sharedInstance]save];
+                                }
+                            });
+                        }else{
+                            cell.imgView.image = placeholderImage;
+                        }
+                    });
                 }
                 else{
                     cell.imgView.image = placeholderImage;

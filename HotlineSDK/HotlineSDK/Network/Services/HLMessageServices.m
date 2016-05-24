@@ -18,8 +18,6 @@
 #import "FDUtilities.h"
 #import "Konotor.h"
 #import "KonotorMessage.h"
-#import "AFHTTPClient.h"
-#import "AFNetworking.h"
 #import "FDResponseInfo.h"
 #import "FDBackgroundTaskManager.h"
 #import "FDDateUtil.h"

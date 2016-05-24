@@ -42,14 +42,6 @@
 		35591AC41B9ED74900BC0B60 /* libHotlineAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */; };
 		35591B621B9EDCB700BC0B60 /* Hotline.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B251B9EDCB700BC0B60 /* Hotline.m */; };
 		35591B631B9EDCB700BC0B60 /* Konotor.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B281B9EDCB700BC0B60 /* Konotor.m */; };
-		35591B8E1B9EDD0700BC0B60 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B7C1B9EDD0700BC0B60 /* AFHTTPClient.m */; };
-		35591B8F1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B7E1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m */; };
-		35591B901B9EDD0700BC0B60 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B801B9EDD0700BC0B60 /* AFImageRequestOperation.m */; };
-		35591B911B9EDD0700BC0B60 /* AFJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B821B9EDD0700BC0B60 /* AFJSONRequestOperation.m */; };
-		35591B921B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B841B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m */; };
-		35591B931B9EDD0700BC0B60 /* AFPropertyListRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B871B9EDD0700BC0B60 /* AFPropertyListRequestOperation.m */; };
-		35591B941B9EDD0700BC0B60 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B891B9EDD0700BC0B60 /* AFURLConnectionOperation.m */; };
-		35591B951B9EDD0700BC0B60 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B8B1B9EDD0700BC0B60 /* AFXMLRequestOperation.m */; };
 		35591BAA1B9EDF8C00BC0B60 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B241B9EDCB700BC0B60 /* Hotline.h */; };
 		35591BAB1B9EDF9200BC0B60 /* Konotor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35591B271B9EDCB700BC0B60 /* Konotor.h */; };
 		355EEB3E1CABD97800229780 /* FDCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 355EEB3D1CABD97800229780 /* FDCell.m */; };
@@ -90,7 +82,6 @@
 		35E000F61C6090810082A036 /* FDDateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E000F51C6090810082A036 /* FDDateUtil.m */; };
 		35E001021C6091000082A036 /* FDMarginalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E001011C6091000082A036 /* FDMarginalView.m */; };
 		35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E767BF1C2051120098CFA1 /* HotlineUser.m */; };
-		35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F7D4571C22A9390007DA9A /* FDImageView.m */; };
 		35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */; };
 		3C051DEC1C6481DE00DDE80D /* HLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C051DEB1C6481DE00DDE80D /* HLViewController.m */; };
 		3C3F15001CBF5129009C040D /* FDMemLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3F14FF1CBF5129009C040D /* FDMemLogger.m */; };
@@ -194,23 +185,6 @@
 		35591B741B9EDCCE00BC0B60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		35591B751B9EDCCE00BC0B60 /* KonotorModels-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "KonotorModels-Info.plist"; sourceTree = "<group>"; };
 		35591B761B9EDCCE00BC0B60 /* KonotorModels-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KonotorModels-Prefix.pch"; sourceTree = "<group>"; };
-		35591B7B1B9EDD0700BC0B60 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
-		35591B7C1B9EDD0700BC0B60 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
-		35591B7D1B9EDD0700BC0B60 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
-		35591B7E1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
-		35591B7F1B9EDD0700BC0B60 /* AFImageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageRequestOperation.h; sourceTree = "<group>"; };
-		35591B801B9EDD0700BC0B60 /* AFImageRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageRequestOperation.m; sourceTree = "<group>"; };
-		35591B811B9EDD0700BC0B60 /* AFJSONRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFJSONRequestOperation.h; sourceTree = "<group>"; };
-		35591B821B9EDD0700BC0B60 /* AFJSONRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFJSONRequestOperation.m; sourceTree = "<group>"; };
-		35591B831B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
-		35591B841B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
-		35591B851B9EDD0700BC0B60 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
-		35591B861B9EDD0700BC0B60 /* AFPropertyListRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPropertyListRequestOperation.h; sourceTree = "<group>"; };
-		35591B871B9EDD0700BC0B60 /* AFPropertyListRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFPropertyListRequestOperation.m; sourceTree = "<group>"; };
-		35591B881B9EDD0700BC0B60 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
-		35591B891B9EDD0700BC0B60 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
-		35591B8A1B9EDD0700BC0B60 /* AFXMLRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFXMLRequestOperation.h; sourceTree = "<group>"; };
-		35591B8B1B9EDD0700BC0B60 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		355EEB3C1CABD97800229780 /* FDCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCell.h; sourceTree = "<group>"; };
 		355EEB3D1CABD97800229780 /* FDCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCell.m; sourceTree = "<group>"; };
 		35609EC01C38F553008844C6 /* HLCoreServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCoreServices.h; sourceTree = "<group>"; };
@@ -312,8 +286,6 @@
 		35E001011C6091000082A036 /* FDMarginalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMarginalView.m; sourceTree = "<group>"; };
 		35E767BF1C2051120098CFA1 /* HotlineUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotlineUser.m; sourceTree = "<group>"; };
 		35ED5ED21BB3E92800E0052D /* HLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLConstants.h; sourceTree = "<group>"; };
-		35F7D4561C22A9390007DA9A /* FDImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDImageView.h; sourceTree = "<group>"; };
-		35F7D4571C22A9390007DA9A /* FDImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDImageView.m; sourceTree = "<group>"; };
 		35FE04421BC4D1DD00EAA8E0 /* FDReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachabilityManager.h; sourceTree = "<group>"; };
 		35FE04431BC4D1DD00EAA8E0 /* FDReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachabilityManager.m; sourceTree = "<group>"; };
 		3C051DEA1C64814F00DDE80D /* HLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLViewController.h; sourceTree = "<group>"; };
@@ -512,35 +484,8 @@
 			children = (
 				35D9F9D71BB96DF8008C92E8 /* UICKeyChainStore-2.0.6 */,
 				35D158BD1BB2B847009CFEDF /* Reachability */,
-				35591B7A1B9EDD0700BC0B60 /* AFNetworking */,
 			);
 			path = Vendor;
-			sourceTree = "<group>";
-		};
-		35591B7A1B9EDD0700BC0B60 /* AFNetworking */ = {
-			isa = PBXGroup;
-			children = (
-				35591B7B1B9EDD0700BC0B60 /* AFHTTPClient.h */,
-				35591B7C1B9EDD0700BC0B60 /* AFHTTPClient.m */,
-				35F7D4561C22A9390007DA9A /* FDImageView.h */,
-				35F7D4571C22A9390007DA9A /* FDImageView.m */,
-				35591B7D1B9EDD0700BC0B60 /* AFHTTPRequestOperation.h */,
-				35591B7E1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m */,
-				35591B7F1B9EDD0700BC0B60 /* AFImageRequestOperation.h */,
-				35591B801B9EDD0700BC0B60 /* AFImageRequestOperation.m */,
-				35591B811B9EDD0700BC0B60 /* AFJSONRequestOperation.h */,
-				35591B821B9EDD0700BC0B60 /* AFJSONRequestOperation.m */,
-				35591B831B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.h */,
-				35591B841B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m */,
-				35591B851B9EDD0700BC0B60 /* AFNetworking.h */,
-				35591B861B9EDD0700BC0B60 /* AFPropertyListRequestOperation.h */,
-				35591B871B9EDD0700BC0B60 /* AFPropertyListRequestOperation.m */,
-				35591B881B9EDD0700BC0B60 /* AFURLConnectionOperation.h */,
-				35591B891B9EDD0700BC0B60 /* AFURLConnectionOperation.m */,
-				35591B8A1B9EDD0700BC0B60 /* AFXMLRequestOperation.h */,
-				35591B8B1B9EDD0700BC0B60 /* AFXMLRequestOperation.m */,
-			);
-			path = AFNetworking;
 			sourceTree = "<group>";
 		};
 		3575C4771BE1EF25000C3D02 /* InputToolbarView */ = {
@@ -883,9 +828,7 @@
 				350EFDED1BD673DD00F3410B /* FDIndexManager.m in Sources */,
 				35E000F61C6090810082A036 /* FDDateUtil.m in Sources */,
 				358DD4C51BB00EB700B36E4E /* HLCategory.m in Sources */,
-				35591B901B9EDD0700BC0B60 /* AFImageRequestOperation.m in Sources */,
 				359E3E881BA6D20600B933C5 /* KonotorMessageBinary.m in Sources */,
-				35591B8F1B9EDD0700BC0B60 /* AFHTTPRequestOperation.m in Sources */,
 				35DCCB5F1BE005370039EFDD /* KonotorAudioPlayer.m in Sources */,
 				35D04B911C1B5A420096F01C /* HotlineConfig.m in Sources */,
 				35D9F9DA1BB96DF8008C92E8 /* FDKeyChainStore.m in Sources */,
@@ -893,30 +836,24 @@
 				35D9F9E81BBAA7FA008C92E8 /* FDSolutionUpdater.m in Sources */,
 				359E3E871BA6D20600B933C5 /* KonotorMessage.m in Sources */,
 				35D9F9DD1BB96E02008C92E8 /* FDSecureStore.m in Sources */,
-				35591B951B9EDD0700BC0B60 /* AFXMLRequestOperation.m in Sources */,
 				35FE04441BC4D1DD00EAA8E0 /* FDReachabilityManager.m in Sources */,
 				35DCCB601BE005370039EFDD /* KonotorAudioRecorder.m in Sources */,
 				3528BA311BC86076008F6C38 /* HLServiceRequest.m in Sources */,
 				3503AAE01C58CBDA00A8DFDB /* FDResponseInfo.m in Sources */,
 				358DD4C41BB00EB700B36E4E /* HLArticle.m in Sources */,
-				35591B921B9EDD0700BC0B60 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				3538A9661C7131D000D8E216 /* KonotorUser.m in Sources */,
 				35D158C01BB2B847009CFEDF /* FDReachability.m in Sources */,
 				35D9F9E71BBAA7FA008C92E8 /* FDDataUpdaterWithInterval.m in Sources */,
 				359E3E851BA6D20600B933C5 /* KonotorConversation.m in Sources */,
 				35591B631B9EDCB700BC0B60 /* Konotor.m in Sources */,
-				35591B931B9EDD0700BC0B60 /* AFPropertyListRequestOperation.m in Sources */,
 				35D639DE1BBBE22D00979721 /* HLTheme.m in Sources */,
 				3CFD733F1CD237EB0006119A /* HLEmptyResultView.m in Sources */,
-				35591B941B9EDD0700BC0B60 /* AFURLConnectionOperation.m in Sources */,
-				35591B8E1B9EDD0700BC0B60 /* AFHTTPClient.m in Sources */,
 				35609EC21C38F553008844C6 /* HLCoreServices.m in Sources */,
 				3533F0BD1BB020D3000B2D9A /* HLAPIClient.m in Sources */,
 				3533F0C21BB042C2000B2D9A /* HLFAQServices.m in Sources */,
 				3538A96C1C71320D00D8E216 /* KonotorCustomProperty.m in Sources */,
 				3552E6E61CD0FA8E001B0968 /* FDMessagesUpdater.m in Sources */,
 				35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */,
-				35591B911B9EDD0700BC0B60 /* AFJSONRequestOperation.m in Sources */,
 				359156121C24B1B4000AB9E0 /* HLChannel.m in Sources */,
 				35591B621B9EDCB700BC0B60 /* Hotline.m in Sources */,
 			);
@@ -964,7 +901,6 @@
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,
 				3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */,
 				354D0D2C1C48D1A4004D2AA1 /* FDAttachmentImageController.m in Sources */,
-				35F7D4581C22A9390007DA9A /* FDImageView.m in Sources */,
 				CE9D4D061BCD286F006F2E66 /* FDRanking.m in Sources */,
 				354D0D2D1C48D1A4004D2AA1 /* KonotorImageInput.m in Sources */,
 				35DCCB541BE002960039EFDD /* FDYesNoPromptView.m in Sources */,
@@ -1018,6 +954,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "01778411-1277-47d7-bc16-f0028cfaf88f";
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = all;
 				VALID_ARCHS = "armv7 arm64 armv7s i386 x86_64";
@@ -1035,6 +972,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "01778411-1277-47d7-bc16-f0028cfaf88f";
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = all;
 				VALID_ARCHS = "armv7 arm64 armv7s i386 x86_64";
@@ -1052,6 +990,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "01778411-1277-47d7-bc16-f0028cfaf88f";
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = all;
 				VALID_ARCHS = "armv7 arm64 armv7s i386 x86_64";
@@ -1069,6 +1008,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "01778411-1277-47d7-bc16-f0028cfaf88f";
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = all;
 				VALID_ARCHS = "armv7 arm64 armv7s i386 x86_64";
@@ -1184,6 +1124,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "01778411-1277-47d7-bc16-f0028cfaf88f";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
@@ -1207,6 +1148,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE = "01778411-1277-47d7-bc16-f0028cfaf88f";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
