@@ -8,20 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HLServiceRequest : NSMutableURLRequest
+@class HLMultipartFormData;
 
-@property(nonatomic, strong, readonly) NSURL *baseURL;
-
--(instancetype)initWithBaseURL:(NSURL *)baseURL;
-
-//contains hard coded URL of hotline -- add more doc
--(instancetype)initWithMethod:(NSString *)httpMethod;
-
--(instancetype)initMultipartFormRequest;
-
--(void)setRelativePath:(NSString *)path andURLParams:(NSArray *)params;
-
--(void)setBody:(NSData *)body;
+@protocol HLMultipartFormData
 
 /**
  Appends the HTTP headers `Content-Disposition: form-data; name=#{name}"`, followed by the encoded data and the multipart form boundary.
@@ -37,15 +26,25 @@
  data: The data to be encoded and appended to the form data.
  name: The name to be associated with the specified data. This parameter must not be `nil`.
  fileName: The filename to be associated with the specified data. This parameter must not be `nil`.
- mimeType: The MIME type of the specified data. (For example, the MIME type for a JPEG image is image/jpeg.)
- For a list of valid MIME types, see http://www.iana.org/assignments/media-types/. This parameter must not be `nil`. */
+ mimeType: The MIME type of the specified data. (For example, the MIME type for a JPEG image is image/jpeg.) */
 
 - (void)appendPartWithFileData:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType;
 
-
-
 @end
 
-//Add new method to add content length when people set http body
+@interface HLServiceRequest : NSMutableURLRequest
 
-//Declare appending file data with these features in a spearate class inside this class cluster
+@property(nonatomic, strong, readonly) NSURL *baseURL;
+
+-(instancetype)initWithBaseURL:(NSURL *)baseURL;
+
+//contains hard coded URL of hotline -- add more doc
+-(instancetype)initWithMethod:(NSString *)httpMethod;
+
+-(instancetype)initMultipartFormRequestWithBody:(void (^)(id <HLMultipartFormData> formData))block;
+
+-(void)setRelativePath:(NSString *)path andURLParams:(NSArray *)params;
+
+-(void)setBody:(NSData *)body;
+
+@end

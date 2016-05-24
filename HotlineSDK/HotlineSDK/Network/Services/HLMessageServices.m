@@ -276,6 +276,7 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
         [[KonotorDataManager sharedInstance]save];
@@ -285,7 +286,8 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
-    
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
+
     __block NSString *messageAlias = pMessage.messageAlias;
     
     if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING){
@@ -294,23 +296,15 @@ static HLNotificationHandler *handleUpdateNotification;
         pMessage.uploadStatus = @(MESSAGE_UPLOADING);
         [[KonotorDataManager sharedInstance]save];
     }
-    
-    NSURL *url = [NSURL URLWithString:[FDUtilities getBaseURL]];
-    AFKonotorHTTPClient *httpClient = [[AFKonotorHTTPClient alloc] initWithBaseURL:url];
-    
-    NSString *postPath = [NSString stringWithFormat:@"%@%@%@%@%@%@",@"services/app/",appID,@"/user/",userAlias,@"/feedback/message/v2?t=",appKey];
-    
-    NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock: ^(id <AFKonotorMultipartFormData>formData) {
         
+    HLServiceRequest *request = [[HLServiceRequest alloc]initMultipartFormRequestWithBody:^(id<HLMultipartFormData> formData) {
         [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
         
         if (channel.channelID) {
-            [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding]
-                                        name:@"channelId"];
+            [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding] name:@"channelId"];
         }else{
             FDLog(@"Message sending without channel ID");
         }
-        
         
         if (conversation.conversationAlias) {
             [formData appendPartWithFormData:[conversation.conversationAlias dataUsingEncoding:NSUTF8StringEncoding] name:@"conversationId"];
@@ -332,61 +326,57 @@ static HLNotificationHandler *handleUpdateNotification;
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
             if(pBinary){
-                [formData appendPartWithFileData:[pBinary binaryImage] name:@"picFile" fileName:@".jpg"
-                                        mimeType:@"application/octet-stream"];
+                [formData appendPartWithFileData:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
                 
                 if([pBinary binaryThumbnail]){
-                    [formData appendPartWithFileData:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg"
-                                            mimeType:@"application/octet-stream"];
+                    [formData appendPartWithFileData:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
                 }
             }
         }
+        
     }];
+    
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UPLOAD_MESSAGE, appID,userAlias];
+    
+    [request setRelativePath:path andURLParams:@[token]];
     
     ShowNetworkActivityIndicator();
     UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
-    
-    AFKonotorHTTPRequestOperation *operation = [[AFKonotorHTTPRequestOperation alloc] initWithRequest:request];
-    
-    [operation setCompletionBlockWithSuccess:^(AFKonotorHTTPRequestOperation *operation, id responseObject){
-        
-        NSDictionary* messageInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
-        
-        if (!conversation) {
-            NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
-            KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-            pMessage.belongsToConversation = newConversation;
-        }else{
-            pMessage.belongsToConversation = conversation;
-        }
-        
-        HideNetworkActivityIndicator();
-        pMessage.uploadStatus = @(MESSAGE_UPLOADED);
-        pMessage.messageAlias = messageInfo[@"alias"];
-        pMessage.createdMillis = messageInfo[@"createdMillis"];
-        [channel addMessagesObject:pMessage];
-        [[KonotorDataManager sharedInstance]save];
-        [Konotor performSelector:@selector(UploadFinishedNotifcation:) withObject:messageAlias];
-        [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
-    }
-     
-     failure:^(AFKonotorHTTPRequestOperation *operation, NSError *error){
-         HideNetworkActivityIndicator();
-         pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
-         pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-         [channel addMessagesObject:pMessage];
-         [[KonotorDataManager sharedInstance]save];
-         [Konotor performSelector:@selector(UploadFailedNotifcation:) withObject:messageAlias];
-         [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
-     }];
-    
-    [operation start];
-}
 
-+(HLServiceRequest *)statusUpdateRequestForMarketingID:(NSNumber *)marketingID{
-//    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [[HLAPIClient sharedInstance]request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        
+        NSDictionary* messageInfo = responseInfo.responseAsDictionary;
+        
+        [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+            if (!error) {
 
-    return nil;
+                if (!conversation) {
+                    NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+                    KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+                    pMessage.belongsToConversation = newConversation;
+                }else{
+                    pMessage.belongsToConversation = conversation;
+                }
+                
+                pMessage.uploadStatus = @(MESSAGE_UPLOADED);
+                pMessage.messageAlias = messageInfo[@"alias"];
+                pMessage.createdMillis = messageInfo[@"createdMillis"];
+                [channel addMessagesObject:pMessage];
+                [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
+            }else{
+                pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
+                pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+                [channel addMessagesObject:pMessage];
+                [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
+            }
+            
+            [[KonotorDataManager sharedInstance]save];
+            [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+            HideNetworkActivityIndicator();
+
+        }];
+    }];
+    
 }
 
 //TODO: Skip messages that are clicked before

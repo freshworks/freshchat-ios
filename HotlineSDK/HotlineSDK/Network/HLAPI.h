@@ -36,6 +36,8 @@
 
 #define HOTLINE_API_USER_CONVERSATION_ACTIVITY @"app/services/app/%@/user/%@/conversation/read"
 
+#define HOTLINE_API_UPLOAD_MESSAGE @"app/services/app/%@/user/%@/feedback/message/v2"
+
 #define HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API @"/app/services/app/%@/user/%@/conversation/v2"
 
 #define HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH @"/app/services/app/%@/user/%@/message/marketing/%@/status"

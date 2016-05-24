@@ -13,11 +13,23 @@
 
 @interface HLServiceRequest ()
 
+@property (nonatomic, strong) NSMutableData *formData;
 @property(nonatomic, strong, readwrite) NSURL *baseURL;
 
 @end
 
 @implementation HLServiceRequest
+
+static NSString * const FDMultipartFormBoundary = @"Boundary+0xAbCdEfGbOuNdArY";
+static NSString * const FDMultipartFormCRLF = @"\r\n";
+
+static inline NSString * FDMultipartFormInitialBoundary() {
+    return [NSString stringWithFormat:@"--%@%@", FDMultipartFormBoundary, FDMultipartFormCRLF];
+}
+
+static inline NSString * FDMultipartFormFinalBoundary() {
+    return [NSString stringWithFormat:@"%@--%@--%@", FDMultipartFormCRLF, FDMultipartFormBoundary, FDMultipartFormCRLF];
+}
 
 -(NSURL *)getHotlineURL{
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -36,15 +48,6 @@
     return self;
 }
 
--(instancetype)initMultipartFormRequest{
-    self = [self initWithBaseURL:[self getHotlineURL]];
-    if (self) {
-        self.HTTPMethod = HTTP_METHOD_POST;
-    }
-    return self;
-}
-
-
 -(instancetype)initWithBaseURL:(NSURL *)baseURL{
     self = [super init];
     if (self) {
@@ -55,6 +58,26 @@
         NSString *userAgent = [NSString stringWithFormat:@"%@ %@",[UIDevice currentDevice].systemName,[UIDevice currentDevice].systemVersion];
         [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
         [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    }
+    return self;
+}
+
+-(instancetype)initMultipartFormRequestWithBody:(void (^)(id <HLMultipartFormData> formData))block{
+    self = [self initWithBaseURL:[self getHotlineURL]];
+    if (self) {
+        
+        self.formData = [[NSMutableData alloc]init];
+        
+        self.HTTPMethod = HTTP_METHOD_POST;
+        
+        [self setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", FDMultipartFormBoundary] forHTTPHeaderField:@"Content-Type"];
+
+        if (block) block((id <HLMultipartFormData>)self);
+
+        [self.formData appendData:[FDMultipartFormFinalBoundary() dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        self.HTTPBody = self.formData;
+        
     }
     return self;
 }
@@ -83,18 +106,24 @@
 }
 
 -(void)appendPartWithFormData:(NSData *)data name:(NSString *)name{
-    NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
-    [mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"%@\"", name] forKey:@"Content-Disposition"];
-    
+    [self.formData appendData:[FDMultipartFormInitialBoundary() dataUsingEncoding:NSUTF8StringEncoding]];
+    [self.formData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"", name]dataUsingEncoding:NSUTF8StringEncoding]];
+    [self appendData:data];
 }
 
 -(void)appendPartWithFileData:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType{
-    
+    [self.formData appendData:[FDMultipartFormInitialBoundary() dataUsingEncoding:NSUTF8StringEncoding]];
+    [self.formData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"", name, fileName] dataUsingEncoding:NSUTF8StringEncoding]];
+    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:NSUTF8StringEncoding]];
+    [self.formData appendData:[[NSString stringWithFormat:@"Content-Type: %@", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
+    [self appendData:data];
 }
 
-- (NSString *)boundaryString{
-    NSString *UUID = [[NSUUID UUID] UUIDString];
-    return [NSString stringWithFormat:@"Boundary-%@", UUID];
+-(void)appendData:(NSData *)data{
+    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:NSUTF8StringEncoding]];
+    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:NSUTF8StringEncoding]];
+    [self.formData appendData:data];
+    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 @end
