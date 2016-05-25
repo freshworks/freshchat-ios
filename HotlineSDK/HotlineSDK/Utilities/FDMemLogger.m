@@ -71,7 +71,8 @@
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
                                      @"App Name" : [FDUtilities appName],
-                                     @"Device Info" : [FDUtilities deviceInfoProperties]
+                                     @"Device Info" : [FDUtilities deviceInfoProperties],
+                                     @"Stack Trace" : [NSThread callStackSymbols]
                                      };
     
     [self addErrorInfo:additionalInfo withMethodName:@"AdditionalInfo"];
@@ -80,13 +81,14 @@
     return log;
 }
 
+static  NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
+
 -(void)upload{
     NSString *log = [self toString];
     FDLog(@"Going to upload : %@" , log);
     NSData *postData = [log dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *logglyURL = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:logglyURL]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:LOGGER_API]];
     request.HTTPBody = postData;
     request.HTTPMethod = HTTP_METHOD_POST;
     [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
