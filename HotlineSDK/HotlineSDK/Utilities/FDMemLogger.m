@@ -63,10 +63,12 @@
         appState = @"Background";
     }
     
+    NSString *userAlias = [FDUtilities getUserAlias] ?  [FDUtilities getUserAlias] : @"NIL";
+    
     NSDictionary *additionalInfo = @{
                                      @"Device Model" : [FDUtilities deviceModelName],
                                      @"Application state" : appState,
-                                     @"User alias" : [FDUtilities getUserAlias],
+                                     @"User alias" : userAlias,
                                      @"Push notification enabled" : pushNotifState,
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
@@ -81,7 +83,7 @@
     return log;
 }
 
-static  NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
+static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
 
 -(void)upload{
     NSString *log = [self toString];
