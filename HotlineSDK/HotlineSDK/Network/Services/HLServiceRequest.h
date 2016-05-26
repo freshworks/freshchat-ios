@@ -12,6 +12,8 @@
 
 @protocol HLMultipartFormData
 
+-(void)appendText:(NSString *)text name:(NSString *)name;
+
 /**
  Appends the HTTP headers `Content-Disposition: form-data; name=#{name}"`, followed by the encoded data and the multipart form boundary.
  

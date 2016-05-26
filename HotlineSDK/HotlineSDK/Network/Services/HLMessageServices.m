@@ -299,13 +299,13 @@ static HLNotificationHandler *handleUpdateNotification;
         [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
         
         if (channel.channelID) {
-            [formData appendPartWithFormData:[channel.channelID.stringValue dataUsingEncoding:NSUTF8StringEncoding] name:@"channelId"];
+            [formData appendText:channel.channelID.stringValue name:@"channelId"];
         }else{
             FDLog(@"Message sending without channel ID");
         }
         
         if (conversation.conversationAlias) {
-            [formData appendPartWithFormData:[conversation.conversationAlias dataUsingEncoding:NSUTF8StringEncoding] name:@"conversationId"];
+            [formData appendText:conversation.conversationAlias name:@"conversationId"];
         }else{
             FDLog(@"Message sending without conversation ID");
         }
