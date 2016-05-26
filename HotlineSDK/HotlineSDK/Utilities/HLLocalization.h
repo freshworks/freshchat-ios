@@ -11,6 +11,8 @@
 #ifndef HLLocalization_h
 #define HLLocalization_h
 
+static NSString *DEFAULT_LANG = @"en";
+
 #define HLLocalizedString(name) [FDUtilities localize:name]
 
 //Keys to lookup in HLLocalizable.strings

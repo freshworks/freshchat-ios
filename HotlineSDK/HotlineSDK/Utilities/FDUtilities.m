@@ -249,29 +249,34 @@ static NSInteger networkIndicator = 0;
     }
 }
 
-static NSString *DEFAULT_LANG = @"en";
-static NSString *DEFAULT_BUNDLE_NAME = @"HLLocalizationPod";
+static NSString *DEFAULT_BUNDLE_NAME = @"HLLocalization";
 static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 +(NSString *)localize:(NSString *)key{
     
+    static NSBundle *bundle = nil;
+    static NSBundle *projectLevelBundle = nil;
+    static NSBundle *podBundle = nil;
+    
     NSString *bundleName = [[FDSecureStore sharedInstance]objectForKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
     
-    NSBundle *bundle = [self bundleWithName:bundleName ? bundleName : DEFAULT_BUNDLE_NAME andLang:[self getPreferredLang]];
+    if(!bundle) bundle = [self bundleWithName:bundleName ? bundleName : DEFAULT_BUNDLE_NAME andLang:[self getPreferredLang]];
     
     NSString *localizedString = NSLocalizedStringWithDefaultValue(key, DEFAULT_LOCALIZATION_TABLE, bundle, nil, nil);
     
     BOOL isLocalized = [self isKey:key localized:localizedString];
     
     if (!isLocalized) {
-        NSBundle *projectLevelBundle = [self bundleWithName:bundleName andLang:DEFAULT_LANG];
+        
+        if(!projectLevelBundle) projectLevelBundle = [self bundleWithName:bundleName andLang:DEFAULT_LANG];
         
         localizedString = NSLocalizedStringWithDefaultValue(key, DEFAULT_LOCALIZATION_TABLE, projectLevelBundle, nil, nil);
         
         isLocalized = [self isKey:key localized:localizedString];
         
         if (!isLocalized) {
-            NSBundle *podBundle = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
+             
+            if(!podBundle) podBundle = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
             
             localizedString = NSLocalizedStringWithDefaultValue(key, DEFAULT_LOCALIZATION_TABLE, podBundle, nil, nil);
         }
@@ -292,7 +297,11 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 }
 
 +(BOOL)isKey:(NSString *)key localized:(NSString *)value{
-    return ![key isEqualToString:value];
+    if (value) {
+        return ![key isEqualToString:value];
+    }else{
+        return NO;
+    }
 }
 
 @end

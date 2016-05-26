@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */; };
-		3513FF821CDCF48B009A7034 /* HLLocalizationPod.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF811CDCF48B009A7034 /* HLLocalizationPod.bundle */; };
 		3538A97B1C7159E100D8E216 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3538A97A1C7159E100D8E216 /* KonotorModels.bundle */; };
 		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
@@ -74,7 +73,6 @@
 
 /* Begin PBXFileReference section */
 		3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLLocalization.bundle; sourceTree = "<group>"; };
-		3513FF811CDCF48B009A7034 /* HLLocalizationPod.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLLocalizationPod.bundle; sourceTree = "<group>"; };
 		3538A97A1C7159E100D8E216 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		354D0D5D1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -172,7 +170,6 @@
 		354D0D681C48D6D8004D2AA1 /* SDKResources */ = {
 			isa = PBXGroup;
 			children = (
-				3513FF811CDCF48B009A7034 /* HLLocalizationPod.bundle */,
 				3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */,
 				3538A97A1C7159E100D8E216 /* KonotorModels.bundle */,
 				354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */,
@@ -382,15 +379,13 @@
 			files = (
 				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
-                3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */,
-                354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
-                3538A97B1C7159E100D8E216 /* KonotorModels.bundle in Resources */,
-                3513FF821CDCF48B009A7034 /* HLLocalizationPod.bundle in Resources */,
-                354D0D6E1C48D6D8004D2AA1 /* HLLocalizable.strings in Resources */,
-                35D3ADA71CEB57280010BA56 /* settings.png in Resources */,
-                35BCD3501CEB64B500795D69 /* FAQ.png in Resources */,
-                35D3ADAC1CEB59CD0010BA56 /* chat.png in Resources */,
-                354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
+				3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */,
+				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
+				3538A97B1C7159E100D8E216 /* KonotorModels.bundle in Resources */,
+				35D3ADA71CEB57280010BA56 /* settings.png in Resources */,
+				35BCD3501CEB64B500795D69 /* FAQ.png in Resources */,
+				35D3ADAC1CEB59CD0010BA56 /* chat.png in Resources */,
+				354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
