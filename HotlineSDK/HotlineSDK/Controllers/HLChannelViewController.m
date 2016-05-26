@@ -24,6 +24,8 @@
 #import "HLEmptyResultView.h"
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
+#import "HLMessageServices.h"
+#import "FDChannelUpdater.h"
 
 @interface HLChannelViewController ()
 
@@ -56,6 +58,11 @@
     return NO;
 }
 
+-(void)viewDidLoad{
+    [super viewDidLoad];
+    [[[FDChannelUpdater alloc] init] resetTime];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self fetchUpdates];
@@ -64,12 +71,11 @@
 
 -(void)fetchUpdates{
     [self updateChannels];
-    FDChannelUpdater *updater = [[FDChannelUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
-        if(isEmpty)[updater resetTime];
+        if(isEmpty)[[[FDChannelUpdater alloc]init] resetTime];
         ShowNetworkActivityIndicator();
-        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
+            HideNetworkActivityIndicator();
         }];
     }];
 }
@@ -80,7 +86,9 @@
             NSMutableArray *messages = [NSMutableArray array];
             for(HLChannel *channel in channels){
                 KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
-                [messages addObject:lastMessage];
+                if (lastMessage) {
+                    [messages addObject:lastMessage];
+                }
             }
             
             id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
@@ -88,21 +96,25 @@
             
             NSMutableArray *sortedChannel = [[NSMutableArray alloc] init];
             for(KonotorMessage *message in messages){
-                [sortedChannel addObject:message.belongsToChannel];
+                if (message.belongsToChannel) {
+                    [sortedChannel addObject:message.belongsToChannel];
+                }
             }
             
             self.channels = sortedChannel;
             if(!self.channels.count){
                 HLTheme *theme = [HLTheme sharedInstance];
-                self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
-                self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                [self.view addSubview:self.emptyResultView];
-                
-                [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-                
+                if (!self.emptyResultView) {
+                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
+                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                    [self.view addSubview:self.emptyResultView];
+                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+                }
             }
             else{
+                self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
+                
             }
             [self.tableView reloadData];
         }

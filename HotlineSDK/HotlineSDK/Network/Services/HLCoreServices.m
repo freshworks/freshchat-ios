@@ -119,65 +119,65 @@
 
 +(void)uploadUnuploadedProperties{
     
-    static dispatch_group_t serviceGroup = nil;
-    static dispatch_queue_t dispatchQueue = nil;
+    static BOOL IN_PROGRESS = NO;
     
-    if (!serviceGroup) {
-        serviceGroup = dispatch_group_create();
+    if(IN_PROGRESS){
+        return;
     }
     
-    if(!dispatchQueue){
-        dispatchQueue = dispatch_queue_create("com.freshdesk.hotline.uploadprops",DISPATCH_QUEUE_SERIAL);
-    }
+    IN_PROGRESS = YES ;
     
-    dispatch_async(dispatchQueue, ^{
-        dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
-        dispatch_group_enter(serviceGroup);
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         
-        [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            
-            if (![FDUtilities isUserRegistered]) {
-                dispatch_group_leave(serviceGroup);
-                return;
-            }
-            
-            NSMutableDictionary *info = [NSMutableDictionary new];
-            NSMutableDictionary *userInfo = [NSMutableDictionary new];
-            
-            NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
-            if (unuploadedProperties.count > 0) {
-                NSMutableDictionary *metaInfo = [NSMutableDictionary new];
-                for (int i=0; i<unuploadedProperties.count; i++) {
-                    KonotorCustomProperty *property = unuploadedProperties[i];
-                    if (property.key) {
-                        if (property.isUserProperty) {
-                            userInfo[property.key] = property.value;
-                        }else{
-                            metaInfo[property.key] = property.value;
-                        }
+        if (![FDUtilities isUserRegistered]) {
+            IN_PROGRESS = NO;
+            return;
+        }
+        
+        NSMutableDictionary *info = [NSMutableDictionary new];
+        NSMutableDictionary *userInfo = [NSMutableDictionary new];
+        
+        NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
+        if (unuploadedProperties.count > 0) {
+            NSMutableDictionary *metaInfo = [NSMutableDictionary new];
+            for (int i=0; i<unuploadedProperties.count; i++) {
+                KonotorCustomProperty *property = unuploadedProperties[i];
+                if (property.key) {
+                    if (property.isUserProperty) {
+                        userInfo[property.key] = property.value;
+                    }else{
+                        metaInfo[property.key] = property.value;
                     }
                 }
-                userInfo[@"meta"] = metaInfo;
-                info[@"user"] = userInfo;
-            }else{
-                dispatch_group_leave(serviceGroup);
-                return;
             }
-            
-            [self updateUserProperties:info handler:^(NSError *error) {
-                if (!error) {
+            userInfo[@"meta"] = metaInfo;
+            info[@"user"] = userInfo;
+        }else{
+            IN_PROGRESS = NO;
+            return;
+        }
+        
+        [self updateUserProperties:info handler:^(NSError *error) {
+            if (!error) {
+                [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
                     for (int i=0; i<unuploadedProperties.count; i++) {
                         KonotorCustomProperty *property = unuploadedProperties[i];
                         property.uploadStatus = @1;
                     }
-                }
-
-                [[KonotorDataManager sharedInstance]save];
-                
-                dispatch_group_leave(serviceGroup);
-            }];
+                    [[KonotorDataManager sharedInstance]save];
+               
+                    IN_PROGRESS = NO;
+                    NSArray *remaining = [KonotorCustomProperty getUnuploadedProperties];
+                    if (remaining.count > 0) {
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self uploadUnuploadedProperties];
+                        });
+                    }
+                }];
+            }
+            IN_PROGRESS = NO;
         }];
-      });
+    }];
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
@@ -206,7 +206,7 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)DAUCall{
++(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities getUserAlias];
@@ -222,6 +222,9 @@
         }else{
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
+        }
+        if(completion){
+            completion(error);
         }
     }];
     return task;

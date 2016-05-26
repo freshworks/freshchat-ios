@@ -23,7 +23,7 @@
 
 @implementation HLFAQServices
 
--(NSURLSessionDataTask *)fetchAllCategories{
+-(NSURLSessionDataTask *)fetchAllCategories:(void (^)(NSError *))completion{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
@@ -33,12 +33,18 @@
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
+    lastUpdateTime = @([lastUpdateTime longLongValue] + 1 ); // hack for not getting back same response from server - Rex
     NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        [self importSolutions:[responseInfo responseAsDictionary]];
-        [FDIndexManager setIndexingCompleted:NO];
-        [FDIndexManager updateIndex];
+        if(!error){
+            [self importSolutions:[responseInfo responseAsDictionary]];
+            [FDIndexManager setIndexingCompleted:NO];
+            [FDIndexManager updateIndex];
+        }
+        if(completion){
+            completion(error);
+        }
     }];
     return task;
 }

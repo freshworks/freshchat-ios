@@ -14,9 +14,6 @@
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
 
-NSString * const DataManagerDidSaveNotification = @"DataManagerDidSaveNotification";
-NSString * const DataManagerDidSaveFailedNotification = @"DataManagerDidSaveFailedNotification";
-
 @interface KonotorDataManager ()
 
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
@@ -39,8 +36,12 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     if(!sharedInstance.persistentStoreCoordinator){
         @synchronized(sharedInstance) {
             if(!sharedInstance.persistentStoreCoordinator){
-                [sharedInstance preparePersistantStoreCoordinator];
-                [sharedInstance setMainQueueContext];
+                @try {
+                    [sharedInstance preparePersistantStoreCoordinator];
+                    [sharedInstance setMainQueueContext];
+                } @catch (NSException *exception) {
+                    [[FDMemLogger new]addMessage:exception.description];
+                }
             }
         }
     }
@@ -55,25 +56,25 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     return  self;
 }
 
-- (NSString*)sharedDocumentsPath {
-    NSString *SharedDocumentsPath = nil;
+- (NSString*)sharedLibraryPath {
+    NSString *sharedLibraryPath = nil;
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-    SharedDocumentsPath = [libraryPath stringByAppendingPathComponent:@"Database"];
+    sharedLibraryPath = [libraryPath stringByAppendingPathComponent:@"Database"];
     NSFileManager *manager = [NSFileManager defaultManager];
     BOOL isDirectory;
-    if (![manager fileExistsAtPath:SharedDocumentsPath isDirectory:&isDirectory] || !isDirectory) {
+    if (![manager fileExistsAtPath:sharedLibraryPath isDirectory:&isDirectory] || !isDirectory) {
         NSError *error = nil;
         NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
-        [manager createDirectoryAtPath:SharedDocumentsPath withIntermediateDirectories:YES attributes:attr error:&error];
+        [manager createDirectoryAtPath:sharedLibraryPath withIntermediateDirectories:YES attributes:attr error:&error];
         if (error){
             NSDictionary *errorInfo = @{@"Folder Creation Failed" :@{
                                                 @"Reason:"   : error.description,
-                                                @"FolderPath" : SharedDocumentsPath
+                                                @"FolderPath" : sharedLibraryPath
                                                 }};
             logInfo(errorInfo);
         }
     }
-    return SharedDocumentsPath;
+    return sharedLibraryPath;
 }
 
 -(void)preparePersistantStoreCoordinator{
@@ -81,7 +82,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-    NSString *storePath = [[self sharedDocumentsPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    NSString *storePath = [[self sharedLibraryPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
     FDLog(@"StoreURL %@",storePath);
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
     
@@ -121,17 +122,35 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 - (BOOL)save {
+    
+    if (![[NSThread currentThread]isMainThread]) {
+        NSDictionary *info = @{
+                               @"Core data thred violation" : @{
+                                       @"Reason" : @"Main context saved in a wrong thread",
+                                       @"Call stack" : [NSThread callStackSymbols] }};
+        
+        logInfo(info);
+        [self.logger upload];
+        
+    }
+    
     if (![self.mainObjectContext hasChanges])
         return YES;
     
     NSError *error = nil;
     if (![self.mainObjectContext save:&error]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveFailedNotification
-                                                            object:error];
+        if (error) {
+            NSDictionary *errorInfo = @{@"Main context save failed" : @{
+                                                @"Error" : error,
+                                                @"call stack" : [NSThread callStackSymbols]
+                                                }};
+            
+            logInfo(errorInfo);
+            [self.logger upload];
+        }
         return NO;
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:DataManagerDidSaveNotification object:nil];
     return YES;
 }
 
@@ -154,7 +173,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
                 [mainContext refreshObject:newSolution mergeChanges:YES];
-                [fetchedSolutions addObject:newSolution];
+                
+                if (newSolution) {
+                    [fetchedSolutions addObject:newSolution];
+                }
+                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(fetchedSolutions,nil);
@@ -177,7 +200,11 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             for (int i=0; i< results.count; i++) {
                 NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
                 [mainContext refreshObject:newSolution mergeChanges:YES];
-                [fetchedSolutions addObject:newSolution];
+                
+                if (newSolution) {
+                    [fetchedSolutions addObject:newSolution];
+                }
+                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(fetchedSolutions,nil);
@@ -196,16 +223,29 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
-        NSArray *results = [context executeFetchRequest:request error:nil];
-        for (int i=0; i<results.count; i++) {
-            NSManagedObject *object = results[i];
-            [context deleteObject:object];
+        @try {
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
+            NSArray *results = [context executeFetchRequest:request error:nil];
+            for (int i=0; i<results.count; i++) {
+                NSManagedObject *object = results[i];
+                [context deleteObject:object];
+            }
+            [context save:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (handler) handler(nil);
+            });
         }
-        [context save:nil];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (handler) handler(nil);
-        });
+        @catch(NSException *exception) {
+            NSDictionary *errorInfo = @{
+                                        @"msg" : @"Error deleting all Entries",
+                                        @"entity" : entity,
+                                        @"excp_desc" : [exception description],
+                                        @"exception_stack_trace" : [exception callStackSymbols],
+                                        @"call_stack_trace" : [NSThread callStackSymbols]
+                                        };
+            logInfo(errorInfo);
+            [self.logger upload];
+        }
     }];
 }
 
@@ -261,10 +301,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllMessages:(void (^)(NSError *))handler{
     [self deleteAllEntriesOfEntity:@"KonotorMessage" handler:handler inContext:self.mainObjectContext];
-}
-
-- (void)dealloc {
-    [self save];
 }
 
 @end

@@ -21,6 +21,8 @@
 #import "FDUtilities.h"
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
+#import "FDMessagesUpdater.h"
+#import "FDDAUUpdater.h"
 #import "KonotorMessage.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
@@ -78,7 +80,10 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    config.appID  = trimString(config.appID);
+    config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
+
     self.config = config;
     
     if ([self hasUpdatedConfig:config]) {
@@ -115,10 +120,11 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
     NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
-    if (![storedValue isEqualToString:currentValue]) {
+    if (storedValue && ![storedValue isEqualToString:currentValue]) {
         [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
         [HLCoreServices uploadUnuploadedProperties];
     }
+    [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
 }
 
 -(void)updateSDKBuildNumber{
@@ -187,17 +193,21 @@
 
 
 -(void)updateUserProperties:(NSDictionary*)props{
-    if(props){
-        for(NSString *key in props){
-            NSString *value = props[key];
-            [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        if(props){
+            for(NSString *key in props){
+                NSString *value = props[key];
+                [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+            }
         }
-    }
-    [HLCoreServices uploadUnuploadedProperties];
+        [HLCoreServices uploadUnuploadedProperties];
+    }];
 }
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
-    [self updateUserProperties:@{ key : value}];
+    if (key && value) {
+        [self updateUserProperties:@{ key : value}];
+    }
 }
 
 -(void)registerUser{
@@ -246,11 +256,10 @@
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
-        [[[FDChannelUpdater alloc]init] fetch];
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices downloadAllMessages:nil];
-        [HLCoreServices DAUCall];
+        [HLMessageServices fetchChannelsAndMessages:nil];
+        [[[FDDAUUpdater alloc]init] fetch];
         [self registerDeviceToken];
         [self updateAppVersion];
         [self updateSDKBuildNumber];
@@ -354,21 +363,39 @@
 }
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
+    if(![self isHotlineNotification:info]){
+        return;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
-
-        [HLMessageServices downloadAllMessages:nil];
-        
         NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
         FDLog(@"Push Recieved :%@", payload);
+        
+        [[[FDMessagesUpdater alloc]init]resetTime];
         
         NSNumber *channelID = @([payload[@"kon_c_ch_id"] integerValue]);
         NSString *message = [payload valueForKeyPath:@"aps.alert"];
         HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         
-        if (!channel) return;
-        
-        self.notificationHandler = [[HLNotificationHandler alloc] init];
-        [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+        if (!channel){
+            [[[FDChannelUpdater alloc] init]resetTime];
+            [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
+                if(!error){
+                    NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+                    [mContext performBlock:^{
+                        HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
+                        if(ch){
+                            self.notificationHandler = [[HLNotificationHandler alloc] init];
+                            [self.notificationHandler handleNotification:ch withMessage:message andState:appState];
+                        }
+                    }];
+                }
+            }];
+        }
+        else {
+            [HLMessageServices fetchChannelsAndMessages:nil];
+            self.notificationHandler = [[HLNotificationHandler alloc] init];
+            [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
+        }
     });
 }
 
@@ -422,8 +449,12 @@
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    [HLMessageServices downloadAllMessages:^(NSError *error) {
-        if (completion) completion([self unreadCount]);
+    [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 completion([self unreadCount]);
+            });
+        }
     }];
 }
 
@@ -443,7 +474,7 @@
 }
 
 -(void) pollNewMessages:(id)sender{
-    [[[FDChannelUpdater alloc]init] fetch];
+    [HLMessageServices fetchChannelsAndMessages:nil];
 }
 
 -(void)cancelPoller{

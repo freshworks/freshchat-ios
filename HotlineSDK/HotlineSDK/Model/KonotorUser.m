@@ -26,34 +26,36 @@
 
 +(void)storeUserInfo:(HotlineUser *)userInfo{
     
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    
-    if (userInfo.name && ![userInfo.name isEqualToString:@""]) {
-        [store setObject:userInfo.name forKey:HOTLINE_DEFAULTS_USER_NAME];
-        [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
-    }
-    
-    if (userInfo.email && [FDStringUtil isValidEmail:userInfo.email]) {
-        [store setObject:userInfo.email forKey:HOTLINE_DEFAULTS_USER_EMAIL];
-        [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
-    }
-    
-    if (userInfo.externalID && ![userInfo.externalID isEqualToString:@""]) {
-        [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
-        [KonotorCustomProperty createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
-    }
-    
-    if (userInfo.phoneNumber && ![userInfo.phoneNumber isEqualToString:@""]) {
-        [store setObject:userInfo.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
-        [KonotorCustomProperty createNewPropertyForKey:@"phone" WithValue:userInfo.phoneNumber isUserProperty:YES];
-    }
-    
-    if (userInfo.phoneCountryCode && ![userInfo.phoneCountryCode isEqualToString:@""]) {
-        [store setObject:userInfo.phoneCountryCode forKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
-        [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.phoneCountryCode isUserProperty:YES];
-    }
-    
-    [[KonotorDataManager sharedInstance]save];
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        
+        if (userInfo.name && ![userInfo.name isEqualToString:@""]) {
+            [store setObject:userInfo.name forKey:HOTLINE_DEFAULTS_USER_NAME];
+            [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
+        }
+        
+        if (userInfo.email && [FDStringUtil isValidEmail:userInfo.email]) {
+            [store setObject:userInfo.email forKey:HOTLINE_DEFAULTS_USER_EMAIL];
+            [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
+        }
+        
+        if (userInfo.externalID && ![userInfo.externalID isEqualToString:@""]) {
+            [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+            [KonotorCustomProperty createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
+        }
+        
+        if (userInfo.phoneNumber && ![userInfo.phoneNumber isEqualToString:@""]) {
+            [store setObject:userInfo.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
+            [KonotorCustomProperty createNewPropertyForKey:@"phone" WithValue:userInfo.phoneNumber isUserProperty:YES];
+        }
+        
+        if (userInfo.phoneCountryCode && ![userInfo.phoneCountryCode isEqualToString:@""]) {
+            [store setObject:userInfo.phoneCountryCode forKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
+            [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.phoneCountryCode isUserProperty:YES];
+        }
+        
+        [[KonotorDataManager sharedInstance]save];
+    }];
     
 }
 

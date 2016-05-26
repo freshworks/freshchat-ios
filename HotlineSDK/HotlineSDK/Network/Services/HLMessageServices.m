@@ -24,129 +24,177 @@
 #import "FDBackgroundTaskManager.h"
 #import "FDDateUtil.h"
 #import "HLNotificationHandler.h"
+#import "FDChannelUpdater.h"
+#import "FDMessagesUpdater.h"
+#import "FDMemLogger.h"
 
 static HLNotificationHandler *handleUpdateNotification;
+
 @implementation HLMessageServices
 
-+(void)downloadAllMessages:(void(^)(NSError *error))handler{
-    
++(void)fetchChannelsAndMessages:(void (^)(NSError *))handler{
+
     static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
+        FDLog(@"download message in progress, so skip");
+        if(handler){
+            handler(nil);
+        }
         return;
     }
-
+    
     ShowNetworkActivityIndicator();
     MESSAGES_DOWNLOAD_IN_PROGRESS = YES;
     
-    HLMessageServices *messageService = [[HLMessageServices alloc]init];
-    [messageService fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+    [[FDChannelUpdater new]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
         if (!error) {
-            [self fetchAllMessages:^(NSError *error) {
-                if (!error) {
-                    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
-                    if(handler) handler(nil);
-                }else{
-                    [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
-                    if(handler) handler(error);
-                }
+            [[FDMessagesUpdater new]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+                if(handler) handler(error);
                 HideNetworkActivityIndicator();
                 MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
             }];
         }else{
-            if(handler) handler(error);
+            if (handler) handler(error);
             HideNetworkActivityIndicator();
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
         }
     }];
+    
 }
 
-+(void)fetchAllMessages:(void(^)(NSError *error))handler{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-    request.HTTPMethod = HTTP_METHOD_GET;
-    
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
-    __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-    NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
-    [request setRelativePath:path andURLParams:@[appKey, afterTime]];
-    
-    BOOL isRestore = [lastUpdateTime isEqualToNumber:@0];
-
-    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
++(void)fetchMessages:(void(^)(NSError *error))handler{
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+        HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+        request.HTTPMethod = HTTP_METHOD_GET;
+        __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
+        NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
+        [request setRelativePath:path andURLParams:@[appKey, afterTime]];
         
-        if (!error) {
-            
-            NSDictionary *response = responseInfo.responseAsDictionary;
-            NSArray *conversations = response[@"conversations"];
-            
-            if(!response || !conversations){
-                //TODO: If this is a special case to handle, We can track this scenario in loggly.
-                NSLog(@"Download failed : Empty response from server");
-                handler([NSError errorWithDomain:@"HOTLINE_ERROR_DOMAIN" code:1000 userInfo:@{@"Reason" : @"Empty response !!!"}]);
-                return;
-            }
-            
-            FDLog(@"Messages : %@", conversations);
-            
-            NSString *messageText;
-            NSNumber *channelId;
-            for (int i=0; i<conversations.count; i++) {
-                NSDictionary *conversationInfo = conversations[i];
-                channelId = conversationInfo[@"channelId"];
-                HLChannel *channel = [HLChannel getWithID:channelId  inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-                NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
-                KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
-                NSArray *messages = conversationInfo[@"messages"];
-                for (int j=0; j<messages.count; j++) {
-                    __block NSDictionary *messageInfo = messages[j];
-                    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
-                    if (!message) {
-                        KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
-                        newMessage.uploadStatus = @2;
-                        
-                        if (channel) {
-                            newMessage.belongsToChannel = channel;
-                        }
-                        
-                        if (!conversation) {
-                            conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                        }
-                        
-                        newMessage.belongsToConversation = conversation;
-                        
-                        //Do not mark restored mesages as unread
-                        if (isRestore) {
-                            newMessage.messageRead = YES;
-                        }
-                        lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
-                        if([newMessage.messageType intValue] == KonotorMessageTypeText){
-                            messageText = newMessage.text;
-                        }
+        [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(),^{
+            if (!error) {
+                NSDictionary *response = responseInfo.responseAsDictionary;
+                NSArray *conversations = response[@"conversations"];
+                
+                if(!response || !conversations){
+                    FDMemLogger *memLogger = [[FDMemLogger alloc]init];
+                    [memLogger addMessage:@"Empty response from server when fetching messages"
+                           withMethodName:NSStringFromSelector(_cmd)];
+                    [memLogger upload];
+                    handler([NSError errorWithDomain:@"HOTLINE_ERROR_DOMAIN" code:1000 userInfo:@{@"Reason" : @"Empty response !!!"}]);
+                    return;
+                }
+                
+                FDLog(@"Messages : %@", conversations);
+                
+                NSNumber *channelId;
+                
+                //Check if we have all the channels locally
+                BOOL channelPresent=YES;
+                for (int i=0; i<conversations.count; i++) {
+                    NSDictionary *conversationInfo = conversations[i];
+                    channelId = conversationInfo[@"channelId"];
+                    HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                    
+                    if (!channel) {
+                        // Channel does not exist; reset channel interval key to force fetch channels
+                        // skipping fetched msg import to DB in the current run.
+                        [[FDChannelUpdater new]resetTime];
+                        channelPresent = NO;
+                        break;
                     }
                 }
                 
-                if(![HLNotificationHandler areNotificationsEnabled] && messageText){
-                    handleUpdateNotification = [[HLNotificationHandler alloc] init];
-                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
+                
+                if(!channelPresent){
+                    [[[FDChannelUpdater alloc]init]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+                        if(!error){
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self processMessageResponse:response];
+                                if(handler) handler(nil);
+                            });
+                        }
+                        else {
+                            if(handler)handler(error);
+                        }
+                    }];
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self processMessageResponse:response];
+                        if(handler) handler(nil);
+                    });
+                }
+            }else{
+                [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
+                if(handler) handler(error);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self postUnreadCountNotification];
+            });
+        });
+    }];
+}
+
++(BOOL)processMessageResponse:(NSDictionary *)response{
+    NSNumber *channelId;
+    NSString *messageText;
+    BOOL isRestore = [[FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME] isEqualToNumber:@0];
+    __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    NSArray *conversations = response[@"conversations"];
+    for (int i=0; i<conversations.count; i++) {
+        NSDictionary *conversationInfo = conversations[i];
+        channelId = conversationInfo[@"channelId"];
+        HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+        
+        NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+        KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+        NSArray *messages = conversationInfo[@"messages"];
+        for (int j=0; j<messages.count; j++) {
+            __block NSDictionary *messageInfo = messages[j];
+            KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
+            lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
+            if (!message) {
+                KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
+                newMessage.uploadStatus = @2;
+                
+                if (channel) {
+                    newMessage.belongsToChannel = channel;
                 }
                 
+                if (!conversation) {
+                    conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+                }
+                
+                newMessage.belongsToConversation = conversation;
+                
+                //Do not mark restored mesages as unread
+                if (isRestore) {
+                    newMessage.messageRead = YES;
+                }else {
+                    if([newMessage.messageType intValue] == KonotorMessageTypeText){
+                        messageText = newMessage.text;
+                    }
+                }
             }
-
-            [[KonotorDataManager sharedInstance]save];
-            [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-            [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
-            handler(nil);
-        }else{
-            handler(error);
         }
-
-        [self postUnreadCountNotification];
         
-    }];
+        if(!isRestore && ![HLNotificationHandler areNotificationsEnabled] && messageText){
+            handleUpdateNotification = [[HLNotificationHandler alloc] init];
+            [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
+        }
+        
+    }
+    
+    [[KonotorDataManager sharedInstance]save];
+    [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
+    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
 }
 
 +(void)postUnreadCountNotification{
@@ -154,7 +202,8 @@ static HLNotificationHandler *handleUpdateNotification;
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil userInfo:@{ @"count" : @(unreadCount)}];
 }
 
--(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
+/* fetches channel list, updates existing channels including hidden channels */
++(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     //TODO: This is repeated multitimes. Needs refactor.
@@ -190,7 +239,7 @@ static HLNotificationHandler *handleUpdateNotification;
     return task;
 }
 
--(void)importChannels:(NSArray *)channels handler:(void (^)(NSArray *channels, NSError *error))handler;{
++(void)importChannels:(NSArray *)channels handler:(void (^)(NSArray *channels, NSError *error))handler;{
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
@@ -207,7 +256,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
                 }
-                [channelList addObject:channel];
+                
+                if (channel) {
+                    [channelList addObject:channel];
+                }
+                
                 if(channelInfo[@"updated"]){
                     lastUpdatedTime = [FDDateUtil maxDateOfNumber:lastUpdatedTime andStr:channelInfo[@"updated"]];
                 }
@@ -220,7 +273,7 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
--(void)postNotification{
++(void)postNotification{
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_CHANNELS_UPDATED object:self];
 }
 
@@ -339,7 +392,6 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 //TODO: Skip messages that are clicked before
-
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
     if([marketingId intValue] ==0 || !marketingId) return;
 
@@ -387,13 +439,15 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
     [request setRelativePath:path andURLParams:@[@"seen=1",appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        if (!error) {
-            FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
-        }else{
-            FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
-            [message markAsUnread];
-        }
-        [context save:nil];
+        [context performBlock:^{
+            if (!error) {
+                FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+            }else{
+                FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
+                [message markAsUnread];
+            }
+            [context save:nil];
+        }];
     }];
 }
 

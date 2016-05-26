@@ -23,7 +23,9 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLMessageServices downloadAllMessages:nil];
+    [HLMessageServices fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+        if(completion) completion(error);
+    }];
 }
 
 @end

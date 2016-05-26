@@ -38,6 +38,7 @@
 		354D0D2C1C48D1A4004D2AA1 /* FDAttachmentImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D291C48D1A4004D2AA1 /* FDAttachmentImageController.m */; };
 		354D0D2D1C48D1A4004D2AA1 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D2B1C48D1A4004D2AA1 /* KonotorImageInput.m */; };
 		354D0D301C48D23E004D2AA1 /* HotlineAppState.m in Sources */ = {isa = PBXBuildFile; fileRef = 354D0D2F1C48D23E004D2AA1 /* HotlineAppState.m */; };
+		3552E6E61CD0FA8E001B0968 /* FDMessagesUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3552E6E51CD0FA8E001B0968 /* FDMessagesUpdater.m */; };
 		35591AC41B9ED74900BC0B60 /* libHotlineAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */; };
 		35591B621B9EDCB700BC0B60 /* Hotline.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B251B9EDCB700BC0B60 /* Hotline.m */; };
 		35591B631B9EDCB700BC0B60 /* Konotor.m in Sources */ = {isa = PBXBuildFile; fileRef = 35591B281B9EDCB700BC0B60 /* Konotor.m */; };
@@ -95,6 +96,7 @@
 		3C3F15001CBF5129009C040D /* FDMemLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3F14FF1CBF5129009C040D /* FDMemLogger.m */; };
 		3CA2B6C01C83F157000BF719 /* FDStringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA2B6BF1C83ECC2000BF719 /* FDStringUtil.m */; };
 		3CA2B6C41C885B7D000BF719 /* FDBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA2B6C31C885B7D000BF719 /* FDBarButtonItem.m */; };
+		3CD4DDBC1CE7323500552178 /* FDDAUUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD4DDBB1CE7323500552178 /* FDDAUUpdater.m */; };
 		3CFD733F1CD237EB0006119A /* HLEmptyResultView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3565F7F61CC8E9F8005B2BE1 /* HLEmptyResultView.m */; };
 		6867C05A1CB3A289003898F6 /* HLNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6867C0591CB3A289003898F6 /* HLNotificationHandler.m */; };
 		68EC0ABD1C61F4F800E37C94 /* FDArticleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68EC0ABC1C61F4F800E37C94 /* FDArticleListCell.m */; };
@@ -181,6 +183,8 @@
 		354D0D2B1C48D1A4004D2AA1 /* KonotorImageInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorImageInput.m; sourceTree = "<group>"; };
 		354D0D2E1C48D23E004D2AA1 /* HotlineAppState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotlineAppState.h; sourceTree = "<group>"; };
 		354D0D2F1C48D23E004D2AA1 /* HotlineAppState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotlineAppState.m; sourceTree = "<group>"; };
+		3552E6E41CD0FA8E001B0968 /* FDMessagesUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMessagesUpdater.h; sourceTree = "<group>"; };
+		3552E6E51CD0FA8E001B0968 /* FDMessagesUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMessagesUpdater.m; sourceTree = "<group>"; };
 		35591A9A1B9ED53700BC0B60 /* libHotlineAPI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineAPI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		35591B241B9EDCB700BC0B60 /* Hotline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotline.h; sourceTree = "<group>"; };
@@ -322,6 +326,8 @@
 		3CA2B6C21C885B3D000BF719 /* FDBarButtonItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDBarButtonItem.h; sourceTree = "<group>"; };
 		3CA2B6C31C885B7D000BF719 /* FDBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDBarButtonItem.m; sourceTree = "<group>"; };
 		3CB483261C51EBD100A8097B /* HLVersionConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLVersionConstants.h; sourceTree = "<group>"; };
+		3CD4DDBA1CE7320000552178 /* FDDAUUpdater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FDDAUUpdater.h; sourceTree = "<group>"; };
+		3CD4DDBB1CE7323500552178 /* FDDAUUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDAUUpdater.m; sourceTree = "<group>"; };
 		6867C0581CB3A289003898F6 /* HLNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLNotificationHandler.h; sourceTree = "<group>"; };
 		6867C0591CB3A289003898F6 /* HLNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLNotificationHandler.m; sourceTree = "<group>"; };
 		68EC0ABB1C61F4F800E37C94 /* FDArticleListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDArticleListCell.h; sourceTree = "<group>"; };
@@ -651,6 +657,10 @@
 				CE55ED0C1BE9FD4B000E8434 /* FDChannelUpdater.m */,
 				35D9F9E51BBAA7FA008C92E8 /* FDSolutionUpdater.h */,
 				35D9F9E61BBAA7FA008C92E8 /* FDSolutionUpdater.m */,
+				3552E6E41CD0FA8E001B0968 /* FDMessagesUpdater.h */,
+				3552E6E51CD0FA8E001B0968 /* FDMessagesUpdater.m */,
+				3CD4DDBA1CE7320000552178 /* FDDAUUpdater.h */,
+				3CD4DDBB1CE7323500552178 /* FDDAUUpdater.m */,
 			);
 			path = DataUpdater;
 			sourceTree = "<group>";
@@ -904,6 +914,7 @@
 				3533F0BD1BB020D3000B2D9A /* HLAPIClient.m in Sources */,
 				3533F0C21BB042C2000B2D9A /* HLFAQServices.m in Sources */,
 				3538A96C1C71320D00D8E216 /* KonotorCustomProperty.m in Sources */,
+				3552E6E61CD0FA8E001B0968 /* FDMessagesUpdater.m in Sources */,
 				35E767C01C2051120098CFA1 /* HotlineUser.m in Sources */,
 				35591B911B9EDD0700BC0B60 /* AFJSONRequestOperation.m in Sources */,
 				359156121C24B1B4000AB9E0 /* HLChannel.m in Sources */,
@@ -949,6 +960,7 @@
 				CE9D4D341BCE91BE006F2E66 /* HLSearchViewController.m in Sources */,
 				359A51871C73EC980075E290 /* FDBackgroundTaskManager.m in Sources */,
 				35E001021C6091000082A036 /* FDMarginalView.m in Sources */,
+				3CD4DDBC1CE7323500552178 /* FDDAUUpdater.m in Sources */,
 				CE80CBD01BB2B6C500B1C74B /* HLCategoryGridViewController.m in Sources */,
 				3575C47F1BE1EF25000C3D02 /* FDInputToolbarView.m in Sources */,
 				354D0D2C1C48D1A4004D2AA1 /* FDAttachmentImageController.m in Sources */,

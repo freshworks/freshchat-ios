@@ -14,6 +14,7 @@
 @implementation HLViewController : UIViewController
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (self.navigationController == nil) {
         NSLog(@"Warning: Use Hotline controllers inside navigation controller");
     }
@@ -49,6 +50,10 @@
                                                                                                       style:self.parentViewController.navigationItem.backBarButtonItem.style
                                                                                                      target:nil action:nil];
     }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return [[HLTheme sharedInstance]statusBarStyle];
 }
 
 @end
