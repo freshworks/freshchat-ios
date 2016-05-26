@@ -143,7 +143,7 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
 
 +(FDReachability *)reachabilityForInternetConnection
 {
-    if (SYSTEM_VERSION_GREATER_THAN(@"9.0")) {
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
         struct sockaddr_in6 zeroAddress;
         bzero(&zeroAddress, sizeof(zeroAddress));
         zeroAddress.sin6_len = sizeof(zeroAddress);
