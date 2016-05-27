@@ -39,8 +39,14 @@
         if(!error){
             [self importSolutions:[responseInfo responseAsDictionary]withCompletion:^(NSError *error) {
                 if(!error){
-                    [FDIndexManager setIndexingCompleted:NO];
-                    [FDIndexManager updateIndex];
+                    if(responseInfo){
+                        NSArray *categories = [responseInfo responseAsDictionary][@"categories"];
+                        if(categories && categories.count > 0 ){
+                            // Indexing is costly, don't do it unless there is a need for it.
+                            [FDIndexManager setIndexingCompleted:NO];
+                            [FDIndexManager updateIndex];
+                        }
+                    }
                 }
                 if(completion){
                     completion(error);
