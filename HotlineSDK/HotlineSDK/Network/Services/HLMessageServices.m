@@ -192,6 +192,7 @@ static HLNotificationHandler *handleUpdateNotification;
     [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
     [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
     [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
+    return true;
 }
 
 +(void)postUnreadCountNotification{
@@ -296,16 +297,16 @@ static HLNotificationHandler *handleUpdateNotification;
     }
         
     HLServiceRequest *request = [[HLServiceRequest alloc]initMultipartFormRequestWithBody:^(id<HLMultipartFormData> formData) {
-        [formData appendPartWithFormData:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
+        [formData addPart:[[pMessage getJSON] dataUsingEncoding:NSUTF8StringEncoding] name:@"message"];
         
         if (channel.channelID) {
-            [formData appendText:channel.channelID.stringValue name:@"channelId"];
+            [formData addTextPart:channel.channelID.stringValue name:@"channelId"];
         }else{
             FDLog(@"Message sending without channel ID");
         }
         
         if (conversation.conversationAlias) {
-            [formData appendText:conversation.conversationAlias name:@"conversationId"];
+            [formData addTextPart:conversation.conversationAlias name:@"conversationId"];
         }else{
             FDLog(@"Message sending without conversation ID");
         }
@@ -315,7 +316,7 @@ static HLNotificationHandler *handleUpdateNotification;
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
             if(pBinary){
-                [formData appendPartWithFileData:[pBinary binaryAudio] name:@"file" fileName:@"file2" mimeType:@"application/octet-stream"];
+                [formData addFilePart:[pBinary binaryAudio] name:@"file" fileName:@"file2" mimeType:@"application/octet-stream"];
             }
         }
         
@@ -324,10 +325,10 @@ static HLNotificationHandler *handleUpdateNotification;
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
             if(pBinary){
-                [formData appendPartWithFileData:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
+                [formData addFilePart:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
                 
                 if([pBinary binaryThumbnail]){
-                    [formData appendPartWithFileData:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
+                    [formData addFilePart:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
                 }
             }
         }

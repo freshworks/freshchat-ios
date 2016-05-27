@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSMutableData *formData;
 @property (nonatomic, strong, readwrite) NSURL *baseURL;
 @property (nonatomic) NSStringEncoding *preferredEncoding;
+@property (nonatomic) NSData *crlf;
 
 @end
 
@@ -72,6 +73,8 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
     self = [self initWithBaseURL:[self getHotlineURL]];
     if (self) {
         
+        self.crlf = [FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding];
+        
         //Boundary varies for every request
         self.formBoundary = FDCreateMultipartFormBoundary();
         
@@ -115,30 +118,34 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
 
 #pragma mark Protocol: <HLMultipartFormData>
 
--(void)appendText:(NSString *)text name:(NSString *)name{
-    [self appendPartWithFormData:[text dataUsingEncoding:self.preferredEncoding] name:name];
+-(void)addTextPart:(NSString *)text name:(NSString *)name{
+    [self addPart:[text dataUsingEncoding:self.preferredEncoding] name:name];
 }
 
--(void)appendPartWithFormData:(NSData *)data name:(NSString *)name{
+-(void)addPart:(NSData *)data name:(NSString *)name{
     [self.formData appendData:[[self multipartFormInitialBoundary] dataUsingEncoding:self.preferredEncoding]];
     [self.formData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"", name]dataUsingEncoding:self.preferredEncoding]];
-    [self appendData:data];
+    [self appendContent:data];
 }
 
--(void)appendPartWithFileData:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType{
+-(void)addFilePart:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType{
     [self.formData appendData:[[self multipartFormInitialBoundary] dataUsingEncoding:self.preferredEncoding]];
     [self.formData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"", name, fileName]
                                dataUsingEncoding:self.preferredEncoding]];
-    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding]];
+    [self addCRLF];
     [self.formData appendData:[[NSString stringWithFormat:@"Content-Type: %@", mimeType] dataUsingEncoding:self.preferredEncoding]];
-    [self appendData:data];
+    [self appendContent:data];
 }
 
--(void)appendData:(NSData *)data{
-    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding]];
-    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding]];
+-(void)addCRLF{
+    [self.formData appendData:self.crlf];
+}
+
+-(void)appendContent:(NSData *)data{
+    [self addCRLF];
+    [self addCRLF];
     [self.formData appendData:data];
-    [self.formData appendData:[FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding]];
+    [self addCRLF];
 }
 
 @end
