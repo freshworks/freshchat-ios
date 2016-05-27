@@ -86,4 +86,6 @@
 
 #define LOC_OFFLINE_MISSING_CONTENT_TEXT @"offline_missing_content_text"
 
+#define LOC_OFFLINE_INTERNET_MESSAGE @"offline_internet_message"
+
 #endif /* HLLocalization_h */

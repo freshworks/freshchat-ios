@@ -27,6 +27,7 @@
 #import "HLEmptyResultView.h"
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
+#import "FDReachabilityManager.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -35,6 +36,7 @@
 @property (nonatomic, strong) FDMarginalView *footerView;
 @property (nonatomic, strong) UILabel  *noSolutionsLabel;
 @property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 
 @end
@@ -51,6 +53,13 @@
     [self setNavigationItem];
     [self theming];
     [self localNotificationSubscription];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
+    [self.view insertSubview:self.activityIndicator aboveSubview:self.collectionView];
+    [self.activityIndicator startAnimating];
+    [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
+    [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
 -(void) viewWillAppear:(BOOL)animated{
@@ -151,7 +160,16 @@
 
             if(!self.categories.count){
                 if(!self.emptyResultView){
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:HLLocalizedString(LOC_EMPTY_FAQ_TEXT)];
+                    
+                    NSString *message;
+                    if([[FDReachabilityManager sharedInstance] isReachable]){
+                        message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                    }
+                    else{
+                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                        [self.activityIndicator removeFromSuperview];
+                    }
+                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
                     [self.view addSubview:self.emptyResultView];
                     [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
@@ -160,6 +178,7 @@
             else{
                 self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
+                [self.activityIndicator removeFromSuperview];
             }
             [self setNavigationItem];
             [self.collectionView reloadData];

@@ -27,10 +27,12 @@
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
 #import "FDIconDownloader.h"
+#import "FDReachabilityManager.h"
 
 @interface HLChannelViewController ()
 
 @property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
 
@@ -55,6 +57,13 @@
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self localNotificationSubscription];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
+    [self.view insertSubview:self.activityIndicator aboveSubview:self.tableView];
+    [self.activityIndicator startAnimating];
+    [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
+    [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
 -(BOOL)canDisplayFooterView{
@@ -108,7 +117,15 @@
             if(!self.channels.count){
                 HLTheme *theme = [HLTheme sharedInstance];
                 if (!self.emptyResultView) {
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
+                    NSString *message;
+                    if([[FDReachabilityManager sharedInstance] isReachable]){
+                        message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                    }
+                    else{
+                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                        [self.activityIndicator removeFromSuperview];
+                    }
+                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
                     [self.view addSubview:self.emptyResultView];
                     [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
@@ -117,7 +134,7 @@
             else{
                 self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
-                
+                [self.activityIndicator removeFromSuperview];
             }
             [self.tableView reloadData];
         }

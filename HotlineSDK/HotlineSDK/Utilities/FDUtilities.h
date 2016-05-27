@@ -32,6 +32,7 @@
 +(BOOL) isPoweredByHidden;
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
++(NSString*)deviceModelName;
 
 @end
 
