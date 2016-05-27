@@ -164,6 +164,7 @@
 -(void)updateConfig:(HotlineConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
+        [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];

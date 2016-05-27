@@ -16,6 +16,7 @@
     self = [super init];
     if (self) {
         self.domain = @"app.hotline.io";
+        self.stringsBundle = @"HLLocalization";
         self.appID = appID;
         self.appKey = appKey;
         self.themeName = @"HLTheme";

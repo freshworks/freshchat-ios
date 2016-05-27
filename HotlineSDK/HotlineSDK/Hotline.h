@@ -43,6 +43,9 @@
  * The setter throws an exception for an invalid filename
  */
 @property (nonatomic, strong) NSString *themeName;
+
+@property (nonatomic, strong) NSString *stringsBundle;
+
 /*
  * Option to Switch between Grid and List view in FAQs. Shows FAQ categories as a list when set to NO.
  * Default set to YES which presents a Grid view

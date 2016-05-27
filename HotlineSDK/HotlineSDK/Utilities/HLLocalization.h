@@ -6,12 +6,13 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
+
 #ifndef HLLocalization_h
 #define HLLocalization_h
 
-//Localization Helper Macro
-#define HLLocalizedString(name) NSLocalizedStringFromTable(name, @"HLLocalizable", nil)
+static NSString *DEFAULT_LANG = @"en";
 
+#define HLLocalizedString(name) [HLLocalization localize:name]
 
 //Keys to lookup in HLLocalizable.strings
 #define LOC_CONTACT_US_BUTTON_TEXT @"contact_us_button_text"
@@ -87,5 +88,11 @@
 #define LOC_OFFLINE_MISSING_CONTENT_TEXT @"offline_missing_content_text"
 
 #define LOC_OFFLINE_INTERNET_MESSAGE @"offline_internet_message"
+
+@interface HLLocalization : NSObject
+
++(NSString *)localize:(NSString *)key;
+
+@end
 
 #endif /* HLLocalization_h */
