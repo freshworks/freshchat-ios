@@ -135,7 +135,7 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
     [self appendContent:data];
 }
 
--(NSData *)clrf{
+-(NSData *)getClrf{
     if(!_crlf){
         _crlf = [FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding];
     }
@@ -143,7 +143,7 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
 }
 
 -(void)addCRLF{
-    [self.formData appendData:self.crlf];
+    [self.formData appendData:[self getClrf]];
 }
 
 -(void)appendContent:(NSData *)data{
