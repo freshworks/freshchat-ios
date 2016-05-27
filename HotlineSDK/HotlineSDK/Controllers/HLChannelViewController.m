@@ -26,11 +26,13 @@
 #import "FDAutolayoutHelper.h"
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
+#import "FDIconDownloader.h"
 
 @interface HLChannelViewController ()
 
 @property (nonatomic, strong) NSArray *channels;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FDIconDownloader *iconDownloader;
 
 @end
 
@@ -50,6 +52,7 @@
                                                                     NSFontAttributeName: [theme navigationBarTitleFont]
                                                                     };
     self.channels = [[NSMutableArray alloc] init];
+    self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self localNotificationSubscription];
 }
@@ -191,8 +194,8 @@
                         cell.imgView.image = placeholderImage;
                         [cell setNeedsLayout];
                     }
-                    dispatch_queue_t lazyImageQueue = dispatch_queue_create("com.freshdesk.hotline_sdk", NULL);
-                    dispatch_async(lazyImageQueue, ^(void) {
+                    
+                    [self.iconDownloader enqueue:^{
                         NSData *imageData = [NSData dataWithContentsOfURL:iconURL];
                         UIImage *image = [[UIImage alloc] initWithData:imageData];
                         if (image) {
@@ -207,7 +210,7 @@
                         }else{
                             cell.imgView.image = placeholderImage;
                         }
-                    });
+                    }];
                 }
                 else{
                     cell.imgView.image = placeholderImage;
@@ -290,7 +293,6 @@
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
-
 }
 
 @end
