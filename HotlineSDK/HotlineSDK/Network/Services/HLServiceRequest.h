@@ -12,7 +12,7 @@
 
 @protocol HLMultipartFormData
 
--(void)appendText:(NSString *)text name:(NSString *)name;
+-(void)addTextPart:(NSString *)text name:(NSString *)name;
 
 /**
  Appends the HTTP headers `Content-Disposition: form-data; name=#{name}"`, followed by the encoded data and the multipart form boundary.
@@ -20,7 +20,7 @@
  data: The data to be encoded and appended to the form data.
  name: The name to be associated with the specified data. This parameter must not be `nil`. */
 
-- (void)appendPartWithFormData:(NSData *)data name:(NSString *)name;
+- (void)addPart:(NSData *)data name:(NSString *)name;
 
 /**
  Appends the HTTP header `Content-Disposition: file; filename=#{filename}; name=#{name}"` and `Content-Type: #{mimeType}`, followed by the encoded file data and the multipart form boundary.
@@ -30,11 +30,11 @@
  fileName: The filename to be associated with the specified data. This parameter must not be `nil`.
  mimeType: The MIME type of the specified data. (For example, the MIME type for a JPEG image is image/jpeg.) */
 
-- (void)appendPartWithFileData:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType;
+- (void)addFilePart:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType;
 
 @end
 
-@interface HLServiceRequest : NSMutableURLRequest
+@interface HLServiceRequest : NSMutableURLRequest<HLMultipartFormData>
 
 @property(nonatomic, strong, readonly) NSURL *baseURL;
 
