@@ -138,7 +138,7 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-+(void)processMessageResponse:(NSDictionary *)response{
++(BOOL)processMessageResponse:(NSDictionary *)response{
     NSNumber *channelId;
     NSString *messageText;
     BOOL isRestore = [[FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME] isEqualToNumber:@0];
