@@ -26,6 +26,7 @@
  */
 
 #import "FDReachability.h"
+#import "HLMacros.h"
 
 
 NSString *const kFDReachabilityChangedNotification = @"kFDReachabilityChangedNotification";
@@ -123,7 +124,7 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     return nil;
 }
 
-+(FDReachability *)reachabilityWithAddress:(const struct sockaddr_in *)hostAddress 
++(FDReachability *)reachabilityWithAddress:(const void *)hostAddress
 {
     SCNetworkReachabilityRef ref = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr*)hostAddress);
     if (ref) 
@@ -140,28 +141,22 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     return nil;
 }
 
-+(FDReachability *)reachabilityForInternetConnection 
-{   
-    struct sockaddr_in zeroAddress;
-    bzero(&zeroAddress, sizeof(zeroAddress));
-    zeroAddress.sin_len = sizeof(zeroAddress);
-    zeroAddress.sin_family = AF_INET;
-    
-    return [self reachabilityWithAddress:&zeroAddress];
-}
-
-+(FDReachability*)reachabilityForLocalWiFi
++(FDReachability *)reachabilityForInternetConnection
 {
-    struct sockaddr_in localWifiAddress;
-    bzero(&localWifiAddress, sizeof(localWifiAddress));
-    localWifiAddress.sin_len            = sizeof(localWifiAddress);
-    localWifiAddress.sin_family         = AF_INET;
-    // IN_LINKLOCALNETNUM is defined in <netinet/in.h> as 169.254.0.0
-    localWifiAddress.sin_addr.s_addr    = htonl(IN_LINKLOCALNETNUM);
-    
-    return [self reachabilityWithAddress:&localWifiAddress];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
+        struct sockaddr_in6 zeroAddress;
+        bzero(&zeroAddress, sizeof(zeroAddress));
+        zeroAddress.sin6_len = sizeof(zeroAddress);
+        zeroAddress.sin6_family = AF_INET6;
+        return [self reachabilityWithAddress:&zeroAddress];
+    }else{
+        struct sockaddr_in zeroAddress;
+        bzero(&zeroAddress, sizeof(zeroAddress));
+        zeroAddress.sin_len = sizeof(zeroAddress);
+        zeroAddress.sin_family = AF_INET;
+        return [self reachabilityWithAddress:&zeroAddress];
+    }
 }
-
 
 // Initialization methods
 
@@ -341,29 +336,6 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
         return NO;
     
     return [self isReachableWithFlags:flags];
-}
-
--(BOOL)isReachableViaWWAN 
-{
-#if	TARGET_OS_IPHONE
-
-    SCNetworkReachabilityFlags flags = 0;
-    
-    if(SCNetworkReachabilityGetFlags(reachabilityRef, &flags)) 
-    {
-        // Check we're REACHABLE
-        if(flags & kSCNetworkReachabilityFlagsReachable)
-        {
-            // Now, check we're on WWAN
-            if(flags & kSCNetworkReachabilityFlagsIsWWAN)
-            {
-                return YES;
-            }
-        }
-    }
-#endif
-    
-    return NO;
 }
 
 -(BOOL)isReachableViaWiFi 
