@@ -14,8 +14,6 @@
 #import "HLMacros.h"
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
-#import "AFHTTPClient.h"
-#import "AFHTTPRequestOperation.h"
 #import "HLMessageServices.h"
 #import "FDLocalNotification.h"
 #import "HLCoreServices.h"

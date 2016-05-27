@@ -26,8 +26,7 @@
 -(NSURLSessionDataTask *)fetchAllCategories:(void (^)(NSError *))completion{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-    request.HTTPMethod = HTTP_METHOD_GET;
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CATEGORIES_PATH,appID];
@@ -91,11 +90,9 @@
 -(NSURLSessionDataTask *)vote:(BOOL)vote forArticleID:(NSNumber *)articleID inCategoryID:(NSNumber *)categoryID{
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
-
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_ARTICLE_VOTE_PATH,appID,categoryID,articleID];
-    request.HTTPMethod = HTTP_METHOD_PUT;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     [request setRelativePath:path andURLParams:@[token, @"deep=true", @"platform=ios"]];
@@ -106,7 +103,7 @@
         voteInfo = @{ @"article": @{ @"downvote" : @"1" } };
     }
     NSData *postData = [NSJSONSerialization dataWithJSONObject:voteInfo options:0 error:nil];
-    request.HTTPBody = postData;
+    [request setBody:postData];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
             FDLog(@"Article vote status: %@",[responseInfo responseAsDictionary]);

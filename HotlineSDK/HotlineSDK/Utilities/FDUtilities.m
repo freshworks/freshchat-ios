@@ -173,12 +173,6 @@ static NSInteger networkIndicator = 0;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(networkIndicator > 0)];
 }
 
-+(NSString *)getBaseURL{
-    NSString *baseURL = [[FDSecureStore sharedInstance]objectForKey:HOTLINE_DEFAULTS_DOMAIN];
-    return [NSString stringWithFormat:@"%@%@%@",@"https://",baseURL,@"/app/"];
-}
-
-
 +(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule{
     NSString *pStr = [NSString stringWithFormat:@"%@:%@",pModule,alertviewstring ];
     UIAlertView *alert = [[UIAlertView alloc]
