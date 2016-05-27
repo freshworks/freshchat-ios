@@ -6,14 +6,13 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-#import "FDUtilities.h"
 
 #ifndef HLLocalization_h
 #define HLLocalization_h
 
 static NSString *DEFAULT_LANG = @"en";
 
-#define HLLocalizedString(name) [FDUtilities localize:name]
+#define HLLocalizedString(name) [HLLocalization localize:name]
 
 //Keys to lookup in HLLocalizable.strings
 #define LOC_CONTACT_US_BUTTON_TEXT @"contact_us_button_text"
@@ -87,5 +86,13 @@ static NSString *DEFAULT_LANG = @"en";
 #define LOC_DEFAULT_NOTIFICATION_MESSAGE @"notification_message_default"
 
 #define LOC_OFFLINE_MISSING_CONTENT_TEXT @"offline_missing_content_text"
+
+
+@interface HLLocalization : NSObject
+
++(NSString *)localize:(NSString *)key;
+
+@end
+
 
 #endif /* HLLocalization_h */
