@@ -251,7 +251,6 @@ NSMutableDictionary *gkMessageIdMessageMap;
             return;
         }else{
             FDLog(@"There are %d unuploaded messages", (int)array.count);
-            FDLog(@"Message retry initiated");
             for(int i=0;i<[array count];i++){
                 KonotorMessage *message = array[i];
                 KonotorConversation *convo = message.belongsToConversation;

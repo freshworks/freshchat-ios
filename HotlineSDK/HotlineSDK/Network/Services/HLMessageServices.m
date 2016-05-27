@@ -87,7 +87,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     return;
                 }
                 
-                FDLog(@"Messages : %@", conversations);
+                FDLog(@"New Messages Count : %d", conversations.count);
                 
                 NSNumber *channelId;
                 
@@ -216,8 +216,6 @@ static HLNotificationHandler *handleUpdateNotification;
     [request setRelativePath:path andURLParams:@[token, afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Channels :%@", [responseInfo responseAsArray]);
-            
             /* This check is added to delete all messages that are migrated from konotor SDK,
                but this is also performed for new installs as well (a harmless side-effect). */
             
@@ -249,9 +247,10 @@ static HLNotificationHandler *handleUpdateNotification;
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
                 if (channel) {
                     [HLChannel updateChannel:channel withInfo:channelInfo];
-                    FDLog(@"Channel with ID:%@ updated", channel.channelID);
+                    FDLog(@"Channel updated ID:%@ name:%@", channel.channelID , channel.name);
                 }else{
                     channel = [HLChannel createWithInfo:channelInfo inContext:context];
+                    FDLog(@"Channel created ID:%@ name:%@", channel.channelID , channel.name);
                 }
                 
                 if (channel) {

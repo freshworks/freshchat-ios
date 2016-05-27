@@ -57,7 +57,6 @@
 }
 
 -(void)importSolutions:(NSDictionary *)solutions withCompletion:(void (^)(NSError *))completion{
-    FDLog(@"%@", solutions);
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
     [context performBlock:^{
         NSNumber *lastUpdated = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
@@ -70,9 +69,10 @@
             BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
             if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
-                    FDLog(@"Updating category with info :%@", categoryInfo);
+                    FDLog(@"Updating category:%@", categoryInfo[@"title"]);
                     [category updateWithInfo:categoryInfo];
                 }else{
+                    FDLog(@"New category:%@", categoryInfo[@"title"]);
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
                 
