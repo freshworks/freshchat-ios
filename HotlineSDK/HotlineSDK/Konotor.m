@@ -135,7 +135,7 @@ __weak static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void)UploadFinishedNotifcation: (NSString *) messageID{
++(void)UploadFinishedNotification: (NSString *) messageID{
     if([Konotor delegate]){
         if([[Konotor delegate] respondsToSelector:@selector(didFinishUploading:) ]){
             [[Konotor delegate] didFinishUploading:messageID];
@@ -143,7 +143,7 @@ __weak static id <KonotorDelegate> _delegate;
     }
 }
 
-+(void)UploadFailedNotifcation: (NSString *) messageID
++(void)UploadFailedNotification: (NSString *) messageID
 {
     if([Konotor delegate])
     {

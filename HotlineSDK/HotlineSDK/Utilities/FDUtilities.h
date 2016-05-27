@@ -23,7 +23,6 @@
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *) getKeyForObject:(NSObject *) object;
 +(NSString *)getAdID;
-+(NSString *)getBaseURL;
 +(NSString *)generateOfflineMessageAlias;
 +(NSDictionary *)deviceInfoProperties;
 +(void)setActivityIndicator:(BOOL)isVisible;
@@ -33,6 +32,7 @@
 +(BOOL) isPoweredByHidden;
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
++(NSString*)deviceModelName;
 
 @end
 

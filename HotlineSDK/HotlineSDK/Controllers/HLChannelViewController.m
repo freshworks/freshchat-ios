@@ -26,11 +26,15 @@
 #import "FDAutolayoutHelper.h"
 #import "HLMessageServices.h"
 #import "FDChannelUpdater.h"
+#import "FDIconDownloader.h"
+#import "FDReachabilityManager.h"
 
 @interface HLChannelViewController ()
 
 @property (nonatomic, strong) NSArray *channels;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FDIconDownloader *iconDownloader;
 
 @end
 
@@ -50,8 +54,16 @@
                                                                     NSFontAttributeName: [theme navigationBarTitleFont]
                                                                     };
     self.channels = [[NSMutableArray alloc] init];
+    self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self localNotificationSubscription];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
+    [self.view insertSubview:self.activityIndicator aboveSubview:self.tableView];
+    [self.activityIndicator startAnimating];
+    [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
+    [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
 -(BOOL)canDisplayFooterView{
@@ -105,7 +117,15 @@
             if(!self.channels.count){
                 HLTheme *theme = [HLTheme sharedInstance];
                 if (!self.emptyResultView) {
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT)];
+                    NSString *message;
+                    if([[FDReachabilityManager sharedInstance] isReachable]){
+                        message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                    }
+                    else{
+                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                        [self.activityIndicator removeFromSuperview];
+                    }
+                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
                     [self.view addSubview:self.emptyResultView];
                     [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
@@ -114,7 +134,7 @@
             else{
                 self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
-                
+                [self.activityIndicator removeFromSuperview];
             }
             [self.tableView reloadData];
         }
@@ -157,6 +177,8 @@
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
         
         cell.titleLabel.text  = channel.name;
+        
+        cell.tag = indexPath.row;
 
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
         
@@ -183,15 +205,29 @@
             }
             else{
                 UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
-                if(channel.iconURL){
-                    NSURL *iconURL = [[NSURL alloc]initWithString:channel.iconURL];
-                    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:iconURL];
-                    __weak FDCell *weakCell = cell;
-                    [cell.imgView setImageWithURLRequest:request placeholderImage:placeholderImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                        weakCell.imgView.image = image;
-                        channel.icon = UIImagePNGRepresentation(image);
-                        [[KonotorDataManager sharedInstance]save];
-                    } failure:nil];
+                NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
+                if(iconURL){
+                    if (cell.tag == indexPath.row) {
+                        cell.imgView.image = placeholderImage;
+                        [cell setNeedsLayout];
+                    }
+                    
+                    [self.iconDownloader enqueue:^{
+                        NSData *imageData = [NSData dataWithContentsOfURL:iconURL];
+                        UIImage *image = [[UIImage alloc] initWithData:imageData];
+                        if (image) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if (cell.tag == indexPath.row) {
+                                    cell.imgView.image = image;
+                                    [cell setNeedsLayout];
+                                    channel.icon = UIImagePNGRepresentation(image);
+                                    [[KonotorDataManager sharedInstance]save];
+                                }
+                            });
+                        }else{
+                            cell.imgView.image = placeholderImage;
+                        }
+                    }];
                 }
                 else{
                     cell.imgView.image = placeholderImage;
@@ -274,7 +310,6 @@
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
-
 }
 
 @end

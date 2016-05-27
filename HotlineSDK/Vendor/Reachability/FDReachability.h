@@ -82,8 +82,6 @@ typedef void (^FDNetworkUnreachable)(FDReachability * reachability);
 //compatibility with Apples original code. (see .m)
 +(FDReachability*)reachabilityWithHostName:(NSString*)hostname;
 +(FDReachability*)reachabilityForInternetConnection;
-+(FDReachability*)reachabilityWithAddress:(const struct sockaddr_in*)hostAddress;
-+(FDReachability*)reachabilityForLocalWiFi;
 
 -(FDReachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref;
 
@@ -91,7 +89,6 @@ typedef void (^FDNetworkUnreachable)(FDReachability * reachability);
 -(void)stopNotifier;
 
 -(BOOL)isReachable;
--(BOOL)isReachableViaWWAN;
 -(BOOL)isReachableViaWiFi;
 
 // WWAN may be available, but not active until a connection has been established.

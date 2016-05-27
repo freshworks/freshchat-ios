@@ -47,7 +47,7 @@
         }
         [self.detailLabel setLineBreakMode:NSLineBreakByTruncatingTail];
 
-        self.imgView=[[FDImageView alloc] init];
+        self.imgView=[[UIImageView alloc] init];
         self.imgView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.imgView.layer setMasksToBounds:YES];
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
