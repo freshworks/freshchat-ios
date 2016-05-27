@@ -38,11 +38,12 @@ static BOOL INDEX_INPROGRESS = NO;
     INDEX_INPROGRESS = YES;
     [self setIndexingCompleted:NO];
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
+    NSManagedObjectContext *context = datamanager.backgroundContext;
     [datamanager deleteAllIndices:^(NSError *error) {
-        [datamanager.backgroundContext performBlock:^{
+        [context performBlock:^{
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
             NSError *error;
-            NSArray *results = [datamanager.backgroundContext executeFetchRequest:request error:&error];
+            NSArray *results = [context executeFetchRequest:request error:&error];
             if (!error) {
                 if (results.count > 0) {
                     for (int i=0; i<[results count]; i++) {
@@ -52,7 +53,7 @@ static BOOL INDEX_INPROGRESS = NO;
                     }
                     INDEX_INPROGRESS = NO;
                     [self setIndexingCompleted:YES];
-                    [datamanager.backgroundContext save:nil];
+                    [context save:nil];
                 }
             }else{
                 FDLog(@"Failed to create index. %@",error);
