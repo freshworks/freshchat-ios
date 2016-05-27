@@ -73,6 +73,8 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
     self = [self initWithBaseURL:[self getHotlineURL]];
     if (self) {
         
+        self.crlf = [FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding];
+        
         //Boundary varies for every request
         self.formBoundary = FDCreateMultipartFormBoundary();
         
@@ -135,15 +137,8 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
     [self appendContent:data];
 }
 
--(NSData *)getClrf{
-    if(!_crlf){
-        _crlf = [FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding];
-    }
-    return _crlf;
-}
-
 -(void)addCRLF{
-    [self.formData appendData:[self getClrf]];
+    [self.formData appendData:self.crlf];
 }
 
 -(void)appendContent:(NSData *)data{
