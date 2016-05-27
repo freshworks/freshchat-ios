@@ -24,7 +24,7 @@
 @property (nonatomic, strong) NSManagedObjectContext *backgroundContext;
 
 +(KonotorDataManager*)sharedInstance;
--(void)save;
+-(BOOL)save;
 -(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler;
 -(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
