@@ -106,7 +106,7 @@ ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDHotlineSDK.a
 cp ./HotlineSDK/HotlineSDK/Hotline.h $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/KonotorModels.bundle  $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/HLResources.bundle $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/HLLocalization $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/HLLocalization.bundle $OUTPUTDIR
 REL_NOTES=$OUTPUTDIR/ReleaseNotes.txt
 RELEASE_HEADER=$( cat <<RELEASEINFO
 Hotline iOS SDK - Powered by Freshdesk

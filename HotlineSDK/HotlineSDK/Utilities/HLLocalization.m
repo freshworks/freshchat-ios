@@ -16,9 +16,6 @@
 
 @implementation HLLocalization
 
-static NSString *DEFAULT_BUNDLE_NAME = @"HLLocalization";
-static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
-
 +(void)load {
     [self getBundlePriorityArray]; // initialize this early.
 }
@@ -31,12 +28,12 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
         lookupBundleName = lookupBundleName ? lookupBundleName : DEFAULT_BUNDLE_NAME;
         
         NSBundle *overrideBundle = [self bundleWithName:lookupBundleName andLang:[self getPreferredLang]];
-        NSBundle *projectLevelBundle = [self bundleWithName:lookupBundleName andLang:DEFAULT_LANG];
-        NSBundle *defaultPodBundle = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
+        NSBundle *overrideBundleForDefaultLanguage = [self bundleWithName:lookupBundleName andLang:DEFAULT_LANG];
+        NSBundle *defaultPodBundleForDefaultLanguage = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
         
         if(overrideBundle) [priorityArray addObject:overrideBundle];
-        if(projectLevelBundle) [priorityArray addObject:projectLevelBundle];
-        if(defaultPodBundle) [priorityArray addObject:defaultPodBundle];
+        if(overrideBundleForDefaultLanguage) [priorityArray addObject:overrideBundleForDefaultLanguage];
+        if(defaultPodBundleForDefaultLanguage && ![lookupBundleName isEqualToString:DEFAULT_BUNDLE_NAME]) [priorityArray addObject:defaultPodBundleForDefaultLanguage];
         
         bundleArray = [[NSArray alloc] initWithArray:priorityArray];
     }
