@@ -38,18 +38,26 @@
     [request setRelativePath:path andURLParams:@[token, @"deep=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if(!error){
-            [self importSolutions:[responseInfo responseAsDictionary]];
-            [FDIndexManager setIndexingCompleted:NO];
-            [FDIndexManager updateIndex];
+            [self importSolutions:[responseInfo responseAsDictionary]withCompletion:^(NSError *error) {
+                if(!error){
+                    [FDIndexManager setIndexingCompleted:NO];
+                    [FDIndexManager updateIndex];
+                }
+                if(completion){
+                    completion(error);
+                }
+            }];
         }
-        if(completion){
-            completion(error);
+        else {
+            if(completion){
+                completion(error);
+            }
         }
     }];
     return task;
 }
 
--(void)importSolutions:(NSDictionary *)solutions{
+-(void)importSolutions:(NSDictionary *)solutions withCompletion:(void (^)(NSError *))completion{
     FDLog(@"%@", solutions);
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].backgroundContext;
     [context performBlock:^{
@@ -82,9 +90,13 @@
                 }
             }
         }
-        [context save:nil];
+        NSError *err;
+        [context save:&err];
         [self postNotification];
         [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
+        if(completion){
+            completion(err);
+        }
     }];
 }
 
