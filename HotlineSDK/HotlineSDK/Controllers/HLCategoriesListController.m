@@ -72,6 +72,7 @@
                     NSString *message;
                     if([[FDReachabilityManager sharedInstance] isReachable]){
                         message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                        [self performSelector:@selector(removeLoadingIndicator) withObject:nil afterDelay:5.0];
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
@@ -92,6 +93,11 @@
             [self.tableView reloadData];
         }
     }];
+}
+
+- (void) removeLoadingIndicator{
+    
+    [self.activityIndicator removeFromSuperview];
 }
 
 -(void)setNavigationItem{
