@@ -164,6 +164,7 @@
                     NSString *message;
                     if([[FDReachabilityManager sharedInstance] isReachable]){
                         message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                        if(![Hotline sharedInstance].config.pollWhenAppActive)
                         [self performSelector:@selector(removeLoadingIndicator) withObject:nil afterDelay:5.0];
                     }
                     else{
