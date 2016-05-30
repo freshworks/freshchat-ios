@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */; };
+		351C4B2B1CFC370D0004F8E8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 351C4B291CFC370D0004F8E8 /* Crashlytics.framework */; };
+		351C4B2C1CFC370D0004F8E8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 351C4B2A1CFC370D0004F8E8 /* Fabric.framework */; };
 		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
@@ -73,6 +75,8 @@
 
 /* Begin PBXFileReference section */
 		3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLLocalization.bundle; sourceTree = "<group>"; };
+		351C4B291CFC370D0004F8E8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		351C4B2A1CFC370D0004F8E8 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		354D0D5D1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		354D0D5F1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -119,9 +123,11 @@
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
 				356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */,
+				351C4B2B1CFC370D0004F8E8 /* Crashlytics.framework in Frameworks */,
 				356F1A171B9DC49C002F1E2A /* SystemConfiguration.framework in Frameworks */,
 				356F1A151B9DC497002F1E2A /* ImageIO.framework in Frameworks */,
 				356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */,
+				351C4B2C1CFC370D0004F8E8 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +166,8 @@
 			children = (
 				354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */,
 				354D0D5E1C48D504004D2AA1 /* Main.storyboard */,
+				351C4B291CFC370D0004F8E8 /* Crashlytics.framework */,
+				351C4B2A1CFC370D0004F8E8 /* Fabric.framework */,
 				354D0D601C48D504004D2AA1 /* Images.xcassets */,
 				354D0D611C48D504004D2AA1 /* Info.plist */,
 				354D0D621C48D504004D2AA1 /* main.m */,
@@ -269,6 +277,7 @@
 				356F19E41B9DBF14002F1E2A /* Frameworks */,
 				356F19E51B9DBF14002F1E2A /* Resources */,
 				3500C2EC1BE37C4F00FF73BE /* ShellScript */,
+				351C4B211CFC1F6F0004F8E8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -411,6 +420,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "KEYWORDS=\"TODO:|FIXME:|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"";
+		};
+		351C4B211CFC1F6F0004F8E8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 0328901558d65da601540b8d8338d680c61448ff 25931faca3d3ecb92cda343545425e316bca9a495f4b6eb9c8abe4781d226a93";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -561,6 +583,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Hotline",
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+				);
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -579,6 +607,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Hotline",
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+				);
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
