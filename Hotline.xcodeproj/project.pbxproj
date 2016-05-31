@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		350D9E211CFDBD48004091C8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 350D9E1F1CFDBD48004091C8 /* Crashlytics.framework */; };
+		350D9E221CFDBD48004091C8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 350D9E201CFDBD48004091C8 /* Fabric.framework */; };
 		3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */; };
 		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
@@ -30,8 +32,6 @@
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
 		3CB780441CF8693800DB7A73 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3CB780431CF8693800DB7A73 /* KonotorModels.bundle */; };
-		68AB8AC21CFD95D800D47DB8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AB8AC01CFD95D800D47DB8 /* Crashlytics.framework */; };
-		68AB8AC31CFD95D800D47DB8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AB8AC11CFD95D800D47DB8 /* Fabric.framework */; };
 		CEED0CDE1C19858200BBB600 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEED0CDD1C19858200BBB600 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
@@ -74,6 +74,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		350D9E1F1CFDBD48004091C8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		350D9E201CFDBD48004091C8 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLLocalization.bundle; sourceTree = "<group>"; };
 		354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HotlineSDK.xcodeproj; path = HotlineSDK/HotlineSDK.xcodeproj; sourceTree = "<group>"; };
 		354D0D5D1C48D504004D2AA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -107,8 +109,6 @@
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		3CB780431CF8693800DB7A73 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
-		68AB8AC01CFD95D800D47DB8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		68AB8AC11CFD95D800D47DB8 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -123,11 +123,11 @@
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
 				356F1A1D1B9DC4B6002F1E2A /* AVFoundation.framework in Frameworks */,
-				68AB8AC21CFD95D800D47DB8 /* Crashlytics.framework in Frameworks */,
+				350D9E211CFDBD48004091C8 /* Crashlytics.framework in Frameworks */,
 				356F1A171B9DC49C002F1E2A /* SystemConfiguration.framework in Frameworks */,
 				356F1A151B9DC497002F1E2A /* ImageIO.framework in Frameworks */,
 				356F1A111B9DC48B002F1E2A /* CoreData.framework in Frameworks */,
-				68AB8AC31CFD95D800D47DB8 /* Fabric.framework in Frameworks */,
+				350D9E221CFDBD48004091C8 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,8 +167,6 @@
 				354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */,
 				354D0D5E1C48D504004D2AA1 /* Main.storyboard */,
 				354D0D601C48D504004D2AA1 /* Images.xcassets */,
-				68AB8AC01CFD95D800D47DB8 /* Crashlytics.framework */,
-				68AB8AC11CFD95D800D47DB8 /* Fabric.framework */,
 				354D0D611C48D504004D2AA1 /* Info.plist */,
 				354D0D621C48D504004D2AA1 /* main.m */,
 			);
@@ -262,6 +260,8 @@
 			isa = PBXGroup;
 			children = (
 				35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */,
+				350D9E1F1CFDBD48004091C8 /* Crashlytics.framework */,
+				350D9E201CFDBD48004091C8 /* Fabric.framework */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -432,7 +432,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Hotline/Supporting\\ Files/Fabric.framework/run 0328901558d65da601540b8d8338d680c61448ff 25931faca3d3ecb92cda343545425e316bca9a495f4b6eb9c8abe4781d226a93";
+			shellScript = "./Hotline/Utilities/Fabric.framework/run 0328901558d65da601540b8d8338d680c61448ff 25931faca3d3ecb92cda343545425e316bca9a495f4b6eb9c8abe4781d226a93";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -590,6 +590,13 @@
 					Files,
 					"$(PROJECT_DIR)/Hotline/Supporting",
 					Files,
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+					"$(PROJECT_DIR)/Hotline/Utilities",
 				);
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -616,6 +623,13 @@
 					Files,
 					"$(PROJECT_DIR)/Hotline/Supporting",
 					Files,
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+					"$(PROJECT_DIR)/Hotline/Supporting",
+					Files,
+					"$(PROJECT_DIR)/Hotline/Utilities",
 				);
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
