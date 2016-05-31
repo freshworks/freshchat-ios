@@ -40,7 +40,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                     [sharedInstance preparePersistantStoreCoordinator];
                     [sharedInstance setMainQueueContext];
                 } @catch (NSException *exception) {
-                    [[FDMemLogger new]addMessage:exception.description];
+                    //[[FDMemLogger new]addMessage:exception.description];
                 }
             }
         }
@@ -101,19 +101,23 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         // OK now lets try to create this on next attempt
         _persistentStoreCoordinator = nil;
     }
+    else {
+        [self.logger reset]; //clean up
+    }
 }
 
 -(void)logModelVersionData:(NSURL *)storeURL{
     
     @try {
-        NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
-                                                                                                  URL:storeURL error:nil];
+        NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator
+                                        metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                        URL:storeURL error:nil];
         if (sourceMetadata) {
             logInfo(@{@"Store Info: ": sourceMetadata});
         }
         
     } @catch (NSException *exception) {
-        
+        logInfo(@{@"Error while accesing store info ": exception});
     }
 }
 

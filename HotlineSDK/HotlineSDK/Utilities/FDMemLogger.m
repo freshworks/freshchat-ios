@@ -95,13 +95,17 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     request.HTTPMethod = HTTP_METHOD_POST;
     [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
-            self.logList = [[NSMutableArray alloc]init];
+            [self reset];
             FDLog(@"successfully uploaded log");
         }else{
             NSLog(@"Failed  : %@",log);
             FDLog(@"Response %@", responseInfo.response);
         }
     }];
+}
+
+-(void)reset{
+    self.logList = [[NSMutableArray alloc]init];
 }
 
 @end
