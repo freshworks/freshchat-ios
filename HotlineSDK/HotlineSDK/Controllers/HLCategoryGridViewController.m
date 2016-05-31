@@ -164,8 +164,6 @@
                     NSString *message;
                     if([[FDReachabilityManager sharedInstance] isReachable]){
                         message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-                        if(![Hotline sharedInstance].config.pollWhenAppActive)
-                        [self performSelector:@selector(removeLoadingIndicator) withObject:nil afterDelay:5.0];
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
@@ -189,17 +187,24 @@
 }
 
 - (void) removeLoadingIndicator{
-    
     [self.activityIndicator removeFromSuperview];
 }
 
 -(void)fetchUpdates{
     FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
-        if(isEmpty) [updater resetTime];
+        if(isEmpty){
+            [updater resetTime];
+        }
+        else {
+            [self removeLoadingIndicator];
+        }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+            HideNetworkActivityIndicator();
+            if(isEmpty){
+                [self removeLoadingIndicator];
+            }
         }];
     }];
 }

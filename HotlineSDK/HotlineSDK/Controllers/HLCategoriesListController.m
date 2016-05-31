@@ -72,12 +72,9 @@
                     NSString *message;
                     if([[FDReachabilityManager sharedInstance] isReachable]){
                         message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-                        if(![Hotline sharedInstance].config.pollWhenAppActive)
-                        [self performSelector:@selector(removeLoadingIndicator) withObject:nil afterDelay:5.0];
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self.activityIndicator removeFromSuperview];
                     }
                     self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -97,7 +94,6 @@
 }
 
 - (void) removeLoadingIndicator{
-    
     [self.activityIndicator removeFromSuperview];
 }
 
@@ -155,9 +151,15 @@
         if(isEmpty){
             [updater resetTime];
         }
+        else {
+            [self removeLoadingIndicator];
+        }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+            HideNetworkActivityIndicator();
+            if(isEmpty){
+                [self removeLoadingIndicator];
+            }
         }];
     }];
 }
