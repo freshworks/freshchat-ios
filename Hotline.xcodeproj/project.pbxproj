@@ -586,16 +586,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Hotline",
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
 					"$(PROJECT_DIR)/Hotline/Utilities",
 				);
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
@@ -619,16 +609,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Hotline",
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
-					"$(PROJECT_DIR)/Hotline/Supporting",
-					Files,
 					"$(PROJECT_DIR)/Hotline/Utilities",
 				);
 				INFOPLIST_FILE = "Hotline/Supporting Files/Info.plist";
