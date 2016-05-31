@@ -87,7 +87,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     return;
                 }
                 
-                FDLog(@"New Messages Count : %d", conversations.count);
+                FDLog(@"New Messages Count : %lu", (unsigned long)conversations.count);
                 
                 NSNumber *channelId;
                 
