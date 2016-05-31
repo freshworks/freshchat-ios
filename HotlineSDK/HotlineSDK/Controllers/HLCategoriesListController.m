@@ -75,7 +75,6 @@
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self.activityIndicator removeFromSuperview];
                     }
                     self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -92,6 +91,10 @@
             [self.tableView reloadData];
         }
     }];
+}
+
+- (void) removeLoadingIndicator{
+    [self.activityIndicator removeFromSuperview];
 }
 
 -(void)setNavigationItem{
@@ -148,9 +151,15 @@
         if(isEmpty){
             [updater resetTime];
         }
+        else {
+            [self removeLoadingIndicator];
+        }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+            HideNetworkActivityIndicator();
+            if(isEmpty){
+                [self removeLoadingIndicator];
+            }
         }];
     }];
 }

@@ -84,10 +84,18 @@
 -(void)fetchUpdates{
     [self updateChannels];
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
-        if(isEmpty)[[[FDChannelUpdater alloc]init] resetTime];
+        if(isEmpty){
+           [[[FDChannelUpdater alloc]init] resetTime];
+        }
+        else {
+            [self.activityIndicator removeFromSuperview];
+        }
         ShowNetworkActivityIndicator();
         [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
             HideNetworkActivityIndicator();
+            if(isEmpty){
+                [self.activityIndicator removeFromSuperview];
+            }
         }];
     }];
 }
@@ -134,7 +142,6 @@
             else{
                 self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
-                [self.activityIndicator removeFromSuperview];
             }
             [self.tableView reloadData];
         }

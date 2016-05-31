@@ -186,13 +186,25 @@
     }];
 }
 
+- (void) removeLoadingIndicator{
+    [self.activityIndicator removeFromSuperview];
+}
+
 -(void)fetchUpdates{
     FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
-        if(isEmpty) [updater resetTime];
+        if(isEmpty){
+            [updater resetTime];
+        }
+        else {
+            [self removeLoadingIndicator];
+        }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if (!isFetchPerformed) HideNetworkActivityIndicator();
+            HideNetworkActivityIndicator();
+            if(isEmpty){
+                [self removeLoadingIndicator];
+            }
         }];
     }];
 }
