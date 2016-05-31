@@ -85,6 +85,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSString *storePath = [[self sharedLibraryPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
     FDLog(@"StoreURL %@",storePath);
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
+    [self logModelVersionData:persistentStoreURL];
     
     NSError* error = nil;
     NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES };
@@ -99,6 +100,20 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         
         // OK now lets try to create this on next attempt
         _persistentStoreCoordinator = nil;
+    }
+}
+
+-(void)logModelVersionData:(NSURL *)storeURL{
+    
+    @try {
+        NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                                                                                  URL:storeURL error:nil];
+        if (sourceMetadata) {
+            logInfo(@{@"Store Info: ": sourceMetadata});
+        }
+        
+    } @catch (NSException *exception) {
+        
     }
 }
 
