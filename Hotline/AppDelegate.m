@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "HotlineSDK/Hotline.h"
 #import "ViewController.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate ()
 
@@ -27,6 +29,9 @@
     }
 
     NSLog(@"launchoptions :%@", launchOptions);
+
+    [Fabric with:@[[Crashlytics class]]];
+
     return YES;
 }
 
