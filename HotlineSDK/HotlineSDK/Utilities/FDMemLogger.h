@@ -17,6 +17,7 @@
 -(void)addErrorInfo:(NSDictionary*) dict;
 -(NSString *)toString;
 -(void)upload;
+-(void)reset;
 
 @end
 
