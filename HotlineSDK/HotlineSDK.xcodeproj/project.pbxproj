@@ -101,6 +101,7 @@
 		35B2EFCD1D000E620014867F /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF7E1D000E620014867F /* FDYesNoPromptView.m */; };
 		35B2EFD41D000EE80014867F /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD01D000EE80014867F /* FDReachability.m */; };
 		35B2EFD51D000EE80014867F /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD31D000EE80014867F /* FDKeyChainStore.m */; };
+		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -110,6 +111,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
