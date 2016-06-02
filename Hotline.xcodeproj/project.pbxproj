@@ -43,13 +43,6 @@
 			remoteGlobalIDString = 35591AB11B9ED58100BC0B60;
 			remoteInfo = HotlineSDK;
 		};
-		354D0D1F1C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 35591A9A1B9ED53700BC0B60;
-			remoteInfo = HotlineAPI;
-		};
 		354D0D231C48D10F004D2AA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */;
@@ -145,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */,
-				354D0D201C48D10F004D2AA1 /* libHotlineAPI.a */,
 				354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */,
 			);
 			name = Products;
@@ -363,13 +355,6 @@
 			fileType = archive.ar;
 			path = libHotlineSDK.a;
 			remoteRef = 354D0D1D1C48D10F004D2AA1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		354D0D201C48D10F004D2AA1 /* libHotlineAPI.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libHotlineAPI.a;
-			remoteRef = 354D0D1F1C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		354D0D241C48D10F004D2AA1 /* KonotorModels.bundle */ = {
