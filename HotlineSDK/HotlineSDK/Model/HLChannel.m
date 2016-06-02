@@ -95,11 +95,35 @@
     }
     if (matches.count > 1) {
         channel = nil;
-        FDLog(@"Duplicates found in Category table !");
+        FDLog(@"Duplicates found in Channel table !");
     }
     return channel;
 }
 
 
++(HLChannel *)getWithName:(NSString *)name inContext:(NSManagedObjectContext *)context{
+    HLChannel *channel = nil;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"name == [cd] %@",name];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastUpdated" ascending:NO]];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count > 0) {
+        channel = matches.firstObject;
+    }
+    return channel;
+}
+
++(HLChannel *)getDefaultChannelInContext:(NSManagedObjectContext *)context{
+    HLChannel *channel = nil;
+    //TODO: Sort by created because we don't store default channel - Fix this later 
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"created" ascending:YES]];
+    
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count > 0) {
+        channel = matches.firstObject;
+    }
+    return channel;
+}
 
 @end

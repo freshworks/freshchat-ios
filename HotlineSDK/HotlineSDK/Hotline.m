@@ -458,6 +458,27 @@
     }];
 }
 
+-(void) sendMessage: (NSString *) message onChannel: (NSString *) channelName{
+    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
+    [mainContext performBlock:^{
+        HLChannel *channel = nil;
+        if(channelName){
+            channel = [HLChannel getWithName:channelName inContext:mainContext];
+        }
+        if(!channel){ // match not found
+            channel = [HLChannel getDefaultChannelInContext:mainContext];// Should use a default channel
+        }
+        if(channel){
+            KonotorConversation *conversation;
+            NSSet *conversations = channel.conversations;
+            if(conversations && [conversations count] > 0 ){
+                conversation = [conversations anyObject];
+            }
+            [Konotor uploadTextFeedback:message onConversation:conversation onChannel:channel];
+        }
+    }];
+}
+
 - (NSString *)validateDomain:(NSString*)domain
 {
     return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
