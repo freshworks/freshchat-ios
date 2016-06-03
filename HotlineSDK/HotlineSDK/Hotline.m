@@ -459,6 +459,9 @@
 }
 
 -(void) sendMessage: (NSString *) message onChannel: (NSString *) channelName{
+    if(!message){
+        return;
+    }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
         HLChannel *channel = nil;
