@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *messages;
 
 +(HLChannel *)getWithID:(NSNumber *)channelID inContext:(NSManagedObjectContext *)context;
++(HLChannel *)getWithName:(NSString *)name inContext:(NSManagedObjectContext *)context;
++(HLChannel *)getDefaultChannelInContext:(NSManagedObjectContext *)context;
+
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context;
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo;
 

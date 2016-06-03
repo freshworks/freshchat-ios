@@ -237,6 +237,8 @@
 
 -(void) updateConversationBannerMessage :(NSString *) message;
 
+-(void) sendMessage: (NSString *) message onChannel: (NSString *) channelName;
+
 @end
 
 @interface HotlineUser : NSObject
