@@ -91,6 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 -(BOOL) isMarketingMessage;
 +(NSArray *)getAllMesssageForChannel:(HLChannel *)channel;
++(bool) hasUserMessageInContext:(NSManagedObjectContext *)context;
 
 @end
 

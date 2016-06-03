@@ -56,6 +56,8 @@
 
 NSMutableDictionary *gkMessageIdMessageMap;
 
+static BOOL messageExistsDirty = YES;
+
 +(NSString *)generateMessageID{
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
     NSString *userAlias = [FDUtilities getUserAlias];
@@ -75,6 +77,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     message.belongsToConversation = conversation;
     [datamanager save];
+    messageExistsDirty = YES;
     return message;
 }
 
@@ -134,6 +137,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
     [message setValue:messageBinary forKey:@"hasMessageBinary"];
     message.belongsToConversation = conversation;
     [datamanager save];
+    messageExistsDirty=YES;
     return message;
 }
 
@@ -174,6 +178,8 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }];
 }
 
+
+//TODO: .. Move network activity code out of Model - rex
 + (void) sendLatestUserActivity :(HLChannel *)channel {
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
@@ -369,6 +375,7 @@ NSMutableDictionary *gkMessageIdMessageMap;
         [newMessage setPicCaption:[message valueForKey:@"picCaption"]];
     }
     [[KonotorDataManager sharedInstance]save];
+    messageExistsDirty = YES;
     return newMessage;
 }
 
@@ -469,6 +476,21 @@ NSMutableDictionary *gkMessageIdMessageMap;
     }
     
     return message;
+}
+
++(bool) hasUserMessageInContext:(NSManagedObjectContext *)context {
+    static BOOL messageExists = NO;
+    if(messageExistsDirty){
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0"];
+        NSError *error;
+        NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
+        if(!error){
+            messageExists =  matches.count > 0;
+            messageExistsDirty = NO;
+        }
+    }
+    return messageExists;
 }
 
 
