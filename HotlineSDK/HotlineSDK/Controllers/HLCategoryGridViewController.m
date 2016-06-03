@@ -163,7 +163,7 @@
                     
                     NSString *message;
                     if([[FDReachabilityManager sharedInstance] isReachable]){
-                        message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                        message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
