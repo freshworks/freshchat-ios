@@ -375,6 +375,7 @@ static BOOL messageExistsDirty = YES;
         [newMessage setPicCaption:[message valueForKey:@"picCaption"]];
     }
     [[KonotorDataManager sharedInstance]save];
+    messageExistsDirty = YES;
     return newMessage;
 }
 
