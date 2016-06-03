@@ -498,7 +498,16 @@
 }
 
 -(void) pollNewMessages:(id)sender{
-    [HLMessageServices fetchChannelsAndMessages:nil];
+    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
+    [mainContext performBlock:^{
+        if([KonotorMessage hasUserMessageInContext:mainContext]){
+            [HLMessageServices fetchChannelsAndMessages:nil];
+            FDLog(@"Triggering poller");
+        }
+        else {
+            FDLog(@"Not fetching updates .. No user messages present");
+        }
+    }];
 }
 
 -(void)cancelPoller{
