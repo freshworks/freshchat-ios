@@ -10,7 +10,16 @@
 #import "HLTheme.h"
 #import "FDAutolayoutHelper.h"
 
+#define TITLE_MAX_LINES 2
+
+@interface FDCell()
+
+@property (nonatomic, assign) float titleSingleLineSize;
+
+@end
+
 @implementation FDCell
+
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannel{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -23,7 +32,7 @@
         
         self.titleLabel = [[FDLabel alloc] init];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [self.titleLabel setNumberOfLines:2];
+        [self.titleLabel setNumberOfLines:TITLE_MAX_LINES];
         [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         self.detailLabel = [[FDLabel alloc] init];
@@ -121,8 +130,18 @@
         }
         
         [self theme];
+        [self setSigleTitleLineSize];
     }
     return self;
+}
+
+- (void) setSigleTitleLineSize{
+    
+    UILabel *tempLabel = [[UILabel alloc] init];
+    tempLabel.text = @"text";
+    tempLabel.font = self.titleLabel.font;
+    CGSize singleSize = [tempLabel sizeThatFits:CGSizeMake(100, 999)];
+    self.titleSingleLineSize = singleSize.height;
 }
 
 -(void)adjustPadding{
@@ -130,7 +149,15 @@
         [self setNeedsLayout];
         [self layoutIfNeeded];
 
-        CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
+        float size = (self.lastUpdatedLabel.frame.origin.x-self.titleLabel.frame.origin.x);
+        CGRect textRect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(size,9999)
+                                             options:NSStringDrawingUsesLineFragmentOrigin
+                                          attributes:@{NSFontAttributeName:self.titleLabel.font}
+                                             context:nil];
+        
+        int noLines = MIN(textRect.size.height /self.titleLabel.font.pointSize, TITLE_MAX_LINES);
+        
+        CGFloat titleHeight  = self.titleSingleLineSize * noLines;
         CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
         
         CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
@@ -138,6 +165,9 @@
         self.lastUpdatedTimeWidthConstraint.constant = lastUpdatedTimeWidth;
         self.encloserHeightConstraint.constant = titleHeight + detailHeight;
         
+       // NSLog(@"Line - %d - %f - %@ - %f",noLines, self.titleSingleLineSize, self.titleLabel.text, self.titleSingleSize);
+        
+        titleHeight = noLines * self.titleSingleLineSize;
         if (self.badgeView.isHidden) {
             self.detailLableRightConstraint.constant = lastUpdatedTimeWidth - self.rightArrowImageView.frame.size.width;
         }else{
