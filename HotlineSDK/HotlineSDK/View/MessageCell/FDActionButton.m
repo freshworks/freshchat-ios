@@ -8,7 +8,6 @@
 
 #import "FDActionButton.h"
 #import "FDMessageCell.h"
-#import "HLArticleDetailViewController.h"
 #import "HLLocalization.h"
 #import "HLTheme.h"
 

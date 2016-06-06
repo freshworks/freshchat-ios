@@ -12,11 +12,11 @@
 #import "HLMacros.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
-#import "HLArticleDetailViewController.h"
 #import "HLContainerController.h"
 #import "KonotorDataManager.h"
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
+#import "HLArticleUtil.h"
 
 @interface HLArticlesController ()
 
@@ -128,14 +128,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        HLArticleDetailViewController *articleDetailController = [[HLArticleDetailViewController alloc]init];
-        articleDetailController.articleID = article.articleID;
-        articleDetailController.articleTitle = article.title;
-        articleDetailController.articleDescription = article.articleDescription;
-        articleDetailController.categoryTitle = self.category.title;
-        articleDetailController.categoryID = self.category.categoryID;
-        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
-        [self.navigationController pushViewController:container animated:YES];
+        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController];
     }
 }
 
