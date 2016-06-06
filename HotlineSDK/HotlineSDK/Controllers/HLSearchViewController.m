@@ -14,7 +14,6 @@
 #import "HLTheme.h"
 #import "KonotorDataManager.h"
 #import "FDButton.h"
-#import "HLArticleDetailViewController.h"
 #import "FDTableViewCell.h"
 #import "FDArticleContent.h"
 #import "FDSearchBar.h"
@@ -26,6 +25,7 @@
 #import "FDArticleListCell.h"
 #import "HLEmptyResultView.h"
 #import "FDAutolayoutHelper.h"
+#import "HLArticleUtil.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -233,14 +233,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.searchResults.count) {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
-        HLArticleDetailViewController *articlesDetailController = [[HLArticleDetailViewController alloc]init];
+      
         FDArticleContent *article = self.searchResults[indexPath.row];
-        articlesDetailController.articleDescription = article.articleDescription;
-        articlesDetailController.articleID = article.articleID;
-        articlesDetailController.articleTitle = article.title;
-        articlesDetailController.isFromSearchView = YES;
-        HLContainerController *containerController = [[HLContainerController alloc]initWithController:articlesDetailController andEmbed:NO];
-        [self.navigationController pushViewController:containerController animated:YES];
+        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController];
     }
 }
 

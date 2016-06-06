@@ -19,6 +19,10 @@
 #import "FDStringUtil.h"
 #import "FDBarButtonItem.h"
 #import "FDAutolayoutHelper.h"
+#import "HLArticle.h"
+#import "KonotorDataManager.h"
+#import "HLArticleUtil.h"
+
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -167,11 +171,19 @@
 
 -(BOOL)webView:(UIWebView *)inWeb shouldStartLoadWithRequest:(NSURLRequest *)inRequest navigationType:(UIWebViewNavigationType)inType {
     if (inType == UIWebViewNavigationTypeLinkClicked){
+        if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
+            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController];
+            return NO;
+        }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
         return NO;
     }
     return YES;
 }
+
+
 
 -(void)webViewDidStartLoad:(UIWebView *)webView{
     [self.activityIndicator startAnimating];

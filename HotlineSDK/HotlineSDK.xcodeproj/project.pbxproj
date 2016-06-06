@@ -102,6 +102,7 @@
 		35B2EFD41D000EE80014867F /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD01D000EE80014867F /* FDReachability.m */; };
 		35B2EFD51D000EE80014867F /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD31D000EE80014867F /* FDKeyChainStore.m */; };
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
+		3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLArticleUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -311,6 +312,8 @@
 		35B2EFD01D000EE80014867F /* FDReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachability.m; sourceTree = "<group>"; };
 		35B2EFD21D000EE80014867F /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
 		35B2EFD31D000EE80014867F /* FDKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDKeyChainStore.m; sourceTree = "<group>"; };
+		3C160B041D05A530000440D4 /* HLArticleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLArticleUtil.h; sourceTree = "<group>"; };
+		3C160B051D05A59C000440D4 /* HLArticleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleUtil.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -555,6 +558,8 @@
 				35B2EF4D1D000E620014867F /* KonotorAudioPlayer.m */,
 				35B2EF4E1D000E620014867F /* KonotorAudioRecorder.h */,
 				35B2EF4F1D000E620014867F /* KonotorAudioRecorder.m */,
+				3C160B041D05A530000440D4 /* HLArticleUtil.h */,
+				3C160B051D05A59C000440D4 /* HLArticleUtil.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -860,6 +865,7 @@
 				35B2EFA21D000E620014867F /* FDIconDownloader.m in Sources */,
 				35B2EFCC1D000E620014867F /* FDPromptView.m in Sources */,
 				35B2EF981D000E620014867F /* KonotorDataManager.m in Sources */,
+				3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */,
 				35B2EFCB1D000E620014867F /* FDAlertView.m in Sources */,
 				35B2EF9D1D000E620014867F /* FDChannelUpdater.m in Sources */,
 				35B2EF8D1D000E620014867F /* Hotline.m in Sources */,

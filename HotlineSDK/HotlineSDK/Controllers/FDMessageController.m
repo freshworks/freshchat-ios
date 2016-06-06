@@ -18,7 +18,6 @@
 #import "FDAudioMessageInputView.h"
 #import "HLConstants.h"
 #import "HLArticle.h"
-#import "HLArticleDetailViewController.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
 #import "HLLocalization.h"
@@ -31,6 +30,7 @@
 #import "FDSecureStore.h"
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
+#import "HLArticleUtil.h"
 
 typedef struct {
     BOOL isLoading;
@@ -757,17 +757,7 @@ typedef struct {
     FDActionButton* button=(FDActionButton*)sender;
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
-            HLArticle *article = [HLArticle getWithID:button.articleID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-            if(article!=nil){
-                HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
-                articleDetailController.articleID = article.articleID;
-                articleDetailController.articleTitle = article.title;
-                articleDetailController.articleDescription = article.articleDescription;
-                articleDetailController.categoryTitle=article.category.title;
-                articleDetailController.categoryID = article.categoryID;
-                HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
-                [self.navigationController pushViewController:container animated:YES];
-            }
+           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController];
         }
         @catch(NSException* e){
             NSLog(@"%@",e);
