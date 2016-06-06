@@ -42,17 +42,15 @@
     if([actionLabel isEqualToString:@""]||(actionLabel==nil))
         actionLabel=HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
     
-    UITextView* txtView=[[UITextView alloc] init];
-    [txtView setFont:actionLabelFont];
-    [txtView setText:actionLabel];
-    CGSize labelSize=[txtView sizeThatFits:CGSizeMake(messageFrameWidth, KONOTOR_ACTIONBUTTON_HEIGHT)];
-    
-    float labelWidth=padding + 20+labelSize.width;
-    float buttonWidth=MIN(labelWidth, maxButtonWidth);//MAX(MIN(labelWidth, maxButtonWidth), maxButtonWidth*percentWidth);
-    
-    float buttonXCenterAlign=messageOriginX-horizontalPadding/3.0+(messageFrameWidth-buttonWidth)/2;
-    
     if([FDMessageCell hasButtonForURL:actionUrlString articleID:articleID]){
+        
+        UITextView *txtView=[[UITextView alloc]init];
+        [txtView setFont:actionLabelFont];
+        [txtView setText:actionLabel];
+        CGSize labelSize=[txtView sizeThatFits:CGSizeMake(messageFrameWidth, KONOTOR_ACTIONBUTTON_HEIGHT)];
+        float labelWidth=padding + 20+labelSize.width;
+        float buttonWidth=MIN(labelWidth, maxButtonWidth);//MAX(MIN(labelWidth, maxButtonWidth), maxButtonWidth*percentWidth);
+        float buttonXCenterAlign=messageOriginX-horizontalPadding/3.0+(messageFrameWidth-buttonWidth)/2;
         self.articleID=articleID;
         self.actionUrlString=actionUrlString;
         [self setFrame:CGRectMake(buttonXCenterAlign,
