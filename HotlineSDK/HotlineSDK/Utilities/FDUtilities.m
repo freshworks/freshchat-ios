@@ -13,7 +13,6 @@
 #import "HLMacros.h"
 #import "HLTheme.h"
 #import "HLLocalization.h"
-#import <AdSupport/ASIdentifierManager.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
 
@@ -126,9 +125,15 @@
 }
 
 +(NSString *)setAdId{
-    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
-    NSString *adId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
+    NSString *adId = @"";
+    Class advertisingClass = NSClassFromString(@"ASIdentifierManager");
+    if (advertisingClass){
+        adId = [[[advertisingClass performSelector:@selector(sharedManager)]
+                                    performSelector:@selector(advertisingIdentifier)]
+                                    performSelector: @selector(UUIDString)];
+        FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+        [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
+    }
     return  adId;
 }
 
