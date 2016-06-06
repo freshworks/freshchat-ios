@@ -27,14 +27,16 @@
 }
 
 +(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UINavigationController *) controller{
-    HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
-    articleDetailController.articleID = article.articleID;
-    articleDetailController.articleTitle = article.title;
-    articleDetailController.articleDescription = article.articleDescription;
-    articleDetailController.categoryTitle=article.category.title;
-    articleDetailController.categoryID = article.categoryID;
-    HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
-    [controller pushViewController:container animated:YES];
+    dispatch_async(dispatch_get_main_queue(),^{
+        HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
+        articleDetailController.articleID = article.articleID;
+        articleDetailController.articleTitle = article.title;
+        articleDetailController.articleDescription = article.articleDescription;
+        articleDetailController.categoryTitle=article.category.title;
+        articleDetailController.categoryID = article.categoryID;
+        HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
+        [controller pushViewController:container animated:YES];
+    });
 }
 
 @end
