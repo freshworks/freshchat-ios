@@ -75,10 +75,10 @@
             BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
             if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
-                    FDLog(@"Updating category:%@", categoryInfo[@"title"]);
+                    FDLog(@"Updating category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
                     [category updateWithInfo:categoryInfo];
                 }else{
-                    FDLog(@"New category:%@", categoryInfo[@"title"]);
+                    FDLog(@"New category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
                 

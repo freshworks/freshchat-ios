@@ -19,6 +19,10 @@
 #import "FDStringUtil.h"
 #import "FDBarButtonItem.h"
 #import "FDAutolayoutHelper.h"
+#import "HLArticle.h"
+#import "HLContainerController.h"
+#import "KonotorDataManager.h"
+#import "HLCategory.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -167,6 +171,27 @@
 
 -(BOOL)webView:(UIWebView *)inWeb shouldStartLoadWithRequest:(NSURLRequest *)inRequest navigationType:(UIWebViewNavigationType)inType {
     if (inType == UIWebViewNavigationTypeLinkClicked){
+        if([[[inRequest URL] scheme] isEqualToString:@"faq"]){
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
+            
+            NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+            
+            [mContext performBlock:^{
+                HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
+                if(article){
+                    HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
+                    articleDetailController.articleID = article.articleID;
+                    articleDetailController.articleTitle = article.title;
+                    articleDetailController.articleDescription = article.articleDescription;
+                    articleDetailController.categoryTitle=article.category.title;
+                    articleDetailController.categoryID = article.categoryID;
+                    HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
+                    [self.navigationController pushViewController:container animated:YES];
+                }
+            }];
+            return NO;
+        }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
         return NO;
     }
