@@ -9,17 +9,9 @@
 #import "FDCell.h"
 #import "HLTheme.h"
 #import "FDAutolayoutHelper.h"
-
 #define TITLE_MAX_LINES 2
 
-@interface FDCell()
-
-@property (nonatomic, assign) float titleSingleLineSize;
-
-@end
-
 @implementation FDCell
-
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannel{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -130,18 +122,22 @@
         }
         
         [self theme];
-        [self setSigleTitleLineSize];
     }
     return self;
 }
 
-- (void) setSigleTitleLineSize{
-    
+- (float) getSigleTitleLineSize{
+    static float height;
+    if(height){
+        return height;
+    }
+    height = 0;
     UILabel *tempLabel = [[UILabel alloc] init];
     tempLabel.text = @"text";
-    tempLabel.font = self.titleLabel.font;
+    tempLabel.font = [[HLTheme sharedInstance] channelTitleFont];
     CGSize singleSize = [tempLabel sizeThatFits:CGSizeMake(100, 999)];
-    self.titleSingleLineSize = singleSize.height;
+    height = singleSize.height;
+    return height;
 }
 
 -(void)adjustPadding{
@@ -157,7 +153,7 @@
         
         int noLines = MIN(textRect.size.height /self.titleLabel.font.pointSize, TITLE_MAX_LINES);
         
-        CGFloat titleHeight  = self.titleSingleLineSize * noLines;
+        CGFloat titleHeight  = [self getSigleTitleLineSize] * noLines;
         CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
         
         CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
@@ -165,9 +161,6 @@
         self.lastUpdatedTimeWidthConstraint.constant = lastUpdatedTimeWidth;
         self.encloserHeightConstraint.constant = titleHeight + detailHeight;
         
-       // NSLog(@"Line - %d - %f - %@ - %f",noLines, self.titleSingleLineSize, self.titleLabel.text, self.titleSingleSize);
-        
-        titleHeight = noLines * self.titleSingleLineSize;
         if (self.badgeView.isHidden) {
             self.detailLableRightConstraint.constant = lastUpdatedTimeWidth - self.rightArrowImageView.frame.size.width;
         }else{
