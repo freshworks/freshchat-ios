@@ -9,8 +9,9 @@
 #import "FDCell.h"
 #import "HLTheme.h"
 #import "FDAutolayoutHelper.h"
-#define TITLE_MAX_LINES 2
 
+#define TITLE_MAX_LINES 2
+static float height = 0;
 @implementation FDCell
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannel{
@@ -126,12 +127,11 @@
     return self;
 }
 
-- (float) getSigleTitleLineSize{
-    static float height;
+- (float) getSingleTitleLineSize{
+
     if(height){
         return height;
     }
-    height = 0;
     UILabel *tempLabel = [[UILabel alloc] init];
     tempLabel.text = @"text";
     tempLabel.font = [[HLTheme sharedInstance] channelTitleFont];
@@ -153,7 +153,7 @@
         
         int noLines = MIN(textRect.size.height /self.titleLabel.font.pointSize, TITLE_MAX_LINES);
         
-        CGFloat titleHeight  = [self getSigleTitleLineSize] * noLines;
+        CGFloat titleHeight  = [self getSingleTitleLineSize] * noLines;
         CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
         
         CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
