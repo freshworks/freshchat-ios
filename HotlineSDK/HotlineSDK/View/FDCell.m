@@ -10,6 +10,8 @@
 #import "HLTheme.h"
 #import "FDAutolayoutHelper.h"
 
+#define TITLE_MAX_LINES 2
+static float height = 0;
 @implementation FDCell
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannel{
@@ -23,7 +25,7 @@
         
         self.titleLabel = [[FDLabel alloc] init];
         [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [self.titleLabel setNumberOfLines:2];
+        [self.titleLabel setNumberOfLines:TITLE_MAX_LINES];
         [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         self.detailLabel = [[FDLabel alloc] init];
@@ -125,12 +127,33 @@
     return self;
 }
 
+- (float) getSingleTitleLineSize{
+
+    if(height){
+        return height;
+    }
+    UILabel *tempLabel = [[UILabel alloc] init];
+    tempLabel.text = @"text";
+    tempLabel.font = [[HLTheme sharedInstance] channelTitleFont];
+    CGSize singleSize = [tempLabel sizeThatFits:CGSizeMake(100, 999)];
+    height = singleSize.height;
+    return height;
+}
+
 -(void)adjustPadding{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setNeedsLayout];
         [self layoutIfNeeded];
 
-        CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
+        float size = (self.lastUpdatedLabel.frame.origin.x-self.titleLabel.frame.origin.x);
+        CGRect textRect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(size,9999)
+                                             options:NSStringDrawingUsesLineFragmentOrigin
+                                          attributes:@{NSFontAttributeName:self.titleLabel.font}
+                                             context:nil];
+        
+        int noLines = MIN(textRect.size.height /self.titleLabel.font.pointSize, TITLE_MAX_LINES);
+        
+        CGFloat titleHeight  = [self getSingleTitleLineSize] * noLines;
         CGFloat detailHeight = self.detailLabel.intrinsicContentSize.height;
         
         CGFloat lastUpdatedTimeWidth = self.lastUpdatedLabel.intrinsicContentSize.width;
