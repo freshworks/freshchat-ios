@@ -547,7 +547,13 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
+    NSString* previousUserAlias = [FDUtilities getUserAlias];
+    
     NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+    
+    [HLCoreServices trackUninstallForUser:previousUserAlias withCompletion:^(NSError *error) {
+        // Don't care about completion.. Proceed with clearUserData
+    }];
     
     [[HotlineUser sharedInstance]clearUserData];
     [[HLArticleTagManager sharedInstance]clear];
