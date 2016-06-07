@@ -16,10 +16,6 @@
 
 @implementation HLLocalization
 
-+(void)load {
-    [self getBundlePriorityArray]; // initialize this early.
-}
-
 +(NSArray *) getBundlePriorityArray{
     static NSArray *bundleArray ;
     if(!bundleArray){
