@@ -47,7 +47,6 @@
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
-    NSString *adId = [FDUtilities getAdID]; // This can be a empty String
     NSString *userAlias = [FDUtilities getUserAlias];
     
     if (userAlias == nil) {
@@ -63,8 +62,7 @@
     NSDictionary *info = @{
                            @"user" : @{
                                    @"alias" : userAlias,
-                                   @"meta"  : [FDUtilities deviceInfoProperties],
-                                   @"adId"  : adId
+                                   @"meta"  : [FDUtilities deviceInfoProperties]
                                    }
                            };
     

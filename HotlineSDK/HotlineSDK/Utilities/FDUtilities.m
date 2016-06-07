@@ -116,23 +116,12 @@
 }
 
 +(NSString *)getAdID{
-    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
-    NSString *adId = [secureStore objectForKey:HOTLINE_DEFAULTS_ADID];
-    if (!adId) {
-        adId = [self setAdId];
-    }
-    return adId;
-}
-
-+(NSString *)setAdId{
     NSString *adId = @"";
     Class advertisingClass = NSClassFromString(@"ASIdentifierManager");
     if (advertisingClass){
         adId = [[[advertisingClass performSelector:@selector(sharedManager)]
                                     performSelector:@selector(advertisingIdentifier)]
                                     performSelector: @selector(UUIDString)];
-        FDSecureStore *secureStore = [FDSecureStore sharedInstance];
-        [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
     }
     return  adId;
 }
