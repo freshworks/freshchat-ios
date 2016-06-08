@@ -53,7 +53,10 @@
     [self setNavigationItem];
     [self theming];
     [self localNotificationSubscription];
-    
+    [self addLoadingIndicator];
+}
+
+-(void)addLoadingIndicator{
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
     [self.view insertSubview:self.activityIndicator aboveSubview:self.collectionView];
@@ -62,7 +65,7 @@
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
--(void) viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self fetchUpdates];
 }
@@ -167,7 +170,7 @@
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self.activityIndicator removeFromSuperview];
+                        [self removeLoadingIndicator];
                     }
                     self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -178,7 +181,7 @@
             else{
                 self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
-                [self.activityIndicator removeFromSuperview];
+                [self removeLoadingIndicator];
             }
             [self setNavigationItem];
             [self.collectionView reloadData];
@@ -186,8 +189,10 @@
     }];
 }
 
-- (void) removeLoadingIndicator{
-    [self.activityIndicator removeFromSuperview];
+-(void)removeLoadingIndicator{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.activityIndicator removeFromSuperview];
+    });
 }
 
 -(void)fetchUpdates{

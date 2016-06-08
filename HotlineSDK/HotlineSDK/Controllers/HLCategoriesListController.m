@@ -44,21 +44,22 @@
     [self setNavigationItem];
     [self updateCategories];
     [self localNotificationSubscription];
-    
+    [self addLoadingIndicator];
+}
+
+-(void)addLoadingIndicator{
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
     [self.view insertSubview:self.activityIndicator aboveSubview:self.tableView];
     [self.activityIndicator startAnimating];
     [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self fetchUpdates];
 }
-
 
 //TODO: Remove duplicate code
 -(void)updateCategories{
@@ -85,7 +86,7 @@
             else{
                 self.emptyResultView.frame = CGRectZero;
                 [self.emptyResultView removeFromSuperview];
-                [self.activityIndicator removeFromSuperview];
+                [self removeLoadingIndicator];
             }
             
             [self.tableView reloadData];
@@ -93,8 +94,10 @@
     }];
 }
 
-- (void) removeLoadingIndicator{
-    [self.activityIndicator removeFromSuperview];
+-(void)removeLoadingIndicator{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.activityIndicator removeFromSuperview];
+    });
 }
 
 -(void)setNavigationItem{

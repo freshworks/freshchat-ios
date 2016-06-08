@@ -57,13 +57,22 @@
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self localNotificationSubscription];
-    
+    [self addLoadingIndicator];
+}
+
+-(void)addLoadingIndicator{
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
     [self.view insertSubview:self.activityIndicator aboveSubview:self.tableView];
     [self.activityIndicator startAnimating];
     [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
+}
+
+-(void)removeLoadingIndicator{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.activityIndicator removeFromSuperview];
+    });
 }
 
 -(BOOL)canDisplayFooterView{
@@ -88,13 +97,13 @@
            [[[FDChannelUpdater alloc]init] resetTime];
         }
         else {
-            [self.activityIndicator removeFromSuperview];
+            [self removeLoadingIndicator];
         }
         ShowNetworkActivityIndicator();
         [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
             HideNetworkActivityIndicator();
             if(isEmpty){
-                [self.activityIndicator removeFromSuperview];
+                [self removeLoadingIndicator];
             }
         }];
     }];
@@ -131,7 +140,7 @@
                     }
                     else{
                         message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self.activityIndicator removeFromSuperview];
+                        [self removeLoadingIndicator];
                     }
                     self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
                     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
