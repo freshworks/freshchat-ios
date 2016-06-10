@@ -22,7 +22,7 @@
 
 -(instancetype)initWithImage:(UIImage *)image;
 
-@property (strong, nonatomic) id<FDAttachmentImageControllerDelegate> delegate;
+@property (weak, nonatomic) id<FDAttachmentImageControllerDelegate> delegate;
 
 
 @end

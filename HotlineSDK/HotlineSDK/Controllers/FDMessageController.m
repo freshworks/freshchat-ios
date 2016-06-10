@@ -381,12 +381,16 @@ typedef struct {
     KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
     float height;
     NSString *key = [self getIdentityForMessage:message];
-    if(self.messageHeightMap[key]){
-        height = [self.messageHeightMap[key] floatValue];
-    }
-    else {
-        height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-        self.messageHeightMap[key] = @(height);
+    if(key){
+        if(self.messageHeightMap[key]){
+            height = [self.messageHeightMap[key] floatValue];
+        }
+        else {
+            height = [FDMessageCell getHeightForMessage:message parentView:self.view];
+            self.messageHeightMap[key] = @(height);
+        }
+    }else{
+        height = 0;
     }
     return height+CELL_HORIZONTAL_PADDING;
 }
@@ -395,12 +399,16 @@ typedef struct {
 -(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
     float width;
     NSString *key = [self getIdentityForMessage:message];
-    if(self.messageWidthMap[key]){
-        width = [self.messageWidthMap[key] floatValue];
-    }
-    else {
-        width = [FDMessageCell getWidthForMessage:message];
-        self.messageWidthMap[key] = @(width);
+    if(key){
+        if(self.messageWidthMap[key]){
+            width = [self.messageWidthMap[key] floatValue];
+        }
+        else {
+            width = [FDMessageCell getWidthForMessage:message];
+            self.messageWidthMap[key] = @(width);
+        }
+    }else{
+        width = 0;
     }
     return width;
 }

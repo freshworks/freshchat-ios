@@ -17,7 +17,7 @@
 
 @interface FDYesNoPromptView : FDPromptView
 
-@property (nonatomic,strong) id<FDYesNoPromptViewDelegate> delegate;
+@property (nonatomic,weak) id<FDYesNoPromptViewDelegate> delegate;
 -(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key;
 
 @end

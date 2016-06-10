@@ -32,7 +32,7 @@
 }
 
 -(void)addMessage:(NSString *) message{
-    [_logList addObject:message];
+    [self.logList addObject:message];
 }
 
 -(void)addMessage:(NSString*) message withMethodName:(NSString*) methodName{
