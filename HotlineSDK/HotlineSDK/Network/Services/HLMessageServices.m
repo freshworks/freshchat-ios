@@ -379,7 +379,7 @@ static HLNotificationHandler *handleUpdateNotification;
 
 //TODO: Skip messages that are clicked before
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
-    if([marketingId intValue] ==0 || (marketingId == nil)) return;
+    if((marketingId == nil) || ([marketingId intValue] ==0)) return;
 
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
@@ -407,7 +407,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     NSNumber *marketingId = message.marketingId;
     
-    if([marketingId intValue] ==0 || (marketingId == nil)) return;
+    if((marketingId == nil) || ([marketingId intValue] ==0)) return;
     
     message.messageRead = YES;
     

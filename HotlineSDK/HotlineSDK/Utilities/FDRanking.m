@@ -88,7 +88,7 @@
                 NSInteger rank =0;
                 FDIndex *index = matchingIndices[j];
                 NSString *articleID = [index.articleID stringValue];
-                if([articleID length]){
+                if(articleID){
                     if ([articleDictionary objectForKey:articleID]) {
                     rank = [[articleDictionary objectForKey:articleID] integerValue];
                     }

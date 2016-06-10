@@ -381,7 +381,7 @@ typedef struct {
     KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
     float height;
     NSString *key = [self getIdentityForMessage:message];
-    if([key length]){
+    if(key){
         if(self.messageHeightMap[key]){
             height = [self.messageHeightMap[key] floatValue];
         }
@@ -399,7 +399,7 @@ typedef struct {
 -(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
     float width;
     NSString *key = [self getIdentityForMessage:message];
-    if([key length]){
+    if(key){
         if(self.messageWidthMap[key]){
             width = [self.messageWidthMap[key] floatValue];
         }
