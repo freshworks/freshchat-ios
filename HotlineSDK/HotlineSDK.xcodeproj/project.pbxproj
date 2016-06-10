@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		354F26C61D0AED2F00DCD158 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 354F26C51D0AED2F00DCD158 /* FDKeyChainStore.m */; };
 		35B2EF7F1D000E620014867F /* FDAttachmentImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEBE1D000E620014867F /* FDAttachmentImageController.m */; };
 		35B2EF801D000E620014867F /* FDImagePreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEC01D000E620014867F /* FDImagePreviewController.m */; };
 		35B2EF811D000E620014867F /* FDMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEC21D000E620014867F /* FDMessageController.m */; };
@@ -100,7 +101,6 @@
 		35B2EFCC1D000E620014867F /* FDPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF7C1D000E620014867F /* FDPromptView.m */; };
 		35B2EFCD1D000E620014867F /* FDYesNoPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF7E1D000E620014867F /* FDYesNoPromptView.m */; };
 		35B2EFD41D000EE80014867F /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD01D000EE80014867F /* FDReachability.m */; };
-		35B2EFD51D000EE80014867F /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD31D000EE80014867F /* FDKeyChainStore.m */; };
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 		3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLArticleUtil.m */; };
 /* End PBXBuildFile section */
@@ -119,6 +119,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		354F26C41D0AED2F00DCD158 /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
+		354F26C51D0AED2F00DCD158 /* FDKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDKeyChainStore.m; sourceTree = "<group>"; };
 		35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		35591B741B9EDCCE00BC0B60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		35591B751B9EDCCE00BC0B60 /* KonotorModels-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "KonotorModels-Info.plist"; sourceTree = "<group>"; };
@@ -310,8 +312,6 @@
 		35B2EF7E1D000E620014867F /* FDYesNoPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDYesNoPromptView.m; sourceTree = "<group>"; };
 		35B2EFCF1D000EE80014867F /* FDReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDReachability.h; sourceTree = "<group>"; };
 		35B2EFD01D000EE80014867F /* FDReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachability.m; sourceTree = "<group>"; };
-		35B2EFD21D000EE80014867F /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
-		35B2EFD31D000EE80014867F /* FDKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDKeyChainStore.m; sourceTree = "<group>"; };
 		3C160B041D05A530000440D4 /* HLArticleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLArticleUtil.h; sourceTree = "<group>"; };
 		3C160B051D05A59C000440D4 /* HLArticleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleUtil.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -335,6 +335,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				354F26C41D0AED2F00DCD158 /* FDKeyChainStore.h */,
+				354F26C51D0AED2F00DCD158 /* FDKeyChainStore.m */,
+			);
+			path = "UICKeyChainStore-2.1.0";
+			sourceTree = "<group>";
+		};
 		35591B721B9EDCCE00BC0B60 /* HotlineModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -348,8 +357,8 @@
 		35591B791B9EDD0700BC0B60 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.0 */,
 				35B2EFCE1D000EE80014867F /* Reachability */,
-				35B2EFD11D000EE80014867F /* UICKeyChainStore-2.0.6 */,
 			);
 			path = Vendor;
 			sourceTree = "<group>";
@@ -654,15 +663,6 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
-		35B2EFD11D000EE80014867F /* UICKeyChainStore-2.0.6 */ = {
-			isa = PBXGroup;
-			children = (
-				35B2EFD21D000EE80014867F /* FDKeyChainStore.h */,
-				35B2EFD31D000EE80014867F /* FDKeyChainStore.m */,
-			);
-			path = "UICKeyChainStore-2.0.6";
-			sourceTree = "<group>";
-		};
 		843DD249178594180053E19E = {
 			isa = PBXGroup;
 			children = (
@@ -814,12 +814,12 @@
 				35B2EFB11D000E620014867F /* FDStringUtil.m in Sources */,
 				35B2EFC71D000E620014867F /* FDActionButton.m in Sources */,
 				35B2EF8E1D000E620014867F /* HotlineConfig.m in Sources */,
+				354F26C61D0AED2F00DCD158 /* FDKeyChainStore.m in Sources */,
 				35B2EFB41D000E620014867F /* HLLocalization.m in Sources */,
 				35B2EF9C1D000E620014867F /* KonotorUser.m in Sources */,
 				35B2EFA41D000E620014867F /* HLAPIClient.m in Sources */,
 				35B2EF891D000E620014867F /* HLSearchViewController.m in Sources */,
 				35B2EF961D000E620014867F /* KonotorConversation.m in Sources */,
-				35B2EFD51D000EE80014867F /* FDKeyChainStore.m in Sources */,
 				35B2EF951D000E620014867F /* HLChannel.m in Sources */,
 				35B2EFB01D000E620014867F /* FDSecureStore.m in Sources */,
 				35B2EFA91D000E620014867F /* FDAutolayoutHelper.m in Sources */,

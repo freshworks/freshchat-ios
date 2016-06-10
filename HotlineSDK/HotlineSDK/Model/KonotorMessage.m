@@ -130,7 +130,11 @@ static BOOL messageExistsDirty = YES;
 #endif
         [message setPicThumbHeight:[NSNumber numberWithInt:h]];
         [message setPicThumbWidth:[NSNumber numberWithInt:w]];
+        
+        CFRelease(src);
+        CFRelease(thumbnail);
     }
+    
     [messageBinary setBinaryImage:imageData];
     [messageBinary setBinaryThumbnail:thumbnailData];
     [messageBinary setValue:message forKey:@"belongsToMessage"];

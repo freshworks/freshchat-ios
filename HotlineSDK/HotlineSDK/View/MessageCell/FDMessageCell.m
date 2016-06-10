@@ -455,12 +455,9 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     NSInteger messageType = [currentMessage.messageType integerValue];
     
     BOOL showSenderName=NO;
-    float maxAvailableWidth=parentView.frame.size.width-MAX_WIDTH_WITH_PROFILE_IMAGE;
-
-    float width=MIN(maxAvailableWidth,MAX_TEXT_WIDTH);
 
     float extraHeight = showSenderName ? EXTRA_HEIGHT_WITH_SENDER_NAME: EXTRA_HEIGHT_WITHOUT_SENDER_NAME;
-    width = [FDMessageCell getWidthForMessage:currentMessage];
+    float width = [FDMessageCell getWidthForMessage:currentMessage];
 
     float cellHeight=0;
     NSString *simpleString=currentMessage.text; //[messageText string];

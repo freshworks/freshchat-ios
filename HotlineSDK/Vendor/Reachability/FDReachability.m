@@ -112,6 +112,7 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (ref) 
     {
         id reachability = [[self alloc] initWithReachabilityRef:ref];
+        CFRelease(ref);
 
 #if __has_feature(objc_arc)
         return reachability;
@@ -130,6 +131,7 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     if (ref) 
     {
         id reachability = [[self alloc] initWithReachabilityRef:ref];
+        CFRelease(ref);
         
 #if __has_feature(objc_arc)
         return reachability;
@@ -167,6 +169,7 @@ static void FDTMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkR
     {
         self.reachableOnWWAN = YES;
         self.reachabilityRef = ref;
+        CFRetain(self.reachabilityRef);
     }
     
     return self;    

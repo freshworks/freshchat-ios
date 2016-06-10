@@ -74,7 +74,7 @@ static BOOL INDEX_INPROGRESS = NO;
     NSArray *substrings = [articleContent.title componentsSeparatedByString:@" "];
     indexInfo = [self convertIntoDictionary:indexInfo withArray:substrings forLabel:ARTICLE_TITLE and:articleContent.articleID];
     substrings = [articleContent.articleDescription componentsSeparatedByString:@" "];
-    indexInfo = [self convertIntoDictionary:indexInfo withArray:substrings forLabel:ARTICLE_DESCRIPTION and:articleContent.articleID];
+    [self convertIntoDictionary:indexInfo withArray:substrings forLabel:ARTICLE_DESCRIPTION and:articleContent.articleID];
 }
 
 +(NSString *) stringByStrippingHTML:(NSString *)stringContent {
