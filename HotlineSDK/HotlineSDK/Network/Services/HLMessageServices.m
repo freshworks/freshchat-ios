@@ -374,12 +374,12 @@ static HLNotificationHandler *handleUpdateNotification;
 
         }];
     }];
-    
+
 }
 
 //TODO: Skip messages that are clicked before
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
-    if([marketingId intValue] ==0 || !marketingId) return;
+    if([marketingId intValue] ==0 || (marketingId == nil)) return;
 
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
@@ -407,7 +407,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     NSNumber *marketingId = message.marketingId;
     
-    if([marketingId intValue] ==0 || !marketingId) return;
+    if([marketingId intValue] ==0 || (marketingId == nil)) return;
     
     message.messageRead = YES;
     
