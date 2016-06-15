@@ -161,13 +161,10 @@ static BOOL messageExistsDirty = YES;
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
         request.predicate = predicate;
-        NSArray *array = [context executeFetchRequest:request error:&pError];
-        if([array count]==0){
-
-        }else{
-            
-            for(int i=0;i<[array count];i++){
-                KonotorMessage *message = [array objectAtIndex:i];
+        NSArray *messages = [context executeFetchRequest:request error:&pError];
+        if (messages.count>0) {
+            for(int i=0;i<messages.count;i++){
+                KonotorMessage *message = messages[i];
                 if(message){
                     if(![[message marketingId] isEqualToNumber:@0]){
                         [HLMessageServices markMarketingMessageAsRead:message context:context];
@@ -181,7 +178,6 @@ static BOOL messageExistsDirty = YES;
         [context save:nil];
     }];
 }
-
 
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
