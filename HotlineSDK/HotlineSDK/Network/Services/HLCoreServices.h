@@ -23,4 +23,6 @@
 
 +(void)uploadUnuploadedProperties;
 
++(void)sendLatestUserActivity:(HLChannel *)channel;
+
 @end

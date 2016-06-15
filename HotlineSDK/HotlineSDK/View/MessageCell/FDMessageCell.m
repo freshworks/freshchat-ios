@@ -27,10 +27,6 @@ static UITextView* txtView=nil;
 
 @implementation FDMessageCell
 
-static BOOL KONOTOR_SHOWPROFILEIMAGE=YES;
-static float MAX_TEXT_WIDTH =KONOTOR_TEXTMESSAGE_MAXWIDTH - KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
-static float MAX_WIDTH_WITH_PROFILE_IMAGE = 3*KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION;
-//static float MAX_WIDTH_WITHOUT_PROFILE_IMAGE = 3*KONOTOR_HORIZONTAL_PADDING-WIDTH_BUFFER_IF_NO_PROFILE_AVAILABLE;
 static float MIN_HEIGHT=(KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2;
 static float ACTION_URL_HEIGHT = KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PADDING*2;
 
@@ -452,6 +448,8 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 
 + (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView{
     
+    BOOL KONOTOR_SHOWPROFILEIMAGE=YES;
+    
     NSInteger messageType = [currentMessage.messageType integerValue];
     
     BOOL showSenderName=NO;
@@ -466,8 +464,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
         
         float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
         if(KONOTOR_SHOWPROFILEIMAGE){
-            cellHeight= MAX(height+extraHeight,
-                            MIN_HEIGHT);
+            cellHeight= MAX(height+extraHeight, MIN_HEIGHT);
         }
         else{
             cellHeight= height+extraHeight;

@@ -161,13 +161,10 @@ static BOOL messageExistsDirty = YES;
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
         request.predicate = predicate;
-        NSArray *array = [context executeFetchRequest:request error:&pError];
-        if([array count]==0){
-
-        }else{
-            
-            for(int i=0;i<[array count];i++){
-                KonotorMessage *message = [array objectAtIndex:i];
+        NSArray *messages = [context executeFetchRequest:request error:&pError];
+        if (messages.count>0) {
+            for(int i=0;i<messages.count;i++){
+                KonotorMessage *message = messages[i];
                 if(message){
                     if(![[message marketingId] isEqualToNumber:@0]){
                         [HLMessageServices markMarketingMessageAsRead:message context:context];
@@ -176,28 +173,10 @@ static BOOL messageExistsDirty = YES;
                     }
                 }
             }
-            [self sendLatestUserActivity:channel];
+            [HLCoreServices sendLatestUserActivity:channel];
         }
         [context save:nil];
     }];
-}
-
-
-//TODO: .. Move network activity code out of Model - rex
-+ (void) sendLatestUserActivity :(HLChannel *)channel {
-    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
-    
-    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"messageRead == 1 AND belongsToChannel == %@", channel];
-    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserId != %@", USER_TYPE_MOBILE];
-    request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[queryChannelAndRead, queryType]];
-    NSArray *messages = [context executeFetchRequest:request error:nil];
-    
-    NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
-    KonotorMessage *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
-    if(latestMessage){
-        [HLCoreServices registerUserConversationActivity:latestMessage];
-    }
 }
 
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId{

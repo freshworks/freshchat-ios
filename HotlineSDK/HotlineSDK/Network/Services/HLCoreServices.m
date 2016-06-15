@@ -261,4 +261,20 @@
     return task;
 }
 
++(void)sendLatestUserActivity:(HLChannel *)channel{
+    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    
+    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"messageRead == 1 AND belongsToChannel == %@", channel];
+    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserId != %@", USER_TYPE_MOBILE];
+    request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[queryChannelAndRead, queryType]];
+    NSArray *messages = [context executeFetchRequest:request error:nil];
+    
+    NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
+    KonotorMessage *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
+    if(latestMessage){
+        [HLCoreServices registerUserConversationActivity:latestMessage];
+    }
+}
+
 @end

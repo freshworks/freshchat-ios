@@ -121,7 +121,6 @@ typedef struct {
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
     [self prepareInputToolbar];
-    
 }
 
 -(void)prepareInputToolbar{

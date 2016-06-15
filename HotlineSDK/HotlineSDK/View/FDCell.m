@@ -210,7 +210,6 @@ static float height = 0;
 
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
-    //TODO: add a check for category list
     self.layer.borderWidth = 0.6;
     self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
     self.imgView.layer.masksToBounds = YES;
