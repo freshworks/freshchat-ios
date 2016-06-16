@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "HLListViewController.h"
 
-@interface HLCategoriesListController : HLListViewController
+@interface HLCategoryListController : HLListViewController
 
 @end

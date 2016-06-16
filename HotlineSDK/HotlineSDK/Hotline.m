@@ -8,7 +8,7 @@
 
 #import "Hotline.h"
 #import "HLContainerController.h"
-#import "HLCategoriesListController.h"
+#import "HLCategoryListController.h"
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
 #import "HLChannelViewController.h"
@@ -285,7 +285,7 @@
     if (isGridLayoutDisplayEnabled) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
-        preferedController = [[HLCategoriesListController alloc]init];
+        preferedController = [[HLCategoryListController alloc]init];
     }
     return preferedController;
 }
@@ -295,6 +295,10 @@
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
+}
+
+-(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    
 }
 
 -(void)showConversations:(UIViewController *)controller{
