@@ -100,6 +100,7 @@
             }
         }
     }
+    [tagManager save];
     return category;
 }
 

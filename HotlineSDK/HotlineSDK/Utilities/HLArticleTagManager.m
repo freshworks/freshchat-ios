@@ -79,7 +79,6 @@
         [articleSet addObject:articleId];
         [self.tagMap setObject:articleSet forKey:tag];
         self.hasChanges = YES;
-        [self save];
     });
 }
 
@@ -90,12 +89,11 @@
             NSMutableSet *articleSet = [self.tagMap objectForKey:tagName];
             if([articleSet containsObject:articleId]){
                 [articleSet removeObject:articleId];
+                [updatedMap setObject:articleSet forKey:tagName];
+                self.hasChanges = YES;
             }
-            [updatedMap setObject:articleSet forKey:tagName];
         }
         self.tagMap = updatedMap;
-        self.hasChanges = YES;
-        [self save];
     });
 }
 

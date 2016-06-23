@@ -17,6 +17,7 @@
 
 -(void)addTag:(NSString *)tag forArticleId: (NSNumber *)articleId;
 -(void)removeTagsForArticleId: (NSNumber *)articleId;
+-(void) save;
 
 @end
 
