@@ -10,6 +10,7 @@
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
+#import "ArticleTagManager.h"
 
 @implementation HLCategory
 
@@ -62,19 +63,28 @@
     });
     category.icon = imageData;
     
+    ArticleTagManager *tagManager = [ArticleTagManager sharedInstance];
+    
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];
     for (int j=0; j<articles.count; j++) {
         NSDictionary *articleInfo = articles[j];
-        HLArticle *article = [HLArticle getWithID:articleInfo[@"articleId"] inContext:context];
+        NSNumber *articleId = articleInfo[@"articleId"];
+        HLArticle *article = [HLArticle getWithID:articleId inContext:context];
         BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
         BOOL isIOSPlatformAvail = [articleInfo[@"platforms"] containsObject:@"ios"];
+        NSArray *tags = articleInfo[@"tags"];
         if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
             }else{
                 article = [HLArticle createWithInfo:articleInfo inContext:context];
                 [category addArticlesObject:article];
+            }
+            if(tags){
+                for(NSString *tagName in tags){
+                    [tagManager addTag:tagName forArticleID:articleId];
+                }
             }
         }else{
             if (article){
@@ -83,6 +93,11 @@
             }
             else {
                FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
+            }
+            if(tags){
+                for(NSString *tagName in tags){
+                    [tagManager removeTag:tagName forArticleID:articleId];
+                }
             }
         }
     }

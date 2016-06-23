@@ -103,6 +103,7 @@
 		35B2EFD41D000EE80014867F /* FDReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EFD01D000EE80014867F /* FDReachability.m */; };
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 		3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLArticleUtil.m */; };
+		3C4CEDBA1D1C2FDD000EE1AE /* ArticleTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4CEDB91D1C2FDD000EE1AE /* ArticleTagManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -314,6 +315,8 @@
 		35B2EFD01D000EE80014867F /* FDReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDReachability.m; sourceTree = "<group>"; };
 		3C160B041D05A530000440D4 /* HLArticleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLArticleUtil.h; sourceTree = "<group>"; };
 		3C160B051D05A59C000440D4 /* HLArticleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleUtil.m; sourceTree = "<group>"; };
+		3C4CEDB81D1C2FC7000EE1AE /* ArticleTagManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArticleTagManager.h; sourceTree = "<group>"; };
+		3C4CEDB91D1C2FDD000EE1AE /* ArticleTagManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleTagManager.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -569,6 +572,8 @@
 				35B2EF4F1D000E620014867F /* KonotorAudioRecorder.m */,
 				3C160B041D05A530000440D4 /* HLArticleUtil.h */,
 				3C160B051D05A59C000440D4 /* HLArticleUtil.m */,
+				3C4CEDB81D1C2FC7000EE1AE /* ArticleTagManager.h */,
+				3C4CEDB91D1C2FDD000EE1AE /* ArticleTagManager.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -859,6 +864,7 @@
 				35B2EFBC1D000E620014867F /* FDCell.m in Sources */,
 				35B2EFB21D000E620014867F /* FDUtilities.m in Sources */,
 				35B2EF851D000E620014867F /* HLCategoryGridViewController.m in Sources */,
+				3C4CEDBA1D1C2FDD000EE1AE /* ArticleTagManager.m in Sources */,
 				35B2EFAB1D000E620014867F /* FDDateUtil.m in Sources */,
 				35B2EF841D000E620014867F /* HLCategoriesListController.m in Sources */,
 				35B2EFA61D000E620014867F /* HLFAQServices.m in Sources */,
