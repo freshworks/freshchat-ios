@@ -10,7 +10,7 @@
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
-#import "ArticleTagManager.h"
+#import "HLArticleTagManager.h"
 
 @implementation HLCategory
 
@@ -63,7 +63,7 @@
     });
     category.icon = imageData;
     
-    ArticleTagManager *tagManager = [ArticleTagManager sharedInstance];
+    HLArticleTagManager *tagManager = [HLArticleTagManager sharedInstance];
     
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];
@@ -82,8 +82,9 @@
                 [category addArticlesObject:article];
             }
             if(tags){
+                [tagManager removeTagsForArticleId:articleId];
                 for(NSString *tagName in tags){
-                    [tagManager addTag:tagName forArticleID:articleId];
+                    [tagManager addTag:tagName forArticleId:articleId];
                 }
             }
         }else{
@@ -95,9 +96,7 @@
                FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
             }
             if(tags){
-                for(NSString *tagName in tags){
-                    [tagManager removeTag:tagName forArticleID:articleId];
-                }
+               [tagManager removeTagsForArticleId:articleId];
             }
         }
     }

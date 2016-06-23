@@ -1,18 +1,18 @@
 //
-//  ArticleTagManager.m
+//  HLArticleTagManager.m
 //  HotlineSDK
 //
 //  Created by Hrishikesh on 23/06/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "ArticleTagManager.h"
+#import "HLArticleTagManager.h"
 #import "HLMacros.h"
 
 #define STORAGE_DIR_PATH @"Hotline/Offline"
 #define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
 
-@interface ArticleTagManager ()
+@interface HLArticleTagManager ()
 
 @property NSMutableDictionary *tagMap;
 @property NSMutableDictionary *articleMap;
@@ -22,10 +22,10 @@
 
 @end
 
-@implementation ArticleTagManager
+@implementation HLArticleTagManager
 
 +(instancetype)sharedInstance{
-    static ArticleTagManager *sharedInstance = nil;
+    static HLArticleTagManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc]init];
@@ -70,7 +70,7 @@
     });
 }
 
--(void)addTag:(NSString *)tag forArticleID: (NSNumber *)articleId{
+-(void)addTag:(NSString *)tag forArticleId: (NSNumber *)articleId{
     dispatch_async(self.queue, ^{
         NSMutableSet *articleSet = [self.tagMap objectForKey:tag];
         if(!articleSet){
@@ -83,7 +83,7 @@
     });
 }
 
--(void)removeTag:(NSString *)tag forArticleID: (NSNumber *)articleId{
+-(void)removeTagsForArticleId:(NSNumber *)articleId{
     dispatch_async(self.queue, ^{
         NSMutableDictionary *updatedMap = [[NSMutableDictionary alloc] init];
         for(NSString *tagName in self.tagMap){
