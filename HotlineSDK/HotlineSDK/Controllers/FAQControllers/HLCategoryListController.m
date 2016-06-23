@@ -6,7 +6,7 @@
 //
 //
 
-#import "HLCategoriesListController.h"
+#import "HLCategoryListController.h"
 #import "HLFAQServices.h"
 #import "FDLocalNotification.h"
 #import "KonotorDataManager.h"
@@ -26,7 +26,7 @@
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
 
-@interface HLCategoriesListController ()
+@interface HLCategoryListController ()
 
 @property (nonatomic, strong)NSArray *categories;
 @property (nonatomic, strong)HLTheme *theme;
@@ -35,7 +35,7 @@
 
 @end
 
-@implementation HLCategoriesListController
+@implementation HLCategoryListController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];

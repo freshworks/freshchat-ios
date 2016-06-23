@@ -8,7 +8,7 @@
 
 #import "Hotline.h"
 #import "HLContainerController.h"
-#import "HLCategoriesListController.h"
+#import "HLCategoryListController.h"
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
 #import "HLChannelViewController.h"
@@ -279,19 +279,30 @@
 }
 
 -(HLViewController *)getPreferredFAQsController{
-    HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
-    if (isGridLayoutDisplayEnabled) {
+    return [self getGridController:isGridLayoutDisplayEnabled];
+}
+
+-(HLViewController *)getGridController:(BOOL)preferGrid{
+    HLViewController *preferedController = nil;
+    if (preferGrid) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
-        preferedController = [[HLCategoriesListController alloc]init];
+        preferedController = [[HLCategoryListController alloc]init];
     }
     return preferedController;
 }
 
 -(void)showFAQs:(UIViewController *)controller{
     HLViewController *preferredController = [self getPreferredFAQsController];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
+}
+
+-(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    HLViewController *preferredController = [self getGridController:options.showFaqCategoriesAsGrid];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];

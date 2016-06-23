@@ -11,7 +11,7 @@
 
 #define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
 
-@class HotlineConfig, HotlineUser;
+@class HotlineConfig, HotlineUser, FAQOptions;
 
 @interface HotlineConfig : NSObject
 
@@ -126,6 +126,8 @@
  *
  */
 -(void)showFAQs:(UIViewController *)controller;
+
+-(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options;
 /**
  *  Update user Info
  *
@@ -270,5 +272,14 @@
  * Access the user info. If update user was called earlier, the instance would contain the persisted values.
  */
 +(instancetype)sharedInstance;
+
+@end
+
+
+@interface FAQOptions : NSObject
+
+@property (nonatomic) BOOL showFaqCategoriesAsGrid;
+@property (nonatomic) BOOL showContactUsOnFaqScreens;
+@property (nonatomic) BOOL showContactUsOnAppBar;
 
 @end

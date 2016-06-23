@@ -88,7 +88,7 @@
 //      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
 //      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
     
-    config.displayFAQsAsGrid = NO;
+    config.displayFAQsAsGrid = YES;
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
     //config.displayFAQsAsGrid = YES;
