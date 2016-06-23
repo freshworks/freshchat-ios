@@ -279,10 +279,14 @@
 }
 
 -(HLViewController *)getPreferredFAQsController{
-    HLViewController *preferedController = nil;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
-    if (isGridLayoutDisplayEnabled) {
+    return [self getGridController:isGridLayoutDisplayEnabled];
+}
+
+-(HLViewController *)getGridController:(BOOL)preferGrid{
+    HLViewController *preferedController = nil;
+    if (preferGrid) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
         preferedController = [[HLCategoryListController alloc]init];
@@ -298,7 +302,10 @@
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
-    
+    HLViewController *preferredController = [self getGridController:options.showFaqCategoriesAsGrid];
+    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+    [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
 -(void)showConversations:(UIViewController *)controller{

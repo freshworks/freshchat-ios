@@ -46,7 +46,9 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance]showFAQs:self];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = NO;
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 
 @end
