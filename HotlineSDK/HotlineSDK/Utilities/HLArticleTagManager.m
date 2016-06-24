@@ -106,8 +106,8 @@
     dispatch_async(self.queue, ^{
         NSMutableSet *articleSet = [[NSMutableSet alloc]init];
         for(NSString *tag in tags){
-            tag = [tag lowercaseString];
-            NSSet *matches = [self.tagMap objectForKey:tag];
+            NSString *tagValue = [tag lowercaseString];
+            NSSet *matches = [self.tagMap objectForKey:tagValue];
             [articleSet addObjectsFromArray:[matches allObjects]];
         }
         dispatch_async(dispatch_get_main_queue(),^{
