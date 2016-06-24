@@ -48,7 +48,7 @@
 - (IBAction)chatButtonPressed:(id)sender {
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = NO;
-    options.filterByTags = @[ @"newTag"];
+    [options filterByTags : @[ @"newTag"] withTitle:@"newTag"];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 

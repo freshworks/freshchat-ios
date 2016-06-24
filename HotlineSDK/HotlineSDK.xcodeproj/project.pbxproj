@@ -135,8 +135,8 @@
 		35B2EED01D000E620014867F /* HLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLListViewController.m; sourceTree = "<group>"; };
 		35B2EED31D000E620014867F /* HLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLViewController.h; sourceTree = "<group>"; };
 		35B2EED41D000E620014867F /* HLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLViewController.m; sourceTree = "<group>"; };
-		35B2EED71D000E620014867F /* HLNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLNotificationHandler.h; sourceTree = "<group>"; };
-		35B2EED81D000E620014867F /* HLNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLNotificationHandler.m; sourceTree = "<group>"; };
+		35B2EED71D000E620014867F /* HLNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLNotificationHandler.h; path = ../HLNotificationHandler.h; sourceTree = "<group>"; };
+		35B2EED81D000E620014867F /* HLNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLNotificationHandler.m; path = ../HLNotificationHandler.m; sourceTree = "<group>"; };
 		35B2EED91D000E620014867F /* Hotline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hotline.h; sourceTree = "<group>"; };
 		35B2EEDA1D000E620014867F /* Hotline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hotline.m; sourceTree = "<group>"; };
 		35B2EEDB1D000E620014867F /* HotlineConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotlineConfig.m; sourceTree = "<group>"; };
@@ -411,8 +411,6 @@
 				35B2EEDD1D000E620014867F /* HotlineUser.m */,
 				35D4E7FB1D10300300EFFE07 /* FAQOptions.m */,
 				35B2EEDB1D000E620014867F /* HotlineConfig.m */,
-				35B2EED71D000E620014867F /* HLNotificationHandler.h */,
-				35B2EED81D000E620014867F /* HLNotificationHandler.m */,
 				35B2EEDC1D000E620014867F /* HotlineSDK-Prefix.pch */,
 				35B2EEBC1D000E620014867F /* Controllers */,
 				35B2EEE01D000E620014867F /* Model */,
@@ -519,6 +517,8 @@
 		35B2EF2A1D000E620014867F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				35B2EED71D000E620014867F /* HLNotificationHandler.h */,
+				35B2EED81D000E620014867F /* HLNotificationHandler.m */,
 				35B2EF2B1D000E620014867F /* FDAutolayoutHelper.h */,
 				35B2EF2C1D000E620014867F /* FDAutolayoutHelper.m */,
 				35B2EF2D1D000E620014867F /* FDBackgroundTaskManager.h */,
@@ -886,7 +886,6 @@
 				35B2EFCA1D000E620014867F /* FDPictureMessageView.m in Sources */,
 				35B2EFBC1D000E620014867F /* FDCell.m in Sources */,
 				35B2EFB21D000E620014867F /* FDUtilities.m in Sources */,
-				35B2EF851D000E620014867F /* HLCategoryGridViewController.m in Sources */,
 				3C4CEDBA1D1C2FDD000EE1AE /* HLArticleTagManager.m in Sources */,
 				35B2EFAB1D000E620014867F /* FDDateUtil.m in Sources */,
 				35B2EFA61D000E620014867F /* HLFAQServices.m in Sources */,

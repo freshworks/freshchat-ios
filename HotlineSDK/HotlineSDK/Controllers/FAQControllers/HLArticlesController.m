@@ -17,21 +17,30 @@
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
 #import "HLArticleUtil.h"
+#import "HLArticleTagManager.h"
 
 @interface HLArticlesController ()
 
 @property(nonatomic, strong)HLCategory *category;
 @property(nonatomic, strong)NSArray *articles;
 @property (strong, nonatomic) HLTheme *theme;
+@property FAQOptions *options;
 
 @end
 
 @implementation HLArticlesController
 
 -(instancetype)initWithCategory:(HLCategory *)category{
-    self = [super init];
+    self = [self init];
     if (self) {
         self.category = category;
+    }
+    return self;
+}
+
+-(instancetype) init {
+    self = [super init];
+    if (self) {
         self.theme = [HLTheme sharedInstance];
     }
     return self;
@@ -43,7 +52,12 @@
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
-    parent.navigationItem.title = self.category.title;
+    if(self.category){
+        parent.navigationItem.title = self.category.title;
+    }
+    else if (self.options && [[self.options tags] count] > 0 ){
+        parent.navigationItem.title = [self.options filteredViewTitle];
+    }
     [self setNavigationItem];
 }
 
@@ -53,14 +67,33 @@
 }
 
 -(void)updateDataSource{
-    self.articles = self.category.articles.allObjects;
+    self.articles = @[];
     [self.tableView reloadData];
-    [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
-        NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        self.articles = sortedArticles;
-        [self.tableView reloadData];
-    }];
+    
+    if(self.category){
+        [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+            NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
+            self.articles = sortedArticles;
+            [self.tableView reloadData];
+        }];
+    }
+    else if (self.options && [[self.options tags] count] > 0 ){
+        [[HLArticleTagManager sharedInstance] articlesForTags:[self.options tags] withCompletion:
+         ^(NSSet *articleIds) {
+             NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
+             
+             [mainContext performBlock:^{
+                 NSMutableArray *matchingArticles;
+                 for(NSNumber * articleId in articleIds){
+                     HLArticle *article = [HLArticle getWithID:articleId inContext:mainContext];
+                     if(article){
+                         [matchingArticles addObject:article];
+                     }
+                 }
+             }];
+         }];
+    }
 }
 
 -(void)setNavigationItem{
@@ -130,6 +163,10 @@
         HLArticle *article = self.articles[indexPath.row];
         [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController];
     }
+}
+
+-(void) setFAQOptions:(FAQOptions *)options {
+    self.options = options;
 }
 
 @end

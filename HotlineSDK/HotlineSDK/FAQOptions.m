@@ -10,6 +10,13 @@
 
 #import <Foundation/Foundation.h>
 
+@interface FAQOptions()
+
+@property (nonatomic) NSArray *filterByTags;
+@property (nonatomic) NSString *filteredViewTitle;
+
+@end
+
 @implementation FAQOptions
 
 - (instancetype)init{
@@ -21,6 +28,19 @@
         self.filterByTags = @[];
     }
     return self;
+}
+
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title{
+    self.filterByTags = tags;
+    self.filteredViewTitle = title;
+}
+
+-(NSString *) filteredViewTitle{
+    return self.filteredViewTitle;
+}
+
+-(NSArray *) tags{
+    return self.filterByTags;
 }
 
 @end

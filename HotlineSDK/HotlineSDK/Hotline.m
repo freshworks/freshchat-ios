@@ -34,6 +34,7 @@
 #import "HLArticlesController.h"
 #import "HLArticleDetailViewController.h"
 #import "HLArticleUtil.h"
+#import "FAQOptionsInterface.h"
 
 @interface Hotline ()
 
@@ -286,13 +287,6 @@
     return [self preferredCategoryController:[FAQOptions new]];
 }
 
--(HLViewController *)getFAQController:(FAQOptions *)options {
-    HLViewController *preferedController = nil;
-    if(options.filterByTags && [options.filterByTags count] > 0){
-        preferedController = [[HLCategoryListController alloc]init];
-    }
-}
-
 -(HLViewController *) preferredCategoryController:(FAQOptions *)options {
     __block HLViewController *preferedController = nil;
     if (options.showFaqCategoriesAsGrid) {
@@ -306,12 +300,20 @@
 
 -(void) selectFAQController:(FAQOptions *)options
                                   withCompletion : (void (^)(HLViewController *))completion{
-    [[HLArticleTagManager sharedInstance] articlesForTags:options.filterByTags
+    [[HLArticleTagManager sharedInstance] articlesForTags:[options tags]
                                                 withCompletion:^(NSSet *articleIds)  {
         __block HLViewController *preferedController = nil;
+        void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
+            if ([preferredViewController conformsToProtocol:@protocol(FAQOptionsInterface)]){
+                HLViewController <FAQOptionsInterface> *vc
+                    = (HLViewController <FAQOptionsInterface> *) preferredViewController;
+                [vc setFAQOptions:options];
+            }
+            completion(preferedController);
+        };
         if([articleIds count] > 1 ){
             preferedController = [[HLArticlesController alloc]init];
-            completion(preferedController);
+            faqOptionsCompletion(preferedController);
         }
         else if([articleIds count] == 1 ) {
             NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
@@ -321,17 +323,17 @@
                 HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
                 if(article){
                     preferedController = [HLArticleUtil getArticleDetailController:article];
-                    completion(preferedController);
+                    faqOptionsCompletion(preferedController);
                 }
                 else { // This shouldn't happen but lets see
                     preferedController = [self preferredCategoryController:options];
-                    completion(preferedController);
+                    faqOptionsCompletion(preferedController);
                 }
             }];
         }
         else {
             preferedController = [self preferredCategoryController:options];
-            completion(preferedController);
+            faqOptionsCompletion(preferedController);
         }
     }];
 }

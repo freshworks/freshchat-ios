@@ -103,7 +103,7 @@
         NSMutableSet *articleSet = [[NSMutableSet alloc]init];
         for(NSString *tag in tags){
             NSSet *matches = [self.tagMap objectForKey:tag];
-            [articleSet addObjectsFromArray:matches];
+            [articleSet addObjectsFromArray:[matches allObjects]];
         }
         dispatch_async(dispatch_get_main_queue(),^{
             completion(articleSet);
@@ -130,6 +130,12 @@
         }
     }
     return [filePath stringByAppendingPathComponent:fileName];
+}
+
+-(void)clear{
+    self.tagMap = [[NSMutableDictionary alloc] init];
+    [self save];
+    FDLog(@"Fire in the hole");
 }
 
 @end
