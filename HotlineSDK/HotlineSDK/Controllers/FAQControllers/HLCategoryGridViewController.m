@@ -38,10 +38,15 @@
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FAQOptions *options;
 
 @end
 
 @implementation HLCategoryGridViewController
+
+-(void) setFAQOptions:(FAQOptions *)options{
+    self.options = options;
+}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);

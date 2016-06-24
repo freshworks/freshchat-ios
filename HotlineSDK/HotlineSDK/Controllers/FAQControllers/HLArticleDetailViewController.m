@@ -36,6 +36,8 @@
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) NSString *appAudioCategory;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
+@property (nonatomic, strong) FAQOptions *options;
+
 @end
 
 @implementation HLArticleDetailViewController
@@ -49,6 +51,10 @@
          _votingManager = [FDVotingManager sharedInstance];
     }
     return self;
+}
+
+-(void) setFAQOptions:(FAQOptions *)options{
+    self.options = options;
 }
 
 -(NSString *)embedHTML{

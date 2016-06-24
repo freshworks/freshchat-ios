@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "HLViewController.h"
+#import "FAQOptionsInterface.h"
 
-@interface HLCategoryGridViewController : HLViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UISearchDisplayDelegate>
+@interface HLCategoryGridViewController : HLViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UISearchDisplayDelegate,FAQOptionsInterface>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *searchResults;

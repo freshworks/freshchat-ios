@@ -319,7 +319,6 @@
             NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
             
             [mContext performBlock:^{
-                //TODO: This is not working for some reason.. investigate later - Rex
                 HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
                 if(article){
                     preferedController = [HLArticleUtil getArticleDetailController:article];
@@ -332,6 +331,7 @@
             }];
         }
         else {
+            [options filterByTags:@[] withTitle:@""]; // No Matching tags so no need to pass it around
             preferedController = [self preferredCategoryController:options];
             faqOptionsCompletion(preferedController);
         }

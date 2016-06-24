@@ -32,10 +32,15 @@
 @property (nonatomic, strong)HLTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FAQOptions *options;
 
 @end
 
 @implementation HLCategoryListController
+
+-(void) setFAQOptions:(FAQOptions *)options{
+    self.options = options;
+}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];

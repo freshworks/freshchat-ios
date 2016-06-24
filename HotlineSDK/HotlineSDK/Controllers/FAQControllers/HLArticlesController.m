@@ -18,6 +18,7 @@
 #import "FDArticleListCell.h"
 #import "HLArticleUtil.h"
 #import "HLArticleTagManager.h"
+#import "HLLocalization.h"
 
 @interface HLArticlesController ()
 
@@ -94,10 +95,16 @@
                      }
                  }
                  self.articles = matchingArticles;
+                  UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+                 self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
                  [self.tableView reloadData];
              }];
          }];
     }
+}
+
+-(void)closeButton:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)setNavigationItem{
