@@ -70,9 +70,11 @@
     self.articles = @[];
     [self.tableView reloadData];
     
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+    
     if(self.category){
         [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+          
             NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
             self.articles = sortedArticles;
             [self.tableView reloadData];
@@ -84,13 +86,15 @@
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
              
              [mainContext performBlock:^{
-                 NSMutableArray *matchingArticles;
+                 NSMutableArray *matchingArticles= [NSMutableArray new];
                  for(NSNumber * articleId in articleIds){
                      HLArticle *article = [HLArticle getWithID:articleId inContext:mainContext];
                      if(article){
                          [matchingArticles addObject:article];
                      }
                  }
+                 self.articles = matchingArticles;
+                 [self.tableView reloadData];
              }];
          }];
     }

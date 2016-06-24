@@ -486,6 +486,7 @@
     NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
     [[HotlineUser sharedInstance]clearUserData];
+    [[HLArticleTagManager sharedInstance]clear];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
         FDLog(@"Deleted all meta properties");

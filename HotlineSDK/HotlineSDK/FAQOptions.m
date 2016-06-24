@@ -13,7 +13,7 @@
 @interface FAQOptions()
 
 @property (nonatomic) NSArray *filterByTags;
-@property (nonatomic) NSString *filteredViewTitle;
+@property (nonatomic) NSString *tagViewTitle;
 
 @end
 
@@ -32,11 +32,11 @@
 
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title{
     self.filterByTags = tags;
-    self.filteredViewTitle = title;
+    self.tagViewTitle = title;
 }
 
 -(NSString *) filteredViewTitle{
-    return self.filteredViewTitle;
+    return self.tagViewTitle;
 }
 
 -(NSArray *) tags{

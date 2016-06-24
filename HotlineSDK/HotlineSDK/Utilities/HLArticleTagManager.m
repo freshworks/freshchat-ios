@@ -72,6 +72,7 @@
 }
 
 -(void)addTag:(NSString *)tag forArticleId: (NSNumber *)articleId{
+    tag = [tag lowercaseString];
     dispatch_async(self.queue, ^{
         NSMutableSet *articleSet = [self.tagMap objectForKey:tag];
         if(!articleSet){
@@ -93,6 +94,9 @@
                 [updatedMap setObject:articleSet forKey:tagName];
                 self.hasChanges = YES;
             }
+            else {
+                [updatedMap setObject:articleSet forKey:tagName];
+            }
         }
         self.tagMap = updatedMap;
     });
@@ -102,6 +106,7 @@
     dispatch_async(self.queue, ^{
         NSMutableSet *articleSet = [[NSMutableSet alloc]init];
         for(NSString *tag in tags){
+            tag = [tag lowercaseString];
             NSSet *matches = [self.tagMap objectForKey:tag];
             [articleSet addObjectsFromArray:[matches allObjects]];
         }
@@ -133,9 +138,12 @@
 }
 
 -(void)clear{
-    self.tagMap = [[NSMutableDictionary alloc] init];
-    [self save];
-    FDLog(@"Fire in the hole");
+    dispatch_async(self.queue, ^{
+        self.tagMap = [[NSMutableDictionary alloc] init];
+        self.hasChanges = YES;
+        [self save];
+        FDLog(@"Fire in the hole");
+    });
 }
 
 @end
