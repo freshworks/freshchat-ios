@@ -15,26 +15,31 @@
 
 @implementation HLArticleUtil
 
-+(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller{
++(void) launchArticleID:(NSNumber *) articleId
+     withNavigationCtlr:(UIViewController *) controller
+          andFAQOptions:(FAQOptions *)faqOptions{
     NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
     
     [mContext performBlock:^{
         HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
         if(article){
-            [HLArticleUtil launchArticle:article withNavigationCtlr:controller];
+            [HLArticleUtil launchArticle:article withNavigationCtlr:controller andFAQOptions:faqOptions];
         }
     }];
 }
 
-+(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UINavigationController *) controller{
++(void) launchArticle:(HLArticle *) article
+   withNavigationCtlr:(UINavigationController *) controller
+        andFAQOptions:(FAQOptions *)faqOptions;{
     dispatch_async(dispatch_get_main_queue(),^{
         HLArticleDetailViewController *articleDetailController = [self getArticleDetailController:article];
+        [HLArticleUtil setFAQOptions:faqOptions andViewController:articleDetailController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
         [controller pushViewController:container animated:YES];
     });
 }
 
-+(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article {
++(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article{
     HLArticleDetailViewController* articleDetailController=[[HLArticleDetailViewController alloc] init];
     articleDetailController.articleID = article.articleID;
     articleDetailController.articleTitle = article.title;

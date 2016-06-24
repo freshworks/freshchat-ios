@@ -235,7 +235,7 @@
         [self.navigationController setNavigationBarHidden:NO animated:NO];
       
         FDArticleContent *article = self.searchResults[indexPath.row];
-        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController];
+        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
     }
 }
 

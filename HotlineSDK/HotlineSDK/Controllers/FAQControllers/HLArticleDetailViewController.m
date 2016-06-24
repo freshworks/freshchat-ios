@@ -36,7 +36,7 @@
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) NSString *appAudioCategory;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
-@property (nonatomic, strong) FAQOptions *options;
+@property (nonatomic, strong) FAQOptions *faqOptions;
 
 @end
 
@@ -54,7 +54,7 @@
 }
 
 -(void) setFAQOptions:(FAQOptions *)options{
-    self.options = options;
+    self.faqOptions = options;
 }
 
 -(NSString *)embedHTML{
@@ -132,7 +132,7 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
-    if(self.options && [[self.options tags] count] > 0 ){
+    if(self.faqOptions && [[self.faqOptions tags] count] > 0 ){
         UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
@@ -188,7 +188,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController];
+            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
@@ -259,6 +259,9 @@
 }
 
 -(void)handleArticleVotePrompt{
+    if(self.faqOptions && ![self.faqOptions showContactUsOnFaqScreens]){
+        return;
+    }
     if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         if(self.bottomViewHeightConstraint.constant == 0 ) {
             BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];

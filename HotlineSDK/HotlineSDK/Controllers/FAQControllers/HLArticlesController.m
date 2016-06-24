@@ -25,7 +25,7 @@
 @property(nonatomic, strong)HLCategory *category;
 @property(nonatomic, strong)NSArray *articles;
 @property (strong, nonatomic) HLTheme *theme;
-@property FAQOptions *options;
+@property FAQOptions *faqOptions;
 
 @end
 
@@ -42,6 +42,7 @@
 -(instancetype) init {
     self = [super init];
     if (self) {
+        self.faqOptions = [FAQOptions new];
         self.theme = [HLTheme sharedInstance];
     }
     return self;
@@ -56,8 +57,8 @@
     if(self.category){
         parent.navigationItem.title = self.category.title;
     }
-    else if (self.options && [[self.options tags] count] > 0 ){
-        parent.navigationItem.title = [self.options filteredViewTitle];
+    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
+        parent.navigationItem.title = [self.faqOptions filteredViewTitle];
     }
     [self setNavigationItem];
 }
@@ -65,6 +66,10 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self updateDataSource];
+}
+
+-(BOOL)canDisplayFooterView{
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
 }
 
 -(void)updateDataSource{
@@ -81,8 +86,8 @@
             [self.tableView reloadData];
         }];
     }
-    else if (self.options && [[self.options tags] count] > 0 ){
-        [[HLArticleTagManager sharedInstance] articlesForTags:[self.options tags] withCompletion:
+    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
+        [[HLArticleTagManager sharedInstance] articlesForTags:[self.faqOptions tags] withCompletion:
          ^(NSSet *articleIds) {
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
              
@@ -172,12 +177,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController];
+        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];
     }
 }
 
 -(void) setFAQOptions:(FAQOptions *)options {
-    self.options = options;
+    self.faqOptions = options;
 }
 
 @end
