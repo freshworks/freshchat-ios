@@ -18,7 +18,7 @@
 +(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller;
 +(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
-
++(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController;
 @end
 
 #endif /* ArticleUtil_h */

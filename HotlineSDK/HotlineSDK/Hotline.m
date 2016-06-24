@@ -302,16 +302,13 @@
                                   withCompletion : (void (^)(HLViewController *))completion{
     [[HLArticleTagManager sharedInstance] articlesForTags:[options tags]
                                                 withCompletion:^(NSSet *articleIds)  {
-        __block HLViewController *preferedController = nil;
+        
         void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-            if ([preferredViewController conformsToProtocol:@protocol(FAQOptionsInterface)]){
-                HLViewController <FAQOptionsInterface> *vc
-                    = (HLViewController <FAQOptionsInterface> *) preferredViewController;
-                [vc setFAQOptions:options];
-            }
-            completion(preferedController);
+            [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+            completion(preferredViewController);
         };
         if([articleIds count] > 1 ){
+            HLViewController *preferedController = nil;
             preferedController = [[HLArticlesController alloc]init];
             faqOptionsCompletion(preferedController);
         }
@@ -319,6 +316,7 @@
             NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
             
             [mContext performBlock:^{
+                HLViewController *preferedController = nil;
                 HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
                 if(article){
                     preferedController = [HLArticleUtil getArticleDetailController:article];
@@ -331,6 +329,7 @@
             }];
         }
         else {
+            HLViewController *preferedController = nil;
             [options filterByTags:@[] withTitle:@""]; // No Matching tags so no need to pass it around
             preferedController = [self preferredCategoryController:options];
             faqOptionsCompletion(preferedController);

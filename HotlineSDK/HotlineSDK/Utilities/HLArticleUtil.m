@@ -44,4 +44,11 @@
     return articleDetailController;
 }
 
++(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController{
+    if ([viewController conformsToProtocol:@protocol(FAQOptionsInterface)]){
+        HLViewController <FAQOptionsInterface> *vc
+        = (HLViewController <FAQOptionsInterface> *) viewController;
+        [vc setFAQOptions:options];
+    }
+}
 @end

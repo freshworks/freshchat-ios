@@ -132,10 +132,18 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
-
-    [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+    if(self.options && [[self.options tags] count] > 0 ){
+        UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
+    else {
+        [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+    }
 }
 
+-(void)closeButton:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 -(void)setSubviews{
     self.webView = [[UIWebView alloc]init];
