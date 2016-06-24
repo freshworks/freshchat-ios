@@ -288,7 +288,7 @@
 }
 
 -(HLViewController *) preferredCategoryController:(FAQOptions *)options {
-    __block HLViewController *preferedController = nil;
+    HLViewController *preferedController = nil;
     if (options.showFaqCategoriesAsGrid) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{

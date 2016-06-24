@@ -15,7 +15,6 @@
 @interface HLArticleTagManager ()
 
 @property NSMutableDictionary *tagMap;
-@property NSMutableDictionary *articleMap;
 @property dispatch_queue_t queue;
 @property NSString *storageFile;
 @property BOOL hasChanges;
@@ -37,7 +36,6 @@
     self = [super init];
     if (self) {
         self.tagMap = [[NSMutableDictionary alloc] init];
-        self.articleMap = [[NSMutableDictionary alloc] init];
         self.queue = dispatch_queue_create("com.freshdesk.hotline.tagmanager", DISPATCH_QUEUE_SERIAL);
         self.storageFile = [self getFileForStorage:TAGS_FILE_NAME];
         [self load];
@@ -124,8 +122,8 @@
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
         NSError *error = nil;
-        NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                         forKey:NSFileProtectionKey];
+        NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
+        
         [[NSFileManager defaultManager] createDirectoryAtPath:filePath
                                   withIntermediateDirectories:YES
                                                    attributes:attr
