@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "HLCategory.h"
 #import "HLListViewController.h"
+#import "FAQOptionsInterface.h"
 
-@interface HLArticlesController : HLListViewController
+@interface HLArticlesController : HLListViewController<FAQOptionsInterface>
 
 -(instancetype)initWithCategory:(HLCategory *)category;
 

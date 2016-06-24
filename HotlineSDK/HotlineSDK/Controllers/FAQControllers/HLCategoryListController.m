@@ -6,7 +6,7 @@
 //
 //
 
-#import "HLCategoriesListController.h"
+#import "HLCategoryListController.h"
 #import "HLFAQServices.h"
 #import "FDLocalNotification.h"
 #import "KonotorDataManager.h"
@@ -25,17 +25,23 @@
 #import "HLEmptyResultView.h"
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
+#import "HLArticleUtil.h"
 
-@interface HLCategoriesListController ()
+@interface HLCategoryListController ()
 
 @property (nonatomic, strong)NSArray *categories;
 @property (nonatomic, strong)HLTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FAQOptions *faqOptions;
 
 @end
 
-@implementation HLCategoriesListController
+@implementation HLCategoryListController
+
+-(void) setFAQOptions:(FAQOptions *)options{
+    self.faqOptions = options;
+}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
@@ -115,12 +121,12 @@
     else {
         [self configureBackButtonWithGestureDelegate:nil];
     }
-    NSArray *rightBarItems;
-    if(!self.categories.count){
-        rightBarItems = @[contactUsBarButton];
+    NSMutableArray *rightBarItems = [NSMutableArray new];
+    if(self.categories.count){
+        [rightBarItems addObject:searchBarButton];
     }
-    else{
-        rightBarItems = @[searchBarButton,contactUsBarButton];
+    if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
+        [rightBarItems addObject:contactUsBarButton];
     }
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
 }
@@ -131,6 +137,7 @@
 
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
@@ -201,12 +208,17 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
+    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
     [self.navigationController pushViewController:container animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 64;
+}
+
+-(BOOL)canDisplayFooterView{
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
 }
 
 @end

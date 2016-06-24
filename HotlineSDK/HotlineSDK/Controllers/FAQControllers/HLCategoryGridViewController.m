@@ -28,6 +28,7 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
+#import "HLArticleUtil.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -38,10 +39,19 @@
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FAQOptions *faqOptions;
 
 @end
 
 @implementation HLCategoryGridViewController
+
+-(void) setFAQOptions:(FAQOptions *)options{
+    self.faqOptions = options;
+}
+
+-(BOOL)canDisplayFooterView{
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
@@ -131,12 +141,12 @@
         [self configureBackButtonWithGestureDelegate:nil];
     }
     
-    NSArray *rightBarItems;
-    if(!self.categories.count){
-        rightBarItems = @[contactUsBarButton];
+    NSMutableArray *rightBarItems = [NSMutableArray new];
+    if(self.categories.count){
+        [rightBarItems addObject:searchBarButton];
     }
-    else{
-        rightBarItems = @[searchBarButton,contactUsBarButton];
+    if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
+        [rightBarItems addObject:contactUsBarButton];
     }
     
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
@@ -146,6 +156,7 @@
 
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
@@ -246,7 +257,12 @@
     NSDictionary *views = @{ @"collectionView" : self.collectionView, @"footerView" : self.footerView};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(40)]|" options:0 metrics:nil views:views]];
+    if([self canDisplayFooterView]){
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(40)]|" options:0 metrics:nil views:views]];
+    }
+    else {
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(0)]|" options:0 metrics:nil views:views]];
+    }
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
@@ -306,6 +322,7 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
+        [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }

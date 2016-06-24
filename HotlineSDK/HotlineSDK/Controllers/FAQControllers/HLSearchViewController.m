@@ -41,6 +41,7 @@
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) BOOL isKeyboardOpen;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic, strong) FAQOptions *faqOptions;
 @end
 
 @implementation HLSearchViewController
@@ -60,6 +61,15 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [self configureBackButtonWithGestureDelegate:self];
+}
+
+-(void)setFAQOptions:(FAQOptions *)options{
+    self.faqOptions = options;
+}
+
+// NOT Used - Need to be used when we figure out how to show Contact us on search
+-(BOOL)canDisplayFooterView{
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
 }
 
 -(HLTheme *)theme{
@@ -235,7 +245,7 @@
         [self.navigationController setNavigationBarHidden:NO animated:NO];
       
         FDArticleContent *article = self.searchResults[indexPath.row];
-        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController];
+        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
     }
 }
 

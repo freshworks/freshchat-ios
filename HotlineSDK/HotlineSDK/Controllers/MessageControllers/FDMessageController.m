@@ -764,7 +764,7 @@ typedef struct {
     FDActionButton* button=(FDActionButton*)sender;
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
-           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController];
+           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
             NSLog(@"%@",e);

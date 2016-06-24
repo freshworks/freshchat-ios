@@ -17,21 +17,32 @@
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
 #import "HLArticleUtil.h"
+#import "HLArticleTagManager.h"
+#import "HLLocalization.h"
 
 @interface HLArticlesController ()
 
 @property(nonatomic, strong)HLCategory *category;
 @property(nonatomic, strong)NSArray *articles;
 @property (strong, nonatomic) HLTheme *theme;
+@property FAQOptions *faqOptions;
 
 @end
 
 @implementation HLArticlesController
 
 -(instancetype)initWithCategory:(HLCategory *)category{
-    self = [super init];
+    self = [self init];
     if (self) {
         self.category = category;
+    }
+    return self;
+}
+
+-(instancetype) init {
+    self = [super init];
+    if (self) {
+        self.faqOptions = [FAQOptions new];
         self.theme = [HLTheme sharedInstance];
     }
     return self;
@@ -43,7 +54,12 @@
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
-    parent.navigationItem.title = self.category.title;
+    if(self.category){
+        parent.navigationItem.title = self.category.title;
+    }
+    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
+        parent.navigationItem.title = [self.faqOptions filteredViewTitle];
+    }
     [self setNavigationItem];
 }
 
@@ -52,15 +68,48 @@
     [self updateDataSource];
 }
 
+-(BOOL)canDisplayFooterView{
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+}
+
 -(void)updateDataSource{
-    self.articles = self.category.articles.allObjects;
+    self.articles = @[];
     [self.tableView reloadData];
-    [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
-        NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        self.articles = sortedArticles;
-        [self.tableView reloadData];
-    }];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending: YES];
+    
+    if(self.category){
+        [[KonotorDataManager sharedInstance]fetchAllArticlesOfCategoryID:self.category.categoryID handler:^(NSArray *articles, NSError *error) {
+          
+            NSArray *sortedArticles = [[self.category.articles allObjects] sortedArrayUsingDescriptors:@[sortDescriptor]];
+            self.articles = sortedArticles;
+            [self.tableView reloadData];
+        }];
+    }
+    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
+        [[HLArticleTagManager sharedInstance] articlesForTags:[self.faqOptions tags] withCompletion:
+         ^(NSSet *articleIds) {
+             NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
+             
+             [mainContext performBlock:^{
+                 NSMutableArray *matchingArticles= [NSMutableArray new];
+                 for(NSNumber * articleId in articleIds){
+                     HLArticle *article = [HLArticle getWithID:articleId inContext:mainContext];
+                     if(article){
+                         [matchingArticles addObject:article];
+                     }
+                 }
+                 self.articles = matchingArticles;
+                  UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+                 self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+                 [self.tableView reloadData];
+             }];
+         }];
+    }
+}
+
+-(void)closeButton:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)setNavigationItem{
@@ -72,6 +121,7 @@
 
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
@@ -128,8 +178,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController];
+        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];
     }
+}
+
+-(void) setFAQOptions:(FAQOptions *)options {
+    self.faqOptions = options;
 }
 
 @end

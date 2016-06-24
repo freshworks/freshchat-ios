@@ -8,7 +8,7 @@
 
 #import "Hotline.h"
 #import "HLContainerController.h"
-#import "HLCategoriesListController.h"
+#import "HLCategoryListController.h"
 #import "HLCategoryGridViewController.h"
 #import "FDReachabilityManager.h"
 #import "HLChannelViewController.h"
@@ -30,6 +30,11 @@
 #import "KonotorUser.h"
 #import "HLVersionConstants.h"
 #import "HLNotificationHandler.h"
+#import "HLArticleTagManager.h"
+#import "HLArticlesController.h"
+#import "HLArticleDetailViewController.h"
+#import "HLArticleUtil.h"
+#import "FAQOptionsInterface.h"
 
 @interface Hotline ()
 
@@ -278,23 +283,73 @@
     }
 }
 
--(HLViewController *)getPreferredFAQsController{
+-(HLViewController *)getPreferredCategoryController{
+    return [self preferredCategoryController:[FAQOptions new]];
+}
+
+-(HLViewController *) preferredCategoryController:(FAQOptions *)options {
     HLViewController *preferedController = nil;
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
-    if (isGridLayoutDisplayEnabled) {
+    if (options.showFaqCategoriesAsGrid) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
-        preferedController = [[HLCategoriesListController alloc]init];
+        preferedController = [[HLCategoryListController alloc]init];
     }
     return preferedController;
 }
 
+
+-(void) selectFAQController:(FAQOptions *)options
+                                  withCompletion : (void (^)(HLViewController *))completion{
+    [[HLArticleTagManager sharedInstance] articlesForTags:[options tags]
+                                                withCompletion:^(NSSet *articleIds)  {
+        
+        void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
+            [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+            completion(preferredViewController);
+        };
+        if([articleIds count] > 1 ){
+            HLViewController *preferedController = nil;
+            preferedController = [[HLArticlesController alloc]init];
+            faqOptionsCompletion(preferedController);
+        }
+        else if([articleIds count] == 1 ) {
+            NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+            
+            [mContext performBlock:^{
+                HLViewController *preferedController = nil;
+                HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
+                if(article){
+                    preferedController = [HLArticleUtil getArticleDetailController:article];
+                    faqOptionsCompletion(preferedController);
+                }
+                else { // This shouldn't happen but lets see
+                    preferedController = [self preferredCategoryController:options];
+                    faqOptionsCompletion(preferedController);
+                }
+            }];
+        }
+        else {
+            HLViewController *preferedController = nil;
+            [options filterByTags:@[] withTitle:@""]; // No Matching tags so no need to pass it around
+            preferedController = [self preferredCategoryController:options];
+            faqOptionsCompletion(preferedController);
+        }
+    }];
+}
+
 -(void)showFAQs:(UIViewController *)controller{
-    HLViewController *preferredController = [self getPreferredFAQsController];
+    HLViewController *preferredController = [self getPreferredCategoryController];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
+}
+
+-(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+     [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
+         HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
+         UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+         [controller presentViewController:navigationController animated:YES completion:nil];
+    }];
 }
 
 -(void)showConversations:(UIViewController *)controller{
@@ -321,7 +376,7 @@
 }
 
 -(UIViewController*) getFAQsControllerForEmbed{
-    return [self getControllerForEmbed:[self getPreferredFAQsController]];
+    return [self getControllerForEmbed:[self preferredCategoryController:[FAQOptions new]]];
 }
 
 -(UIViewController*) getConversationsControllerForEmbed{
@@ -430,6 +485,7 @@
     NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
     [[HotlineUser sharedInstance]clearUserData];
+    [[HLArticleTagManager sharedInstance]clear];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
         FDLog(@"Deleted all meta properties");

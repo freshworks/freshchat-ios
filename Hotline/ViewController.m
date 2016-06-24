@@ -46,7 +46,12 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance]showFAQs:self];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = YES;
+    options.showContactUsOnFaqScreens = YES;
+//    [options filterByTags : @[ @"sample"] withTitle:@"newTag"];
+    //options.showContactUsOnAppBar = YES;
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 
 @end

@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "HLListViewController.h"
+#import "FAQOptionsInterface.h"
 
-@interface HLCategoriesListController : HLListViewController
+@interface HLCategoryListController : HLListViewController<FAQOptionsInterface>
 
 @end

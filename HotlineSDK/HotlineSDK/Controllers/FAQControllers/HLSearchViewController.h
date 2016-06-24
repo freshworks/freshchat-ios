@@ -10,8 +10,9 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
 #import "HLViewController.h"
+#import "FAQOptionsInterface.h"
 
-@interface HLSearchViewController : HLViewController <UITableViewDataSource, UITableViewDelegate>
+@interface HLSearchViewController : HLViewController <UITableViewDataSource, UITableViewDelegate,FAQOptionsInterface>
 
 @property (strong, nonatomic) NSArray *searchResults;
 
