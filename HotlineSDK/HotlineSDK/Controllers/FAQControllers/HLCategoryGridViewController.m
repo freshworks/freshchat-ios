@@ -156,6 +156,7 @@
 
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
