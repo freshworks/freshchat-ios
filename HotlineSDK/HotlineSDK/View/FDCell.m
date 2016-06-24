@@ -200,7 +200,13 @@ static float height = 0;
     label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
     label.layer.cornerRadius = label.frame.size.height / 2.0f;
     label.clipsToBounds = YES;
-    UIGraphicsBeginImageContext(label.frame.size);
+    
+    if (&UIGraphicsBeginImageContextWithOptions != NULL) {
+        UIGraphicsBeginImageContextWithOptions(label.frame.size, NO, 0.0);
+    } else {
+        UIGraphicsBeginImageContext(label.frame.size);
+    }
+
     [[label layer] renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
