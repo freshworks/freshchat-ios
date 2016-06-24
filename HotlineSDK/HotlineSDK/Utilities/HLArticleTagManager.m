@@ -65,6 +65,7 @@
             NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
             if(data){
                 self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+                 FDLog(@"loaded file with contents %@", self.tagMap);
             }
         }
     });
@@ -97,13 +98,16 @@
     });
 }
 
--(void)articlesForTag:(NSString *) tag withCompletion:(void (^)(NSSet *))completion{
+-(void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion{
     dispatch_async(self.queue, ^{
-        NSMutableSet *articleSet = [self.tagMap objectForKey:tag];
-        if(!articleSet){
-            articleSet = [[NSMutableSet alloc]init];
+        NSMutableSet *articleSet = [[NSMutableSet alloc]init];
+        for(NSString *tag in tags){
+            NSSet *matches = [self.tagMap objectForKey:tag];
+            [articleSet addObjectsFromArray:matches];
         }
-        completion(articleSet);
+        dispatch_async(dispatch_get_main_queue(),^{
+            completion(articleSet);
+        });
     });
 }
 

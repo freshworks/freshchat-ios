@@ -281,5 +281,6 @@
 @property (nonatomic) BOOL showFaqCategoriesAsGrid;
 @property (nonatomic) BOOL showContactUsOnFaqScreens;
 @property (nonatomic) BOOL showContactUsOnAppBar;
+@property (nonatomic) NSArray *filterByTags;
 
 @end

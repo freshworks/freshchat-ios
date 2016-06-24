@@ -30,6 +30,10 @@
 #import "KonotorUser.h"
 #import "HLVersionConstants.h"
 #import "HLNotificationHandler.h"
+#import "HLArticleTagManager.h"
+#import "HLArticlesController.h"
+#import "HLArticleDetailViewController.h"
+#import "HLArticleUtil.h"
 
 @interface Hotline ()
 
@@ -278,15 +282,20 @@
     }
 }
 
--(HLViewController *)getPreferredFAQsController{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    BOOL isGridLayoutDisplayEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
-    return [self getGridController:isGridLayoutDisplayEnabled];
+-(HLViewController *)getPreferredCategoryController{
+    return [self preferredCategoryController:[FAQOptions new]];
 }
 
--(HLViewController *)getGridController:(BOOL)preferGrid{
+-(HLViewController *)getFAQController:(FAQOptions *)options {
     HLViewController *preferedController = nil;
-    if (preferGrid) {
+    if(options.filterByTags && [options.filterByTags count] > 0){
+        preferedController = [[HLCategoryListController alloc]init];
+    }
+}
+
+-(HLViewController *) preferredCategoryController:(FAQOptions *)options {
+    __block HLViewController *preferedController = nil;
+    if (options.showFaqCategoriesAsGrid) {
         preferedController = [[HLCategoryGridViewController alloc]init];
     }else{
         preferedController = [[HLCategoryListController alloc]init];
@@ -294,18 +303,52 @@
     return preferedController;
 }
 
+
+-(void) selectFAQController:(FAQOptions *)options
+                                  withCompletion : (void (^)(HLViewController *))completion{
+    [[HLArticleTagManager sharedInstance] articlesForTags:options.filterByTags
+                                                withCompletion:^(NSSet *articleIds)  {
+        __block HLViewController *preferedController = nil;
+        if([articleIds count] > 1 ){
+            preferedController = [[HLArticlesController alloc]init];
+            completion(preferedController);
+        }
+        else if([articleIds count] == 1 ) {
+            NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+            
+            [mContext performBlock:^{
+                //TODO: This is not working for some reason.. investigate later - Rex
+                HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
+                if(article){
+                    preferedController = [HLArticleUtil getArticleDetailController:article];
+                    completion(preferedController);
+                }
+                else { // This shouldn't happen but lets see
+                    preferedController = [self preferredCategoryController:options];
+                    completion(preferedController);
+                }
+            }];
+        }
+        else {
+            preferedController = [self preferredCategoryController:options];
+            completion(preferedController);
+        }
+    }];
+}
+
 -(void)showFAQs:(UIViewController *)controller{
-    HLViewController *preferredController = [self getPreferredFAQsController];
+    HLViewController *preferredController = [self getPreferredCategoryController];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
-    HLViewController *preferredController = [self getGridController:options.showFaqCategoriesAsGrid];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-    [controller presentViewController:navigationController animated:YES completion:nil];
+     [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
+         HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
+         UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+         [controller presentViewController:navigationController animated:YES completion:nil];
+    }];
 }
 
 -(void)showConversations:(UIViewController *)controller{
@@ -332,7 +375,7 @@
 }
 
 -(UIViewController*) getFAQsControllerForEmbed{
-    return [self getControllerForEmbed:[self getPreferredFAQsController]];
+    return [self getControllerForEmbed:[self preferredCategoryController:[FAQOptions new]]];
 }
 
 -(UIViewController*) getConversationsControllerForEmbed{

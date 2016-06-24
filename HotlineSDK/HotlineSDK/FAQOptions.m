@@ -18,6 +18,7 @@
         self.showFaqCategoriesAsGrid = YES;
         self.showContactUsOnFaqScreens = YES;
         self.showContactUsOnAppBar = NO;
+        self.filterByTags = @[];
     }
     return self;
 }
