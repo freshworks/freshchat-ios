@@ -310,6 +310,9 @@
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = PKUQ4ZWJH3;
 						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
