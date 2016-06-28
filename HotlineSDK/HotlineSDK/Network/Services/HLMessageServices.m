@@ -25,6 +25,7 @@
 #import "FDChannelUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
+#import "FDLocalNotification.h"
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -190,14 +191,14 @@ static HLNotificationHandler *handleUpdateNotification;
     
     [[KonotorDataManager sharedInstance]save];
     [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_MESSAGES_DOWNLOADED object:self];
+    [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
     [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
     return true;
 }
 
 +(void)postUnreadCountNotification{
     NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
-    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil userInfo:@{ @"count" : @(unreadCount)}];
+    [FDLocalNotification post:HOTLINE_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(unreadCount)}];
 }
 
 /* fetches channel list, updates existing channels including hidden channels */
@@ -265,12 +266,8 @@ static HLNotificationHandler *handleUpdateNotification;
         [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         [context save:nil];
         if (handler) handler(channelList,nil);
-        [self postNotification];
+        [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
     }];
-}
-
-+(void)postNotification{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_CHANNELS_UPDATED object:self];
 }
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{

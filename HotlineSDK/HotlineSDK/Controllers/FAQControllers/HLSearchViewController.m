@@ -51,7 +51,11 @@
     [self setupSubviews];
     [self setupTap];
     self.view.userInteractionEnabled=YES;
-    
+    [self localNotificationSubscription];
+    [self configureBackButtonWithGestureDelegate:self];
+}
+
+-(void)localNotificationSubscription{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -60,7 +64,6 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-    [self configureBackButtonWithGestureDelegate:self];
 }
 
 -(void)setFAQOptions:(FAQOptions *)options{
@@ -84,6 +87,12 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self localNotificationUnSubscription];
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void)setupTap{
@@ -340,14 +349,6 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES]; 
-}
-
--(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
--(void)dealloc{
-    [self localNotificationUnSubscription];
 }
 
 @end

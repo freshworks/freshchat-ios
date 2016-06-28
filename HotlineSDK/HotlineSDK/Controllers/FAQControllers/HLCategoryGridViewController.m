@@ -229,6 +229,14 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [self localNotificationUnSubscription];
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_SOLUTIONS_UPDATED object:nil];
+}
+
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
@@ -345,10 +353,6 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self setNavigationItem];
     [self.collectionView reloadData];
-}
-
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

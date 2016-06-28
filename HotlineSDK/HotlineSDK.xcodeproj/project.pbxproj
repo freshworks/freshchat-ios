@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		354F26C61D0AED2F00DCD158 /* FDKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 354F26C51D0AED2F00DCD158 /* FDKeyChainStore.m */; };
+		356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 356727DF1D216842007ECF89 /* FDLocalNotification.m */; };
 		35B2EF871D000E620014867F /* HLContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EECE1D000E620014867F /* HLContainerController.m */; };
 		35B2EF881D000E620014867F /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EED01D000E620014867F /* HLListViewController.m */; };
 		35B2EF8A1D000E620014867F /* HLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EED41D000E620014867F /* HLViewController.m */; };
@@ -127,6 +128,7 @@
 		35591B741B9EDCCE00BC0B60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		35591B751B9EDCCE00BC0B60 /* KonotorModels-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "KonotorModels-Info.plist"; sourceTree = "<group>"; };
 		35591B761B9EDCCE00BC0B60 /* KonotorModels-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KonotorModels-Prefix.pch"; sourceTree = "<group>"; };
+		356727DF1D216842007ECF89 /* FDLocalNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDLocalNotification.m; sourceTree = "<group>"; };
 		358DD4EE1BB01A2100B36E4E /* KonotorModels.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KonotorModels.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		358DD4F11BB01A2100B36E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35B2EECD1D000E620014867F /* HLContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLContainerController.h; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 				35B2EF311D000E620014867F /* FDIndexManager.h */,
 				35B2EF321D000E620014867F /* FDIndexManager.m */,
 				35B2EF331D000E620014867F /* FDLocalNotification.h */,
+				356727DF1D216842007ECF89 /* FDLocalNotification.m */,
 				35B2EF341D000E620014867F /* FDMemLogger.h */,
 				35B2EF351D000E620014867F /* FDMemLogger.m */,
 				35B2EF361D000E620014867F /* FDRanking.h */,
@@ -830,6 +833,7 @@
 				35B2EFC41D000E620014867F /* HLGridViewCell.m in Sources */,
 				35B2EFBA1D000E620014867F /* FDBadgeView.m in Sources */,
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
+				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
 				35B2EFC91D000E620014867F /* FDMessageCell.m in Sources */,

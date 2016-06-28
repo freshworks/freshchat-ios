@@ -31,6 +31,7 @@
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
+#import "FDLocalNotification.h"
 
 typedef struct {
     BOOL isLoading;
@@ -119,7 +120,6 @@ typedef struct {
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
     [self prepareInputToolbar];
 }
 
@@ -156,7 +156,7 @@ typedef struct {
     [self resetAudioSessionCategory];
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+    [self localNotificationUnSubscription];
 }
 
 -(void)registerAppAudioCategory{
@@ -517,6 +517,9 @@ typedef struct {
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView)
+                                                 name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
+    
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil
                                                       queue:nil usingBlock:^(NSNotification *note) {
          [KonotorMessage uploadAllUnuploadedMessages];
@@ -524,7 +527,12 @@ typedef struct {
 }
 
 -(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_NETWORK_REACHABLE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -828,10 +836,6 @@ typedef struct {
     
     [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     [Konotor cancelRecording];
-}
-
--(void)dealloc{
-    [self localNotificationUnSubscription];
 }
 
 @end

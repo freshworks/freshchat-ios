@@ -110,6 +110,10 @@
     [self handleArticleVoteAfterSometime];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_NETWORK_REACHABLE object:nil];
+}
+
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil queue:nil usingBlock:^(NSNotification *note) {
@@ -329,10 +333,6 @@
 -(void)buttonClickedEvent:(id)sender{
     [self hideBottomView];
     [[Hotline sharedInstance] showConversations:self];
-}
-
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

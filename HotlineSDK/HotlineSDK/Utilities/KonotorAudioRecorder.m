@@ -37,18 +37,16 @@ KonotorAlertView *pAlert;
             dispatch_async(dispatch_get_main_queue(), ^{
                 BOOL status=[KonotorAudioRecorder startRecordingA];
                 if(status){
-                    [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
+                    [FDLocalNotification post:HOTLINE_AUDIO_RECORDING_STARTED];
                 }
                 else{
-                    [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_FAILED withObject:nil];
+                    [FDLocalNotification post:HOTLINE_AUDIO_RECORDING_FAILED];
                 }
             });
         }
         else
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_MIC_PERMISSION_DENIED withObject:nil];
-            });
+            [FDLocalNotification post:HOTLINE_AUDIO_MIC_PERMISSION_DENIED];
         }
     };
     
@@ -64,10 +62,10 @@ KonotorAlertView *pAlert;
     {
         BOOL status=[KonotorAudioRecorder startRecordingA];
         if(status){
-            [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
+            [FDLocalNotification post:HOTLINE_AUDIO_RECORDING_STARTED];
         }
         else{
-            [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_FAILED withObject:nil];
+            [FDLocalNotification post:HOTLINE_AUDIO_RECORDING_FAILED];
         }
         return status;
     }

@@ -1,5 +1,5 @@
 //
-//  HLLocalNotification.h
+//  FDLocalNotification.h
 //  HotlineSDK
 //
 //  Created by Aravinth Chandran on 23/09/15.
@@ -17,5 +17,13 @@
 #define HOTLINE_AUDIO_RECORDING_STARTED @"com.freshdesk.hotline_recording_started"
 #define HOTLINE_AUDIO_RECORDING_FAILED @"com.freshdesk.hotline_recording_failed"
 #define HOTLINE_AUDIO_MIC_PERMISSION_DENIED @"com.freshdesk.hotline_microphone_permission_denied"
+#define HOTLINE_AUDIO_RECORDING_CLOSE @"com.freshdesk.hotline_recording_closed"
+
+@interface FDLocalNotification : NSObject
+
++(void)post:(NSString *)name;
++(void)post:(NSString *)name info:(id)info;
+
+@end
 
 #endif

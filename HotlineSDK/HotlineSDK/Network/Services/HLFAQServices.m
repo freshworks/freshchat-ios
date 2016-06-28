@@ -97,7 +97,7 @@
         }
         NSError *err;
         [context save:&err];
-        [self postNotification];
+        [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
         [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
         if(completion){
             completion(err);
@@ -131,10 +131,6 @@
         }
     }];
     return task;
-}
-
--(void)postNotification{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HOTLINE_SOLUTIONS_UPDATED object:self];
 }
 
 @end

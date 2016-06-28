@@ -10,6 +10,7 @@
 #import "HLTheme.h"
 #import "KonotorAudioRecorder.h"
 #import "HLLocalization.h"
+#import "FDLocalNotification.h"
 
 @interface FDAudioMessageUnit ()
 
@@ -107,7 +108,7 @@
     }
     else
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"CLOSE_AUDIO_RECORDING" object:nil];
+        [FDLocalNotification post:HOTLINE_AUDIO_RECORDING_CLOSE];
         [self playAudioMessage];
     }
 }
