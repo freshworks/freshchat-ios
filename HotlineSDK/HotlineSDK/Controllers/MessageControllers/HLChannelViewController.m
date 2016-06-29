@@ -170,10 +170,21 @@
 
 -(void)localNotificationSubscription{
     __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_MESSAGES_DOWNLOADED object:nil queue:nil usingBlock:^(NSNotification *note) {
+    void(^updateChannels)(NSNotification *note) = ^(NSNotification * note){
         HideNetworkActivityIndicator();
         [weakSelf updateChannels];
-    }];
+    };
+    
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_MESSAGES_DOWNLOADED
+                                                     object:nil queue:nil usingBlock:updateChannels];
+    
+    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_CHANNELS_UPDATED
+                                                     object:nil queue:nil usingBlock:updateChannels];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

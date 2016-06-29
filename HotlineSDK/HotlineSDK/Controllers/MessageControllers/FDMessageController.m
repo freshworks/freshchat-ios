@@ -32,6 +32,7 @@
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
 #import "FDLocalNotification.h"
+#import "KonotorAudioRecorder.h"
 
 typedef struct {
     BOOL isLoading;
@@ -432,7 +433,7 @@ typedef struct {
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (granted) {
-                BOOL recording=[Konotor startRecording];
+                BOOL recording = [KonotorAudioRecorder startRecording];
                 if(recording){
                     [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
                 }
