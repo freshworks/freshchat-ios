@@ -49,7 +49,6 @@
     [super viewDidLoad];
     
     self.containerView = [[UIScrollView alloc]initWithFrame:self.view.frame];
-    self.containerView.contentSize = CGSizeMake(320, 750);
     
     self.domainField = [self getTextFieldWithPlaceHolder:@"Domain name"];
     self.domainField.keyboardType = UIKeyboardTypeURL;
@@ -101,7 +100,7 @@
     
     [self setupHorizontalConstraintsForViews:configFields onSuperView:self.containerView];
     
-    NSDictionary *metrics = @{@"contentWidth": @(self.containerView.contentSize.width - 20) };
+    NSDictionary *metrics = @{@"contentWidth": @(self.view.frame.size.width - 20) };
     
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[updateConfigButton(contentWidth)]-10-|" options:0 metrics:metrics views:views]];
     
@@ -120,6 +119,9 @@
     [self updateFields];
 }
 
+-(void)viewDidLayoutSubviews{
+    self.containerView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + 200);
+}
 
 -(UIButton *)getCustomAutoLayoutButtonWithTitle:(NSString *)title withAction:(SEL)action{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
