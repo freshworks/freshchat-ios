@@ -180,11 +180,6 @@ static NSInteger networkIndicator = 0;
     return;
 }
 
-+(void) PostNotificationWithName :(NSString *) notName withObject: (id) object{
-    NSNotification* not=[NSNotification notificationWithName:notName object:object];
-    [[NSNotificationCenter defaultCenter] postNotification:not];
-}
-
 + (NSString*)convertIntoMD5 :(NSString *) str
 {
     // Create pointer to the string as UTF8

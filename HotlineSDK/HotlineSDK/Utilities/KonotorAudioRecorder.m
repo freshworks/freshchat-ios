@@ -25,58 +25,18 @@ KonotorAlertView *pAlert;
 
 @implementation KonotorAudioRecorder
 
-+(BOOL) startRecording
-{
-#ifndef __IPHONE_7_0
-    typedef void (^PermissionBlock)(BOOL granted);
-#endif
-    
-    PermissionBlock permissionBlock = ^(BOOL granted) {
-        if (granted)
-        {
++(BOOL)startRecording{
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted){
             dispatch_async(dispatch_get_main_queue(), ^{
-                BOOL status=[KonotorAudioRecorder startRecordingA];
-                if(status){
-                    [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
-                }
-                else{
-                    [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_FAILED withObject:nil];
-                }
+                [KonotorAudioRecorder startRecordingA];
             });
         }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_MIC_PERMISSION_DENIED withObject:nil];
-            });
-        }
-    };
-    
-    // iOS7+
-    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])
-    {
-        [[AVAudioSession sharedInstance] performSelector:@selector(requestRecordPermission:)
-                                              withObject:permissionBlock];
-    }
-    
-    // ios6 and lesser dont require permission.
-    else
-    {
-        BOOL status=[KonotorAudioRecorder startRecordingA];
-        if(status){
-            [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_STARTED withObject:nil];
-        }
-        else{
-            [FDUtilities PostNotificationWithName:HOTLINE_AUDIO_RECORDING_FAILED withObject:nil];
-        }
-        return status;
-    }
-    
+    }];
     return YES;
 }
 
-+(BOOL) startRecordingA
-{
++(BOOL) startRecordingA{
     
     NSError *error;
     

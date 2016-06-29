@@ -31,6 +31,8 @@
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
+#import "FDLocalNotification.h"
+#import "KonotorAudioRecorder.h"
 
 typedef struct {
     BOOL isLoading;
@@ -115,11 +117,9 @@ typedef struct {
     [self updateMessages];
     [self setNavigationItem];
     [self registerAppAudioCategory];
-    [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView) name:@"CLOSE_AUDIO_RECORDING" object:nil];
     [self prepareInputToolbar];
 }
 
@@ -135,10 +135,10 @@ typedef struct {
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
-    [super viewWillAppear:animated];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -156,7 +156,7 @@ typedef struct {
     [self resetAudioSessionCategory];
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLOSE_AUDIO_RECORDING" object:nil];
+    [self localNotificationUnSubscription];
 }
 
 -(void)registerAppAudioCategory{
@@ -432,7 +432,7 @@ typedef struct {
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (granted) {
-                BOOL recording=[Konotor startRecording];
+                BOOL recording = [KonotorAudioRecorder startRecording];
                 if(recording){
                     [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
                 }
@@ -517,14 +517,24 @@ typedef struct {
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil
-                                                      queue:nil usingBlock:^(NSNotification *note) {
-         [KonotorMessage uploadAllUnuploadedMessages];
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView)
+                                                 name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
+}
+
+-(void)networkReachable{
+    [KonotorMessage uploadAllUnuploadedMessages];
 }
 
 -(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_NETWORK_REACHABLE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -828,10 +838,6 @@ typedef struct {
     
     [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     [Konotor cancelRecording];
-}
-
--(void)dealloc{
-    [self localNotificationUnSubscription];
 }
 
 @end

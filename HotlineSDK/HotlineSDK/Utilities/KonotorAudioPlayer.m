@@ -12,6 +12,7 @@
 #import "Konotor.h"
 #import "FDUtilities.h"
 #import "HLMacros.h"
+#import "FDLocalNotification.h"
 
 @implementation KonotorAudioPlayer
 
@@ -37,9 +38,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
             gkIsAudioAlreadyPlaying = NO;
             [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
             [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
-            
-            
-            
         }
         
     }
@@ -50,10 +48,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     return YES;
 }
 
-+(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime
-{
-    
-    
++(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime{
     
     NSError *error;
     KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
@@ -61,9 +56,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         return NO;
     
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
-    
-    //Activate the session
-    
+
     //TODO: set audio session back to the original state when dismissing msg controller
     
     UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
@@ -113,14 +106,11 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
 }
 
-+(void) UnInitPlayer
-{
-    
++(void) UnInitPlayer{
     AudioSessionSetActiveWithFlags (
                                     false,
                                     AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
                                     );
-    
 }
 
 +(void) HandleDownloadExpiry:(id) parameter
@@ -134,10 +124,8 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         return;
     NSURL *pURL = [NSURL URLWithString:[messageObject audioURL]];
    
-    
-    NSString *notifSString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"started"];
-    NSNotification* notif=[NSNotification notificationWithName:notifSString object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:notif];
+    NSString *messageDownloadStartedNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_STARTED,[messageObject messageAlias]];
+    [FDLocalNotification post:messageDownloadStartedNotif];
     
     ShowNetworkActivityIndicator();
     NSData *soundData = [NSData dataWithContentsOfURL:pURL];
@@ -145,11 +133,8 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     
     if(soundData){
-                
-        NSString *notifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"downloaded"];
-        
-        NSNotification* not=[NSNotification notificationWithName:notifString object:soundData];
-        [[NSNotificationCenter defaultCenter] postNotification:not];
+        NSString *messagesDownloadCompleteNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_DOWNLOADED,[messageObject messageAlias]];
+        [FDLocalNotification post:messagesDownloadCompleteNotif];
     }
     
     else
@@ -157,16 +142,13 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         [Konotor performSelector:@selector(MediaDownloadFailedNotification:) withObject:
          messageObject.messageAlias];
         
-        NSString *notifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"failed"];
-        
-        NSNotification* not=[NSNotification notificationWithName:notifString object:nil];
-        [[NSNotificationCenter defaultCenter] postNotification:not];
+        NSString *messagesDownloadFailedNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_FAILED,[messageObject messageAlias]];
+        [FDLocalNotification post:messagesDownloadFailedNotif];
     }
     
 }
 
-+(BOOL) InitAndPlayWithSoundData : (NSData *)soundData
-{
++(BOOL) InitAndPlayWithSoundData : (NSData *)soundData{
     NSError *pError;
     
     KonotorAudioPlayer *audioPlayer = [[KonotorAudioPlayer alloc]initWithData:soundData  error:&pError];
@@ -193,32 +175,25 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
 }
 
-+(NSString*) currentPlaying:(NSString*) mediaIDToSet set:(BOOL)toSet
-{
++(NSString*) currentPlaying:(NSString*) mediaIDToSet set:(BOOL)toSet{
     static NSString *mediaID=nil;
     if(toSet)
         mediaID=mediaIDToSet;
     return mediaID;
 }
 
-
-
-+(BOOL) SaveAndPlayMessage : (KonotorMessage *) messageObject
-{
++(BOOL) SaveAndPlayMessage : (KonotorMessage *) messageObject{
     
-    
-    NSString *successNotifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"downloaded"];
-    NSString *failedNotifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"failed"];
-    NSString *downloadstarted = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"started"];
+    NSString *successNotifString = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_DOWNLOADED,[messageObject messageAlias]];
+    NSString *failedNotifString = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_FAILED,[messageObject messageAlias]];
+    NSString *downloadstarted = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_STARTED,[messageObject messageAlias]];
     
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance] mainObjectContext];
     
     __block id failobserver;
     __block id downloadstartedbserver;
-    __block id successobserver = [[NSNotificationCenter defaultCenter] addObserverForName:successNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note)
-          {
-              
-              
+    __block id successobserver = [[NSNotificationCenter defaultCenter] addObserverForName:successNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
+        
               NSError *pError;
               
               KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
@@ -241,14 +216,9 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
               
               [[NSNotificationCenter defaultCenter] removeObserver:successobserver];
               [[NSNotificationCenter defaultCenter] removeObserver:failobserver];
-              
-              
-          }
-          
-          ];
+          }];
 
-        failobserver = [[NSNotificationCenter defaultCenter] addObserverForName:failedNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note)
-        {
+        failobserver = [[NSNotificationCenter defaultCenter] addObserverForName:failedNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
             NSError *pError;
 
             [messageObject setIsDownloading:NO];
@@ -259,35 +229,21 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
             [[NSNotificationCenter defaultCenter] removeObserver:failobserver];
 
 
-        }
+        }];
 
-        ];
-
-        downloadstartedbserver = [[NSNotificationCenter defaultCenter] addObserverForName:downloadstarted object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note)
-        {
+        downloadstartedbserver = [[NSNotificationCenter defaultCenter] addObserverForName:downloadstarted object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
           NSError *pError;
           
           [messageObject setIsDownloading:YES];
           [context save:&pError];
           [[NSNotificationCenter defaultCenter] removeObserver:downloadstartedbserver];
-          
-          
-        }
-
-        ];
+        }];
     
     return YES;
 }
 
-//bool gAudioAudioOverride = true;
 
-
-
-
-
-+(BOOL) StopMessage : (KonotorMessage *)messageObject;
-{
-    
++(BOOL) StopMessage : (KonotorMessage *)messageObject;{
     if(gkIsAudioAlreadyPlaying)
     {
         if(gkSingletonPlayer)
@@ -297,20 +253,11 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
             gkIsAudioAlreadyPlaying = NO;
             [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
             [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
-            
-            
-            
         }
-        
     }
     
     [KonotorAudioPlayer UnInitPlayer];
-    
     [KonotorAudioPlayer currentPlaying:nil set:YES];
-    
-    NSNotification* not=[NSNotification notificationWithName:@"MediaFinished" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:not];
-    
     return YES;
 }
 
@@ -402,15 +349,5 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
 }
 
 #endif // TARGET_OS_IPHONE
-
-
-
-
-
-
-
-
-
-
 
 @end

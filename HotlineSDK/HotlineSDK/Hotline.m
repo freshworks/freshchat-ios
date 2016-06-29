@@ -584,11 +584,4 @@
     }
 }
 
--(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
--(void)dealloc{
-    [self localNotificationUnSubscription];
-}
-
 @end

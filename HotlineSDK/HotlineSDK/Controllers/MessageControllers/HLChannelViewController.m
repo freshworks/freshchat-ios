@@ -56,7 +56,6 @@
     self.channels = [[NSMutableArray alloc] init];
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
-    [self localNotificationSubscription];
     [self addLoadingIndicator];
 }
 
@@ -86,6 +85,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self localNotificationSubscription];
     [self fetchUpdates];
     self.footerView.hidden = YES;
 }
@@ -110,6 +110,7 @@
 }
 
 -(void)updateChannels{
+    HideNetworkActivityIndicator();
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             NSMutableArray *messages = [NSMutableArray array];
@@ -169,11 +170,15 @@
 }
 
 -(void)localNotificationSubscription{
-    __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_MESSAGES_DOWNLOADED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        HideNetworkActivityIndicator();
-        [weakSelf updateChannels];
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChannels)
+                                                 name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChannels)
+                                                 name:HOTLINE_CHANNELS_UPDATED object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

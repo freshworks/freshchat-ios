@@ -62,7 +62,6 @@
     [self adjustUIBounds];
     [self setNavigationItem];
     [self theming];
-    [self localNotificationSubscription];
     [self addLoadingIndicator];
 }
 
@@ -77,6 +76,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self localNotificationSubscription];
     [self fetchUpdates];
 }
 
@@ -229,15 +229,25 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [self localNotificationUnSubscription];
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_SOLUTIONS_UPDATED object:nil];
+}
+
 -(void)localNotificationSubscription{
-    __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.categories = @[];
-            [weakSelf updateCategories];
-            HideNetworkActivityIndicator();
-        });
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSolutions)
+                                                 name:HOTLINE_SOLUTIONS_UPDATED object:nil];
+}
+
+-(void)updateSolutions{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.categories = @[];
+        [self updateCategories];
+        HideNetworkActivityIndicator();
+    });
 }
 
 -(void)setupCollectionView{
@@ -345,10 +355,6 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self setNavigationItem];
     [self.collectionView reloadData];
-}
-
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
