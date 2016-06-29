@@ -124,7 +124,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         return;
     NSURL *pURL = [NSURL URLWithString:[messageObject audioURL]];
    
-    NSString *messageDownloadStartedNotif = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"started"];
+    NSString *messageDownloadStartedNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_STARTED,[messageObject messageAlias]];
     [FDLocalNotification post:messageDownloadStartedNotif];
     
     ShowNetworkActivityIndicator();
@@ -133,7 +133,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     
     if(soundData){
-        NSString *messagesDownloadCompleteNotif = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"downloaded"];
+        NSString *messagesDownloadCompleteNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_DOWNLOADED,[messageObject messageAlias]];
         [FDLocalNotification post:messagesDownloadCompleteNotif];
     }
     
@@ -142,7 +142,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         [Konotor performSelector:@selector(MediaDownloadFailedNotification:) withObject:
          messageObject.messageAlias];
         
-        NSString *messagesDownloadFailedNotif = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"failed"];
+        NSString *messagesDownloadFailedNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_FAILED,[messageObject messageAlias]];
         [FDLocalNotification post:messagesDownloadFailedNotif];
     }
     
@@ -184,9 +184,9 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
 
 +(BOOL) SaveAndPlayMessage : (KonotorMessage *) messageObject{
     
-    NSString *successNotifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"downloaded"];
-    NSString *failedNotifString = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"failed"];
-    NSString *downloadstarted = [NSString stringWithFormat:@"%@_%@",[messageObject messageAlias],@"started"];
+    NSString *successNotifString = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_DOWNLOADED,[messageObject messageAlias]];
+    NSString *failedNotifString = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_FAILED,[messageObject messageAlias]];
+    NSString *downloadstarted = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_STARTED,[messageObject messageAlias]];
     
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance] mainObjectContext];
     
@@ -244,7 +244,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
 
 
 +(BOOL) StopMessage : (KonotorMessage *)messageObject;{
-    
     if(gkIsAudioAlreadyPlaying)
     {
         if(gkSingletonPlayer)
@@ -259,7 +258,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [KonotorAudioPlayer UnInitPlayer];
     [KonotorAudioPlayer currentPlaying:nil set:YES];
-    [FDLocalNotification post:@"MediaFinished"];
     return YES;
 }
 

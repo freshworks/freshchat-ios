@@ -12,6 +12,8 @@
 #import "KonotorConversation.h"
 #import "Hotline.h"
 
+//TODO: Remove this class
+
 @protocol KonotorDelegate <NSObject>
 
 @optional
@@ -36,7 +38,6 @@
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) isUserMe:(NSString *) userId;
-+(BOOL) startRecording;
 +(NSString*) stopRecording;
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;

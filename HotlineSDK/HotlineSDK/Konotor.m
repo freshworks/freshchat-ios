@@ -33,10 +33,6 @@ __weak static id <KonotorDelegate> _delegate;
     return [KonotorAudioPlayer audioPlayerGetCurrentTime];
 }
 
-+(BOOL) startRecording
-{
-    return [KonotorAudioRecorder startRecording];
-}
 +(NSString *) stopRecording
 {
     return[KonotorAudioRecorder stopRecording];

@@ -49,7 +49,6 @@
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
     [self updateCategories];
-    [self localNotificationSubscription];
     [self addLoadingIndicator];
 }
 
@@ -65,6 +64,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self fetchUpdates];
+    [self localNotificationSubscription];
 }
 
 //TODO: Remove duplicate code
@@ -147,12 +147,24 @@
     [[Hotline sharedInstance]showConversations:self];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [self localNotificationUnSubscription];
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_SOLUTIONS_UPDATED object:nil];
+}
+
 -(void)localNotificationSubscription{
-    __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSolutions)
+                                                 name:HOTLINE_SOLUTIONS_UPDATED object:nil];
+}
+
+-(void)updateSolutions{
+    dispatch_async(dispatch_get_main_queue(), ^{
         HideNetworkActivityIndicator();
-        [weakSelf updateCategories];
-    }];
+        [self updateCategories];
+    });
 }
 
 -(void)fetchUpdates{

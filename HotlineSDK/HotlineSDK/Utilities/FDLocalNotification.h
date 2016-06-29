@@ -14,10 +14,11 @@
 #define HOTLINE_NETWORK_UNREACHABLE @"com.freshdesk.hotline_network_unreachable"
 #define HOTLINE_CHANNELS_UPDATED @"com.freshdesk.hotline_channels_updated"
 #define HOTLINE_MESSAGES_DOWNLOADED @"com.freshdesk.hotline_messages_downloaded"
-#define HOTLINE_AUDIO_RECORDING_STARTED @"com.freshdesk.hotline_recording_started"
-#define HOTLINE_AUDIO_RECORDING_FAILED @"com.freshdesk.hotline_recording_failed"
-#define HOTLINE_AUDIO_MIC_PERMISSION_DENIED @"com.freshdesk.hotline_microphone_permission_denied"
 #define HOTLINE_AUDIO_RECORDING_CLOSE @"com.freshdesk.hotline_recording_closed"
+
+#define HOTLINE_AUDIO_MESSAGE_STARTED @"%@_com.freshdesk.hotline_audio_message_started"
+#define HOTLINE_AUDIO_MESSAGE_FAILED @"%@_com.freshdesk.hotline_audio_message_failed"
+#define HOTLINE_AUDIO_MESSAGE_DOWNLOADED @"%@_com.freshdesk.hotline_audio_message_downloaded"
 
 @interface FDLocalNotification : NSObject
 
