@@ -51,7 +51,6 @@
     [self setupSubviews];
     [self setupTap];
     self.view.userInteractionEnabled=YES;
-    [self localNotificationSubscription];
     [self configureBackButtonWithGestureDelegate:self];
 }
 
@@ -79,8 +78,10 @@
     if(!_theme) _theme = [HLTheme sharedInstance];
     return _theme;
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self localNotificationSubscription];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 

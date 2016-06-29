@@ -106,8 +106,11 @@
     [self theming];
     [self setSubviews];
     [self fixAudioPlayback];
-    [self localNotificationSubscription];
     [self handleArticleVoteAfterSometime];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self localNotificationSubscription];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -115,11 +118,13 @@
 }
 
 -(void)localNotificationSubscription{
-    __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [weakSelf.webView loadHTMLString:self.embedHTML baseURL:nil];
-        [self handleArticleVoteAfterSometime];
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
+}
+
+-(void)networkReachable{
+    [self.webView loadHTMLString:self.embedHTML baseURL:nil];
+    [self handleArticleVoteAfterSometime];
 }
 
 -(void)handleArticleVoteAfterSometime{

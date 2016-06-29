@@ -62,7 +62,6 @@
     [self adjustUIBounds];
     [self setNavigationItem];
     [self theming];
-    [self localNotificationSubscription];
     [self addLoadingIndicator];
 }
 
@@ -77,6 +76,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self localNotificationSubscription];
     [self fetchUpdates];
 }
 
@@ -238,14 +238,16 @@
 }
 
 -(void)localNotificationSubscription{
-    __weak typeof(self)weakSelf = self;
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_SOLUTIONS_UPDATED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.categories = @[];
-            [weakSelf updateCategories];
-            HideNetworkActivityIndicator();
-        });
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSolutions)
+                                                 name:HOTLINE_SOLUTIONS_UPDATED object:nil];
+}
+
+-(void)updateSolutions{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.categories = @[];
+        [self updateCategories];
+        HideNetworkActivityIndicator();
+    });
 }
 
 -(void)setupCollectionView{

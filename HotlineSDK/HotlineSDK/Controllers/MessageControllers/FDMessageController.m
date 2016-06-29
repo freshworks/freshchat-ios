@@ -117,7 +117,6 @@ typedef struct {
     [self updateMessages];
     [self setNavigationItem];
     [self registerAppAudioCategory];
-    [self localNotificationSubscription];
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
@@ -136,10 +135,10 @@ typedef struct {
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
-    [super viewWillAppear:animated];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -520,11 +519,13 @@ typedef struct {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView)
                                                  name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
-    
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_NETWORK_REACHABLE object:nil
-                                                      queue:nil usingBlock:^(NSNotification *note) {
-         [KonotorMessage uploadAllUnuploadedMessages];
-    }];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
+}
+
+-(void)networkReachable{
+    [KonotorMessage uploadAllUnuploadedMessages];
 }
 
 -(void)localNotificationUnSubscription{
