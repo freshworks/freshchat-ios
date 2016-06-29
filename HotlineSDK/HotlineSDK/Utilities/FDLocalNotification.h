@@ -16,6 +16,10 @@
 #define HOTLINE_MESSAGES_DOWNLOADED @"com.freshdesk.hotline_messages_downloaded"
 #define HOTLINE_AUDIO_RECORDING_CLOSE @"com.freshdesk.hotline_recording_closed"
 
+#define HOTLINE_AUDIO_MESSAGE_STARTED @"%@_com.freshdesk.hotline_audio_message_started"
+#define HOTLINE_AUDIO_MESSAGE_FAILED @"%@_com.freshdesk.hotline_audio_message_failed"
+#define HOTLINE_AUDIO_MESSAGE_DOWNLOADED @"%@_com.freshdesk.hotline_audio_message_downloaded"
+
 @interface FDLocalNotification : NSObject
 
 +(void)post:(NSString *)name;
