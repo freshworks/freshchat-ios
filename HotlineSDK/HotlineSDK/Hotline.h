@@ -127,6 +127,16 @@
  */
 -(void)showFAQs:(UIViewController *)controller;
 
+/**
+ *  Show the FAQs to the user.
+ *
+ *  @discussion This method lets you show the FAQ view.
+ *
+ *  @param controller The view controller from where you present the FAQ view.
+ *
+ *  @param options filter by tags or control FAQ screen options
+ *
+ */
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options;
 /**
  *  Update user Info
