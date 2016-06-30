@@ -76,6 +76,7 @@ static BOOL messageExistsDirty = YES;
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     message.belongsToConversation = conversation;
+    message.isWelcomeMessage = NO;
     [datamanager save];
     messageExistsDirty = YES;
     return message;
@@ -140,6 +141,7 @@ static BOOL messageExistsDirty = YES;
     [messageBinary setValue:message forKey:@"belongsToMessage"];
     [message setValue:messageBinary forKey:@"hasMessageBinary"];
     message.belongsToConversation = conversation;
+    message.isWelcomeMessage = NO;
     [datamanager save];
     messageExistsDirty=YES;
     return message;
@@ -465,7 +467,7 @@ static BOOL messageExistsDirty = YES;
     static BOOL messageExists = NO;
     if(messageExistsDirty){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
-        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0"];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isWelcomeMessage <> 1"];
         NSError *error;
         NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
         if(!error){
