@@ -1,4 +1,10 @@
 
+Ver 1.1.1 
+__________________________
+You can now hide contact us on the FAQ screens 
+You can show a  filtered view of articles by tags. 
+Minor fixes and improvements. 
+
 Ver 1.1.0 
 __________________________
 The SDK is now i18n ready. All the strings can be overriden and localized to your language of choice.
