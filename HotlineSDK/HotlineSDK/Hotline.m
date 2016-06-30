@@ -557,8 +557,14 @@
 // Polling changes
 
 -(void)startPoller{
+#ifdef DEBUG
+    #define POLL_INTERVAL 5
+#else 
+    #define POLL_INTERVAL 30
+#endif
+    
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(pollNewMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Start off-screen message poller");
     }
