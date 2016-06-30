@@ -22,6 +22,7 @@
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
 #import "HLArticleUtil.h"
+#import "HLArticleTagManager.h"
 
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
@@ -141,9 +142,17 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
+    
     if(self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+        [[HLArticleTagManager sharedInstance] articlesForTags:self.faqOptions.tags withCompletion:^(NSSet *matches) {
+            if([matches count] == 1){
+                UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+                self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+            }
+            else {
+                [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+            }
+        }];
     }
     else {
         [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];

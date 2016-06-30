@@ -20,6 +20,7 @@
 #import "FDIndexManager.h"
 #import "FDResponseInfo.h"
 #import "FDDateUtil.h"
+#import "HLArticleTagManager.h"
 
 @implementation HLFAQServices
 
@@ -91,6 +92,10 @@
             }else{
                 if (category){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
+                    for(HLArticle *article in category.articles){
+                        [[HLArticleTagManager sharedInstance] removeTagsForArticleId:article.articleID];
+                    }
+                    [[HLArticleTagManager sharedInstance]save];
                     [context deleteObject:category];
                 }
             }
