@@ -76,12 +76,12 @@
 		354D0D611C48D504004D2AA1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		354D0D621C48D504004D2AA1 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HLResources.bundle; sourceTree = "<group>"; };
-		356F19E71B9DBF14002F1E2A /* Hotline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hotline.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		356F19E71B9DBF14002F1E2A /* Hotline Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hotline Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F19EE1B9DBF14002F1E2A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		356F19EF1B9DBF14002F1E2A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		356F19F11B9DBF14002F1E2A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		356F19F21B9DBF14002F1E2A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		356F1A001B9DBF14002F1E2A /* HotlineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HotlineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		356F1A001B9DBF14002F1E2A /* Hotline Demo.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hotline Demo.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F1A051B9DBF14002F1E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		356F1A061B9DBF14002F1E2A /* HotlineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotlineTests.m; sourceTree = "<group>"; };
 		356F1A101B9DC48B002F1E2A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -185,8 +185,8 @@
 		356F19E81B9DBF14002F1E2A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				356F19E71B9DBF14002F1E2A /* Hotline.app */,
-				356F1A001B9DBF14002F1E2A /* HotlineTests.xctest */,
+				356F19E71B9DBF14002F1E2A /* Hotline Demo.app */,
+				356F1A001B9DBF14002F1E2A /* Hotline Demo.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,9 +259,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		356F19E61B9DBF14002F1E2A /* Hotline */ = {
+		356F19E61B9DBF14002F1E2A /* Hotline Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 356F1A0A1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "Hotline" */;
+			buildConfigurationList = 356F1A0A1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "Hotline Demo" */;
 			buildPhases = (
 				356F19E31B9DBF14002F1E2A /* Sources */,
 				356F19E41B9DBF14002F1E2A /* Frameworks */,
@@ -274,14 +274,14 @@
 			dependencies = (
 				354D0D261C48D135004D2AA1 /* PBXTargetDependency */,
 			);
-			name = Hotline;
+			name = "Hotline Demo";
 			productName = Hotline;
-			productReference = 356F19E71B9DBF14002F1E2A /* Hotline.app */;
+			productReference = 356F19E71B9DBF14002F1E2A /* Hotline Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		356F19FF1B9DBF14002F1E2A /* HotlineTests */ = {
+		356F19FF1B9DBF14002F1E2A /* Hotline DemoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 356F1A0D1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "HotlineTests" */;
+			buildConfigurationList = 356F1A0D1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "Hotline DemoTests" */;
 			buildPhases = (
 				356F19FC1B9DBF14002F1E2A /* Sources */,
 				356F19FD1B9DBF14002F1E2A /* Frameworks */,
@@ -292,9 +292,9 @@
 			dependencies = (
 				356F1A021B9DBF14002F1E2A /* PBXTargetDependency */,
 			);
-			name = HotlineTests;
+			name = "Hotline DemoTests";
 			productName = HotlineTests;
-			productReference = 356F1A001B9DBF14002F1E2A /* HotlineTests.xctest */;
+			productReference = 356F1A001B9DBF14002F1E2A /* Hotline Demo.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -325,7 +325,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 356F19E21B9DBF14002F1E2A /* Build configuration list for PBXProject "Hotline" */;
+			buildConfigurationList = 356F19E21B9DBF14002F1E2A /* Build configuration list for PBXProject "Hotline Demo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -344,8 +344,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				356F19E61B9DBF14002F1E2A /* Hotline */,
-				356F19FF1B9DBF14002F1E2A /* HotlineTests */,
+				356F19E61B9DBF14002F1E2A /* Hotline Demo */,
+				356F19FF1B9DBF14002F1E2A /* Hotline DemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -453,7 +453,7 @@
 		};
 		356F1A021B9DBF14002F1E2A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 356F19E61B9DBF14002F1E2A /* Hotline */;
+			target = 356F19E61B9DBF14002F1E2A /* Hotline Demo */;
 			targetProxy = 356F1A011B9DBF14002F1E2A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -578,8 +578,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
+				PRODUCT_NAME = "Hotline Demo";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -601,8 +601,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.Hotline;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
+				PRODUCT_NAME = "Hotline Demo";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
@@ -624,9 +624,9 @@
 				INFOPLIST_FILE = HotlineTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Freshdesk.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Hotline Demo";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hotline.app/Hotline";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hotline Demo.app/Hotline Demo";
 			};
 			name = Debug;
 		};
@@ -643,16 +643,16 @@
 				INFOPLIST_FILE = HotlineTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Freshdesk.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Hotline Demo";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hotline.app/Hotline";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hotline Demo.app/Hotline Demo";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		356F19E21B9DBF14002F1E2A /* Build configuration list for PBXProject "Hotline" */ = {
+		356F19E21B9DBF14002F1E2A /* Build configuration list for PBXProject "Hotline Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				356F1A081B9DBF14002F1E2A /* Debug */,
@@ -661,7 +661,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		356F1A0A1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "Hotline" */ = {
+		356F1A0A1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "Hotline Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				356F1A0B1B9DBF14002F1E2A /* Debug */,
@@ -670,7 +670,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		356F1A0D1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "HotlineTests" */ = {
+		356F1A0D1B9DBF14002F1E2A /* Build configuration list for PBXNativeTarget "Hotline DemoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				356F1A0E1B9DBF14002F1E2A /* Debug */,

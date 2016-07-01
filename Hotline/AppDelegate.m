@@ -71,8 +71,8 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
-                                                       andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"34c9f03a-b443-401f-906f-ca55fb790a07"
+                                                       andAppKey:@"96419575-2b0c-4364-86f5-bce535cdc8ee"];
     
 //    config.appID = @"51590df9-ab7e-4ca7-9a25-b2279bc5cc7c";
 //    config.appKey = @"e9021572-383c-4b6f-997e-3fea9d32e2c7";
