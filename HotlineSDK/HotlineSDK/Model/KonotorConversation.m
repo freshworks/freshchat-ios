@@ -34,7 +34,7 @@
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId{
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorConversation" inManagedObjectContext:context];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_CONVERSATION_ENTITY inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
     [request setEntity:entityDescription];
@@ -72,7 +72,7 @@
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    KonotorConversation *newConversation = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorConversation" inManagedObjectContext:context];
+    KonotorConversation *newConversation = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CONVERSATION_ENTITY inManagedObjectContext:context];
 
     newConversation.conversationAlias = conversationID;
 

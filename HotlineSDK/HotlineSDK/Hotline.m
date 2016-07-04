@@ -35,6 +35,8 @@
 #import "HLArticleDetailViewController.h"
 #import "HLArticleUtil.h"
 #import "FAQOptionsInterface.h"
+#import "FDIndex.h"
+#import "KonotorMessageBinary.h"
 
 @interface Hotline ()
 
@@ -79,6 +81,8 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        [FDIndex load];
+        [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
     }
     return self;
@@ -509,7 +513,7 @@
 
 -(NSInteger)unreadCount{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     return messages.count;
