@@ -35,6 +35,7 @@
 #import "HLArticleDetailViewController.h"
 #import "HLArticleUtil.h"
 #import "FAQOptionsInterface.h"
+#import "FDIndex.h"
 
 @interface Hotline ()
 
@@ -79,6 +80,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        [FDIndex load];
         [[FDReachabilityManager sharedInstance] start];
     }
     return self;
