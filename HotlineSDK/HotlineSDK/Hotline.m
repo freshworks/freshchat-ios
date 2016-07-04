@@ -509,7 +509,7 @@
 
 -(NSInteger)unreadCount{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     return messages.count;

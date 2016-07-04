@@ -16,8 +16,11 @@
 #import "FDUtilities.h"
 #import "FDStringUtil.h"
 
-static BOOL INDEX_INPROGRESS = NO;
+#define ARTICLE_TITLE @"articleTitle"
+#define ARTICLE_DESCRIPTION @"articleDescription"
 #define HOTLINE_DEFAULTS_IS_INDEX_CREATED @"hotline_defaults_is_index_created"
+
+static BOOL INDEX_INPROGRESS = NO;
 
 @implementation FDIndexManager
 
