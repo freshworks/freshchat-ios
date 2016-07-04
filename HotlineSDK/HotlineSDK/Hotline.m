@@ -36,6 +36,7 @@
 #import "HLArticleUtil.h"
 #import "FAQOptionsInterface.h"
 #import "FDIndex.h"
+#import "KonotorMessageBinary.h"
 
 @interface Hotline ()
 
@@ -81,6 +82,7 @@
     self = [super init];
     if (self) {
         [FDIndex load];
+        [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
     }
     return self;
