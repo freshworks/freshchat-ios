@@ -37,6 +37,7 @@
 #import "FAQOptionsInterface.h"
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
+#import "FDLocalNotification.h"
 
 @interface Hotline ()
 
@@ -84,8 +85,14 @@
         [FDIndex load];
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                     name:HOTLINE_NETWORK_REACHABLE object:nil];
     }
     return self;
+}
+
+-(void)networkReachable{
+    [self registerUser];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{

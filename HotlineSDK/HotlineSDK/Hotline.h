@@ -51,7 +51,7 @@
  * Option to Switch between Grid and List view in FAQs. Shows FAQ categories as a list when set to NO.
  * Default set to YES which presents a Grid view
  */
-@property (nonatomic, assign) BOOL displayFAQsAsGrid;
+@property (nonatomic, assign) BOOL displayFAQsAsGrid __attribute__((deprecated("please use FAQOptions object instead")));
 /*
  * Allow the user to attach images using the camera. Defaults to YES.
  */
@@ -154,7 +154,7 @@
  *  This will clean up all the data associated with the SDK for the user.
  *
  */
--(void)clearUserData __deprecated;
+-(void)clearUserData __attribute__((deprecated("please use clearUserDataWithCompletion: instead")));
 /**
  *  Clear User Data
  *
@@ -285,7 +285,7 @@
 
 @end
 
-
+//TODO: Need to add comments for this object and its methods
 @interface FAQOptions : NSObject
 
 @property (nonatomic) BOOL showFaqCategoriesAsGrid;
@@ -295,5 +295,7 @@
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title;
 
 -(NSString *) filteredViewTitle;
+
 -(NSArray *) tags;
+
 @end
