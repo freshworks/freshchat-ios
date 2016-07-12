@@ -37,6 +37,7 @@
 #import "FAQOptionsInterface.h"
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
+#import "FDLocalNotification.h"
 
 @interface Hotline ()
 
@@ -88,6 +89,10 @@
     return self;
 }
 
+-(void)networkReachable{
+    [self registerUser];
+}
+
 -(void)initWithConfig:(HotlineConfig *)config{
     config.appID  = trimString(config.appID);
     config.appKey = trimString(config.appKey);
@@ -115,14 +120,15 @@
 }
 
 -(void) registerAppNotificationListeners{
-    [[NSNotificationCenter defaultCenter]
-                    addObserver: self
-                    selector: @selector(newSession:)
-                    name: UIApplicationDidBecomeActiveNotification object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(newSession:)
+                                                 name: UIApplicationDidBecomeActiveNotification object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
 }
 
 -(void)updateAppVersion{
