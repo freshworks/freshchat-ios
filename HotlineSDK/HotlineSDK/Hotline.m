@@ -85,8 +85,6 @@
         [FDIndex load];
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
-                                                     name:HOTLINE_NETWORK_REACHABLE object:nil];
     }
     return self;
 }
@@ -122,14 +120,15 @@
 }
 
 -(void) registerAppNotificationListeners{
-    [[NSNotificationCenter defaultCenter]
-                    addObserver: self
-                    selector: @selector(newSession:)
-                    name: UIApplicationDidBecomeActiveNotification object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(newSession:)
+                                                 name: UIApplicationDidBecomeActiveNotification object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
 }
 
 -(void)updateAppVersion{
