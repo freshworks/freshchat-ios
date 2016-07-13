@@ -10,6 +10,7 @@
 #import "HLViewController.h"
 #import "HLTheme.h"
 #import "FDBarButtonItem.h"
+#import "HLEventManager.h"
 
 @implementation HLViewController : UIViewController
 
@@ -54,6 +55,11 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return [[HLTheme sharedInstance]statusBarStyle];
+}
+
+- (void) viewWillDisappear:(BOOL)animated{
+    //call api to upload event to store
+    [[HLEventManager sharedInstance] getEventsAndUpload];
 }
 
 @end

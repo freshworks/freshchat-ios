@@ -29,6 +29,8 @@
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
 #import "HLArticleUtil.h"
+#import "HLEventManager.h"
+#import "HLEvent.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -334,6 +336,12 @@
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
         [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
+        
+        //Track event category click
+        NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [category.categoryID stringValue], HLEVENT_PARAM_CATEGORY_NAME : category.title};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_CATEGORY andProperty:properties];
+        [event saveEvent];
+        
         [self.navigationController pushViewController:container animated:YES];
     }
 }
