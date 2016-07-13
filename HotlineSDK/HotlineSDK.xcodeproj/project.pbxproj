@@ -106,6 +106,8 @@
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 		3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLArticleUtil.m */; };
 		3C4CEDBA1D1C2FDD000EE1AE /* HLArticleTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4CEDB91D1C2FDD000EE1AE /* HLArticleTagManager.m */; };
+		68A532551D36252A0078339F /* HLEventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532541D36252A0078339F /* HLEventManager.m */; };
+		68A532581D3626300078339F /* HLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532571D3626300078339F /* HLEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -322,6 +324,10 @@
 		3C160B051D05A59C000440D4 /* HLArticleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleUtil.m; sourceTree = "<group>"; };
 		3C4CEDB81D1C2FC7000EE1AE /* HLArticleTagManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLArticleTagManager.h; sourceTree = "<group>"; };
 		3C4CEDB91D1C2FDD000EE1AE /* HLArticleTagManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLArticleTagManager.m; sourceTree = "<group>"; };
+		68A532531D36252A0078339F /* HLEventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEventManager.h; sourceTree = "<group>"; };
+		68A532541D36252A0078339F /* HLEventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEventManager.m; sourceTree = "<group>"; };
+		68A532561D3626300078339F /* HLEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEvent.h; sourceTree = "<group>"; };
+		68A532571D3626300078339F /* HLEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEvent.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -477,6 +483,8 @@
 				35B2EF1C1D000E620014867F /* FDResponseInfo.h */,
 				35B2EF1D1D000E620014867F /* FDResponseInfo.m */,
 				35B2EF1E1D000E620014867F /* HLAPI.h */,
+				68A532561D3626300078339F /* HLEvent.h */,
+				68A532571D3626300078339F /* HLEvent.m */,
 				35B2EF1F1D000E620014867F /* HLAPIClient.h */,
 				35B2EF201D000E620014867F /* HLAPIClient.m */,
 				35B2EF211D000E620014867F /* Services */,
@@ -512,6 +520,8 @@
 				35B2EF271D000E620014867F /* HLMessageServices.m */,
 				35B2EF281D000E620014867F /* HLServiceRequest.h */,
 				35B2EF291D000E620014867F /* HLServiceRequest.m */,
+				68A532531D36252A0078339F /* HLEventManager.h */,
+				68A532541D36252A0078339F /* HLEventManager.m */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -835,6 +845,7 @@
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
 				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
+				68A532551D36252A0078339F /* HLEventManager.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
 				35B2EFC91D000E620014867F /* FDMessageCell.m in Sources */,
 				35B2EFB51D000E620014867F /* HLTheme.m in Sources */,
@@ -864,6 +875,7 @@
 				35D4E8161D118E9000EFFE07 /* HLArticleDetailViewController.m in Sources */,
 				35B2EFC21D000E620014867F /* FDNotificationBanner.m in Sources */,
 				35B2EF881D000E620014867F /* HLListViewController.m in Sources */,
+				68A532581D3626300078339F /* HLEvent.m in Sources */,
 				35B2EFC81D000E620014867F /* FDAudioMessageUnit.m in Sources */,
 				35B2EF9F1D000E620014867F /* FDDAUUpdater.m in Sources */,
 				35B2EF9E1D000E620014867F /* FDDataUpdaterWithInterval.m in Sources */,
