@@ -355,7 +355,7 @@
 -(UIFont *)articleListFont{
     NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ArticlesList.Title"];
     if(fontNameValue == nil){
-        return [self getFontWithKey:@"TableView.Title" andDefaultSize:14];
+        return [self tableViewCellTitleFont];
     }
     return [self getFontWithKey:@"ArticlesList.Title" andDefaultSize:14];
 }

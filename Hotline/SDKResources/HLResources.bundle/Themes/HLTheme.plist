@@ -149,9 +149,9 @@
 		<string>13f</string>
 		<key>ChannelIconPlaceholderBackgroundColor</key>
 		<string>555555</string>
-		<key>ChannelIconPlaceholderCharFontSize</key>
+		<key>ChannelIconPlaceholderTextFontSize</key>
 		<string>20.0f</string>
-		<key>ChannelIconPlaceholderCharFontName</key>
+		<key>ChannelIconPlaceholderTextFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 	</dict>
 	<key>EmptyResultView</key>
