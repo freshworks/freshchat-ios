@@ -348,7 +348,7 @@
 -(UIColor *)articleListFontColor{
     UIColor *color = [self getColorForKeyPath:@"ArticlesList.TitleFontColor"];
     if(color == nil)
-        color = [self getColorForKeyPath:@"TableView.TitleFontColor"];
+        color = [self tableViewCellTitleFontColor];
     return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
 }
 
@@ -547,11 +547,11 @@
 }
 
 -(UIFont *)channelIconPlaceholderImageCharFont{
-    NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ChannelListView.ChannelIconPlaceholderCharFontName"];
+    NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ChannelListView.ChannelIconPlaceholderTextFontName"];
     if(fontNameValue == nil){
-        return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderText" andDefaultSize:FD_FONT_SIZE_LARGE];
+        return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
     }
-    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
+    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderText" andDefaultSize:FD_FONT_SIZE_LARGE];
 }
 
 #pragma mark - Empty Result
