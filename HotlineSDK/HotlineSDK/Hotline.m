@@ -483,6 +483,9 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    if([store objectForKey:HOTLINE_DEFAULTS_DOMAIN]){
+        return;
+    }
     config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     config.agentAvatarEnabled =[store objectForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
     config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
