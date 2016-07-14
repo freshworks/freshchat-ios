@@ -363,11 +363,11 @@
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelHolders, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
-            if (channels.count == 1) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
+            if (channelHolders.count == 1) {
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channelHolders.firstObject
                                                                                    andPresentModally:YES];
                 preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
@@ -567,14 +567,8 @@
 // Polling changes
 
 -(void)startPoller{
-#ifdef DEBUG
-    #define POLL_INTERVAL 5
-#else 
-    #define POLL_INTERVAL 30
-#endif
-    
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Start off-screen message poller");
     }

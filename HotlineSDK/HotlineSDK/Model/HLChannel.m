@@ -57,18 +57,6 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
-    
-    /*
-        Icon prefetch when channel is created with background context
-     
-        __block NSData *imageData = nil;
-        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:channelInfo[@"iconUrl"]]];
-        });
-        channel.icon = imageData;
-
-     */
-    
     KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
     NSString *updatedMessage = trimString(channelInfo[@"welcomeMessage"][@"text"]); //set welcome message here
     if (welcomeMessage) {
@@ -124,6 +112,22 @@
         channel = matches.firstObject;
     }
     return channel;
+}
+
+@end
+
+
+@implementation HLChannelHolder
+
+-(NSData *)icon{
+    return [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext].icon;
+}
+
+-(void)setIcon:(NSData *)icon{
+    if (icon) {
+        [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext].icon = icon;
+        [[KonotorDataManager sharedInstance]save];
+    }
 }
 
 @end

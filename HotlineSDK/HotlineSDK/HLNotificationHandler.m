@@ -91,13 +91,13 @@
 }
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
-    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
+    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel.channelID andPresentModally:NO];
     HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
     [controller pushViewController:container animated:YES];
 }
 
 -(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
-    FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:YES];
+    FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channel.channelID andPresentModally:YES];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];

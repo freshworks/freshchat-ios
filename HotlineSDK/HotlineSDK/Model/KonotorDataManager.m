@@ -10,6 +10,7 @@
 #import "FDUtilities.h"
 #import "HLConstants.h"
 #import "FDMemLogger.h"
+#import "HLChannel.h"
 
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
@@ -282,7 +283,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
--(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler{
+-(void)fetchAllVisibleChannels:(void(^)(NSArray *channelHolders, NSError *error))handler{
     NSManagedObjectContext *context = self.mainObjectContext;
     [context performBlock:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
@@ -290,8 +291,18 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
         request.sortDescriptors = @[position];
         NSArray *results = [context executeFetchRequest:request error:nil];
+        NSMutableArray *channelHolders = [NSMutableArray new];
+        for (int i=0; i<results.count; i++) {
+            HLChannel *channel = results[i];
+            HLChannelHolder *channelHolder = [HLChannelHolder new];
+            channelHolder.name = channel.name;
+            channelHolder.iconURL = channel.iconURL;
+            channelHolder.icon = channel.icon;
+            channelHolder.channelID = channel.channelID;
+            [channelHolders addObject:channelHolder];
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(handler) handler(results,nil);
+            if(handler) handler(channelHolders,nil);
         });
     }];
 }
