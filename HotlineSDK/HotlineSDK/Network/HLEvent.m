@@ -34,7 +34,12 @@
 }
 
 -(void)saveEvent{
-    self.eventDictionary = @{ @"_tracker":[self getTracker] ,@"_userId" :[FDUtilities getUserAlias], @"_eventName":self.eventName, @"_sessionId":[HLEventManager getUserSessionId], @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)], @"_properties":self.properties};
+    self.eventDictionary = @{@"_tracker":[self getTracker],
+                             @"_userId" :[FDUtilities getUserAlias],
+                             @"_eventName":self.eventName,
+                             @"_sessionId":[HLEventManager getUserSessionId],
+                             @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)],
+                             @"_properties":self.properties};
     [[HLEventManager sharedInstance] updateFileWithEvent:self.eventDictionary];
 }
 

@@ -338,7 +338,8 @@
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         
         //Track event category click
-        NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [category.categoryID stringValue], HLEVENT_PARAM_CATEGORY_NAME : category.title};
+        NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [category.categoryID stringValue],
+                                     HLEVENT_PARAM_CATEGORY_NAME : category.title};
         HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_CATEGORY andProperty:properties];
         [event saveEvent];
         

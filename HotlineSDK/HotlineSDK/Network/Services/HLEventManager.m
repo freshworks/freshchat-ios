@@ -41,6 +41,7 @@
 {
     self = [super init];
     if (self) {
+        
         self.eventsArray = [NSMutableArray array];
         self.sessionID = [FDStringUtil generateUUID];
         self.serialQueue = dispatch_queue_create("com.freshdesk.hotline.events", DISPATCH_QUEUE_SERIAL);
@@ -48,6 +49,20 @@
         [self getOldEvents];
     }
     return self;
+}
+
+-(NSString *)getEventsURL{
+    NSString *baseURLString;
+    
+#ifdef DEBUG
+    baseURLString = @"app.hotline.io";
+#else
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    baseURLString = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+#endif
+    
+    NSString *domain = [[baseURLString stringByReplacingOccurrencesOfString:@"app" withString:@"events.staging"] stringByAppendingPathComponent:BULK_EVENT_DIR_PATH];
+    return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
 }
 
 - (NSString*)returnEventLibraryPath {
@@ -72,6 +87,12 @@
     return [filePath stringByAppendingPathComponent:HLEVENT_FILE_NAME];
 }
 
+- (void) getOldEvents {
+    NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];
+    NSArray *eventsArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    [self.eventsArray addObjectsFromArray:eventsArray];
+}
+
 - (void) updateFileWithEvent:(NSDictionary *) eventDict{
     dispatch_async(self.serialQueue, ^{
         
@@ -81,18 +102,6 @@
 }
 
 - (void) writeEventsToPList{
-    [self writeEventsArray:self.eventsArray];
-}
-
-- (void) getOldEvents {
-    NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];
-    NSArray *eventsArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    [self.eventsArray addObjectsFromArray:eventsArray];
-}
-         
-- (void) writeEventsArray : (NSArray *) array{
-    //event array is current session data
-    
     NSMutableArray *eventsArrayCopy = [NSMutableArray arrayWithArray:[self.eventsArray copy]];
     if (![NSKeyedArchiver archiveRootObject:eventsArrayCopy toFile:self.plistURL]) { // NOTE:
         NSLog(@"%@ unable to create events data", self);
@@ -100,22 +109,21 @@
 }
 
 - (void) getEventsAndUpload{
-
-    NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]]; //self.url
-    NSArray *eventsArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    
+    dispatch_async(self.serialQueue, ^{
+        NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]]; //self.url
+        NSArray *eventsArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        NSMutableArray *events = [NSMutableArray array];
+    
+        for(int j = 0; j < [eventsArray count]; j += HLEVENTS_BATCH_SIZE) {
         
-    NSMutableArray *events = [NSMutableArray array];
-        
-    for(int j = 0; j < [eventsArray count]; j += HLEVENTS_BATCH_SIZE) {
-        
-        NSArray *subarray = [eventsArray subarrayWithRange:NSMakeRange(j, MIN(HLEVENTS_BATCH_SIZE, [eventsArray count] - j))];
-            
+            NSArray *subarray = [eventsArray subarrayWithRange:NSMakeRange(j, MIN(HLEVENTS_BATCH_SIZE, [eventsArray count] - j))];
             for (int i=0; i<[subarray count]; i++) {
-                
-            [events addObject:eventsArray[i]];
+                [events addObject:eventsArray[i]];
+            }
+            [self uploadUserEvents:events];
         }
-        [self uploadUserEvents:events];
-    }
+    });
 }
      
 - (void) clearEventFile{
@@ -147,9 +155,11 @@
 - (void) uploadUserEvents :(NSMutableArray *)events{
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
+    //https to http: for testing only
     NSString *eventURL = [NSString stringWithFormat:@"%@%@",HLEVENTS_BULK_BASE_URL,[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+    //NSString *eventURL = [NSString stringWithFormat:@"%@/%@/",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
     NSMutableArray *tempEventsArray = [[NSMutableArray alloc] initWithArray:self.eventsArray];
-    //tempEventsArray = [self.eventsArray copy];
+    
     for(NSDictionary *event in events){
         for(NSDictionary *eventCompare in tempEventsArray){
             if ([eventCompare[@"timeStamp"] compare:event[@"timeStamp"]] == NSOrderedSame){
@@ -164,7 +174,8 @@
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:eventURL]];
     request.HTTPBody = postData;
     request.HTTPMethod = HTTP_METHOD_POST;
-    [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
+    dispatch_async(self.serialQueue, ^{
+        [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
             if([responseInfo isDict]) {
                 NSMutableArray *incompleteEvents = [[NSMutableArray alloc] init];
@@ -187,7 +198,8 @@
                 [self writeArrayEvents:events];
             }
         }
-    }];
+        }];
+    });
 }
 
 - (void) writeArrayEvents :(NSMutableArray *)events{
