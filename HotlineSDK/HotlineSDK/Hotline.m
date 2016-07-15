@@ -363,11 +363,11 @@
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelHolders, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
-            if (channelHolders.count == 1) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channelHolders.firstObject
+            if (channelInfos.count == 1) {
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channelInfos.firstObject
                                                                                    andPresentModally:YES];
                 preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{

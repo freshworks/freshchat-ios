@@ -117,7 +117,18 @@
 @end
 
 
-@implementation HLChannelHolder
+@implementation HLChannelInfo
+
+-(HLChannelInfo *)initWithChannel:(HLChannel *)channel{
+    self = [super init];
+    if (self) {
+        self.name = channel.name;
+        self.iconURL = channel.iconURL;
+        self.icon = channel.icon;
+        self.channelID = channel.channelID;
+    }
+    return self;
+}
 
 -(NSData *)icon{
     return [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext].icon;

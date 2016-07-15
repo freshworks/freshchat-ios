@@ -56,12 +56,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface HLChannelHolder : NSObject
+@interface HLChannelInfo : NSObject
 
 @property (nonatomic, strong) NSData *icon;
 @property (nonatomic, strong) NSString *iconURL;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSNumber *channelID;
+
+-(HLChannelInfo *)initWithChannel:(HLChannel *)channel;
 
 @end
 

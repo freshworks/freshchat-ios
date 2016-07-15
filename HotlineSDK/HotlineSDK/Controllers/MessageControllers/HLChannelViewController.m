@@ -110,9 +110,9 @@
 
 -(void)updateChannels{
     HideNetworkActivityIndicator();
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelHolders, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
-            NSArray *sortedChannel = [self sortChannelList:channelHolders];
+            NSArray *sortedChannel = [self sortChannelList:channelInfos];
             [self showEmptyResultsView:(sortedChannel.count == 0)];
             self.channels = sortedChannel;
             [self.tableView reloadData];
@@ -120,12 +120,12 @@
     }];
 }
 
--(NSArray *)sortChannelList:(NSArray *)channelHolders{
+-(NSArray *)sortChannelList:(NSArray *)channelInfos{
     
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
     NSMutableArray *messages = [NSMutableArray array];
-    for(HLChannelHolder *channel in channelHolders){
+    for(HLChannelInfo *channel in channelInfos){
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
         if (lastMessage) {
             [messages addObject:lastMessage];
@@ -203,7 +203,7 @@
     //Update cell properties
     
     if (indexPath.row < self.channels.count) {
-        HLChannelHolder *channel =  self.channels[indexPath.row];
+        HLChannelInfo *channel =  self.channels[indexPath.row];
 
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
         
