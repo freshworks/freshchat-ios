@@ -39,15 +39,13 @@
 #define HLEVENT_PARAM_MESSAGE_ID            @"MessageId"
 #define HLEVENT_PARAM_ARTICLE_ID            @"ArticleId"
 
-#define HLEVENTS_BATCH_SIZE 50
+#define HLEVENTS_BATCH_SIZE 25
 
 @interface HLEventManager : NSObject
 
 @property (nonatomic, strong) NSMutableArray *eventsArray;
 
 + (instancetype)sharedInstance;
-
-//- (void)setEventLibraryPath;
 
 - (void) uploadUserEvents :(NSArray *)events;
 

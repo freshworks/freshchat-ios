@@ -11,12 +11,9 @@
 #import "Hotline.h"
 #import "FDSecureStore.h"
 #import "KonotorDataManager.h"
-//#import "AFHTTPClient.h"
-//#import "AFNetworking.h"
 #import "HLAPIClient.h"
 #import "HLServiceRequest.h"
-
-#define HOTLINE_MAX_PUSH_EVENTS 40
+#import "HLMacros.h"
 
 @interface HLEventManager()
 
@@ -61,12 +58,11 @@
 }
 
 - (NSString*)returnEventLibraryPath {
-    NSLog(@"creating event library");
     //check for path, if available return else create path
     
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:HLEVENT_DIR_PATH];
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        NSLog(@"creating file");
+        
         NSError *error = nil;
         NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
                                                          forKey:NSFileProtectionKey];
@@ -74,8 +70,9 @@
            withIntermediateDirectories:YES
                             attributes:attr
                                  error:&error];
-        if (error)
-            NSLog(@"Error creating directory path: %@", [error localizedDescription]);
+        if (error){
+            FDLog(@"Error creating directory path: %@", [error localizedDescription]);
+        }
     }
 //    NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];
 //    [self.eventsArray addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
@@ -99,7 +96,7 @@
 - (void) writeEventsToPList{
     NSMutableArray *eventsArrayCopy = [NSMutableArray arrayWithArray:[self.eventsArray copy]];
     if (![NSKeyedArchiver archiveRootObject:eventsArrayCopy toFile:self.plistURL]) { // NOTE:
-        NSLog(@"%@ unable to create events data", self);
+        FDLog(@"%@ unable to create events data", self);
     }
 }
 
@@ -127,23 +124,31 @@
     if(exists) {
         [[NSFileManager defaultManager]removeItemAtPath:[self returnEventLibraryPath]  error:&error];
     }
-    else NSLog(@"File not exists!!!");
+    else{
+        FDLog(@"File not exists!!!");
+    }
 }
 
 +(NSString *)getUserSessionId{
     NSString *sessionId =[NSString stringWithFormat:@"%@_%@", [HLEventManager sharedInstance].sessionID, [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
-    //[self uploadUserEvents:nil];
     return sessionId;
 }
 
 + (NSDictionary *) getUserProperties{
     //get all user properties and forward them to
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias;
+    if([FDUtilities getUserAlias]){
+        userAlias = [FDUtilities getUserAlias];
+    }
     NSString *appAlias = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appName = [FDUtilities appName];
     NSDictionary *deviceInfo = [FDUtilities deviceInfoProperties];
-    NSDictionary *user = @{ @"userId":userAlias,@"tracker":@"HotlineSDK",@"groupId":appAlias, @"appName":appName, @"properties":deviceInfo};
+    NSDictionary *user = @{ @"userId":userAlias,
+                            @"tracker":[FDUtilities getTracker],
+                            @"groupId":appAlias,
+                            @"appName":appName,
+                            @"properties":deviceInfo};
     return user;
 }
 

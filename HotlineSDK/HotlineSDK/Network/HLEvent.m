@@ -29,12 +29,8 @@
     return self;
 }
 
-- (NSString *) getTracker{
-    return [NSString stringWithFormat:@"HLiOS%@",[Hotline SDKVersion]];
-}
-
 -(void)saveEvent{
-    self.eventDictionary = @{@"_tracker":[self getTracker],
+    self.eventDictionary = @{@"_tracker":[FDUtilities getTracker],
                              @"_userId" :[FDUtilities getUserAlias],
                              @"_eventName":self.eventName,
                              @"_sessionId":[HLEventManager getUserSessionId],

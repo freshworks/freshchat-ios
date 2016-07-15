@@ -32,6 +32,7 @@
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
 +(NSString*)deviceModelName;
++(NSString *) getTracker;
 
 @end
 

@@ -45,6 +45,10 @@
     return image;
 }
 
++(NSString *) getTracker{
+    return [NSString stringWithFormat:@"HLiOS%@",[Hotline SDKVersion]];
+}
+
 +(BOOL)isUserRegistered{
     return [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
 }
