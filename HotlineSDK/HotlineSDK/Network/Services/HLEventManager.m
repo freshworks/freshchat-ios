@@ -52,16 +52,11 @@
 }
 
 -(NSString *)getEventsURL{
-    NSString *baseURLString;
     
-#ifdef DEBUG
-    baseURLString = @"app.hotline.io";
-#else
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    baseURLString = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
-#endif
+    NSString *baseURLString = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     
-    NSString *domain = [[baseURLString stringByReplacingOccurrencesOfString:@"app" withString:@"events.staging"] stringByAppendingPathComponent:BULK_EVENT_DIR_PATH];
+    NSString *domain = [[baseURLString stringByReplacingOccurrencesOfString:@"app" withString:@"events"] stringByAppendingPathComponent:BULK_EVENT_DIR_PATH];
     return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
 }
 
@@ -155,9 +150,11 @@
 - (void) uploadUserEvents :(NSMutableArray *)events{
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    //https to http: for testing only
+#ifdef DEBUG
     NSString *eventURL = [NSString stringWithFormat:@"%@%@",HLEVENTS_BULK_BASE_URL,[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
-    //NSString *eventURL = [NSString stringWithFormat:@"%@/%@/",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+#else
+    NSString *eventURL = [NSString stringWithFormat:@"%@/%@/",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+#endif
     NSMutableArray *tempEventsArray = [[NSMutableArray alloc] initWithArray:self.eventsArray];
     
     for(NSDictionary *event in events){
@@ -177,6 +174,7 @@
     dispatch_async(self.serialQueue, ^{
         [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
+            //add serial queue code block for serial execution
             if([responseInfo isDict]) {
                 NSMutableArray *incompleteEvents = [[NSMutableArray alloc] init];
                 NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];

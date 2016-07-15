@@ -14,13 +14,10 @@
 #define HLEVENT_DIR_PATH @"Hotline/Events"
 #define HLEVENT_FILE_NAME @"events.plist" // Hotline/Events/events.plist
 
-//Single event dir path
-#define SINGLE_EVENT_DIR_PATH @"events/"
-
 //Bulk event dir path
 #define BULK_EVENT_DIR_PATH @"bulkevents/"
 
-//bulk evnet base erl
+//bulk event base url for debug mode only
 #define HLEVENTS_BULK_BASE_URL @"http://events.staging.konotor.com/bulkevents/"
 
 
