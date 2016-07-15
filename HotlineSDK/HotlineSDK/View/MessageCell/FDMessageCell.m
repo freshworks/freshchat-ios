@@ -346,6 +346,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
         [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
     
+    messageTextView.tintColor = [[HLTheme sharedInstance] hyperlinkColor];
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)) {
         [audioItem.mediaProgressBar setHidden:YES];
