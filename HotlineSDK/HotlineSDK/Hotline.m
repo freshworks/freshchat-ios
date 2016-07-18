@@ -367,7 +367,8 @@
         if (!error) {
             HLContainerController *preferredController = nil;
             if (channelInfos.count == 1) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channelInfos.firstObject
+                HLChannelInfo *channelInfo = [channelInfos firstObject];
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
                                                                                    andPresentModally:YES];
                 preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
@@ -395,9 +396,9 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
     NSArray *results = [context executeFetchRequest:request error:nil];
-    
     if (results.count == 1){
-        controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+        HLChannelInfo *channelInfo = [results firstObject];
+        controller = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:NO];
     }else{
         controller = [[HLChannelViewController alloc]init];
     }
