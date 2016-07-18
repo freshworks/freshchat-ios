@@ -137,10 +137,7 @@
 + (NSDictionary *) getUserProperties{
     //get all user properties and forward them to
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *userAlias;
-    if([FDUtilities getUserAlias]){
-        userAlias = [FDUtilities getUserAlias];
-    }
+    NSString *userAlias = [FDUtilities getUserAlias];
     NSString *appAlias = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appName = [FDUtilities appName];
     NSDictionary *deviceInfo = [FDUtilities deviceInfoProperties];
@@ -154,6 +151,9 @@
 
 - (void) uploadUserEvents :(NSMutableArray *)events{
     
+    if([FDUtilities getUserAlias]){
+        return;
+    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
 #ifdef DEBUG
     NSString *eventURL = [NSString stringWithFormat:@"%@%@",HLEVENTS_BULK_BASE_URL,[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
