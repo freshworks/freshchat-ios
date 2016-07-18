@@ -147,7 +147,8 @@ static BOOL messageExistsDirty = YES;
     return message;
 }
 
-+(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel{
++(NSInteger)getUnreadMessagesCountForChannel:(NSNumber *)channelID{
+    HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];

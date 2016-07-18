@@ -11,7 +11,6 @@
 #import "HLTheme.h"
 #import "FDLocalNotification.h"
 #import "FDChannelUpdater.h"
-#import "HLChannel.h"
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "KonotorMessage.h"
@@ -111,51 +110,62 @@
 
 -(void)updateChannels{
     HideNetworkActivityIndicator();
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
-            NSMutableArray *messages = [NSMutableArray array];
-            for(HLChannel *channel in channels){
-                KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
-                if (lastMessage) {
-                    [messages addObject:lastMessage];
-                }
-            }
-            
-            id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
-            messages = [[messages sortedArrayUsingDescriptors:@[sort]] mutableCopy];
-            
-            NSMutableArray *sortedChannel = [[NSMutableArray alloc] init];
-            for(KonotorMessage *message in messages){
-                if (message.belongsToChannel) {
-                    [sortedChannel addObject:message.belongsToChannel];
-                }
-            }
-            
+            NSArray *sortedChannel = [self sortChannelList:channelInfos];
+            [self showEmptyResultsView:(sortedChannel.count == 0)];
             self.channels = sortedChannel;
-            if(!self.channels.count){
-                HLTheme *theme = [HLTheme sharedInstance];
-                if (!self.emptyResultView) {
-                    NSString *message;
-                    if([[FDReachabilityManager sharedInstance] isReachable]){
-                        message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-                    }
-                    else{
-                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self removeLoadingIndicator];
-                    }
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
-                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                    [self.view addSubview:self.emptyResultView];
-                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-                }
-            }
-            else{
-                self.emptyResultView.frame = CGRectZero;
-                [self.emptyResultView removeFromSuperview];
-            }
             [self.tableView reloadData];
         }
     }];
+}
+
+-(NSArray *)sortChannelList:(NSArray *)channelInfos{
+    
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSMutableArray *messages = [NSMutableArray array];
+    for(HLChannelInfo *channel in channelInfos){
+        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
+        if (lastMessage) {
+            [messages addObject:lastMessage];
+        }
+    }
+    
+    id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
+    messages = [[messages sortedArrayUsingDescriptors:@[sort]] mutableCopy];
+    
+    for(KonotorMessage *message in messages){
+        if (message.belongsToChannel) {
+            [results addObject:message.belongsToChannel];
+        }
+    }
+    
+    return results;
+}
+
+-(void)showEmptyResultsView:(BOOL)canShow{
+    if(canShow){
+        HLTheme *theme = [HLTheme sharedInstance];
+        if (!self.emptyResultView) {
+            NSString *message;
+            if([[FDReachabilityManager sharedInstance] isReachable]){
+                message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+            }
+            else{
+                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                [self removeLoadingIndicator];
+            }
+            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
+            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+            [self.view addSubview:self.emptyResultView];
+            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+        }
+    }
+    else{
+        self.emptyResultView.frame = CGRectZero;
+        [self.emptyResultView removeFromSuperview];
+    }
 }
 
 -(void)setNavigationItem{
@@ -193,9 +203,9 @@
     //Update cell properties
     
     if (indexPath.row < self.channels.count) {
-        HLChannel *channel =  self.channels[indexPath.row];
+        HLChannelInfo *channel =  self.channels[indexPath.row];
 
-        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel];
+        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
         
         cell.titleLabel.text  = channel.name;
         
@@ -213,7 +223,7 @@
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
 
-        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel];
+        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
 
@@ -242,7 +252,6 @@
                                     cell.imgView.image = image;
                                     [cell setNeedsLayout];
                                     channel.icon = UIImagePNGRepresentation(image);
-                                    [[KonotorDataManager sharedInstance]save];
                                 }
                             });
                         }else{
@@ -296,7 +305,8 @@
     return description;
 }
 
--(KonotorMessage *)getLastMessageInChannel:(HLChannel *)channel{
+-(KonotorMessage *)getLastMessageInChannel:(NSNumber *)channelID{
+    HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSArray *messages = channel.messages.allObjects;
     return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
@@ -314,7 +324,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
-        FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel andPresentModally:NO];
+        FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel.channelID andPresentModally:NO];
         HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }

@@ -156,7 +156,11 @@
                 [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
                     for (int i=0; i<unuploadedProperties.count; i++) {
                         KonotorCustomProperty *property = unuploadedProperties[i];
-                        property.uploadStatus = @1;
+                        if (property.managedObjectContext != nil) {
+                            property.uploadStatus = @1;
+                        }else{
+                            FDLog(@"Trying to access deleted meta object - Ignoring");
+                        }
                     }
                     [[KonotorDataManager sharedInstance]save];
                
