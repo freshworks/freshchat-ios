@@ -43,7 +43,7 @@
 	<key>MinimumOSVersion</key>
 	<string>7.0</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Freshdesk. All rights reserved.</string>
+	<string>Copyright © 2016 Freshdesk. All rights reserved.</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
