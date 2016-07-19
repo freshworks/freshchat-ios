@@ -58,9 +58,7 @@
 }
 
 - (void) viewWillDisappear:(BOOL)animated{
-    //call api to upload event to store
     [super viewWillDisappear:animated];
-    [[HLEventManager sharedInstance] getEventsAndUpload];
 }
 
 @end

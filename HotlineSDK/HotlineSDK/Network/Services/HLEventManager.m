@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSString *plistURL;
 @property (nonatomic, strong) NSString *sessionID;
 @property dispatch_queue_t serialQueue;
+@property (nonatomic, strong) NSTimer *pollingTimer;
 
 @end
 
@@ -38,12 +39,13 @@
 {
     self = [super init];
     if (self) {
-        
         self.eventsArray = [NSMutableArray array];
         self.sessionID = [FDStringUtil generateUUID];
         self.serialQueue = dispatch_queue_create("com.freshdesk.hotline.events", DISPATCH_QUEUE_SERIAL);
         self.plistURL = [self returnEventLibraryPath];
         [self getOldEvents];
+        [self startEventsPolling];
+        [self localNotificationSubscription];
     }
     return self;
 }
@@ -55,6 +57,50 @@
     
     NSString *domain = [[baseURLString stringByReplacingOccurrencesOfString:@"app" withString:@"events"] stringByAppendingPathComponent:BULK_EVENT_DIR_PATH];
     return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
+}
+
+-(void)localNotificationSubscription{
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleBecameActive:)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+}
+
+-(void)handleBecameActive:(NSNotification *)notification{
+    [self startEventsPolling];
+}
+
+-(void)handleEnteredBackground:(NSNotification *)notification{
+    [self cancelEventsPolling];
+}
+
+-(void)startEventsPolling{
+    
+    if(![self.pollingTimer isValid]){
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(pollForEvents)
+                                                           userInfo:nil repeats:YES];
+    }
+}
+
+-(void) pollForEvents{
+    if([self.eventsArray count]){
+        
+        [self getEventsAndUpload];
+    }
+    else{
+        [self cancelEventsPolling];
+    }
+}
+
+-(void)cancelEventsPolling{
+    if([self.pollingTimer isValid]){
+        [self.pollingTimer invalidate];
+    }
 }
 
 - (NSString*)returnEventLibraryPath {

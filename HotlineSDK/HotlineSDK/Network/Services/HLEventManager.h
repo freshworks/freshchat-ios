@@ -51,8 +51,6 @@
 
 + (NSString *) getUserSessionId;
 
-- (void) getEventsAndUpload;
-
 - (void) updateFileWithEvent :(NSDictionary *) eventDict;
 
 @end
