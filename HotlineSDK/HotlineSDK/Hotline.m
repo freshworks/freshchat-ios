@@ -38,6 +38,7 @@
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
+#import "HLEventManager.h"
 
 @interface Hotline ()
 
@@ -126,6 +127,10 @@
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleBecameActive:)
+                                                 name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
@@ -266,6 +271,11 @@
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
     [self cancelPoller];
+    [[HLEventManager sharedInstance] cancelEventsPolling];
+}
+
+-(void)handleBecameActive:(NSNotification *)notification{
+    [[HLEventManager sharedInstance] startEventsPolling];
 }
 
 -(void)performPendingTasks{

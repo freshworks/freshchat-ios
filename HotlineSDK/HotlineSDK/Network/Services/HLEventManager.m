@@ -45,7 +45,6 @@
         self.plistURL = [self returnEventLibraryPath];
         [self getOldEvents];
         [self startEventsPolling];
-        [self localNotificationSubscription];
     }
     return self;
 }
@@ -59,41 +58,11 @@
     return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
 }
 
--(void)localNotificationSubscription{
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground:)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleBecameActive:)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-}
-
--(void)handleBecameActive:(NSNotification *)notification{
-    [self startEventsPolling];
-}
-
--(void)handleEnteredBackground:(NSNotification *)notification{
-    [self cancelEventsPolling];
-}
-
 -(void)startEventsPolling{
     
-    if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(pollForEvents)
+    if(![self.pollingTimer isValid] && [self.eventsArray count]){
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(getEventsAndUpload)
                                                            userInfo:nil repeats:YES];
-    }
-}
-
--(void) pollForEvents{
-    if([self.eventsArray count]){
-        
-        [self getEventsAndUpload];
-    }
-    else{
-        [self cancelEventsPolling];
     }
 }
 
@@ -197,7 +166,7 @@
 
 - (void) uploadUserEvents :(NSMutableArray *)events{
     
-    if([FDUtilities getUserAlias]){
+    if(![FDUtilities getUserAlias]){
         return;
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];

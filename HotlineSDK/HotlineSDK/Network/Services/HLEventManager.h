@@ -51,6 +51,10 @@
 
 + (NSString *) getUserSessionId;
 
+- (void)startEventsPolling;
+
+-(void)cancelEventsPolling;
+
 - (void) updateFileWithEvent :(NSDictionary *) eventDict;
 
 @end
