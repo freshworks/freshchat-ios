@@ -325,7 +325,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.channels.count) {
         HLChannel *channel = self.channels[indexPath.row];
-        FDMessageController *conversationController = [[FDMessageController alloc]initWithChannel:channel.channelID andPresentModally:NO];
+        FDMessageController *conversationController = [[FDMessageController alloc]initWithChannelID:channel.channelID andPresentModally:NO];
         HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
     }
