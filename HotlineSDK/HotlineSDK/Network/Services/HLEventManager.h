@@ -51,9 +51,9 @@
 
 + (NSString *) getUserSessionId;
 
-- (void)startEventsPolling;
+- (void)startEventsUploadTimer;
 
--(void)cancelEventsPolling;
+- (void)cancelEventsUploadTimer;
 
 - (void) updateFileWithEvent :(NSDictionary *) eventDict;
 

@@ -44,7 +44,7 @@
         self.serialQueue = dispatch_queue_create("com.freshdesk.hotline.events", DISPATCH_QUEUE_SERIAL);
         self.plistURL = [self returnEventLibraryPath];
         [self getOldEvents];
-        [self startEventsPolling];
+        [self startEventsUploadTimer];
     }
     return self;
 }
@@ -58,7 +58,7 @@
     return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
 }
 
--(void)startEventsPolling{
+-(void)startEventsUploadTimer{
     
     if(![self.pollingTimer isValid] && [self.eventsArray count]){
         self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(getEventsAndUpload)
@@ -66,7 +66,7 @@
     }
 }
 
--(void)cancelEventsPolling{
+-(void)cancelEventsUploadTimer{
     if([self.pollingTimer isValid]){
         [self.pollingTimer invalidate];
     }

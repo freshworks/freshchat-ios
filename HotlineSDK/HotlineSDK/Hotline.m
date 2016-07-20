@@ -271,11 +271,11 @@
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
     [self cancelPoller];
-    [[HLEventManager sharedInstance] cancelEventsPolling];
+    [[HLEventManager sharedInstance] cancelEventsUploadTimer];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
-    [[HLEventManager sharedInstance] startEventsPolling];
+    [[HLEventManager sharedInstance] startEventsUploadTimer];
 }
 
 -(void)performPendingTasks{
