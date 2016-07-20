@@ -92,6 +92,7 @@
 
 -(void)networkReachable{
     [self registerUser];
+    [[HLEventManager sharedInstance] startEventsUploadTimer];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{

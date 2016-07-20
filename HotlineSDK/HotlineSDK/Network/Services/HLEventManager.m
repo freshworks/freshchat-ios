@@ -14,6 +14,7 @@
 #import "HLAPIClient.h"
 #import "HLServiceRequest.h"
 #import "HLMacros.h"
+#import "FDReachabilityManager.h"
 
 @interface HLEventManager()
 
@@ -59,10 +60,11 @@
 }
 
 -(void)startEventsUploadTimer{
-    
-    if(![self.pollingTimer isValid] && [self.eventsArray count]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(getEventsAndUpload)
+    if([[FDReachabilityManager sharedInstance] isReachable]){
+        if(![self.pollingTimer isValid] && [self.eventsArray count]){
+            self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(getEventsAndUpload)
                                                            userInfo:nil repeats:YES];
+        }
     }
 }
 
