@@ -112,10 +112,14 @@
     HideNetworkActivityIndicator();
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
-            NSArray *sortedChannel = [self sortChannelList:channelInfos];
-            [self showEmptyResultsView:(sortedChannel.count == 0)];
-            self.channels = sortedChannel;
-            [self.tableView reloadData];
+            if (channelInfos.count == 1) {
+                self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
+            }else{
+                NSArray *sortedChannel = [self sortChannelList:channelInfos];
+                [self showEmptyResultsView:(sortedChannel.count == 0)];
+                self.channels = sortedChannel;
+                [self.tableView reloadData];
+            }
         }
     }];
 }
