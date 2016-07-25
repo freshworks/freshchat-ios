@@ -1,4 +1,8 @@
 
+Ver 1.1.2 
+__________________________
+<To be filled>
+
 Ver 1.1.1 
 __________________________
 You can now hide contact us on the FAQ screens 
