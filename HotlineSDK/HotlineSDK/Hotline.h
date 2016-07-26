@@ -156,6 +156,7 @@
  *
  *  @discussion Use this function when your user needs to log out of the app .
  *  This will clean up all the data associated with the SDK for the user.
+ *  Please use the completion block if you are updating user information or subsequently calling init 
  *  
  * @param Completion block to be called when clearData is completed
  *
