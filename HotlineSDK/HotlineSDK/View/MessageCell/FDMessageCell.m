@@ -321,6 +321,7 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     UIEdgeInsets otherChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
     UIEdgeInsets userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
+    messageTextView.tintColor = [[HLTheme sharedInstance] hyperlinkColor];
     UIColor *messageTextColor;
     if(isSenderOther){
         messageTextColor = [[HLTheme sharedInstance] agentMessageFontColor];
@@ -345,7 +346,6 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
     
     if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
         [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
-    
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)) {
         [audioItem.mediaProgressBar setHidden:YES];

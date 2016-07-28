@@ -10,6 +10,7 @@
 #import "FDUtilities.h"
 #import "HLConstants.h"
 #import "FDMemLogger.h"
+#import "HLChannel.h"
 
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
@@ -282,7 +283,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
--(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler{
+-(void)fetchAllVisibleChannels:(void(^)(NSArray *channelInfos, NSError *error))handler{
     NSManagedObjectContext *context = self.mainObjectContext;
     [context performBlock:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
@@ -290,8 +291,14 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
         request.sortDescriptors = @[position];
         NSArray *results = [context executeFetchRequest:request error:nil];
+        NSMutableArray *channelInfos = [NSMutableArray new];
+        for (int i=0; i<results.count; i++) {
+            HLChannel *channel = results[i];
+            HLChannelInfo *channelInfo = [[HLChannelInfo alloc ]initWithChannel:channel];
+            [channelInfos addObject:channelInfo];
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(handler) handler(results,nil);
+            if(handler) handler(channelInfos,nil);
         });
     }];
 }
@@ -301,7 +308,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)deleteAllProperties:(void (^)(NSError *))handler{
-    [self deleteAllEntriesOfEntity:@"KonotorCustomProperty" handler:handler inContext:self.mainObjectContext];
+    [self deleteAllEntriesOfEntity:HOTLINE_CUSTOM_PROPERTY_ENTITY handler:handler inContext:self.mainObjectContext];
 }
 
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
@@ -319,7 +326,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)deleteAllMessages:(void (^)(NSError *))handler{
-    [self deleteAllEntriesOfEntity:@"KonotorMessage" handler:handler inContext:self.mainObjectContext];
+    [self deleteAllEntriesOfEntity:HOTLINE_MESSAGE_ENTITY handler:handler inContext:self.mainObjectContext];
 }
 
 @end

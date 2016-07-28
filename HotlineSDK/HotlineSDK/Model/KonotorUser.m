@@ -62,7 +62,7 @@
 +(KonotorUser *)getUser{
     KonotorUser *user = nil;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorUser"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_USER_ENTITY];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 1) {
         user = matches.firstObject;

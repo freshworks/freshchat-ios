@@ -196,7 +196,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         
               NSError *pError;
               
-              KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+              KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
               [messageBinary setBinaryAudio:[note object]];
               
               [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];

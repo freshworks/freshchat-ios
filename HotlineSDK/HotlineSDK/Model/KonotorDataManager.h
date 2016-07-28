@@ -14,8 +14,11 @@
 #define HOTLINE_CATEGORY_ENTITY @"HLCategory"
 #define HOTLINE_CHANNEL_ENTITY @"HLChannel"
 #define HOTLINE_INDEX_ENTITY @"FDIndex"
-#define ARTICLE_TITLE @"articleTitle"
-#define ARTICLE_DESCRIPTION @"articleDescription"
+#define HOTLINE_CUSTOM_PROPERTY_ENTITY @"KonotorCustomProperty"
+#define HOTLINE_CONVERSATION_ENTITY @"KonotorConversation"
+#define HOTLINE_MESSAGE_ENTITY @"KonotorMessage"
+#define HOTLINE_MESSAGE_BINARY_ENTITY @"KonotorMessageBinary"
+#define HOTLINE_USER_ENTITY @"KonotorUser"
 
 @interface KonotorDataManager : NSObject
 
@@ -30,7 +33,7 @@
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler;
--(void)fetchAllVisibleChannels:(void(^)(NSArray *channels, NSError *error))handler;
+-(void)fetchAllVisibleChannels:(void(^)(NSArray *channelInfos, NSError *error))handler;
 -(void)deleteAllChannels:(void(^)(NSError *error))handler;
 -(void)deleteAllMessages:(void(^)(NSError *error))handler;
 -(void)deleteAllProperties:(void(^)(NSError *error))handler;

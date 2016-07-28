@@ -77,7 +77,7 @@ typedef struct {
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
 
--(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
@@ -91,7 +91,7 @@ typedef struct {
         self.messagesDisplayedCount=20;
         self.loadmoreCount=20;
         
-        self.channel = channel;
+        self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }

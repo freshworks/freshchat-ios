@@ -35,6 +35,9 @@
 #import "HLArticleDetailViewController.h"
 #import "HLArticleUtil.h"
 #import "FAQOptionsInterface.h"
+#import "FDIndex.h"
+#import "KonotorMessageBinary.h"
+#import "FDLocalNotification.h"
 
 @interface Hotline ()
 
@@ -79,9 +82,15 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        [FDIndex load];
+        [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
     }
     return self;
+}
+
+-(void)networkReachable{
+    [self registerUser];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
@@ -111,14 +120,15 @@
 }
 
 -(void) registerAppNotificationListeners{
-    [[NSNotificationCenter defaultCenter]
-                    addObserver: self
-                    selector: @selector(newSession:)
-                    name: UIApplicationDidBecomeActiveNotification object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(newSession:)
+                                                 name: UIApplicationDidBecomeActiveNotification object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
+                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
 }
 
 -(void)updateAppVersion{
@@ -353,11 +363,12 @@
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
-            if (channels.count == 1) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
+            if (channelInfos.count == 1) {
+                HLChannelInfo *channelInfo = [channelInfos firstObject];
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
                                                                                    andPresentModally:YES];
                 preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
@@ -385,9 +396,9 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
     NSArray *results = [context executeFetchRequest:request error:nil];
-    
     if (results.count == 1){
-        controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+        HLChannelInfo *channelInfo = [results firstObject];
+        controller = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:NO];
     }else{
         controller = [[HLChannelViewController alloc]init];
     }
@@ -473,13 +484,13 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    if([store objectForKey:HOTLINE_DEFAULTS_DOMAIN]){
+        config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    }
     config.agentAvatarEnabled =[store objectForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
-    config.displayFAQsAsGrid = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
     NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
@@ -509,7 +520,7 @@
 
 -(NSInteger)unreadCount{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     return messages.count;
@@ -557,14 +568,8 @@
 // Polling changes
 
 -(void)startPoller{
-#ifdef DEBUG
-    #define POLL_INTERVAL 5
-#else 
-    #define POLL_INTERVAL 30
-#endif
-    
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Start off-screen message poller");
     }

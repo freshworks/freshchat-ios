@@ -69,7 +69,7 @@ static BOOL messageExistsDirty = YES;
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    KonotorMessage *message = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageType:@1];
     [message setMessageRead:YES];
@@ -85,7 +85,7 @@ static BOOL messageExistsDirty = YES;
 +(KonotorMessage* )savePictureMessageInCoreData:(UIImage *)image withCaption:(NSString *)caption onConversation:(nonnull KonotorConversation *)conversation{
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     
     [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:[KonotorMessage generateMessageID]];
@@ -93,7 +93,7 @@ static BOOL messageExistsDirty = YES;
     [message setMessageRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     [message setPicCaption:caption];
-    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
     NSData *imageData, *thumbnailData;
   
     if(image){
@@ -147,9 +147,10 @@ static BOOL messageExistsDirty = YES;
     return message;
 }
 
-+(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel{
++(NSInteger)getUnreadMessagesCountForChannel:(NSNumber *)channelID{
+    HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
     request.predicate = predicate;
     NSArray *messages = [context executeFetchRequest:request error:nil];
@@ -160,7 +161,7 @@ static BOOL messageExistsDirty = YES;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
         request.predicate = predicate;
         NSArray *messages = [context executeFetchRequest:request error:&pError];
@@ -189,7 +190,7 @@ static BOOL messageExistsDirty = YES;
     
     KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[messageObject valueForKeyPath:@"hasMessageBinary"];
     if(!pMessageBinary){
-        KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+        KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
         [pMessageBinary setBinaryImage:imageData];
         [messageBinary setValue:messageObject forKey:@"belongsToMessage"];
         [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];
@@ -213,7 +214,7 @@ static BOOL messageExistsDirty = YES;
     }
     KonotorMessageBinary *pMessageBinary = (KonotorMessageBinary*)[messageObject valueForKeyPath:@"hasMessageBinary"];
     if(!pMessageBinary){
-        KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+        KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
         [pMessageBinary setBinaryThumbnail:imageData];
         [messageBinary setValue:messageObject forKey:@"belongsToMessage"];
         [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];
@@ -232,7 +233,7 @@ static BOOL messageExistsDirty = YES;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         [request setEntity:entityDescription];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isMarkedForUpload == YES AND uploadStatus == 0"];
@@ -263,7 +264,7 @@ static BOOL messageExistsDirty = YES;
     
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"KonotorMessage" inManagedObjectContext:context];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
     
@@ -331,7 +332,7 @@ static BOOL messageExistsDirty = YES;
 
 +(KonotorMessage *)createNewMessage:(NSDictionary *)message{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
-    KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    KonotorMessage *newMessage = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     newMessage.isWelcomeMessage = NO;
     newMessage.messageAlias = [message valueForKey:@"alias"];
     newMessage.messageType = [message valueForKey:@"messageType"];
@@ -449,7 +450,7 @@ static BOOL messageExistsDirty = YES;
 +(KonotorMessage *)getWelcomeMessageForChannel:(HLChannel *)channel{
     KonotorMessage *message = nil;
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"belongsToChannel == %@ AND isWelcomeMessage == 1",channel];
     NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 1) {
@@ -466,7 +467,7 @@ static BOOL messageExistsDirty = YES;
 +(bool) hasUserMessageInContext:(NSManagedObjectContext *)context {
     static BOOL messageExists = NO;
     if(messageExistsDirty){
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorMessage"];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
         fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isWelcomeMessage <> 1"];
         NSError *error;
         NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];

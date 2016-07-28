@@ -429,7 +429,7 @@ float gKonoDecibels;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     
     [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:pRec.messageID];
@@ -438,7 +438,7 @@ float gKonoDecibels;
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
 
     
-    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
 
     NSString *path = [pRec.pFileDest path];
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -469,7 +469,7 @@ float gKonoDecibels;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessage" inManagedObjectContext:context];
+    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     
     [message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:pRec.messageID];
@@ -479,7 +479,7 @@ float gKonoDecibels;
     message.belongsToConversation=conversation;
     
     
-    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:@"KonotorMessageBinary" inManagedObjectContext:context];
+    KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
     
     NSString *path = [pRec.pFileDest path];
     NSData *data = [NSData dataWithContentsOfFile:path];

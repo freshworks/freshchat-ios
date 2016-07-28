@@ -26,7 +26,7 @@
             return property;
         }
     }else{
-        property = [NSEntityDescription insertNewObjectForEntityForName:@"KonotorCustomProperty" inManagedObjectContext:context];
+        property = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CUSTOM_PROPERTY_ENTITY inManagedObjectContext:context];
         property.key = key;
     }
     property.uploadStatus = @0;
@@ -42,7 +42,7 @@
 // (Key + userProperty) is unique
 +(KonotorCustomProperty *)getCustomPropertyWithKey:(NSString *)key andUserProperty:(BOOL)userProperty withContext:(NSManagedObjectContext *)context{
     KonotorCustomProperty *property = nil;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorCustomProperty"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CUSTOM_PROPERTY_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"key == %@ && isUserProperty == %@",key,[NSNumber numberWithBool:userProperty]];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 1) {
@@ -57,7 +57,7 @@
 
 +(NSArray *)getUnuploadedProperties{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KonotorCustomProperty"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CUSTOM_PROPERTY_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"uploadStatus == NO"];
     return [context executeFetchRequest:fetchRequest error:nil];
 }

@@ -15,6 +15,6 @@
 
 -(BOOL)isModal;
 
--(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal;
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal;
 
 @end

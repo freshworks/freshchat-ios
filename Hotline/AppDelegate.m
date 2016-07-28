@@ -71,27 +71,11 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
-                                                       andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"e3280bde-4696-4bd5-8be7-e7919249bf9a"
+                                                       andAppKey:@"9d456296-5f38-45ce-884e-b595f7e6301a"];
     
-//    config.appID = @"51590df9-ab7e-4ca7-9a25-b2279bc5cc7c";
-//    config.appKey = @"e9021572-383c-4b6f-997e-3fea9d32e2c7";
-    
-    config.domain=@"mr.orange.konotor.com";
-
-//    prod 
-//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
-//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
-//    config.domain = @"app.hotline.io";
-    
-//      config.domain = @"satheeshjm.pagekite.me";
-//      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
-//      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
-    
-    config.displayFAQsAsGrid = YES;
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
-    //config.displayFAQsAsGrid = YES;
     
     HotlineUser *user = [HotlineUser sharedInstance];
     user.name = @"Sid";
@@ -99,7 +83,7 @@
     user.phoneNumber = @"9898989898";
     user.phoneCountryCode = @"+91";
     config.pollWhenAppActive = YES;
-    
+
     [[Hotline sharedInstance] updateUser:user];
     
     [[Hotline sharedInstance] updateUserProperties:@{

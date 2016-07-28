@@ -102,7 +102,8 @@ rm -rf dist
 mkdir -p $OUTPUTDIR
 
 RESOURCES_DIR=Hotline/SDKResources
-ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDHotlineSDK.a  
+ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDHotlineSDK.a
+cp LICENSE $OUTPUTDIR
 cp ./HotlineSDK/HotlineSDK/Hotline.h $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/KonotorModels.bundle  $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/HLResources.bundle $OUTPUTDIR

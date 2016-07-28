@@ -42,7 +42,12 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.imageView.image = appDelegate.pickedImage;
+    if (appDelegate.pickedImage) {
+        self.imageView.image = appDelegate.pickedImage;
+    }else{
+        self.imageView.image = [UIImage imageNamed:@"background"];
+    }
+    
 }
 
 - (IBAction)chatButtonPressed:(id)sender {

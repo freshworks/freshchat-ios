@@ -76,7 +76,15 @@
 }
 
 +(NSString *)generateUUID{
-    return [[NSUUID UUID]UUIDString];
+    NSString *UUID = [[NSUUID UUID]UUIDString];
+    if (UUID == nil) {
+        CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+        CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+        CFRelease(uuidRef);
+        UUID = (__bridge_transfer NSString *)uuidStringRef;
+        FDLog(@"Note! NSUUID is nil, using CFUUID instead");
+    }
+    return UUID;
 }
 
 +(BOOL)isValidEmail:(NSString *)email{
