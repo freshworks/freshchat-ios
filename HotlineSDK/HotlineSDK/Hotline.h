@@ -2,7 +2,7 @@
 //  Hotline.h
 //  Konotor
 //
-//  Copyright (c) 2016 Freshdesk. All rights reserved.
+//  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 //  Contact support@hotline.io
 
