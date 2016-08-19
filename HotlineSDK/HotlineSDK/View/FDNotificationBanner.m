@@ -80,6 +80,7 @@
     self.messageLabel.textColor = [self.theme notificationMessageTextColor];
 
     self.imgView=[[UIImageView alloc] init];
+    self.imgView.backgroundColor = [self.theme notificationChannelIconBackgroundColor];
     [self.imgView.layer setMasksToBounds:YES];
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     
