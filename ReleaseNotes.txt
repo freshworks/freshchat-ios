@@ -1,4 +1,10 @@
 
+Ver 1.1.3 
+__________________________
+Added background theme entry for In-app Notification banner 
+Fixed a Jitter for some third party keyboards 
+Removed Deprecated Config for ShowFAQsAsGrid
+
 Ver 1.1.2 
 __________________________
 Theme now support system default font. Allows you to use Helvetica on iOS 8 and below and San Francisco on iOS9 and above.
