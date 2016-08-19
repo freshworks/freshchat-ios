@@ -343,6 +343,11 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+-(UIColor *)notificationChannelIconBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{

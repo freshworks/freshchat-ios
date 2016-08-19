@@ -584,7 +584,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
 				PRODUCT_NAME = "Hotline Demo";
-				PROVISIONING_PROFILE = "295fb589-8de1-493e-b01b-9e8d9c0602fb";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -607,7 +607,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
 				PRODUCT_NAME = "Hotline Demo";
-				PROVISIONING_PROFILE = "295fb589-8de1-493e-b01b-9e8d9c0602fb";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
