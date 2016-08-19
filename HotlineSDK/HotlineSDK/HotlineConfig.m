@@ -26,7 +26,6 @@
         self.voiceMessagingEnabled = NO;
         self.agentAvatarEnabled = YES;
         self.notificationSoundEnabled = YES;
-        self.displayFAQsAsGrid = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
         self.pollWhenAppActive = NO;
