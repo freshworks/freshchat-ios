@@ -16,6 +16,7 @@
 @interface FDStringUtil : NSObject
 
 +(BOOL)isValidEmail:(NSString *)email;
++(BOOL) isValidUserPropName : (NSString *)name;
 +(NSString *)generateUUID;
 +(NSString *)base64EncodedStringFromString:(NSString *)string;
 +(NSString *)sanitizeStringForUTF8:(NSString *)string;
