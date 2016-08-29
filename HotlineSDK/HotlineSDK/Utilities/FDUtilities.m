@@ -12,6 +12,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
+#import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
@@ -222,6 +223,19 @@ static NSInteger networkIndicator = 0;
     NSNumber *lastUpdateTime = [[FDSecureStore sharedInstance] objectForKey:key];
     if (lastUpdateTime == nil) lastUpdateTime = @0;
     return lastUpdateTime;
+}
+
++(NSDictionary*) returnValidUserDict :(NSDictionary*) userDict{
+    
+    NSMutableDictionary *userProperties = [[NSMutableDictionary alloc] init];
+    for(id key in userDict){
+        NSString *keyValue = [userDict objectForKey:key];
+        if(([key length] <=32) && ([keyValue length] <= 256 ) && ([FDStringUtil isValidUserProperty:keyValue])){
+            
+            [userProperties setObject:keyValue forKey:key];
+        }
+    }
+    return userProperties;
 }
 
 +(NSString *)appName{
