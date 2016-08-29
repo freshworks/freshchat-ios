@@ -93,8 +93,8 @@
     return ([emailPatternPredicate evaluateWithObject:email]) ? YES : NO;
 }
 
-+(BOOL) isValidUserProperty : (NSString *)name{
-    NSString *propertyPattern = @"[A-Z0-9a-z_-]+";
++(BOOL) isValidUserPropName : (NSString *)name{
+    NSString *propertyPattern = @"[A-Z0-9a-z _-]+";
     NSPredicate *propertyPatternPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",propertyPattern];
     return ([propertyPatternPredicate evaluateWithObject:name]) ? YES : NO;
 }

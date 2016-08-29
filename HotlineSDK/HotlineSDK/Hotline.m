@@ -209,7 +209,7 @@
 -(void)updateUserProperties:(NSDictionary*)props{
     
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-        if(![[FDUtilities returnValidUserDict:props] isKindOfClass:[NSNull class]]){
+        if([FDUtilities returnValidUserDict:props]){
             for(NSString *key in [FDUtilities returnValidUserDict:props]){
                 NSString *value = props[key];
                 [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];

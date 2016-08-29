@@ -230,9 +230,12 @@ static NSInteger networkIndicator = 0;
     NSMutableDictionary *userProperties = [[NSMutableDictionary alloc] init];
     for(id key in userDict){
         NSString *keyValue = [userDict objectForKey:key];
-        if(([key length] <=32) && ([keyValue length] <= 256 ) && ([FDStringUtil isValidUserProperty:keyValue])){
+        if(([key length] <=32) && ([keyValue length] <= 256 ) && ([FDStringUtil isValidUserPropName:keyValue])){
             
             [userProperties setObject:keyValue forKey:key];
+        }
+        else{
+            NSLog(@"Invalid user property %@ - %@ : <validation error>", key, keyValue);
         }
     }
     return userProperties;
