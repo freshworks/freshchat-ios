@@ -145,7 +145,7 @@
         }
         
         if (message.length > 0) {
-            NSString *reason = [@"iOS 10 requires the following keys added to Info.plist for media access" stringByAppendingString:message];
+            NSString *reason = [@"Hotline SDK needs the following keys added to Info.plist for media access on iOS 10." stringByAppendingString:message];
             [[NSException exceptionWithName:@"HOTLINE_SDK_MISSING_MEDIA_PERMISSION_EXCEPTION" reason:reason userInfo:nil]raise];
         }
         
