@@ -94,6 +94,9 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    
+    [self checkMediaPermissions:config];
+    
     config.appID  = trimString(config.appID);
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
@@ -116,6 +119,36 @@
     [self registerAppNotificationListeners];
     if(config.pollWhenAppActive){
         [self startPoller];
+    }
+}
+
+-(void)checkMediaPermissions:(HotlineConfig *)config{
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+        NSMutableString *message = [NSMutableString new];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
+        NSMutableDictionary *plistInfo =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
+        
+        if (config.voiceMessagingEnabled) {
+            if (![plistInfo objectForKey:@"NSMicrophoneUsageDescription"]) {
+                [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
+            }
+        }
+        
+        if (config.pictureMessagingEnabled) {
+            if (![plistInfo objectForKey:@"NSPhotoLibraryUsageDescription"]) {
+                [message appendString:@"\nAdd key NSPhotoLibraryUsageDescription : To Enable access to Photo Library"];
+            }
+            
+            if (![plistInfo objectForKey:@"NSCameraUsageDescription"]) {
+                [message appendString:@"\nAdd key NSCameraUsageDescription : To take Images from Camera"];
+            }
+        }
+        
+        if (message.length > 0) {
+            NSString *reason = [@"Hotline SDK needs the following keys added to Info.plist for media access on iOS 10." stringByAppendingString:message];
+            [[NSException exceptionWithName:@"HOTLINE_SDK_MISSING_MEDIA_PERMISSION_EXCEPTION" reason:reason userInfo:nil]raise];
+        }
+        
     }
 }
 
