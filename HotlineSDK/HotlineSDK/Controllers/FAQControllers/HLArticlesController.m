@@ -101,7 +101,7 @@
                  }
                  NSSortDescriptor *categorySorter = [[NSSortDescriptor alloc] initWithKey:@"category.position" ascending:YES];
                  NSSortDescriptor *articleSorter = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
-                 [matchingArticles sortUsingDescriptors:[NSArray arrayWithObjects:categorySorter, articleSorter, nil]];
+                 [matchingArticles sortUsingDescriptors:@[categorySorter, articleSorter]];
                  
                  self.articles = matchingArticles;
                   UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
