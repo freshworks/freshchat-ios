@@ -35,6 +35,7 @@
                              @"_eventName":self.eventName,
                              @"_sessionId":[HLEventManager getUserSessionId],
                              @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)],
+                             @"_appId" : [Hotline sharedInstance].config.appID,
                              @"_properties":self.properties};
     [[HLEventManager sharedInstance] updateFileWithEvent:self.eventDictionary];
 }

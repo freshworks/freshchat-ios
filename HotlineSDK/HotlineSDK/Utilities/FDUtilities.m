@@ -46,7 +46,7 @@
 }
 
 +(NSString *) getTracker{
-    return [NSString stringWithFormat:@"HLiOS%@",[Hotline SDKVersion]];
+    return [NSString stringWithFormat:@"HL-iOS-%@",[Hotline SDKVersion]];
 }
 
 +(BOOL)isUserRegistered{

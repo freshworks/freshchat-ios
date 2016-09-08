@@ -181,7 +181,7 @@
     
     for(NSDictionary *event in events){
         for(NSDictionary *eventCompare in tempEventsArray){
-            if ([eventCompare[@"timeStamp"] compare:event[@"timeStamp"]] == NSOrderedSame){
+            if ([eventCompare[@"_eventTimestamp"] compare:event[@"_eventTimestamp"]] == NSOrderedSame){
                 [self.eventsArray removeObject:eventCompare];
             }
         }
@@ -201,15 +201,14 @@
                 NSMutableArray *incompleteEvents = [[NSMutableArray alloc] init];
                 NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
                 for (int i=0; i<[eventsResponse count]; i++) {
-                    if(![eventsResponse objectAtIndex:i][@"created"]){
                         
-                        if((![[eventsResponse objectAtIndex:i][@"code"] isEqualToString: @"422"]) || (![[eventsResponse objectAtIndex:i][@"code"] isEqualToString: @"415"]) ||(![[eventsResponse objectAtIndex:i][@"code"] isEqualToString:@"invalidData"])){
+                    if(!(([[eventsResponse objectAtIndex:i][@"status"] intValue] == 422) ||
+                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == 415) ||
+                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == 200))){
                             
-                            [incompleteEvents addObject:[self.eventsArray objectAtIndex:i]];
-                        }
+                        [incompleteEvents addObject:[events objectAtIndex:i]];
                     }
                 }
-                
                 [self writeArrayEvents:incompleteEvents];
             }
         }else{
