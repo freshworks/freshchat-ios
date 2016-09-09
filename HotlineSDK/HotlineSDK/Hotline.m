@@ -123,7 +123,7 @@
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
-    if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
         NSMutableString *message = [NSMutableString new];
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
         NSMutableDictionary *plistInfo =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
