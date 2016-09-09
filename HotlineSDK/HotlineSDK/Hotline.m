@@ -602,7 +602,7 @@
 
 -(void)startPoller{
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Start off-screen message poller");
     }

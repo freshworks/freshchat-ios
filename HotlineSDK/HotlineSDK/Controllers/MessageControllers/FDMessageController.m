@@ -185,7 +185,7 @@ typedef struct {
 
 -(void)startPoller{
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(pollMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:ON_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Starting Poller");
     }
