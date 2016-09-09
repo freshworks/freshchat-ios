@@ -145,8 +145,8 @@
         }
         
         if (message.length > 0) {
-            NSString *reason = [@"Hotline SDK needs the following keys added to Info.plist for media access on iOS 10." stringByAppendingString:message];
-            [[NSException exceptionWithName:@"HOTLINE_SDK_MISSING_MEDIA_PERMISSION_EXCEPTION" reason:reason userInfo:nil]raise];
+            NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
+            NSLog(@"\n\n** %@ ** \n %@ \n\n", info, message);
         }
         
     }
@@ -602,7 +602,7 @@
 
 -(void)startPoller{
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Start off-screen message poller");
     }
