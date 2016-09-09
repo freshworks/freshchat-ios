@@ -123,7 +123,7 @@
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+    if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
         NSMutableString *message = [NSMutableString new];
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
         NSMutableDictionary *plistInfo =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
@@ -145,8 +145,8 @@
         }
         
         if (message.length > 0) {
-            NSString *reason = [@"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10." stringByAppendingString:message];
-            NSLog(@"%@",reason);
+            NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
+            NSLog(@"\n\n** %@ ** \n %@ \n\n", info, message);
         }
         
     }
