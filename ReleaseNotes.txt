@@ -1,4 +1,8 @@
 
+Ver 1.1.5 
+__________________________
+Exception for Media permission check removed
+
 Ver 1.1.4 
 __________________________
 Validation for iOS10 permission entries in Info.plist
