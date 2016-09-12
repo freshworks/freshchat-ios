@@ -26,6 +26,8 @@
 #import "HLEmptyResultView.h"
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
+#import "HLEventManager.h"
+#import "HLEvent.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -255,6 +257,16 @@
         [self.navigationController setNavigationBarHidden:NO animated:NO];
       
         FDArticleContent *article = self.searchResults[indexPath.row];
+        
+        NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [article.articleID stringValue],
+                                     //HLEVENT_PARAM_CATEGORY_NAME : article.category.title,
+                                     HLEVENT_PARAM_ARTICLE_ID : article.articleID,
+                                     HLEVENT_PARAM_ARTICLE_NAME : article.title,
+                                     HLEVENT_PARAM_ARTICLE_SEARCH_KEY : self.searchBar.text,
+                                     HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_ARTICLE};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_ARTICLE andProperty:properties];
+        [event saveEvent];
+        
         [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
     }
 }
@@ -322,6 +334,11 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    
+    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_SEARCH_KEY : searchBar.text,
+                                 HLEVENT_PARAM_ARTICLE_SEARCH_COUNT : [@(self.searchResults.count) stringValue]};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_KEYWORD andProperty:properties];
+    [event saveEvent];
     [self dismissModalViewControllerAnimated:NO];
 }
 

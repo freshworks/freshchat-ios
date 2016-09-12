@@ -16,6 +16,8 @@
     articleContent.articleID = article.articleID;
     articleContent.articleDescription = article.articleDescription;
     articleContent.title = article.title;
+   // articleContent.categoryName = article.category.title;
+    articleContent.categoryID = article.categoryID;
     return articleContent;
 }
 

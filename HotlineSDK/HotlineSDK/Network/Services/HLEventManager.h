@@ -35,9 +35,18 @@
 #define HLEVENT_PARAM_CATEGORY_NAME         @"CategoryName"
 #define HLEVENT_PARAM_ARTICLE_NAME          @"ArticleName"
 #define HLEVENT_PARAM_ARTICLE_SEARCH_KEY    @"SearchKey"
+#define HLEVENT_PARAM_ARTICLE_SEARCH_COUNT  @"SearchArticleCount"
 #define HLEVENT_PARAM_CHANNEL_ID            @"ChannelId"
 #define HLEVENT_PARAM_MESSAGE_ID            @"MessageId"
 #define HLEVENT_PARAM_ARTICLE_ID            @"ArticleId"
+#define HLEVENT_PARAM_OPENED_SOURCE         @"OpenedSource"
+
+//Events Article Open Source Type
+#define HLEVENT_ARTICLE_SOURCE_AS_ARTICLE   @"Article"
+#define HLEVENT_ARTICLE_SOURCE_AS_SEARCH    @"SearchArticle"
+#define HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK  @"DeepLink"
+
+#define HLEVENT_PARAM_
 
 #define HLEVENTS_BATCH_SIZE 25
 

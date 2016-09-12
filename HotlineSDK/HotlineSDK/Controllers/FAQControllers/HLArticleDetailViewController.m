@@ -23,7 +23,8 @@
 #import "KonotorDataManager.h"
 #import "HLArticleUtil.h"
 #import "HLArticleTagManager.h"
-
+#import "HLEventManager.h"
+#import "HLEvent.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -332,6 +333,9 @@
 
 -(void)yesButtonClicked:(id)sender{
     [self showThankYouPrompt];
+    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue]};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_UPVOTED_ARTICLE andProperty:properties];
+    [event saveEvent];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");
     }];
@@ -339,6 +343,9 @@
 
 -(void)noButtonClicked:(id)sender{
     [self showContactUsPrompt];
+    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue]};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_DOWNVOTED_ARTICLE andProperty:properties];
+    [event saveEvent];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");
     }];

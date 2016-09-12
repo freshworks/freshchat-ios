@@ -14,6 +14,8 @@
 @property (nonatomic, retain) NSNumber * articleID;
 @property (nonatomic, retain) NSString * articleDescription;
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSNumber * categoryID;
+@property (nonatomic, retain) NSString * categoryName;
 
 -(id)initWithArticle:(HLArticle *)article;
 
