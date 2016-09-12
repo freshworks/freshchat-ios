@@ -225,17 +225,32 @@ static NSInteger networkIndicator = 0;
     return lastUpdateTime;
 }
 
-+(NSDictionary*) returnValidUserDict :(NSDictionary*) userDict{
-    
++(BOOL) isValidPropKey: (NSString *) str {
+    return str && [str length] <=32 && [FDStringUtil isValidUserPropName:str];
+}
+
++(BOOL) isValidPropValue: (NSString *) str {
+    return str && [str length] <= 256;
+}
+
++(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict{
     NSMutableDictionary *userProperties = [[NSMutableDictionary alloc] init];
-    for(id key in userDict){
-        NSString *keyValue = [userDict objectForKey:key];
-        if(([key length] <=32) && ([keyValue length] <= 256 ) && ([FDStringUtil isValidUserPropName:keyValue])){
-            
-            [userProperties setObject:keyValue forKey:key];
-        }
-        else{
-            NSLog(@"Invalid user property %@ - %@ : <validation error>", key, keyValue);
+    if(userDict){
+        for(id key in userDict){
+            if([FDUtilities isValidPropKey:key]){
+                NSObject *valueObj = [userDict objectForKey:key];
+                if([valueObj isKindOfClass:[NSString class]]) {
+                    NSString *value = (NSString *) valueObj;
+                    if([FDUtilities isValidPropValue:value]){
+                        [userProperties setObject:value forKey:key];
+                    }
+                } else {
+                    NSLog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
+                }
+            }
+            else{
+                NSLog(@"Invalid user property  key %@ : <validation error>", key);
+            }
         }
     }
     return userProperties;
