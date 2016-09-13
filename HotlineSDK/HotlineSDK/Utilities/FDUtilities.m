@@ -244,8 +244,11 @@ static NSInteger networkIndicator = 0;
                     if([FDUtilities isValidPropValue:value]){
                         [userProperties setObject:value forKey:key];
                     }
+                    else {
+                        NSLog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
+                    }
                 } else {
-                    NSLog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
+                    NSLog(@"Invalid user property value. Not a NSString. %@ - %@ : <validation error>", key, valueObj);
                 }
             }
             else{
