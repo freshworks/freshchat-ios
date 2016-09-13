@@ -32,7 +32,7 @@
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
 +(NSString*)deviceModelName;
-+(NSDictionary*) returnValidUserDict :(NSDictionary*) userDict;
++(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 
 @end
 

@@ -1,4 +1,8 @@
 
+Ver 1.1.6 
+__________________________
+Fix validation error on User Property
+
 Ver 1.1.5 
 __________________________
 Exception for Media permission check removed

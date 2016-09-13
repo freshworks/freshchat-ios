@@ -242,8 +242,9 @@
 -(void)updateUserProperties:(NSDictionary*)props{
     
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-        if([FDUtilities returnValidUserDict:props]){
-            for(NSString *key in [FDUtilities returnValidUserDict:props]){
+        NSDictionary *filteredProps = [FDUtilities filterValidUserPropEntries:props];
+        if(filteredProps){
+            for(NSString *key in filteredProps){
                 NSString *value = props[key];
                 [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
             }
@@ -255,6 +256,9 @@
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if (key && value) {
         [self updateUserProperties:@{ key : value}];
+    }
+    else {
+        NSLog(@"Null property %@ provided. Not updated", key ? @"value" : @"key" );
     }
 }
 
