@@ -259,11 +259,11 @@
         FDArticleContent *article = self.searchResults[indexPath.row];
         
         NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [article.articleID stringValue],
-                                     //HLEVENT_PARAM_CATEGORY_NAME : article.category.title,
+                                     HLEVENT_PARAM_CATEGORY_NAME : article.categoryName,
                                      HLEVENT_PARAM_ARTICLE_ID : article.articleID,
                                      HLEVENT_PARAM_ARTICLE_NAME : article.title,
                                      HLEVENT_PARAM_ARTICLE_SEARCH_KEY : self.searchBar.text,
-                                     HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_ARTICLE};
+                                     HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_SEARCH};
         HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_ARTICLE andProperty:properties];
         [event saveEvent];
         
@@ -334,11 +334,12 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    
-    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_SEARCH_KEY : searchBar.text,
+    if([trimString(searchBar.text) length] > 0){
+        NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_SEARCH_KEY : searchBar.text,
                                  HLEVENT_PARAM_ARTICLE_SEARCH_COUNT : [@(self.searchResults.count) stringValue]};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_KEYWORD andProperty:properties];
-    [event saveEvent];
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_KEYWORD andProperty:properties];
+        [event saveEvent];
+    }
     [self dismissModalViewControllerAnimated:NO];
 }
 

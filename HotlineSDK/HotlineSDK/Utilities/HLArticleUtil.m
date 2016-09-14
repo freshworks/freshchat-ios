@@ -12,6 +12,8 @@
 #import "HLCategory.h"
 #import "KonotorDataManager.h"
 #import "HLContainerController.h"
+#import "HLEventManager.h"
+#import "HLEvent.h"
 
 @implementation HLArticleUtil
 
@@ -23,6 +25,13 @@
     [mContext performBlock:^{
         HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
         if(article){
+            NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [article.categoryID stringValue],
+                                         HLEVENT_PARAM_CATEGORY_NAME : article.category.title,
+                                         HLEVENT_PARAM_ARTICLE_ID : article.articleID,
+                                         HLEVENT_PARAM_ARTICLE_NAME : article.title,
+                                         HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK};
+            HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_ARTICLE andProperty:properties];
+            [event saveEvent];
             [HLArticleUtil launchArticle:article withNavigationCtlr:controller andFAQOptions:faqOptions];
         }
     }];

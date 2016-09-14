@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HLArticle.h"
+#import "HLCategory.h"
 
 @interface FDArticleContent : NSObject
 

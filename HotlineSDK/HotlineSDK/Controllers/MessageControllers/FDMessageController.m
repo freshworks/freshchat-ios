@@ -33,6 +33,8 @@
 #import "HLArticleUtil.h"
 #import "FDLocalNotification.h"
 #import "KonotorAudioRecorder.h"
+#import "HLEventManager.h"
+#import "HLEvent.h"
 
 typedef struct {
     BOOL isLoading;
@@ -82,6 +84,12 @@ typedef struct {
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
+        
+        NSDictionary *properties = @{HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
+                                     HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
+                                     HLEVENT_PARAM_CHANNEL_NAME : channel.name};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_LAUNCH_CONVERSATION andProperty:properties];
+        [event saveEvent];
         
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
@@ -468,6 +476,7 @@ typedef struct {
         [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
         
     }else{
+        
         [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";

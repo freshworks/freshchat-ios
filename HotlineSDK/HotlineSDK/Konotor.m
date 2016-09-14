@@ -15,6 +15,8 @@
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
 #import "FDUtilities.h"
+#import "HLEventManager.h"
+#import "HLEvent.h"
 
 @implementation Konotor
 
@@ -56,6 +58,14 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel{
+    
+    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
+                                 HLEVENT_PARAM_CHANNEL_NAME : channel.name,
+                                 HLEVENT_PARAM_MESSAGE_ID : MessageID,
+                                 HLEVENT_PARAM_MESSAGE_TYPE : HLEVENT_MESSAGE_TYPE_AUDIO};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_SENT_MESSAGE andProperty:properties];
+    [event saveEvent];
+    
     [KonotorAudioRecorder SendRecordingWithMessageID:MessageID toConversationID:ConversationID onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
@@ -69,6 +79,14 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
+                                 HLEVENT_PARAM_CHANNEL_NAME : channel.name,
+                                 HLEVENT_PARAM_MESSAGE_ID : conversation.conversationAlias,
+                                 HLEVENT_PARAM_MESSAGE_TYPE : HLEVENT_MESSAGE_TYPE_TEXT};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_SENT_MESSAGE andProperty:properties];
+    [event saveEvent];
+    
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
@@ -81,6 +99,14 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 +(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
+                                 HLEVENT_PARAM_CHANNEL_NAME : channel.name,
+                                 HLEVENT_PARAM_MESSAGE_ID : conversation.conversationAlias,
+                                 HLEVENT_PARAM_MESSAGE_TYPE : HLEVENT_MESSAGE_TYPE_IMAGE};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_SENT_MESSAGE andProperty:properties];
+    [event saveEvent];
+    
     KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
     [channel addMessagesObject:message];
     [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
