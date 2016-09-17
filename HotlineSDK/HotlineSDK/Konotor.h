@@ -18,9 +18,6 @@
 
 @optional
 
--(void) didFinishPlaying:(NSString *)messageID;
--(void) didStartPlaying:(NSString *)messageID;
-
 -(void) didFinishDownloadingMessages;
 
 -(void) didFinishUploading: (NSString *)messageID;
