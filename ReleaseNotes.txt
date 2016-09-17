@@ -1,4 +1,8 @@
 
+Ver 1.1.7 
+__________________________
+didStartPlaying API reference removed. This internal API had a name conflict with Apple's private API causing app store submission to be rejected
+
 Ver 1.1.6 
 __________________________
 Fix validation error on User Property
