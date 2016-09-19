@@ -122,6 +122,10 @@
 }
 
 -(void)searchButtonAction:(id)sender{
+    
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_SOURCE_AS_ARTICLE_LIST};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_LAUNCH andProperty:properties];
+    [event saveEvent];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
@@ -185,8 +189,8 @@
                                      HLEVENT_PARAM_CATEGORY_NAME : article.category.title,
                                      HLEVENT_PARAM_ARTICLE_ID : article.articleID,
                                      HLEVENT_PARAM_ARTICLE_NAME : article.title,
-                                     HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_ARTICLE};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_ARTICLE andProperty:properties];
+                                     HLEVENT_PARAM_SOURCE : HLEVENT_SOURCE_AS_ARTICLE_LIST};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_OPEN_ARTICLE andProperty:properties];
         [event saveEvent];
         
         [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];

@@ -85,10 +85,10 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
-        NSDictionary *properties = @{HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
+        NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
                                      HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
                                      HLEVENT_PARAM_CHANNEL_NAME : channel.name};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_LAUNCH_CONVERSATION andProperty:properties];
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CONVERSATIONS_LAUNCH andProperty:properties];
         [event saveEvent];
         
         _flags.isFirstWordOnLine = YES;

@@ -22,47 +22,49 @@
 
 
 //Events Name
-#define HLEVENT_OPENED_CATEGORY                     @"OpenedCategory"
-#define HLEVENT_OPENED_ARTICLE                      @"OpenedArticle"
-#define HLEVENT_FAQ_SEARCH_KEYWORD                  @"FAQSearchKeyword"
-#define HLEVENT_UPVOTED_ARTICLE                     @"UpvotedArticle"
-#define HLEVENT_DOWNVOTED_ARTICLE                   @"DownvotedArticle"
-#define HLEVENT_LAUNCH_CHANNELS_VIEW                @"LaunchChannelView"
-#define HLEVENT_SENT_MESSAGE                        @"SentMessage"
-#define HLEVENT_LAUNCH_FAQ_VIEW                     @"LaunchFAQView"
-#define HLEVENT_LAUNCH_CONVERSATION                 @"LaunchConversation"
+#define HLEVENT_FAQ_OPEN_CATEGORY                   @"faq_open_category"
+#define HLEVENT_FAQ_OPEN_ARTICLE                    @"faq_open_article"
+#define HLEVENT_FAQ_SEARCH                          @"faq_search"
+#define HLEVENT_FAQ_UPVOTE_ARTICLE                  @"faq_upvote_article"
+#define HLEVENT_FAQ_DOWNVOTE_ARTICLE                @"faq_downvote_article"
+#define HLEVENT_CHANNELS_LAUNCH                     @"channels_launch"
+#define HLEVENT_CONVERSATION_SEND_MESSAGE           @"conversation_send_message"
+#define HLEVENT_FAQ_LAUNCH                          @"faqs_launch"
+#define HLEVENT_CONVERSATIONS_LAUNCH                @"conversation_launch"
+#define HLEVENT_FAQ_SEARCH_LAUNCH                   @"faq_search_launch"
 
 //Event Params
-#define HLEVENT_PARAM_CATEGORY_ID                   @"CategoryId"
-#define HLEVENT_PARAM_CATEGORY_NAME                 @"CategoryName"
-#define HLEVENT_PARAM_ARTICLE_ID                    @"ArticleId"
-#define HLEVENT_PARAM_ARTICLE_NAME                  @"ArticleName"
-#define HLEVENT_PARAM_ARTICLE_SEARCH_KEY            @"SearchKey"
-#define HLEVENT_PARAM_ARTICLE_SEARCH_COUNT          @"SearchArticleCount"
-#define HLEVENT_PARAM_CHANNEL_ID                    @"ChannelId"
-#define HLEVENT_PARAM_CHANNEL_NAME                  @"ChannelName"
-#define HLEVENT_PARAM_MESSAGE_ID                    @"MessageId"
-#define HLEVENT_PARAM_MESSAGE_TYPE                  @"MessageType"
-#define HLEVENT_PARAM_OPENED_SOURCE                 @"OpenedSource"
+#define HLEVENT_PARAM_CATEGORY_ID                   @"category_id"
+#define HLEVENT_PARAM_CATEGORY_NAME                 @"category_name"
+#define HLEVENT_PARAM_ARTICLE_ID                    @"article_id"
+#define HLEVENT_PARAM_ARTICLE_NAME                  @"article_name"
+#define HLEVENT_PARAM_ARTICLE_SEARCH_KEY            @"search_key"
+#define HLEVENT_PARAM_ARTICLE_SEARCH_COUNT          @"search_article_count"
+#define HLEVENT_PARAM_CHANNEL_ID                    @"channel_id"
+#define HLEVENT_PARAM_CHANNEL_NAME                  @"channel_name"
+#define HLEVENT_PARAM_MESSAGE_ID                    @"message_id"
+#define HLEVENT_PARAM_MESSAGE_TYPE                  @"message_type"
+#define HLEVENT_PARAM_SOURCE                        @"source"
 
 //Events Article Open Source Type
-#define HLEVENT_ARTICLE_SOURCE_AS_ARTICLE           @"Article"
-#define HLEVENT_ARTICLE_SOURCE_AS_SEARCH            @"SearchArticle"
-#define HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK          @"DeepLink"
+#define HLEVENT_SOURCE_AS_ARTICLE_LIST              @"article_list"
+#define HLEVENT_ARTICLE_SOURCE_AS_SEARCH            @"search_article"
+#define HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK          @"deep_link"
 
 //Channel launch source
-#define HLEVENT_LAUNCH_SOURCE_DEFAULT               @"Default"
-#define HLEVENT_INBOX_LAUNCH_SOURCE_ARTICLELIST     @"ArticleList"
-#define HLEVENT_INBOX_LAUNCH_SOURCE_FAQLIST         @"FAQList"
-#define HLEVENT_INBOX_LAUNCH_SOURCE_ARTICLE_DETAIL  @"ArticleDetail"
+#define HLEVENT_LAUNCH_SOURCE_DEFAULT               @"default"
 
 //Conversation launch source
-#define HLEVENT_CONVERSATION_LAUNCH_CONTACTUS       @"ContactUs"
+#define HLEVENT_CONVERSATION_LAUNCH_CONTACTUS               @"contact_us"
+#define HLEVENT_CONVERSATION_LAUNCH_ARTICLE_NOT_HELPFUL     @"article_not_found_helpful"
 
 //Message types
-#define HLEVENT_MESSAGE_TYPE_TEXT                   @"Text"
-#define HLEVENT_MESSAGE_TYPE_IMAGE                  @"Image"
-#define HLEVENT_MESSAGE_TYPE_AUDIO                  @"Image"
+#define HLEVENT_MESSAGE_TYPE_TEXT                   @"text"
+#define HLEVENT_MESSAGE_TYPE_IMAGE                  @"image"
+#define HLEVENT_MESSAGE_TYPE_AUDIO                  @"image"
+
+//search launch
+#define HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST         @"category_list"
 
 #define HLEVENTS_BATCH_SIZE 25
 

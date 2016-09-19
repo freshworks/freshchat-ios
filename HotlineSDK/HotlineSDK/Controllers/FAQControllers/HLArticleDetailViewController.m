@@ -336,7 +336,7 @@
     NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
                                  HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
                                  HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_UPVOTED_ARTICLE andProperty:properties];
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_UPVOTE_ARTICLE andProperty:properties];
     [event saveEvent];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");
@@ -348,7 +348,7 @@
     NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
                                  HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
                                  HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_DOWNVOTED_ARTICLE andProperty:properties];
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_DOWNVOTE_ARTICLE andProperty:properties];
     [event saveEvent];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"Voting Completed");
@@ -357,8 +357,8 @@
 
 -(void)buttonClickedEvent:(id)sender{
     
-    NSDictionary *properties = @{HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_CONVERSATION_LAUNCH_CONTACTUS};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_LAUNCH_CHANNELS_VIEW andProperty:properties];
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_CONVERSATION_LAUNCH_CONTACTUS};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CHANNELS_LAUNCH andProperty:properties];
     [event saveEvent];
     [self hideBottomView];
     [[Hotline sharedInstance] showConversations:self];

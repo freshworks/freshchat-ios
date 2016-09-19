@@ -63,7 +63,7 @@ __weak static id <KonotorDelegate> _delegate;
                                  HLEVENT_PARAM_CHANNEL_NAME : channel.name,
                                  HLEVENT_PARAM_MESSAGE_ID : MessageID,
                                  HLEVENT_PARAM_MESSAGE_TYPE : HLEVENT_MESSAGE_TYPE_AUDIO};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_SENT_MESSAGE andProperty:properties];
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CONVERSATION_SEND_MESSAGE andProperty:properties];
     [event saveEvent];
     
     [KonotorAudioRecorder SendRecordingWithMessageID:MessageID toConversationID:ConversationID onChannel:channel];
@@ -84,7 +84,7 @@ __weak static id <KonotorDelegate> _delegate;
                                  HLEVENT_PARAM_CHANNEL_NAME : channel.name,
                                  HLEVENT_PARAM_MESSAGE_ID : conversation.conversationAlias,
                                  HLEVENT_PARAM_MESSAGE_TYPE : HLEVENT_MESSAGE_TYPE_TEXT};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_SENT_MESSAGE andProperty:properties];
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CONVERSATION_SEND_MESSAGE andProperty:properties];
     [event saveEvent];
     
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
@@ -104,7 +104,7 @@ __weak static id <KonotorDelegate> _delegate;
                                  HLEVENT_PARAM_CHANNEL_NAME : channel.name,
                                  HLEVENT_PARAM_MESSAGE_ID : conversation.conversationAlias,
                                  HLEVENT_PARAM_MESSAGE_TYPE : HLEVENT_MESSAGE_TYPE_IMAGE};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_SENT_MESSAGE andProperty:properties];
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CONVERSATION_SEND_MESSAGE andProperty:properties];
     [event saveEvent];
     
     KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];

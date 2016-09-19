@@ -157,12 +157,14 @@
 }
 
 -(void)searchButtonAction:(id)sender{
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_LAUNCH andProperty:properties];
+    [event saveEvent];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
-    
 }
 
 -(void)contactUsButtonAction:(id)sender{
@@ -339,7 +341,7 @@
         
         NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [category.categoryID stringValue],
                                      HLEVENT_PARAM_CATEGORY_NAME : category.title};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_CATEGORY andProperty:properties];
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_OPEN_CATEGORY andProperty:properties];
         [event saveEvent];
         
         [self.navigationController pushViewController:container animated:YES];

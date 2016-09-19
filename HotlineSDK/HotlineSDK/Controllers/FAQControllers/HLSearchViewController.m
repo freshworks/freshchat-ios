@@ -263,8 +263,8 @@
                                      HLEVENT_PARAM_ARTICLE_ID : article.articleID,
                                      HLEVENT_PARAM_ARTICLE_NAME : article.title,
                                      HLEVENT_PARAM_ARTICLE_SEARCH_KEY : self.searchBar.text,
-                                     HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_SEARCH};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_OPENED_ARTICLE andProperty:properties];
+                                     HLEVENT_PARAM_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_SEARCH};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_OPEN_ARTICLE andProperty:properties];
         [event saveEvent];
         
         [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
@@ -337,7 +337,7 @@
     if([trimString(searchBar.text) length] > 0){
         NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_SEARCH_KEY : searchBar.text,
                                  HLEVENT_PARAM_ARTICLE_SEARCH_COUNT : [@(self.searchResults.count) stringValue]};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_KEYWORD andProperty:properties];
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH andProperty:properties];
         [event saveEvent];
     }
     [self dismissModalViewControllerAnimated:NO];

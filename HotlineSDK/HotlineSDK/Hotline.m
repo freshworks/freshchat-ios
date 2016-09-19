@@ -361,8 +361,8 @@
 }
 
 -(void)showFAQs:(UIViewController *)controller{
-    NSDictionary *properties = @{HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_LAUNCH_FAQ_VIEW andProperty:properties];
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
+    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_LAUNCH andProperty:properties];
     [event saveEvent];
     HLViewController *preferredController = [self getPreferredCategoryController];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
@@ -373,8 +373,8 @@
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
      [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
          
-         NSDictionary *properties = @{HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
-         HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_LAUNCH_FAQ_VIEW andProperty:properties];
+         NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
+         HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_LAUNCH andProperty:properties];
          [event saveEvent];
          HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
          UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
@@ -386,8 +386,8 @@
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
-            NSDictionary *properties = @{HLEVENT_PARAM_OPENED_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
-            HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_LAUNCH_CHANNELS_VIEW andProperty:properties];
+            NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
+            HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CHANNELS_LAUNCH andProperty:properties];
             [event saveEvent];
             if (channels.count == 1) {
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
