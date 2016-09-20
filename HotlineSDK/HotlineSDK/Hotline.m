@@ -516,6 +516,7 @@
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
     NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+    [[HLEventManager sharedInstance] clearEventFile];
     
     [[HotlineUser sharedInstance]clearUserData];
     [[HLArticleTagManager sharedInstance]clear];

@@ -202,9 +202,10 @@
                 NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
                 for (int i=0; i<[eventsResponse count]; i++) {
                         
-                    if(!(([[eventsResponse objectAtIndex:i][@"status"] intValue] == 422) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == 415) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == 200))){
+                    if(!(([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_VALIDATION_FAILED) ||
+                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_UNSUPPORTED_MEDIA_TYPE) ||
+                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_INVALID_REQUEST_FORMAT) ||
+                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_REQUEST_ACCEPTED))){
                             
                         [incompleteEvents addObject:[events objectAtIndex:i]];
                     }

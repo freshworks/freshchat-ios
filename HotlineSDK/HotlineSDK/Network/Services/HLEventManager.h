@@ -20,6 +20,11 @@
 //bulk event base url for debug mode only
 #define HLEVENTS_BULK_BASE_URL @"http://events.staging.konotor.com/bulkevents/"
 
+//Events api response code
+#define HLEVENTS_REQUEST_ACCEPTED                   200
+#define HLEVENTS_INVALID_REQUEST_FORMAT             400
+#define HLEVENTS_UNSUPPORTED_MEDIA_TYPE             415
+#define HLEVENTS_VALIDATION_FAILED                  422
 
 //Events Name
 #define HLEVENT_FAQ_OPEN_CATEGORY                   @"faq_open_category"
@@ -83,5 +88,7 @@
 - (void)cancelEventsUploadTimer;
 
 - (void) updateFileWithEvent :(NSDictionary *) eventDict;
+
+- (void) clearEventFile;
 
 @end
