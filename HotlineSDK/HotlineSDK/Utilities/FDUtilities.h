@@ -33,6 +33,7 @@
 +(NSString *)appName;
 +(NSString*)deviceModelName;
 +(NSString *) getTracker;
++ (NSString *) returnLibraryPathForDir : (NSString *) directory;
 
 @end
 

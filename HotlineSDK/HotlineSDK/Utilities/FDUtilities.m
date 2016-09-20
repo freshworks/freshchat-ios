@@ -46,7 +46,7 @@
 }
 
 +(NSString *) getTracker{
-    return [NSString stringWithFormat:@"HL-iOS-%@",[Hotline SDKVersion]];
+    return [NSString stringWithFormat:@"hl_ios_%@",[Hotline SDKVersion]];
 }
 
 +(BOOL)isUserRegistered{
@@ -59,7 +59,6 @@
     NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", appID ,HOTLINE_DEFAULTS_DEVICE_UUID ];
     return uuIdLookupKey;
 }
-
 
 /* This function gets the user-alias from persisted secure store for new customers (Hotline),
  it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
@@ -110,7 +109,24 @@
     [persistedStore setObject:alias forKey:[FDUtilities getUUIDLookupKey]];
 }
 
-
++ (NSString *) returnLibraryPathForDir : (NSString *) directory{
+    
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:directory];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        
+        NSError *error = nil;
+        NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                         forKey:NSFileProtectionKey];
+        [[NSFileManager defaultManager] createDirectoryAtPath:filePath
+                                  withIntermediateDirectories:YES
+                                                   attributes:attr
+                                                        error:&error];
+        if (error){
+            FDLog(@"Error creating directory path: %@", [error localizedDescription]);
+        }
+    }
+    return filePath;
+}
 
 +(NSString *) getKeyForObject:(NSObject *) object {
     if(object){

@@ -75,26 +75,28 @@
 }
 
 - (NSString*)returnEventLibraryPath {
-    //check for path, if available return else create path
+    return [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
+}
+
+- (NSString *) returnLibraryPathForDir : (NSString *) dirPath{
     
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:HLEVENT_DIR_PATH];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:dirPath];
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
         
         NSError *error = nil;
         NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
                                                          forKey:NSFileProtectionKey];
         [[NSFileManager defaultManager] createDirectoryAtPath:filePath
-           withIntermediateDirectories:YES
-                            attributes:attr
-                                 error:&error];
+                                  withIntermediateDirectories:YES
+                                                   attributes:attr
+                                                        error:&error];
         if (error){
             FDLog(@"Error creating directory path: %@", [error localizedDescription]);
         }
     }
-//    NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];
-//    [self.eventsArray addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
-    return [filePath stringByAppendingPathComponent:HLEVENT_FILE_NAME];
+    return filePath;
 }
+
 
 - (void) getOldEvents {
     NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];
@@ -198,7 +200,7 @@
         if (!error) {
             //add serial queue code block for serial execution
             if([responseInfo isDict]) {
-                NSMutableArray *incompleteEvents = [[NSMutableArray alloc] init];
+                NSMutableArray *eventsToRetry = [[NSMutableArray alloc] init];
                 NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
                 for (int i=0; i<[eventsResponse count]; i++) {
                         
@@ -207,10 +209,10 @@
                         ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_INVALID_REQUEST_FORMAT) ||
                         ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_REQUEST_ACCEPTED))){
                             
-                        [incompleteEvents addObject:[events objectAtIndex:i]];
+                        [eventsToRetry addObject:[events objectAtIndex:i]];
                     }
                 }
-                [self writeArrayEvents:incompleteEvents];
+                [self writeArrayEvents:eventsToRetry];
             }
         }else{
             if((error.code != 422) || (error.code != 415)){//validation error
