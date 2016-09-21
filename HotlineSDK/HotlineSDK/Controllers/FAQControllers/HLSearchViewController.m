@@ -255,18 +255,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.searchResults.count) {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
-      
         FDArticleContent *article = self.searchResults[indexPath.row];
-        
-        NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [article.articleID stringValue],
-                                     HLEVENT_PARAM_CATEGORY_NAME : article.categoryName,
-                                     HLEVENT_PARAM_ARTICLE_ID : article.articleID,
-                                     HLEVENT_PARAM_ARTICLE_NAME : article.title,
-                                     HLEVENT_PARAM_ARTICLE_SEARCH_KEY : self.searchBar.text,
-                                     HLEVENT_PARAM_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_SEARCH};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_OPEN_ARTICLE andProperty:properties];
-        [event saveEvent];
-        
+        [HLArticleUtil registerFaqOpenArticleEvent:self.searchResults[indexPath.row]];
         [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
     }
 }

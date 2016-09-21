@@ -19,6 +19,7 @@
 +(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller andFAQOptions:(FAQOptions *)faqOptions;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
 +(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController;
++ (void) registerFaqOpenArticleEvent :(HLArticle *) article;
 @end
 
 #endif /* ArticleUtil_h */
