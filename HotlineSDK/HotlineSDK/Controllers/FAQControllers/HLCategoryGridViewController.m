@@ -30,7 +30,6 @@
 #import "FDReachabilityManager.h"
 #import "HLArticleUtil.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -150,16 +149,13 @@
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
         [rightBarItems addObject:contactUsBarButton];
     }
-    
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
-    
     
 }
 
 -(void)searchButtonAction:(id)sender{
     NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_LAUNCH andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_SEARCH_LAUNCH andProperties:properties];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
@@ -338,12 +334,9 @@
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
         [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
-        
         NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [category.categoryID stringValue],
                                      HLEVENT_PARAM_CATEGORY_NAME : category.title};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_OPEN_CATEGORY andProperty:properties];
-        [event saveEvent];
-        
+        [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_OPEN_CATEGORY andProperties:properties];
         [self.navigationController pushViewController:container animated:YES];
     }
 }

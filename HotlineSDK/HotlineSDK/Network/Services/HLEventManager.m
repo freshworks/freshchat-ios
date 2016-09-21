@@ -15,6 +15,7 @@
 #import "HLServiceRequest.h"
 #import "HLMacros.h"
 #import "FDReachabilityManager.h"
+#import "HLEvent.h"
 
 @interface HLEventManager()
 
@@ -97,6 +98,11 @@
     return filePath;
 }
 
+- (void) addEventWithName :(NSString*) eventName andProperties :(NSDictionary *) properties{
+    
+    HLEvent *event = [[HLEvent alloc] initWithEventName:eventName andProperty:properties];
+    [event saveEvent];
+}
 
 - (void) getOldEvents {
     NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];

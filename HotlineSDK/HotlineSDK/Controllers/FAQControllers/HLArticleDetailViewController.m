@@ -333,30 +333,31 @@
 
 -(void)yesButtonClicked:(id)sender{
     [self showThankYouPrompt];
-    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
-                                 HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
-                                 HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_UPVOTE_ARTICLE andProperty:properties];
-    [event saveEvent];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
+        NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
+                                     HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
+                                     HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_UPVOTE_ARTICLE andProperty:properties];
+        [event saveEvent];
         FDLog(@"Voting Completed");
     }];
 }
 
 -(void)noButtonClicked:(id)sender{
     [self showContactUsPrompt];
-    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
-                                 HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
-                                 HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_DOWNVOTE_ARTICLE andProperty:properties];
-    [event saveEvent];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
+        
+        NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
+                                     HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
+                                     HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
+        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_DOWNVOTE_ARTICLE andProperty:properties];
+        [event saveEvent];
+        
         FDLog(@"Voting Completed");
     }];
 }
 
 -(void)buttonClickedEvent:(id)sender{
-    
     NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_CONVERSATION_LAUNCH_CONTACTUS};
     HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CHANNELS_LAUNCH andProperty:properties];
     [event saveEvent];

@@ -9,6 +9,7 @@
 #import "FDVotingManager.h"
 #import "FDSecureStore.h"
 #import "HLFAQServices.h"
+#import "HLEventManager.h"
 
 @interface FDVotingManager()
 
