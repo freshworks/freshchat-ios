@@ -24,7 +24,6 @@
 #import "HLArticleUtil.h"
 #import "HLArticleTagManager.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -352,14 +351,12 @@
     NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
                                  HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
                                  HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:eventName andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:eventName andProperties:properties];
 }
 
 -(void)buttonClickedEvent:(id)sender{
     NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_CONVERSATION_LAUNCH_CONTACTUS};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CHANNELS_LAUNCH andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
     [self hideBottomView];
     [[Hotline sharedInstance] showConversations:self];
 }

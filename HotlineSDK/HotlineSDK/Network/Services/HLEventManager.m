@@ -140,6 +140,7 @@
             }
             [self uploadUserEvents:events];
         }
+        [self cancelEventsUploadTimer];
     });
 }
      

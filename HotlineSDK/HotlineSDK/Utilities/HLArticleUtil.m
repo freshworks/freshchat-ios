@@ -13,7 +13,6 @@
 #import "KonotorDataManager.h"
 #import "HLContainerController.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 @implementation HLArticleUtil
 
@@ -38,8 +37,7 @@
                                  HLEVENT_PARAM_ARTICLE_ID : article.articleID,
                                  HLEVENT_PARAM_ARTICLE_NAME : article.title,
                                  HLEVENT_PARAM_SOURCE : HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_OPEN_ARTICLE andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_OPEN_ARTICLE andProperties:properties];
 }
 
 +(void) launchArticle:(HLArticle *) article

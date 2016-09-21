@@ -20,7 +20,6 @@
 #import "HLArticleTagManager.h"
 #import "HLLocalization.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 @interface HLArticlesController ()
 
@@ -124,8 +123,7 @@
 -(void)searchButtonAction:(id)sender{
     
     NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_SOURCE_AS_ARTICLE_LIST};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH_LAUNCH andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_SEARCH_LAUNCH andProperties:properties];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];

@@ -26,6 +26,7 @@
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
 #import "FDLocalNotification.h"
+#import "HLEventManager.h"
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -357,6 +358,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 pMessage.messageAlias = messageInfo[@"alias"];
                 pMessage.createdMillis = messageInfo[@"createdMillis"];
                 [channel addMessagesObject:pMessage];
+                [self addSentMessageEventWithChannel:channel messageAlias:pMessage.messageAlias andType:messageInfo[@"messageType"]];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
                 pMessage.messageAlias = [FDUtilities generateOfflineMessageAlias];
@@ -373,6 +375,15 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 
 }
+
++(void) addSentMessageEventWithChannel :(HLChannel *)channel messageAlias:(NSString *)messageId andType :(NSString *) type {
+    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
+                                 HLEVENT_PARAM_CHANNEL_NAME : channel.name,
+                                 HLEVENT_PARAM_MESSAGE_ALIAS : messageId,
+                                 HLEVENT_PARAM_MESSAGE_TYPE : type};
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATION_SEND_MESSAGE andProperties:properties];
+}
+
 
 //TODO: Skip messages that are clicked before
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{

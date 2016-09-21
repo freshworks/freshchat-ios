@@ -40,7 +40,6 @@
 #import "FDLocalNotification.h"
 #import "HLEventManager.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 @interface Hotline ()
 
@@ -362,8 +361,7 @@
 
 -(void)showFAQs:(UIViewController *)controller{
     NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_LAUNCH andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_LAUNCH andProperties:properties];
     HLViewController *preferredController = [self getPreferredCategoryController];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
@@ -374,8 +372,7 @@
      [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
          
          NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
-         HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_LAUNCH andProperty:properties];
-         [event saveEvent];
+         [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_LAUNCH andProperties:properties];
          HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
          UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
          [controller presentViewController:navigationController animated:YES completion:nil];
@@ -387,8 +384,7 @@
         if (!error) {
             HLContainerController *preferredController = nil;
             NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
-            HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CHANNELS_LAUNCH andProperty:properties];
-            [event saveEvent];
+            [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
             if (channels.count == 1) {
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
                                                                                    andPresentModally:YES];

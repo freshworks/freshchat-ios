@@ -11,7 +11,6 @@
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 @interface FDMarginalView ()
 
@@ -64,8 +63,7 @@
 -(void)handleTapGesture:(id)sender{
     
     NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_CONVERSATION_LAUNCH_ARTICLE_NOT_HELPFUL};
-    HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CHANNELS_LAUNCH andProperty:properties];
-    [event saveEvent];
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
     [self.delegate marginalView:self handleTap:sender];
 }
 

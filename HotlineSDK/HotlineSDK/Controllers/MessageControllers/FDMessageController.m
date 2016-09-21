@@ -34,7 +34,6 @@
 #import "FDLocalNotification.h"
 #import "KonotorAudioRecorder.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 typedef struct {
     BOOL isLoading;
@@ -88,8 +87,7 @@ typedef struct {
         NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
                                      HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
                                      HLEVENT_PARAM_CHANNEL_NAME : channel.name};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_CONVERSATIONS_LAUNCH andProperty:properties];
-        [event saveEvent];
+        [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATIONS_LAUNCH andProperties:properties];
         
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;

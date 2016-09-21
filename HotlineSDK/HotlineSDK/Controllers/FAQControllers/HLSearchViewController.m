@@ -27,7 +27,6 @@
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
 #import "HLEventManager.h"
-#import "HLEvent.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -327,8 +326,7 @@
     if([trimString(searchBar.text) length] > 0){
         NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_SEARCH_KEY : searchBar.text,
                                  HLEVENT_PARAM_ARTICLE_SEARCH_COUNT : [@(self.searchResults.count) stringValue]};
-        HLEvent *event = [[HLEvent alloc] initWithEventName:HLEVENT_FAQ_SEARCH andProperty:properties];
-        [event saveEvent];
+        [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_SEARCH andProperties:properties];
     }
     [self dismissModalViewControllerAnimated:NO];
 }
