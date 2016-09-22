@@ -16,12 +16,11 @@
 
 @interface HLArticleUtil : NSObject
 
-+(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller andFAQOptions:(FAQOptions *)faqOptions;
-+(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller andFAQOptions:(FAQOptions *)faqOptions;
++(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller fAQOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
++(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller fAQOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
 +(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController;
-+ (void) addFaqOpenArticleEvent :(HLArticle *) article;
-+ (void) addFaqOpenSearchArticleEvent:(FDArticleContent *)article;
++ (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source;
 @end
 
 #endif /* ArticleUtil_h */

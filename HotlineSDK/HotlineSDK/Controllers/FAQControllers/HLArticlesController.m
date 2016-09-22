@@ -182,8 +182,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLArticleUtil addFaqOpenArticleEvent:article];
-        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];
+        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController fAQOptions:self.faqOptions andSource:HLEVENT_SOURCE_AS_ARTICLE_LIST];
     }
 }
 
