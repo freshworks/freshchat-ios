@@ -11,6 +11,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "HLArticle.h"
+#import "FDArticleContent.h"
 #import "HLArticleDetailViewController.h"
 
 @interface HLArticleUtil : NSObject
@@ -19,7 +20,8 @@
 +(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller andFAQOptions:(FAQOptions *)faqOptions;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
 +(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController;
-+ (void) registerFaqOpenArticleEvent :(HLArticle *) article;
++ (void) addFaqOpenArticleEvent :(HLArticle *) article;
++ (void) addFaqOpenSearchArticleEvent:(FDArticleContent *)article;
 @end
 
 #endif /* ArticleUtil_h */

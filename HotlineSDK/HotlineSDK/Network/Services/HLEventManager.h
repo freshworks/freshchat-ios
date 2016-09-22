@@ -37,6 +37,7 @@
 #define HLEVENT_FAQ_LAUNCH                          @"faqs_launch"
 #define HLEVENT_CONVERSATIONS_LAUNCH                @"conversation_launch"
 #define HLEVENT_FAQ_SEARCH_LAUNCH                   @"faq_search_launch"
+#define HLEVENT_CONVERSATION_DEEPLINK_LAUNCH        @"conversation_deeplink_launch"
 
 //Event Params
 #define HLEVENT_PARAM_CATEGORY_ID                   @"category_id"
@@ -47,7 +48,7 @@
 #define HLEVENT_PARAM_ARTICLE_SEARCH_COUNT          @"search_article_count"
 #define HLEVENT_PARAM_CHANNEL_ID                    @"channel_id"
 #define HLEVENT_PARAM_CHANNEL_NAME                  @"channel_name"
-#define HLEVENT_PARAM_MESSAGE_ALIAS                    @"message_alias"
+#define HLEVENT_PARAM_MESSAGE_ALIAS                 @"message_alias"
 #define HLEVENT_PARAM_MESSAGE_TYPE                  @"message_type"
 #define HLEVENT_PARAM_SOURCE                        @"source"
 

@@ -779,6 +779,7 @@ typedef struct {
 //TODO: Needs refractor
 -(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
+    [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
            [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; // Question - The developer will have no controller over the behaviour
@@ -803,6 +804,13 @@ typedef struct {
             NSLog(@"%@",e);
         }
     }
+}
+
+- (void) addConversationDeepLinkLaunchEvent{
+    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : self.conversation.belongsToChannel.channelID,
+                                 HLEVENT_PARAM_CHANNEL_NAME : self.conversation.belongsToChannel.name,
+                                 HLEVENT_PARAM_MESSAGE_ALIAS : self.conversation.conversationAlias};
+    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH andProperties:properties];
 }
 
 #pragma mark - Audio toolbar delegates
