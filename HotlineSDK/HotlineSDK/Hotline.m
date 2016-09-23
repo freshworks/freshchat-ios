@@ -128,17 +128,17 @@
     NSMutableString *message = [NSMutableString new];
 
     if (config.voiceMessagingEnabled) {
-        if (![plistManager canAccessMic]) {
+        if (![plistManager micUsageEnabled]) {
             [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
         }
     }
     
     if (config.pictureMessagingEnabled) {
-        if (![plistManager canAccessPhotoLibrary]) {
+        if (![plistManager photoLibraryUsageEnabled]) {
             [message appendString:@"\nAdd key NSPhotoLibraryUsageDescription : To Enable access to Photo Library"];
         }
         
-        if (![plistManager canAccessCamera]) {
+        if (![plistManager cameraUsageEnabled]) {
             [message appendString:@"\nAdd key NSCameraUsageDescription : To take Images from Camera"];
         }
     }

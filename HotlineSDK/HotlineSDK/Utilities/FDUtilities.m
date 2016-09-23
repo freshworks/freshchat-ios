@@ -16,6 +16,7 @@
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
+#import "FDPlistManager.h"
 
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
@@ -331,6 +332,22 @@ static NSInteger networkIndicator = 0;
     NSString *deviceName = commonNamesDictionary[machineName];
     if (!deviceName) { deviceName = machineName; }
     return deviceName;
+}
+
++(BOOL)isiOS10{
+    return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
+}
+
++(BOOL)isVoiceMessageEnabled{
+    FDPlistManager *plistManager = [FDPlistManager sharedInstance];
+    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED] && [plistManager micUsageEnabled]);
+}
+
++(BOOL)isPictureMessageEnabled{
+    FDPlistManager *plistManager = [FDPlistManager sharedInstance];
+    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED] &&
+            [plistManager cameraUsageEnabled] &&
+            [plistManager photoLibraryUsageEnabled]);
 }
 
 @end

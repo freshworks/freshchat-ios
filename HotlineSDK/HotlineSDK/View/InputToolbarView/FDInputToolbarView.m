@@ -15,10 +15,9 @@
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 #import "FDAutolayoutHelper.h"
-#import "FDPlistManager.h"
+#import "FDUtilities.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>{
-    
     NSString *placeHolderText;
 }
 @property (strong, nonatomic) UIView               *accessoryViewContainer;
@@ -126,15 +125,12 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 -(void)prepareView{
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    
-    FDPlistManager *plistManager = [FDPlistManager sharedInstance];
-    
-    BOOL isPictureMessageEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED] && [plistManager canAccessCamera] && [plistManager canAccessPhotoLibrary];
+        
+    BOOL isPictureMessageEnabled = [FDUtilities isPictureMessageEnabled];
 
     attachButtonWidthConstraint.constant = (isPictureMessageEnabled) ? 24.0 : 0;
     
-    
-    self.isVoiceMessageEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED] && [plistManager canAccessMic];
+    self.isVoiceMessageEnabled = [FDUtilities isVoiceMessageEnabled];
 
     [self updateActionButtons:textView];
     

@@ -8,6 +8,7 @@
 
 #import "FDPlistManager.h"
 #import "HLMacros.h"
+#import "FDUtilities.h"
 
 @interface FDPlistManager ()
 
@@ -35,28 +36,24 @@
     return self;
 }
 
--(BOOL)isiOS10{
-    return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
-}
-
--(BOOL)canAccessMic{
-    if ([self isiOS10]) {
+-(BOOL)micUsageEnabled{
+    if ([FDUtilities isiOS10]) {
         return [self.plist objectForKey:@"NSMicrophoneUsageDescription"];
     }else{
         return YES;
     }
 }
 
--(BOOL)canAccessPhotoLibrary{
-    if ([self isiOS10]) {
+-(BOOL)photoLibraryUsageEnabled{
+    if ([FDUtilities isiOS10]) {
         return [self.plist objectForKey:@"NSPhotoLibraryUsageDescription"];
     }else{
         return YES;
     }
 }
 
--(BOOL)canAccessCamera{
-    if ([self isiOS10]) {
+-(BOOL)cameraUsageEnabled{
+    if ([FDUtilities isiOS10]) {
         return [self.plist objectForKey:@"NSCameraUsageDescription"];
     }else{
         return YES;

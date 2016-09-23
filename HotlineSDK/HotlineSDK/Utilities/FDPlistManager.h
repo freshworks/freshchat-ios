@@ -12,10 +12,10 @@
 
 +(instancetype)sharedInstance;
 
--(BOOL)canAccessMic;
+-(BOOL)micUsageEnabled;
 
--(BOOL)canAccessPhotoLibrary;
+-(BOOL)photoLibraryUsageEnabled;
 
--(BOOL)canAccessCamera;
+-(BOOL)cameraUsageEnabled;
 
 @end
