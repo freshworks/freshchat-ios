@@ -127,8 +127,8 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     [self setNeedsLayout];
     [self layoutIfNeeded];
     
-    FDPlistManager *plistManager = [[FDPlistManager alloc]init];
-        
+    FDPlistManager *plistManager = [FDPlistManager new];
+
     BOOL isPictureMessageEnabled = [plistManager isPictureMessageEnabled];
 
     attachButtonWidthConstraint.constant = (isPictureMessageEnabled) ? 24.0 : 0;
