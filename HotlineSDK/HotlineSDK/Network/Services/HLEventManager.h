@@ -53,16 +53,16 @@
 #define HLEVENT_PARAM_SOURCE                        @"source"
 
 //Events Article Open Source Type
-#define HLEVENT_SOURCE_AS_ARTICLE_LIST              @"article_list"
-#define HLEVENT_ARTICLE_SOURCE_AS_SEARCH            @"search_article"
-#define HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK          @"deep_link"
+#define HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST          @"article_list"
+#define HLEVENT_LAUNCH_SOURCE_SEARCH                @"search_article"
+#define HLEVENT_LAUNCH_SOURCE_DEEPLINK              @"deep_link"
 
 //Channel launch source
 #define HLEVENT_LAUNCH_SOURCE_DEFAULT               @"default"
 
 //Conversation launch source
-#define HLEVENT_CONVERSATION_LAUNCH_CONTACTUS               @"contact_us"
-#define HLEVENT_CONVERSATION_LAUNCH_ARTICLE_NOT_HELPFUL     @"article_not_found_helpful"
+#define HLEVENT_LAUNCH_SOURCE_CONTACTUS             @"contact_us"
+#define HLEVENT_LAUNCH_SOURCE_ARTICLE_NOT_HELPFUL   @"article_not_found_helpful"
 
 //Message types
 #define HLEVENT_MESSAGE_TYPE_TEXT                   @"text"

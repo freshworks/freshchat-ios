@@ -208,7 +208,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK];
+            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
@@ -357,7 +357,7 @@
 }
 
 -(void)buttonClickedEvent:(id)sender{
-    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_CONVERSATION_LAUNCH_CONTACTUS};
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_CONTACTUS};
     [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
     [self hideBottomView];
     [[Hotline sharedInstance] showConversations:self];
