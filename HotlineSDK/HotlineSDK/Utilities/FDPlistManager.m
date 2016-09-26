@@ -57,7 +57,7 @@
 }
 
 -(BOOL)isPictureMessageEnabled{
-    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED]
+    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED]
             && [self cameraUsageEnabled]
             && [self photoLibraryUsageEnabled]);
 }
