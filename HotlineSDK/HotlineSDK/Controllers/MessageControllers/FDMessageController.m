@@ -84,10 +84,7 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
-        NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
-                                     HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
-                                     HLEVENT_PARAM_CHANNEL_NAME : channel.name};
-        [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATIONS_LAUNCH andProperties:properties];
+        
         
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
@@ -99,6 +96,12 @@ typedef struct {
         
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
+        
+        NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
+                                     HLEVENT_PARAM_CHANNEL_ID : self.channel.channelID,
+                                     HLEVENT_PARAM_CHANNEL_NAME : self.channel.name};
+        [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATIONS_LAUNCH andProperties:properties];
+        
         [Konotor setDelegate:self];
     }
     return self;
