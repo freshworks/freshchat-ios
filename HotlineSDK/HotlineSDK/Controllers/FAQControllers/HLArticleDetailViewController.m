@@ -335,20 +335,20 @@
 -(void)yesButtonClicked:(id)sender{
     [self showThankYouPrompt];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        [self voteForArticle:HLEVENT_FAQ_UPVOTE_ARTICLE];
-        FDLog(@"Voting Completed");
+        [self sendEventForArticle:HLEVENT_FAQ_UPVOTE_ARTICLE];
+        FDLog(@"UpVoting Completed");
     }];
 }
 
 -(void)noButtonClicked:(id)sender{
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        [self voteForArticle:HLEVENT_FAQ_DOWNVOTE_ARTICLE];
-        FDLog(@"Voting Completed");
+        [self sendEventForArticle:HLEVENT_FAQ_DOWNVOTE_ARTICLE];
+        FDLog(@"DownVoting Completed");
     }];
 }
 
-- (void) voteForArticle :(NSString *) eventName{
+- (void) sendEventForArticle :(NSString *) eventName{
     
     NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
                                  HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
