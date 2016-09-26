@@ -343,14 +343,25 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+-(UIColor *)notificationChannelIconBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{
     UIColor *color = [self getColorForKeyPath:@"ArticlesList.TitleFontColor"];
+    if(color == nil)
+        color = [self tableViewCellTitleFontColor];
     return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
 }
 
 -(UIFont *)articleListFont{
+    NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ArticlesList.Title"];
+    if(fontNameValue == nil){
+        return [self tableViewCellTitleFont];
+    }
     return [self getFontWithKey:@"ArticlesList.Title" andDefaultSize:14];
 }
 
@@ -541,7 +552,11 @@
 }
 
 -(UIFont *)channelIconPlaceholderImageCharFont{
-    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
+    NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ChannelListView.ChannelIconPlaceholderTextFontName"];
+    if(fontNameValue == nil){
+        return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
+    }
+    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderText" andDefaultSize:FD_FONT_SIZE_LARGE];
 }
 
 #pragma mark - Empty Result

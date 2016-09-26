@@ -78,7 +78,7 @@ typedef struct {
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
 
--(instancetype)initWithChannel:(HLChannel *)channel andPresentModally:(BOOL)isModal{
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
     if (self) {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
@@ -97,7 +97,7 @@ typedef struct {
         self.messagesDisplayedCount=20;
         self.loadmoreCount=20;
         
-        self.channel = channel;
+        self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
     }
@@ -191,7 +191,7 @@ typedef struct {
 
 -(void)startPoller{
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(pollMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:ON_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Starting Poller");
     }
@@ -559,13 +559,16 @@ typedef struct {
     _flags.isKeyboardOpen = YES;
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
-    CGFloat keyboardCoveredHeight = self.view.bounds.size.height - keyboardRect.origin.y;
+    CGFloat calculatedHeight = self.view.bounds.size.height - keyboardRect.origin.y;
+    FDLog(@"calculated height %f", calculatedHeight);
+    CGFloat keyboardCoveredHeight = self.keyboardHeight < calculatedHeight ? calculatedHeight : self.keyboardHeight;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
     self.keyboardHeight = keyboardCoveredHeight;
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        [self scrollTableViewToLastCell];
     }];
-    [self scrollTableViewToLastCell];
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{

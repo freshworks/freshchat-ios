@@ -16,6 +16,7 @@
 @interface FDStringUtil : NSObject
 
 +(BOOL)isValidEmail:(NSString *)email;
++(BOOL) isValidUserPropName : (NSString *)name;
 +(NSString *)generateUUID;
 +(NSString *)base64EncodedStringFromString:(NSString *)string;
 +(NSString *)sanitizeStringForUTF8:(NSString *)string;
@@ -26,6 +27,5 @@
 +(NSString *)replaceInString:(NSString *)string usingRegex:(NSString *)regexString replaceWith:(NSString *) replaceString;
 
 @end
-
 
 #endif /* FDStringUtil_h */

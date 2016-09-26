@@ -126,6 +126,7 @@
 -(UIFont *)notificationTitleFont;
 -(UIFont *)notificationMessageFont;
 -(UIColor *)notificationChannelIconBorderColor;
+-(UIColor *)notificationChannelIconBackgroundColor;
 
 //Grid View Cell
 -(UIFont *)gridViewCellTitleFont;

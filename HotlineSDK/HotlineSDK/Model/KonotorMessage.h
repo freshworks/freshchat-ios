@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)uploadAllUnuploadedMessages;
 -(void) markAsRead;
 -(void) markAsUnread;
-+(NSInteger)getUnreadMessagesCountForChannel:(HLChannel *)channel;
++(NSInteger)getUnreadMessagesCountForChannel:(NSNumber *)channel;
 +(void) markAllMessagesAsReadForChannel:(HLChannel *)channel;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;

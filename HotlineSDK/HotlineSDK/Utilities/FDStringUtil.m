@@ -76,13 +76,27 @@
 }
 
 +(NSString *)generateUUID{
-    return [[NSUUID UUID]UUIDString];
+    NSString *UUID = [[NSUUID UUID]UUIDString];
+    if (UUID == nil) {
+        CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+        CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+        CFRelease(uuidRef);
+        UUID = (__bridge_transfer NSString *)uuidStringRef;
+        FDLog(@"Note! NSUUID is nil, using CFUUID instead");
+    }
+    return UUID;
 }
 
 +(BOOL)isValidEmail:(NSString *)email{
     NSString *emailPattern=@"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,15}";
     NSPredicate *emailPatternPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailPattern];
     return ([emailPatternPredicate evaluateWithObject:email]) ? YES : NO;
+}
+
++(BOOL) isValidUserPropName : (NSString *)name{
+    NSString *propertyPattern = @"[A-Z0-9a-z _-]+";
+    NSPredicate *propertyPatternPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",propertyPattern];
+    return ([propertyPatternPredicate evaluateWithObject:name]) ? YES : NO;
 }
 
 +(NSString*) stringRepresentationForDate:(NSDate*) date{

@@ -12,6 +12,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "HLTheme.h"
+#import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
@@ -242,6 +243,40 @@ static NSInteger networkIndicator = 0;
     NSNumber *lastUpdateTime = [[FDSecureStore sharedInstance] objectForKey:key];
     if (lastUpdateTime == nil) lastUpdateTime = @0;
     return lastUpdateTime;
+}
+
++(BOOL) isValidPropKey: (NSString *) str {
+    return str && [str length] <=32 && [FDStringUtil isValidUserPropName:str];
+}
+
++(BOOL) isValidPropValue: (NSString *) str {
+    return str && [str length] <= 256;
+}
+
++(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict{
+    NSMutableDictionary *userProperties = [[NSMutableDictionary alloc] init];
+    if(userDict){
+        for(id key in userDict){
+            if([FDUtilities isValidPropKey:key]){
+                NSObject *valueObj = [userDict objectForKey:key];
+                if([valueObj isKindOfClass:[NSString class]]) {
+                    NSString *value = (NSString *) valueObj;
+                    if([FDUtilities isValidPropValue:value]){
+                        [userProperties setObject:value forKey:key];
+                    }
+                    else {
+                        NSLog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
+                    }
+                } else {
+                    NSLog(@"Invalid user property value. Not a NSString. %@ - %@ : <validation error>", key, valueObj);
+                }
+            }
+            else{
+                NSLog(@"Invalid user property  key %@ : <validation error>", key);
+            }
+        }
+    }
+    return userProperties;
 }
 
 +(NSString *)appName{

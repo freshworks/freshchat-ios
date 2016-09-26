@@ -97,6 +97,9 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    
+    [self checkMediaPermissions:config];
+    
     config.appID  = trimString(config.appID);
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
@@ -119,6 +122,36 @@
     [self registerAppNotificationListeners];
     if(config.pollWhenAppActive){
         [self startPoller];
+    }
+}
+
+-(void)checkMediaPermissions:(HotlineConfig *)config{
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+        NSMutableString *message = [NSMutableString new];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
+        NSMutableDictionary *plistInfo =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
+        
+        if (config.voiceMessagingEnabled) {
+            if (![plistInfo objectForKey:@"NSMicrophoneUsageDescription"]) {
+                [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
+            }
+        }
+        
+        if (config.pictureMessagingEnabled) {
+            if (![plistInfo objectForKey:@"NSPhotoLibraryUsageDescription"]) {
+                [message appendString:@"\nAdd key NSPhotoLibraryUsageDescription : To Enable access to Photo Library"];
+            }
+            
+            if (![plistInfo objectForKey:@"NSCameraUsageDescription"]) {
+                [message appendString:@"\nAdd key NSCameraUsageDescription : To take Images from Camera"];
+            }
+        }
+        
+        if (message.length > 0) {
+            NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
+            NSLog(@"\n\n** %@ ** \n %@ \n\n", info, message);
+        }
+        
     }
 }
 
@@ -192,7 +225,6 @@
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
         [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
         [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
-        [store setBoolValue:config.displayFAQsAsGrid forKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
@@ -215,9 +247,11 @@
 
 
 -(void)updateUserProperties:(NSDictionary*)props{
+    
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-        if(props){
-            for(NSString *key in props){
+        NSDictionary *filteredProps = [FDUtilities filterValidUserPropEntries:props];
+        if(filteredProps){
+            for(NSString *key in filteredProps){
                 NSString *value = props[key];
                 [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
             }
@@ -229,6 +263,9 @@
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if (key && value) {
         [self updateUserProperties:@{ key : value}];
+    }
+    else {
+        NSLog(@"Null property %@ provided. Not updated", key ? @"value" : @"key" );
     }
 }
 
@@ -380,13 +417,14 @@
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channels, NSError *error) {
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
             NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT};
             [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
-            if (channels.count == 1) {
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannel:channels.firstObject
+            if (channelInfos.count == 1) {
+                HLChannelInfo *channelInfo = [channelInfos firstObject];
+                FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
                                                                                    andPresentModally:YES];
                 preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
             }else{
@@ -414,9 +452,9 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
     NSArray *results = [context executeFetchRequest:request error:nil];
-    
     if (results.count == 1){
-        controller = [[FDMessageController alloc]initWithChannel:results.firstObject andPresentModally:NO];
+        HLChannelInfo *channelInfo = [results firstObject];
+        controller = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:NO];
     }else{
         controller = [[HLChannelViewController alloc]init];
     }
@@ -502,13 +540,13 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    if([store objectForKey:HOTLINE_DEFAULTS_DOMAIN]){
+        config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    }
     config.agentAvatarEnabled =[store objectForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
-    config.displayFAQsAsGrid = [store boolValueForKey:HOTLINE_DEFAULTS_DISPLAY_SOLUTION_AS_GRID];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
     NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
@@ -587,14 +625,8 @@
 // Polling changes
 
 -(void)startPoller{
-#ifdef DEBUG
-    #define POLL_INTERVAL 5
-#else 
-    #define POLL_INTERVAL 30
-#endif
-    
     if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
+        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
                                                            userInfo:nil repeats:YES];
         FDLog(@"Start off-screen message poller");
     }
