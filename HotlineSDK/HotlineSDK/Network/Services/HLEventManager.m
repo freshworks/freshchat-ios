@@ -164,6 +164,7 @@
     //get all user properties and forward them to
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *userAlias = [FDUtilities getUserAlias];
+    if(!userAlias){userAlias=@"Undefined_Alias";}
     NSString *appAlias = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appName = [FDUtilities appName];
     NSDictionary *deviceInfo = [FDUtilities deviceInfoProperties];
