@@ -208,7 +208,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController fAQOptions:self.faqOptions andSource:HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK];
+            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];

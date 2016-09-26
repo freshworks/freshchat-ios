@@ -186,7 +186,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController fAQOptions:self.faqOptions andSource:HLEVENT_SOURCE_AS_ARTICLE_LIST];
+        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_SOURCE_AS_ARTICLE_LIST];
     }
 }
 

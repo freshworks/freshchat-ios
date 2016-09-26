@@ -18,21 +18,21 @@
 
 +(void) launchArticleID:(NSNumber *) articleId
      withNavigationCtlr:(UIViewController *) controller
-          fAQOptions:(FAQOptions *)faqOptions andSource : (NSString *)source{
+          faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source{
     NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
     
     [mContext performBlock:^{
         //article search
         HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
         if(article){
-            [HLArticleUtil launchArticle:article withNavigationCtlr:controller fAQOptions:faqOptions andSource:source];
+            [HLArticleUtil launchArticle:article withNavigationCtlr:controller faqOptions:faqOptions andSource:source];
         }
     }];
 }
 
 +(void) launchArticle:(HLArticle *) article
    withNavigationCtlr:(UINavigationController *) controller
-           fAQOptions:(FAQOptions *)faqOptions andSource:(NSString *)source;{
+           faqOptions:(FAQOptions *)faqOptions andSource:(NSString *)source;{
     dispatch_async(dispatch_get_main_queue(),^{
         [self addFaqOpenArticleEvent:article andSource:source];
         HLArticleDetailViewController *articleDetailController = [self getArticleDetailController:article];
