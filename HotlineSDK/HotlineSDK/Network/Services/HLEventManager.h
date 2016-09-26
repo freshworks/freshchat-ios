@@ -67,7 +67,7 @@
 //Message types
 #define HLEVENT_MESSAGE_TYPE_TEXT                   @"text"
 #define HLEVENT_MESSAGE_TYPE_IMAGE                  @"image"
-#define HLEVENT_MESSAGE_TYPE_AUDIO                  @"image"
+#define HLEVENT_MESSAGE_TYPE_AUDIO                  @"audio"
 
 //search launch
 #define HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST         @"category_list"
