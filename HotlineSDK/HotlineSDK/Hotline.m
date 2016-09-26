@@ -124,7 +124,7 @@
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
-    FDPlistManager *plistManager = [[FDPlistManager alloc]init];
+    FDPlistManager *plistManager = [[FDPlistManager alloc] init];
     NSMutableString *message = [NSMutableString new];
 
     if (config.voiceMessagingEnabled) {

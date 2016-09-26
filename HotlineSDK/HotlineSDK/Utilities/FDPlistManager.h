@@ -16,4 +16,8 @@
 
 -(BOOL)cameraUsageEnabled;
 
+-(BOOL)isVoiceMessageEnabled;
+
+-(BOOL)isPictureMessageEnabled;
+
 @end

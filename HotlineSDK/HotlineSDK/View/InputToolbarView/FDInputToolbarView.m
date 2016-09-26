@@ -129,11 +129,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     
     FDPlistManager *plistManager = [FDPlistManager new];
 
-    BOOL isPictureMessageEnabled = [plistManager photoLibraryUsageEnabled] && [plistManager cameraUsageEnabled];
+    BOOL isPictureMessageEnabled = [plistManager isPictureMessageEnabled];
 
     attachButtonWidthConstraint.constant = (isPictureMessageEnabled) ? 24.0 : 0;
     
-    self.isVoiceMessageEnabled = [plistManager micUsageEnabled];
+    self.isVoiceMessageEnabled = [plistManager isVoiceMessageEnabled];
 
     [self updateActionButtons:textView];
     

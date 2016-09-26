@@ -14,6 +14,7 @@
 @interface FDPlistManager ()
 
 @property (strong, nonatomic) NSMutableDictionary *plist;
+@property (strong, nonatomic) FDSecureStore *secStore;
 
 @end
 
@@ -24,32 +25,41 @@
     if (self) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
         self.plist = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+        self.secStore = [FDSecureStore sharedInstance];
     }
     return self;
 }
 
-
--(BOOL)checkOption:(NSString *)option forKey:(NSString *)key{
-    BOOL isOptionPreferred = [[FDSecureStore sharedInstance] boolValueForKey:option];
-
-    if ([FDUtilities isiOS10]) {
-        return [self.plist objectForKey:key] && isOptionPreferred;
-    }else{
-        return isOptionPreferred;
-    }
-    
-}
-
 -(BOOL)micUsageEnabled{
-    return [self checkOption:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED forKey:@"NSMicrophoneUsageDescription"];
+    return [self checkPermissionKeyForiOS10:@"NSMicrophoneUsageDescription"];
 }
 
 -(BOOL)photoLibraryUsageEnabled{
-    return [self checkOption:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED forKey:@"NSPhotoLibraryUsageDescription"];
+    return [self checkPermissionKeyForiOS10:@"NSPhotoLibraryUsageDescription"];
 }
 
 -(BOOL)cameraUsageEnabled{
-    return [self checkOption:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED forKey:@"NSCameraUsageDescription"];
+    return [self checkPermissionKeyForiOS10:@"NSCameraUsageDescription"];
+}
+
+-(BOOL)checkPermissionKeyForiOS10:(NSString *)key{
+    if ([FDUtilities isiOS10]) {
+        return [self.plist objectForKey:key];
+    }else{
+        return YES;
+    }
+}
+
+
+-(BOOL)isVoiceMessageEnabled{
+    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED]
+            && [self micUsageEnabled]);
+}
+
+-(BOOL)isPictureMessageEnabled{
+    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED]
+            && [self cameraUsageEnabled]
+            && [self photoLibraryUsageEnabled]);
 }
 
 @end
