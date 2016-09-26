@@ -39,6 +39,7 @@
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
 #import "FDPlistManager.h"
+#import "FDMemLogger.h"
 
 @interface Hotline ()
 
@@ -461,10 +462,29 @@
 }
 
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
-    NSDictionary *payload = info;
-    if (info[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
-        payload = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    NSDictionary *payload = @{};
+    if (info) {
+        if ([info isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *launchOptions = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+            if (launchOptions) {
+                if ([launchOptions isKindOfClass:[NSDictionary class]]) {
+                    payload = launchOptions;
+                }else{
+                    FDMemLogger *memlogger = [[FDMemLogger alloc]init];
+                    [memlogger addMessage:[NSString stringWithFormat:@"     payload for key UIApplicationLaunchOptionsRemoteNotificationKey -> %@ ",
+                                           launchOptions]];
+                    [memlogger upload];
+                }
+            }else{
+                payload = info;
+            }
+        }else{
+            FDMemLogger *memlogger = [[FDMemLogger alloc]init];
+            [memlogger addMessage:[NSString stringWithFormat:@"Invalid push notification payload -> %@ ", info]];
+            [memlogger upload];
+        }
     }
+    
     return payload;
 }
 
