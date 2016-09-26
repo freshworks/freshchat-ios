@@ -34,6 +34,8 @@
 +(NSString*)deviceModelName;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 
++(BOOL)isiOS10;
+
 @end
 
 #endif
