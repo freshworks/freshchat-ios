@@ -98,10 +98,21 @@
     return filePath;
 }
 
-- (void) addEventWithName :(NSString*) eventName andProperties :(NSDictionary *) properties{
-    
-    HLEvent *event = [[HLEvent alloc] initWithEventName:eventName andProperty:properties];
+//- (void) addEventWithName :(NSString*) eventName andProperties :(NSDictionary *) properties{
+//    
+//    HLEvent *event = [[HLEvent alloc] initWithEventName:eventName andProperty:properties];
+//    [event saveEvent];
+//}
+
+//+ (HLEvent *) event:(NSString *) eventName {
+//    return [[HLEvent alloc] initWithEventName:eventName];
+//}
+
++ (HLEvent *) submitEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
+    HLEvent *event = [[HLEvent alloc] initWithEventName:eventName];
+    builderBlock(event);
     [event saveEvent];
+    return event;
 }
 
 - (void) getOldEvents {

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "KonotorDataManager.h"
 #import "FDUtilities.h"
+#import "HLEvent.h"
 
 //Event plist file path
 #define HLEVENT_DIR_PATH @"Hotline/Events"
@@ -80,6 +81,8 @@
 
 + (instancetype)sharedInstance;
 
++ (HLEvent *) submitEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
+
 - (void) uploadUserEvents :(NSArray *)events;
 
 + (NSString *) getUserSessionId;
@@ -90,7 +93,7 @@
 
 - (void) updateFileWithEvent :(NSDictionary *) eventDict;
 
-- (void) addEventWithName :(NSString*) eventName andProperties :(NSDictionary *) properties;
+//- (void) addEventWithName :(NSString*) eventName andProperties :(NSDictionary *) properties;
 
 - (void) clearEventFile;
 

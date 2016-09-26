@@ -382,6 +382,10 @@ static HLNotificationHandler *handleUpdateNotification;
                                  HLEVENT_PARAM_MESSAGE_ALIAS : messageId,
                                  HLEVENT_PARAM_MESSAGE_TYPE : type};
     [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATION_SEND_MESSAGE andProperties:properties];
+    
+    [HLEventManager submitEvent:HLEVENT_CONVERSATION_SEND_MESSAGE withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
+    }];
 }
 
 

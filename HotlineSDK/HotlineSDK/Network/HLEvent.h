@@ -12,7 +12,9 @@
 
 @interface HLEvent : NSObject
 
--(instancetype)initWithEventName:(NSString *)eventName andProperty :(NSDictionary *)properties;
+-(instancetype)initWithEventName:(NSString *)eventName;
+
+-(HLEvent *) propKey:(NSString *) key andVal:(NSString *) value;
 
 -(void)saveEvent;
 

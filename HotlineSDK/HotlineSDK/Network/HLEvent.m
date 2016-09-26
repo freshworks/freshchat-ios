@@ -12,33 +12,43 @@
 #import "FDUtilities.h"
 
 @interface HLEvent()
-@property (nonatomic, strong) NSDictionary *properties;
+@property (nonatomic, strong) NSMutableDictionary *properties;
 @property (nonatomic, strong) NSString *eventName;
-@property (nonatomic, strong) NSDictionary *eventDictionary;
 
 @end
 
 @implementation HLEvent
 
--(instancetype)initWithEventName:(NSString *)eventName andProperty :(NSDictionary *)properties{
+-(instancetype)initWithEventName:(NSString *)eventName{
     self = [super init];
     if (self) {
-        self.properties = properties;
+        self.properties = [NSMutableDictionary new];
         self.eventName = eventName;
     }
     return self;
 }
 
+-(HLEvent *) event:(NSString *)eventName {
+    return self;
+}
+
+-(HLEvent *) propKey:(NSString *) key andVal:(NSString *) value {
+    if(key && value){
+        [self.properties setObject:value forKey:key];
+    }
+    return self;
+}
+
 -(void)saveEvent{
-    if([FDUtilities getUserAlias]){
-        self.eventDictionary = @{@"_tracker":[FDUtilities getTracker],
-                                 @"_userId" :[FDUtilities getUserAlias],
-                                 @"_eventName":self.eventName,
-                                 @"_sessionId":[HLEventManager getUserSessionId],
-                                 @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)],
-                                 @"_appId" : [Hotline sharedInstance].config.appID,
-                                 @"_properties":self.properties};
-        [[HLEventManager sharedInstance] updateFileWithEvent:self.eventDictionary];
+    if([FDUtilities getUserAlias]) {
+        NSDictionary *eventDictionary = @{@"_tracker":[FDUtilities getTracker],
+                                          @"_userId" :[FDUtilities getUserAlias],
+                                          @"_eventName":self.eventName,
+                                          @"_sessionId":[HLEventManager getUserSessionId],
+                                          @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)],
+                                          @"_appId" : [Hotline sharedInstance].config.appID,
+                                          @"_properties":self.properties};
+        [[HLEventManager sharedInstance] updateFileWithEvent:eventDictionary];
     }
 }
 
