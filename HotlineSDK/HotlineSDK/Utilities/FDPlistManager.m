@@ -9,6 +9,7 @@
 #import "FDPlistManager.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
+#import "FDSecureStore.h"
 
 @interface FDPlistManager ()
 
@@ -17,15 +18,6 @@
 @end
 
 @implementation FDPlistManager
-
-+ (instancetype)sharedInstance{
-    static FDPlistManager *sharedPlistManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedPlistManager = [[self alloc]init];
-    });
-    return sharedPlistManager;
-}
 
 - (instancetype)init{
     self = [super init];
@@ -36,28 +28,28 @@
     return self;
 }
 
--(BOOL)micUsageEnabled{
+
+-(BOOL)checkOption:(NSString *)option forKey:(NSString *)key{
+    BOOL isOptionPreferred = [[FDSecureStore sharedInstance] boolValueForKey:option];
+
     if ([FDUtilities isiOS10]) {
-        return [self.plist objectForKey:@"NSMicrophoneUsageDescription"];
+        return [self.plist objectForKey:key] && isOptionPreferred;
     }else{
-        return YES;
+        return isOptionPreferred;
     }
+    
+}
+
+-(BOOL)micUsageEnabled{
+    return [self checkOption:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED forKey:@"NSMicrophoneUsageDescription"];
 }
 
 -(BOOL)photoLibraryUsageEnabled{
-    if ([FDUtilities isiOS10]) {
-        return [self.plist objectForKey:@"NSPhotoLibraryUsageDescription"];
-    }else{
-        return YES;
-    }
+    return [self checkOption:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED forKey:@"NSPhotoLibraryUsageDescription"];
 }
 
 -(BOOL)cameraUsageEnabled{
-    if ([FDUtilities isiOS10]) {
-        return [self.plist objectForKey:@"NSCameraUsageDescription"];
-    }else{
-        return YES;
-    }
+    return [self checkOption:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED forKey:@"NSCameraUsageDescription"];
 }
 
 @end

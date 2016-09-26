@@ -10,8 +10,6 @@
 
 @interface FDPlistManager : NSObject
 
-+(instancetype)sharedInstance;
-
 -(BOOL)micUsageEnabled;
 
 -(BOOL)photoLibraryUsageEnabled;

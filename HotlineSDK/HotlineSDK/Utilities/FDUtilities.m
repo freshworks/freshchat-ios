@@ -338,16 +338,4 @@ static NSInteger networkIndicator = 0;
     return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
 }
 
-+(BOOL)isVoiceMessageEnabled{
-    FDPlistManager *plistManager = [FDPlistManager sharedInstance];
-    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED] && [plistManager micUsageEnabled]);
-}
-
-+(BOOL)isPictureMessageEnabled{
-    FDPlistManager *plistManager = [FDPlistManager sharedInstance];
-    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED] &&
-            [plistManager cameraUsageEnabled] &&
-            [plistManager photoLibraryUsageEnabled]);
-}
-
 @end

@@ -36,10 +36,6 @@
 
 +(BOOL)isiOS10;
 
-+(BOOL)isVoiceMessageEnabled;
-
-+(BOOL)isPictureMessageEnabled;
-
 @end
 
 #endif
