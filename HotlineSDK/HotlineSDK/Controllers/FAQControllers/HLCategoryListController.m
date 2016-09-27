@@ -137,9 +137,9 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    
-    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_SEARCH_LAUNCH andProperties:properties];
+    [HLEventManager submitEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
+    }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
@@ -227,10 +227,10 @@
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
-    
-    NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [category.categoryID stringValue],
-                                 HLEVENT_PARAM_CATEGORY_NAME : category.title};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_OPEN_CATEGORY andProperties:properties];
+    [HLEventManager submitEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[category.categoryID stringValue]];
+        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];
+    }];
     
     [self.navigationController pushViewController:container animated:YES];
 }

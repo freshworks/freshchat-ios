@@ -43,13 +43,13 @@
 }
 
 + (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source{
-    
-    NSDictionary *properties = @{HLEVENT_PARAM_CATEGORY_ID : [article.categoryID stringValue],
-                                 HLEVENT_PARAM_CATEGORY_NAME : article.category.title,
-                                 HLEVENT_PARAM_ARTICLE_ID : article.articleID,
-                                 HLEVENT_PARAM_ARTICLE_NAME : article.title,
-                                 HLEVENT_PARAM_SOURCE : source};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_OPEN_ARTICLE andProperties:properties];
+    [HLEventManager submitEvent:HLEVENT_FAQ_OPEN_ARTICLE withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[article.categoryID stringValue]];
+        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:article.category.title];
+        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[article.articleID stringValue]];
+        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:article.title];
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:source];
+    }];
 }
 
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article{

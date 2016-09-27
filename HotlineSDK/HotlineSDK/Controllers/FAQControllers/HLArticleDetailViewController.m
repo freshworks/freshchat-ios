@@ -349,16 +349,17 @@
 }
 
 - (void) sendEventForArticle :(NSString *) eventName{
-    
-    NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
-                                 HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
-                                 HLEVENT_PARAM_CATEGORY_ID : self.categoryID};
-    [[HLEventManager sharedInstance] addEventWithName:eventName andProperties:properties];
+    [HLEventManager submitEvent:eventName withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[self.articleID stringValue]];
+        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:self.articleTitle];
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[self.categoryID stringValue]];
+    }];
 }
 
 -(void)buttonClickedEvent:(id)sender{
-    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_CONTACTUS};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
+    [HLEventManager submitEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_CONTACTUS];
+    }];
     [self hideBottomView];
     [[Hotline sharedInstance] showConversations:self];
 }

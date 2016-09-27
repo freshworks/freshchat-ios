@@ -377,14 +377,11 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 +(void) addSentMessageEventWithChannel :(HLChannel *)channel messageAlias:(NSString *)messageId andType :(NSString *) type {
-    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : channel.channelID,
-                                 HLEVENT_PARAM_CHANNEL_NAME : channel.name,
-                                 HLEVENT_PARAM_MESSAGE_ALIAS : messageId,
-                                 HLEVENT_PARAM_MESSAGE_TYPE : type};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATION_SEND_MESSAGE andProperties:properties];
-    
     [HLEventManager submitEvent:HLEVENT_CONVERSATION_SEND_MESSAGE withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[channel.channelID stringValue]];
+        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channel.name];
+        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageId];
+        [event propKey:HLEVENT_PARAM_MESSAGE_TYPE andVal:type];
     }];
 }
 

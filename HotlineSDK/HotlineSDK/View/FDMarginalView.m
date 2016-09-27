@@ -61,9 +61,9 @@
 }
 
 -(void)handleTapGesture:(id)sender{
-    
-    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_ARTICLE_NOT_HELPFUL};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
+    [HLEventManager submitEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_NOT_HELPFUL];
+    }];
     [self.delegate marginalView:self handleTap:sender];
 }
 

@@ -96,11 +96,11 @@ typedef struct {
         
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
-        
-        NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_DEFAULT,
-                                     HLEVENT_PARAM_CHANNEL_ID : self.channel.channelID,
-                                     HLEVENT_PARAM_CHANNEL_NAME : self.channel.name};
-        [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATIONS_LAUNCH andProperties:properties];
+        [HLEventManager submitEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+            [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[self.channel.channelID stringValue]];
+            [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:self.channel.name];
+        }];
         
         [Konotor setDelegate:self];
     }
@@ -813,10 +813,11 @@ typedef struct {
 }
 
 - (void) addConversationDeepLinkLaunchEvent{
-    NSDictionary *properties = @{HLEVENT_PARAM_CHANNEL_ID : self.conversation.belongsToChannel.channelID,
-                                 HLEVENT_PARAM_CHANNEL_NAME : self.conversation.belongsToChannel.name,
-                                 HLEVENT_PARAM_MESSAGE_ALIAS : self.conversation.conversationAlias};
-    [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH andProperties:properties];
+    [HLEventManager submitEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[self.conversation.belongsToChannel.channelID stringValue]];
+        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:self.conversation.belongsToChannel.name];
+        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:self.conversation.conversationAlias];
+    }];
 }
 
 #pragma mark - Audio toolbar delegates
