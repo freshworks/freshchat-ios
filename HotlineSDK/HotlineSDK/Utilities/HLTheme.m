@@ -37,6 +37,10 @@
     return self;
 }
 
+-(void)refreshSystemFont:(NSNotification *)notification{
+    self.systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+}
+
 -(void)setThemeName:(NSString *)themeName{
     NSString *themeFilePath = [self getPathForTheme:themeName];
     if (themeFilePath) {
