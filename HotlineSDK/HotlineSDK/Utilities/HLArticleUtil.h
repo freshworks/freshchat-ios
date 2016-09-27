@@ -16,8 +16,8 @@
 
 @interface HLArticleUtil : NSObject
 
-+(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller fAQOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
-+(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller fAQOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
++(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
++(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
 +(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController;
 + (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source;

@@ -208,7 +208,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController fAQOptions:self.faqOptions andSource:HLEVENT_ARTICLE_SOURCE_AS_DEEPLINK];
+            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
@@ -335,20 +335,20 @@
 -(void)yesButtonClicked:(id)sender{
     [self showThankYouPrompt];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        [self voteForArticle:HLEVENT_FAQ_UPVOTE_ARTICLE];
-        FDLog(@"Voting Completed");
+        [self sendEventForArticle:HLEVENT_FAQ_UPVOTE_ARTICLE];
+        FDLog(@"UpVoting Completed");
     }];
 }
 
 -(void)noButtonClicked:(id)sender{
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        [self voteForArticle:HLEVENT_FAQ_DOWNVOTE_ARTICLE];
-        FDLog(@"Voting Completed");
+        [self sendEventForArticle:HLEVENT_FAQ_DOWNVOTE_ARTICLE];
+        FDLog(@"DownVoting Completed");
     }];
 }
 
-- (void) voteForArticle :(NSString *) eventName{
+- (void) sendEventForArticle :(NSString *) eventName{
     
     NSDictionary *properties = @{HLEVENT_PARAM_ARTICLE_ID : [self.articleID stringValue],
                                  HLEVENT_PARAM_ARTICLE_NAME : self.articleTitle,
@@ -357,7 +357,7 @@
 }
 
 -(void)buttonClickedEvent:(id)sender{
-    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_CONVERSATION_LAUNCH_CONTACTUS};
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_CONTACTUS};
     [[HLEventManager sharedInstance] addEventWithName:HLEVENT_CHANNELS_LAUNCH andProperties:properties];
     [self hideBottomView];
     [[Hotline sharedInstance] showConversations:self];

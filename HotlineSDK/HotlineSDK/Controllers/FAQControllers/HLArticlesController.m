@@ -126,7 +126,7 @@
 
 -(void)searchButtonAction:(id)sender{
     
-    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_SOURCE_AS_ARTICLE_LIST};
+    NSDictionary *properties = @{HLEVENT_PARAM_SOURCE : HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST};
     [[HLEventManager sharedInstance] addEventWithName:HLEVENT_FAQ_SEARCH_LAUNCH andProperties:properties];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
@@ -186,7 +186,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController fAQOptions:self.faqOptions andSource:HLEVENT_SOURCE_AS_ARTICLE_LIST];
+        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
     }
 }
 
