@@ -39,7 +39,8 @@
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
 #import "HLEventManager.h"
-#import "HLEventManager.h"
+#import "FDPlistManager.h"
+#import "FDMemLogger.h"
 
 @interface Hotline ()
 
@@ -126,32 +127,28 @@
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
-        NSMutableString *message = [NSMutableString new];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
-        NSMutableDictionary *plistInfo =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
-        
-        if (config.voiceMessagingEnabled) {
-            if (![plistInfo objectForKey:@"NSMicrophoneUsageDescription"]) {
-                [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
-            }
+    FDPlistManager *plistManager = [[FDPlistManager alloc] init];
+    NSMutableString *message = [NSMutableString new];
+
+    if (config.voiceMessagingEnabled) {
+        if (![plistManager micUsageEnabled]) {
+            [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
+        }
+    }
+    
+    if (config.pictureMessagingEnabled) {
+        if (![plistManager photoLibraryUsageEnabled]) {
+            [message appendString:@"\nAdd key NSPhotoLibraryUsageDescription : To Enable access to Photo Library"];
         }
         
-        if (config.pictureMessagingEnabled) {
-            if (![plistInfo objectForKey:@"NSPhotoLibraryUsageDescription"]) {
-                [message appendString:@"\nAdd key NSPhotoLibraryUsageDescription : To Enable access to Photo Library"];
-            }
-            
-            if (![plistInfo objectForKey:@"NSCameraUsageDescription"]) {
-                [message appendString:@"\nAdd key NSCameraUsageDescription : To take Images from Camera"];
-            }
+        if (![plistManager cameraUsageEnabled]) {
+            [message appendString:@"\nAdd key NSCameraUsageDescription : To take Images from Camera"];
         }
-        
-        if (message.length > 0) {
-            NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
-            NSLog(@"\n\n** %@ ** \n %@ \n\n", info, message);
-        }
-        
+    }
+    
+    if (message.length > 0) {
+        NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
+        NSLog(@"\n\n** %@ ** \n %@ \n\n", info, message);
     }
 }
 
@@ -485,10 +482,29 @@
 }
 
 -(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
-    NSDictionary *payload = info;
-    if (info[@"UIApplicationLaunchOptionsRemoteNotificationKey"]) {
-        payload = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    NSDictionary *payload = @{};
+    if (info) {
+        if ([info isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *launchOptions = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+            if (launchOptions) {
+                if ([launchOptions isKindOfClass:[NSDictionary class]]) {
+                    payload = launchOptions;
+                }else{
+                    FDMemLogger *memlogger = [[FDMemLogger alloc]init];
+                    [memlogger addMessage:[NSString stringWithFormat:@"     payload for key UIApplicationLaunchOptionsRemoteNotificationKey -> %@ ",
+                                           launchOptions]];
+                    [memlogger upload];
+                }
+            }else{
+                payload = info;
+            }
+        }else{
+            FDMemLogger *memlogger = [[FDMemLogger alloc]init];
+            [memlogger addMessage:[NSString stringWithFormat:@"Invalid push notification payload -> %@ ", info]];
+            [memlogger upload];
+        }
     }
+    
     return payload;
 }
 

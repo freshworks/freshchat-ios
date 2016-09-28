@@ -308,7 +308,7 @@ static HLNotificationHandler *handleUpdateNotification;
             FDLog(@"Message sending without conversation ID");
         }
         
-        //if audio message add the binary audio also.
+        //Audio message
         if([[pMessage messageType]intValue]== 2){
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
@@ -317,15 +317,15 @@ static HLNotificationHandler *handleUpdateNotification;
             }
         }
         
-        //if audio message add the binary audio also.
+        //Picture message
         if([[pMessage messageType]intValue]== 3) {
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
             if(pBinary){
-                [formData addFilePart:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
+                [formData addFilePart:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/jpeg"];
                 
                 if([pBinary binaryThumbnail]){
-                    [formData addFilePart:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/octet-stream"];
+                    [formData addFilePart:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/jpeg"];
                 }
             }
         }

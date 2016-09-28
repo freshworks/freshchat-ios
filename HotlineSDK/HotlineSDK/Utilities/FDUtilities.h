@@ -36,6 +36,8 @@
 + (NSString *) returnLibraryPathForDir : (NSString *) directory;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 
++(BOOL)isiOS10;
+
 @end
 
 #endif

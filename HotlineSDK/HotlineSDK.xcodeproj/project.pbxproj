@@ -108,6 +108,7 @@
 		3C4CEDBA1D1C2FDD000EE1AE /* HLArticleTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4CEDB91D1C2FDD000EE1AE /* HLArticleTagManager.m */; };
 		68A532551D36252A0078339F /* HLEventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532541D36252A0078339F /* HLEventManager.m */; };
 		68A532581D3626300078339F /* HLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532571D3626300078339F /* HLEvent.m */; };
+		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -328,6 +329,8 @@
 		68A532541D36252A0078339F /* HLEventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEventManager.m; sourceTree = "<group>"; };
 		68A532561D3626300078339F /* HLEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEvent.h; sourceTree = "<group>"; };
 		68A532571D3626300078339F /* HLEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEvent.m; sourceTree = "<group>"; };
+		CE0C7C6C1D9539A100F545AE /* FDPlistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPlistManager.h; sourceTree = "<group>"; };
+		CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPlistManager.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -531,6 +534,8 @@
 			children = (
 				35B2EED71D000E620014867F /* HLNotificationHandler.h */,
 				35B2EED81D000E620014867F /* HLNotificationHandler.m */,
+				CE0C7C6C1D9539A100F545AE /* FDPlistManager.h */,
+				CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */,
 				35B2EF2B1D000E620014867F /* FDAutolayoutHelper.h */,
 				35B2EF2C1D000E620014867F /* FDAutolayoutHelper.m */,
 				35B2EF2D1D000E620014867F /* FDBackgroundTaskManager.h */,
@@ -831,6 +836,7 @@
 				35B2EFD41D000EE80014867F /* FDReachability.m in Sources */,
 				35B2EFC51D000E620014867F /* FDAudioMessageInputView.m in Sources */,
 				35B2EFB81D000E620014867F /* KonotorAudioRecorder.m in Sources */,
+				CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */,
 				35B2EFC01D000E620014867F /* FDLabel.m in Sources */,
 				35B2EF971D000E620014867F /* KonotorCustomProperty.m in Sources */,
 				35B2EF931D000E620014867F /* HLArticle.m in Sources */,
