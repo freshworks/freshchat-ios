@@ -79,25 +79,6 @@
     return [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
 }
 
-- (NSString *) returnLibraryPathForDir : (NSString *) dirPath{
-    
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:dirPath];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        
-        NSError *error = nil;
-        NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                         forKey:NSFileProtectionKey];
-        [[NSFileManager defaultManager] createDirectoryAtPath:filePath
-                                  withIntermediateDirectories:YES
-                                                   attributes:attr
-                                                        error:&error];
-        if (error){
-            FDLog(@"Error creating directory path: %@", [error localizedDescription]);
-        }
-    }
-    return filePath;
-}
-
 + (HLEvent *) submitEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
     HLEvent *event = [[HLEvent alloc] initWithEventName:eventName];
     builderBlock(event);
