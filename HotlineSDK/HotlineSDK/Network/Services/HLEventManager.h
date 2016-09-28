@@ -93,8 +93,6 @@
 
 - (void) updateFileWithEvent :(NSDictionary *) eventDict;
 
-//- (void) addEventWithName :(NSString*) eventName andProperties :(NSDictionary *) properties;
-
 - (void) clearEventFile;
 
 @end
