@@ -553,7 +553,6 @@ typedef struct {
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat calculatedHeight = self.view.bounds.size.height - keyboardRect.origin.y;
-    FDLog(@"calculated height %f", calculatedHeight);
     CGFloat keyboardCoveredHeight = self.keyboardHeight < calculatedHeight ? calculatedHeight : self.keyboardHeight;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
     self.keyboardHeight = keyboardCoveredHeight;
