@@ -52,7 +52,7 @@
                                                                     NSForegroundColorAttributeName: [theme navigationBarTitleColor],
                                                                     NSFontAttributeName: [theme navigationBarTitleFont]
                                                                     };
-    self.channels = [[NSMutableArray alloc] init];
+    self.channels = [[NSArray alloc] init];
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
@@ -130,7 +130,8 @@
     
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
-    NSMutableArray *messages = [NSMutableArray array];
+    NSMutableArray *messages = [[NSMutableArray alloc]init];
+    
     for(HLChannelInfo *channel in channelInfos){
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
         if (lastMessage) {
@@ -143,7 +144,8 @@
     
     for(KonotorMessage *message in messages){
         if (message.belongsToChannel) {
-            [results addObject:message.belongsToChannel];
+            HLChannelInfo *chInfo = [[HLChannelInfo alloc] initWithChannel:message.belongsToChannel];
+            [results addObject:chInfo];
         }
     }
     
