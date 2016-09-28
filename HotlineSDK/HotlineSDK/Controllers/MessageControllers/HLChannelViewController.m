@@ -192,10 +192,14 @@
                                                  name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)localNotificationUnSubscription{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self localNotificationUnSubscription];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -348,6 +352,10 @@
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
+}
+
+-(void)dealloc{
+    [self localNotificationUnSubscription];
 }
 
 @end

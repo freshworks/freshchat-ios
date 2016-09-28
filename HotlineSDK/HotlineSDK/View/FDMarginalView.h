@@ -21,4 +21,6 @@
 
 -(id)initWithDelegate:(id <FDMarginalViewDelegate>)delegate;
 
+@property (nonatomic,weak) id<FDMarginalViewDelegate> delegate;
+
 @end

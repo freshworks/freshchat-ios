@@ -26,6 +26,7 @@
 @property (strong, nonatomic) FDButton *sendButton;
 @property (strong, nonatomic) FDButton *attachButton;
 @property (strong, nonatomic) UITextView *textView;
+@property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 
 -(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate;
 -(void)showAttachButton:(BOOL)state;

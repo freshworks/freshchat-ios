@@ -70,4 +70,10 @@
     return 0;
 }
 
+-(void)dealloc{
+    self.tableView.dataSource = nil;
+    self.tableView.delegate = nil;
+    self.footerView.delegate = nil;
+}
+
 @end

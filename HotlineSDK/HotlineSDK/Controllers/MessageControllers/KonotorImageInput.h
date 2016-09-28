@@ -12,8 +12,6 @@
 
 @interface KonotorImageInput : NSObject <UIAlertViewDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UITextViewDelegate>
 
-
-
 - (instancetype) initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 - (void) showInputOptions:(UIViewController*) viewController;
 

@@ -838,9 +838,16 @@ typedef struct {
 }
 
 - (void) sendMessage{
-    
     [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     [Konotor cancelRecording];
+}
+
+-(void)dealloc{
+    self.tableView.delegate = nil;
+    self.tableView.dataSource = nil;
+    self.inputToolbar.delegate = nil;
+    self.audioMessageInputView.delegate = nil;
+    [self localNotificationUnSubscription];
 }
 
 @end

@@ -21,6 +21,8 @@
 
 @interface FDAudioMessageInputView : UIView
 
+@property (weak, nonatomic) id <FDAudioInputDelegate> delegate;
+
 -(id)initWithDelegate:(id <FDAudioInputDelegate>)delegate;
 
 @property (nonatomic,strong) UIButton *dismissButton;
