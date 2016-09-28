@@ -15,7 +15,6 @@
 @interface FDAudioMessageInputView ()
 
 @property (nonatomic,strong) NSTimer *timer;
-@property (weak, nonatomic) id <FDAudioInputDelegate> delegate;
 @property (nonatomic, strong) HLTheme *theme;
 
 @end

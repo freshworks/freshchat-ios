@@ -27,7 +27,6 @@
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
 @property (nonatomic, strong) HLTheme              *theme;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonYConstraint;
-@property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 @property (nonatomic) BOOL canShowAttachButton;
 
 @property (nonatomic, strong) NSLayoutConstraint   *accessoryViewWidthConstraint;

@@ -260,4 +260,9 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
+-(void)dealloc{
+    self.scrollView.delegate = nil;
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
+
 @end
