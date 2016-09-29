@@ -40,7 +40,7 @@
 }
 
 -(void)saveEvent{
-    if([FDUtilities getUserAlias]) {
+    if([FDUtilities getUserAlias] && [Hotline sharedInstance].config.appID && [FDUtilities getTracker]) {
         NSDictionary *eventDictionary = @{@"_tracker":[FDUtilities getTracker],
                                           @"_userId" :[FDUtilities getUserAlias],
                                           @"_eventName":self.eventName,

@@ -33,7 +33,7 @@
 +(NSString *)appName;
 +(NSString*)deviceModelName;
 +(NSString *) getTracker;
-+ (NSString *) returnLibraryPathForDir : (NSString *) directory;
++(NSString *) returnLibraryPathForDir : (NSString *) directory;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 
 +(BOOL)isiOS10;
