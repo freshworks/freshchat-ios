@@ -18,7 +18,7 @@ Test cases for v1.1.8
 4. Added missing listener for UIContentSizeCategoryDidChangeNotification
  - Go background, change font size from settings and back to SDK screen, SDK should not crash, font size should have updated
 
-5. Made FDAudioMessageInputView delegate 'weak' from 'strong'
+5. Made FDMarginalView delegate 'weak' from 'strong'
  - check if that works fine
 
 6. Notification payload safety checks in isHotlineNotification:
@@ -31,5 +31,5 @@ Test cases for v1.1.8
  - pass @{ "UIApplicationLaunchOptionsRemoteNotificationKey" : @{}}
  - check mem logger
 
-7. Modified mimeType for picture messages from "octet-stream" to "application/jpeg"
+7. Modified mimeType for picture messages from "octet-stream" to "image/jpeg"
  - check uploading picture messages
