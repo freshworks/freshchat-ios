@@ -1,0 +1,35 @@
+Test cases for v1.1.8
+=====================
+
+1. Implemented dealloc in HLListViewController
+ - Check all its subclasses
+
+2. Channel list data source changed from NSManagedObject to NSObjects
+ - Channel info updates - name, icon,
+ - Test fetch, update, create new, remove
+
+3. iOS 10 Media permission
+ - Test if the attachment and mic icon is visible based on the preferred permission and info.plist changes
+ - check in iOS versions - 10, 9, 8
+ - Build SDK in Xcode 7 and test in iOS 9 and 10
+ - Build SDK in Xcode 8 and test in iOS 9 and 10
+ - check if HotlineConfig for attachment and mic works as expected
+
+4. Added missing listener for UIContentSizeCategoryDidChangeNotification
+ - Go background, change font size from settings and back to SDK screen, SDK should not crash, font size should have updated
+
+5. Made FDAudioMessageInputView delegate 'weak' from 'strong'
+ - check if that works fine
+
+6. Notification payload safety checks in isHotlineNotification:
+ - Entire push notification flow, with in-app notification by polling
+ - pass nil, NULL
+ - pass a different object
+ - pass empty dictionary @{}
+ - pass this @{"info" : @""}
+ - pass @{ "UIApplicationLaunchOptionsRemoteNotificationKey" : "some object"}
+ - pass @{ "UIApplicationLaunchOptionsRemoteNotificationKey" : @{}}
+ - check mem logger
+
+7. Modified mimeType for picture messages from "octet-stream" to "application/jpeg"
+ - check uploading picture messages
