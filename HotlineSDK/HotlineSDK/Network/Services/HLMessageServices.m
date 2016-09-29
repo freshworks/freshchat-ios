@@ -321,10 +321,10 @@ static HLNotificationHandler *handleUpdateNotification;
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
             if(pBinary){
-                [formData addFilePart:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"application/jpeg"];
+                [formData addFilePart:[pBinary binaryImage] name:@"picFile" fileName:@".jpg" mimeType:@"image/jpeg"];
                 
                 if([pBinary binaryThumbnail]){
-                    [formData addFilePart:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"application/jpeg"];
+                    [formData addFilePart:[pBinary binaryThumbnail] name:@"picThumbFile" fileName:@".jpg" mimeType:@"image/jpeg"];
                 }
             }
         }
