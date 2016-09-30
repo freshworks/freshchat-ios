@@ -1,4 +1,9 @@
 
+Ver 1.1.8 
+__________________________
+Missing media usage description disables picture and voice messaging on iOS10. This used to crash earlier on iOS10. Refer Docs for more info
+Minor fixes and logging added
+
 Ver 1.1.7 
 __________________________
 didStartPlaying API reference removed. This internal API had a name conflict with Apple's private API causing app store submission to be rejected
