@@ -553,8 +553,20 @@
     [[HLArticleTagManager sharedInstance]clear];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
+        if(error){
+            FDMemLogger *logger = [FDMemLogger new];
+            [logger addMessage:@"Error while deleting all properties"];
+            [logger addErrorInfo:error.userInfo];
+            [logger upload];
+        }
         FDLog(@"Deleted all meta properties");
         [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
+            if(error){
+                FDMemLogger *logger = [FDMemLogger new];
+                [logger addMessage:@"Error while deleting all channels"];
+                [logger addErrorInfo:error.userInfo];
+                [logger upload];
+            }
             // Initiate a init
             if(doInit){
                 [self initWithConfig:config];
