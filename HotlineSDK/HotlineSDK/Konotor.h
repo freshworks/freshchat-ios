@@ -53,5 +53,14 @@
 + (BOOL) showNotificationDisabledAlert;
 + (void) setDisabledNotificationAlertShown:(BOOL) shown;
 
+//TODO: The following are indirectly called by KonotorDelegate and need to be removed.
++(void) MediaDownloadFailedNotification:(NSString *) messageID;
++(void) conversationsDownloadFailed;
++(void) conversationsDownloaded;
++(void) UploadFinishedNotification: (NSString *) messageID;
++(void) UploadFailedNotification: (NSString *) messageID;
+
+
+
 
 @end
