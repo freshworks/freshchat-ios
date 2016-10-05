@@ -541,7 +541,7 @@
     if([store objectForKey:HOTLINE_DEFAULTS_DOMAIN]){
         config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     }
-    config.agentAvatarEnabled =[store objectForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    config.agentAvatarEnabled =[store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
     config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];

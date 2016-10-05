@@ -44,7 +44,7 @@
 
 -(BOOL)checkPermissionKeyForiOS10:(NSString *)key{
     if ([FDUtilities isiOS10]) {
-        return [self.plist objectForKey:key];
+        return [self.plist objectForKey:key] ? YES : NO;
     }else{
         return YES;
     }

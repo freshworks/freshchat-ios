@@ -98,7 +98,7 @@
 -(UIFont *)navigationBarButtonFont;
 
 //StatusBarStyle
--(UIStatusBarStyle *)statusBarStyle;
+-(UIStatusBarStyle)statusBarStyle;
 
 
 //Messagecell & Conversation UI

@@ -236,7 +236,7 @@
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
 
-        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel.channelID];
+        NSInteger unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
 
