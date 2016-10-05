@@ -159,7 +159,7 @@
     if (error) {
         FDLog(@"Regex error : %@",error);
     }
-    NSArray<NSTextCheckingResult *> *matches =  [regex matchesInString:string options:NSRegularExpressionCaseInsensitive range:NSMakeRange(0, [string length])];
+    NSArray<NSTextCheckingResult *> *matches =  [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
     return [matches count] > 0;
 }
 @end
