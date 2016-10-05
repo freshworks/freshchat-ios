@@ -16,8 +16,8 @@
 @property (nonatomic, strong) NSString *formBoundary;
 @property (nonatomic, strong) NSMutableData *formData;
 @property (nonatomic, strong, readwrite) NSURL *baseURL;
-@property (nonatomic) NSStringEncoding *preferredEncoding;
-@property (nonatomic) NSData *crlf;
+@property (nonatomic) NSStringEncoding preferredEncoding;
+@property (nonatomic, strong) NSData *crlf;
 
 @end
 
