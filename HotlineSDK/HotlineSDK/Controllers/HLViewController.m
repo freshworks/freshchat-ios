@@ -19,7 +19,8 @@
         NSLog(@"Warning: Use Hotline controllers inside navigation controller");
     }
     else {
-        self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle];
+        self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle] == UIStatusBarStyleLightContent ?
+                                                                    UIBarStyleBlack : UIBarStyleDefault; // barStyle has a different enum but same values .. so hack to clear the update.
         self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
     }
 }
