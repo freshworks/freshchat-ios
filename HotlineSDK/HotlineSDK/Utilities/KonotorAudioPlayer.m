@@ -164,11 +164,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: YES ];
     
-   NSString *messageid = [KonotorAudioPlayer currentPlaying:nil set:NO];
-    
-    [Konotor performSelector:@selector(MediaStartedNotification:) withObject:
-     messageid];
-    
     gkIsAudioAlreadyPlaying = YES;
     
     return YES;
@@ -262,13 +257,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
 }
 
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    NSString *messageid = [KonotorAudioPlayer currentPlaying:nil set:NO];
-    
-    [Konotor performSelector:@selector(messageFinishedPlayingNotification:) withObject:
-     messageid];
-    
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
     gkSingletonPlayer = nil;
     gkIsAudioAlreadyPlaying = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];

@@ -152,14 +152,6 @@ __weak static id <KonotorDelegate> _delegate;
     
 }
 
-+(void) messageFinishedPlayingNotification:(NSString *) messageID
-{
-}
-
-+(void) MediaStartedNotification:(NSString *) messageID
-{
-}
-
 +(void) MediaDownloadFailedNotification:(NSString *) messageID
 {
     if([Konotor delegate])
