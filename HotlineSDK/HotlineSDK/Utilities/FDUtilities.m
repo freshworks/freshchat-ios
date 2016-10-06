@@ -17,6 +17,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
 #import "FDPlistManager.h"
+#import <AdSupport/ASIdentifierManager.h>
 
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
