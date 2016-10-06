@@ -22,10 +22,10 @@
 
 @interface HLArticlesController ()
 
-@property(nonatomic, strong)HLCategory *category;
-@property(nonatomic, strong)NSArray *articles;
+@property (nonatomic, strong)HLCategory *category;
+@property (nonatomic, strong)NSArray *articles;
 @property (strong, nonatomic) HLTheme *theme;
-@property FAQOptions *faqOptions;
+@property (nonatomic,strong) FAQOptions *faqOptions;
 
 @end
 
