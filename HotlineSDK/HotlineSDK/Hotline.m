@@ -226,7 +226,6 @@
 }
 
 -(void) updateConversationBannerMessage:(NSString *) message{
-    
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
 }
@@ -306,6 +305,7 @@
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
+        
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices fetchChannelsAndMessages:nil];
@@ -315,6 +315,7 @@
         [self updateAdId];
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
+        [self markPreviousUserUninstalledIfPresent];
     });
 }
 
@@ -547,17 +548,17 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
-    NSString* previousUserAlias = [FDUtilities getUserAlias];
+    NSString *previousUserAlias = [FDUtilities getUserAlias];
     
-    NSString* deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+    NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
-    [HLCoreServices trackUninstallForUser:previousUserAlias withCompletion:^(NSError *error) {
-        // Don't care about completion.. Proceed with clearUserData
-    }];
     
-    [[HotlineUser sharedInstance]clearUserData];
+    [[HotlineUser sharedInstance]clearUserData]; // This clear Sercure Store data as well.
     [[HLArticleTagManager sharedInstance]clear];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
+    
+    [self storePreviousUser:previousUserAlias inStore:store];
+    
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
         if(error){
             FDMemLogger *logger = [FDMemLogger new];
@@ -664,6 +665,24 @@
     if([self.pollingTimer isValid]){
         [self.pollingTimer invalidate];
         FDLog(@"Cancel off-screen message poller");
+    }
+}
+
+-(void)storePreviousUser:(NSString *) previousUserAlias inStore:(FDSecureStore *)secureStore{
+    [secureStore setObject:previousUserAlias forKey:HOTLINE_DEFAULTS_OLD_DEVICE_ID];
+}
+
+-(void)markPreviousUserUninstalledIfPresent{
+    static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *previousUserAlias = [store objectForKey:HOTLINE_DEFAULTS_OLD_DEVICE_ID];
+    if(previousUserAlias && !inProgress){
+        inProgress = true;
+        [HLCoreServices trackUninstallForUser:previousUserAlias withCompletion:^(NSError *error) {
+            if(!error){
+                [store removeObjectWithKey:HOTLINE_DEFAULTS_OLD_DEVICE_ID];
+            }
+        }];
     }
 }
 

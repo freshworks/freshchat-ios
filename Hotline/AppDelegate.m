@@ -80,9 +80,9 @@
     config.domain=@"mr.orange.konotor.com";
 
 //    prod 
-//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
-//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
-//    config.domain = @"app.hotline.io";
+    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
+    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
+    config.domain = @"app.hotline.io";
     
 //      config.domain = @"satheeshjm.pagekite.me";
 //      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
@@ -92,13 +92,17 @@
 //    config.appID = @"92124c8f-bd1a-4362-a390-72e76ef7125c";
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
     
-    config.displayFAQsAsGrid = NO;
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.name = @"Sid";
-    user.email = @"sid@freshdesk.com";
+    user.name = [@"User - " stringByAppendingString:dateString];
+    user.email = @"user@freshdesk.com";
     user.phoneNumber = @"9898989898";
     user.phoneCountryCode = @"+91";
     config.pollWhenAppActive = YES;
