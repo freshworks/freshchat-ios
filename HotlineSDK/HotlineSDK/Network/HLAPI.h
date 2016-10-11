@@ -24,6 +24,8 @@
 
 #define HOTLINE_API_DAU_PATH @"/app/services/app/%@/user/%@/activity"
 
+#define HOTLINE_API_UNINSTALLED_PATH @"/app/services/app/%@/user/%@/uninstalled"
+
 #define HOTLINE_API_USER_PROPERTIES_PATH @"/app/services/app/%@/user/%@"
 
 #define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/category"

@@ -25,4 +25,6 @@
 
 +(void)sendLatestUserActivity:(HLChannel *)channel;
 
++(NSURLSessionDataTask *)trackUninstallForUser:(NSString *) userAlias withCompletion:(void (^)(NSError *))completion;
+
 @end
