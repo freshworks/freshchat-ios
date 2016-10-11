@@ -669,18 +669,19 @@
 }
 
 -(void)storePreviousUser:(NSString *) previousUserAlias inStore:(FDSecureStore *)secureStore{
-    [secureStore setObject:previousUserAlias forKey:HOTLINE_DEFAULTS_OLD_DEVICE_ID];
+    [secureStore setObject:previousUserAlias forKey:HOTLINE_DEFAULTS_OLD_USER_ALIAS];
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *previousUserAlias = [store objectForKey:HOTLINE_DEFAULTS_OLD_DEVICE_ID];
+    NSString *previousUserAlias = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_ALIAS];
     if(previousUserAlias && !inProgress){
         inProgress = true;
         [HLCoreServices trackUninstallForUser:previousUserAlias withCompletion:^(NSError *error) {
             if(!error){
-                [store removeObjectWithKey:HOTLINE_DEFAULTS_OLD_DEVICE_ID];
+                [store removeObjectWithKey:HOTLINE_DEFAULTS_OLD_USER_ALIAS];
+                inProgress = false;
             }
         }];
     }
