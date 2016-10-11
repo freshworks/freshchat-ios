@@ -101,13 +101,16 @@
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
     
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.name = [@"User - " stringByAppendingString:dateString];
-    user.email = @"user@freshdesk.com";
-    user.phoneNumber = @"9898989898";
-    user.phoneCountryCode = @"+91";
+    if(!user.name){
+        user.name = [@"User - " stringByAppendingString:dateString];
+        user.email = @"user@freshdesk.com";
+        user.phoneNumber = @"9898989898";
+        user.phoneCountryCode = @"+91";
+        [[Hotline sharedInstance] updateUser:user];
+    }
     config.pollWhenAppActive = YES;
 
-    [[Hotline sharedInstance] updateUser:user];
+    
     
     [[Hotline sharedInstance] updateUserProperties:@{
                                                      @"Key1" : @"Value1",
