@@ -69,6 +69,8 @@ typedef struct {
 @property (nonatomic) NSInteger messagesDisplayedCount;
 @property (nonatomic) NSInteger loadmoreCount;
 
+@property (strong,nonatomic) FDYesNoPromptView *yesNoPrompt;
+
 @end
 
 @implementation FDMessageController
@@ -212,6 +214,15 @@ typedef struct {
             [self configureBackButtonWithGestureDelegate:self];
         }
     }
+    
+    
+    UIBarButtonItem *contactUsBarButton = [[FDBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_CONTACT_US_ICON]
+                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
+    self.parentViewController.navigationItem.rightBarButtonItem = contactUsBarButton;
+}
+
+-(void)contactUsButtonAction:(id)sender{
+    [self updateBottomViewWith:self.yesNoPrompt andHeight:80];
 }
 
 -(void)closeButtonAction:(id)sender{
@@ -266,6 +277,9 @@ typedef struct {
     
     self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
+    
+    self.yesNoPrompt = [[FDYesNoPromptView alloc]initWithDelegate:self andKey:LOC_ARTICLE_VOTE_PROMPT_PARTIAL];
+    self.yesNoPrompt.translatesAutoresizingMaskIntoConstraints = NO;
 
     NSDictionary *views;
     
@@ -415,7 +429,6 @@ typedef struct {
 
 -(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
     return ((message.messageId==nil)?[NSString stringWithFormat:@"%ul",message.createdMillis.intValue]:message.messageId);
-    //[FDUtilities getKeyForObject:message];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
@@ -443,16 +456,6 @@ typedef struct {
             }
         });
     }];
-}
-
--(void)messageCell:(FDMessageCell *)cell playButtonIsPressed:(id)sender{
-    //if recording
-    
-    //show prompt to continue of not
-    
-    //if cancel - play audio stop recording
-    
-    //
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -834,6 +837,15 @@ typedef struct {
             [self sendMessage];
         }
     }
+}
+
+-(void)yesButtonClicked:(id)sender{
+    FDLog(@"Yes button pressed, display the prompt view with stars");
+    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+}
+
+-(void)noButtonClicked:(id)sender{
+    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
 - (void) sendMessage{
