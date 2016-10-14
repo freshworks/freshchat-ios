@@ -275,7 +275,9 @@
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^ {
-                    completion(error);
+                    if (completion) {
+                        completion(error);
+                    }
                 });
             }];
         }
@@ -587,7 +589,12 @@
             // Initiate a init
             if(doInit){
                 [self initWithConfig:config completion:completion];
+            }else{
+                if (completion) {
+                    completion();
+                }
             }
+            
             [self updateDeviceTokenInternal:deviceToken];
         }];
     }];

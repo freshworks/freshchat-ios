@@ -64,7 +64,7 @@
     [self fetchWithCompletion:nil];
 }
 
-- (void) doFetch:(void(^)(NSError *error))completion{ // Empty function .. Needs to be implemented by subclasses
+- (void) doFetch:(void(^)(NSError *error))completion{
     FDLog("WARNING : Unimplemented DoFetch For %@", [[self class] debugDescription]);
 }
 
