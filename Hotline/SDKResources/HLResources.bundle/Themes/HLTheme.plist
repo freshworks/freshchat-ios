@@ -129,6 +129,8 @@
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>ChannelTitleFontSize</key>
 		<string>15.0f</string>
+		<key>cellBackgroundColor</key>
+		<string>b72f63</string>
 		<key>ChannelDescriptionFontColor</key>
 		<string>ABABAB</string>
 		<key>ChannelDescriptionFontName</key>
