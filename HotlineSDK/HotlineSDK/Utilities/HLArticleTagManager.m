@@ -14,10 +14,10 @@
 
 @interface HLArticleTagManager ()
 
-@property NSMutableDictionary *tagMap;
-@property dispatch_queue_t queue;
-@property NSString *storageFile;
-@property BOOL hasChanges;
+@property (nonatomic,strong)NSMutableDictionary *tagMap;
+@property (nonatomic)dispatch_queue_t queue;
+@property (nonatomic,strong)NSString *storageFile;
+@property (nonatomic)BOOL hasChanges;
 
 @end
 

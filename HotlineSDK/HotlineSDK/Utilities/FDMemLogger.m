@@ -17,7 +17,7 @@
 
 @interface FDMemLogger ()
 
-@property NSMutableArray *logList;
+@property (nonatomic, strong) NSMutableArray *logList;
 
 @end
 
