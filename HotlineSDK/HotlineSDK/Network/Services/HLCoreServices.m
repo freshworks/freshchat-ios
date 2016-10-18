@@ -282,4 +282,26 @@
     }
 }
 
++(NSURLSessionDataTask *)trackUninstallForUser:(NSString *) userAlias withCompletion:(void (^)(NSError *))completion{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userAlias];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            FDLog(@"User uninstalled call made");
+        }else{
+            FDLog(@"User uninstall call failed %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
+        }
+        if(completion){
+            completion(error);
+        }
+    }];
+    return task;
+}
+
 @end
