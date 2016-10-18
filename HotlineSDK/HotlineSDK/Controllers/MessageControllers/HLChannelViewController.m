@@ -24,7 +24,6 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "HLMessageServices.h"
-#import "FDChannelUpdater.h"
 #import "FDIconDownloader.h"
 #import "FDReachabilityManager.h"
 

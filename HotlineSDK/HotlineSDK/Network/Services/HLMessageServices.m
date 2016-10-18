@@ -25,7 +25,6 @@
 #import "FDChannelUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
-#import "FDLocalNotification.h"
 
 static HLNotificationHandler *handleUpdateNotification;
 
