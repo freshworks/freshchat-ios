@@ -42,15 +42,15 @@
     return task;
 }
 
--(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
-    NSString *adId = [FDUtilities getAdID]; // This can be a empty String
+-(NSDictionary *)getUserInfo{
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    NSString *adId = [FDUtilities getAdID];
     NSString *userAlias = [FDUtilities getUserAlias];
+    NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
     
-    if (userAlias == nil) {
+    if (userAlias) {
+        userInfo[@"alias"] = userAlias;
+    }else{
         FDMemLogger *memLogger = [[FDMemLogger alloc]init];
         [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
         if(!userAlias){
@@ -59,16 +59,31 @@
         [memLogger upload];
         return nil;
     }
+
+    if (deviceProps) {
+        userInfo[@"meta"] = deviceProps;
+    }
     
-    NSDictionary *info = @{
-                           @"user" : @{
-                                   @"alias" : userAlias,
-                                   @"meta"  : [FDUtilities deviceInfoProperties],
-                                   @"adId"  : adId
-                                   }
-                           };
+    if (adId) {
+        userInfo[@"adId"] = adId;
+    }
     
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
+    return  @{ @"user" : userInfo };
+}
+
+-(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
+    
+    NSDictionary *userInfo = [self getUserInfo];
+    
+    if (!userInfo) {
+        return nil;
+    }
+    
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:nil];
     
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
