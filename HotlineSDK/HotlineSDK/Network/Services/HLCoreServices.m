@@ -282,20 +282,27 @@
     }
 }
 
-+(NSURLSessionDataTask *)trackUninstallForUser:(NSString *) userAlias withCompletion:(void (^)(NSError *))completion{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userAlias];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
++(NSURLSessionDataTask *)trackUninstallForUser:(NSDictionary *) userInfo withCompletion:(void (^)(NSError *))completion{
+    NSString *appID = userInfo[@"appId"];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",userInfo[@"appKey"]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userInfo[@"userAlias"]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,userInfo[@"domain"]]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:url andMethod:HTTP_METHOD_PUT];
     [request setRelativePath:path andURLParams:@[appKey]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"User uninstalled call made");
         }else{
-            FDLog(@"User uninstall call failed %@", error);
-            FDLog(@"Response : %@", responseInfo.response);
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 404 ){
+                // user does not belong to this app ( or domain )
+                error = nil; // ignore error
+            }
+            else {
+                FDLog(@"User uninstall call failed %@", error);
+                FDLog(@"Response : %@", responseInfo.response);
+            }
         }
         if(completion){
             completion(error);

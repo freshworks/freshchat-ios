@@ -29,28 +29,28 @@
 }
 
 -(instancetype)initWithMethod:(NSString *)httpMethod{
-    self = [self initWithBaseURL:[self getHotlineURL]];
-    if (self) {
-        self.HTTPMethod = httpMethod;
-        if ([httpMethod isEqualToString:HTTP_METHOD_POST] || [httpMethod isEqualToString:HTTP_METHOD_PUT]) {
-            NSString *charset = (__bridge NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
-            [self setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
-        }
-    }
+    self = [self initWithBaseURL:[self getHotlineURL] andMethod:httpMethod];
+   
     return self;
 }
 
--(instancetype)initWithBaseURL:(NSURL *)baseURL{
+-(instancetype)initWithBaseURL:(NSURL *)baseURL andMethod:(NSString *)httpMethod{
     self = [super init];
     if (self) {
         self.URL = baseURL;
         self.baseURL = baseURL;
         self.timeoutInterval = 60;
         self.preferredEncoding = NSUTF8StringEncoding;
-
+        
         NSString *userAgent = [NSString stringWithFormat:@"%@ %@",[UIDevice currentDevice].systemName,[UIDevice currentDevice].systemVersion];
         [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
         [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
+        self.HTTPMethod = httpMethod;
+        if ([httpMethod isEqualToString:HTTP_METHOD_POST] || [httpMethod isEqualToString:HTTP_METHOD_PUT]) {
+            NSString *charset = (__bridge NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+            [self setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+        }
     }
     return self;
 }
@@ -70,7 +70,7 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
 }
 
 -(instancetype)initMultipartFormRequestWithBody:(void (^)(id <HLMultipartFormData> formData))block{
-    self = [self initWithBaseURL:[self getHotlineURL]];
+    self = [self initWithBaseURL:[self getHotlineURL] andMethod:HTTP_METHOD_POST];
     if (self) {
         
         self.crlf = [FDMultipartFormCRLF dataUsingEncoding:self.preferredEncoding];
@@ -79,8 +79,6 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
         self.formBoundary = FDCreateMultipartFormBoundary();
         
         self.formData = [[NSMutableData alloc]init];
-        
-        self.HTTPMethod = HTTP_METHOD_POST;
         
         [self setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", self.formBoundary] forHTTPHeaderField:@"Content-Type"];
 
