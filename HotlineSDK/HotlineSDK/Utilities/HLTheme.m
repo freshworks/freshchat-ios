@@ -508,7 +508,7 @@
 #pragma mark - Channel List View
 
 -(UIColor *)channelListCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.cellBackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelCellBackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
