@@ -70,6 +70,7 @@ typedef struct {
 @property (nonatomic) NSInteger loadmoreCount;
 
 @property (strong,nonatomic) FDYesNoPromptView *yesNoPrompt;
+@property (strong, nonatomic) FDCSATView *CSATView;
 
 @end
 
@@ -839,9 +840,23 @@ typedef struct {
     }
 }
 
+
+//Loat CSATView when needed
+-(FDCSATView *)CSATView{
+    if (!_CSATView) {
+        _CSATView = [[FDCSATView alloc]initWithController:self andDelegate:self];
+    }
+    return _CSATView;
+}
+
 -(void)yesButtonClicked:(id)sender{
     FDLog(@"Yes button pressed, display the prompt view with stars");
+    [self.CSATView show];
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+}
+
+-(void)submittedCSATWithInfo:(NSDictionary *)info{
+    NSLog(@"CSAT Info :%@", info);
 }
 
 -(void)noButtonClicked:(id)sender{

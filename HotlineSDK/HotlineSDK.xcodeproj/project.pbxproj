@@ -107,6 +107,8 @@
 		3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLArticleUtil.m */; };
 		3C4CEDBA1D1C2FDD000EE1AE /* HLArticleTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4CEDB91D1C2FDD000EE1AE /* HLArticleTagManager.m */; };
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
+		CE274D041DB78E5C00733EDB /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE274D021DB78E5C00733EDB /* HCSStarRatingView.m */; };
+		CED138481DB4D55200404686 /* FDCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* FDCSATView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -326,6 +328,10 @@
 		CE0C7C6C1D9539A100F545AE /* FDPlistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPlistManager.h; sourceTree = "<group>"; };
 		CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPlistManager.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE274D011DB78E5C00733EDB /* HCSStarRatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCSStarRatingView.h; sourceTree = "<group>"; };
+		CE274D021DB78E5C00733EDB /* HCSStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCSStarRatingView.m; sourceTree = "<group>"; };
+		CED138461DB4D55200404686 /* FDCSATView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCSATView.h; sourceTree = "<group>"; };
+		CED138471DB4D55200404686 /* FDCSATView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCSATView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -368,6 +374,7 @@
 		35591B791B9EDD0700BC0B60 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				CE274D001DB78E5C00733EDB /* HCSStarRatingView-1.4.5 */,
 				354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.0 */,
 				35B2EFCE1D000EE80014867F /* Reachability */,
 			);
@@ -594,6 +601,8 @@
 				35B2EF671D000E620014867F /* HLEmptyResultView.m */,
 				35B2EF681D000E620014867F /* HLGridViewCell.h */,
 				35B2EF691D000E620014867F /* HLGridViewCell.m */,
+				CED138461DB4D55200404686 /* FDCSATView.h */,
+				CED138471DB4D55200404686 /* FDCSATView.m */,
 				35B2EF6A1D000E620014867F /* InputToolbarView */,
 				35B2EF6F1D000E620014867F /* MessageCell */,
 				35B2EF781D000E620014867F /* PromptView */,
@@ -718,6 +727,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		CE274D001DB78E5C00733EDB /* HCSStarRatingView-1.4.5 */ = {
+			isa = PBXGroup;
+			children = (
+				CE274D011DB78E5C00733EDB /* HCSStarRatingView.h */,
+				CE274D021DB78E5C00733EDB /* HCSStarRatingView.m */,
+			);
+			path = "HCSStarRatingView-1.4.5";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -829,6 +847,7 @@
 				CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */,
 				35B2EFC01D000E620014867F /* FDLabel.m in Sources */,
 				35B2EF971D000E620014867F /* KonotorCustomProperty.m in Sources */,
+				CE274D041DB78E5C00733EDB /* HCSStarRatingView.m in Sources */,
 				35B2EF931D000E620014867F /* HLArticle.m in Sources */,
 				35B2EFA71D000E620014867F /* HLMessageServices.m in Sources */,
 				35B2EFBD1D000E620014867F /* FDButton.m in Sources */,
@@ -887,6 +906,7 @@
 				35B2EF8F1D000E620014867F /* HotlineUser.m in Sources */,
 				35B2EF921D000E620014867F /* FDIndex.m in Sources */,
 				35B2EFAF1D000E620014867F /* FDReachabilityManager.m in Sources */,
+				CED138481DB4D55200404686 /* FDCSATView.m in Sources */,
 				35B2EF911D000E620014867F /* FDArticleContent.m in Sources */,
 				35B2EFC31D000E620014867F /* HLEmptyResultView.m in Sources */,
 				35B2EFBF1D000E620014867F /* FDTableViewCell.m in Sources */,
