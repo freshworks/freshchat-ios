@@ -87,41 +87,65 @@
         [FDIndex load];
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
+        [self registerAppNotificationListeners];
     }
     return self;
 }
 
 -(void)networkReachable{
-    [self registerUser];
+    [self registerUser:nil];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
+    [self initWithConfig:config completion:nil];
+}
+
+-(void)initWithConfig:(HotlineConfig *)config completion:(void(^)(NSError *error))completion{
+    HotlineConfig *processedConfig = [self processConfig:config];
     
-    [self checkMediaPermissions:config];
+    self.config = processedConfig;
     
+    if ([self hasUpdatedConfig:processedConfig]) {
+        [self cleanUpData:^{
+            [self updateConfig:processedConfig andRegisterUser:completion];
+        }];
+    }
+    else {
+        [self updateConfig:processedConfig andRegisterUser:completion];
+    }
+}
+
+-(HotlineConfig *)processConfig:(HotlineConfig *)config{
     config.appID  = trimString(config.appID);
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
 
-    self.config = config;
-    
-    if ([self hasUpdatedConfig:config]) {
-        [self cleanUpData:^{
-            [self initConfigAndUser:config];
-        }];
-    }
-    else {
-        [self initConfigAndUser:config];
-    }
-}
-
--(void)initConfigAndUser:(HotlineConfig *)config{
-    [self updateConfig:config];
-    [self registerUser];
-    [self registerAppNotificationListeners];
     if(config.pollWhenAppActive){
         [self startPoller];
     }
+
+    [self checkMediaPermissions:config];
+    return config;
+}
+
+-(void)updateConfig:(HotlineConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    if (config) {
+        [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
+        [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
+        [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
+        [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+        [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+        [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+        [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+        [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+        [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+        [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+        [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
+        [[HLTheme sharedInstance]setThemeName:config.themeName];
+    }
+    
+    [self registerUser:completion];
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
@@ -207,24 +231,6 @@
     }
 }
 
--(void)updateConfig:(HotlineConfig *)config{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    if (config) {
-        [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
-        [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
-        [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
-        [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
-        [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
-        [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
-        [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
-        [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-        [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
-        [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-        [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
-        [[HLTheme sharedInstance]setThemeName:config.themeName];
-    }
-}
-
 -(void) updateConversationBannerMessage:(NSString *) message{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
@@ -259,7 +265,7 @@
     }
 }
 
--(void)registerUser{
+-(void)registerUser:(void(^)(NSError *error))completion{
     dispatch_async(dispatch_get_main_queue(),^{
         BOOL isUserRegistered = [FDUtilities isUserRegistered];
         if (!isUserRegistered) {
@@ -267,7 +273,17 @@
                 if (!error) {
                     [self performPendingTasks];
                 }
+                
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    if (completion) {
+                        completion(error);
+                    }
+                });
             }];
+        }else{
+            if (completion) {
+                completion(nil);
+            }
         }
     });
 }
@@ -323,7 +339,7 @@
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *storedAdId = [secureStore objectForKey:HOTLINE_DEFAULTS_ADID];
     NSString *adId = [FDUtilities getAdID];
-    if(adId && ![adId isEqualToString:storedAdId]){
+    if(adId && adId.length > 0 && ![adId isEqualToString:storedAdId]){
         [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
         [KonotorCustomProperty createNewPropertyForKey:@"adId" WithValue:adId isUserProperty:YES];
     }
@@ -576,12 +592,14 @@
             }
             // Initiate a init
             if(doInit){
-                [self initWithConfig:config];
+                [self initWithConfig:config completion:completion];
+            }else{
+                if (completion) {
+                    completion();
+                }
             }
+            
             [self updateDeviceTokenInternal:deviceToken];
-            if(completion){
-                completion();
-            }
         }];
     }];
     
