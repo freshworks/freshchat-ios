@@ -280,6 +280,10 @@
                     }
                 });
             }];
+        }else{
+            if (completion) {
+                completion(nil);
+            }
         }
     });
 }

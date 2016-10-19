@@ -64,7 +64,7 @@
         userInfo[@"meta"] = deviceProps;
     }
     
-    if (adId) {
+    if (adId && adId.length > 0) {
         userInfo[@"adId"] = adId;
     }
     
@@ -83,7 +83,16 @@
         return nil;
     }
     
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:nil];
+    
+    NSError *error = nil;
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
+    
+    if (error) {
+        FDMemLogger *logger = [FDMemLogger new];
+        [logger addMessage:@"Error while serializing user information"];
+        [logger addErrorInfo:error.userInfo];
+        [logger upload];
+    }
     
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
