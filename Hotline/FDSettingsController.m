@@ -235,8 +235,9 @@
 }
 
 -(void)testNotification:(id)sender{
+    NSNumber *channelId = @1213;
     [[Hotline sharedInstance] handleRemoteNotification:@{
-                                                                  @"kon_c_ch_id" : @200,
+                                                                  @"kon_c_ch_id" : channelId,
                                                                       @"aps" : @{
                                                                           @"alert" : @"Sample Test Message"
                                                                           },

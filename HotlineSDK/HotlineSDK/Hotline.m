@@ -335,7 +335,7 @@
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *storedAdId = [secureStore objectForKey:HOTLINE_DEFAULTS_ADID];
     NSString *adId = [FDUtilities getAdID];
-    if(adId && ![adId isEqualToString:storedAdId]){
+    if(adId && adId.length > 0 && ![adId isEqualToString:storedAdId]){
         [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
         [KonotorCustomProperty createNewPropertyForKey:@"adId" WithValue:adId isUserProperty:YES];
     }
