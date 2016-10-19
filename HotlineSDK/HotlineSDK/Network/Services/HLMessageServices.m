@@ -343,7 +343,8 @@ static HLNotificationHandler *handleUpdateNotification;
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if (!error && statusCode == 201) {
 
                 if (!conversation) {
                     NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];

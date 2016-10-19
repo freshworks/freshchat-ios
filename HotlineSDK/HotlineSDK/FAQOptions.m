@@ -12,8 +12,8 @@
 
 @interface FAQOptions()
 
-@property (nonatomic) NSArray *filterByTags;
-@property (nonatomic) NSString *tagViewTitle;
+@property (nonatomic, strong) NSArray *filterByTags;
+@property (nonatomic, strong) NSString *tagViewTitle;
 
 @end
 

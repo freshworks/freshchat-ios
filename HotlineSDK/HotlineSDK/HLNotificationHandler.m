@@ -107,7 +107,7 @@
 +(BOOL) areNotificationsEnabled{
 #if (TARGET_OS_SIMULATOR)
     return NO;
-#endif
+#else
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){
         UIUserNotificationSettings *noticationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         if (!noticationSettings || (noticationSettings.types == UIUserNotificationTypeNone)) {
@@ -120,6 +120,7 @@
         return YES;
     }
     return NO;
+#endif
 }
 
 @end
