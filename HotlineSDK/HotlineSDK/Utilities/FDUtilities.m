@@ -92,12 +92,8 @@
         }
         else {
             userAlias = [FDStringUtil generateUUID];
-            FDLog(@"New Hotline User");
         }
         [FDUtilities storeUserAlias:userAlias];
-    }
-    else {
-        FDLog(@"Existing Konotor user");
     }
     userAlias = [persistedStore objectForKey:uuIdLookupKey];
     return userAlias;
@@ -107,8 +103,6 @@
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     [persistedStore setObject:alias forKey:[FDUtilities getUUIDLookupKey]];
 }
-
-
 
 +(NSString *) getKeyForObject:(NSObject *) object {
     if(object){
