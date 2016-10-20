@@ -456,7 +456,10 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
-
+-(UIColor *)messageUIBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
 
 #pragma mark - Grid View
 -(UIColor *)gridViewCellBorderColor{
@@ -505,7 +508,7 @@
 #pragma mark - Channel List View
 
 -(UIColor *)channelListCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.cellBackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelCellBackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
