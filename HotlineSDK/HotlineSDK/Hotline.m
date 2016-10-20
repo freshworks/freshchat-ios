@@ -674,7 +674,7 @@
             FDLog(@"Triggering poller");
         }
         else {
-            FDLog(@"Not fetching updates .. No user messages present");
+            FDLog(@"POLLER: Not fetching updates .. No user messages present");
         }
     }];
 }
