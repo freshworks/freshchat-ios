@@ -14,10 +14,15 @@
 #import "HLChannelViewController.h"
 #import "FDMessageController.h"
 #import "HLContainerController.h"
+#import "FDMemLogger.h"
+#import "FDChannelUpdater.h"
+#import "FDMessagesUpdater.h"
+#import "HLMessageServices.h"
 
 @interface HLNotificationHandler ()
 
 @property (nonatomic, strong) FDNotificationBanner *banner;
+@property (nonatomic, strong) NSNumber *marketingID;
 
 @end
 
@@ -30,6 +35,81 @@
         self.banner.delegate = self;
     }
     return self;
+}
+
++(BOOL)isHotlineNotification:(NSDictionary *)info{
+    NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
+    return ([payload[@"source"] isEqualToString:@"konotor"] || [payload[@"source"] isEqualToString:@"hotline"]);
+}
+
+-(void)handleNotification:(NSDictionary *)info appState:(UIApplicationState)appState{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
+
+        [[[FDMessagesUpdater alloc]init]resetTime];
+        
+        NSNumber *channelID = nil;
+        
+        if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
+            channelID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID] integerValue]);
+        }else{
+            return;
+        }
+        
+        if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID]) {
+            self.marketingID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
+        }
+        
+        NSString *message = [payload valueForKeyPath:@"aps.alert"];
+        
+        HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+        
+        if (!channel){
+            [[[FDChannelUpdater alloc] init]resetTime];
+            [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
+                if(!error){
+                    NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+                    [mContext performBlock:^{
+                        HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
+                        if(ch){
+                            [self handleNotification:ch withMessage:message andState:appState];
+                        }
+                    }];
+                }
+            }];
+        }
+        else {
+            [HLMessageServices fetchChannelsAndMessages:nil];
+            [self handleNotification:channel withMessage:message andState:appState];
+        }
+    });
+}
+
++(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
+    NSDictionary *payload = @{};
+    if (info) {
+        if ([info isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *launchOptions = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+            if (launchOptions) {
+                if ([launchOptions isKindOfClass:[NSDictionary class]]) {
+                    payload = launchOptions;
+                }else{
+                    FDMemLogger *memlogger = [[FDMemLogger alloc]init];
+                    [memlogger addMessage:[NSString stringWithFormat:@"payload for key UIApplicationLaunchOptionsRemoteNotificationKey -> %@ ",
+                                           launchOptions]];
+                    [memlogger upload];
+                }
+            }else{
+                payload = info;
+            }
+        }else{
+            FDMemLogger *memlogger = [[FDMemLogger alloc]init];
+            [memlogger addMessage:[NSString stringWithFormat:@"Invalid push notification payload -> %@ ", info]];
+            [memlogger upload];
+        }
+    }
+    
+    return payload;
 }
 
 -(void) showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message{
@@ -46,6 +126,7 @@
 
 - (void) handleNotification :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
     if (state == UIApplicationStateInactive) {
+        [HLMessageServices markMarketingMessageAsClicked:self.marketingID];
         [self launchMessageControllerOfChannel:channel];
     }
     else {
@@ -54,6 +135,7 @@
 }
 
 -(void)notificationBanner:(FDNotificationBanner *)banner bannerTapped:(id)sender{
+    [HLMessageServices markMarketingMessageAsClicked:self.marketingID];
     [self launchMessageControllerOfChannel:banner.currentChannel];
 }
 

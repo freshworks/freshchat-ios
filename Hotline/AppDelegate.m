@@ -143,10 +143,13 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"Failed to register remote notification  %@", error);
+    if (error.code != 3010) { //Checks for simulator
+        NSLog(@"Device failed to register remote notification  %@", error);
+    }
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
+    NSLog(@"Push recieved :%@", info);
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
         [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }

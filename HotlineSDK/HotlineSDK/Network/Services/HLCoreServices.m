@@ -100,10 +100,25 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
-        if (!error && statusCode == 201) {
-            [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-            FDLog(@"User registered successfully 👍");
-            if (handler) handler(nil);
+        if (!error) {
+            
+            FDLog(@" *** User registration status *** ");
+            
+            if (statusCode == 201 || statusCode == 304) {
+                
+                if (statusCode == 201) FDLog(@"New user created successfully");
+                
+                if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
+                
+                [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                
+                if (handler) handler(nil);
+                
+            }else{
+                FDLog(@"Failed with wrong status code");
+                if (handler) handler([NSError new]);
+            }
+            
         }else{
             FDLog(@"User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
@@ -261,8 +276,14 @@
     
     NSMutableDictionary *info = [NSMutableDictionary new];
     
-    if (message.belongsToConversation.conversationAlias) {
+    
+    NSString *conversationAlias = message.belongsToConversation.conversationAlias;
+    
+    if (conversationAlias && [conversationAlias longLongValue] > 0) {
         info[@"conversationId"] = message.belongsToConversation.conversationAlias;
+    }else{
+        FDLog(@"*** Do not update read reciept for marketing campaign message ***");
+        return nil;
     }
     
     if (message.belongsToChannel.channelID) {
@@ -281,9 +302,9 @@
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Successful conversation request")
+            FDLog(@"*** Read reciept : Updated Successfully ***")
         }else{
-            FDLog(@"Could not make register user conversation call %@", error);
+            FDLog(@"** Read reciept : failed *** %@ ", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
     }];

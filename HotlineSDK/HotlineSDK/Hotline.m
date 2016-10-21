@@ -492,73 +492,16 @@
     [self registerDeviceToken];
 }
 
--(NSDictionary *)getPayloadFromNotificationInfo:(NSDictionary *)info{
-    NSDictionary *payload = @{};
-    if (info) {
-        if ([info isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *launchOptions = info[@"UIApplicationLaunchOptionsRemoteNotificationKey"];
-            if (launchOptions) {
-                if ([launchOptions isKindOfClass:[NSDictionary class]]) {
-                    payload = launchOptions;
-                }else{
-                    FDMemLogger *memlogger = [[FDMemLogger alloc]init];
-                    [memlogger addMessage:[NSString stringWithFormat:@"     payload for key UIApplicationLaunchOptionsRemoteNotificationKey -> %@ ",
-                                           launchOptions]];
-                    [memlogger upload];
-                }
-            }else{
-                payload = info;
-            }
-        }else{
-            FDMemLogger *memlogger = [[FDMemLogger alloc]init];
-            [memlogger addMessage:[NSString stringWithFormat:@"Invalid push notification payload -> %@ ", info]];
-            [memlogger upload];
-        }
-    }
-    
-    return payload;
-}
-
 -(BOOL)isHotlineNotification:(NSDictionary *)info{
-    NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
-    return ([payload[@"source"] isEqualToString:@"konotor"] || [payload[@"source"] isEqualToString:@"hotline"]);
+    return [HLNotificationHandler isHotlineNotification:info];
 }
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     if(![self isHotlineNotification:info]){
         return;
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSDictionary *payload = [self getPayloadFromNotificationInfo:info];
-        FDLog(@"Push Recieved :%@", payload);
-        
-        [[[FDMessagesUpdater alloc]init]resetTime];
-        
-        NSNumber *channelID = @([payload[@"kon_c_ch_id"] integerValue]);
-        NSString *message = [payload valueForKeyPath:@"aps.alert"];
-        HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-        
-        if (!channel){
-            [[[FDChannelUpdater alloc] init]resetTime];
-            [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
-                if(!error){
-                    NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-                    [mContext performBlock:^{
-                        HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
-                        if(ch){
-                            self.notificationHandler = [[HLNotificationHandler alloc] init];
-                            [self.notificationHandler handleNotification:ch withMessage:message andState:appState];
-                        }
-                    }];
-                }
-            }];
-        }
-        else {
-            [HLMessageServices fetchChannelsAndMessages:nil];
-            self.notificationHandler = [[HLNotificationHandler alloc] init];
-            [self.notificationHandler handleNotification:channel withMessage:message andState:appState];
-        }
-    });
+    self.notificationHandler = [[HLNotificationHandler alloc]init];
+    [self.notificationHandler handleNotification:info appState:appState];
 }
 
 -(void)clearUserData{
@@ -693,7 +636,7 @@
             FDLog(@"Triggering poller");
         }
         else {
-            FDLog(@"Not fetching updates .. No user messages present");
+            FDLog(@"POLLER: Not fetching updates .. No user messages present");
         }
         
     }];
