@@ -126,6 +126,7 @@
 
 - (void) handleNotification :(HLChannel *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
     if (state == UIApplicationStateInactive) {
+        [HLMessageServices markMarketingMessageAsClicked:self.marketingID];
         [self launchMessageControllerOfChannel:channel];
     }
     else {

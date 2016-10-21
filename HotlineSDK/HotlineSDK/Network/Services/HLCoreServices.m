@@ -279,7 +279,7 @@
     
     NSString *conversationAlias = message.belongsToConversation.conversationAlias;
     
-    if (conversationAlias && [conversationAlias integerValue] > 0) {
+    if (conversationAlias && [conversationAlias longLongValue] > 0) {
         info[@"conversationId"] = message.belongsToConversation.conversationAlias;
     }else{
         FDLog(@"*** Do not update read reciept for marketing campaign message ***");
