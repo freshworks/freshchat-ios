@@ -400,9 +400,9 @@ static HLNotificationHandler *handleUpdateNotification;
     [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
+            FDLog(@"*** Marked as Clicked *** Marketing campaign message with ID  %@", marketingId);
         }else{
-            FDLog(@"Failed to register marketing message click event to server");
+            FDLog(@"Failed to register marketing message click event to server : %@", error);
         }
     }];
 }
@@ -429,7 +429,7 @@ static HLNotificationHandler *handleUpdateNotification;
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         [context performBlock:^{
             if (!error) {
-                FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+                FDLog(@"*** Marked as Seen *** Marketing campaign message with ID : %@ ", marketingId);
             }else{
                 FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
                 [message markAsUnread];

@@ -784,9 +784,6 @@ typedef struct {
     }
     else if(button.actionUrlString!=nil){
         @try{
-            if (cell.messageData.marketingId.integerValue != 0) {
-                [HLMessageServices markMarketingMessageAsClicked:cell.messageData.marketingId];
-            }
             NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
             if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
                 dispatch_async(dispatch_get_main_queue(), ^{

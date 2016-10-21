@@ -149,6 +149,7 @@
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
+    NSLog(@"Push recieved :%@", info);
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
         [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
