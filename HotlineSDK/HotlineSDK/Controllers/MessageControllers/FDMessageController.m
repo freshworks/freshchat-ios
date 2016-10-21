@@ -31,7 +31,6 @@
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
-#import "FDLocalNotification.h"
 #import "KonotorAudioRecorder.h"
 
 typedef struct {
