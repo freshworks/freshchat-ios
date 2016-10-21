@@ -251,6 +251,7 @@ typedef struct {
     [bannerMessageView addSubview:bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
+    self.tableView.backgroundColor = [[HLTheme sharedInstance]messageUIBackgroundColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
