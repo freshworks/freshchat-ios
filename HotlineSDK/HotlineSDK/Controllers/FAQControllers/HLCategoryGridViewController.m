@@ -13,7 +13,6 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "FDRanking.h"
-#import "HLArticlesController.h"
 #import "FDLocalNotification.h"
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"

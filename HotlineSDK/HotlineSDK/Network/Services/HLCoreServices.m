@@ -42,15 +42,15 @@
     return task;
 }
 
--(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
-    NSString *adId = [FDUtilities getAdID]; // This can be a empty String
+-(NSDictionary *)getUserInfo{
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    NSString *adId = [FDUtilities getAdID];
     NSString *userAlias = [FDUtilities getUserAlias];
+    NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
     
-    if (userAlias == nil) {
+    if (userAlias) {
+        userInfo[@"alias"] = userAlias;
+    }else{
         FDMemLogger *memLogger = [[FDMemLogger alloc]init];
         [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
         if(!userAlias){
@@ -59,16 +59,40 @@
         [memLogger upload];
         return nil;
     }
+
+    if (deviceProps) {
+        userInfo[@"meta"] = deviceProps;
+    }
     
-    NSDictionary *info = @{
-                           @"user" : @{
-                                   @"alias" : userAlias,
-                                   @"meta"  : [FDUtilities deviceInfoProperties],
-                                   @"adId"  : adId
-                                   }
-                           };
+    if (adId && adId.length > 0) {
+        userInfo[@"adId"] = adId;
+    }
     
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
+    return  @{ @"user" : userInfo };
+}
+
+-(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
+    
+    NSDictionary *userInfo = [self getUserInfo];
+    
+    if (!userInfo) {
+        return nil;
+    }
+    
+    
+    NSError *error = nil;
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
+    
+    if (error) {
+        FDMemLogger *logger = [FDMemLogger new];
+        [logger addMessage:@"Error while serializing user information"];
+        [logger addErrorInfo:error.userInfo];
+        [logger upload];
+    }
     
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
@@ -76,10 +100,25 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
-        if (!error && statusCode == 201) {
-            [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-            FDLog(@"User registered successfully 👍");
-            if (handler) handler(nil);
+        if (!error) {
+            
+            FDLog(@" *** User registration status *** ");
+            
+            if (statusCode == 201 || statusCode == 304) {
+                
+                if (statusCode == 201) FDLog(@"New user created successfully");
+                
+                if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
+                
+                [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                
+                if (handler) handler(nil);
+                
+            }else{
+                FDLog(@"Failed with wrong status code");
+                if (handler) handler([NSError new]);
+            }
+            
         }else{
             FDLog(@"User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
@@ -237,8 +276,14 @@
     
     NSMutableDictionary *info = [NSMutableDictionary new];
     
-    if (message.belongsToConversation.conversationAlias) {
+    
+    NSString *conversationAlias = message.belongsToConversation.conversationAlias;
+    
+    if (conversationAlias && [conversationAlias longLongValue] > 0) {
         info[@"conversationId"] = message.belongsToConversation.conversationAlias;
+    }else{
+        FDLog(@"*** Do not update read reciept for marketing campaign message ***");
+        return nil;
     }
     
     if (message.belongsToChannel.channelID) {
@@ -257,9 +302,9 @@
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Successful conversation request")
+            FDLog(@"*** Read reciept : Updated Successfully ***")
         }else{
-            FDLog(@"Could not make register user conversation call %@", error);
+            FDLog(@"** Read reciept : failed *** %@ ", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
     }];
