@@ -276,8 +276,14 @@
     
     NSMutableDictionary *info = [NSMutableDictionary new];
     
-    if (message.belongsToConversation.conversationAlias) {
+    
+    NSString *conversationAlias = message.belongsToConversation.conversationAlias;
+    
+    if (conversationAlias && [conversationAlias longLongValue] > 0) {
         info[@"conversationId"] = message.belongsToConversation.conversationAlias;
+    }else{
+        FDLog(@"*** Do not update read reciept for marketing campaign message ***");
+        return nil;
     }
     
     if (message.belongsToChannel.channelID) {
@@ -296,9 +302,9 @@
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Successful conversation request")
+            FDLog(@"*** Read reciept : Updated Successfully ***")
         }else{
-            FDLog(@"Could not make register user conversation call %@", error);
+            FDLog(@"** Read reciept : failed *** %@ ", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
     }];
