@@ -313,7 +313,7 @@
         }
     }
     else {
-        FDLog(@"WARNING: deviceToken is not being updated now");
+        FDLog(@"*** Not updating device token *** Register user first");
     }
 }
 
@@ -475,20 +475,28 @@
 #pragma mark Push notifications
 
 -(void)updateDeviceToken:(NSData *)deviceToken {
-   
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
-    [self storeDeviceToken:deviceTokenString];
-    [self registerDeviceToken];
+    if ([self isDeviceTokenUpdated:deviceTokenString]) {
+        [self storeDeviceToken:deviceTokenString];
+        [self registerDeviceToken];
+    }
 }
 
 -(void) storeDeviceToken:(NSString *) deviceTokenString{
-     FDSecureStore *store = [FDSecureStore sharedInstance];
-    if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
+    if (deviceTokenString) {
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
+    }
+}
+
+-(BOOL)isDeviceTokenUpdated:(NSString *)newToken{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    if (newToken && ![newToken isEqualToString:@""]) {
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-        if(![storedDeviceToken isEqualToString:deviceTokenString]){
-            [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
-        }
+        return (storedDeviceToken == nil || ![storedDeviceToken isEqualToString:newToken]);
+    }else{
+        return NO;
     }
 }
 
