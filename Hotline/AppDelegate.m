@@ -26,7 +26,6 @@
     if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
-    NSLog(@"launchoptions :%@", launchOptions);
     [Fabric with:@[[Crashlytics class]]];
     return YES;
 }
