@@ -477,10 +477,11 @@
 -(void)updateDeviceToken:(NSData *)deviceToken {
    
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
-    [self updateDeviceTokenInternal:deviceTokenString];
+    [self storeDeviceToken:deviceTokenString];
+    [self registerDeviceToken];
 }
 
--(void) updateDeviceTokenInternal:(NSString *) deviceTokenString{
+-(void) storeDeviceToken:(NSString *) deviceTokenString{
      FDSecureStore *store = [FDSecureStore sharedInstance];
     if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
@@ -489,7 +490,6 @@
             [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         }
     }
-    [self registerDeviceToken];
 }
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info{
@@ -521,16 +521,17 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
-    
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
     }
   
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
-    
-    [[HotlineUser sharedInstance]clearUserData]; // This clear Sercure Store data as well.
+    [[HotlineUser sharedInstance]clearUserData];
     [[HLArticleTagManager sharedInstance]clear];
+    
+    //Clear secure store
+    [[FDSecureStore sharedInstance]clearStoreData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     
     if(previousUser) {
@@ -560,8 +561,9 @@
                     completion();
                 }
             }
-            
-            [self updateDeviceTokenInternal:deviceToken];
+            if (deviceToken) {
+                [self storeDeviceToken:deviceToken];
+            }
         }];
     }];
     
