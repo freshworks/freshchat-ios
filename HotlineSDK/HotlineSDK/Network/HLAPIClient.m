@@ -7,6 +7,7 @@
 //
 
 #import "HLAPIClient.h"
+#import "FDMemLogger.h"
 
 @interface HLAPIClient ()
 
@@ -34,11 +35,16 @@
     return self;
 }
 
--(NSURLSessionDataTask *)request:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler{
+-(NSURLSessionDataTask *)request:(HLServiceRequest *)request withHandler:(HLNetworkCallback)handler{
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
         if (statusCode >= 400) {
+            
+            FDMemLogger *logger = [FDMemLogger new];
+            [logger addErrorInfo:@{ @"request" : request.toString, @"response" : responseInfo.toString}];
+            [logger upload];
+            
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
         }else{

@@ -83,15 +83,11 @@
         return nil;
     }
     
-    
     NSError *error = nil;
     NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
     
     if (error) {
-        FDMemLogger *logger = [FDMemLogger new];
-        [logger addMessage:@"Error while serializing user information"];
-        [logger addErrorInfo:error.userInfo];
-        [logger upload];
+        FDLog(@"Error while serializing user information");
     }
     
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
