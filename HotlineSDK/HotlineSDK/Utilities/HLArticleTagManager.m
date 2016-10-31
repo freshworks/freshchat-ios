@@ -51,7 +51,7 @@
             }
             else {
                 self.hasChanges = NO;
-                FDLog(@"Saved file with contents %@", self.tagMap);
+                FDLog(@"Tags: %d files saved", (int)self.tagMap.count);
             }
         }
     });
@@ -63,7 +63,7 @@
             NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
             if(data){
                 self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                 FDLog(@"loaded file with contents %@", self.tagMap);
+                 FDLog(@"Tags: %d files loaded", (int)self.tagMap.count);
             }
         }
     });
