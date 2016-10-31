@@ -90,9 +90,8 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     FDLog(@"Going to upload : %@" , log);
     NSData *postData = [log dataUsingEncoding:NSUTF8StringEncoding];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:LOGGER_API]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:LOGGER_API] andMethod:HTTP_METHOD_POST];
     request.HTTPBody = postData;
-    request.HTTPMethod = HTTP_METHOD_POST;
     [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
             [self reset];
