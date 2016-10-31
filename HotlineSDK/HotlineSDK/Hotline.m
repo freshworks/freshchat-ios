@@ -209,13 +209,27 @@
 
 -(void)cleanUpData:(void (^)())completion{
     KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
+    NSDictionary *previousUser = [self getPreviousUserInfo];
     [dataManager deleteAllSolutions:^(NSError *error) {
         FDLog(@"All solutions deleted");
         [dataManager deleteAllIndices:^(NSError *error) {
             FDLog(@"Index cleared");
-            [self clearUserDataWithCompletion:completion andInit:false];
+            [self clearUserDataWithCompletion:completion init:false andOldUser:previousUser];
         }];
     }];
+}
+
+-(NSDictionary *) getPreviousUserInfo{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSDictionary *previousUserInfo = nil;
+    if( [FDUtilities isUserRegistered] && [store objectForKey:HOTLINE_DEFAULTS_APP_ID] && [store objectForKey:HOTLINE_DEFAULTS_APP_KEY]){
+        previousUserInfo =  @{ @"appId" : [store objectForKey:HOTLINE_DEFAULTS_APP_ID],
+                               @"appKey" : [store objectForKey:HOTLINE_DEFAULTS_APP_KEY],
+                               @"userAlias" :[FDUtilities getUserAlias],
+                               @"domain" : [store objectForKey:HOTLINE_DEFAULTS_DOMAIN]
+                               };
+    }
+    return previousUserInfo;
 }
 
 -(BOOL)hasUpdatedConfig:(HotlineConfig *)config{
@@ -299,7 +313,7 @@
         }
     }
     else {
-        FDLog(@"WARNING: deviceToken is not being updated now");
+        FDLog(@"*** Not updating device token *** Register user first");
     }
 }
 
@@ -461,21 +475,29 @@
 #pragma mark Push notifications
 
 -(void)updateDeviceToken:(NSData *)deviceToken {
-   
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
-    [self updateDeviceTokenInternal:deviceTokenString];
+    if ([self isDeviceTokenUpdated:deviceTokenString]) {
+        [self storeDeviceToken:deviceTokenString];
+        [self registerDeviceToken];
+    }
 }
 
--(void) updateDeviceTokenInternal:(NSString *) deviceTokenString{
-     FDSecureStore *store = [FDSecureStore sharedInstance];
-    if (deviceTokenString && ![deviceTokenString isEqualToString:@""]) {
-        NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-        if(![storedDeviceToken isEqualToString:deviceTokenString]){
-            [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
-        }
+-(void) storeDeviceToken:(NSString *) deviceTokenString{
+    if (deviceTokenString) {
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
     }
-    [self registerDeviceToken];
+}
+
+-(BOOL)isDeviceTokenUpdated:(NSString *)newToken{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    if (newToken && ![newToken isEqualToString:@""]) {
+        NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+        return (storedDeviceToken == nil || ![storedDeviceToken isEqualToString:newToken]);
+    }else{
+        return NO;
+    }
 }
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info{
@@ -491,10 +513,10 @@
 }
 
 -(void)clearUserData{
-    [self clearUserDataWithCompletion:nil andInit:true];
+    [self clearUserDataWithCompletion:nil init:true andOldUser:nil];
 }
 
--(void)clearUserDataWithCompletion:(void (^)())completion andInit:(BOOL)doInit{
+-(void)clearUserDataWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
@@ -507,32 +529,26 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
-    NSString *previousUserAlias = [FDUtilities getUserAlias];
-    
+    if(!previousUser) {
+        previousUser = [self getPreviousUserInfo];
+    }
+  
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
-    
-    [[HotlineUser sharedInstance]clearUserData]; // This clear Sercure Store data as well.
+    [[HotlineUser sharedInstance]clearUserData];
     [[HLArticleTagManager sharedInstance]clear];
+    
+    //Clear secure store
+    [[FDSecureStore sharedInstance]clearStoreData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     
-    [self storePreviousUser:previousUserAlias inStore:store];
+    if(previousUser) {
+        [self storePreviousUser:previousUser inStore:store];
+    }
     
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
-        if(error){
-            FDMemLogger *logger = [FDMemLogger new];
-            [logger addMessage:@"Error while deleting all properties"];
-            [logger addErrorInfo:error.userInfo];
-            [logger upload];
-        }
         FDLog(@"Deleted all meta properties");
         [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
-            if(error){
-                FDMemLogger *logger = [FDMemLogger new];
-                [logger addMessage:@"Error while deleting all channels"];
-                [logger addErrorInfo:error.userInfo];
-                [logger upload];
-            }
             // Initiate a init
             if(doInit){
                 [self initWithConfig:config completion:completion];
@@ -541,15 +557,16 @@
                     completion();
                 }
             }
-            
-            [self updateDeviceTokenInternal:deviceToken];
+            if (deviceToken) {
+                [self storeDeviceToken:deviceToken];
+            }
         }];
     }];
     
 }
 
 -(void)clearUserDataWithCompletion:(void (^)())completion{
-    [self clearUserDataWithCompletion:completion andInit:true];
+    [self clearUserDataWithCompletion:completion init:true andOldUser:nil];
 }
 
 -(NSInteger)unreadCount{
@@ -619,6 +636,7 @@
         else {
             FDLog(@"POLLER: Not fetching updates .. No user messages present");
         }
+        
     }];
 }
 
@@ -629,19 +647,19 @@
     }
 }
 
--(void)storePreviousUser:(NSString *) previousUserAlias inStore:(FDSecureStore *)secureStore{
-    [secureStore setObject:previousUserAlias forKey:HOTLINE_DEFAULTS_OLD_USER_ALIAS];
+-(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore{
+    [secureStore setObject:previousUserInfo forKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *previousUserAlias = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_ALIAS];
-    if(previousUserAlias && !inProgress){
+    NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
+    if(previousUserInfo && !inProgress){
         inProgress = true;
-        [HLCoreServices trackUninstallForUser:previousUserAlias withCompletion:^(NSError *error) {
+        [HLCoreServices trackUninstallForUser:previousUserInfo withCompletion:^(NSError *error) {
             if(!error){
-                [store removeObjectWithKey:HOTLINE_DEFAULTS_OLD_USER_ALIAS];
+                [store removeObjectWithKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
                 inProgress = false;
             }
         }];
