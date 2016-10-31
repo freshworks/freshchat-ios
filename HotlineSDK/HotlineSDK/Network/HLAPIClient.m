@@ -11,11 +11,19 @@
 
 @interface HLAPIClient ()
 
+@property(nonatomic, strong) NSMutableArray *loggedAPICalls;
 @property(nonatomic, strong) NSURLSession *session;
 
 @end
 
 @implementation HLAPIClient
+
+-(NSMutableArray *)loggedAPICalls{
+    if (!_loggedAPICalls) {
+        _loggedAPICalls = [[NSMutableArray alloc]init];
+    }
+    return _loggedAPICalls;
+}
 
 +(id)sharedInstance{
     static HLAPIClient *sharedInstance = nil;
@@ -40,11 +48,7 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
         if (statusCode >= 400) {
-            
-            FDMemLogger *logger = [FDMemLogger new];
-            [logger addErrorInfo:@{ @"request" : request.toString, @"response" : responseInfo.toString}];
-            [logger upload];
-            
+            [self logRequest:request response:responseInfo];
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
         }else{
@@ -57,6 +61,18 @@
     }];
     [task resume];
     return task;
+}
+
+-(void)logRequest:(HLServiceRequest *)request response:(FDResponseInfo *)response{
+    NSString *path = request.URL.path;
+    if (path) {
+        if (![self.loggedAPICalls containsObject:path]) {
+            [self.loggedAPICalls addObject:path];
+            FDMemLogger *logger = [FDMemLogger new];
+            [logger addErrorInfo:@{ @"request" : request.toString, @"response" : response.toString}];
+            [logger upload];
+        }
+    }
 }
 
 @end
