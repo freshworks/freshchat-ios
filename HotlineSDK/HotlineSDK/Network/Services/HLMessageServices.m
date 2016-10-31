@@ -25,6 +25,7 @@
 #import "FDChannelUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
+#import "HLCoreServices.h"
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -269,7 +270,14 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
+//TODO: Temproary hack to avoid user registration occuring parallely
+
+static bool USER_REGISTRATION_IN_PROGRESS = NO;
+
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    //Added this to simulate sending unregistered user alias for message create call
+    //[[FDSecureStore sharedInstance] setObject:@"asdf-adf-asdf-asdf" forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
@@ -359,6 +367,31 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
+                
+                if(responseInfo.isDict){
+                    NSDictionary *res = responseInfo.responseAsDictionary;
+                    if (res) {
+                        if ([res objectForKey:@"errorCode"]) {
+                            if ([res[@"errorCode"] integerValue] == -1) {
+                                [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+                                [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                                
+                                //Retry user alias for failed users
+                                if (USER_REGISTRATION_IN_PROGRESS == NO) {
+                                    USER_REGISTRATION_IN_PROGRESS = YES;
+                                    [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
+                                        if (!error) {
+                                            [KonotorMessage uploadAllUnuploadedMessages];
+                                        }
+                                    }];
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+                
+                NSLog(@"check failed request");
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
