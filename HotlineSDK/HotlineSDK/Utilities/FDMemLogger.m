@@ -73,34 +73,35 @@
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
                                      @"App Name" : [FDUtilities appName],
-                                     @"Device Info" : [FDUtilities deviceInfoProperties],
-                                     @"Stack Trace" : [NSThread callStackSymbols]
+                                     @"Device Info" : [FDUtilities deviceInfoProperties]
                                      };
     
     [self addErrorInfo:additionalInfo withMethodName:@"AdditionalInfo"];
-
-    NSString *log = [self.logList componentsJoinedByString:@"\n"];
-    return log;
+    return [self.logList componentsJoinedByString:@"\n"];
 }
 
 static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
 
 -(void)upload{
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
+    NSURL *url = [NSURL URLWithString:LOGGER_API];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     NSString *log = [self toString];
-    FDLog(@"Going to upload : %@" , log);
-    NSData *postData = [log dataUsingEncoding:NSUTF8StringEncoding];
-    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:LOGGER_API] andMethod:HTTP_METHOD_POST];
-    request.HTTPBody = postData;
-    [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
+    FDLog(@"***Memlogger*** Going to upload: \n %@" , log);
+    request.HTTPMethod = HTTP_METHOD_POST;
+    request.HTTPBody = [log dataUsingEncoding:NSUTF8StringEncoding];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (!error) {
             [self reset];
             FDLog(@"successfully uploaded log");
         }else{
             NSLog(@"Failed  : %@",log);
-            FDLog(@"Response %@", responseInfo.response);
+            FDLog(@"Response %@", response);
         }
-    }];
+    }]resume];
 }
 
 -(void)reset{

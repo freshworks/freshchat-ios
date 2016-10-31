@@ -49,4 +49,6 @@
 
 -(void)setBody:(NSData *)body;
 
+-(NSString *)toString;
+
 @end

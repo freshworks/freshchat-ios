@@ -359,14 +359,6 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                if(error && error.code >= 400 ){
-                    FDMemLogger *logger = [FDMemLogger new];
-                    [logger addMessage:@"Server Error during message create"];
-                    [logger addErrorInfo:error.userInfo];
-                    [logger addErrorInfo:@{@"requestURL" : request.URL.absoluteString ,
-                                           @"errorCode" : @(error.code) }];
-                    [logger upload];
-                }
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];

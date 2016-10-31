@@ -146,4 +146,9 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
     [self addCRLF];
 }
 
+-(NSString *)toString{
+    NSString *body = [[[NSString alloc]initWithData:self.formData encoding:self.preferredEncoding] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    return [NSString stringWithFormat:@"HEADERS : %@ REQUEST: %@ HTTP-BODY:%@", [self allHTTPHeaderFields] , self, body];
+}
+
 @end
