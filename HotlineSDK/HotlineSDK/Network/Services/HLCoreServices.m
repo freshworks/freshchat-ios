@@ -333,7 +333,10 @@
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"User uninstalled call made");
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 202 || statusCode == 200){
+                FDLog(@"Previous user marked as uninstalled");
+            }
         }else{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 404 ){
