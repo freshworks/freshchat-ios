@@ -18,13 +18,6 @@
 
 @implementation HLAPIClient
 
--(NSMutableArray *)loggedAPICalls{
-    if (!_loggedAPICalls) {
-        _loggedAPICalls = [[NSMutableArray alloc]init];
-    }
-    return _loggedAPICalls;
-}
-
 +(id)sharedInstance{
     static HLAPIClient *sharedInstance = nil;
     static dispatch_once_t oncetoken;
@@ -39,6 +32,7 @@
     if (self) {
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         self.session = [NSURLSession sessionWithConfiguration:configuration];
+        self.loggedAPICalls = [[NSMutableArray alloc]init];
     }
     return self;
 }
