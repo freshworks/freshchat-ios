@@ -46,6 +46,7 @@
         NSString *userAgent = [NSString stringWithFormat:@"HL-iOS(%@)(%@)",[UIDevice currentDevice].systemVersion, HOTLINE_SDK_VERSION];
         [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
         [self setValue:HOTLINE_SDK_BUILD_NUMBER forHTTPHeaderField:@"X-SDK-Version-Code"];
+        [self setValue:[[NSBundle mainBundle] bundleIdentifier] forHTTPHeaderField:@"X-App-Package-Name"];
         [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
         
         self.HTTPMethod = httpMethod;
