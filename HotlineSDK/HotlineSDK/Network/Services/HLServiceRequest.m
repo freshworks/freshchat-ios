@@ -10,6 +10,7 @@
 #import "HLAPI.h"
 #import <UIKit/UIKit.h>
 #import "FDSecureStore.h"
+#import "HLVersionConstants.h"
 
 @interface HLServiceRequest ()
 
@@ -42,8 +43,9 @@
         self.timeoutInterval = 60;
         self.preferredEncoding = NSUTF8StringEncoding;
         
-        NSString *userAgent = [NSString stringWithFormat:@"%@ %@",[UIDevice currentDevice].systemName,[UIDevice currentDevice].systemVersion];
+        NSString *userAgent = [NSString stringWithFormat:@"HL-iOS(%@)(%@)",[UIDevice currentDevice].systemVersion, HOTLINE_SDK_VERSION];
         [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
+        [self setValue:HOTLINE_SDK_BUILD_NUMBER forHTTPHeaderField:@"X-SDK-Version-Code"];
         [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
         
         self.HTTPMethod = httpMethod;
