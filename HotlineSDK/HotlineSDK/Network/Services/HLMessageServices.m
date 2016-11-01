@@ -272,12 +272,10 @@ static HLNotificationHandler *handleUpdateNotification;
 
 //TODO: Temproary hack to avoid user registration occuring parallely
 
-static bool USER_REGISTRATION_IN_PROGRESS = NO;
-
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     
     //Added this to simulate sending unregistered user alias for message create call
-    //[[FDSecureStore sharedInstance] setObject:@"asdf-adf-asdf-asdf" forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+//    [[FDSecureStore sharedInstance] setObject:@"asdf-adf-asdf-asdf" forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
@@ -367,31 +365,7 @@ static bool USER_REGISTRATION_IN_PROGRESS = NO;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                
-                if(responseInfo.isDict){
-                    NSDictionary *res = responseInfo.responseAsDictionary;
-                    if (res) {
-                        if ([res objectForKey:@"errorCode"]) {
-                            if ([res[@"errorCode"] integerValue] == -1) {
-                                [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
-                                [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-                                
-                                //Retry user alias for failed users
-                                if (USER_REGISTRATION_IN_PROGRESS == NO) {
-                                    USER_REGISTRATION_IN_PROGRESS = YES;
-                                    [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
-                                        if (!error) {
-                                            [KonotorMessage uploadAllUnuploadedMessages];
-                                        }
-                                    }];
-                                }
-                                
-                            }
-                        }
-                    }
-                }
-                
-                NSLog(@"check failed request");
+                [self retryUserRegistrationIfNeeded:responseInfo];
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
@@ -403,7 +377,34 @@ static bool USER_REGISTRATION_IN_PROGRESS = NO;
 
         }];
     }];
+}
 
+static BOOL USER_REG_RETRY_IN_PROGRESS = NO;
+
++(void)retryUserRegistrationIfNeeded:(FDResponseInfo *)responseInfo{
+    if(responseInfo.isDict){
+        NSDictionary *res = responseInfo.responseAsDictionary;
+        if (res) {
+            if ([res objectForKey:@"errorCode"]) {
+                if ([res[@"errorCode"] integerValue] == -1) {
+                    [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+                    [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                    
+                    //Retry user alias for failed users
+                    if (USER_REG_RETRY_IN_PROGRESS == NO) {
+                        USER_REG_RETRY_IN_PROGRESS = YES;
+                        [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
+                            if (!error) {
+                                [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
+                            }
+                        }];
+                    }
+                    
+                }
+            }
+        }
+    }
+ 
 }
 
 //TODO: Skip messages that are clicked before

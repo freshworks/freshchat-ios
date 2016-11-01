@@ -20,6 +20,8 @@
 #define HOTLINE_AUDIO_MESSAGE_FAILED @"%@_com.freshdesk.hotline_audio_message_failed"
 #define HOTLINE_AUDIO_MESSAGE_DOWNLOADED @"%@_com.freshdesk.hotline_audio_message_downloaded"
 
+#define HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS @"com.freshdesk.notification.perform_pending_tasks"
+
 @interface FDLocalNotification : NSObject
 
 +(void)post:(NSString *)name;

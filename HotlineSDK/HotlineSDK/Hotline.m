@@ -184,6 +184,9 @@
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performPendingTasks)
+                                                 name:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS object:nil];
 }
 
 -(void)updateAppVersion{
