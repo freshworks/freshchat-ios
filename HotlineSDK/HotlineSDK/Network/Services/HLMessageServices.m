@@ -379,8 +379,6 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-static BOOL USER_REG_RETRY_IN_PROGRESS = NO;
-
 +(void)retryUserRegistrationIfNeeded:(FDResponseInfo *)responseInfo{
     if(responseInfo.isDict){
         NSDictionary *res = responseInfo.responseAsDictionary;
@@ -391,20 +389,11 @@ static BOOL USER_REG_RETRY_IN_PROGRESS = NO;
                     [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                     
                     //Retry user alias for failed users
-                    if (USER_REG_RETRY_IN_PROGRESS == NO) {
-                        USER_REG_RETRY_IN_PROGRESS = YES;
-                        [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
-                            if (!error) {
-                                [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
-                            }
-                        }];
-                    }
-                    
+                    [FDUtilities registerUser:nil];
                 }
             }
         }
     }
- 
 }
 
 //TODO: Skip messages that are clicked before

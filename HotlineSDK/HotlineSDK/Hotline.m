@@ -93,7 +93,7 @@
 }
 
 -(void)networkReachable{
-    [self registerUser:nil];
+    [FDUtilities registerUser:nil];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
@@ -145,7 +145,7 @@
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
     
-    [self registerUser:completion];
+    [FDUtilities registerUser:nil];
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
@@ -282,29 +282,6 @@
     }
 }
 
--(void)registerUser:(void(^)(NSError *error))completion{
-    dispatch_async(dispatch_get_main_queue(),^{
-        BOOL isUserRegistered = [FDUtilities isUserRegistered];
-        if (!isUserRegistered) {
-            [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
-                if (!error) {
-                    [self performPendingTasks];
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^ {
-                    if (completion) {
-                        completion(error);
-                    }
-                });
-            }];
-        }else{
-            if (completion) {
-                completion(nil);
-            }
-        }
-    });
-}
-
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if([FDUtilities isUserRegistered]){
@@ -328,7 +305,7 @@
     if(self.config.pollWhenAppActive){
         [self startPoller];
     }
-    [self performPendingTasks];
+    [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
