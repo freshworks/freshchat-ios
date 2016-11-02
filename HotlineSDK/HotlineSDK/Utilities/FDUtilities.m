@@ -17,6 +17,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
 #import "FDPlistManager.h"
+#import "HLCoreServices.h"
+#import "FDLocalNotification.h"
 
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
@@ -24,6 +26,37 @@
 
 #pragma mark - General Utitlites
 
+static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
+
++(void)registerUser:(void(^)(NSError *error))completion{
+    @synchronized ([FDUtilities class]) {
+
+        if (IS_USER_REGISTRATION_IN_PROGRESS == NO) {
+            
+            IS_USER_REGISTRATION_IN_PROGRESS = YES;
+            
+            BOOL isUserRegistered = [FDUtilities isUserRegistered];
+            if (!isUserRegistered) {
+                [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
+                    if (!error) {
+                        [FDUtilities initiatePendingTasks];
+                    }
+                    dispatch_async(dispatch_get_main_queue(), ^ {
+                        IS_USER_REGISTRATION_IN_PROGRESS = NO;
+                        if (completion) {
+                            completion(error);
+                        }
+                    });
+                }];
+            }else{
+                IS_USER_REGISTRATION_IN_PROGRESS = NO;
+                if (completion) {
+                    completion(nil);
+                }
+            }
+        }
+    }
+}
 
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
@@ -330,6 +363,10 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL)isiOS10{
     return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
+}
+
++(void)initiatePendingTasks{
+    [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
 }
 
 @end
