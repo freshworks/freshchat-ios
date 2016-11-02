@@ -42,11 +42,14 @@
         self.baseURL = baseURL;
         self.timeoutInterval = 60;
         self.preferredEncoding = NSUTF8StringEncoding;
+        UIDevice *device = [UIDevice currentDevice];
+        NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
         
-        NSString *userAgent = [NSString stringWithFormat:@"HL-iOS(%@)(%@)",[UIDevice currentDevice].systemVersion, HOTLINE_SDK_VERSION];
+        NSString *userAgent = [NSString stringWithFormat:@"HL-iOS(%@)(%@)(%@)(%@)",
+                               device.systemVersion, HOTLINE_SDK_VERSION, device.model, bundleIdentifier];
         [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
         [self setValue:HOTLINE_SDK_BUILD_NUMBER forHTTPHeaderField:@"X-SDK-Version-Code"];
-        [self setValue:[[NSBundle mainBundle] bundleIdentifier] forHTTPHeaderField:@"X-App-Package-Name"];
+        [self setValue:bundleIdentifier forHTTPHeaderField:@"X-App-Package-Name"];
         [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
         
         self.HTTPMethod = httpMethod;
