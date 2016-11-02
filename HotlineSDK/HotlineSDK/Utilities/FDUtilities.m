@@ -26,17 +26,10 @@
 
 #pragma mark - General Utitlites
 
-static NSObject *USER_REGISTRATION_LOCK;
 static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(void)registerUser:(void(^)(NSError *error))completion{
-    
-    //Initialize lock
-    if (USER_REGISTRATION_LOCK == nil) {
-        USER_REGISTRATION_LOCK = [[NSObject alloc]init];
-    }
-    
-    @synchronized (USER_REGISTRATION_LOCK) {
+    @synchronized ([FDUtilities class]) {
 
         if (IS_USER_REGISTRATION_IN_PROGRESS == NO) {
             
@@ -46,7 +39,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
             if (!isUserRegistered) {
                 [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
                     if (!error) {
-                        [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
+                        [FDUtilities initiatePendingTasks];
                     }
                     dispatch_async(dispatch_get_main_queue(), ^ {
                         IS_USER_REGISTRATION_IN_PROGRESS = NO;
@@ -370,6 +363,10 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL)isiOS10{
     return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
+}
+
++(void)initiatePendingTasks{
+    [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
 }
 
 @end

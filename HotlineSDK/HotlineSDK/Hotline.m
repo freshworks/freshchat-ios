@@ -305,7 +305,7 @@
     if(self.config.pollWhenAppActive){
         [self startPoller];
     }
-    [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
+    [FDUtilities initiatePendingTask];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{

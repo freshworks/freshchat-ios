@@ -38,6 +38,8 @@
 
 +(BOOL)isiOS10;
 
++(void)initiatePendingTasks;
+
 @end
 
 #endif
