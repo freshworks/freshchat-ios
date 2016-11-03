@@ -172,7 +172,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     [properties setValue:@"Apple" forKey:@"manufacturer"];
     [properties setValue:@"iPhone OS" forKey:@"os"];
     [properties setValue:[device systemVersion] forKey:@"os_version"];
-    [properties setValue:[device model] forKey:@"model"];
+    [properties setValue:[FDUtilities deviceModelName] forKey:@"model"];
     
     CGSize size = [UIScreen mainScreen].bounds.size;
     [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"screen_height"];
@@ -322,6 +322,12 @@ static NSInteger networkIndicator = 0;
       @"iPhone7,2":    @"iPhone 6",
       @"iPhone8,1":    @"iPhone 6s",
       @"iPhone8,2":    @"iPhone 6s Plus",
+      @"iPhone8,4":    @"iPhone SE",
+      @"iPhone9,1":    @"iPhone 7",
+      @"iPhone9,3":    @"iPhone 7",
+      @"iPhone9,2":    @"iPhone 7 Plus",
+      @"iPhone9,4":    @"iPhone 7 Plus",
+      
       
       @"iPad1,1":  @"iPad",
       @"iPad2,1":  @"iPad 2(WiFi)",
@@ -346,14 +352,21 @@ static NSInteger networkIndicator = 0;
       @"iPad4,7":  @"iPad Mini 3(WiFi)",
       @"iPad4,8":  @"iPad Mini 3(WiFi+Cellular)",
       @"iPad4,9":  @"iPad Mini 3(WiFi+Cellular - China)",
+      @"iPad5,1":  @"iPad mini 4",
+      @"iPad5,2":  @"iPad mini 4",
       @"iPad5,3":  @"iPad Air 2(WiFi)",
       @"iPad5,4":  @"iPad Air 2(WiFi+Cellular)",
+      @"iPad6,7":  @"iPad Pro (12.9 inch)",
+      @"iPad6,8":  @"iPad Pro (12.9 inch)",
+      @"iPad6,3":  @"iPad Pro (9.7 inch)",
+      @"iPad6,4":  @"iPad Pro (9.7 inch)",
       
       @"iPod1,1":  @"iPod 1st Gen",
       @"iPod2,1":  @"iPod 2nd Gen",
       @"iPod3,1":  @"iPod 3rd Gen",
       @"iPod4,1":  @"iPod 4th Gen",
       @"iPod5,1":  @"iPod 5th Gen",
+      @"iPod7,1":  @"iPod 6th Gen",
       
       };
     NSString *deviceName = commonNamesDictionary[machineName];
