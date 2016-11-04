@@ -145,7 +145,7 @@
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
     
-    [FDUtilities registerUser:nil];
+    [FDUtilities registerUser:completion];
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
