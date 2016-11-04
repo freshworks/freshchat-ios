@@ -167,8 +167,7 @@ then
   git add ${CONSTANTS_FILE}
   git add ReleaseNotes.txt
   git commit -m "Release [${VERSION}] Build[${BUILD_NUMBER}] - `git config user.name`" 
-  git tag v${VERSION}
-  git tag build_${BUILD_NUMBER}
+  git tag v${VERSION}-${BUILD_NUMBER}
   rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
   rm ReleaseNotes_v.txt
 else
