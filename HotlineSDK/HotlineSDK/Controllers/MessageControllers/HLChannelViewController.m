@@ -26,6 +26,7 @@
 #import "HLMessageServices.h"
 #import "FDIconDownloader.h"
 #import "FDReachabilityManager.h"
+#import "FDControllerUtils.h"
 
 @interface HLChannelViewController ()
 
@@ -113,7 +114,8 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!error) {
                 if (channelInfos.count == 1) {
-                    self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
+                    BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
+                    self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
                 }else{
                     NSArray *sortedChannel = [self sortChannelList:channelInfos];
                     [self showEmptyResultsView:(sortedChannel.count == 0)];

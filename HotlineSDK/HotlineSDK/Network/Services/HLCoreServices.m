@@ -83,15 +83,11 @@
         return nil;
     }
     
-    
     NSError *error = nil;
     NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
     
     if (error) {
-        FDMemLogger *logger = [FDMemLogger new];
-        [logger addMessage:@"Error while serializing user information"];
-        [logger addErrorInfo:error.userInfo];
-        [logger upload];
+        FDLog(@"Error while serializing user information");
     }
     
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -327,20 +323,30 @@
     }
 }
 
-+(NSURLSessionDataTask *)trackUninstallForUser:(NSString *) userAlias withCompletion:(void (^)(NSError *))completion{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userAlias];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
++(NSURLSessionDataTask *)trackUninstallForUser:(NSDictionary *) userInfo withCompletion:(void (^)(NSError *))completion{
+    NSString *appID = userInfo[@"appId"];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",userInfo[@"appKey"]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userInfo[@"userAlias"]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,userInfo[@"domain"]]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:url andMethod:HTTP_METHOD_PUT];
     [request setRelativePath:path andURLParams:@[appKey]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"User uninstalled call made");
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 202 || statusCode == 200){
+                FDLog(@"Previous user marked as uninstalled");
+            }
         }else{
-            FDLog(@"User uninstall call failed %@", error);
-            FDLog(@"Response : %@", responseInfo.response);
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 404 ){
+                // user does not belong to this app ( or domain )
+                error = nil; // ignore error
+            }
+            else {
+                FDLog(@"User uninstall call failed %@", error);
+                FDLog(@"Response : %@", responseInfo.response);
+            }
         }
         if(completion){
             completion(error);

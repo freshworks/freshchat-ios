@@ -109,6 +109,7 @@
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
 		CE274D041DB78E5C00733EDB /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE274D021DB78E5C00733EDB /* HCSStarRatingView.m */; };
 		CED138481DB4D55200404686 /* FDCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* FDCSATView.m */; };
+		CE39CF721DCB694300A46660 /* FDControllerUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CE39CF711DCB694300A46660 /* FDControllerUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -332,6 +333,8 @@
 		CE274D021DB78E5C00733EDB /* HCSStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCSStarRatingView.m; sourceTree = "<group>"; };
 		CED138461DB4D55200404686 /* FDCSATView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCSATView.h; sourceTree = "<group>"; };
 		CED138471DB4D55200404686 /* FDCSATView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDCSATView.m; sourceTree = "<group>"; };
+		CE39CF701DCB694300A46660 /* FDControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDControllerUtils.h; sourceTree = "<group>"; };
+		CE39CF711DCB694300A46660 /* FDControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDControllerUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -554,6 +557,8 @@
 				35B2EF3C1D000E620014867F /* FDStringUtil.h */,
 				35B2EF3D1D000E620014867F /* FDStringUtil.m */,
 				35B2EF3E1D000E620014867F /* FDThemeConstants.h */,
+				CE39CF701DCB694300A46660 /* FDControllerUtils.h */,
+				CE39CF711DCB694300A46660 /* FDControllerUtils.m */,
 				35B2EF3F1D000E620014867F /* FDUtilities.h */,
 				35B2EF401D000E620014867F /* FDUtilities.m */,
 				35B2EF411D000E620014867F /* FDVotingManager.h */,
@@ -858,6 +863,7 @@
 				35B2EFC41D000E620014867F /* HLGridViewCell.m in Sources */,
 				35B2EFBA1D000E620014867F /* FDBadgeView.m in Sources */,
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
+				CE39CF721DCB694300A46660 /* FDControllerUtils.m in Sources */,
 				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
