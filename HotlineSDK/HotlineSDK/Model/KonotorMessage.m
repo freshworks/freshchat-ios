@@ -229,7 +229,6 @@ static BOOL messageExistsDirty = YES;
 }
 
 +(void)uploadAllUnuploadedMessages{
-    FDLog(@"Uploading all unuploaded messages");
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
