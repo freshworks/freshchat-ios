@@ -169,6 +169,7 @@ then
   git tag v${VERSION}
   rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
   rm ReleaseNotes_v.txt
+  git tag -l | grep build | xargs git tag -d  #remove old build tags so that they are not pushed
 else
   mv ${CONSTANTS_FILE}.original ${CONSTANTS_FILE} 
   rm ${CONSTANTS_FILE}.old
