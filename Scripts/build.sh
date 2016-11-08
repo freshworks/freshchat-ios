@@ -15,7 +15,6 @@ HEADER
 }
 
 VERSION=DEV
-#BUILD_NUMBER=`date +%Y%m%d%H%M`
 
 #Clear Derived Data to have clean build
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
@@ -167,7 +166,7 @@ then
   git add ${CONSTANTS_FILE}
   git add ReleaseNotes.txt
   git commit -m "Release [${VERSION}] Build[${BUILD_NUMBER}] - `git config user.name`" 
-  git tag v${VERSION}-${BUILD_NUMBER}
+  git tag v${VERSION}
   rm ${CONSTANTS_FILE}.old ${CONSTANTS_FILE}.original
   rm ReleaseNotes_v.txt
 else
