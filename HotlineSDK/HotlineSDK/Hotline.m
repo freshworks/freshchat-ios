@@ -495,7 +495,10 @@
     @try {
         return [HLNotificationHandler isHotlineNotification:info];
     } @catch (NSException *exception) {
-        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
+        FDMemLogger *logger = [FDMemLogger new];
+        [logger addMessage:exception.debugDescription withMethodName:NSStringFromSelector(_cmd)];
+        [logger addErrorInfo:info];
+        [logger upload];
     }
     return NO; // Return a valid value to avoid inconsistency
 }
@@ -507,9 +510,11 @@
         }
         self.notificationHandler = [[HLNotificationHandler alloc]init];
         [self.notificationHandler handleNotification:info appState:appState];
-
     } @catch (NSException *exception) {
-        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
+        FDMemLogger *logger = [FDMemLogger new];
+        [logger addMessage:exception.debugDescription withMethodName:NSStringFromSelector(_cmd)];
+        [logger addErrorInfo:info];
+        [logger upload];
     }
 }
 
