@@ -19,6 +19,8 @@
 -(void)upload;
 -(void)reset;
 
++(void)sendMessage:(NSString *) message fromMethod:(NSString*) methodName;
+
 @end
 
 #endif /* FDMemLogger_h */

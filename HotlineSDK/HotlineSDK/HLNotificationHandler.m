@@ -44,43 +44,54 @@
 
 -(void)handleNotification:(NSDictionary *)info appState:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
+        @try {
+            NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
 
-        [[[FDMessagesUpdater alloc]init]resetTime];
-        
-        NSNumber *channelID = nil;
-        
-        if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
-            channelID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID] integerValue]);
-        }else{
-            return;
+            [[[FDMessagesUpdater alloc]init]resetTime];
+            
+            NSNumber *channelID = nil;
+            
+            if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
+                channelID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID] integerValue]);
+            }else{
+                return;
+            }
+            
+            if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID]) {
+                self.marketingID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
+            }
+            
+            NSString *message = [payload valueForKeyPath:@"aps.alert"];
+            
+            HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+            
+            if (!channel){
+                [[[FDChannelUpdater alloc] init]resetTime];
+                [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
+                    if(!error){
+                        NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+                        [mContext performBlock:^{
+                            @try {
+                                HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
+                                if(ch){
+                                    [self handleNotification:ch withMessage:message andState:appState];
+                                }
+                            }
+                            @catch(NSException *exception) {
+                                [FDMemLogger sendMessage:exception.description
+                                              fromMethod:NSStringFromSelector(_cmd)];
+                            }
+                        }];
+                    }
+                }];
+            }
+            else {
+                [HLMessageServices fetchChannelsAndMessages:nil];
+                [self handleNotification:channel withMessage:message andState:appState];
+            }
         }
-        
-        if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID]) {
-            self.marketingID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
-        }
-        
-        NSString *message = [payload valueForKeyPath:@"aps.alert"];
-        
-        HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-        
-        if (!channel){
-            [[[FDChannelUpdater alloc] init]resetTime];
-            [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
-                if(!error){
-                    NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-                    [mContext performBlock:^{
-                        HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
-                        if(ch){
-                            [self handleNotification:ch withMessage:message andState:appState];
-                        }
-                    }];
-                }
-            }];
-        }
-        else {
-            [HLMessageServices fetchChannelsAndMessages:nil];
-            [self handleNotification:channel withMessage:message andState:appState];
+        @catch(NSException *exception){
+            [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
         }
     });
 }

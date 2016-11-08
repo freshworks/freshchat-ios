@@ -72,7 +72,7 @@
         return sharedInstance;
 
     } @catch (NSException *exception) {
-        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
+        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
         return nil; // Return a valid value to avoid inconsistency
     }
 }
@@ -107,7 +107,7 @@
     @try {
         [self initWithConfig:config completion:nil];
     } @catch (NSException *exception) {
-        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
+        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
     }
 }
 
@@ -495,9 +495,9 @@
     @try {
         return [HLNotificationHandler isHotlineNotification:info];
     } @catch (NSException *exception) {
-        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
-        return NO; // Return a valid value to avoid inconsistency
+        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
     }
+    return NO; // Return a valid value to avoid inconsistency
 }
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
@@ -509,7 +509,7 @@
         [self.notificationHandler handleNotification:info appState:appState];
 
     } @catch (NSException *exception) {
-        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
+        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
     }
 }
 
