@@ -59,15 +59,22 @@
 @implementation Hotline
 
 +(instancetype)sharedInstance{
-    static Hotline *sharedInstance = nil;
-    static dispatch_once_t oncetoken;
-    dispatch_once(&oncetoken,^{
-        sharedInstance = [[Hotline alloc]init];
-    });
-    if(![sharedInstance checkPersistence]) {
-        return nil;
+    
+    @try {
+        static Hotline *sharedInstance = nil;
+        static dispatch_once_t oncetoken;
+        dispatch_once(&oncetoken,^{
+            sharedInstance = [[Hotline alloc]init];
+        });
+        if(![sharedInstance checkPersistence]) {
+            return nil;
+        }
+        return sharedInstance;
+
+    } @catch (NSException *exception) {
+        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
+        return nil; // Return a valid value to avoid inconsistency
     }
-    return sharedInstance;
 }
 
 +(NSString *)SDKVersion{
@@ -97,7 +104,11 @@
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
-    [self initWithConfig:config completion:nil];
+    @try {
+        [self initWithConfig:config completion:nil];
+    } @catch (NSException *exception) {
+        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
+    }
 }
 
 -(void)initWithConfig:(HotlineConfig *)config completion:(void(^)(NSError *error))completion{
@@ -481,15 +492,25 @@
 }
 
 -(BOOL)isHotlineNotification:(NSDictionary *)info{
-    return [HLNotificationHandler isHotlineNotification:info];
+    @try {
+        return [HLNotificationHandler isHotlineNotification:info];
+    } @catch (NSException *exception) {
+        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
+        return NO; // Return a valid value to avoid inconsistency
+    }
 }
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
-    if(![self isHotlineNotification:info]){
-        return;
+    @try {
+        if(![self isHotlineNotification:info]){
+            return;
+        }
+        self.notificationHandler = [[HLNotificationHandler alloc]init];
+        [self.notificationHandler handleNotification:info appState:appState];
+
+    } @catch (NSException *exception) {
+        [[FDMemLogger new] addMessage:exception.description withMethodName:NSStringFromSelector(_cmd)];
     }
-    self.notificationHandler = [[HLNotificationHandler alloc]init];
-    [self.notificationHandler handleNotification:info appState:appState];
 }
 
 -(void)clearUserData{
