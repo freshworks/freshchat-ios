@@ -19,13 +19,14 @@
         NSLog(@"Warning: Use Hotline controllers inside navigation controller");
     }
     else {
-        self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle];
+        self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle] == UIStatusBarStyleLightContent ?
+                                                                    UIBarStyleBlack : UIBarStyleDefault; // barStyle has a different enum but same values .. so hack to clear the update.
         self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
     }
 }
 
 -(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate{
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON];
+    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     
     if (isBackButtonImageExist && ![self embedded]) {
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]

@@ -17,6 +17,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <sys/utsname.h>
 #import "FDPlistManager.h"
+#import "HLCoreServices.h"
+#import "FDLocalNotification.h"
 
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
@@ -24,6 +26,37 @@
 
 #pragma mark - General Utitlites
 
+static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
+
++(void)registerUser:(void(^)(NSError *error))completion{
+    @synchronized ([FDUtilities class]) {
+
+        if (IS_USER_REGISTRATION_IN_PROGRESS == NO) {
+            
+            IS_USER_REGISTRATION_IN_PROGRESS = YES;
+            
+            BOOL isUserRegistered = [FDUtilities isUserRegistered];
+            if (!isUserRegistered) {
+                [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
+                    if (!error) {
+                        [FDUtilities initiatePendingTasks];
+                    }
+                    dispatch_async(dispatch_get_main_queue(), ^ {
+                        IS_USER_REGISTRATION_IN_PROGRESS = NO;
+                        if (completion) {
+                            completion(error);
+                        }
+                    });
+                }];
+            }else{
+                IS_USER_REGISTRATION_IN_PROGRESS = NO;
+                if (completion) {
+                    completion(nil);
+                }
+            }
+        }
+    }
+}
 
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
@@ -77,6 +110,7 @@
 
 +(NSString *)generateUserAlias{
     NSString *userAlias;
+    //TODO: This logic is too nested. Need to remove this - Rex
     if(![[FDSecureStore sharedInstance] checkItemWithKey:HOTLINE_DEFAULTS_APP_ID]){
         FDLog(@"WARNING : getUserAlias Called before init");
         return nil; // safety check for functions called before init.
@@ -92,12 +126,8 @@
         }
         else {
             userAlias = [FDStringUtil generateUUID];
-            FDLog(@"New Hotline User");
         }
         [FDUtilities storeUserAlias:userAlias];
-    }
-    else {
-        FDLog(@"Existing Konotor user");
     }
     userAlias = [persistedStore objectForKey:uuIdLookupKey];
     return userAlias;
@@ -107,8 +137,6 @@
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     [persistedStore setObject:alias forKey:[FDUtilities getUUIDLookupKey]];
 }
-
-
 
 +(NSString *) getKeyForObject:(NSObject *) object {
     if(object){
@@ -145,7 +173,7 @@
     [properties setValue:@"Apple" forKey:@"manufacturer"];
     [properties setValue:@"iPhone OS" forKey:@"os"];
     [properties setValue:[device systemVersion] forKey:@"os_version"];
-    [properties setValue:[device model] forKey:@"model"];
+    [properties setValue:[FDUtilities deviceModelName] forKey:@"model"];
     
     CGSize size = [UIScreen mainScreen].bounds.size;
     [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"screen_height"];
@@ -295,6 +323,12 @@ static NSInteger networkIndicator = 0;
       @"iPhone7,2":    @"iPhone 6",
       @"iPhone8,1":    @"iPhone 6s",
       @"iPhone8,2":    @"iPhone 6s Plus",
+      @"iPhone8,4":    @"iPhone SE",
+      @"iPhone9,1":    @"iPhone 7",
+      @"iPhone9,3":    @"iPhone 7",
+      @"iPhone9,2":    @"iPhone 7 Plus",
+      @"iPhone9,4":    @"iPhone 7 Plus",
+      
       
       @"iPad1,1":  @"iPad",
       @"iPad2,1":  @"iPad 2(WiFi)",
@@ -319,14 +353,21 @@ static NSInteger networkIndicator = 0;
       @"iPad4,7":  @"iPad Mini 3(WiFi)",
       @"iPad4,8":  @"iPad Mini 3(WiFi+Cellular)",
       @"iPad4,9":  @"iPad Mini 3(WiFi+Cellular - China)",
+      @"iPad5,1":  @"iPad mini 4",
+      @"iPad5,2":  @"iPad mini 4",
       @"iPad5,3":  @"iPad Air 2(WiFi)",
       @"iPad5,4":  @"iPad Air 2(WiFi+Cellular)",
+      @"iPad6,7":  @"iPad Pro (12.9 inch)",
+      @"iPad6,8":  @"iPad Pro (12.9 inch)",
+      @"iPad6,3":  @"iPad Pro (9.7 inch)",
+      @"iPad6,4":  @"iPad Pro (9.7 inch)",
       
       @"iPod1,1":  @"iPod 1st Gen",
       @"iPod2,1":  @"iPod 2nd Gen",
       @"iPod3,1":  @"iPod 3rd Gen",
       @"iPod4,1":  @"iPod 4th Gen",
       @"iPod5,1":  @"iPod 5th Gen",
+      @"iPod7,1":  @"iPod 6th Gen",
       
       };
     NSString *deviceName = commonNamesDictionary[machineName];
@@ -336,6 +377,10 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL)isiOS10{
     return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
+}
+
++(void)initiatePendingTasks{
+    [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
 }
 
 @end

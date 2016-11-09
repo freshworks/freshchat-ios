@@ -142,14 +142,13 @@ static const CGFloat THROWING_THRESHOLD = 1600;
                 if (velocity.y >0)   // panning down
                 {
                     [UIView animateWithDuration:.2 delay:0.0
-                                        options: UIViewAnimationCurveEaseIn
+                                        options: UIViewAnimationOptionCurveEaseIn
                                      animations:^{
                                          self.imageView.frame = CGRectMake(0, self.view.frame.size.height+self.imageView.frame.size.height, 0, 0);
                                      }
                                      completion:^(BOOL finished){
                                          if (finished){
                                              self.imageView.hidden = YES;
-                                             //                                                 [self.imageView removeFromSuperview];
                                              [self dismissModalViewControllerAnimated:NO];
                                          }
                                      }];
@@ -158,13 +157,12 @@ static const CGFloat THROWING_THRESHOLD = 1600;
                 else                // panning up
                 {
                     [UIView animateWithDuration:.5 delay:0.0
-                                        options: UIViewAnimationCurveEaseIn animations:^{
+                                        options: UIViewAnimationOptionCurveEaseIn animations:^{
                                             self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, -(self.view.frame.size.height+self.imageView.frame.size.height), 0, 0);
                                         }
                                      completion:^(BOOL finished){
                                          if (finished){
                                              self.imageView.hidden = YES;
-                                             //                                                [self.imageView removeFromSuperview];
                                              [self dismissModalViewControllerAnimated:NO];
                                          }
                                      }];

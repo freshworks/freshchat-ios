@@ -25,7 +25,7 @@
 #import "FDChannelUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
-#import "FDLocalNotification.h"
+#import "HLCoreServices.h"
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -270,7 +270,12 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
+//TODO: Temproary hack to avoid user registration occuring parallely
+
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    //Added this to simulate sending unregistered user alias for message create call
+//    [[FDSecureStore sharedInstance] setObject:@"asdf-adf-asdf-asdf" forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
@@ -343,7 +348,8 @@ static HLNotificationHandler *handleUpdateNotification;
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if (!error && statusCode == 201) {
 
                 if (!conversation) {
                     NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
@@ -359,14 +365,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                if(error && error.code >= 400 ){
-                    FDMemLogger *logger = [FDMemLogger new];
-                    [logger addMessage:@"Server Error during message create"];
-                    [logger addErrorInfo:error.userInfo];
-                    [logger addErrorInfo:@{@"requestURL" : request.URL.absoluteString ,
-                                           @"errorCode" : @(error.code) }];
-                    [logger upload];
-                }
+                [self retryUserRegistrationIfNeeded:responseInfo];
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
@@ -378,7 +377,23 @@ static HLNotificationHandler *handleUpdateNotification;
 
         }];
     }];
+}
 
++(void)retryUserRegistrationIfNeeded:(FDResponseInfo *)responseInfo{
+    if(responseInfo.isDict){
+        NSDictionary *res = responseInfo.responseAsDictionary;
+        if (res) {
+            if ([res objectForKey:@"errorCode"]) {
+                if ([res[@"errorCode"] integerValue] == -1) {
+                    [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+                    [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                    
+                    //Retry user alias for failed users
+                    [FDUtilities registerUser:nil];
+                }
+            }
+        }
+    }
 }
 
 //TODO: Skip messages that are clicked before
@@ -399,9 +414,9 @@ static HLNotificationHandler *handleUpdateNotification;
     [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
+            FDLog(@"*** Marked as Clicked *** Marketing campaign message with ID  %@", marketingId);
         }else{
-            FDLog(@"Failed to register marketing message click event to server");
+            FDLog(@"Failed to register marketing message click event to server : %@", error);
         }
     }];
 }
@@ -428,7 +443,7 @@ static HLNotificationHandler *handleUpdateNotification;
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         [context performBlock:^{
             if (!error) {
-                FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+                FDLog(@"*** Marked as Seen *** Marketing campaign message with ID : %@ ", marketingId);
             }else{
                 FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
                 [message markAsUnread];
