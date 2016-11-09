@@ -18,6 +18,7 @@
 @interface FDCSATView : UIView
 
 @property (nonatomic,weak) id<FDCSATViewDelegate> delegate;
+@property (nonatomic, strong) NSLayoutConstraint *CSATPromptCenterYConstraint;
 
 - (instancetype)initWithController:(UIViewController *)controller andDelegate:(id <FDCSATViewDelegate>)delegate;
 - (void)show;
