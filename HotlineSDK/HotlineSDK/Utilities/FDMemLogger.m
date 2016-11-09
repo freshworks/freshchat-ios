@@ -108,4 +108,10 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     self.logList = [[NSMutableArray alloc]init];
 }
 
++(void)sendMessage:(NSString *) message fromMethod:(NSString*) methodName{
+    FDMemLogger *logger = [FDMemLogger new];
+    [logger addMessage:message withMethodName:methodName];
+    [logger upload];
+}
+
 @end

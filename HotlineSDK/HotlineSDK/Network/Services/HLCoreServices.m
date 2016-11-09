@@ -51,12 +51,15 @@
     if (userAlias) {
         userInfo[@"alias"] = userAlias;
     }else{
-        FDMemLogger *memLogger = [[FDMemLogger alloc]init];
-        [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
-        if(!userAlias){
-            [memLogger addErrorInfo:@{ @"Reason": @"userAlias is nil"}];
+        if([[FDSecureStore sharedInstance] checkItemWithKey:HOTLINE_DEFAULTS_APP_ID]){
+            // If appID is present then something is terribly wrong. Call the doctor
+            FDMemLogger *memLogger = [[FDMemLogger alloc]init];
+            [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
+            if(!userAlias){
+                [memLogger addErrorInfo:@{ @"Reason": @"userAlias is nil"}];
+            }
+            [memLogger upload];
         }
-        [memLogger upload];
         return nil;
     }
 
