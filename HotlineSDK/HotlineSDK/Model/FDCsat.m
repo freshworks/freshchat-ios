@@ -12,8 +12,10 @@
 
 @dynamic csatID;
 @dynamic question;
-@dynamic isManadatory;
 @dynamic mobileUserCommentsAllowed;
 @dynamic belongsToConversation;
+@dynamic userRatingCount;
+@dynamic status;
+@dynamic userComments;
 
 @end
