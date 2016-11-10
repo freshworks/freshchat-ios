@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="16A323" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16A323" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FDCsat" representedClassName="FDCsat" syncable="YES">
         <attribute name="csatID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isManadatory" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mobileUserCommentsAllowed" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="question" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="belongToConversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorConversation" inverseName="hasCsat" inverseEntity="KonotorConversation" syncable="YES"/>
     </entity>
     <entity name="FDIndex" representedClassName="FDIndex" syncable="YES">
         <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -71,6 +72,7 @@
         <attribute name="unreadMessagesCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="updatedMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HLChannel" inverseName="conversations" inverseEntity="HLChannel" syncable="YES"/>
+        <relationship name="hasCsat" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FDCsat" inverseName="belongToConversation" inverseEntity="FDCsat" syncable="YES"/>
         <relationship name="hasMessages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="KonotorMessage" inverseName="belongsToConversation" inverseEntity="KonotorMessage" syncable="YES"/>
     </entity>
     <entity name="KonotorCustomProperty" representedClassName="KonotorCustomProperty" syncable="YES">
@@ -132,18 +134,18 @@
         <relationship name="hasProperties" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="KonotorCustomProperty" syncable="YES"/>
     </entity>
     <elements>
+        <element name="FDCsat" positionX="-173" positionY="675" width="128" height="120"/>
         <element name="FDIndex" positionX="-117" positionY="-24" width="128" height="105"/>
-        <element name="FDTags" positionX="-378" positionY="117" width="128" height="90"/>
+        <element name="FDTags" positionX="25" positionY="189" width="128" height="90"/>
         <element name="HLArticle" positionX="-371" positionY="590" width="128" height="148"/>
         <element name="HLCategory" positionX="-576" positionY="420" width="128" height="163"/>
         <element name="HLChannel" positionX="-110" positionY="246" width="128" height="208"/>
         <element name="KonotorApp" positionX="-288" positionY="-27" width="128" height="195"/>
-        <element name="KonotorConversation" positionX="106" positionY="180" width="128" height="195"/>
+        <element name="KonotorConversation" positionX="126" positionY="537" width="128" height="208"/>
         <element name="KonotorCustomProperty" positionX="-371" positionY="306" width="128" height="118"/>
         <element name="KonotorMessage" positionX="351" positionY="71" width="128" height="465"/>
         <element name="KonotorMessageBinary" positionX="576" positionY="324" width="128" height="105"/>
         <element name="KonotorShareMessageEvent" positionX="54" positionY="-25" width="128" height="88"/>
         <element name="KonotorUser" positionX="-578" positionY="162" width="128" height="163"/>
-        <element name="FDCsat" positionX="-378" positionY="117" width="128" height="105"/>
     </elements>
 </model>
