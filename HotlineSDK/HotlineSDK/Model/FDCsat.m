@@ -14,9 +14,9 @@
 @dynamic csatID;
 @dynamic question;
 @dynamic mobileUserCommentsAllowed;
-@dynamic belongsToConversation;
+@dynamic belongToConversation;
 @dynamic userRatingCount;
-@dynamic status;
+@dynamic csatStatus;
 @dynamic userComments;
 
 +(FDCsat *)getWithID:(NSNumber *)csatID inContext:(NSManagedObjectContext *)context{

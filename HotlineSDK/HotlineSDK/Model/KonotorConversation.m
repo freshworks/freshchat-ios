@@ -30,6 +30,8 @@
 @dynamic updatedMillis;
 @dynamic belongsToChannel;
 @dynamic hasMessages;
+@dynamic hasCsat;
+@dynamic hasPendingCsat;
 
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId{
     NSError *pError;
