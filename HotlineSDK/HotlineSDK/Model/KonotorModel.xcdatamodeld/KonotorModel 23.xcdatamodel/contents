@@ -2,9 +2,9 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16A323" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FDCsat" representedClassName="FDCsat" syncable="YES">
         <attribute name="csatID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="csatStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mobileUserCommentsAllowed" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="question" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="userComments" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userRatingCount" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="belongToConversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorConversation" inverseName="hasCsat" inverseEntity="KonotorConversation" syncable="YES"/>

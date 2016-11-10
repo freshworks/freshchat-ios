@@ -22,11 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSNumber *csatID;
 @property (nullable, nonatomic, retain) NSString *question;
-@property (nullable, nonatomic, retain) NSNumber *status;
+@property (nullable, nonatomic, retain) NSNumber *csatStatus;
 @property (nullable, nonatomic, retain) NSString *userComments;
 @property (nullable, nonatomic, retain) NSNumber *userRatingCount;
 @property (nullable, nonatomic, retain) NSNumber *mobileUserCommentsAllowed;
-@property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
+@property (nullable, nonatomic, retain) KonotorConversation *belongToConversation;
 
 
 @end
