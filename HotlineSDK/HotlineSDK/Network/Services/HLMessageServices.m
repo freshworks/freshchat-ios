@@ -73,15 +73,15 @@ static HLNotificationHandler *handleUpdateNotification;
             bool hasPendingCSAT = [conversationInfo[@"hasPendingCsat"]boolValue];
             if (hasPendingCSAT) {
                 NSDictionary *csatInfo = conversationInfo[@"csat"];
-                NSNumber *csatID = conversationInfo[@"csatId"];
                 
                 FDLog(@"Conversation ID : %@ requires CSAT", conversationInfo[@"conversationId"]);
                 FDLog(@"%@", csatInfo);
                 
-                FDCsat *csat = [FDCsat getWithID:csatID inContext:context];
+                FDCsat *csat = [FDCsat getWithID:csatInfo[@"csatId"] inContext:context];
                 if (!csat) {
-                    csat = [FDCsat createWithInfo:conversationInfo inContext:context];
-                    csat.belongsToConversation = conversation;
+                    FDLog(@"Inserted a CSAT entry");
+                    csat = [FDCsat createWithInfo:csatInfo inContext:context];
+                    csat.belongToConversation = conversation;
                 }
             }
         }

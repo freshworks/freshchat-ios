@@ -40,7 +40,7 @@
     csat.csatID = csatInfo[@"csatId"];
     csat.question = csatInfo[@"question"];
     csat.mobileUserCommentsAllowed = [csatInfo valueForKeyPath:@"mobileUserCommentsAllowed"];
-    csat.status = @(CSAT_NOT_RATED);
+    csat.csatStatus = @(CSAT_NOT_RATED);
     return csat;
 }
 
