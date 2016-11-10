@@ -95,9 +95,19 @@
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
         [self registerAppNotificationListeners];
+        [self applicationDocumentsDirectory];
     }
     return self;
 }
+
+// Returns the URL to the application's Documents directory.
+- (NSURL *)applicationDocumentsDirectory
+{
+    NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
+    
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
 
 -(void)networkReachable{
     [FDUtilities registerUser:nil];

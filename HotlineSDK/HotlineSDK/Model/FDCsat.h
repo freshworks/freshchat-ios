@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "KonotorConversation.h"
+#import "KonotorDataManager.h"
 
 typedef enum {
     CSAT_RATED = 0,
@@ -28,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *mobileUserCommentsAllowed;
 @property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
 
++(FDCsat *)getWithID:(NSNumber *)csatID inContext:(NSManagedObjectContext *)context;
++(FDCsat *)createWithInfo:(NSDictionary *)csatInfo inContext:(NSManagedObjectContext *)context;
 
 @end
 

@@ -61,6 +61,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSString *sharedLibraryPath = nil;
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
     sharedLibraryPath = [libraryPath stringByAppendingPathComponent:@"Database"];
+    FDLog(@"\n\n\n%@\n\n\n", sharedLibraryPath);
     NSFileManager *manager = [NSFileManager defaultManager];
     BOOL isDirectory;
     if (![manager fileExistsAtPath:sharedLibraryPath isDirectory:&isDirectory] || !isDirectory) {

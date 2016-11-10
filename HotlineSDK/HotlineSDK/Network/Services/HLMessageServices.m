@@ -62,6 +62,33 @@ static HLNotificationHandler *handleUpdateNotification;
     
 }
 
++(void)processConversationForCSAT:(NSArray *)conversations{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        for (int i=0; i<conversations.count; i++) {
+            NSDictionary *conversationInfo = conversations[i];
+            NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+            KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+
+            bool hasPendingCSAT = [conversationInfo[@"hasPendingCsat"]boolValue];
+            if (hasPendingCSAT) {
+                NSDictionary *csatInfo = conversationInfo[@"csat"];
+                NSNumber *csatID = conversationInfo[@"csatId"];
+                
+                FDLog(@"Conversation ID : %@ requires CSAT", conversationInfo[@"conversationId"]);
+                FDLog(@"%@", csatInfo);
+                
+                FDCsat *csat = [FDCsat getWithID:csatID inContext:context];
+                if (!csat) {
+                    csat = [FDCsat createWithInfo:conversationInfo inContext:context];
+                    csat.belongsToConversation = conversation;
+                }
+            }
+        }
+        [context save:nil];
+    }];
+}
+
 +(void)fetchMessages:(void(^)(NSError *error))handler{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -70,14 +97,15 @@ static HLNotificationHandler *handleUpdateNotification;
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
         __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
-        NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
-        [request setRelativePath:path andURLParams:@[appKey, afterTime]];
+        //NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
+        [request setRelativePath:path andURLParams:@[appKey]];
         
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
             if (!error) {
                 NSDictionary *response = responseInfo.responseAsDictionary;
                 NSArray *conversations = response[@"conversations"];
+                [self processConversationForCSAT:conversations];
                 
                 if(!response || !conversations){
                     FDMemLogger *memLogger = [[FDMemLogger alloc]init];
@@ -88,7 +116,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     return;
                 }
                 
-                FDLog(@"New Messages Count : %lu", (unsigned long)conversations.count);
+                FDLog(@"Conversations created locally : %lu", (unsigned long)conversations.count);
                 
                 NSNumber *channelId;
                 
