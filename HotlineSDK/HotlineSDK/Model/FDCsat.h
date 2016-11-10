@@ -8,15 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "KonotorConversation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FDCsat : NSManagedObject
 
-@property (nullable, nonatomic, copy) NSNumber *csatID;
-@property (nullable, nonatomic, copy) NSString *question;
-@property (nullable, nonatomic, copy) NSNumber *isManadatory;
-@property (nullable, nonatomic, copy) NSNumber *mobileUserCommentsAllowed;
+@property (nullable, nonatomic, retain) NSNumber *csatID;
+@property (nullable, nonatomic, retain) NSString *question;
+@property (nullable, nonatomic, retain) NSNumber *isManadatory;
+@property (nullable, nonatomic, retain) NSNumber *mobileUserCommentsAllowed;
+@property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
 
 
 @end

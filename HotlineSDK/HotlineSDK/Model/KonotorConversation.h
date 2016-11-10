@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "HLChannel.h"
+#import "FDCsat.h"
+
+@class FDCsat;
 
 @interface KonotorConversation : NSManagedObject
 
@@ -24,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *updatedMillis;
 @property (nullable, nonatomic, retain) HLChannel *belongsToChannel;
 @property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *hasMessages;
+@property (nullable, nonatomic, retain) NSSet<FDCsat *> *hasCsat;
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel;
 +(KonotorConversation *) RetriveConversationForConversationId: (NSString *)conversationId;

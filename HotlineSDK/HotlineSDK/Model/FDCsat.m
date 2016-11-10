@@ -14,5 +14,6 @@
 @dynamic question;
 @dynamic isManadatory;
 @dynamic mobileUserCommentsAllowed;
+@dynamic belongsToConversation;
 
 @end
