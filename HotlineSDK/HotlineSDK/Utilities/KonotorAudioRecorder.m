@@ -29,6 +29,10 @@ KonotorAlertView *pAlert;
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted){
             dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"HLPauseAppAudioNotification"
+                 object:self];
                 [KonotorAudioRecorder startRecordingA];
             });
         }

@@ -45,11 +45,16 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     [KonotorAudioPlayer UnInitPlayer];
     
     [KonotorAudioPlayer currentPlaying:nil set:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPlayAppAudioNotification" object:self];
     return YES;
 }
 
 +(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime{
     
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"HLPauseAppAudioNotification"
+     object:self];
+
     NSError *error;
     KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
     if(!messageObject)
@@ -253,6 +258,9 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [KonotorAudioPlayer UnInitPlayer];
     [KonotorAudioPlayer currentPlaying:nil set:YES];
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"HLPlayAppAudioNotification"
+     object:self];
     return YES;
 }
 
@@ -266,8 +274,10 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [KonotorAudioPlayer UnInitPlayer];
     [KonotorAudioPlayer currentPlaying:nil set:YES];
-
     
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"HLPlayAppAudioNotification"
+     object:self];
 }
 
 + (double) audioPlayerGetCurrentTime

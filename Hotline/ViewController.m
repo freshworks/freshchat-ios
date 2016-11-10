@@ -11,10 +11,14 @@
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 
-@interface ViewController ()
+
+@interface ViewController (){
+    
+}
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
+
 
 @end
 
@@ -25,7 +29,33 @@
     
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
+    
+    // Construct URL to sound file
+    NSString *path = [NSString stringWithFormat:@"%@/mmmm.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    
+    // Create audio player object and initialize with URL to sound
+    __audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveHLPlayNotification:)
+                                                 name:@"HLPlayAppAudioNotification"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveHLPauseNotification:)
+                                                 name:@"HLPauseAppAudioNotification"
+                                               object:nil];
+    
 }
+
+- (void) receiveHLPlayNotification:(NSNotification *) notification{
+    
+    [__audioPlayer play];
+}
+ 
+- (void) receiveHLPauseNotification:(NSNotification *) notification{
+    [__audioPlayer pause];
+}
+
 
 -(void)setupSubview{
     self.imageView = [[UIImageView alloc]init];
@@ -36,10 +66,13 @@
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imgView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[imgView]|" options:0 metrics:nil views:views]];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    
+    if(![__audioPlayer isPlaying]){
+        [__audioPlayer play];
+    }
     [super viewWillAppear:animated];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if (appDelegate.pickedImage) {
@@ -47,7 +80,10 @@
     }else{
         self.imageView.image = [UIImage imageNamed:@"background"];
     }
-    
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+  //  [__audioPlayer pause];
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
