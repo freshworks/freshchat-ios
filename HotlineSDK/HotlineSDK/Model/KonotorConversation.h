@@ -15,6 +15,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSString *conversationAlias;
+@property (nullable, nonatomic, retain) NSNumber *hasPendingCsat;
 @property (nullable, nonatomic, retain) NSString *conversationHostUserAlias;
 @property (nullable, nonatomic, retain) NSString *conversationHostUserId;
 @property (nullable, nonatomic, retain) NSNumber *createdMillis;
