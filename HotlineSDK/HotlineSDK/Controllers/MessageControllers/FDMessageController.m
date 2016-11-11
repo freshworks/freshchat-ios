@@ -138,6 +138,10 @@ typedef struct {
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if (self.conversation.hasPendingCsat.boolValue) {
+        FDLog(@"Has pending CSAT");
+        [self updateBottomViewWith:self.yesNoPrompt andHeight:80];
+    }
     [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
@@ -856,10 +860,44 @@ typedef struct {
 }
 
 -(void)submittedCSATWithInfo:(NSDictionary *)info{
-    NSLog(@"CSAT Info :%@", info);
+    NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
+ 
+    NSString *conversationID = self.conversation.conversationAlias;
+    NSNumber *csatID = self.conversation.hasCsat.allObjects.firstObject.csatID;
+    
+    if (conversationID) {
+        response[@"conversationId"] = conversationID;
+    }
+    
+    if (csatID) {
+        response[@"csatId"] = csatID;
+    }
+    
+    response[@"stars"] = info[@"ratingStars"];
+    response[@"response"] = info[@"feedback"];
+    response[@"issueResolved"] = @"true";
+    
+    [HLMessageServices postCSAT:response];
 }
 
 -(void)noButtonClicked:(id)sender{
+    NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
+    
+    NSString *conversationID = self.conversation.conversationAlias;
+    NSNumber *csatID = self.conversation.hasCsat.allObjects.firstObject.csatID;
+    
+    if (conversationID) {
+        response[@"conversationId"] = conversationID;
+    }
+    
+    if (csatID) {
+        response[@"csatId"] = csatID;
+    }
+    
+    response[@"issueResolved"] = @"false";
+    
+    [HLMessageServices postCSAT:response];
+    
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 

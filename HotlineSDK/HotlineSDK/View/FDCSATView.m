@@ -138,7 +138,20 @@
 }
 
 -(void)submitButtonPressed{
-    NSLog(@"User rated %d stars \n feedback: %@", (int)self.rating, self.feedbackView.text);
+    //TODO: Add validation and enforce user if they do not rate
+    if (self.delegate) {
+        NSMutableDictionary *userFeedback = [[NSMutableDictionary alloc]init];
+        
+        if (self.rating) {
+            userFeedback[@"ratingStars"]  = [NSString stringWithFormat:@"%d", (int)self.rating];
+        }
+        
+        if (self.feedbackView.text && ![self.feedbackView.text isEqualToString:@""]) {
+            userFeedback[@"feedback"] = self.feedbackView.text;
+        }
+        [self.delegate submittedCSATWithInfo:userFeedback];
+    }
+    [self dismiss];
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{

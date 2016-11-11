@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) KonotorConversation *belongToConversation;
 
 +(FDCsat *)getWithID:(NSNumber *)csatID inContext:(NSManagedObjectContext *)context;
++(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)csatInfo;
 +(FDCsat *)createWithInfo:(NSDictionary *)csatInfo inContext:(NSManagedObjectContext *)context;
 
 @end

@@ -121,7 +121,7 @@
     }];
     
     [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
-        NSLog(@"updated unread messages count %@", note.userInfo[@"count"]);
+        NSLog(@"Unread messages  %@", note.userInfo[@"count"]);
     }];
 }
 

@@ -43,3 +43,5 @@
 #define HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API @"/app/services/app/%@/user/%@/conversation/v2"
 
 #define HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH @"/app/services/app/%@/user/%@/message/marketing/%@/status"
+
+#define HOTLINE_API_CSAT_PATH @"/app/services/app/%@/user/%@/conversation/%@/csat/%@/response"

@@ -34,14 +34,17 @@
     return csat;
 }
 
-
-+(FDCsat *)createWithInfo:(NSDictionary *)csatInfo inContext:(NSManagedObjectContext *)context{
-    FDCsat *csat = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CSAT_ENTITY inManagedObjectContext:context];
++(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)csatInfo{
     csat.csatID = csatInfo[@"csatId"];
     csat.question = csatInfo[@"question"];
     csat.mobileUserCommentsAllowed = [csatInfo valueForKeyPath:@"mobileUserCommentsAllowed"];
     csat.csatStatus = @(CSAT_NOT_RATED);
     return csat;
+}
+
++(FDCsat *)createWithInfo:(NSDictionary *)csatInfo inContext:(NSManagedObjectContext *)context{
+    FDCsat *csat = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CSAT_ENTITY inManagedObjectContext:context];
+    return [self updateCSAT:csat withInfo:csatInfo];
 }
 
 @end

@@ -69,19 +69,24 @@ static HLNotificationHandler *handleUpdateNotification;
             NSDictionary *conversationInfo = conversations[i];
             NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
             KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
-
-            bool hasPendingCSAT = [conversationInfo[@"hasPendingCsat"]boolValue];
-            if (hasPendingCSAT) {
-                NSDictionary *csatInfo = conversationInfo[@"csat"];
-                
-                FDLog(@"Conversation ID : %@ requires CSAT", conversationInfo[@"conversationId"]);
-                FDLog(@"%@", csatInfo);
-                
-                FDCsat *csat = [FDCsat getWithID:csatInfo[@"csatId"] inContext:context];
-                if (!csat) {
-                    FDLog(@"Inserted a CSAT entry");
-                    csat = [FDCsat createWithInfo:csatInfo inContext:context];
-                    csat.belongToConversation = conversation;
+            if ([conversationInfo objectForKey:@"hasPendingCsat"]) {
+                conversation.hasPendingCsat = @([conversationInfo[@"hasPendingCsat"] boolValue]);
+                if ([conversationInfo objectForKey:@"csat"]) {
+                    NSDictionary *csatInfo = conversationInfo[@"csat"];
+                    
+                    if ([conversationInfo[@"hasPendingCsat"] boolValue]) {
+                        FDLog(@"*** CSAT for Conversation ID : %@ is pending ***", conversationInfo[@"conversationId"]);
+                    }
+                    
+                    FDCsat *csat = [FDCsat getWithID:csatInfo[@"csatId"] inContext:context];
+                    if (!csat) {
+                        FDLog(@"Made a CSAT entry");
+                        csat = [FDCsat createWithInfo:csatInfo inContext:context];
+                        csat.belongToConversation = conversation;
+                    }else{
+                        FDLog(@"Update existing CSAT entry");
+                        [FDCsat updateCSAT:csat withInfo:csatInfo];
+                    }
                 }
             }
         }
@@ -477,6 +482,27 @@ static HLNotificationHandler *handleUpdateNotification;
                 [message markAsUnread];
             }
             [context save:nil];
+        }];
+    }];
+}
+
++(void)postCSAT:(NSDictionary *)response{
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSNumber *csatID = [response valueForKeyPath:@"csatId"];
+    NSNumber *conversationID = [response valueForKeyPath:@"conversationId"];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
+    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+            if (!error) {
+                FDLog(@"*** CSAT submitted *** \n %@", response);
+            }else{
+                FDLog(@"CSAT submission failed");
+            }            
         }];
     }];
 }
