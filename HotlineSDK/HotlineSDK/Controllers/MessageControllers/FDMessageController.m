@@ -62,7 +62,6 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
 @property (strong, nonatomic) NSString *appAudioCategory;
-
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
 @property (nonatomic) NSInteger messageCountPrevious;
