@@ -22,6 +22,7 @@ KonotorAudioRecorder *gkAudioRecorder;
 NSURL *pFileToUpload;
 
 KonotorAlertView *pAlert;
+static NSString *beforeRecordCategory;
 
 @implementation KonotorAudioRecorder
 
@@ -30,9 +31,7 @@ KonotorAlertView *pAlert;
         if (granted){
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"HLPauseAppAudioNotification"
-                 object:self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPauseAppAudioNotification" object:self];
                 [KonotorAudioRecorder startRecordingA];
             });
         }
@@ -45,6 +44,7 @@ KonotorAlertView *pAlert;
     NSError *error;
     
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    beforeRecordCategory = audioSession.category;
     
     [audioSession setActive:NO error:&error];
     
@@ -302,6 +302,11 @@ KonotorAlertView *pAlert;
     [KonotorAudioRecorder UnInitRecorder];
     
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
+    
+    AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    NSError *error;
+    [audioSession setCategory:beforeRecordCategory error:&error];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPlayAppAudioNotification" object:self];
     
     return YES;
 }

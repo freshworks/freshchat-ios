@@ -20,6 +20,7 @@ KonotorMessage *gCurrentlyPlaying;
 
 BOOL gkIsAudioAlreadyPlaying = NO;
 KonotorAudioPlayer *gkSingletonPlayer = nil;
+static NSString *beforePlayCategory;
 
 +(BOOL) playMessageWithMessageID : (NSString *)messageID
 {
@@ -45,6 +46,8 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     [KonotorAudioPlayer UnInitPlayer];
     
     [KonotorAudioPlayer currentPlaying:nil set:YES];
+    NSError *error;
+    [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPlayAppAudioNotification" object:self];
     return YES;
 }
@@ -61,6 +64,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
         return NO;
     
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    beforePlayCategory = audioSession.category;
 
     //TODO: set audio session back to the original state when dismissing msg controller
     
@@ -258,9 +262,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [KonotorAudioPlayer UnInitPlayer];
     [KonotorAudioPlayer currentPlaying:nil set:YES];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"HLPlayAppAudioNotification"
-     object:self];
     return YES;
 }
 
@@ -275,6 +276,8 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     [KonotorAudioPlayer UnInitPlayer];
     [KonotorAudioPlayer currentPlaying:nil set:YES];
     
+    NSError *error;
+    [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"HLPlayAppAudioNotification"
      object:self];
