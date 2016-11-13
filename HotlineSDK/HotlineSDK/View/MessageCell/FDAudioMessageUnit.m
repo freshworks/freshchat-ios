@@ -109,7 +109,7 @@
     else
     {
         [FDLocalNotification post:HOTLINE_AUDIO_RECORDING_CLOSE];
-        [self playAudioMessage];
+        //[self playAudioMessage];
     }
 }
 
