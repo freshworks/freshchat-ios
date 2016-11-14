@@ -79,10 +79,11 @@ static HLNotificationHandler *handleUpdateNotification;
                     }
                     
                     FDCsat *csat = [FDCsat getWithID:csatInfo[@"csatId"] inContext:context];
+                    csat.belongToConversation = conversation;
+
                     if (!csat) {
                         FDLog(@"Made a CSAT entry");
                         csat = [FDCsat createWithInfo:csatInfo inContext:context];
-                        csat.belongToConversation = conversation;
                     }else{
                         FDLog(@"Update existing CSAT entry");
                         [FDCsat updateCSAT:csat withInfo:csatInfo];

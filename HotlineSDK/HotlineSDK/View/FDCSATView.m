@@ -27,10 +27,9 @@
 
 @implementation FDCSATView
 
-- (instancetype)initWithController:(UIViewController *)controller andDelegate:(id <FDCSATViewDelegate>)delegate{
+- (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView{
     self = [super initWithFrame:CGRectZero];
     if (self) {
-        self.delegate = delegate;
         
         //Transparent background view
         self.transparentView  = [UIView new];
@@ -54,12 +53,11 @@
         [self.CSATPrompt addSubview:starRatingView];
         
         //Survey title
-        UILabel *surveyTitle = [UILabel new];
-        surveyTitle.numberOfLines = 0;
-        surveyTitle.textAlignment = NSTextAlignmentCenter;
-        surveyTitle.translatesAutoresizingMaskIntoConstraints = NO;
-        surveyTitle.text = @"How would you rate your interaction with us ?";
-        [self.CSATPrompt addSubview:surveyTitle];
+        self.surveyTitle = [UILabel new];
+        self.surveyTitle.numberOfLines = 0;
+        self.surveyTitle.textAlignment = NSTextAlignmentCenter;
+        self.surveyTitle.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.CSATPrompt addSubview:self.surveyTitle];
         
         //Submit button
         UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -87,7 +85,7 @@
         [self.CSATPrompt addSubview:horizontalLine];
         
         //Layout constraints
-        NSDictionary *views = @{@"survey_title" : surveyTitle, @"submit_button" : submitButton,
+        NSDictionary *views = @{@"survey_title" : self.surveyTitle, @"submit_button" : submitButton,
                                 @"horizontal_line" : horizontalLine, @"feedback_view" : self.feedbackView,
                                 @"superview" : controller.view, @"transparent_view" : self.transparentView,
                                 @"star_rating_view" : starRatingView};
@@ -98,23 +96,29 @@
         
         //CSAT prompt constraints
         [FDAutolayoutHelper setWidth:250 forView:self.CSATPrompt inView:self.transparentView];
-        [FDAutolayoutHelper setHeight:200 forView:self.CSATPrompt inView:self.transparentView];
         [FDAutolayoutHelper centerX:self.CSATPrompt onView:self.transparentView];
         self.CSATPromptCenterYConstraint = [FDAutolayoutHelper centerY:self.CSATPrompt onView:self.transparentView];
         
         //CSAT prompt subviews
         [FDAutolayoutHelper setWidth:150 forView:starRatingView inView:self.CSATPrompt];
         [FDAutolayoutHelper centerX:starRatingView onView:self.CSATPrompt];
-        [FDAutolayoutHelper centerX:surveyTitle onView:self.CSATPrompt];
+        [FDAutolayoutHelper centerX:self.surveyTitle onView:self.CSATPrompt];
         [FDAutolayoutHelper centerX:self.feedbackView onView:self.CSATPrompt];
         [FDAutolayoutHelper centerX:submitButton onView:self.CSATPrompt];
 
-        [FDAutolayoutHelper setWidth:200 forView:surveyTitle inView:self.CSATPrompt];
+        [FDAutolayoutHelper setWidth:200 forView:self.surveyTitle inView:self.CSATPrompt];
         [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
         [FDAutolayoutHelper setWidth:200 forView:self.feedbackView inView:self.CSATPrompt];
         //TODO: Change survey title to intrinsic content size (by setting dynamically)
-        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(50)][feedback_view]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:0 metrics:nil views:views]];
-
+        
+        if (hideFeedbackView) {
+            [FDAutolayoutHelper setHeight:150 forView:self.CSATPrompt inView:self.transparentView];
+            [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(50)]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:0 metrics:nil views:views]];
+        }else{
+            [FDAutolayoutHelper setHeight:200 forView:self.CSATPrompt inView:self.transparentView];
+            [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(50)][feedback_view]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:0 metrics:nil views:views]];
+        }
+        
         //Hide by default
         self.transparentView.hidden = YES;
         self.CSATPrompt.hidden = YES;
@@ -139,19 +143,22 @@
     self.rating = sender.value;
 }
 
+-(NSDictionary *)fetchUserInputs{
+    NSMutableDictionary *userFeedback = [[NSMutableDictionary alloc]init];
+    
+    if (self.rating) {
+        userFeedback[@"ratingStars"]  = [NSString stringWithFormat:@"%d", (int)self.rating];
+    }
+    
+    if (self.feedbackView.text && ![self.feedbackView.text isEqualToString:@""]) {
+        userFeedback[@"feedback"] = self.feedbackView.text;
+    }
+    return userFeedback;
+}
+
 -(void)submitButtonPressed{
-    //TODO: Add validation and enforce user if they do not rate
     if (self.delegate) {
-        NSMutableDictionary *userFeedback = [[NSMutableDictionary alloc]init];
-        
-        if (self.rating) {
-            userFeedback[@"ratingStars"]  = [NSString stringWithFormat:@"%d", (int)self.rating];
-        }
-        
-        if (self.feedbackView.text && ![self.feedbackView.text isEqualToString:@""]) {
-            userFeedback[@"feedback"] = self.feedbackView.text;
-        }
-        [self.delegate submittedCSATWithInfo:userFeedback];
+        [self.delegate submittedCSATWithInfo:[self fetchUserInputs]];
     }
     [self dismiss];
 }
@@ -160,8 +167,16 @@
     return (touch.view == self.transparentView);
 }
 
+//Submit CSAT without user input
 -(void)tappedOutsidePrompt{
+    if (self.delegate) {
+        [self.delegate recordCSATYesState];
+    }
     [self dismiss];
+}
+
+-(BOOL)isShowing{
+    return !self.CSATPrompt.hidden;
 }
 
 -(void)show{

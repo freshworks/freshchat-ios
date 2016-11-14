@@ -163,6 +163,13 @@ typedef struct {
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [self localNotificationUnSubscription];
+    
+    
+    if (self.CSATView.isShowing) {
+        FDLog(@"*** Leaving message screen with active CSAT | Recording yes state ***");
+        [self recordCSATYesState];
+    }
+    
 }
 
 -(void)registerAppAudioCategory{
@@ -844,11 +851,14 @@ typedef struct {
     }
 }
 
-
-//Loat CSATView when needed
+//Load CSATView when needed
 -(FDCSATView *)CSATView{
     if (!_CSATView) {
-        _CSATView = [[FDCSATView alloc]initWithController:self andDelegate:self];
+        FDCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
+        BOOL hideFeedBackView = !csat.mobileUserCommentsAllowed.boolValue;
+        _CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView];
+        _CSATView.delegate = self;
+        _CSATView.surveyTitle.text = csat.question;
     }
     return _CSATView;
 }
@@ -858,46 +868,47 @@ typedef struct {
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
--(void)submittedCSATWithInfo:(NSDictionary *)info{
+-(NSDictionary *)getConversationAndCsatID{
     NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
- 
+    
     NSString *conversationID = self.conversation.conversationAlias;
     NSNumber *csatID = self.conversation.hasCsat.allObjects.firstObject.csatID;
     
-    if (conversationID) {
-        response[@"conversationId"] = conversationID;
+    if (conversationID == nil || csatID == nil) {
+        return nil;
     }
+
+    response[@"conversationId"] = conversationID;
+    response[@"csatId"] = csatID;
     
-    if (csatID) {
-        response[@"csatId"] = csatID;
+    return response;
+}
+
+-(void)recordCSATYesState{
+    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:[self getConversationAndCsatID]];
+    if(response){
+        response[@"issueResolved"] = @"true";
+        [HLMessageServices postCSAT:response];
     }
-    
-    response[@"stars"] = info[@"ratingStars"];
-    response[@"response"] = info[@"feedback"];
-    response[@"issueResolved"] = @"true";
-    
-    [HLMessageServices postCSAT:response];
 }
 
 -(void)noButtonClicked:(id)sender{
-    NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
-    
-    NSString *conversationID = self.conversation.conversationAlias;
-    NSNumber *csatID = self.conversation.hasCsat.allObjects.firstObject.csatID;
-    
-    if (conversationID) {
-        response[@"conversationId"] = conversationID;
+    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:[self getConversationAndCsatID]];
+    if(response){
+        response[@"issueResolved"] = @"false";
+        [HLMessageServices postCSAT:response];
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }
-    
-    if (csatID) {
-        response[@"csatId"] = csatID;
+}
+
+-(void)submittedCSATWithInfo:(NSDictionary *)info{
+    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:[self getConversationAndCsatID]];
+    if (response) {
+        response[@"stars"] = info[@"ratingStars"];
+        response[@"response"] = info[@"feedback"];
+        response[@"issueResolved"] = @"true";
+        [HLMessageServices postCSAT:response];
     }
-    
-    response[@"issueResolved"] = @"false";
-    
-    [HLMessageServices postCSAT:response];
-    
-    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
 - (void) sendMessage{
