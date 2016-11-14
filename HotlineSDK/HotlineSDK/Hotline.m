@@ -563,22 +563,22 @@
     }
     
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
-        FDLog(@"Deleted all meta properties");
         [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
-            // Initiate a init
-            if(doInit){
-                [self initWithConfig:config completion:completion];
-            }else{
-                if (completion) {
-                    completion();
+            [[KonotorDataManager sharedInstance]deleteAllCSATEntries:^(NSError *error) {
+                if(doInit){
+                    [self initWithConfig:config completion:completion];
+                }else{
+                    if (completion) {
+                        completion();
+                    }
                 }
-            }
-            if (deviceToken) {
-                [self storeDeviceToken:deviceToken];
-            }
+                if (deviceToken) {
+                    [self storeDeviceToken:deviceToken];
+                }
+
+            }];
         }];
     }];
-    
 }
 
 -(void)clearUserDataWithCompletion:(void (^)())completion{
