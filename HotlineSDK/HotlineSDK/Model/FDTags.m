@@ -15,34 +15,29 @@
 @dynamic taggableType;
 @dynamic tagName;
 
-+(FDTags *)createWithInfo:(NSDictionary *)TagsInfo inContext:(NSManagedObjectContext *)context{
-    
-    FDTags *tag = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_TAGS_ENTITY inManagedObjectContext:context];
-    return [self addTags:tag withInfo:TagsInfo];
-}
 
-+(FDTags *)getTaggedWithId : (NSNumber *) taggableID andType: (NSNumber *)taggableType inContext:(NSManagedObjectContext *)context{
++(void)createTagWithInfo : (NSDictionary *)tagInfo inContext:(NSManagedObjectContext *)context{
     
     FDTags *taggedObj;
+    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %d AND taggableType == %d",taggableID, taggableType];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %d AND taggableType == %d",tagInfo[@"taggableID"], tagInfo[@"taggableType"]];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 1) {
         taggedObj = matches.firstObject;
+        taggedObj.tagName = tagInfo[@"tagName"];
     }
-    return taggedObj;
+    else{
+        FDTags *tag = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_TAGS_ENTITY inManagedObjectContext:context];
+        [self addTag:tag withInfo:tagInfo];
+    }
 }
 
--(void)updateWithInfo:(NSDictionary *)tagInfo{
++(FDTags *)addTag:(FDTags *)tag withInfo:(NSDictionary *)tagInfo{
     
-    [FDTags addTags:self withInfo:tagInfo];
-}
-
-+(FDTags *)addTags:(FDTags *)tag withInfo:(NSDictionary *)TagsInfo{
-    
-    tag.taggableID = TagsInfo[@"taggableID"];
-    tag.taggableType = TagsInfo[@"taggableType"];
-    tag.tagName = TagsInfo[@"tagName"];
+    tag.taggableID = tagInfo[@"taggableID"];
+    tag.taggableType = tagInfo[@"taggableType"];
+    tag.tagName = tagInfo[@"tagName"];
     return tag;
 }
 
