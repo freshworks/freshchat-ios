@@ -11,7 +11,7 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @end
 

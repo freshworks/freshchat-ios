@@ -18,7 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
-
+@property (nonatomic, strong) NSURL *soundUrl;
 
 @end
 
@@ -31,11 +31,13 @@
     [super viewDidLoad];
     
     // Construct URL to sound file
-    NSString *path = [NSString stringWithFormat:@"%@/mmmm.mp3", [[NSBundle mainBundle] resourcePath]];
-    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    NSString *path = [NSString stringWithFormat:@"%@/youraudio.mp3", [[NSBundle mainBundle] resourcePath]];
+    _soundUrl = [NSURL fileURLWithPath:path];
     
     // Create audio player object and initialize with URL to sound
-    __audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
+    if(_soundUrl){
+        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_soundUrl error:nil];
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPlayNotification:)
                                                  name:@"HLPlayAppAudioNotification"
@@ -48,12 +50,15 @@
 }
 
 - (void) receiveHLPlayNotification:(NSNotification *) notification{
-    
-    [__audioPlayer play];
+    if(_soundUrl){
+        [_audioPlayer play];
+    }
 }
- 
+
 - (void) receiveHLPauseNotification:(NSNotification *) notification{
-    [__audioPlayer pause];
+    if(_soundUrl){
+        [_audioPlayer pause];
+    }
 }
 
 
@@ -70,8 +75,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
-    if(![__audioPlayer isPlaying]){
-        [__audioPlayer play];
+    if(![_audioPlayer isPlaying]){
+        [_audioPlayer play];
     }
     [super viewWillAppear:animated];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -80,10 +85,6 @@
     }else{
         self.imageView.image = [UIImage imageNamed:@"background"];
     }
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-  //  [__audioPlayer pause];
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
