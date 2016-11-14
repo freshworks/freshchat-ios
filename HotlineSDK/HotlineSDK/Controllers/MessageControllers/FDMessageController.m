@@ -542,6 +542,8 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"HLPlayAppAudioNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"HLPauseAppAudioNotification" object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
