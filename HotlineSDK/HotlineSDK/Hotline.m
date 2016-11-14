@@ -314,7 +314,7 @@
         }
     }
     else {
-        FDLog(@"*** Not updating device token *** Register user first");
+        FDLog(@"Not updating device token : Register user first");
     }
 }
 

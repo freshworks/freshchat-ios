@@ -570,7 +570,7 @@ typedef struct {
     CGFloat calculatedHeight = self.view.bounds.size.height - keyboardRect.origin.y;
     CGFloat keyboardCoveredHeight = self.keyboardHeight < calculatedHeight ? calculatedHeight : self.keyboardHeight;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
-    self.CSATView.CSATPromptCenterYConstraint.constant = -100;
+    self.CSATView.CSATPromptCenterYConstraint.constant = -calculatedHeight/2;
     
     self.keyboardHeight = keyboardCoveredHeight;
     [UIView animateWithDuration:animationDuration animations:^{

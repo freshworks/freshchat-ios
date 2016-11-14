@@ -101,7 +101,7 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
             
-            FDLog(@" *** User registration status *** ");
+            FDLog(@"*** User registration status ***");
             
             if (statusCode == 201 || statusCode == 304) {
                 
@@ -253,7 +253,7 @@
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"DAU call made");
+            FDLog(@"**** DAU call made ****");
         }else{
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);

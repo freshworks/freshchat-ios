@@ -146,7 +146,7 @@
 -(NSDictionary *)fetchUserInputs{
     NSMutableDictionary *userFeedback = [[NSMutableDictionary alloc]init];
     
-    if (self.rating) {
+    if (self.rating > 0) {
         userFeedback[@"ratingStars"]  = [NSString stringWithFormat:@"%d", (int)self.rating];
     }
     

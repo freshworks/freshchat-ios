@@ -35,7 +35,6 @@
 }
 
 +(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)csatInfo{
-    FDLog(@"New CSAT Info from portal : %@", csatInfo);
     csat.csatID = csatInfo[@"csatId"];
     csat.question = csatInfo[@"question"];
     csat.mobileUserCommentsAllowed = csatInfo[@"mobileUserCommentsAllowed"];

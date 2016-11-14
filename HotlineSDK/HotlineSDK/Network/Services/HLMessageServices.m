@@ -75,17 +75,16 @@ static HLNotificationHandler *handleUpdateNotification;
                     NSDictionary *csatInfo = conversationInfo[@"csat"];
                     
                     if ([conversationInfo[@"hasPendingCsat"] boolValue]) {
-                        FDLog(@"*** CSAT for Conversation ID : %@ is pending ***", conversationInfo[@"conversationId"]);
+                        FDLog(@"*** CSAT for Conversation ID :%@ is pending ***", conversationInfo[@"conversationId"]);
                     }
                     
                     FDCsat *csat = [FDCsat getWithID:csatInfo[@"csatId"] inContext:context];
                     csat.belongToConversation = conversation;
 
                     if (!csat) {
-                        FDLog(@"Made a CSAT entry");
+                        FDLog(@"Added a new CSAT entry\n %@", csatInfo);
                         csat = [FDCsat createWithInfo:csatInfo inContext:context];
                     }else{
-                        FDLog(@"Update existing CSAT entry");
                         [FDCsat updateCSAT:csat withInfo:csatInfo];
                     }
                 }
@@ -122,7 +121,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     return;
                 }
                 
-                FDLog(@"Conversations created locally : %lu", (unsigned long)conversations.count);
+                FDLog(@"%lu Conversations created locally", (unsigned long)conversations.count);
                 
                 NSNumber *channelId;
                 
