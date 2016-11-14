@@ -854,7 +854,6 @@ typedef struct {
 }
 
 -(void)yesButtonClicked:(id)sender{
-    FDLog(@"Yes button pressed, display the prompt view with stars");
     [self.CSATView show];
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }

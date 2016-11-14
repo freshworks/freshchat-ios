@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSLayoutConstraint *CSATPromptCenterYConstraint;
 
 - (instancetype)initWithController:(UIViewController *)controller andDelegate:(id <FDCSATViewDelegate>)delegate;
+- (void)hideFeedbackView;
 - (void)show;
 - (void)dismiss;
 

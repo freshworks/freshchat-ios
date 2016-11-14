@@ -10,12 +10,14 @@
 #import "HCSStarRatingView.h"
 #import "FDAutolayoutHelper.h"
 #import "HLTheme.h"
+#import "FDGrowingTextView.h"
+#import "HLLocalization.h"
 
 @interface FDCSATView() <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *transparentView;
 @property (nonatomic, strong) UIView *CSATPrompt;
-@property (nonatomic, strong) UITextView *feedbackView;
+@property (nonatomic, strong) FDGrowingTextView *feedbackView;
 @property (nonatomic) float rating;
 
 @end
@@ -67,12 +69,12 @@
         [self.CSATPrompt addSubview:submitButton];
         
         //Feedback textview
-        self.feedbackView = [UITextView new];
+        self.feedbackView = [FDGrowingTextView new];
+        self.feedbackView.placeholder = HLLocalizedString(LOC_CSAT_FEEDBACK_VIEW_PLACEHOLDER_TEXT);
         self.feedbackView.opaque = NO;
         self.feedbackView.alpha = 0.7;
         self.feedbackView.layer.borderWidth = 0.5;
         self.feedbackView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        self.feedbackView.text = @"Enter feedback here";
         self.feedbackView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.CSATPrompt addSubview:self.feedbackView];
         

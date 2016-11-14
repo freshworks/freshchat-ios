@@ -89,3 +89,7 @@
 
 /*Notifications*/
 "notification_message_default"="Hey, you have a new message";
+
+/*CSAT*/
+"csat_feedback_view_placeholder_text"="Enter your feedback here";
+
