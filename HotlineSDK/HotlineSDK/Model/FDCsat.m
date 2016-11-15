@@ -17,5 +17,6 @@
 @dynamic userRatingCount;
 @dynamic csatStatus;
 @dynamic userComments;
+@dynamic isIssueResolved;
 
 @end
