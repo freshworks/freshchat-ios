@@ -11,7 +11,7 @@
 #import "KonotorConversation.h"
 
 typedef enum {
-    CSAT_RATED = 0,
+    CSAT_RATED = 1,
     CSAT_NOT_RATED,
     CSAT_SENT
 } CSAT_STATUS;
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FDCsat : NSManagedObject
 
-@property (nullable, nonatomic, retain) NSNumber *csatID;
+@property (nullable, nonatomic, retain) NSString *csatID;
 @property (nullable, nonatomic, retain) NSString *question;
 @property (nullable, nonatomic, retain) NSNumber *csatStatus;
 @property (nullable, nonatomic, retain) NSString *userComments;
