@@ -75,6 +75,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     NSDictionary *csatInfo = conversationInfo[@"csat"];
                     
                     if ([conversationInfo[@"hasPendingCsat"] boolValue]) {
+                        [FDLocalNotification post:HOTLINE_PROCESS_PENDING_CSAT];
                         FDLog(@"*** CSAT for Conversation ID :%@ is pending ***", conversationInfo[@"conversationId"]);
                     }
                     

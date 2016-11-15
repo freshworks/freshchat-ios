@@ -21,6 +21,7 @@
 #define HOTLINE_AUDIO_MESSAGE_DOWNLOADED @"%@_com.freshdesk.hotline_audio_message_downloaded"
 
 #define HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS @"com.freshdesk.notification.perform_pending_tasks"
+#define HOTLINE_PROCESS_PENDING_CSAT @"com.freshdesk.notification.process_pending_csat"
 
 @interface FDLocalNotification : NSObject
 

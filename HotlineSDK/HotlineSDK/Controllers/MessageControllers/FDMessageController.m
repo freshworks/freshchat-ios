@@ -78,6 +78,7 @@ typedef struct {
 #define INPUT_TOOLBAR_HEIGHT  43
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
+#define YES_NO_PROMPT_HEIGHT 80
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -145,6 +146,8 @@ typedef struct {
     [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
+    [self processPendingCSAT];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -166,7 +169,7 @@ typedef struct {
     
     
     if (self.CSATView.isShowing) {
-        FDLog(@"*** Leaving message screen with active CSAT | Recording yes state ***");
+        FDLog(@"Leaving message screen with active CSAT, Recording YES state");
         [self recordCSATYesState];
     }
     
@@ -233,7 +236,7 @@ typedef struct {
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [self updateBottomViewWith:self.yesNoPrompt andHeight:80];
+    [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
 }
 
 -(void)closeButtonAction:(id)sender{
@@ -537,6 +540,10 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processPendingCSAT)
+                                                 name:HOTLINE_PROCESS_PENDING_CSAT object:nil];
+
 }
 
 -(void)networkReachable{
@@ -544,6 +551,7 @@ typedef struct {
 }
 
 -(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_PROCESS_PENDING_CSAT object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_NETWORK_REACHABLE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
@@ -851,7 +859,29 @@ typedef struct {
     }
 }
 
-//Load CSATView when needed
+- (void) sendMessage{
+    [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
+    [Konotor cancelRecording];
+}
+
+-(FDCsat *)getCSATObject{
+    return self.conversation.hasCsat.allObjects.firstObject;
+}
+
+-(void)processPendingCSAT{
+    if ([self hasPendingCSAT]) {
+        [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
+    }else{
+        if (self.CSATView.isShowing) {
+            [self.CSATView dismiss];
+        }
+    }
+}
+
+-(BOOL)hasPendingCSAT{
+    return (self.conversation.hasPendingCsat.boolValue && [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
+}
+
 -(FDCSATView *)CSATView{
     if (!_CSATView) {
         FDCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
@@ -911,10 +941,6 @@ typedef struct {
     }
 }
 
-- (void) sendMessage{
-    [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
-    [Konotor cancelRecording];
-}
 
 -(void)dealloc{
     self.tableView.delegate = nil;
