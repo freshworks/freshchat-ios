@@ -499,7 +499,8 @@ static HLNotificationHandler *handleUpdateNotification;
     [request setRelativePath:path andURLParams:@[appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if (!error && statusCode == 201) {
                 FDLog(@"*** CSAT submitted *** \n %@", response);
             }else{
                 FDLog(@"CSAT submission failed");
