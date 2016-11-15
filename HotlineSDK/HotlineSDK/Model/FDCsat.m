@@ -18,6 +18,7 @@
 @dynamic userRatingCount;
 @dynamic csatStatus;
 @dynamic userComments;
+@dynamic isIssueResolved;
 
 +(FDCsat *)getWithID:(NSNumber *)csatID inContext:(NSManagedObjectContext *)context{
     FDCsat *csat = nil;
