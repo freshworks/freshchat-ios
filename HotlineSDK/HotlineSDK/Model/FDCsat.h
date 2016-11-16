@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FDCsat : NSManagedObject
 
 @property (nullable, nonatomic, retain) NSString *csatID;
+@property (nullable, nonatomic, retain) NSString *conversationID;
 @property (nullable, nonatomic, retain) NSString *question;
 @property (nullable, nonatomic, retain) NSNumber *csatStatus;
 @property (nullable, nonatomic, retain) NSString *userComments;
