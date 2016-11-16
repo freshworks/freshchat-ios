@@ -12,6 +12,7 @@
 @implementation FDCsat
 
 @dynamic csatID;
+@dynamic conversationID;
 @dynamic question;
 @dynamic mobileUserCommentsAllowed;
 @dynamic belongToConversation;
