@@ -7,7 +7,9 @@
 //
 
 #import "HLArticleTagManager.h"
+#import "KonotorDataManager.h"
 #import "HLMacros.h"
+#import "FDTags.h"
 
 #define STORAGE_DIR_PATH @"Hotline/Offline"
 #define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
@@ -98,6 +100,44 @@
         }
         self.tagMap = updatedMap;
     });
+}
+
++(void) getAllArticleTags :(NSManagedObjectContext *)context{
+    
+    FDTags *taggedObj;
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableType == 1 AND taggableType == 2"];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count >= 1) {
+        //tag objects are available
+        
+    }
+    
+}
+
++(void) getAllCategoryTags : (NSManagedObjectContext *) context {
+    
+    FDTags *taggedObj;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableType == 2" ];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count >= 1) {
+        //tag objects are available
+        
+    }
+}
+
++(void) getAllChannelTags : (NSManagedObjectContext *) context {
+    
+    FDTags *taggedObj;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableType == 3" ];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if (matches.count >= 1) {
+        //tag objects are available
+        
+    }
 }
 
 -(void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion{
