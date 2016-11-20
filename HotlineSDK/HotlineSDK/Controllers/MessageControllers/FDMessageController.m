@@ -869,76 +869,83 @@ typedef struct {
 }
 
 -(void)processPendingCSAT{
-    if ([self hasPendingCSAT]) {
-        [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
-    }else{
-        if (self.CSATView.isShowing) {
-            [self.CSATView dismiss];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self hasPendingCSAT] && !self.CSATView.isShowing) {
+            [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
+            [self scrollTableViewToLastCell];
         }
-    }
+    });
 }
 
 -(BOOL)hasPendingCSAT{
-    return (self.conversation.hasPendingCsat.boolValue && [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
+    return (self.conversation.hasPendingCsat.boolValue &&
+            [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
 }
 
--(FDCSATView *)CSATView{
-    if (!_CSATView) {
-        FDCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
-        BOOL hideFeedBackView = !csat.mobileUserCommentsAllowed.boolValue;
-        _CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView];
-        _CSATView.delegate = self;
-        _CSATView.surveyTitle.text = csat.question;
+-(void)showCSATView{
+    //Dispose old prompt
+    if (self.CSATView) {
+        [self.CSATView removeFromSuperview];
+        self.CSATView = nil;
     }
-    return _CSATView;
+    
+    FDCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
+    BOOL hideFeedBackView = !csat.mobileUserCommentsAllowed.boolValue;
+    self.CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView];
+    self.CSATView.delegate = self;
+    self.CSATView.surveyTitle.text = csat.question;
+    [self.CSATView show];
 }
 
 -(void)yesButtonClicked:(id)sender{
-    [self.CSATView show];
+    [self showCSATView];
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
--(NSDictionary *)getConversationAndCsatID{
-    NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
-    
-    NSString *conversationID = self.conversation.conversationAlias;
-    NSNumber *csatID = self.conversation.hasCsat.allObjects.firstObject.csatID;
-    
-    if (conversationID == nil || csatID == nil) {
-        return nil;
-    }
-
-    response[@"conversationId"] = conversationID;
-    response[@"csatId"] = csatID;
-    
-    return response;
-}
-
 -(void)recordCSATYesState{
-    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:[self getConversationAndCsatID]];
-    if(response){
-        response[@"issueResolved"] = @"true";
-        [HLMessageServices postCSAT:response];
-    }
+    FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+    csatHolder.isIssueResolved = YES;
+    [self storeAndPostCSAT:csatHolder];
 }
 
 -(void)noButtonClicked:(id)sender{
-    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:[self getConversationAndCsatID]];
-    if(response){
-        response[@"issueResolved"] = @"false";
-        [HLMessageServices postCSAT:response];
-        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
-    }
+    FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+    csatHolder.isIssueResolved = NO;
+    [self storeAndPostCSAT:csatHolder];
+    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
--(void)submittedCSATWithInfo:(NSDictionary *)info{
-    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:[self getConversationAndCsatID]];
-    if (response) {
-        response[@"stars"] = info[@"ratingStars"];
-        response[@"response"] = info[@"feedback"];
-        response[@"issueResolved"] = @"true";
-        [HLMessageServices postCSAT:response];
-    }
+-(void)submittedCSAT:(FDCsatHolder *)csatHolder{
+    csatHolder.isIssueResolved = YES;
+    [self storeAndPostCSAT:csatHolder];
+}
+
+-(void)storeAndPostCSAT:(FDCsatHolder *)csatHolder{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        FDCsat *csat = [self getCSATObject];
+        
+        csat.isIssueResolved = csatHolder.isIssueResolved ? @"true" : @"false";
+        
+        if(csatHolder.userRatingCount > 0){
+            csat.userRatingCount = [NSNumber numberWithInt:csatHolder.userRatingCount];
+        }else{
+            csat.userRatingCount = nil;
+            FDLog(@"CSAT Warning! CSAT prompt allows submitting CSAT without rating");
+        }
+        
+        if (csatHolder.userComments && csatHolder.userComments.length > 0) {
+            csat.userComments = csatHolder.userComments;
+        }else{
+            csat.userComments = nil;
+        }
+        
+        csat.csatStatus = @(CSAT_RATED);
+        
+        [context save:nil];
+        
+        [HLMessageServices postCSATWithID:csat.objectID];
+    }];
 }
 
 -(void)dealloc{

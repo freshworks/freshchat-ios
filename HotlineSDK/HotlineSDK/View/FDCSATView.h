@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FDCsat.h"
 
 @protocol FDCSATViewDelegate <NSObject>
 
--(void)submittedCSATWithInfo:(NSDictionary *)info;
+-(void)submittedCSAT:(FDCsatHolder *)csatHolder;
 -(void)recordCSATYesState;
 
 @end

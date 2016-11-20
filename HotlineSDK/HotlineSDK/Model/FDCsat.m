@@ -21,10 +21,10 @@
 @dynamic userComments;
 @dynamic isIssueResolved;
 
-+(FDCsat *)getWithID:(NSNumber *)csatID inContext:(NSManagedObjectContext *)context{
++(FDCsat *)getWithID:(NSString *)conversationID inContext:(NSManagedObjectContext *)context{
     FDCsat *csat = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CSAT_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"csatID == %@",csatID];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"conversationID == %@",conversationID];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 1) {
         csat = matches.firstObject;
@@ -36,17 +36,33 @@
     return csat;
 }
 
-+(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)csatInfo{
-    csat.csatID = csatInfo[@"csatId"];
-    csat.question = csatInfo[@"question"];
-    csat.mobileUserCommentsAllowed = csatInfo[@"mobileUserCommentsAllowed"];
++(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)conversationInfo{
+    csat.conversationID = [[conversationInfo valueForKey:@"conversationId"]stringValue];
+    csat.csatID = [[conversationInfo valueForKeyPath:@"csat.csatId"]stringValue];
+    csat.question = [conversationInfo valueForKeyPath:@"csat.question"];
+    csat.mobileUserCommentsAllowed = @([[conversationInfo valueForKeyPath:@"csat.mobileUserCommentsAllowed"]boolValue]);
     csat.csatStatus = @(CSAT_NOT_RATED);
     return csat;
 }
 
-+(FDCsat *)createWithInfo:(NSDictionary *)csatInfo inContext:(NSManagedObjectContext *)context{
++(FDCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context{
     FDCsat *csat = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CSAT_ENTITY inManagedObjectContext:context];
-    return [self updateCSAT:csat withInfo:csatInfo];
+    return [self updateCSAT:csat withInfo:conversationInfo];
+}
+
+@end
+
+
+@implementation FDCsatHolder
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        self.userComments = nil;
+        self.userRatingCount = 0;
+        self.isIssueResolved = NO;
+    }
+    return self;
 }
 
 @end

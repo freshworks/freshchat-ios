@@ -24,6 +24,6 @@
 
 +(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context;
 
-+(void)postCSAT:(NSDictionary *)response;
++(void)postCSATWithID:(NSManagedObjectID *)csatObjectID;
 
 @end

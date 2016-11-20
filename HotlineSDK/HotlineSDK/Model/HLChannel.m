@@ -103,7 +103,7 @@
 
 +(HLChannel *)getDefaultChannelInContext:(NSManagedObjectContext *)context{
     HLChannel *channel = nil;
-    //TODO: Sort by created because we don't store default channel - Fix this later 
+    //TODO: Sort by created because we don't store default channel - Fix this later
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"created" ascending:YES]];
     

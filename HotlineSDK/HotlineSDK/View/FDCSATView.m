@@ -143,22 +143,19 @@
     self.rating = sender.value;
 }
 
--(NSDictionary *)fetchUserInputs{
-    NSMutableDictionary *userFeedback = [[NSMutableDictionary alloc]init];
-    
-    if (self.rating > 0) {
-        userFeedback[@"ratingStars"]  = [NSString stringWithFormat:@"%d", (int)self.rating];
-    }
-    
-    if (self.feedbackView.text && ![self.feedbackView.text isEqualToString:@""]) {
-        userFeedback[@"feedback"] = self.feedbackView.text;
-    }
-    return userFeedback;
-}
-
 -(void)submitButtonPressed{
     if (self.delegate) {
-        [self.delegate submittedCSATWithInfo:[self fetchUserInputs]];
+        
+        FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+        
+        if (self.rating > 0) {
+            csatHolder.userRatingCount = self.rating;
+        }
+        
+        if (self.feedbackView.text && ![self.feedbackView.text isEqualToString:@""]) {
+            csatHolder.userComments = self.feedbackView.text;
+        }
+        [self.delegate submittedCSAT:csatHolder];
     }
     [self dismiss];
 }

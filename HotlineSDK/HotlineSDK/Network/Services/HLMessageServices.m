@@ -72,22 +72,24 @@ static HLNotificationHandler *handleUpdateNotification;
             if ([conversationInfo objectForKey:@"hasPendingCsat"]) {
                 conversation.hasPendingCsat = @([conversationInfo[@"hasPendingCsat"] boolValue]);
                 if ([conversationInfo objectForKey:@"csat"]) {
-                    NSDictionary *csatInfo = conversationInfo[@"csat"];
                     
                     if ([conversationInfo[@"hasPendingCsat"] boolValue]) {
                         [FDLocalNotification post:HOTLINE_PROCESS_PENDING_CSAT];
                         FDLog(@"*** CSAT for Conversation ID :%@ is pending ***", conversationInfo[@"conversationId"]);
                     }
                     
-                    FDCsat *csat = [FDCsat getWithID:csatInfo[@"csatId"] inContext:context];
-                    csat.belongToConversation = conversation;
-
+                    FDCsat *csat = [FDCsat getWithID:conversationID inContext:context];
+                    
+                    FDLog(@"Conversation : %@", conversationInfo);
+                    
                     if (!csat) {
-                        FDLog(@"Added a new CSAT entry\n %@", csatInfo);
-                        csat = [FDCsat createWithInfo:csatInfo inContext:context];
+                        csat = [FDCsat createWithInfo:conversationInfo inContext:context];
+                        FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
                     }else{
-                        [FDCsat updateCSAT:csat withInfo:csatInfo];
+                        csat = [FDCsat updateCSAT:csat withInfo:conversationInfo];
                     }
+                    
+                    csat.belongToConversation = conversation;
                 }
             }
         }
@@ -103,7 +105,7 @@ static HLNotificationHandler *handleUpdateNotification;
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
         __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
-        //NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
+        NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
         [request setRelativePath:path andURLParams:@[appKey]];
         
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
@@ -487,25 +489,67 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-+(void)postCSAT:(NSDictionary *)response{
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
-    NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    NSNumber *csatID = [response valueForKeyPath:@"csatId"];
-    NSNumber *conversationID = [response valueForKeyPath:@"conversationId"];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
-    [request setRelativePath:path andURLParams:@[appKey]];
-    [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
-            if (!error && statusCode == 201) {
-                FDLog(@"*** CSAT submitted *** \n %@", response);
-            }else{
-                FDLog(@"CSAT submission failed");
-            }            
+
++(void)postCSATWithID:(NSManagedObjectID *)csatObjectID{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        
+        NSError *error; //Check if you can pass nil error object here ..
+        FDCsat *csat = [context existingObjectWithID:csatObjectID error:&error];
+        if (error) {
+            FDLog(@"Attention! Core data warning! Expected CSAT object does not exist");
+            return;
+        }
+        
+        //Build the request body here
+        
+        NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
+        
+        NSString *conversationID = csat.belongToConversation.conversationAlias;
+        
+        NSString *csatID = csat.csatID;
+        
+        if (conversationID == nil || csatID == nil || conversationID.length == 0  || csatID.length == 0) {
+            FDLog(@"CSAT error: Something went wrong");
+            return;
+        }
+
+        response[@"csatId"] = csatID;
+        
+        response[@"conversationId"] = conversationID;
+        
+        if (csat.userRatingCount) {
+            response[@"stars"] = csat.userRatingCount.stringValue;
+        }
+        
+        if (csat.isIssueResolved) {
+            response[@"issueResolved"] = csat.isIssueResolved;
+        }
+        
+        if (csat.userComments && csat.userComments.length > 0){
+            response[@"response"] = csat.userComments;
+        }
+        
+        HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+        NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
+        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+        NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
+        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
+        [request setRelativePath:path andURLParams:@[appKey]];
+        [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+            [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+                NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+                if (!error && statusCode == 201) {
+                    [context deleteObject:csat];
+                    FDLog(@"*** CSAT submitted *** \n %@", response);
+                }else{
+                    FDLog(@"CSAT submission failed");
+                }
+                [context save:nil];
+            }];
         }];
+
     }];
 }
 

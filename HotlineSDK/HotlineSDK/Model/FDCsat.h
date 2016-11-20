@@ -14,7 +14,6 @@
 typedef enum {
     CSAT_RATED = 1,
     CSAT_NOT_RATED,
-    CSAT_SENT
 } CSAT_STATUS;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,10 +30,22 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *mobileUserCommentsAllowed;
 @property (nullable, nonatomic, retain) KonotorConversation *belongToConversation;
 
-+(FDCsat *)getWithID:(NSNumber *)csatID inContext:(NSManagedObjectContext *)context;
-+(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)csatInfo;
-+(FDCsat *)createWithInfo:(NSDictionary *)csatInfo inContext:(NSManagedObjectContext *)context;
+
+//Primary key : conversation ID
++(FDCsat *)getWithID:(NSString *)conversationID inContext:(NSManagedObjectContext *)context;
++(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)conversationInfo;
++(FDCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context;
 
 @end
+
+
+@interface FDCsatHolder : NSObject
+
+@property (nonatomic, strong) NSString *userComments;
+@property (nonatomic, assign) int userRatingCount;
+@property (nonatomic, assign) BOOL isIssueResolved;
+
+@end
+
 
 NS_ASSUME_NONNULL_END
