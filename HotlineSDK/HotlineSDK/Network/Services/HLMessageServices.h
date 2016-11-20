@@ -26,4 +26,6 @@
 
 +(void)postCSATWithID:(NSManagedObjectID *)csatObjectID;
 
++(void)uploadUnuploadedCSAT;
+
 @end

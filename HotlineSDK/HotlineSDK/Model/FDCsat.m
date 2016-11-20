@@ -41,13 +41,13 @@
     csat.csatID = [[conversationInfo valueForKeyPath:@"csat.csatId"]stringValue];
     csat.question = [conversationInfo valueForKeyPath:@"csat.question"];
     csat.mobileUserCommentsAllowed = @([[conversationInfo valueForKeyPath:@"csat.mobileUserCommentsAllowed"]boolValue]);
-    csat.csatStatus = @(CSAT_NOT_RATED);
     return csat;
 }
 
 +(FDCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context{
     FDCsat *csat = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CSAT_ENTITY inManagedObjectContext:context];
     return [self updateCSAT:csat withInfo:conversationInfo];
+    csat.csatStatus = @(CSAT_NOT_RATED);
 }
 
 @end

@@ -139,15 +139,10 @@ typedef struct {
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (self.conversation.hasPendingCsat.boolValue) {
-        FDLog(@"Has pending CSAT");
-        [self updateBottomViewWith:self.yesNoPrompt andHeight:80];
-    }
     [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self processPendingCSAT];
-
 }
 
 -(void)viewDidAppear:(BOOL)animated{

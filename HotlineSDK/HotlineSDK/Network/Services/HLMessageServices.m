@@ -499,10 +499,7 @@ static HLNotificationHandler *handleUpdateNotification;
 
         if (csatObjectID) {
             csat = [context existingObjectWithID:csatObjectID error:&error];
-            if (error) {
-                FDLog(@"Attention! Core data warning! Expected CSAT object does not exist");
-                return;
-            }
+            if (error) return;
         }else{
             FDLog(@"CSAT Error, Nil object ID");
             return;
@@ -554,6 +551,20 @@ static HLNotificationHandler *handleUpdateNotification;
                 [context save:nil];
             }];
         }];
+
+    }];
+}
+
++(void)uploadUnuploadedCSAT{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CSAT_ENTITY];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"csatStatus == %d", CSAT_RATED];
+        NSArray *results = [context executeFetchRequest:fetchRequest error:nil];
+        FDLog(@"There are %d unuploaded CSATs", (int)results.count);
+        for (FDCsat *csat in results) {
+            [HLMessageServices postCSATWithID:csat.objectID];
+        }
 
     }];
 }

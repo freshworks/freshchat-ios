@@ -347,6 +347,7 @@
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
+        [HLMessageServices uploadUnuploadedCSAT];
     });
 }
 
