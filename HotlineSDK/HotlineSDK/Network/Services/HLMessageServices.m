@@ -494,14 +494,19 @@ static HLNotificationHandler *handleUpdateNotification;
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
         
-        NSError *error; //Check if you can pass nil error object here ..
-        FDCsat *csat = [context existingObjectWithID:csatObjectID error:&error];
-        if (error) {
-            FDLog(@"Attention! Core data warning! Expected CSAT object does not exist");
+        NSError *error;
+        FDCsat *csat = nil;
+
+        if (csatObjectID) {
+            csat = [context existingObjectWithID:csatObjectID error:&error];
+            if (error) {
+                FDLog(@"Attention! Core data warning! Expected CSAT object does not exist");
+                return;
+            }
+        }else{
+            FDLog(@"CSAT Error, Nil object ID");
             return;
         }
-        
-        //Build the request body here
         
         NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
         

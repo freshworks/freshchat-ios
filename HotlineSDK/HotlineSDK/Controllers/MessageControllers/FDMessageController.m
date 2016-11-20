@@ -879,6 +879,7 @@ typedef struct {
 
 -(BOOL)hasPendingCSAT{
     return (self.conversation.hasPendingCsat.boolValue &&
+            [self getCSATObject] &&
             [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
 }
 
