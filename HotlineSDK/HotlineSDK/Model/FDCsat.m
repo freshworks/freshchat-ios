@@ -46,8 +46,8 @@
 
 +(FDCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context{
     FDCsat *csat = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CSAT_ENTITY inManagedObjectContext:context];
-    return [self updateCSAT:csat withInfo:conversationInfo];
     csat.csatStatus = @(CSAT_NOT_RATED);
+    return [self updateCSAT:csat withInfo:conversationInfo];
 }
 
 @end
