@@ -224,15 +224,6 @@ typedef struct {
             [self configureBackButtonWithGestureDelegate:self];
         }
     }
-    
-    
-    UIBarButtonItem *contactUsBarButton = [[FDBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_CONTACT_US_ICON]
-                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
-    self.parentViewController.navigationItem.rightBarButtonItem = contactUsBarButton;
-}
-
--(void)contactUsButtonAction:(id)sender{
-    [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
 }
 
 -(void)closeButtonAction:(id)sender{
