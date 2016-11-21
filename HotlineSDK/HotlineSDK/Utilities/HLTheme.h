@@ -176,5 +176,7 @@
 -(UIColor *)csatPromptRatingBarColor;
 -(UIColor *)csatPromptSubmitButtonColor;
 -(UIColor *)csatPromptHorizontalLineColor;
+-(UIFont *)csatPromptQuestionTextFont;
+-(UIColor *)csatPromptQuestionTextFontColor;
 
 @end

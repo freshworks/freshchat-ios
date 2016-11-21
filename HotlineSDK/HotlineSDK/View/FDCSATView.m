@@ -58,6 +58,8 @@
         
         //Survey title
         self.surveyTitle = [UILabel new];
+        self.surveyTitle.font = self.theme.csatPromptQuestionTextFont;
+        self.surveyTitle.textColor = self.theme.csatPromptQuestionTextFontColor;
         self.surveyTitle.numberOfLines = 0;
         self.surveyTitle.textAlignment = NSTextAlignmentCenter;
         self.surveyTitle.translatesAutoresizingMaskIntoConstraints = NO;
@@ -114,7 +116,6 @@
         [FDAutolayoutHelper setWidth:200 forView:self.surveyTitle inView:self.CSATPrompt];
         [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
         [FDAutolayoutHelper setWidth:200 forView:self.feedbackView inView:self.CSATPrompt];
-        //TODO: Change survey title to intrinsic content size (by setting dynamically)
         
         if (hideFeedbackView) {
             [FDAutolayoutHelper setHeight:150 forView:self.CSATPrompt inView:self.transparentView];

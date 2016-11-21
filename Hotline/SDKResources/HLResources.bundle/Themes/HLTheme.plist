@@ -58,14 +58,14 @@
 		<string>007AFF</string>
 		<key>ratingBarColor</key>
 		<string>FFA500</string>
-		<key>questionTextFontSize</key>
-		<string>15</string>
 		<key>horizontalLineColor</key>
 		<string>D3D3D3</string>
+		<key>questionTextFontSize</key>
+		<string>15</string>
 		<key>questionTextFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>questionTextColor</key>
-		<string>F6F6F5</string>
+		<string>000000</string>
 	</dict>
 	<key>ChatBubbleInsets</key>
 	<dict>

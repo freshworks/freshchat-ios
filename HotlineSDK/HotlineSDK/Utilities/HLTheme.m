@@ -627,5 +627,13 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
 }
 
+-(UIFont *)csatPromptQuestionTextFont{
+    return [self getFontWithKey:@"CSATPrompt.questionText" andDefaultSize:15];
+}
+
+-(UIColor *)csatPromptQuestionTextFontColor{
+    UIColor *color = [self getColorForKeyPath:@"CSATPrompt.questionTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
 
 @end
