@@ -92,6 +92,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_OFFLINE_INTERNET_MESSAGE @"offline_internet_message"
 
 #define LOC_CSAT_FEEDBACK_VIEW_PLACEHOLDER_TEXT @"csat_feedback_view_placeholder_text"
+#define LOC_CSAT_FEEDBACK_VIEW_SUBMIT_BUTTON_TEXT @"csat_feedback_view_submit_button_text"
 
 @interface HLLocalization : NSObject
 

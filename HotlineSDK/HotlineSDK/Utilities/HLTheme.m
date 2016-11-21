@@ -605,4 +605,27 @@
     return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
 }
 
+#pragma mark CSAT Prompt
+
+-(UIColor *)csatPromptBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"CSATPrompt.backgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)csatPromptRatingBarColor{
+    UIColor *color = [self getColorForKeyPath:@"CSATPrompt.ratingBarColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];    
+}
+
+-(UIColor *)csatPromptSubmitButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"CSATPrompt.submitButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+}
+
+-(UIColor *)csatPromptHorizontalLineColor{
+    UIColor *color = [self getColorForKeyPath:@"CSATPrompt.horizontalLineColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
+}
+
+
 @end

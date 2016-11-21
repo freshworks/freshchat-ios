@@ -19,6 +19,8 @@
 @property (nonatomic, strong) UIView *CSATPrompt;
 @property (nonatomic, strong) FDGrowingTextView *feedbackView;
 @property (nonatomic) float rating;
+@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) UIButton *submitButton;
 
 @end
 
@@ -30,6 +32,8 @@
 - (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView{
     self = [super initWithFrame:CGRectZero];
     if (self) {
+        
+        self.theme = [HLTheme sharedInstance];
         
         //Transparent background view
         self.transparentView  = [UIView new];
@@ -44,7 +48,7 @@
         //CSAT prompt
         self.CSATPrompt = [UIView new];
         self.CSATPrompt.translatesAutoresizingMaskIntoConstraints = NO;
-        self.CSATPrompt.backgroundColor = [UIColor whiteColor];
+        self.CSATPrompt.backgroundColor = self.theme.csatPromptBackgroundColor;
         self.CSATPrompt.center = self.transparentView.center;
         self.CSATPrompt.layer.cornerRadius = 15;
         [self.transparentView addSubview:self.CSATPrompt];
@@ -60,11 +64,12 @@
         [self.CSATPrompt addSubview:self.surveyTitle];
         
         //Submit button
-        UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        submitButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [submitButton setTitle:@"SUBMIT" forState:(UIControlStateNormal)];
-        [submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
-        [self.CSATPrompt addSubview:submitButton];
+        self.submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.submitButton setTitleColor:self.theme.csatPromptSubmitButtonColor forState:UIControlStateNormal];
+        self.submitButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.submitButton setTitle:HLLocalizedString(LOC_CSAT_FEEDBACK_VIEW_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
+        [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
+        [self.CSATPrompt addSubview:self.submitButton];
         
         //Feedback textview
         self.feedbackView = [FDGrowingTextView new];
@@ -80,12 +85,12 @@
         UIView *horizontalLine = [UIView new];
         horizontalLine.opaque = NO;
         horizontalLine.alpha = 0.3;
-        horizontalLine.backgroundColor = [UIColor lightGrayColor];
+        horizontalLine.backgroundColor = self.theme.csatPromptHorizontalLineColor;
         horizontalLine.translatesAutoresizingMaskIntoConstraints = NO;
         [self.CSATPrompt addSubview:horizontalLine];
         
         //Layout constraints
-        NSDictionary *views = @{@"survey_title" : self.surveyTitle, @"submit_button" : submitButton,
+        NSDictionary *views = @{@"survey_title" : self.surveyTitle, @"submit_button" : self.submitButton,
                                 @"horizontal_line" : horizontalLine, @"feedback_view" : self.feedbackView,
                                 @"superview" : controller.view, @"transparent_view" : self.transparentView,
                                 @"star_rating_view" : starRatingView};
@@ -104,7 +109,7 @@
         [FDAutolayoutHelper centerX:starRatingView onView:self.CSATPrompt];
         [FDAutolayoutHelper centerX:self.surveyTitle onView:self.CSATPrompt];
         [FDAutolayoutHelper centerX:self.feedbackView onView:self.CSATPrompt];
-        [FDAutolayoutHelper centerX:submitButton onView:self.CSATPrompt];
+        [FDAutolayoutHelper centerX:self.submitButton onView:self.CSATPrompt];
 
         [FDAutolayoutHelper setWidth:200 forView:self.surveyTitle inView:self.CSATPrompt];
         [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
@@ -119,28 +124,43 @@
             [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(50)][feedback_view]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:0 metrics:nil views:views]];
         }
         
-        //Hide by default
+        //Initial view config
         self.transparentView.hidden = YES;
         self.CSATPrompt.hidden = YES;
+        [self enableSubmitButton:NO];
     }
     return self;
 }
 
+-(void)enableSubmitButton:(BOOL)state{
+    self.submitButton.enabled = state;
+    if (state) {
+        [self.submitButton setTitleColor:[self.theme csatPromptSubmitButtonColor] forState:UIControlStateNormal];
+    }else{
+        [self.submitButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+
+}
+
 -(UIView *)createStarRatingView{
     HCSStarRatingView *starRatingView = [HCSStarRatingView new];
+    starRatingView.backgroundColor = self.theme.csatPromptBackgroundColor;
     starRatingView.translatesAutoresizingMaskIntoConstraints = NO;
     starRatingView.maximumValue = 5;
     starRatingView.minimumValue = 0;
-    starRatingView.value = 0; // Initial value
-    starRatingView.tintColor = [UIColor orangeColor];
-    starRatingView.emptyStarImage = [[UIImage imageNamed:@"heart-empty"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    starRatingView.filledStarImage = [[UIImage imageNamed:@"heart-full"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    starRatingView.value = 0;
+    starRatingView.tintColor = self.theme.csatPromptRatingBarColor;
     [starRatingView addTarget:self action:@selector(didChangeValue:) forControlEvents:UIControlEventValueChanged];
     return starRatingView;
 }
 
 - (IBAction)didChangeValue:(HCSStarRatingView *)sender {
-    self.rating = sender.value;
+    if (sender.value > 0) {
+        self.rating = sender.value;
+        [self enableSubmitButton:YES];
+    }else{
+        [self enableSubmitButton:NO];
+    }
 }
 
 -(void)submitButtonPressed{

@@ -170,4 +170,11 @@
 -(UIImage *)getImageWithKey:(NSString *)key;
 
 -(NSString *)getCssFileContent:(NSString *)key;
+
+//CSAT Prompt
+-(UIColor *)csatPromptBackgroundColor;
+-(UIColor *)csatPromptRatingBarColor;
+-(UIColor *)csatPromptSubmitButtonColor;
+-(UIColor *)csatPromptHorizontalLineColor;
+
 @end
