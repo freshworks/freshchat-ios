@@ -90,8 +90,7 @@ typedef struct {
         self.messageCountPrevious = 0;
         self.messagesDisplayedCount=20;
         self.loadmoreCount=20;
-        self.channelID = channelID;
-        NSLog(@"::ChannelID::%d",[self.channelID intValue]);
+        self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
@@ -147,7 +146,6 @@ typedef struct {
     if(!self.channel.managedObjectContext) {
         [self rebuildChannel];
     }
-    
     [self refreshView];
     [self startPoller];
 }
@@ -674,7 +672,7 @@ typedef struct {
 - (void) didEncounterErrorFromServer {
     if(!_flags.isShowingAlert){
         [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
-                      andMessage:HLLocalizedString(LOC_PROBLEM_SERVER_INFO_TEXT)];
+                      andMessage:HLLocalizedString(LOC_SERVER_ERROR_INFO_TEXT)];
         _flags.isShowingAlert = YES;
     }
 }
