@@ -859,6 +859,7 @@ typedef struct {
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self hasPendingCSAT] && !self.CSATView.isShowing) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
+            [self.view layoutIfNeeded];
             [self scrollTableViewToLastCell];
         }
     });
