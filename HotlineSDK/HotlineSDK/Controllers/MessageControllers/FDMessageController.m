@@ -61,6 +61,7 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
 @property (strong, nonatomic) NSString *appAudioCategory;
+@property (nonatomic,strong) NSNumber *channelID;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
@@ -89,7 +90,8 @@ typedef struct {
         self.messageCountPrevious = 0;
         self.messagesDisplayedCount=20;
         self.loadmoreCount=20;
-        
+        self.channelID = channelID;
+        NSLog(@"::ChannelID::%d",[self.channelID intValue]);
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
@@ -142,6 +144,11 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    if(!self.channel.managedObjectContext) {
+        [self rebuildChannel];
+    }
+    
+    [self refreshView];
     [self startPoller];
 }
 
@@ -476,6 +483,12 @@ typedef struct {
     [self refreshView];
 }
 
+-(void) rebuildChannel {
+    self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    self.conversation = [self.channel primaryConversation];
+    self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
+}
+
 -(void)checkPushNotificationState{
     
     BOOL notificationEnabled = [HLNotificationHandler areNotificationsEnabled];
@@ -655,6 +668,14 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
+    }
+}
+
+- (void) didEncounterErrorFromServer {
+    if(!_flags.isShowingAlert){
+        [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
+                      andMessage:HLLocalizedString(LOC_PROBLEM_SERVER_INFO_TEXT)];
+        _flags.isShowingAlert = YES;
     }
 }
 
