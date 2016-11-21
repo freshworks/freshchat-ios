@@ -32,6 +32,7 @@
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
 #import "KonotorAudioRecorder.h"
+#import "FDBackgroundTaskManager.h"
 
 typedef struct {
     BOOL isLoading;
@@ -919,6 +920,8 @@ typedef struct {
 -(void)storeAndPostCSAT:(FDCsatHolder *)csatHolder{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
+        UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
+
         FDCsat *csat = [self getCSATObject];
         
         csat.isIssueResolved = csatHolder.isIssueResolved ? @"true" : @"false";
@@ -940,7 +943,9 @@ typedef struct {
         
         [context save:nil];
         
-        [HLMessageServices postCSATWithID:csat.objectID];
+        [HLMessageServices postCSATWithID:csat.objectID completion:^(NSError *error) {
+            [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+        }];
     }];
 }
 

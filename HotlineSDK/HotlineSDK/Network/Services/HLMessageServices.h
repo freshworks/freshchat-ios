@@ -24,7 +24,7 @@
 
 +(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context;
 
-+(void)postCSATWithID:(NSManagedObjectID *)csatObjectID;
++(void)postCSATWithID:(NSManagedObjectID *)csatObjectID completion:(void (^)(NSError *))handler;
 
 +(void)uploadUnuploadedCSAT;
 

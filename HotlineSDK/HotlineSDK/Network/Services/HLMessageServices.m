@@ -490,7 +490,7 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 
-+(void)postCSATWithID:(NSManagedObjectID *)csatObjectID{
++(void)postCSATWithID:(NSManagedObjectID *)csatObjectID completion:(void (^)(NSError *))handler{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
         
@@ -499,9 +499,13 @@ static HLNotificationHandler *handleUpdateNotification;
 
         if (csatObjectID) {
             csat = [context existingObjectWithID:csatObjectID error:&error];
-            if (error) return;
+            if (error){
+                if(handler) handler([NSError new]);
+                return;
+            }
         }else{
             FDLog(@"CSAT Error, Nil object ID");
+            if(handler) handler([NSError new]);
             return;
         }
         
@@ -513,6 +517,7 @@ static HLNotificationHandler *handleUpdateNotification;
         
         if (conversationID == nil || csatID == nil || conversationID.length == 0  || csatID.length == 0) {
             FDLog(@"CSAT error: Something went wrong");
+            if(handler) handler([NSError new]);
             return;
         }
 
@@ -549,6 +554,8 @@ static HLNotificationHandler *handleUpdateNotification;
                     FDLog(@"CSAT submission failed");
                 }
                 [context save:nil];
+                
+                if (handler) handler(error);
             }];
         }];
 
@@ -563,7 +570,7 @@ static HLNotificationHandler *handleUpdateNotification;
         NSArray *results = [context executeFetchRequest:fetchRequest error:nil];
         FDLog(@"There are %d unuploaded CSATs", (int)results.count);
         for (FDCsat *csat in results) {
-            [HLMessageServices postCSATWithID:csat.objectID];
+            [HLMessageServices postCSATWithID:csat.objectID completion:nil];
         }
 
     }];
