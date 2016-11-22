@@ -20,7 +20,7 @@
 
 #define HOTLINE_API_DEVICE_REGISTRATION_PATH @"/app/services/app/%@/user/%@/notification"
 
-#define HOTLINE_API_UPDATE_SDK_BUILD_NUMBER_PATH @"/app/services/app/%@/user/%@/client"
+#define HOTLINE_API_UPDATE_SDK_BUILD_NUMBER_PATH @"/app/services/app/v2/%@/user/%@/client"
 
 #define HOTLINE_API_DAU_PATH @"/app/services/app/%@/user/%@/activity"
 
