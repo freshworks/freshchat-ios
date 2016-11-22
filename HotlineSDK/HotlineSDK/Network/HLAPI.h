@@ -12,7 +12,7 @@
 #define HTTP_METHOD_PUT @"PUT"
 #define HTTP_METHOD_POST @"POST"
 
-#define HOTLINE_USER_DOMAIN @"http://%@"
+#define HOTLINE_USER_DOMAIN @"https://%@"
 
 #define HOTLINE_REQUEST_PARAMS @"t=%@"
 
