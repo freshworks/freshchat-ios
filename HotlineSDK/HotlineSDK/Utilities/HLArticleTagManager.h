@@ -9,6 +9,7 @@
 #ifndef HLArticleTagManager_h
 #define HLArticleTagManager_h
 
+#import "KonotorDataManager.h"
 #import <Foundation/Foundation.h>
 
 @interface HLArticleTagManager : NSObject
@@ -18,6 +19,11 @@
 -(void)addTag:(NSString *)tag forArticleId: (NSNumber *)articleId;
 -(void)removeTagsForArticleId: (NSNumber *)articleId;
 -(void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion;
+
+-(void) getArticleForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion;
+-(void) getChannelsForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion;
+-(void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion;
+
 -(void) save;
 -(void) clear;
 

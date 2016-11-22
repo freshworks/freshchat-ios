@@ -26,6 +26,7 @@
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
 #import "FDLocalNotification.h"
+#import "FDTags.h"
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -246,6 +247,19 @@ static HLNotificationHandler *handleUpdateNotification;
             for(int i=0; i<channels.count; i++){
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
+                NSArray *tags = channelInfo[@"tags"];
+                if(tags.count){
+                    if(!([channelInfo[@"hidden"] boolValue])){
+                        if(tags){
+                            for(NSString *tagName in tags){
+                                [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];
+                            }
+                        }
+                    }
+                    else {//remove channel from tag list
+                        [FDTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: FDTagTypeChannel] inContext:context];
+                    }
+                }
                 if (channel) {
                     [HLChannel updateChannel:channel withInfo:channelInfo];
                     FDLog(@"Channel updated ID:%@ name:%@", channel.channelID , channel.name);

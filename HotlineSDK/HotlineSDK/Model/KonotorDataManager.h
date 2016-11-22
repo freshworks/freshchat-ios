@@ -35,6 +35,7 @@
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler;
 -(void)fetchAllVisibleChannels:(void(^)(NSArray *channelInfos, NSError *error))handler;
+- (void) fetchAllVisibleChannelsForTags:(NSArray *)channelIds completion:(void (^)(NSArray *channelInfos, NSError *))handler;
 -(void)deleteAllChannels:(void(^)(NSError *error))handler;
 -(void)deleteAllMessages:(void(^)(NSError *error))handler;
 -(void)deleteAllProperties:(void(^)(NSError *error))handler;

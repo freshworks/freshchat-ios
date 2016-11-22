@@ -146,8 +146,9 @@
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     
     if(self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        [[HLArticleTagManager sharedInstance] articlesForTags:self.faqOptions.tags withCompletion:^(NSSet *matches) {
-            if([matches count] == 1){
+        //[[HLArticleTagManager sharedInstance] articlesForTags:self.faqOptions.tags withCompletion:^(NSSet *matches) {
+        [[HLArticleTagManager sharedInstance] getArticleForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+            if([articleIds count] == 1){
                 UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
                 self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
             }

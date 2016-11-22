@@ -15,26 +15,45 @@
 @dynamic taggableType;
 @dynamic tagName;
 
-
 +(void)createTagWithInfo : (NSDictionary *)tagInfo inContext:(NSManagedObjectContext *)context{
-    
     FDTags *taggedObj;
-    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %d AND taggableType == %d",tagInfo[@"taggableID"], tagInfo[@"taggableType"]];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %@ AND taggableType == %@ AND tagName == %@",tagInfo[@"taggableID"], tagInfo[@"taggableType"], tagInfo[@"tagName"]];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count == 1) {
-        taggedObj = matches.firstObject;
-        taggedObj.tagName = tagInfo[@"tagName"];
-    }
-    else{
+    if (matches.count == 0) {
         FDTags *tag = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_TAGS_ENTITY inManagedObjectContext:context];
         [self addTag:tag withInfo:tagInfo];
     }
 }
 
-+(FDTags *)addTag:(FDTags *)tag withInfo:(NSDictionary *)tagInfo{
++(void)removeTagsForTaggableId:(NSNumber *)tagId andType : (NSNumber*)type inContext:(NSManagedObjectContext *)context{
     
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %@ AND taggableType == %@", tagId, type];
+    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    if(matches.count){
+        for (FDTags *object in matches) {
+        [context deleteObject:object];
+        }
+    }
+    NSError * error = nil;
+    if (![context save:&error])
+    {
+        NSLog(@"Error in tag deletion! %@", error);
+    }
+}
+
++(NSDictionary *) createDictWithTagName :(NSString *)tagname type :(NSNumber *) type andIdvalue :(NSNumber *)tagId{
+    
+    NSMutableDictionary *tagsDict = [[NSMutableDictionary alloc] init];
+    [tagsDict setValue:tagId forKey:@"taggableID"];
+    [tagsDict setValue:type forKey:@"taggableType"];
+    [tagsDict setValue:tagname forKey:@"tagName"];
+    
+    return tagsDict;
+}
+
++(FDTags *)addTag:(FDTags *)tag withInfo:(NSDictionary *)tagInfo{
     tag.taggableID = tagInfo[@"taggableID"];
     tag.taggableType = tagInfo[@"taggableType"];
     tag.tagName = tagInfo[@"tagName"];

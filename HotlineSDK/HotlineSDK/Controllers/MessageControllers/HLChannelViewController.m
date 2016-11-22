@@ -109,8 +109,11 @@
 }
 
 -(void)updateChannels{
+    
     HideNetworkActivityIndicator();
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+    
+    //[[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:self.tagsArray completion:^(NSArray *channelInfos, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!error) {
                 if (channelInfos.count == 1) {

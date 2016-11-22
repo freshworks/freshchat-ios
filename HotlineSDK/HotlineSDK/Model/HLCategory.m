@@ -11,6 +11,7 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "HLArticleTagManager.h"
+#import "FDTags.h"
 
 @implementation HLCategory
 
@@ -82,8 +83,12 @@
                 [category addArticlesObject:article];
             }
             if(tags){
+                
                 [tagManager removeTagsForArticleId:articleId];
                 for(NSString *tagName in tags){
+                    
+                    [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeArticle] andIdvalue:articleId] inContext:context];
+                    
                     [tagManager addTag:tagName forArticleId:articleId];
                 }
             }
@@ -95,8 +100,10 @@
             else {
                FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
             }
+            
             if(tags){
-               [tagManager removeTagsForArticleId:articleId];
+                [FDTags removeTagsForTaggableId:articleId andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
+                [tagManager removeTagsForArticleId:articleId];
             }
         }
     }

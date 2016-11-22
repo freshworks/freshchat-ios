@@ -29,6 +29,7 @@
     }
 
     NSLog(@"launchoptions :%@", launchOptions);
+    //NSLog(@"Documents Directory: %@", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
 
     [Fabric with:@[[Crashlytics class]]];
 
@@ -71,18 +72,19 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"e3280bde-4696-4bd5-8be7-e7919249bf9a"
-                                                       andAppKey:@"9d456296-5f38-45ce-884e-b595f7e6301a"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"45fa92d7-af5d-4528-b001-a200ce554cb8"
+                                                      andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
+    
     
 //    config.appID = @"51590df9-ab7e-4ca7-9a25-b2279bc5cc7c";
 //    config.appKey = @"e9021572-383c-4b6f-997e-3fea9d32e2c7";
     
-    config.domain=@"mr.orange.konotor.com";
+    config.domain=@"mr-blonde.staging.konotor.com";
 
 //    prod 
-    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
-    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
-    config.domain = @"app.hotline.io";
+//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
+//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
+//    config.domain = @"app.hotline.io";
     
 //      config.domain = @"satheeshjm.pagekite.me";
 //      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
@@ -118,7 +120,8 @@
                                                      }];
     
         [[Hotline sharedInstance]initWithConfig:config];
-    
+  //  NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+
     NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);

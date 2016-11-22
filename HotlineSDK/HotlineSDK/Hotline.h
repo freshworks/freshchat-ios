@@ -11,7 +11,7 @@
 
 #define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
 
-@class HotlineConfig, HotlineUser, FAQOptions;
+@class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions;
 
 @interface HotlineConfig : NSObject
 
@@ -111,6 +111,17 @@
  *
  */
 -(void)showConversations:(UIViewController *)controller;
+
+/**
+ *  Show the Conversations / Chat to the user.
+ *
+ *  @param options filter by tags
+ *
+ *  @discussion This method lets you launch and present the Channels list to the user. The user directly lands in the default Conversation view if no channels found.
+ *
+ */
+-(void)showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options;
+
 /**
  *  Show the FAQs to the user.
  *
@@ -297,6 +308,36 @@
  * Default set to NO which hides "contact us" button on the navigation bar
  */
 @property (nonatomic) BOOL showContactUsOnAppBar;
+
+/**
+ *  Show Filtered articles list
+ *
+ *  @discussion This method lets you to launch and present a controller with the list of articles filtered by the tags supplied
+ *
+ *  @param List of tags that are configured already the portal
+ *
+ *  @param Controller's navigation bar title
+ *
+ */
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (NSNumber *) type;
+/**
+ *  Preferred navigation bar title
+ *
+ *  @discussion
+ */
+-(NSString *)filteredViewTitle;
+
+/**
+ *  List of tags you have supplied already
+ *
+ *  @discussion List of tags which are configured in portal
+ */
+-(NSArray *)tags;
+
+@end
+
+
+@interface ConversationOptions : NSObject
 
 /**
  *  Show Filtered articles list

@@ -50,13 +50,23 @@
     
 }
 
+- (IBAction)showConversations:(id)sender{
+    
+    
+}
+
 - (IBAction)chatButtonPressed:(id)sender {
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
-    options.showContactUsOnFaqScreens = YES;
-//    [options filterByTags : @[ @"sample"] withTitle:@"newTag"];
-    //options.showContactUsOnAppBar = YES;
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+//    FAQOptions *options = [FAQOptions new];
+//    options.showFaqCategoriesAsGrid = YES;
+//    options.showContactUsOnFaqScreens = YES;
+//    //[options filterByTags : @[ @"test"] withTitle:@"newTag"];
+//    ////options.showContactUsOnAppBar = YES;
+//    [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:1]];
+//    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    
+    ConversationOptions *options = [ConversationOptions new];
+    [options filterByTags:@[@"test"] withTitle:@"Test"];
+    [[Hotline sharedInstance] showConversations:self withOptions:options];
 }
 
 @end

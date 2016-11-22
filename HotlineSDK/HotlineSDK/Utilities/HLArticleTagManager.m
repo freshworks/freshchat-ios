@@ -7,9 +7,10 @@
 //
 
 #import "HLArticleTagManager.h"
-#import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "FDTags.h"
+#import "HLCategory.h"
+#import "HLArticle.h"
 
 #define STORAGE_DIR_PATH @"Hotline/Offline"
 #define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
@@ -40,6 +41,7 @@
         self.tagMap = [[NSMutableDictionary alloc] init];
         self.queue = dispatch_queue_create("com.freshdesk.hotline.tagmanager", DISPATCH_QUEUE_SERIAL);
         self.storageFile = [self getFileForStorage:TAGS_FILE_NAME];
+  //      [self migrateTagsfromPlist];
         [self load];
     }
     return self;
@@ -102,45 +104,63 @@
     });
 }
 
-+(void) getAllArticleTags :(NSManagedObjectContext *)context{
+-(void) getArticleForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion {
     
-    FDTags *taggedObj;
-    
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableType == 1 AND taggableType == 2"];
-    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count >= 1) {
-        //tag objects are available
-        
+    NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
+    for(NSString *tag in tags){
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName like %@ AND (taggableType ==1 OR taggableType ==2)", tag];
+        NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
+        for (FDTags *taggedObj in matches){
+            if([taggedObj.taggableType intValue] == FDTagTypeArticle){
+                [taggedIds addObject:taggedObj.taggableID];
+            }
+            else if ([taggedObj.taggableType intValue] == FDTagTypeCategory){
+                HLCategory *category = [HLCategory getWithID:taggedObj.taggableID inContext:context];
+                for(HLArticle *articleInfo in category.articles){
+                    [taggedIds addObject:articleInfo.articleID];
+                }
+            }
+        }
     }
-    
+    dispatch_async(dispatch_get_main_queue(),^{
+        completion([taggedIds mutableCopy]);
+    });
 }
 
-+(void) getAllCategoryTags : (NSManagedObjectContext *) context {
+- (void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
     
-    FDTags *taggedObj;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableType == 2" ];
-    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count >= 1) {
-        //tag objects are available
-        
+    NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
+    for(NSString *tag in tags){
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName like %@ AND taggableType ==2",tag];
+        NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
+        for (FDTags *taggedObj in matches){
+            [taggedIds addObject:taggedObj.taggableID];
+        }
     }
+    dispatch_async(dispatch_get_main_queue(),^{
+        completion([taggedIds mutableCopy]);
+    });
 }
 
-+(void) getAllChannelTags : (NSManagedObjectContext *) context {
+- (void) getChannelsForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
     
-    FDTags *taggedObj;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableType == 3" ];
-    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count >= 1) {
-        //tag objects are available
-        
+    NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
+    for(NSString *tag in tags){
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName like %@ AND taggableType ==3",tag];
+        NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
+        for (FDTags *taggedObj in matches){
+            [taggedIds addObject:taggedObj.taggableID];
+        }
     }
+    dispatch_async(dispatch_get_main_queue(),^{
+        completion([taggedIds mutableCopy]);
+    });
 }
 
--(void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion{
+- (void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion{
     dispatch_async(self.queue, ^{
         NSMutableSet *articleSet = [[NSMutableSet alloc]init];
         for(NSString *tag in tags){
@@ -173,6 +193,25 @@
         }
     }
     return [filePath stringByAppendingPathComponent:fileName];
+}
+
+- (void) migrateTagsfromPlist{
+    
+    dispatch_async(self.queue, ^{
+        if([[NSFileManager defaultManager] fileExistsAtPath:self.storageFile]){
+            NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
+            if(data){
+                self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+                for(NSString *key in [self.tagMap allKeys]) {
+                    for (id item in [self.tagMap objectForKey:key]) {
+                        NSLog(@"------ %@", item);
+                        [FDTags createTagWithInfo:[FDTags createDictWithTagName:key type:[NSNumber numberWithInt: FDTagTypeArticle] andIdvalue:item] inContext:[KonotorDataManager sharedInstance].backgroundContext];
+                    }
+                }
+            }
+            [[NSFileManager defaultManager] removeItemAtPath:self.storageFile error:NULL];
+        }
+    });
 }
 
 -(void)clear{

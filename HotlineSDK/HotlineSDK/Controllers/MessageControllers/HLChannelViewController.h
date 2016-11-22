@@ -10,5 +10,8 @@
 #import "HLListViewController.h"
 
 @interface HLChannelViewController : HLListViewController
+@property (nonatomic, strong) NSArray *tagsArray;
+@property (nonatomic, assign) NSString *title;
+
 
 @end

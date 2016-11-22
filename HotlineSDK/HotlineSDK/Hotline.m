@@ -343,22 +343,22 @@
     return preferedController;
 }
 
-
--(void) selectFAQController:(FAQOptions *)options
-                                  withCompletion : (void (^)(HLViewController *))completion{
-    [[HLArticleTagManager sharedInstance] articlesForTags:[options tags]
-                                                withCompletion:^(NSSet *articleIds)  {
+-(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
+    
+    
+    [[HLArticleTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
         
         void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
             [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
         };
+        
+        
         if([articleIds count] > 1 ){
             HLViewController *preferedController = nil;
             preferedController = [[HLArticlesController alloc]init];
             faqOptionsCompletion(preferedController);
-        }
-        else if([articleIds count] == 1 ) {
+        } else if([articleIds count] == 1 ) {
             NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
             
             [mContext performBlock:^{
@@ -373,14 +373,16 @@
                     faqOptionsCompletion(preferedController);
                 }
             }];
-        }
-        else {
+        } else {
             HLViewController *preferedController = nil;
-            [options filterByTags:@[] withTitle:@""]; // No Matching tags so no need to pass it around
+            //[options filterByTags:@[] withTitle:@""];
+            [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
             preferedController = [self preferredCategoryController:options];
             faqOptionsCompletion(preferedController);
         }
     }];
+    
+    
 }
 
 -(void)showFAQs:(UIViewController *)controller{
@@ -398,8 +400,49 @@
     }];
 }
 
+
+
+
+//
+
+
+// exposing API for the user (done)
+// Loading tags to DB (done, i will verify it)
+// handling it in the UI (do it now) from user API
+
+
+
+- (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options{
+    
+    [[HLArticleTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+        HLContainerController *preferredController = nil;
+        if([channelIds count] < 1 ){
+            HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
+            FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
+                                                                                             andPresentModally:YES];
+            preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
+        }
+        else if (channelIds.count == 1) {
+            HLChannelInfo *channelInfo = [channelIds firstObject];
+            FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
+                                                                                 andPresentModally:YES];
+            preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
+        }
+        else{
+            HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
+            channelViewController.tagsArray = options.tags;
+            channelViewController.title = options.filteredViewTitle;
+            preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
+        }
+        UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
+        [controller presentViewController:navigationController animated:YES completion:nil];
+        
+    }];
+}
+
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+    //[[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:nil completion:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
             if (channelInfos.count == 1) {
@@ -414,6 +457,26 @@
             UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
             [controller presentViewController:navigationController animated:YES completion:nil];
         }
+    }];
+}
+
+-(void) selectChannelController:(ConversationOptions *)options
+                withCompletion : (void (^)(HLViewController *))completion{
+    [[HLArticleTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+         HLContainerController *preferredController = nil;
+        if([channelIds count] > 1 ){
+            //show default channel here
+        }
+        else if (channelIds.count == 1) {
+            HLChannelInfo *channelInfo = [channelIds firstObject];
+            FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
+                                                                                 andPresentModally:YES];
+            preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
+        }
+        else{
+            //show all matched channel here
+        }
+        
     }];
 }
 
