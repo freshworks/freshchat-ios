@@ -334,6 +334,11 @@
  */
 -(NSArray *)tags;
 
+/**
+ *  Tags Filter type - FAQ's or Articles tags
+ */
+-(NSNumber *) filteredType;
+
 @end
 
 

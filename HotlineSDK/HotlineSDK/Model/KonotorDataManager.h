@@ -33,6 +33,7 @@
 -(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
 -(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
+- (void) fetchAllCategoriesForTags  :(NSArray*) tagsIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler;
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler;
 -(void)fetchAllVisibleChannels:(void(^)(NSArray *channelInfos, NSError *error))handler;
 - (void) fetchAllVisibleChannelsForTags:(NSArray *)channelIds completion:(void (^)(NSArray *channelInfos, NSError *))handler;

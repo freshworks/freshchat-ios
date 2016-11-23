@@ -69,7 +69,8 @@
 
 //TODO: Remove duplicate code
 -(void)updateCategories{
-    [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
+    //[[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
+    [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:self.tagsArray withCompletion:^(NSArray *solutions, NSError *error) {
         if (!error) {
             self.categories = solutions;
             [self setNavigationItem];

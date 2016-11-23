@@ -11,7 +11,7 @@
 
 @interface HLChannelViewController : HLListViewController
 @property (nonatomic, strong) NSArray *tagsArray;
-@property (nonatomic, assign) NSString *title;
+@property (nonatomic, copy) NSString *title;
 
 
 @end

@@ -47,12 +47,6 @@
     }else{
         self.imageView.image = [UIImage imageNamed:@"background"];
     }
-    
-}
-
-- (IBAction)showConversations:(id)sender{
-    
-    
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
@@ -61,11 +55,11 @@
 //    options.showContactUsOnFaqScreens = YES;
 //    //[options filterByTags : @[ @"test"] withTitle:@"newTag"];
 //    ////options.showContactUsOnAppBar = YES;
-//    [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:1]];
+//   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:1]];
 //    [[Hotline sharedInstance]showFAQs:self withOptions:options];
     
     ConversationOptions *options = [ConversationOptions new];
-    [options filterByTags:@[@"test"] withTitle:@"Test"];
+    [options filterByTags:@[@"testing"] withTitle:@"Test"];
     [[Hotline sharedInstance] showConversations:self withOptions:options];
 }
 

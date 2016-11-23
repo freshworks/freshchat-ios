@@ -11,6 +11,7 @@
 #import "HLConstants.h"
 #import "FDMemLogger.h"
 #import "HLChannel.h"
+#import "HLCategory.h"
 
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
@@ -205,6 +206,47 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
+- (void) fetchAllCategoriesForTags  :(NSArray*) tagsIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
+    NSManagedObjectContext *backgroundContext = self.backgroundContext;
+    NSManagedObjectContext *mainContext = self.mainObjectContext;
+    [backgroundContext performBlock:^{
+        NSArray *results;
+        NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        if(tagsIds.count){
+            for(NSNumber * categoryId in tagsIds){
+                HLCategory *category = [HLCategory getWithID:categoryId inContext:mainContext];
+                if(category){
+                    [fetchedSolutions addObject :category];
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(fetchedSolutions,nil);
+            });
+        }
+        else{
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+            NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+            request.sortDescriptors = @[position];
+            results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+            [mainContext performBlock:^{
+                for (int i=0; i< results.count; i++) {
+                    NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
+                    [mainContext refreshObject:newSolution mergeChanges:YES];
+                    
+                    if (newSolution) {
+                        [fetchedSolutions addObject:newSolution];
+                    }
+                    
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(handler) handler(fetchedSolutions,nil);
+                });
+            }];
+        }
+    }];
+}
+
+
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler{
     NSManagedObjectContext *backgroundContext = [KonotorDataManager sharedInstance].backgroundContext;
     NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
@@ -282,13 +324,13 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
-- (void) fetchAllVisibleChannelsForTags:(NSArray *)channelIds completion:(void (^)(NSArray *channelInfos, NSError *))handler {
+- (void) fetchAllVisibleChannelsForTags:(NSArray *)TagIds completion:(void (^)(NSArray *channelInfos, NSError *))handler {
     
     NSManagedObjectContext *context = self.mainObjectContext;
     [context performBlock:^{
         NSMutableArray *channelInfos= [NSMutableArray new];
-        if(channelIds.count){
-            for(NSNumber * channelId in channelIds){
+        if(TagIds.count){
+            for(NSNumber * channelId in TagIds){
                 HLChannel *channel = [HLChannel getWithID:channelId inContext:context];
                 if(channel){
                     [channelInfos addObject:channel];

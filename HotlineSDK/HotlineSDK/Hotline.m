@@ -345,7 +345,7 @@
 
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     
-    
+    if([options.filteredType intValue] == 1){
     [[HLArticleTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
         
         void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
@@ -381,6 +381,54 @@
             faqOptionsCompletion(preferedController);
         }
     }];
+    }
+    else if([options.filteredType intValue] == 2){
+        
+        [[HLArticleTagManager sharedInstance] getCategoriesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
+            void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
+            [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+            completion(preferredViewController);
+            };
+            HLViewController *preferedController = nil;
+            if(categoryIds.count < 1){
+                [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
+                preferedController = [self preferredCategoryController:options];
+                faqOptionsCompletion(preferedController);
+            }
+            else{
+                [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];// No Matching tags so no need to pass it around
+                if([options.filteredType intValue] == 1){
+                    if (options.showFaqCategoriesAsGrid) {
+                        HLCategoryGridViewController *categoryView = [[HLCategoryGridViewController alloc]init];
+                        categoryView.tagsArray = categoryIds;
+                        categoryView.tagsTitle = options.filteredViewTitle;
+                        faqOptionsCompletion(categoryView);
+                    }
+                    else{
+                        HLCategoryListController *categoryView = [[HLCategoryListController alloc]init];
+                        categoryView.tagsArray = categoryIds;
+                        categoryView.tagsTitle = options.filteredViewTitle;
+                        faqOptionsCompletion(categoryView);
+                    }
+                }
+                else{
+                    if (options.showFaqCategoriesAsGrid) {
+                        HLCategoryGridViewController *categoryView = [[HLCategoryGridViewController alloc]init];
+                        categoryView.tagsArray = categoryIds;
+                        categoryView.tagsTitle = options.filteredViewTitle;
+                        faqOptionsCompletion(categoryView);
+                    }
+                    else{
+                        HLCategoryListController *categoryView = [[HLCategoryListController alloc]init];
+                        categoryView.tagsArray = categoryIds;
+                        categoryView.tagsTitle = options.filteredViewTitle;
+                        faqOptionsCompletion(categoryView);
+                    }
+                }
+                
+            }
+        }];
+    }
     
     
 }
@@ -400,18 +448,6 @@
     }];
 }
 
-
-
-
-//
-
-
-// exposing API for the user (done)
-// Loading tags to DB (done, i will verify it)
-// handling it in the UI (do it now) from user API
-
-
-
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options{
     
     [[HLArticleTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
@@ -423,14 +459,13 @@
             preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
         }
         else if (channelIds.count == 1) {
-            HLChannelInfo *channelInfo = [channelIds firstObject];
-            FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
+            FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:[channelIds firstObject]
                                                                                  andPresentModally:YES];
             preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
         }
         else{
             HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-            channelViewController.tagsArray = options.tags;
+            channelViewController.tagsArray = channelIds;
             channelViewController.title = options.filteredViewTitle;
             preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
         }
@@ -457,26 +492,6 @@
             UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
             [controller presentViewController:navigationController animated:YES completion:nil];
         }
-    }];
-}
-
--(void) selectChannelController:(ConversationOptions *)options
-                withCompletion : (void (^)(HLViewController *))completion{
-    [[HLArticleTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
-         HLContainerController *preferredController = nil;
-        if([channelIds count] > 1 ){
-            //show default channel here
-        }
-        else if (channelIds.count == 1) {
-            HLChannelInfo *channelInfo = [channelIds firstObject];
-            FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
-                                                                                 andPresentModally:YES];
-            preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
-        }
-        else{
-            //show all matched channel here
-        }
-        
     }];
 }
 

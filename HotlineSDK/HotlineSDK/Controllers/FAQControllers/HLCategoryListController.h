@@ -12,4 +12,7 @@
 
 @interface HLCategoryListController : HLListViewController<FAQOptionsInterface>
 
+@property (nonatomic, strong) NSArray *tagsArray;
+@property (nonatomic, assign) NSString *tagsTitle;
+
 @end
