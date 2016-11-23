@@ -17,7 +17,7 @@
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
 #import "HLArticleUtil.h"
-#import "HLArticleTagManager.h"
+#import "HLTagManager.h"
 #import "HLLocalization.h"
 
 @interface HLArticlesController ()
@@ -93,9 +93,9 @@
         }];
     }
     else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-//        [[HLArticleTagManager sharedInstance] articlesForTags:[self.faqOptions tags] withCompletion:
+//        [[HLTagManager sharedInstance] articlesForTags:[self.faqOptions tags] withCompletion:
 //         ^(NSSet *articleIds) {
-        [[HLArticleTagManager sharedInstance] getArticleForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+        [[HLTagManager sharedInstance] getArticleForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
              
              [mainContext performBlock:^{

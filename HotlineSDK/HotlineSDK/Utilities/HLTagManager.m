@@ -1,12 +1,12 @@
 //
-//  HLArticleTagManager.m
+//  HLTagManager.m
 //  HotlineSDK
 //
 //  Created by Hrishikesh on 23/06/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "HLArticleTagManager.h"
+#import "HLTagManager.h"
 #import "HLMacros.h"
 #import "FDTags.h"
 #import "HLCategory.h"
@@ -15,7 +15,7 @@
 #define STORAGE_DIR_PATH @"Hotline/Offline"
 #define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
 
-@interface HLArticleTagManager ()
+@interface HLTagManager ()
 
 @property NSMutableDictionary *tagMap;
 @property dispatch_queue_t queue;
@@ -24,10 +24,10 @@
 
 @end
 
-@implementation HLArticleTagManager
+@implementation HLTagManager
 
 +(instancetype)sharedInstance{
-    static HLArticleTagManager *sharedInstance = nil;
+    static HLTagManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc]init];

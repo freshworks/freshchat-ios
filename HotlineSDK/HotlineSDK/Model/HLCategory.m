@@ -10,7 +10,7 @@
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
-#import "HLArticleTagManager.h"
+#import "HLTagManager.h"
 #import "FDTags.h"
 
 @implementation HLCategory
@@ -64,7 +64,7 @@
     });
     category.icon = imageData;
     
-    HLArticleTagManager *tagManager = [HLArticleTagManager sharedInstance];
+    HLTagManager *tagManager = [HLTagManager sharedInstance];
     
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];

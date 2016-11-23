@@ -1,18 +1,18 @@
 //
-//  HLArticleTagManager.h
+//  HLTagManager.h
 //  HotlineSDK
 //
 //  Created by Hrishikesh on 23/06/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#ifndef HLArticleTagManager_h
-#define HLArticleTagManager_h
+#ifndef HLTagManager_h
+#define HLTagManager_h
 
 #import "KonotorDataManager.h"
 #import <Foundation/Foundation.h>
 
-@interface HLArticleTagManager : NSObject
+@interface HLTagManager : NSObject
 
 +(instancetype)sharedInstance;
 
@@ -29,4 +29,4 @@
 
 @end
 
-#endif /* HLArticleTagManager_h */
+#endif /* HLTagManager_h */

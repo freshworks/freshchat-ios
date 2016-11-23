@@ -30,7 +30,7 @@
 #import "KonotorUser.h"
 #import "HLVersionConstants.h"
 #import "HLNotificationHandler.h"
-#import "HLArticleTagManager.h"
+#import "HLTagManager.h"
 #import "HLArticlesController.h"
 #import "HLArticleDetailViewController.h"
 #import "HLArticleUtil.h"
@@ -346,7 +346,7 @@
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     
     if([options.filteredType intValue] == 1){
-    [[HLArticleTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
+    [[HLTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
         
         void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
             [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
@@ -384,7 +384,7 @@
     }
     else if([options.filteredType intValue] == 2){
         
-        [[HLArticleTagManager sharedInstance] getCategoriesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
+        [[HLTagManager sharedInstance] getCategoriesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
             [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
@@ -409,7 +409,7 @@
                         categoryView.tagsArray = categoryIds;
                         categoryView.tagsTitle = options.filteredViewTitle;
                         faqOptionsCompletion(categoryView);
-                    }
+                    } 
                 }
                 else{
                     if (options.showFaqCategoriesAsGrid) {
@@ -450,7 +450,7 @@
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options{
     
-    [[HLArticleTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+    [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
         HLContainerController *preferredController = nil;
         if([channelIds count] < 1 ){
             HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
@@ -632,7 +632,7 @@
     
     
     [[HotlineUser sharedInstance]clearUserData]; // This clear Sercure Store data as well.
-    [[HLArticleTagManager sharedInstance]clear];
+    [[HLTagManager sharedInstance]clear];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     
     [self storePreviousUser:previousUserAlias inStore:store];
