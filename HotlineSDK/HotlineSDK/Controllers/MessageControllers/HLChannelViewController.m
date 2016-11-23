@@ -82,8 +82,9 @@
     [[[FDChannelUpdater alloc] init] resetTime];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     [self localNotificationSubscription];
     [self fetchUpdates];
     self.footerView.hidden = YES;

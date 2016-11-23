@@ -38,18 +38,21 @@
         if([self conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
             if(gestureDelegate){
                 if (self.parentViewController) {
+                    [self.parentViewController.navigationController.interactivePopGestureRecognizer setEnabled:YES];
                     self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = gestureDelegate;
                 }else{
+                    [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
                     self.navigationController.interactivePopGestureRecognizer.delegate = gestureDelegate;
                 }
             }else{
-                self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+                [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
             }
         }
     }else{
         self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
                                                                                                       style:self.parentViewController.navigationItem.backBarButtonItem.style
                                                                                                      target:nil action:nil];
+        [self.parentViewController.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     }
 }
 

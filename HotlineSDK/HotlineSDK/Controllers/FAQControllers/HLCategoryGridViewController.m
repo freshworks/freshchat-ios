@@ -73,8 +73,9 @@
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     [self localNotificationSubscription];
     [self fetchUpdates];
 }
