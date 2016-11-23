@@ -319,7 +319,13 @@
  *  @param Controller's navigation bar title
  *
  */
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title;
+
+/**
+ *  Filter with type either faq articles or categories 
+ */
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (NSNumber *) type;
+ 
 /**
  *  Preferred navigation bar title
  *

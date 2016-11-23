@@ -36,6 +36,12 @@ enum TagFilterType {
     return self;
 }
 
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title{
+    self.filterByTags = tags;
+    self.tagViewTitle = title;
+}
+
+
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (NSNumber *) type{
     self.filterByTags = tags;
     self.tagViewTitle = title;
