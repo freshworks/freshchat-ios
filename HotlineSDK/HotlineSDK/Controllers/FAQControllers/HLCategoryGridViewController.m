@@ -78,6 +78,7 @@
     [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     [self localNotificationSubscription];
     [self fetchUpdates];
+    [self updateSolutions];
 }
 
 -(void)setupSubviews{

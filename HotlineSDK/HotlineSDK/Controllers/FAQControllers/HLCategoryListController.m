@@ -66,6 +66,7 @@
     [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     [self localNotificationSubscription];
     [self fetchUpdates];
+    [self updateSolutions];
 }
 
 //TODO: Remove duplicate code
