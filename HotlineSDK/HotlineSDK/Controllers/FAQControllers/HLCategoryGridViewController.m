@@ -54,7 +54,12 @@
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+    if (self.faqOptions && self.tagsArray.count >0 ){
+        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
+    }
+    else{
+        parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+    }
     self.theme = [HLTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
     [self updateCategories];

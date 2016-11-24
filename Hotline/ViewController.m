@@ -50,13 +50,17 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
-    options.showContactUsOnFaqScreens = YES;
-    //[options filterByTags : @[ @"test"] withTitle:@"newTag"];
-    ////options.showContactUsOnAppBar = YES;
-   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:CATEGORY]];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+//    FAQOptions *options = [FAQOptions new];
+//    options.showFaqCategoriesAsGrid = YES;
+//    options.showContactUsOnFaqScreens = YES;
+//    //[options filterByTags : @[ @"test"] withTitle:@"newTag"];
+//    ////options.showContactUsOnAppBar = YES;
+//   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:ARTICLE]];
+//    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:@[@"testing"] withTitle:@"channelfilter"];
+    [[Hotline sharedInstance] showConversations:self withOptions:opt];
 
 }
 

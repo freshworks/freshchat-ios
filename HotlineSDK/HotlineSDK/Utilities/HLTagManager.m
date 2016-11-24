@@ -196,7 +196,6 @@
 }
 
 - (void) migrateTagsfromPlist{
-    
     dispatch_async(self.queue, ^{
         if([[NSFileManager defaultManager] fileExistsAtPath:self.storageFile]){
             NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
@@ -204,7 +203,6 @@
                 self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
                 for(NSString *key in [self.tagMap allKeys]) {
                     for (id item in [self.tagMap objectForKey:key]) {
-                        NSLog(@"------ %@", item);
                         [FDTags createTagWithInfo:[FDTags createDictWithTagName:key type:[NSNumber numberWithInt: FDTagTypeArticle] andIdvalue:item] inContext:[KonotorDataManager sharedInstance].backgroundContext];
                     }
                 }
