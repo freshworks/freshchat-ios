@@ -12,11 +12,6 @@
 
 @interface FAQOptions()
 
-enum TagFilterType {
-    Article  = 1,
-    Category = 2
-};
-
 @property (nonatomic) NSArray *filterByTags;
 @property (nonatomic) NSString *tagViewTitle;
 @property (nonatomic) NSNumber *filterType;

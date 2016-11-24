@@ -55,12 +55,9 @@
     options.showContactUsOnFaqScreens = YES;
     //[options filterByTags : @[ @"test"] withTitle:@"newTag"];
     ////options.showContactUsOnAppBar = YES;
-   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:1]];
+   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:CATEGORY]];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
-    
-//    ConversationOptions *options = [ConversationOptions new];
-//    [options filterByTags:@[@"testing"] withTitle:@"Test"];
-//    [[Hotline sharedInstance] showConversations:self withOptions:options];
+
 }
 
 @end

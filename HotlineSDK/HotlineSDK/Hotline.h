@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+enum TagFilterType {
+    ARTICLE  = 1,
+    CATEGORY = 2
+};
+
 #define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
 
 @class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions;

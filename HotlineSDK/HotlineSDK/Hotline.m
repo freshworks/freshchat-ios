@@ -345,92 +345,69 @@
 
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     
-    if([options.filteredType intValue] == 1){
-    [[HLTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
-        
-        void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-            [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
-            completion(preferredViewController);
-        };
-        
-        
-        if([articleIds count] > 1 ){
-            HLViewController *preferedController = nil;
-            preferedController = [[HLArticlesController alloc]init];
-            faqOptionsCompletion(preferedController);
-        } else if([articleIds count] == 1 ) {
-            NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-            
-            [mContext performBlock:^{
-                HLViewController *preferedController = nil;
-                HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
-                if(article){
-                    preferedController = [HLArticleUtil getArticleDetailController:article];
-                    faqOptionsCompletion(preferedController);
-                }
-                else { // This shouldn't happen but lets see
-                    preferedController = [self preferredCategoryController:options];
-                    faqOptionsCompletion(preferedController);
-                }
-            }];
-        } else {
-            HLViewController *preferedController = nil;
-            //[options filterByTags:@[] withTitle:@""];
-            [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
-            preferedController = [self preferredCategoryController:options];
-            faqOptionsCompletion(preferedController);
-        }
-    }];
-    }
-    else if([options.filteredType intValue] == 2){
+    if([options.filteredType intValue] == CATEGORY){
         
         [[HLTagManager sharedInstance] getCategoriesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-            [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
-            completion(preferredViewController);
+                [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+                completion(preferredViewController);
             };
-            HLViewController *preferedController = nil;
+            HLViewController *preferedController = [self preferredCategoryController:options];
             if(categoryIds.count < 1){
                 [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
-                preferedController = [self preferredCategoryController:options];
                 faqOptionsCompletion(preferedController);
             }
             else{
                 [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];// No Matching tags so no need to pass it around
-                if([options.filteredType intValue] == 1){
-                    if (options.showFaqCategoriesAsGrid) {
-                        HLCategoryGridViewController *categoryView = [[HLCategoryGridViewController alloc]init];
-                        categoryView.tagsArray = categoryIds;
-                        categoryView.tagsTitle = options.filteredViewTitle;
-                        faqOptionsCompletion(categoryView);
-                    }
-                    else{
-                        HLCategoryListController *categoryView = [[HLCategoryListController alloc]init];
-                        categoryView.tagsArray = categoryIds;
-                        categoryView.tagsTitle = options.filteredViewTitle;
-                        faqOptionsCompletion(categoryView);
-                    } 
+                if (options.showFaqCategoriesAsGrid) {
+                    ((HLCategoryGridViewController *)preferedController).tagsArray = categoryIds;
+                    faqOptionsCompletion(preferedController);
                 }
                 else{
-                    if (options.showFaqCategoriesAsGrid) {
-                        HLCategoryGridViewController *categoryView = [[HLCategoryGridViewController alloc]init];
-                        categoryView.tagsArray = categoryIds;
-                        categoryView.tagsTitle = options.filteredViewTitle;
-                        faqOptionsCompletion(categoryView);
-                    }
-                    else{
-                        HLCategoryListController *categoryView = [[HLCategoryListController alloc]init];
-                        categoryView.tagsArray = categoryIds;
-                        categoryView.tagsTitle = options.filteredViewTitle;
-                        faqOptionsCompletion(categoryView);
-                    }
+                    ((HLCategoryListController *)preferedController).tagsArray = categoryIds;
+                    faqOptionsCompletion(preferedController);
                 }
                 
             }
         }];
     }
-    
-    
+    else{
+        [[HLTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
+        
+            void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
+                [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+            completion(preferredViewController);
+            };
+        
+        
+            if([articleIds count] > 1 ){
+                HLViewController *preferedController = nil;
+                preferedController = [[HLArticlesController alloc]init];
+                faqOptionsCompletion(preferedController);
+            } else if([articleIds count] == 1 ) {
+                NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+            
+                [mContext performBlock:^{
+                    HLViewController *preferedController = nil;
+                    HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
+                    if(article){
+                        preferedController = [HLArticleUtil getArticleDetailController:article];
+                        faqOptionsCompletion(preferedController);
+                    }
+                    else { // This shouldn't happen but lets see
+                        preferedController = [self preferredCategoryController:options];
+                        faqOptionsCompletion(preferedController);
+                    }
+                }];
+            } else {
+                HLViewController *preferedController = nil;
+                //[options filterByTags:@[] withTitle:@""];
+                [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
+                preferedController = [self preferredCategoryController:options];
+                faqOptionsCompletion(preferedController);
+            }
+        }];
+    }
 }
 
 -(void)showFAQs:(UIViewController *)controller{
