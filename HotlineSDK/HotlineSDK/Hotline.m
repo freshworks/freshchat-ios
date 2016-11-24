@@ -443,7 +443,7 @@
         else{
             HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
             channelViewController.tagsArray = channelIds;
-            channelViewController.title = options.filteredViewTitle;
+            channelViewController.tagsTitle = options.filteredViewTitle;
             preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
         }
         UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];

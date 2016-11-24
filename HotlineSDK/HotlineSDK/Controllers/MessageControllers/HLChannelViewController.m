@@ -34,6 +34,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
+@property (nonatomic, strong) FAQOptions *faqOptions;
 
 @end
 
@@ -41,7 +42,12 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
+    if(self.tagsArray.count){
+        parent.navigationItem.title = self.tagsTitle;
+    }
+    else{
+        parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
+    }
     HLTheme *theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
