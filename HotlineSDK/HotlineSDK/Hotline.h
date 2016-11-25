@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 
 #define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
+#define HOTLINE_PLAY_INAPP_AUDIO @"%@_com.freshdesk.hotline_play_inapp_audio"
+#define HOTLINE_PAUSE_INAPP_AUDIO @"%@_com.freshdesk.hotline_pause_inapp_audio"
 
 @class HotlineConfig, HotlineUser, FAQOptions;
 

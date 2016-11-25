@@ -31,7 +31,7 @@ static NSString *beforeRecordCategory;
         if (granted){
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPauseAppAudioNotification" object:self];
+                [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
                 [KonotorAudioRecorder startRecordingA];
             });
         }
@@ -306,8 +306,11 @@ static NSString *beforeRecordCategory;
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
     NSError *error;
     [audioSession setCategory:beforeRecordCategory error:&error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPlayAppAudioNotification" object:self];
-    
+    if(error){
+        NSLog(@"Failed to set audio session category");
+        return NO;
+    }
+    [FDLocalNotification post:HOTLINE_PLAY_INAPP_AUDIO];
     return YES;
 }
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID

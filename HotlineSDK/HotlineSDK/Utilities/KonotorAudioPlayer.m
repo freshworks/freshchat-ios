@@ -48,15 +48,17 @@ static NSString *beforePlayCategory;
     [KonotorAudioPlayer currentPlaying:nil set:YES];
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"HLPlayAppAudioNotification" object:self];
+    if(error){
+        FDLog(@"Failed to set audio session category");
+        return NO;
+    }
+    [FDLocalNotification post:HOTLINE_PLAY_INAPP_AUDIO];
     return YES;
 }
 
 +(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime{
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"HLPauseAppAudioNotification"
-     object:self];
+    [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
 
     NSError *error;
     KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
@@ -74,7 +76,10 @@ static NSString *beforePlayCategory;
     [audioSession setActive:YES error:&error];
     
     [audioSession setCategory:AVAudioSessionCategoryPlayback error: &error];
-    
+    if(error){
+        FDLog(@"Failed to set audio session category");
+        return NO;
+    }
     gCurrentlyPlaying = messageObject;
     
     if(gkIsAudioAlreadyPlaying)
@@ -278,9 +283,10 @@ static NSString *beforePlayCategory;
     
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"HLPlayAppAudioNotification"
-     object:self];
+    if(error){
+        FDLog(@"Failed to set audio session category");
+    }
+    [FDLocalNotification post:HOTLINE_PLAY_INAPP_AUDIO];
 }
 
 + (double) audioPlayerGetCurrentTime

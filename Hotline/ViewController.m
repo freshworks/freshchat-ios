@@ -12,9 +12,7 @@
 #import "AppDelegate.h"
 
 
-@interface ViewController (){
-    
-}
+@interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -40,11 +38,11 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPlayNotification:)
-                                                 name:@"HLPlayAppAudioNotification"
+                                                 name:HOTLINE_PLAY_INAPP_AUDIO
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPauseNotification:)
-                                                 name:@"HLPauseAppAudioNotification"
+                                                 name:HOTLINE_PAUSE_INAPP_AUDIO
                                                object:nil];
     
 }
@@ -60,7 +58,6 @@
         [_audioPlayer pause];
     }
 }
-
 
 -(void)setupSubview{
     self.imageView = [[UIImageView alloc]init];

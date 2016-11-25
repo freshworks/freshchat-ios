@@ -33,7 +33,6 @@
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
 		3CB780441CF8693800DB7A73 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3CB780431CF8693800DB7A73 /* KonotorModels.bundle */; };
-		CEF24D011DB17B6200F906F7 /* mmmm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEF24D001DB17B6200F906F7 /* mmmm.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,7 +105,6 @@
 		3CB780431CF8693800DB7A73 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		CEF24D001DB17B6200F906F7 /* mmmm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = mmmm.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,7 +203,6 @@
 				356F19EF1B9DBF14002F1E2A /* AppDelegate.m */,
 				356F19F11B9DBF14002F1E2A /* ViewController.h */,
 				356F19F21B9DBF14002F1E2A /* ViewController.m */,
-				CEF24D001DB17B6200F906F7 /* mmmm.mp3 */,
 				35D707141BE2498B0035FD74 /* FDSettingsController.h */,
 				35D707151BE2498B0035FD74 /* FDSettingsController.m */,
 				354D0D311C48D32D004D2AA1 /* Images */,
@@ -382,7 +379,6 @@
 			files = (
 				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				3518351B1D273997000EB496 /* background.png in Resources */,
-				CEF24D011DB17B6200F906F7 /* mmmm.mp3 in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
 				3513FF801CDCC3A3009A7034 /* HLLocalization.bundle in Resources */,
 				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
