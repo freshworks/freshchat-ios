@@ -75,7 +75,6 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     [self localNotificationSubscription];
     [self fetchUpdates];
     [self updateSolutions];
