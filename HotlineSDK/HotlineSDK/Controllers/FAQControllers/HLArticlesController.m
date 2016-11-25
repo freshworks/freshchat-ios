@@ -56,11 +56,11 @@
     }
     if(self.category){
         parent.navigationItem.title = self.category.title;
+        [self setNavigationItem];
     }
     else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
         parent.navigationItem.title = [self.faqOptions filteredViewTitle];
     }
-    [self setNavigationItem];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

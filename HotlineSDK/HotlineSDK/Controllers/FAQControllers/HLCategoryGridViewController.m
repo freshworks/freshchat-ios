@@ -59,13 +59,13 @@
     }
     else{
         parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+        [self setNavigationItem];
     }
     self.theme = [HLTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
     [self updateCategories];
     [self setupSubviews];
     [self adjustUIBounds];
-    [self setNavigationItem];
     [self theming];
     [self addLoadingIndicator];
 }
@@ -200,7 +200,9 @@
                 [self.emptyResultView removeFromSuperview];
                 [self removeLoadingIndicator];
             }
-            [self setNavigationItem];
+            if (!self.faqOptions && !self.tagsArray.count){
+                [self setNavigationItem];
+            }
             [self.collectionView reloadData];
         }
     }];
