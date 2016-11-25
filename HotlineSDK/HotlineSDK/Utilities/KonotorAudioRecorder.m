@@ -32,11 +32,18 @@ static NSString *beforeRecordCategory;
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
-                [KonotorAudioRecorder startRecordingA];
+                
+                [self pauseAudioWithCompletion:^{
+                    [KonotorAudioRecorder startRecordingA];
+                }];
             });
         }
     }];
     return YES;
+}
+
++(void)pauseAudioWithCompletion:(void (^)())completion{
+    [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
 }
 
 +(BOOL) startRecordingA{
