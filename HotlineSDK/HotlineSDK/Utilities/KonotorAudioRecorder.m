@@ -29,21 +29,13 @@ static NSString *beforeRecordCategory;
 +(BOOL)startRecording{
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted){
+            [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
             dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
-                
-                [self pauseAudioWithCompletion:^{
-                    [KonotorAudioRecorder startRecordingA];
-                }];
+                [KonotorAudioRecorder startRecordingA];
             });
         }
     }];
     return YES;
-}
-
-+(void)pauseAudioWithCompletion:(void (^)())completion{
-    [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
 }
 
 +(BOOL) startRecordingA{
