@@ -106,25 +106,28 @@
 
 -(void) getArticleForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion {
     
-    NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
+    NSArray *taggedIds;
+    NSMutableSet * articlesSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName like %@ AND (taggableType ==1 OR taggableType ==2)", tag];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND (taggableType ==1 OR taggableType ==2)", tag];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
             if([taggedObj.taggableType intValue] == FDTagTypeArticle){
-                [taggedIds addObject:taggedObj.taggableID];
+                
+                [articlesSet addObject:taggedObj.taggableID];
             }
             else if ([taggedObj.taggableType intValue] == FDTagTypeCategory){
                 HLCategory *category = [HLCategory getWithID:taggedObj.taggableID inContext:context];
                 for(HLArticle *articleInfo in category.articles){
-                    [taggedIds addObject:articleInfo.articleID];
+                    [articlesSet addObject:articleInfo.articleID];
                 }
             }
         }
+        taggedIds = [articlesSet allObjects];
     }
     dispatch_async(dispatch_get_main_queue(),^{
-        completion([taggedIds mutableCopy]);
+        completion(taggedIds);
     });
 }
 
