@@ -260,6 +260,10 @@ static HLNotificationHandler *handleUpdateNotification;
                         [FDTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: FDTagTypeChannel] inContext:context];
                     }
                 }
+                else {//viable if tags are removed from portal
+                    [FDTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: FDTagTypeChannel] inContext:context];
+                }
+                
                 if (channel) {
                     [HLChannel updateChannel:channel withInfo:channelInfo];
                     FDLog(@"Channel updated ID:%@ name:%@", channel.channelID , channel.name);
