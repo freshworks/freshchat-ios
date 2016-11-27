@@ -136,7 +136,7 @@
     NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName like %@ AND taggableType ==2",tag];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==2",tag];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
             [taggedIds addObject:taggedObj.taggableID];
@@ -152,7 +152,7 @@
     NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName like %@ AND taggableType ==3",tag];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==3",tag];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
             [taggedIds addObject:taggedObj.taggableID];

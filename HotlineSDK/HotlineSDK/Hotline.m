@@ -372,8 +372,8 @@
         }];
     }
     else{
-        [[HLTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
-        
+        //[[HLTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
+        [[HLTagManager sharedInstance] getArticleForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
@@ -389,7 +389,7 @@
             
                 [mContext performBlock:^{
                     HLViewController *preferedController = nil;
-                    HLArticle *article = [HLArticle getWithID:[articleIds anyObject] inContext:mContext];
+                    HLArticle *article = [HLArticle getWithID:[articleIds firstObject] inContext:mContext];
                     if(article){
                         preferedController = [HLArticleUtil getArticleDetailController:article];
                         faqOptionsCompletion(preferedController);

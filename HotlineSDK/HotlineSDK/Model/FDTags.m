@@ -48,8 +48,7 @@
     NSMutableDictionary *tagsDict = [[NSMutableDictionary alloc] init];
     [tagsDict setValue:tagId forKey:@"taggableID"];
     [tagsDict setValue:type forKey:@"taggableType"];
-    [tagsDict setValue:tagname forKey:@"tagName"];
-    
+    [tagsDict setValue:[tagname lowercaseString] forKey:@"tagName"];
     return tagsDict;
 }
 
