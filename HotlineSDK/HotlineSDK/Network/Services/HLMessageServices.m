@@ -365,7 +365,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
                 if ( error && error.code == -1009) {
-                    [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
+                    [Konotor UploadFailedNotification:messageAlias];
                 }
                 else if( responseInfo && [responseInfo.responseAsDictionary[@"errorCode"] integerValue] == -1) {
                         [self retryUserRegistration];
