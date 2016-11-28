@@ -52,7 +52,7 @@
 
 - (IBAction)chatButtonPressed:(id)sender {
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
+    options.showFaqCategoriesAsGrid = NO;
     options.showContactUsOnFaqScreens = YES;
 //    [options filterByTags : @[ @"sample"] withTitle:@"newTag"];
     //options.showContactUsOnAppBar = YES;
