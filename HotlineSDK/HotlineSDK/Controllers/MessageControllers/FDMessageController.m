@@ -669,7 +669,7 @@ typedef struct {
     }
 }
 
-- (void) didEncounterErrorFromServer {
+- (void) didNotifyServerError {
     if(!_flags.isShowingAlert){
         [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
                       andMessage:HLLocalizedString(LOC_SERVER_ERROR_INFO_TEXT)];

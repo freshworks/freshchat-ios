@@ -23,7 +23,7 @@
 -(void) didFinishUploading: (NSString *)messageID;
 -(void) didEncounterErrorWhileUploading: (NSString *) messageID;
 -(void) didEncounterErrorWhileDownloading: (NSString *)messageID;
--(void) didEncounterErrorFromServer;
+-(void) didNotifyServerError;
 -(void) didEncounterErrorWhileDownloadingConversations;
 
 -(void) didStartUploadingNewMessage;
@@ -60,7 +60,7 @@
 +(void) conversationsDownloaded;
 +(void) UploadFinishedNotification: (NSString *) messageID;
 +(void) UploadFailedNotification: (NSString *) messageID;
-+(void) ServerProblemNotification;
++(void) NotifyServerError;
 
 
 

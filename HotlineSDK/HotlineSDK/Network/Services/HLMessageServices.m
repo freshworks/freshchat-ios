@@ -364,16 +364,14 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                NSDictionary *res = responseInfo.responseAsDictionary;
-                if( responseInfo && [res[@"errorCode"] integerValue] == -1){
-                        [self retryUserRegistration];
-                        [Konotor performSelector:@selector(ServerProblemNotification)];
-                }
-                else if ( error && error.code == -1009) {
+                if ( error && error.code == -1009) {
                     [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
                 }
+                else if( responseInfo && [responseInfo.responseAsDictionary[@"errorCode"] integerValue] == -1) {
+                        [self retryUserRegistration];
+                }
                 else {
-                    [Konotor performSelector:@selector(ServerProblemNotification)];
+                    [Konotor NotifyServerError];
                 }
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];

@@ -152,13 +152,13 @@ __weak static id <KonotorDelegate> _delegate;
     
 }
 
-+(void)ServerProblemNotification
++(void)NotifyServerError
 {
     if([Konotor delegate])
     {
-        if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorFromServer)])
+        if([[Konotor delegate] respondsToSelector:@selector(didNotifyServerError)])
         {
-            [[Konotor delegate] didEncounterErrorFromServer];
+            [[Konotor delegate] didNotifyServerError];
         }
     }
 }
