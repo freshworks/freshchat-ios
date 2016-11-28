@@ -364,11 +364,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                if ( error && error.code == -1009) {
+                if ( error && error.code == -1009 ) {
                     [Konotor UploadFailedNotification:messageAlias];
                 }
-                else if( responseInfo && [responseInfo.responseAsDictionary[@"errorCode"] integerValue] == -1) {
-                        [self retryUserRegistration];
+                else if( [self shouldRetryUserRegistration:responseInfo] ) {
+                    [self retryUserRegistration];
                 }
                 else {
                     [Konotor NotifyServerError];
@@ -383,6 +383,10 @@ static HLNotificationHandler *handleUpdateNotification;
 
         }];
     }];
+}
+
++(BOOL) shouldRetryUserRegistration : (FDResponseInfo *)responseInfo {
+    return (responseInfo && [responseInfo.responseAsDictionary[@"errorCode"] integerValue] == -1);
 }
 
 +(void)retryUserRegistration{
