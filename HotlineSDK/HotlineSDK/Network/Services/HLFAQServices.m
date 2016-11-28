@@ -76,6 +76,7 @@
             BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
             BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
             NSArray *tags = categoryInfo[@"tags"];
+            [FDTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
             if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
                     FDLog(@"Updating category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
@@ -84,8 +85,10 @@
                     FDLog(@"New category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
-                if(tags){
+                
+                if(tags.count){
                     for(NSString *tagName in tags){
+                        
                         [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeCategory] andIdvalue:categoryInfo[@"categoryId"]] inContext:context];
                     }
                 }
@@ -99,10 +102,10 @@
             }else{
                 if (category){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
+                    
                     for(HLArticle *article in category.articles){
                         [[HLTagManager sharedInstance] removeTagsForArticleId:article.articleID];
             
-                        [FDTags removeTagsForTaggableId:article.articleID andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
                     }
                     [[HLTagManager sharedInstance]save];
                     [context deleteObject:category];

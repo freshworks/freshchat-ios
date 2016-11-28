@@ -75,6 +75,7 @@
         BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
         BOOL isIOSPlatformAvail = [articleInfo[@"platforms"] containsObject:@"ios"];
         NSArray *tags = articleInfo[@"tags"];
+        [FDTags removeTagsForTaggableId:articleId andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
         if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
@@ -82,14 +83,13 @@
                 article = [HLArticle createWithInfo:articleInfo inContext:context];
                 [category addArticlesObject:article];
             }
-            if(tags){
-                
-                [tagManager removeTagsForArticleId:articleId];
+            if(tags.count){
+                [tagManager removeTagsForArticleId:articleId];//have to remove
                 for(NSString *tagName in tags){
                     
                     [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeArticle] andIdvalue:articleId] inContext:context];
                     
-                    [tagManager addTag:tagName forArticleId:articleId];
+                    [tagManager addTag:tagName forArticleId:articleId];//have to remove
                 }
             }
         }else{
@@ -100,9 +100,7 @@
             else {
                FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
             }
-            
-            if(tags){
-                [FDTags removeTagsForTaggableId:articleId andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
+            if(tags){//need to remove
                 [tagManager removeTagsForArticleId:articleId];
             }
         }
