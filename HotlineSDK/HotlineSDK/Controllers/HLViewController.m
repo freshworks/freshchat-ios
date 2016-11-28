@@ -27,32 +27,29 @@
 
 -(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate{
     BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
-    
+    UINavigationController *naviController = nil;
     if (isBackButtonImageExist && ![self embedded]) {
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
                                                                        style:UIBarButtonItemStylePlain
                                                                       target:self.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
         self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        
         if([self conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
+            naviController = self.navigationController;
             if(gestureDelegate){
-                if (self.parentViewController) {
-                    [self.parentViewController.navigationController.interactivePopGestureRecognizer setEnabled:YES];
-                    self.parentViewController.navigationController.interactivePopGestureRecognizer.delegate = gestureDelegate;
-                }else{
-                    [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
-                    self.navigationController.interactivePopGestureRecognizer.delegate = gestureDelegate;
-                }
+                naviController = (self.parentViewController) ? self.parentViewController.navigationController : naviController;
+                [naviController.interactivePopGestureRecognizer setEnabled:YES];
+                naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
             }else{
-                [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
+                [naviController.interactivePopGestureRecognizer setEnabled:NO];
             }
         }
     }else{
+        naviController = self.parentViewController.navigationController;
         self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
                                                                                                       style:self.parentViewController.navigationItem.backBarButtonItem.style
                                                                                                      target:nil action:nil];
-        [self.parentViewController.navigationController.interactivePopGestureRecognizer setEnabled:NO];
+        [naviController.interactivePopGestureRecognizer setEnabled:NO];
     }
 }
 
