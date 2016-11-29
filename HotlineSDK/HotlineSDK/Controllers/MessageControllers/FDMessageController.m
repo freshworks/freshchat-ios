@@ -33,6 +33,7 @@
 #import "HLArticleUtil.h"
 #import "KonotorAudioRecorder.h"
 #import "FDBackgroundTaskManager.h"
+#import "FDCSATYesNoPrompt.h"
 
 typedef struct {
     BOOL isLoading;
@@ -69,7 +70,7 @@ typedef struct {
 @property (nonatomic) NSInteger messagesDisplayedCount;
 @property (nonatomic) NSInteger loadmoreCount;
 
-@property (strong,nonatomic) FDYesNoPromptView *yesNoPrompt;
+@property (strong,nonatomic) FDCSATYesNoPrompt *yesNoPrompt;
 @property (strong, nonatomic) FDCSATView *CSATView;
 
 @end
@@ -280,7 +281,7 @@ typedef struct {
     self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
     
-    self.yesNoPrompt = [[FDYesNoPromptView alloc]initWithDelegate:self andKey:LOC_ARTICLE_VOTE_PROMPT_PARTIAL];
+    self.yesNoPrompt = [[FDCSATYesNoPrompt alloc]initWithDelegate:self andKey:LOC_CSAT_PROMPT_PARTIAL];
     self.yesNoPrompt.translatesAutoresizingMaskIntoConstraints = NO;
 
     NSDictionary *views;

@@ -77,6 +77,8 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_BUTTON_TEXT_PARTIAL @"_%@_button_text"
 #define LOC_TEXT_PARTIAL @"_text"
 
+#define LOC_CSAT_PROMPT_PARTIAL @"chat_resolution_prompt"
+
 #define LOC_DAY_SUNDAY @"day_sunday"
 #define LOC_DAY_MONDAY @"day_monday"
 #define LOC_DAY_TUESDAY @"day_tuesday"
@@ -91,8 +93,8 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 #define LOC_OFFLINE_INTERNET_MESSAGE @"offline_internet_message"
 
-#define LOC_CSAT_FEEDBACK_VIEW_PLACEHOLDER_TEXT @"csat_feedback_view_placeholder_text"
-#define LOC_CSAT_FEEDBACK_VIEW_SUBMIT_BUTTON_TEXT @"csat_feedback_view_submit_button_text"
+#define LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER @"cust_sat_user_comments_placeholder"
+#define LOC_CUST_SAT_SUBMIT_BUTTON_TEXT @"cust_sat_submit_button_text"
 
 @interface HLLocalization : NSObject
 

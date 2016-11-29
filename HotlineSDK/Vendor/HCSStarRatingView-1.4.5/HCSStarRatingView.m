@@ -20,6 +20,8 @@
 @dynamic value;
 @dynamic shouldUseImages;
 
+//TODO: Remove unused methods from this class
+
 #pragma mark - Initialization
 
 - (instancetype)initWithFrame:(CGRect)frame {

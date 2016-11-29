@@ -7,6 +7,7 @@
 //
 
 #import "FDPromptView.h"
+#import "HLTheme.h"
 
 @protocol FDYesNoPromptViewDelegate <NSObject>
 
@@ -16,6 +17,11 @@
 @end
 
 @interface FDYesNoPromptView : FDPromptView
+
+@property (nonatomic, strong) HLTheme *theme;
+@property (strong, nonatomic) UILabel *promptLabel;
+@property (nonatomic, strong) UIButton *YesButton;
+@property (nonatomic, strong) UIButton *NoButton;
 
 @property (nonatomic,weak) id<FDYesNoPromptViewDelegate> delegate;
 -(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key;

@@ -69,13 +69,13 @@
         self.submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.submitButton setTitleColor:self.theme.csatPromptSubmitButtonColor forState:UIControlStateNormal];
         self.submitButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.submitButton setTitle:HLLocalizedString(LOC_CSAT_FEEDBACK_VIEW_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
+        [self.submitButton setTitle:HLLocalizedString(LOC_CUST_SAT_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
         [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
         [self.CSATPrompt addSubview:self.submitButton];
         
         //Feedback textview
         self.feedbackView = [FDGrowingTextView new];
-        self.feedbackView.placeholder = HLLocalizedString(LOC_CSAT_FEEDBACK_VIEW_PLACEHOLDER_TEXT);
+        self.feedbackView.placeholder = HLLocalizedString(LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER);
         self.feedbackView.opaque = NO;
         self.feedbackView.alpha = 0.7;
         self.feedbackView.layer.borderWidth = 0.5;
