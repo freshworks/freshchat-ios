@@ -27,6 +27,8 @@
 #import "FDMemLogger.h"
 #import "HLCoreServices.h"
 
+#define ERROR_CODE_USER_NOT_CREATED -1
+
 static HLNotificationHandler *handleUpdateNotification;
 
 @implementation HLMessageServices
@@ -367,7 +369,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 if ( error && error.code == -1009 ) {
                     [Konotor UploadFailedNotification:messageAlias];
                 }
-                else if( [self shouldRetryUserRegistration:responseInfo] ) {
+                else if( [self isUserNotCreated:responseInfo] ) {
                     [self retryUserRegistration];
                 }
                 else {
@@ -385,8 +387,9 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-+(BOOL) shouldRetryUserRegistration : (FDResponseInfo *)responseInfo {
-    return (responseInfo && [responseInfo.responseAsDictionary[@"errorCode"] integerValue] == -1);
++(BOOL) isUserNotCreated : (FDResponseInfo *)responseInfo {
+    return (responseInfo && [responseInfo isDict]
+            && [[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_USER_NOT_CREATED);
 }
 
 +(void)retryUserRegistration{
