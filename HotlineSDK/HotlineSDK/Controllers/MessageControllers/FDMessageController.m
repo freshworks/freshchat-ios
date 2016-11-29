@@ -673,6 +673,7 @@ typedef struct {
 
 - (void) didFinishUploading:(NSString *)messageID{
     [self refreshView];
+    [self processPendingCSAT];
 }
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
@@ -777,7 +778,6 @@ typedef struct {
 
 #pragma mark - Message cell delegates
 
-
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
     FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:image];
     [imageController presentOnController:self];
@@ -856,6 +856,12 @@ typedef struct {
 }
 
 -(void)processPendingCSAT{
+    
+    if ([self.inputToolbar containsUserInputText] || [KonotorAudioRecorder isRecording]){
+        FDLog(@"Not showing CSAT prompt, User is currently engaging input toolbar");
+        return;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self hasPendingCSAT] && !self.CSATView.isShowing) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];

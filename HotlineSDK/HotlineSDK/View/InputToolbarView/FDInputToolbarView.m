@@ -211,4 +211,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     }
 }
 
+//TODO: Replace textiew used in this class with FDGrowingTextView
+-(BOOL)containsUserInputText{
+    return (self.textView.text &&
+            ![self.textView.text isEqualToString:@""] &&
+            ![self.textView.text isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)]);
+}
+
 @end
