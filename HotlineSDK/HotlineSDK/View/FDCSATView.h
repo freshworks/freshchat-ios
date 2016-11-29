@@ -16,7 +16,6 @@
 
 @end
 
-
 @interface FDCSATView : UIView
 
 @property (nonatomic,weak) id<FDCSATViewDelegate> delegate;

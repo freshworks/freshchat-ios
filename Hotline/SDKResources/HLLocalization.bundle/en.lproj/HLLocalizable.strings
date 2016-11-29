@@ -93,7 +93,7 @@
 /* Customer Satisfaction Survey */
 
 /* Yes No Prompt */
-"chat_resolution_prompt_text"="Did we address your concerns?";
+"chat_resolution_prompt_text"="Did we address your concerns ?";
 "chat_resolution_prompt_yes_button_text"="Yes!";
 "chat_resolution_prompt_no_button_text"="No";
 

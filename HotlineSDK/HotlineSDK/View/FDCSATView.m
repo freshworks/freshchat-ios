@@ -108,22 +108,18 @@
         
         //CSAT prompt subviews
         [FDAutolayoutHelper setWidth:150 forView:starRatingView inView:self.CSATPrompt];
-        [FDAutolayoutHelper centerX:starRatingView onView:self.CSATPrompt];
-        [FDAutolayoutHelper centerX:self.surveyTitle onView:self.CSATPrompt];
-        [FDAutolayoutHelper centerX:self.feedbackView onView:self.CSATPrompt];
-        [FDAutolayoutHelper centerX:self.submitButton onView:self.CSATPrompt];
-
         [FDAutolayoutHelper setWidth:200 forView:self.surveyTitle inView:self.CSATPrompt];
-        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
         [FDAutolayoutHelper setWidth:200 forView:self.feedbackView inView:self.CSATPrompt];
+        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
+
         
-        if (hideFeedbackView) {
-            [FDAutolayoutHelper setHeight:150 forView:self.CSATPrompt inView:self.transparentView];
-            [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(50)]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:0 metrics:nil views:views]];
-        }else{
-            [FDAutolayoutHelper setHeight:200 forView:self.CSATPrompt inView:self.transparentView];
-            [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(50)][feedback_view]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:0 metrics:nil views:views]];
-        }
+        CGFloat promptHeight = (hideFeedbackView) ? 150 : 200;
+        
+        NSDictionary *metrics = @{@"feedbackview_height": (hideFeedbackView) ? @0 : @50, @"ratingbar_height" : (true) ? @40 : @0 };
+
+        [FDAutolayoutHelper setHeight:promptHeight forView:self.CSATPrompt inView:self.transparentView];
+        
+        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(<=ratingbar_height@900)]-10-[feedback_view(<=feedbackview_height@500)]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
         
         //Initial view config
         self.transparentView.hidden = YES;
