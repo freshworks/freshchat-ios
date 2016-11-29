@@ -133,6 +133,21 @@ typedef struct {
     return headerView;
 }
 
+- (void)tableViewTapped:(UITapGestureRecognizer *)tapObj {
+    CGPoint touchLoc = [tapObj locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoc];
+    FDMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ( messageCell ) {
+        touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
+        if (! CGRectContainsPoint(messageCell.messageTextView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
+            [self.inputToolbar.textView resignFirstResponder];
+        }
+    }
+    else  {
+        [self.inputToolbar.textView resignFirstResponder];
+    }
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self localNotificationSubscription];
@@ -257,6 +272,7 @@ typedef struct {
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.view addSubview:self.tableView];
     
     //Bottomview
