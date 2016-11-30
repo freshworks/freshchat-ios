@@ -56,7 +56,6 @@
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     self.theme = [HLTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self updateCategories];
     [self setupSubviews];
     [self adjustUIBounds];
     [self setNavigationItem];

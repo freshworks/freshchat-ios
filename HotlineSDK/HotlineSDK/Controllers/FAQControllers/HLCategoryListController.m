@@ -48,7 +48,6 @@
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
-    [self updateCategories];
     [self addLoadingIndicator];
 }
 
