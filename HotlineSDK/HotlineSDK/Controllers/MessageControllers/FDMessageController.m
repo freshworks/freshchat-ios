@@ -140,11 +140,11 @@ typedef struct {
     if ( messageCell ) {
         touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
         if (! CGRectContainsPoint(messageCell.messageTextView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
-            [self.inputToolbar.textView resignFirstResponder];
+            [self dismissKeyboard];
         }
     }
     else  {
-        [self.inputToolbar.textView resignFirstResponder];
+        [self dismissKeyboard];
     }
 }
 
@@ -435,7 +435,7 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
-    [self.view endEditing:YES];
+    [self dismissKeyboard];
     [self.imageInput showInputOptions:self];
 }
 
@@ -852,6 +852,10 @@ typedef struct {
 - (void) sendMessage{
     [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     [Konotor cancelRecording];
+}
+
+- (void) dismissKeyboard {
+    [self.view endEditing:YES];
 }
 
 -(void)dealloc{
