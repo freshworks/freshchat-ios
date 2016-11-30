@@ -49,7 +49,7 @@ static NSString *beforePlayCategory;
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
     if(error){
-        FDLog(@"Failed to set audio session category");
+        NSLog(@"Failed to set audio %@ session category", beforePlayCategory);
         return NO;
     }
     [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
@@ -77,7 +77,7 @@ static NSString *beforePlayCategory;
     
     [audioSession setCategory:AVAudioSessionCategoryPlayback error: &error];
     if(error){
-        FDLog(@"Failed to set audio session category");
+        NSLog(@"Failed to set audio session category");
         return NO;
     }
     gCurrentlyPlaying = messageObject;
@@ -284,7 +284,7 @@ static NSString *beforePlayCategory;
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
     if(error){
-        FDLog(@"Failed to set audio session category");
+        NSLog(@"Failed to set audio %@ play session category", beforePlayCategory);
     }
     [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
 }
