@@ -65,7 +65,7 @@
     [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
-    [self updateSolutions];
+    [self updateCategories];
 }
 
 //TODO: Remove duplicate code

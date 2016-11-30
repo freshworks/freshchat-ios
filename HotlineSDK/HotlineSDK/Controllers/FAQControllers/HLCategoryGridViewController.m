@@ -77,7 +77,7 @@
     [super viewDidAppear:animated];
     [self localNotificationSubscription];
     [self fetchUpdates];
-    [self updateSolutions];
+    [self updateCategories];
 }
 
 -(void)setupSubviews{
