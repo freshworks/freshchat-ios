@@ -72,6 +72,7 @@ typedef struct {
 
 @property (strong,nonatomic) FDCSATYesNoPrompt *yesNoPrompt;
 @property (strong, nonatomic) FDCSATView *CSATView;
+@property (nonatomic) BOOL isOneWayChannel;
 
 @end
 
@@ -167,7 +168,7 @@ typedef struct {
     
     if (self.CSATView.isShowing) {
         FDLog(@"Leaving message screen with active CSAT, Recording YES state");
-        [self recordCSATYesState];
+        [self handleUserEvadedCSAT];
     }
     
 }
@@ -317,6 +318,10 @@ typedef struct {
         self.audioMessageInputView.translatesAutoresizingMaskIntoConstraints = NO;
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+    }
+    
+    if([self.channel.type isEqualToString:CHANNEL_TYPE_AGENT_ONLY]){
+        self.isOneWayChannel = YES;
     }
 }
 
@@ -902,18 +907,31 @@ typedef struct {
 
 -(void)yesButtonClicked:(id)sender{
     [self displayCSATPromptWithState:YES];
-    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
-}
-
--(void)recordCSATYesState{
-    FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
-    csatHolder.isIssueResolved = YES;
-    [self storeAndPostCSAT:csatHolder];
+    [self updateBottomViewAfterCSATSubmisssion];
 }
 
 -(void)noButtonClicked:(id)sender{
     [self displayCSATPromptWithState:NO];
-    [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+    [self updateBottomViewAfterCSATSubmisssion];
+}
+
+-(void)updateBottomViewAfterCSATSubmisssion{
+    if (!self.isOneWayChannel) {
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+    }else{
+        [self cleanupBottomView];
+    }
+}
+
+-(void)cleanupBottomView{
+    [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.bottomViewHeightConstraint.constant = 0;
+}
+
+-(void)handleUserEvadedCSAT{
+    FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+    csatHolder.isIssueResolved = self.CSATView.isResolved;
+    [self storeAndPostCSAT:csatHolder];
 }
 
 -(void)submittedCSAT:(FDCsatHolder *)csatHolder{

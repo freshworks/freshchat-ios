@@ -12,7 +12,7 @@
 @protocol FDCSATViewDelegate <NSObject>
 
 -(void)submittedCSAT:(FDCsatHolder *)csatHolder;
--(void)recordCSATYesState;
+-(void)handleUserEvadedCSAT;
 
 @end
 
@@ -21,6 +21,7 @@
 @property (nonatomic,weak) id<FDCSATViewDelegate> delegate;
 @property (nonatomic, strong) UILabel *surveyTitle;
 @property (nonatomic, assign) BOOL isShowing;
+@property (nonatomic, assign) BOOL isResolved;
 @property (nonatomic, strong) NSLayoutConstraint *CSATPromptCenterYConstraint;
 
 - (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView isResolved:(BOOL)isResolved;

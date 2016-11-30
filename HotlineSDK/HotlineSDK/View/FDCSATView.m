@@ -19,15 +19,11 @@
 @property (nonatomic, strong) UIView *CSATPrompt;
 @property (nonatomic, strong) FDGrowingTextView *feedbackView;
 @property (nonatomic) float rating;
-@property (nonatomic) BOOL isResolved;
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) UIButton *submitButton;
 
 
 @end
-
-// Dismiss prompt & Add config
-// Add theme
 
 @implementation FDCSATView
 
@@ -204,7 +200,7 @@
 //Submit CSAT without user input
 -(void)tappedOutsidePrompt{
     if (self.delegate) {
-        [self.delegate recordCSATYesState];
+        [self.delegate handleUserEvadedCSAT];
     }
     [self dismiss];
 }
