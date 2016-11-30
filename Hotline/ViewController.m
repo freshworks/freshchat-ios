@@ -38,11 +38,11 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPlayNotification:)
-                                                 name:HOTLINE_PLAY_INAPP_AUDIO
+                                                 name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPauseNotification:)
-                                                 name:HOTLINE_PAUSE_INAPP_AUDIO
+                                                 name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE
                                                object:nil];
     
 }

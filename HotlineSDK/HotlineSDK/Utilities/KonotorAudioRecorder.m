@@ -29,7 +29,7 @@ static NSString *beforeRecordCategory;
 +(BOOL)startRecording{
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted){
-            [FDLocalNotification post:HOTLINE_PAUSE_INAPP_AUDIO];
+            [FDLocalNotification post:HOTLINE_WILL_PLAY_AUDIO_MESSAGE];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [KonotorAudioRecorder startRecordingA];
             });
@@ -309,7 +309,7 @@ static NSString *beforeRecordCategory;
         NSLog(@"Failed to set audio session category");
         return NO;
     }
-    [FDLocalNotification post:HOTLINE_PLAY_INAPP_AUDIO];
+    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
     return YES;
 }
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID
