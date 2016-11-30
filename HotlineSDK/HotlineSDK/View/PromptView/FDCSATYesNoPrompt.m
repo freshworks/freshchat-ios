@@ -17,7 +17,7 @@
     if (self) {
         self.theme = [HLTheme sharedInstance];
         
-        self.promptLabel = [self createPromptLabel:key];
+        self.promptLabel = [self createCSATPromptLabel:key];
         [self addSubview:self.promptLabel];
         
         self.YesButton = [self createBorderedPromptButton:@"yes" withKey:key];
@@ -41,6 +41,21 @@
         [self addSpacersInView:self];
     }
     return self;
+}
+
+-(UILabel *)createCSATPromptLabel:(NSString *) key{
+    UILabel *promptLabel = [[UILabel alloc] init];
+    HLTheme *theme = [HLTheme sharedInstance];
+    self.backgroundColor = [theme custSatDialogueBackgroundColor];
+    promptLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    promptLabel.textColor = [theme custSatDialogueTitleTextColor];
+    promptLabel.font = [theme custSatDialogueTitleFont];
+    promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    promptLabel.numberOfLines = 0;
+    promptLabel.textAlignment= NSTextAlignmentCenter;
+    promptLabel.text = HLLocalizedString([key stringByAppendingString:
+                                          LOC_TEXT_PARTIAL]);
+    return promptLabel;
 }
 
 @end
