@@ -19,8 +19,10 @@
 @property (nonatomic, strong) UIView *CSATPrompt;
 @property (nonatomic, strong) FDGrowingTextView *feedbackView;
 @property (nonatomic) float rating;
+@property (nonatomic) BOOL isResolved;
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) UIButton *submitButton;
+
 
 @end
 
@@ -29,10 +31,11 @@
 
 @implementation FDCSATView
 
-- (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView{
+- (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView isResolved:(BOOL)isResolved{
     self = [super initWithFrame:CGRectZero];
     if (self) {
         
+        self.isResolved = isResolved;
         self.theme = [HLTheme sharedInstance];
         
         //Transparent background view
@@ -111,11 +114,27 @@
         [FDAutolayoutHelper setWidth:200 forView:self.surveyTitle inView:self.CSATPrompt];
         [FDAutolayoutHelper setWidth:200 forView:self.feedbackView inView:self.CSATPrompt];
         [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
-
         
-        CGFloat promptHeight = (hideFeedbackView) ? 150 : 200;
+        CGFloat promptHeight, ratingbarHeight, feedbackviewHeight = 0;
         
-        NSDictionary *metrics = @{@"feedbackview_height": (hideFeedbackView) ? @0 : @50, @"ratingbar_height" : (true) ? @40 : @0 };
+        if (isResolved) {
+            ratingbarHeight = 40;
+            if (hideFeedbackView) {
+                promptHeight = 150;
+                feedbackviewHeight = 0;
+            }else{
+                promptHeight = 200;
+                feedbackviewHeight = 50;
+            }
+            [self enableSubmitButton:NO];
+       }else{
+           ratingbarHeight = 0;
+           promptHeight = 170;
+           feedbackviewHeight = 50;
+           [self enableSubmitButton:YES];
+       }
+        
+        NSDictionary *metrics = @{@"feedbackview_height": @(feedbackviewHeight), @"ratingbar_height" : @(ratingbarHeight) };
 
         [FDAutolayoutHelper setHeight:promptHeight forView:self.CSATPrompt inView:self.transparentView];
         
@@ -124,7 +143,6 @@
         //Initial view config
         self.transparentView.hidden = YES;
         self.CSATPrompt.hidden = YES;
-        [self enableSubmitButton:NO];
     }
     return self;
 }
@@ -164,6 +182,8 @@
     if (self.delegate) {
         
         FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+        
+        csatHolder.isIssueResolved = self.isResolved;
         
         if (self.rating > 0) {
             csatHolder.userRatingCount = self.rating;

@@ -878,7 +878,7 @@ typedef struct {
             [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
 }
 
--(void)showCSATView{
+-(void)displayCSATPromptWithState:(BOOL)isResolved{
     //Dispose old prompt
     if (self.CSATView) {
         [self.CSATView removeFromSuperview];
@@ -887,14 +887,21 @@ typedef struct {
     
     FDCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
     BOOL hideFeedBackView = !csat.mobileUserCommentsAllowed.boolValue;
-    self.CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView];
+    
+    if (isResolved) {
+        self.CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView isResolved:YES];
+        self.CSATView.surveyTitle.text = csat.question;
+    }else{
+        self.CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:NO isResolved:NO];
+        self.CSATView.surveyTitle.text = HLLocalizedString(LOC_CUST_SAT_NOT_RESOLVED_PROMPT);
+    }
+    
     self.CSATView.delegate = self;
-    self.CSATView.surveyTitle.text = csat.question;
     [self.CSATView show];
 }
 
 -(void)yesButtonClicked:(id)sender{
-    [self showCSATView];
+    [self displayCSATPromptWithState:YES];
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
@@ -905,14 +912,11 @@ typedef struct {
 }
 
 -(void)noButtonClicked:(id)sender{
-    FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
-    csatHolder.isIssueResolved = NO;
-    [self storeAndPostCSAT:csatHolder];
+    [self displayCSATPromptWithState:NO];
     [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
 }
 
 -(void)submittedCSAT:(FDCsatHolder *)csatHolder{
-    csatHolder.isIssueResolved = YES;
     [self storeAndPostCSAT:csatHolder];
 }
 
@@ -929,7 +933,6 @@ typedef struct {
             csat.userRatingCount = [NSNumber numberWithInt:csatHolder.userRatingCount];
         }else{
             csat.userRatingCount = nil;
-            FDLog(@"CSAT Warning! CSAT prompt allows submitting CSAT without rating");
         }
         
         if (csatHolder.userComments && csatHolder.userComments.length > 0) {

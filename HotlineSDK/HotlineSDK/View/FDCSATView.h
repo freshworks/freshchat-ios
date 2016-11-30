@@ -23,7 +23,7 @@
 @property (nonatomic, assign) BOOL isShowing;
 @property (nonatomic, strong) NSLayoutConstraint *CSATPromptCenterYConstraint;
 
-- (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView;
+- (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView isResolved:(BOOL)isResolved;
 - (void)show;
 - (void)dismiss;
 

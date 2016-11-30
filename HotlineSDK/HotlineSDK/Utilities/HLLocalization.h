@@ -95,6 +95,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 #define LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER @"cust_sat_user_comments_placeholder"
 #define LOC_CUST_SAT_SUBMIT_BUTTON_TEXT @"cust_sat_submit_button_text"
+#define LOC_CUST_SAT_NOT_RESOLVED_PROMPT @"cust_sat_not_resolved_prompt"
 
 @interface HLLocalization : NSObject
 

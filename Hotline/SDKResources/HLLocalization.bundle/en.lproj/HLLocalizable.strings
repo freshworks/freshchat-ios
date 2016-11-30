@@ -98,5 +98,6 @@
 "chat_resolution_prompt_no_button_text"="No";
 
 /* Survey prompt */
+"cust_sat_not_resolved_prompt"="How could we have helped better ?";
 "cust_sat_user_comments_placeholder"="Enter your feedback here";
 "cust_sat_submit_button_text"="SUBMIT";
