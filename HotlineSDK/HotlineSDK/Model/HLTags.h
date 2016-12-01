@@ -9,10 +9,10 @@
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 
-enum FDTagType {
-    FDTagTypeArticle  = 1,
-    FDTagTypeCategory = 2,
-    FDTagTypeChannel  = 3
+enum HLTagType {
+    HLTagTypeArticle  = 1,
+    HLTagTypeCategory = 2,
+    HLTagTypeChannel  = 3
 };
 
 

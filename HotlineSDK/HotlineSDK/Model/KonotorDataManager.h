@@ -12,7 +12,7 @@
 
 #define HOTLINE_CSAT_ENTITY @"FDCsat"
 #define HOTLINE_ARTICLE_ENTITY @"HLArticle"
-#define HOTLINE_TAGS_ENTITY @"FDTags"
+#define HOTLINE_TAGS_ENTITY @"HLTags"
 #define HOTLINE_CATEGORY_ENTITY @"HLCategory"
 #define HOTLINE_CHANNEL_ENTITY @"HLChannel"
 #define HOTLINE_INDEX_ENTITY @"FDIndex"
