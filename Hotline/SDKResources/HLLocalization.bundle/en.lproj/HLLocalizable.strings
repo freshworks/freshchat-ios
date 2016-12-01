@@ -53,6 +53,7 @@
 "modify_push_setting_info_text"="To be notified of responses even when out of this chat, enable push notifications for this app via the Settings->Notification Center";
 "message_unsent_title"="Message not sent";
 "message_unsent_info_text"="We could not send your message(s) at this time. Check your internet or try later.";
+"server_error_info_text"="Problem sending message. Please try again later.";
 
 /* Posting audio message alerts */
 "short_audio_alert_title" = "Message too short";

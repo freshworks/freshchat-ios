@@ -156,6 +156,17 @@ __weak static id <KonotorDelegate> _delegate;
     
 }
 
++(void)NotifyServerError
+{
+    if([Konotor delegate])
+    {
+        if([[Konotor delegate] respondsToSelector:@selector(didNotifyServerError)])
+        {
+            [[Konotor delegate] didNotifyServerError];
+        }
+    }
+}
+
 +(void) MediaDownloadFailedNotification:(NSString *) messageID
 {
     if([Konotor delegate])
