@@ -38,7 +38,7 @@
 
 @property(nonatomic, strong, readonly) NSURL *baseURL;
 
--(instancetype)initWithBaseURL:(NSURL *)baseURL;
+-(instancetype)initWithBaseURL:(NSURL *)baseURL andMethod:(NSString *)httpMethod;
 
 //contains hard coded URL of hotline -- add more doc
 -(instancetype)initWithMethod:(NSString *)httpMethod;
@@ -48,5 +48,7 @@
 -(void)setRelativePath:(NSString *)path andURLParams:(NSArray *)params;
 
 -(void)setBody:(NSData *)body;
+
+-(NSString *)toString;
 
 @end

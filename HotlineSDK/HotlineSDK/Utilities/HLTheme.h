@@ -111,13 +111,13 @@
 -(UIColor *)actionButtonColor;
 -(UIColor *)actionButtonBorderColor;
 -(UIColor *)hyperlinkColor;
-//-(NSString *)chatBubbleFontName;
 -(NSString *)conversationUIFontName;
-//-(float)chatBubbleFontSize;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
 - (UIColor *) agentMessageFontColor;
 - (UIColor *) userMessageFontColor;
+
+-(UIColor *)messageUIBackgroundColor;
 
 //Notification
 -(UIColor *)notificationBackgroundColor;

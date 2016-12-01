@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "HotlineSDK/Hotline.h"
 #import "ViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -21,17 +20,13 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self hotlineIntegration];
     [self registerAppForNotifications];
     [self setupRootController];
+    [self hotlineIntegration];
     if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
-
-    NSLog(@"launchoptions :%@", launchOptions);
-
     [Fabric with:@[[Crashlytics class]]];
-
     return YES;
 }
 
@@ -70,6 +65,19 @@
     }
 }
 
++(HotlineUser *)createHotlineUser{
+    HotlineUser *user = [HotlineUser sharedInstance];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    user.name = [@"User - " stringByAppendingString:dateString];
+    user.email = @"user@freshdesk.com";
+    user.phoneNumber = @"9898989898";
+    user.phoneCountryCode = @"+91";
+    return user;
+}
+
 -(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"e3280bde-4696-4bd5-8be7-e7919249bf9a"
                                                        andAppKey:@"9d456296-5f38-45ce-884e-b595f7e6301a"];
@@ -77,12 +85,12 @@
 //    config.appID = @"51590df9-ab7e-4ca7-9a25-b2279bc5cc7c";
 //    config.appKey = @"e9021572-383c-4b6f-997e-3fea9d32e2c7";
     
-    config.domain=@"mr.orange.konotor.com";
+//    config.domain=@"mr.orange.konotor.com";
 
 //    prod 
-    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
-    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
-    config.domain = @"app.hotline.io";
+//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
+//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
+//    config.domain = @"app.hotline.io";
     
 //      config.domain = @"satheeshjm.pagekite.me";
 //      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
@@ -94,32 +102,20 @@
     
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
-    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
-    
-    HotlineUser *user = [HotlineUser sharedInstance];
-    if(!user.name){
-        user.name = [@"User - " stringByAppendingString:dateString];
-        user.email = @"user@freshdesk.com";
-        user.phoneNumber = @"9898989898";
-        user.phoneCountryCode = @"+91";
-        [[Hotline sharedInstance] updateUser:user];
-    }
     config.pollWhenAppActive = YES;
 
+    if(![HotlineUser sharedInstance].name){
+        [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
+    }
     
     
     [[Hotline sharedInstance] updateUserProperties:@{
-                                                     @"Key1" : @"Value1",
-                                                     @"Key2" : @"1"
+                                                     @"Unread messages" : @([[Hotline sharedInstance]unreadCount]).description,
+                                                     @"SDK Version" : [Hotline SDKVersion]
                                                      }];
     
-        [[Hotline sharedInstance]initWithConfig:config];
-    
-    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
+    [[Hotline sharedInstance]initWithConfig:config];
+
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];
@@ -146,10 +142,13 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"Failed to register remote notification  %@", error);
+    if (error.code != 3010) { //Checks for simulator
+        NSLog(@"Device failed to register remote notification  %@", error);
+    }
 }
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
+    NSLog(@"Push recieved :%@", info);
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
         [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }

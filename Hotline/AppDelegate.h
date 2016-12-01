@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HotlineSDK/Hotline.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -14,5 +15,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UIImage *pickedImage;
+
++(HotlineUser *)createHotlineUser;
 
 @end

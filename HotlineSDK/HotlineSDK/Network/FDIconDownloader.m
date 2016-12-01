@@ -17,7 +17,6 @@
 
 @implementation FDIconDownloader
 
-
 - (instancetype)init{
     self = [super init];
     if (self) {
@@ -28,6 +27,12 @@
 
 -(void)enqueue:(void (^)(void))handler{
     dispatch_async(self.queue, handler);
+}
+
+-(void)dealloc{
+    if (self.queue) {
+        dispatch_release(self.queue);
+    }
 }
 
 @end

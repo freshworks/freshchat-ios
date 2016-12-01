@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HLAPI.h"
 #import "FDResponseInfo.h"
+#import "HLServiceRequest.h"
 
 @interface HLAPIClient : NSObject
 
@@ -16,7 +17,7 @@ typedef void(^HLNetworkCallback)(FDResponseInfo *responseInfo, NSError *error);
 
 +(id)sharedInstance;
 
--(NSURLSessionDataTask *)request:(NSURLRequest *)request withHandler:(HLNetworkCallback)handler;
+-(NSURLSessionDataTask *)request:(HLServiceRequest *)request withHandler:(HLNetworkCallback)handler;
 
 @end
 
