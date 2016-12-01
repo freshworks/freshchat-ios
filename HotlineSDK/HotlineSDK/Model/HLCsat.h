@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "KonotorConversation.h"
+#import "KonotorDataManager.h"
 
 typedef enum {
     CSAT_RATED = 1,
     CSAT_NOT_RATED,
-    CSAT_SENT
 } CSAT_STATUS;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,6 +31,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) KonotorConversation *belongToConversation;
 
 
+//Primary key : conversation ID
++(HLCsat *)getWithID:(NSString *)conversationID inContext:(NSManagedObjectContext *)context;
++(HLCsat *)updateCSAT:(HLCsat *)csat withInfo:(NSDictionary *)conversationInfo;
++(HLCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context;
+
 @end
+
+
+@interface HLCsatHolder : NSObject
+
+@property (nonatomic, strong) NSString *userComments;
+@property (nonatomic, assign) int userRatingCount;
+@property (nonatomic, assign) BOOL isIssueResolved;
+
+@end
+
 
 NS_ASSUME_NONNULL_END

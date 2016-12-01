@@ -8,21 +8,15 @@
 
 #import "FDYesNoPromptView.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
 #import "HLLocalization.h"
 
 @interface FDYesNoPromptView ()
-
-@property (nonatomic, strong) HLTheme *theme;
-@property (strong, nonatomic) UILabel *promptLabel;
-@property (nonatomic, strong) UIButton *YesButton;
-@property (nonatomic, strong) UIButton *NoButton;
 
 @end
 
 @implementation FDYesNoPromptView
 
--(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
+-(instancetype)initWithDelegate:(id<HLYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
         self.theme = [HLTheme sharedInstance];
