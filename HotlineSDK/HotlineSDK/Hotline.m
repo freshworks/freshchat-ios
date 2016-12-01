@@ -334,7 +334,7 @@
         [self registerDeviceToken];
         [self updateAppVersion];
         [self updateAdId];
-        [self updateSDKBuildNumber];
+//        [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
     });

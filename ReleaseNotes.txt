@@ -1,4 +1,8 @@
 
+Ver 1.1.10 
+__________________________
+Fix Tap metrics issue
+
 Ver 1.1.9 
 __________________________
 Added ability to change background color for chat/conversation screen

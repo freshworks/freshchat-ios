@@ -61,6 +61,7 @@
 +(void) UploadFinishedNotification: (NSString *) messageID;
 +(void) UploadFailedNotification: (NSString *) messageID;
 +(void) NotifyServerError;
++(BOOL) isRecording;
 
 
 

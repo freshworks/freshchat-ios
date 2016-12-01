@@ -48,7 +48,6 @@
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
-    [self updateCategories];
     [self addLoadingIndicator];
 }
 
@@ -61,10 +60,11 @@
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self fetchUpdates];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];    
     [self localNotificationSubscription];
+    [self fetchUpdates];
+    [self updateCategories];
 }
 
 //TODO: Remove duplicate code
@@ -147,8 +147,8 @@
     [[Hotline sharedInstance]showConversations:self];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
 }
 

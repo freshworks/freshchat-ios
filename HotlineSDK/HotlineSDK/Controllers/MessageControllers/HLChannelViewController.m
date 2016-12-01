@@ -82,8 +82,8 @@
     [[[FDChannelUpdater alloc] init] resetTime];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
     self.footerView.hidden = YES;
@@ -200,8 +200,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
 }
 

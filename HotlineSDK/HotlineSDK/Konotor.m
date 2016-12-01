@@ -38,6 +38,10 @@ __weak static id <KonotorDelegate> _delegate;
     return[KonotorAudioRecorder stopRecording];
 }
 
++(BOOL) isRecording{
+    return [KonotorAudioRecorder isRecording];
+}
+
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation
 {
     return [KonotorAudioRecorder stopRecordingOnConversation:conversation];

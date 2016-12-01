@@ -22,12 +22,14 @@ KonotorAudioRecorder *gkAudioRecorder;
 NSURL *pFileToUpload;
 
 KonotorAlertView *pAlert;
+static NSString *beforeRecordCategory;
 
 @implementation KonotorAudioRecorder
 
 +(BOOL)startRecording{
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted){
+            [FDLocalNotification post:HOTLINE_WILL_PLAY_AUDIO_MESSAGE];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [KonotorAudioRecorder startRecordingA];
             });
@@ -41,6 +43,7 @@ KonotorAlertView *pAlert;
     NSError *error;
     
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    beforeRecordCategory = audioSession.category;
     
     [audioSession setActive:NO error:&error];
     
@@ -299,6 +302,14 @@ KonotorAlertView *pAlert;
     
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
     
+    AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    NSError *error;
+    [audioSession setCategory:beforeRecordCategory error:&error];
+    if(error){
+        NSLog(@"Failed to set audio session category");
+        return NO;
+    }
+    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
     return YES;
 }
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID
