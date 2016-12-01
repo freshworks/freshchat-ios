@@ -65,7 +65,8 @@
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:@"plist"];
+    NSString *fileExt = [theme containsString:@".plist"] ? nil : @".plist";
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:fileExt];
     if (!path) {
         NSBundle *HLResourcesBundle = [self getHLResourceBundle];
         path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];

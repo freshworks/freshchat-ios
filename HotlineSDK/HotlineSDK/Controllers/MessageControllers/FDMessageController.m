@@ -63,6 +63,7 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
 @property (strong, nonatomic) NSString *appAudioCategory;
+@property (nonatomic,strong) NSNumber *channelID;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
@@ -96,7 +97,7 @@ typedef struct {
         self.messageCountPrevious = 0;
         self.messagesDisplayedCount=20;
         self.loadmoreCount=20;
-        
+        self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [Konotor setDelegate:self];
@@ -122,7 +123,6 @@ typedef struct {
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
-    [self registerAppAudioCategory];
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
@@ -140,6 +140,21 @@ typedef struct {
     return headerView;
 }
 
+- (void)tableViewTapped:(UITapGestureRecognizer *)tapObj {
+    CGPoint touchLoc = [tapObj locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoc];
+    FDMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ( messageCell ) {
+        touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
+        if (! CGRectContainsPoint(messageCell.messageTextView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
+            [self dismissKeyboard];
+        }
+    }
+    else  {
+        [self dismissKeyboard];
+    }
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self localNotificationSubscription];
@@ -150,17 +165,30 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    if(!self.channel.managedObjectContext) {
+        [self rebuildChannel];
+    }
+    [self refreshView];
+    [self registerAppAudioCategory];
     [self startPoller];
 }
+
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
-    [Konotor stopRecording];
+    
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
-    [self resetAudioSessionCategory];
+    //add check if audio recording is enabled or not
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    if([secureStore boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED]){
+        [self resetAudioSessionCategory];
+        if([Konotor isRecording]){
+            [Konotor stopRecording];
+        }
+    }
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [self localNotificationUnSubscription];
@@ -242,7 +270,6 @@ typedef struct {
 }
 
 -(void)setSubviews{
-    
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
     
@@ -272,6 +299,7 @@ typedef struct {
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.view addSubview:self.tableView];
     
     //Bottomview
@@ -440,7 +468,7 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
-    [self.view endEditing:YES];
+    [self dismissKeyboard];
     [self.imageInput showInputOptions:self];
 }
 
@@ -485,6 +513,12 @@ typedef struct {
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     }
     [self refreshView];
+}
+
+-(void) rebuildChannel {
+    self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    self.conversation = [self.channel primaryConversation];
+    self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
 }
 
 -(void)checkPushNotificationState{
@@ -547,6 +581,8 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -671,6 +707,14 @@ typedef struct {
         _flags.isLoading = NO;
         [self refreshView];
         [self processPendingCSAT];
+    }
+}
+
+- (void) didNotifyServerError {
+    if(!_flags.isShowingAlert){
+        [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
+                      andMessage:HLLocalizedString(LOC_SERVER_ERROR_INFO_TEXT)];
+        _flags.isShowingAlert = YES;
     }
 }
 
@@ -826,6 +870,7 @@ typedef struct {
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
+    
     if(self.currentRecordingMessageId!=nil){
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
@@ -964,6 +1009,9 @@ typedef struct {
             [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
         }];
     }];
+}
+- (void) dismissKeyboard {
+    [self.view endEditing:YES];
 }
 
 -(void)dealloc{

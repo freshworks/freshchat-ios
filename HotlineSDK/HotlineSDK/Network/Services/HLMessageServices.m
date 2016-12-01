@@ -27,6 +27,8 @@
 #import "FDMemLogger.h"
 #import "HLCoreServices.h"
 
+#define ERROR_CODE_USER_NOT_CREATED -1
+
 static HLNotificationHandler *handleUpdateNotification;
 
 @implementation HLMessageServices
@@ -382,7 +384,6 @@ static HLNotificationHandler *handleUpdateNotification;
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if (!error && statusCode == 201) {
-
                 if (!conversation) {
                     NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
@@ -397,10 +398,17 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                [self retryUserRegistrationIfNeeded:responseInfo];
+                if ( error && error.code == -1009 ) {
+                    [Konotor UploadFailedNotification:messageAlias];
+                }
+                else if( [self isUserNotCreated:responseInfo] ) {
+                    [self retryUserRegistration];
+                }
+                else {
+                    [Konotor NotifyServerError];
+                }
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];
-                [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
             }
             
             [[KonotorDataManager sharedInstance]save];
@@ -411,21 +419,15 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-+(void)retryUserRegistrationIfNeeded:(FDResponseInfo *)responseInfo{
-    if(responseInfo.isDict){
-        NSDictionary *res = responseInfo.responseAsDictionary;
-        if (res) {
-            if ([res objectForKey:@"errorCode"]) {
-                if ([res[@"errorCode"] integerValue] == -1) {
-                    [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
-                    [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-                    
-                    //Retry user alias for failed users
-                    [FDUtilities registerUser:nil];
-                }
-            }
-        }
-    }
++(BOOL) isUserNotCreated : (FDResponseInfo *)responseInfo {
+    return (responseInfo && [responseInfo isDict]
+            && [[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_USER_NOT_CREATED);
+}
+
++(void)retryUserRegistration{
+    [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+    [FDUtilities registerUser:nil];
 }
 
 //TODO: Skip messages that are clicked before
