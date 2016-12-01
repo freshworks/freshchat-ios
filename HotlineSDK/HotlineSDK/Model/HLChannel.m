@@ -37,7 +37,23 @@
 }
 
 - (KonotorConversation*) primaryConversation{
-    return self.conversations.allObjects.firstObject;
+    KonotorConversation *conversation;
+    NSArray<KonotorConversation *> *conversations = self.conversations.allObjects;
+    long conversationsCount = conversations.count;
+    if (conversationsCount <= 1 ) {
+        conversation = conversations.firstObject;
+    }
+    else {
+        FDLog(@"Duplicate Conversation found for channel %@", self.channelID);
+        for(int i=0; i < conversationsCount ; i++ ){
+            KonotorConversation *conv =[conversations objectAtIndex:i];
+            if(![conv.conversationAlias  isEqual:@"0"] ) {
+                conversation = conv;
+                FDLog(@"No Worries we found a match for channel %@", self.channelID);
+            }
+        }
+    }
+    return conversation;
 }
 
 -(BOOL)isActiveChannel{

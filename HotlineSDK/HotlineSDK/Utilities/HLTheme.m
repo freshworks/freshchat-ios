@@ -672,31 +672,31 @@
 #pragma mark CSAT Prompt
 
 -(UIColor *)csatPromptBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.backgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)csatPromptRatingBarColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.ratingBarColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.RatingBarColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];    
 }
 
 -(UIColor *)csatPromptSubmitButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.submitButtonColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.SubmitButtonColor"];
     return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 -(UIColor *)csatPromptHorizontalLineColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.horizontalLineColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.HorizontalLineColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIFont *)csatPromptQuestionTextFont{
-    return [self getFontWithKey:@"ChatResolutionPrompt.questionText" andDefaultSize:15];
+    return [self getFontWithKey:@"ChatResolutionPrompt.QuestionText" andDefaultSize:15];
 }
 
 -(UIColor *)csatPromptQuestionTextFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.questionTextColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.QuestionTextColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
