@@ -78,15 +78,16 @@ static HLNotificationHandler *handleUpdateNotification;
                         FDLog(@"*** CSAT for Conversation ID :%@ is pending ***", conversationInfo[@"conversationId"]);
                     }
                     
-                    FDCsat *csat = [FDCsat getWithID:conversationID inContext:context];
+                    HLCsat
+                    *csat = [HLCsat getWithID:conversationID inContext:context];
                     
                     FDLog(@"Conversation : %@", conversationInfo);
                     
                     if (!csat) {
-                        csat = [FDCsat createWithInfo:conversationInfo inContext:context];
+                        csat = [HLCsat createWithInfo:conversationInfo inContext:context];
                         FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
                     }else{
-                        csat = [FDCsat updateCSAT:csat withInfo:conversationInfo];
+                        csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
                     }
                     
                     csat.belongToConversation = conversation;
@@ -495,7 +496,7 @@ static HLNotificationHandler *handleUpdateNotification;
     [context performBlock:^{
         
         NSError *error;
-        FDCsat *csat = nil;
+        HLCsat *csat = nil;
 
         if (csatObjectID) {
             csat = [context existingObjectWithID:csatObjectID error:&error];
@@ -569,7 +570,7 @@ static HLNotificationHandler *handleUpdateNotification;
         fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"csatStatus == %d", CSAT_RATED];
         NSArray *results = [context executeFetchRequest:fetchRequest error:nil];
         FDLog(@"There are %d unuploaded CSATs", (int)results.count);
-        for (FDCsat *csat in results) {
+        for (HLCsat *csat in results) {
             [HLMessageServices postCSATWithID:csat.objectID completion:nil];
         }
 

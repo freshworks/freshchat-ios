@@ -32,14 +32,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //Primary key : conversation ID
-+(FDCsat *)getWithID:(NSString *)conversationID inContext:(NSManagedObjectContext *)context;
-+(FDCsat *)updateCSAT:(FDCsat *)csat withInfo:(NSDictionary *)conversationInfo;
-+(FDCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context;
++(HLCsat *)getWithID:(NSString *)conversationID inContext:(NSManagedObjectContext *)context;
++(HLCsat *)updateCSAT:(HLCsat *)csat withInfo:(NSDictionary *)conversationInfo;
++(HLCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context;
 
 @end
 
 
-@interface FDCsatHolder : NSObject
+@interface HLCsatHolder : NSObject
 
 @property (nonatomic, strong) NSString *userComments;
 @property (nonatomic, assign) int userRatingCount;

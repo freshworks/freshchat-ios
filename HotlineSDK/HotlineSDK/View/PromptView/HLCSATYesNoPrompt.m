@@ -1,18 +1,18 @@
 //
-//  FDCSATYesNoPrompt.m
+//  HLCSATYesNoPrompt.m
 //  HotlineSDK
 //
 //  Created by user on 29/11/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "FDCSATYesNoPrompt.h"
+#import "HLCSATYesNoPrompt.h"
 #import "HLMacros.h"
 #import "HLLocalization.h"
 
-@implementation FDCSATYesNoPrompt
+@implementation HLCSATYesNoPrompt
 
--(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
+-(instancetype)initWithDelegate:(id<HLYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
         self.theme = [HLTheme sharedInstance];

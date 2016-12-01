@@ -33,7 +33,7 @@
 #import "HLArticleUtil.h"
 #import "KonotorAudioRecorder.h"
 #import "FDBackgroundTaskManager.h"
-#import "FDCSATYesNoPrompt.h"
+#import "HLCSATYesNoPrompt.h"
 
 typedef struct {
     BOOL isLoading;
@@ -70,8 +70,8 @@ typedef struct {
 @property (nonatomic) NSInteger messagesDisplayedCount;
 @property (nonatomic) NSInteger loadmoreCount;
 
-@property (strong,nonatomic) FDCSATYesNoPrompt *yesNoPrompt;
-@property (strong, nonatomic) FDCSATView *CSATView;
+@property (strong,nonatomic) HLCSATYesNoPrompt *yesNoPrompt;
+@property (strong, nonatomic) HLCSATView *CSATView;
 @property (nonatomic) BOOL isOneWayChannel;
 
 @end
@@ -282,7 +282,7 @@ typedef struct {
     self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
     
-    self.yesNoPrompt = [[FDCSATYesNoPrompt alloc]initWithDelegate:self andKey:LOC_CSAT_PROMPT_PARTIAL];
+    self.yesNoPrompt = [[HLCSATYesNoPrompt alloc]initWithDelegate:self andKey:LOC_CSAT_PROMPT_PARTIAL];
     self.yesNoPrompt.translatesAutoresizingMaskIntoConstraints = NO;
 
     NSDictionary *views;
@@ -857,7 +857,7 @@ typedef struct {
     [Konotor cancelRecording];
 }
 
--(FDCsat *)getCSATObject{
+-(HLCsat *)getCSATObject{
     return self.conversation.hasCsat.allObjects.firstObject;
 }
 
@@ -890,14 +890,14 @@ typedef struct {
         self.CSATView = nil;
     }
     
-    FDCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
+    HLCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
     BOOL hideFeedBackView = !csat.mobileUserCommentsAllowed.boolValue;
     
     if (isResolved) {
-        self.CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView isResolved:YES];
+        self.CSATView = [[HLCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView isResolved:YES];
         self.CSATView.surveyTitle.text = csat.question;
     }else{
-        self.CSATView = [[FDCSATView alloc]initWithController:self hideFeedbackView:NO isResolved:NO];
+        self.CSATView = [[HLCSATView alloc]initWithController:self hideFeedbackView:NO isResolved:NO];
         self.CSATView.surveyTitle.text = HLLocalizedString(LOC_CUST_SAT_NOT_RESOLVED_PROMPT);
     }
     
@@ -929,21 +929,21 @@ typedef struct {
 }
 
 -(void)handleUserEvadedCSAT{
-    FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+    HLCsatHolder *csatHolder = [[HLCsatHolder alloc]init];
     csatHolder.isIssueResolved = self.CSATView.isResolved;
     [self storeAndPostCSAT:csatHolder];
 }
 
--(void)submittedCSAT:(FDCsatHolder *)csatHolder{
+-(void)submittedCSAT:(HLCsatHolder *)csatHolder{
     [self storeAndPostCSAT:csatHolder];
 }
 
--(void)storeAndPostCSAT:(FDCsatHolder *)csatHolder{
+-(void)storeAndPostCSAT:(HLCsatHolder *)csatHolder{
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
         UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
 
-        FDCsat *csat = [self getCSATObject];
+        HLCsat *csat = [self getCSATObject];
         
         csat.isIssueResolved = csatHolder.isIssueResolved ? @"true" : @"false";
         

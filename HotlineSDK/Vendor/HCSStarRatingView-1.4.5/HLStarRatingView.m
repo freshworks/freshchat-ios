@@ -1,15 +1,15 @@
-// HCSStarRatingView.m
+// HLStarRatingView.m
 //
 // Copyright (c) 2015 Hugo Sousa
 //
 
-#import "HCSStarRatingView.h"
+#import "HLStarRatingView.h"
 
-@interface HCSStarRatingView ()
+@interface HLStarRatingView ()
 @property (nonatomic, readonly) BOOL shouldUseImages;
 @end
 
-@implementation HCSStarRatingView {
+@implementation HLStarRatingView {
     CGFloat _minimumValue;
     NSUInteger _maximumValue;
     CGFloat _value;

@@ -1,14 +1,14 @@
-// HCSStarRatingView.h
+// HLStarRatingView.h
 //
 // Copyright (c) 2015 Hugo Sousa
 //
 
 #import <UIKit/UIKit.h>
 
-typedef BOOL(^HCSStarRatingViewShouldBeginGestureRecognizerBlock)(UIGestureRecognizer *gestureRecognizer);
+typedef BOOL(^HLStarRatingViewShouldBeginGestureRecognizerBlock)(UIGestureRecognizer *gestureRecognizer);
 
 IB_DESIGNABLE
-@interface HCSStarRatingView : UIControl
+@interface HLStarRatingView : UIControl
 @property (nonatomic) IBInspectable NSUInteger maximumValue;
 @property (nonatomic) IBInspectable CGFloat minimumValue;
 @property (nonatomic) IBInspectable CGFloat value;
@@ -19,7 +19,7 @@ IB_DESIGNABLE
 @property (nonatomic) BOOL shouldBecomeFirstResponder;
 
 // Optional: if `nil` method will return `NO`.
-@property (nonatomic, copy) HCSStarRatingViewShouldBeginGestureRecognizerBlock shouldBeginGestureRecognizerBlock;
+@property (nonatomic, copy) HLStarRatingViewShouldBeginGestureRecognizerBlock shouldBeginGestureRecognizerBlock;
 
 @property (nonatomic, strong) IBInspectable UIImage *emptyStarImage;
 @property (nonatomic, strong) IBInspectable UIImage *halfStarImage;

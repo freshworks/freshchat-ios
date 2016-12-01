@@ -1,5 +1,5 @@
 //
-//  FDCSATView.h
+//  HLCSATView.h
 //  HotlineSDK
 //
 //  Created by user on 17/10/16.
@@ -7,18 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FDCsat.h"
+#import "HLCsat.h"
 
-@protocol FDCSATViewDelegate <NSObject>
+@protocol HLCSATViewDelegate <NSObject>
 
--(void)submittedCSAT:(FDCsatHolder *)csatHolder;
+-(void)submittedCSAT:(HLCsatHolder *)csatHolder;
 -(void)handleUserEvadedCSAT;
 
 @end
 
-@interface FDCSATView : UIView
+@interface HLCSATView : UIView
 
-@property (nonatomic,weak) id<FDCSATViewDelegate> delegate;
+@property (nonatomic,weak) id<HLCSATViewDelegate> delegate;
 @property (nonatomic, strong) UILabel *surveyTitle;
 @property (nonatomic, assign) BOOL isShowing;
 @property (nonatomic, assign) BOOL isResolved;

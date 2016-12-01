@@ -9,7 +9,7 @@
 #import "FDPromptView.h"
 #import "HLTheme.h"
 
-@protocol FDYesNoPromptViewDelegate <NSObject>
+@protocol HLYesNoPromptViewDelegate <NSObject>
 
 -(void)yesButtonClicked:(id)sender;
 -(void)noButtonClicked:(id)sender;
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) UIButton *YesButton;
 @property (nonatomic, strong) UIButton *NoButton;
 
-@property (nonatomic,weak) id<FDYesNoPromptViewDelegate> delegate;
--(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key;
+@property (nonatomic,weak) id<HLYesNoPromptViewDelegate> delegate;
+-(instancetype)initWithDelegate:(id<HLYesNoPromptViewDelegate>) delegate andKey:(NSString *)key;
 
 @end

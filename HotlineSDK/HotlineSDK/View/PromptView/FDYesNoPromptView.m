@@ -16,7 +16,7 @@
 
 @implementation FDYesNoPromptView
 
--(instancetype)initWithDelegate:(id<FDYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
+-(instancetype)initWithDelegate:(id<HLYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
         self.theme = [HLTheme sharedInstance];

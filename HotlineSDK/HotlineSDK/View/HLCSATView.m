@@ -1,19 +1,19 @@
 //
-//  FDCSATView.m
+//  HLCSATView.m
 //  HotlineSDK
 //
 //  Created by user on 17/10/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "FDCSATView.h"
-#import "HCSStarRatingView.h"
+#import "HLCSATView.h"
+#import "HLStarRatingView.h"
 #import "FDAutolayoutHelper.h"
 #import "HLTheme.h"
 #import "FDGrowingTextView.h"
 #import "HLLocalization.h"
 
-@interface FDCSATView() <UIGestureRecognizerDelegate>
+@interface HLCSATView() <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *transparentView;
 @property (nonatomic, strong) UIView *CSATPrompt;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation FDCSATView
+@implementation HLCSATView
 
 - (instancetype)initWithController:(UIViewController *)controller hideFeedbackView:(BOOL)hideFeedbackView isResolved:(BOOL)isResolved{
     self = [super initWithFrame:CGRectZero];
@@ -154,7 +154,7 @@
 }
 
 -(UIView *)createStarRatingView{
-    HCSStarRatingView *starRatingView = [HCSStarRatingView new];
+    HLStarRatingView *starRatingView = [HLStarRatingView new];
     starRatingView.backgroundColor = self.theme.csatPromptBackgroundColor;
     starRatingView.translatesAutoresizingMaskIntoConstraints = NO;
     starRatingView.maximumValue = 5;
@@ -165,7 +165,7 @@
     return starRatingView;
 }
 
-- (IBAction)didChangeValue:(HCSStarRatingView *)sender {
+- (IBAction)didChangeValue:(HLStarRatingView *)sender {
     if (sender.value > 0) {
         self.rating = sender.value;
         [self enableSubmitButton:YES];
@@ -177,7 +177,7 @@
 -(void)submitButtonPressed{
     if (self.delegate) {
         
-        FDCsatHolder *csatHolder = [[FDCsatHolder alloc]init];
+        HLCsatHolder *csatHolder = [[HLCsatHolder alloc]init];
         
         csatHolder.isIssueResolved = self.isResolved;
         

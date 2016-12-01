@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#define HOTLINE_CSAT_ENTITY @"FDCsat"
+#define HOTLINE_CSAT_ENTITY @"HLCsat"
 #define HOTLINE_ARTICLE_ENTITY @"HLArticle"
 #define HOTLINE_TAGS_ENTITY @"HLTags"
 #define HOTLINE_CATEGORY_ENTITY @"HLCategory"

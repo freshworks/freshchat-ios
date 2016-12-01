@@ -1,5 +1,5 @@
 //
-//  FDCSATYesNoPrompt.h
+//  HLCSATYesNoPrompt.h
 //  HotlineSDK
 //
 //  Created by user on 29/11/16.
@@ -8,7 +8,7 @@
 
 #import "FDYesNoPromptView.h"
 
-@interface FDCSATYesNoPrompt : FDYesNoPromptView
+@interface HLCSATYesNoPrompt : FDYesNoPromptView
 
 
 @end
