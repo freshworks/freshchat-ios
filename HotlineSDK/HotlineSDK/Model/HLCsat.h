@@ -1,5 +1,5 @@
 //
-//  FDCsat.h
+//  HLCsat.h
 //  HotlineSDK
 //
 //  Created by user on 10/11/16.
@@ -18,7 +18,7 @@ typedef enum {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FDCsat : NSManagedObject
+@interface HLCsat : NSManagedObject
 
 @property (nullable, nonatomic, retain) NSString *csatID;
 @property (nullable, nonatomic, retain) NSString *conversationID;
