@@ -115,7 +115,6 @@ typedef struct {
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
-    [self registerAppAudioCategory];
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
@@ -157,17 +156,26 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [self registerAppAudioCategory];
     [self startPoller];
 }
+
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
-    [Konotor stopRecording];
+    
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
-    [self resetAudioSessionCategory];
+    //add check if audio recording is enabled or not
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    if([secureStore boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED]){
+        [self resetAudioSessionCategory];
+        if([Konotor isRecording]){
+            [Konotor stopRecording];
+        }
+    }
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [self localNotificationUnSubscription];
@@ -242,7 +250,6 @@ typedef struct {
 }
 
 -(void)setSubviews{
-    
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
     
@@ -551,6 +558,8 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -826,6 +835,7 @@ typedef struct {
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
+    
     if(self.currentRecordingMessageId!=nil){
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];

@@ -59,6 +59,7 @@
 +(void) conversationsDownloaded;
 +(void) UploadFinishedNotification: (NSString *) messageID;
 +(void) UploadFailedNotification: (NSString *) messageID;
++(BOOL) isRecording;
 
 
 
