@@ -50,6 +50,7 @@
 
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo{
     channel.name = channelInfo[@"name"];
+    channel.isDefault = channelInfo[@"defaultChannel"];
     channel.type = channelInfo[@"type"];
     channel.channelID = channelInfo[@"channelId"];
     channel.iconURL = channelInfo[@"iconUrl"];
@@ -104,12 +105,10 @@
 
 +(HLChannel *)getDefaultChannelInContext:(NSManagedObjectContext *)context{
     HLChannel *channel = nil;
-    //TODO: Sort by created because we don't store default channel - Fix this later
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"created" ascending:YES]];
-    
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isDefault == YES"];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count > 0) {
+    if (matches.count == 1) {
         channel = matches.firstObject;
     }
     return channel;
