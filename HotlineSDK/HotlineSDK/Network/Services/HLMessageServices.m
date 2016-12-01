@@ -545,11 +545,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
                 if (!error && statusCode == 201) {
                     [context deleteObject:csat];
+                    [context save:nil];
                     FDLog(@"*** CSAT submitted *** \n %@", response);
                 }else{
                     FDLog(@"CSAT submission failed");
                 }
-                [context save:nil];
                 
                 if (handler) handler(error);
             }];

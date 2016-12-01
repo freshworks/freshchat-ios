@@ -336,7 +336,9 @@
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
-        [HLMessageServices uploadUnuploadedCSAT]; // TODO: Implement a better retry mechanism
+        
+        // TODO: Implement a better retry mechanism, also has a timing issue need to fix it
+        [HLMessageServices uploadUnuploadedCSAT];
     });
 }
 
@@ -554,19 +556,16 @@
     
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
         [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
-            [[KonotorDataManager sharedInstance]deleteAllCSATEntries:^(NSError *error) {
-                if(doInit){
-                    [self initWithConfig:config completion:completion];
-                }else{
-                    if (completion) {
-                        completion();
-                    }
+            if(doInit){
+                [self initWithConfig:config completion:completion];
+            }else{
+                if (completion) {
+                    completion();
                 }
-                if (deviceToken) {
-                    [self storeDeviceToken:deviceToken];
-                }
-
-            }];
+            }
+            if (deviceToken) {
+                [self storeDeviceToken:deviceToken];
+            }
         }];
     }];
 }
