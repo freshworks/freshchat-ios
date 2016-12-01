@@ -533,9 +533,6 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processPendingCSAT)
-                                                 name:HOTLINE_PROCESS_PENDING_CSAT object:nil];
 
 }
 
@@ -544,7 +541,6 @@ typedef struct {
 }
 
 -(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_PROCESS_PENDING_CSAT object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_NETWORK_REACHABLE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
@@ -674,6 +670,7 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
+        [self processPendingCSAT];
     }
 }
 
