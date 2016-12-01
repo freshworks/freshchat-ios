@@ -176,7 +176,9 @@ static HLNotificationHandler *handleUpdateNotification;
                     conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
                 }
                 
-                newMessage.belongsToConversation = conversation;
+                if(conversation){
+                    newMessage.belongsToConversation = conversation;
+                }
                 
                 //Do not mark restored mesages as unread
                 if (isRestore) {
@@ -384,10 +386,12 @@ static HLNotificationHandler *handleUpdateNotification;
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if (!error && statusCode == 201) {
-                if (!conversation) {
-                    NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+                NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+                if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                    pMessage.belongsToConversation = newConversation;
+                    if(newConversation){
+                        pMessage.belongsToConversation = newConversation;
+                    }
                 }else{
                     pMessage.belongsToConversation = conversation;
                 }

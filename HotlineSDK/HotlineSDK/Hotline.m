@@ -606,11 +606,7 @@
             channel = [HLChannel getDefaultChannelInContext:mainContext];// Should use a default channel
         }
         if(channel){
-            KonotorConversation *conversation;
-            NSSet *conversations = channel.conversations;
-            if(conversations && [conversations count] > 0 ){
-                conversation = [conversations anyObject];
-            }
+            KonotorConversation *conversation = [channel primaryConversation];
             [Konotor uploadTextFeedback:message onConversation:conversation onChannel:channel];
         }
     }];
