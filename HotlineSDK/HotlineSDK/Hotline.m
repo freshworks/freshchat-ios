@@ -95,19 +95,9 @@
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
         [self registerAppNotificationListeners];
-        [self applicationDocumentsDirectory];
     }
     return self;
 }
-
-// Returns the URL to the application's Documents directory.
-- (NSURL *)applicationDocumentsDirectory
-{
-    NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
-    
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
 
 -(void)networkReachable{
     [FDUtilities registerUser:nil];
@@ -336,7 +326,6 @@
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
-        
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices fetchChannelsAndMessages:nil];
@@ -347,7 +336,7 @@
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
-        [HLMessageServices uploadUnuploadedCSAT];
+        [HLMessageServices uploadUnuploadedCSAT]; // TODO: Implement a better retry mechanism
     });
 }
 

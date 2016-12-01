@@ -8,13 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol FDGrowingTextviewDelegate <NSObject>
-
--(void)FDGrowingTextViewKe:(NSDictionary *)info;
-
-@end
-
-
 @interface FDGrowingTextView : UITextView
 
 @property (nonatomic, strong) NSString *placeholder;

@@ -546,7 +546,7 @@ static HLNotificationHandler *handleUpdateNotification;
         request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
         [request setRelativePath:path andURLParams:@[appKey]];
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-            [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+            [context performBlock:^{
                 NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
                 if (!error && statusCode == 201) {
                     [context deleteObject:csat];
