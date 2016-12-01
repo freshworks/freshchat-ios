@@ -1,15 +1,15 @@
 //
-//  FDCsat.m
+//  HLCsat.m
 //  HotlineSDK
 //
 //  Created by user on 10/11/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "FDCsat.h"
 #import "HLMacros.h"
+#import "HLCsat.h"
 
-@implementation FDCsat
+@implementation HLCsat
 
 @dynamic csatID;
 @dynamic conversationID;

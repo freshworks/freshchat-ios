@@ -1,5 +1,5 @@
 //
-//  FDTags.h
+//  HLTags.h
 //  HotlineSDK
 //
 //  Created by harish on 06/11/16.
@@ -16,13 +16,13 @@ enum FDTagType {
 };
 
 
-@interface FDTags : NSManagedObject
+@interface HLTags : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * taggableID;
 @property (nonatomic, retain) NSNumber * taggableType;
 @property (nonatomic, retain) NSString * tagName;
 
-+(FDTags *)createWithInfo:(NSDictionary *)TagsInfo inContext:(NSManagedObjectContext *)context;
++(HLTags *)createWithInfo:(NSDictionary *)TagsInfo inContext:(NSManagedObjectContext *)context;
 -(void)updateWithInfo:(NSDictionary *)tagInfo;
 
 @end
