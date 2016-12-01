@@ -20,6 +20,7 @@
 @dynamic icon;
 @dynamic iconURL;
 @dynamic isHidden;
+@dynamic isDefault;
 @dynamic lastUpdated;
 @dynamic name;
 @dynamic position;
