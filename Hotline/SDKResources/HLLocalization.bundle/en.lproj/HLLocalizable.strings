@@ -90,3 +90,15 @@
 
 /*Notifications*/
 "notification_message_default"="Hey, you have a new message";
+
+/* Customer Satisfaction Survey */
+
+/* Yes No Prompt */
+"chat_resolution_prompt_text"="Did we address your concerns ?";
+"chat_resolution_prompt_yes_button_text"="Yes!";
+"chat_resolution_prompt_no_button_text"="No";
+
+/* Survey prompt */
+"cust_sat_not_resolved_prompt"="How could we have helped better ?";
+"cust_sat_user_comments_placeholder"="Enter your feedback here";
+"cust_sat_submit_button_text"="SUBMIT";

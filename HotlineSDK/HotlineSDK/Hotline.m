@@ -304,7 +304,7 @@
         }
     }
     else {
-        FDLog(@"*** Not updating device token *** Register user first");
+        FDLog(@"Not updating device token : Register user first");
     }
 }
 
@@ -326,7 +326,6 @@
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     dispatch_async(dispatch_get_main_queue(),^{
-        
         [[[FDSolutionUpdater alloc]init] fetch];
         [KonotorMessage uploadAllUnuploadedMessages];
         [HLMessageServices fetchChannelsAndMessages:nil];
@@ -334,9 +333,12 @@
         [self registerDeviceToken];
         [self updateAppVersion];
         [self updateAdId];
-//        [self updateSDKBuildNumber];
+        [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
+        
+        // TODO: Implement a better retry mechanism, also has a timing issue need to fix it
+        [HLMessageServices uploadUnuploadedCSAT];
     });
 }
 
@@ -553,9 +555,7 @@
     }
     
     [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
-        FDLog(@"Deleted all meta properties");
         [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
-            // Initiate a init
             if(doInit){
                 [self initWithConfig:config completion:completion];
             }else{
@@ -568,7 +568,6 @@
             }
         }];
     }];
-    
 }
 
 -(void)clearUserDataWithCompletion:(void (^)())completion{
@@ -607,11 +606,7 @@
             channel = [HLChannel getDefaultChannelInContext:mainContext];// Should use a default channel
         }
         if(channel){
-            KonotorConversation *conversation;
-            NSSet *conversations = channel.conversations;
-            if(conversations && [conversations count] > 0 ){
-                conversation = [conversations anyObject];
-            }
+            KonotorConversation *conversation = [channel primaryConversation];
             [Konotor uploadTextFeedback:message onConversation:conversation onChannel:channel];
         }
     }];

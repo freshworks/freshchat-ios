@@ -20,6 +20,7 @@
 @dynamic icon;
 @dynamic iconURL;
 @dynamic isHidden;
+@dynamic isDefault;
 @dynamic lastUpdated;
 @dynamic name;
 @dynamic position;
@@ -36,7 +37,23 @@
 }
 
 - (KonotorConversation*) primaryConversation{
-    return self.conversations.allObjects.firstObject;
+    KonotorConversation *conversation;
+    NSArray<KonotorConversation *> *conversations = self.conversations.allObjects;
+    long conversationsCount = conversations.count;
+    if (conversationsCount <= 1 ) {
+        conversation = conversations.firstObject;
+    }
+    else {
+        FDLog(@"Duplicate Conversation found for channel %@", self.channelID);
+        for(int i=0; i < conversationsCount ; i++ ){
+            KonotorConversation *conv =[conversations objectAtIndex:i];
+            if(![conv.conversationAlias  isEqual:@"0"] ) {
+                conversation = conv;
+                FDLog(@"No Worries we found a match for channel %@", self.channelID);
+            }
+        }
+    }
+    return conversation;
 }
 
 -(BOOL)isActiveChannel{
@@ -49,6 +66,7 @@
 
 +(HLChannel *)updateChannel:(HLChannel *)channel withInfo:(NSDictionary *)channelInfo{
     channel.name = channelInfo[@"name"];
+    channel.isDefault = channelInfo[@"defaultChannel"];
     channel.type = channelInfo[@"type"];
     channel.channelID = channelInfo[@"channelId"];
     channel.iconURL = channelInfo[@"iconUrl"];
@@ -103,12 +121,10 @@
 
 +(HLChannel *)getDefaultChannelInContext:(NSManagedObjectContext *)context{
     HLChannel *channel = nil;
-    //TODO: Sort by created because we don't store default channel - Fix this later 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"created" ascending:YES]];
-    
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isDefault == YES"];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count > 0) {
+    if (matches.count == 1) {
         channel = matches.firstObject;
     }
     return channel;

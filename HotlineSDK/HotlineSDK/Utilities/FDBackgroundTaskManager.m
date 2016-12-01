@@ -23,16 +23,13 @@
 - (UIBackgroundTaskIdentifier)beginTask{
     UIApplication *application = [UIApplication sharedApplication];
     __block NSUInteger taskID = [application beginBackgroundTaskWithExpirationHandler:^{
-        FDLog(@"bgtask trigger with ID %lu expired", (unsigned long)taskID);
         [application endBackgroundTask:taskID];
         taskID = UIBackgroundTaskInvalid;
     }];
-    FDLog(@"bgtask trigger with ID %lu initiated", (unsigned long)taskID);
     return taskID;
 }
 
 -(void)endTask:(UIBackgroundTaskIdentifier)taskID{
-    FDLog(@"bgtask task with ID %lu is ended", (unsigned long)taskID);
     [[UIApplication sharedApplication] endBackgroundTask:taskID];
 }
 

@@ -90,6 +90,22 @@
 -(UIColor *)dialogueBackgroundColor;
 -(UIColor *)dialogueButtonColor;
 
+//TODO: Need to refractor this, use a common function for article voting and CSAT dialogue
+
+//CSAT Yes No dialogue
+-(UIFont *)custSatDialogueTitleFont;
+-(UIColor *)custSatDialogueTitleTextColor;
+-(UIFont *)custSatDialogueYesButtonFont;
+-(UIColor *)custSatDialogueYesButtonTextColor;
+-(UIColor *)custSatDialogueYesButtonBackgroundColor;
+-(UIColor *)custSatDialogueNoButtonBorderColor;
+-(UIColor *)custSatDialogueYesButtonBorderColor;
+-(UIColor *)custSatDialogueNoButtonBackgroundColor;
+-(UIFont *)custSatDialogueNoButtonFont;
+-(UIColor *)custSatDialogueNoButtonTextColor;
+-(UIColor *)custSatDialogueBackgroundColor;
+-(UIColor *)custSatDialogueButtonColor;
+
 //NavigationBar
 -(UIColor *)navigationBarBackgroundColor;
 -(UIFont *)navigationBarTitleFont;
@@ -170,4 +186,13 @@
 -(UIImage *)getImageWithKey:(NSString *)key;
 
 -(NSString *)getCssFileContent:(NSString *)key;
+
+//CSAT Prompt
+-(UIColor *)csatPromptBackgroundColor;
+-(UIColor *)csatPromptRatingBarColor;
+-(UIColor *)csatPromptSubmitButtonColor;
+-(UIColor *)csatPromptHorizontalLineColor;
+-(UIFont *)csatPromptQuestionTextFont;
+-(UIColor *)csatPromptQuestionTextFontColor;
+
 @end

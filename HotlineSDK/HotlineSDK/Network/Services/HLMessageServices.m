@@ -64,6 +64,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
 }
 
+
 +(void)fetchMessages:(void(^)(NSError *error))handler{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -90,7 +91,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     return;
                 }
                 
-                FDLog(@"New Messages Count : %lu", (unsigned long)conversations.count);
+                FDLog(@"%lu Conversations created locally", (unsigned long)conversations.count);
                 
                 NSNumber *channelId;
                 
@@ -153,7 +154,11 @@ static HLNotificationHandler *handleUpdateNotification;
         HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         
         NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+        
         KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+        
+        [self processCSATForConversation:conversation withInfo:conversationInfo];
+        
         NSArray *messages = conversationInfo[@"messages"];
         for (int j=0; j<messages.count; j++) {
             __block NSDictionary *messageInfo = messages[j];
@@ -171,7 +176,9 @@ static HLNotificationHandler *handleUpdateNotification;
                     conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
                 }
                 
-                newMessage.belongsToConversation = conversation;
+                if(conversation){
+                    newMessage.belongsToConversation = conversation;
+                }
                 
                 //Do not mark restored mesages as unread
                 if (isRestore) {
@@ -196,6 +203,33 @@ static HLNotificationHandler *handleUpdateNotification;
     [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
     [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
     return true;
+}
+
++(void)processCSATForConversation:(KonotorConversation *)conversation withInfo:(NSDictionary *)conversationInfo{
+    if ([conversationInfo objectForKey:@"hasPendingCsat"]) {
+        conversation.hasPendingCsat = @([conversationInfo[@"hasPendingCsat"] boolValue]);
+        if ([conversationInfo objectForKey:@"csat"]) {
+            
+            if ([conversationInfo[@"hasPendingCsat"] boolValue]) {
+                FDLog(@"*** CSAT for Conversation ID :%@ is pending ***", conversationInfo[@"conversationId"]);
+            }
+
+            NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+            NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+            HLCsat *csat = [HLCsat getWithID:conversationID inContext:context];
+            
+            FDLog(@"Conversation : %@", conversationInfo);
+            
+            if (!csat) {
+                csat = [HLCsat createWithInfo:conversationInfo inContext:context];
+                FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
+            }else{
+                csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
+            }
+            
+            csat.belongToConversation = conversation;
+        }
+    }
 }
 
 +(void)postUnreadCountNotification{
@@ -352,10 +386,12 @@ static HLNotificationHandler *handleUpdateNotification;
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if (!error && statusCode == 201) {
-                if (!conversation) {
-                    NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+                NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+                if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                    pMessage.belongsToConversation = newConversation;
+                    if(newConversation){
+                        pMessage.belongsToConversation = newConversation;
+                    }
                 }else{
                     pMessage.belongsToConversation = conversation;
                 }
@@ -452,6 +488,93 @@ static HLNotificationHandler *handleUpdateNotification;
             }
             [context save:nil];
         }];
+    }];
+}
+
+
++(void)postCSATWithID:(NSManagedObjectID *)csatObjectID completion:(void (^)(NSError *))handler{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        
+        NSError *error;
+        HLCsat *csat = nil;
+
+        if (csatObjectID) {
+            csat = [context existingObjectWithID:csatObjectID error:&error];
+            if (error){
+                if(handler) handler([NSError new]);
+                return;
+            }
+        }else{
+            FDLog(@"CSAT Error, Nil object ID");
+            if(handler) handler([NSError new]);
+            return;
+        }
+        
+        NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
+        
+        NSString *conversationID = csat.belongToConversation.conversationAlias;
+        
+        NSString *csatID = csat.csatID;
+        
+        if (conversationID == nil || csatID == nil || conversationID.length == 0  || csatID.length == 0) {
+            FDLog(@"CSAT error: Something went wrong");
+            if(handler) handler([NSError new]);
+            return;
+        }
+
+        response[@"csatId"] = csatID;
+        
+        response[@"conversationId"] = conversationID;
+        
+        if (csat.userRatingCount) {
+            response[@"stars"] = csat.userRatingCount.stringValue;
+        }
+        
+        if (csat.isIssueResolved) {
+            response[@"issueResolved"] = csat.isIssueResolved;
+        }
+        
+        if (csat.userComments && csat.userComments.length > 0){
+            response[@"response"] = csat.userComments;
+        }
+        
+        HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+        NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
+        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+        NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
+        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
+        [request setRelativePath:path andURLParams:@[appKey]];
+        [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+            [context performBlock:^{
+                NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+                if (!error && statusCode == 201) {
+                    [context deleteObject:csat];
+                    [context save:nil];
+                    FDLog(@"*** CSAT submitted *** \n %@", response);
+                }else{
+                    FDLog(@"CSAT submission failed");
+                }
+                
+                if (handler) handler(error);
+            }];
+        }];
+
+    }];
+}
+
++(void)uploadUnuploadedCSAT{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CSAT_ENTITY];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"csatStatus == %d", CSAT_RATED];
+        NSArray *results = [context executeFetchRequest:fetchRequest error:nil];
+        FDLog(@"There are %d unuploaded CSATs", (int)results.count);
+        for (HLCsat *csat in results) {
+            [HLMessageServices postCSATWithID:csat.objectID completion:nil];
+        }
+
     }];
 }
 

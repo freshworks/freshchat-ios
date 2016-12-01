@@ -253,8 +253,10 @@
                 NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
                 if(iconURL){
                     if (cell.tag == indexPath.row) {
-                        cell.imgView.image = placeholderImage;
-                        [cell setNeedsLayout];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            cell.imgView.image = placeholderImage;
+                            [cell setNeedsLayout];
+                        });
                     }
                     
                     [self.iconDownloader enqueue:^{
@@ -269,7 +271,10 @@
                                 }
                             });
                         }else{
-                            cell.imgView.image = placeholderImage;
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                cell.imgView.image = placeholderImage;
+                                [cell setNeedsLayout];
+                            });
                         }
                     }];
                 }
