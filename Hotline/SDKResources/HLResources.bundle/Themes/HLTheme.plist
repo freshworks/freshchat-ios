@@ -52,19 +52,19 @@
 	</dict>
 	<key>ChatResolutionPrompt</key>
 	<dict>
-		<key>backgroundColor</key>
+		<key>BackgroundColor</key>
 		<string>FFFFFF</string>
-		<key>submitButtonColor</key>
+		<key>SubmitButtonColor</key>
 		<string>007AFF</string>
-		<key>ratingBarColor</key>
+		<key>RatingBarColor</key>
 		<string>FFA500</string>
-		<key>horizontalLineColor</key>
+		<key>HorizontalLineColor</key>
 		<string>D3D3D3</string>
-		<key>questionTextFontSize</key>
+		<key>QuestionTextFontSize</key>
 		<string>15</string>
-		<key>questionTextFontName</key>
+		<key>QuestionTextFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
-		<key>questionTextColor</key>
+		<key>QuestionTextColor</key>
 		<string>000000</string>
 	</dict>
 	<key>CustSatDialogue</key>
