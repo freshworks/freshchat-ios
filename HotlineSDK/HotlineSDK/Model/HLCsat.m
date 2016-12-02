@@ -58,7 +58,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.userComments = nil;
+        self.userComments = @"";
         self.userRatingCount = 0;
         self.isIssueResolved = NO;
     }
