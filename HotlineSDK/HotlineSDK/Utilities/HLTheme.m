@@ -65,11 +65,11 @@
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *fileExt = [theme containsString:@".plist"] ? nil : @".plist";
+    NSString *fileExt = [theme rangeOfString:@".plist"].location != NSNotFound ? nil : @".plist";
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:fileExt];
     if (!path) {
         NSBundle *HLResourcesBundle = [self getHLResourceBundle];
-        path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
+        path = [HLResourcesBundle pathForResource:theme ofType:fileExt inDirectory:FD_THEMES_DIR];
     }
     return path;
 }
