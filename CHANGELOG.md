@@ -1,5 +1,40 @@
 # Change Log
 
+## [v1.2.0](https://github.com/freshdesk/hotline_ios_dev/tree/v1.2.0) (2016-12-02)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.1.10...v1.2.0)
+
+**Implemented enhancements:**
+
+- Allow users to set theme name with .plist extension as well. [\#556](https://github.com/freshdesk/hotline_ios_dev/issues/556)
+
+**Fixed bugs:**
+
+- Do not show incorrect error message when message is failed to upload [\#547](https://github.com/freshdesk/hotline_ios_dev/issues/547)
+- Input toolbar is not returning to its default position after keyboard is dismissed [\#542](https://github.com/freshdesk/hotline_ios_dev/issues/542)
+- FAQ and channel screen freezes when user edge swipes from left to right  [\#531](https://github.com/freshdesk/hotline_ios_dev/issues/531)
+- Channels thumbnail missing sometimes when come from background state to active state  [\#451](https://github.com/freshdesk/hotline_ios_dev/issues/451)
+
+**Closed issues:**
+
+- FAQ Screen freezes [\#552](https://github.com/freshdesk/hotline_ios_dev/issues/552)
+- Swiggy crash at init [\#477](https://github.com/freshdesk/hotline_ios_dev/issues/477)
+
+**Merged pull requests:**
+
+- Model version update 23 [\#564](https://github.com/freshdesk/hotline_ios_dev/pull/564) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Fixes Duplicate conversation issue. [\#563](https://github.com/freshdesk/hotline_ios_dev/pull/563) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- FAQ & Channel - Bugs [\#561](https://github.com/freshdesk/hotline_ios_dev/pull/561) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- General fixes [\#560](https://github.com/freshdesk/hotline_ios_dev/pull/560) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Csat [\#559](https://github.com/freshdesk/hotline_ios_dev/pull/559) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- General fixes [\#558](https://github.com/freshdesk/hotline_ios_dev/pull/558) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- FAQ & Channel - Bugs [\#555](https://github.com/freshdesk/hotline_ios_dev/pull/555) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Do not update SDK build number [\#553](https://github.com/freshdesk/hotline_ios_dev/pull/553) ([AravinthChandran](https://github.com/AravinthChandran))
+- Bug Fixes in Channel Messages Controller [\#551](https://github.com/freshdesk/hotline_ios_dev/pull/551) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Fix app's audio playback with recording and playing audio message [\#549](https://github.com/freshdesk/hotline_ios_dev/pull/549) ([harish6989](https://github.com/harish6989))
+- Add missing file references of FDTag model to .xcodeproj [\#548](https://github.com/freshdesk/hotline_ios_dev/pull/548) ([harish6989](https://github.com/harish6989))
+- Add models for Tag table [\#546](https://github.com/freshdesk/hotline_ios_dev/pull/546) ([harish6989](https://github.com/harish6989))
+- Add changelog [\#541](https://github.com/freshdesk/hotline_ios_dev/pull/541) ([AravinthChandran](https://github.com/AravinthChandran))
+
 ## [v1.1.10](https://github.com/freshdesk/hotline_ios_dev/tree/v1.1.10) (2016-11-09)
 [Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.1.9...v1.1.10)
 
