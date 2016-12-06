@@ -86,7 +86,9 @@
     [event setValue:HLEVENT_PARAM_TYPE forKey:eventType];
     builderBlock(event);
     NSDictionary *eventDictionary = [event toEventDictionary:[HLEventManager getUserSessionId]];
-    [[HLEventManager sharedInstance] updateFileWithEvent:eventDictionary];
+    if(eventDictionary){
+        [[HLEventManager sharedInstance] updateFileWithEvent:eventDictionary];
+    }
     return event;
 }
 

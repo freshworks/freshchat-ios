@@ -7,7 +7,6 @@
 //
 
 #import "HLEvent.h"
-#import "HLEventManager.h"
 #import "Hotline.h"
 #import "FDUtilities.h"
 
