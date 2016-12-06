@@ -79,11 +79,22 @@
     return [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
 }
 
-+ (HLEvent *) submitEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
++ (HLEvent *) submitEvent:(NSString *)eventName
+                   ofType:(NSString *)eventType
+                withBlock:(void(^)(HLEvent *event))builderBlock{
     HLEvent *event = [[HLEvent alloc] initWithEventName:eventName];
+    [event setValue:HLEVENT_PARAM_TYPE forKey:eventType];
     builderBlock(event);
-    [event saveEvent];
+    NSDictionary *eventDictionary = [event toEventDictionary:[HLEventManager getUserSessionId]];
+    [[HLEventManager sharedInstance] updateFileWithEvent:eventDictionary];
     return event;
+}
+
++ (HLEvent *) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
+    return [HLEventManager submitEvent:eventName
+            //All events right now are generated from SDK. Add user events when we expose API for events.
+                                ofType:HLEVENT_TYPE_SDK
+                             withBlock:builderBlock];
 }
 
 - (void) getOldEvents {
@@ -182,9 +193,8 @@
     NSError *error;
     NSData * postData = [NSJSONSerialization dataWithJSONObject:events options:0 error:&error];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:eventURL]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:eventURL] andMethod:HTTP_METHOD_POST];
     request.HTTPBody = postData;
-    request.HTTPMethod = HTTP_METHOD_POST;
     dispatch_async(self.serialQueue, ^{
         [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {

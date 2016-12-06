@@ -30,14 +30,14 @@
 //Events Name
 #define HLEVENT_FAQ_OPEN_CATEGORY                   @"faq_open_category"
 #define HLEVENT_FAQ_OPEN_ARTICLE                    @"faq_open_article"
-#define HLEVENT_FAQ_SEARCH                          @"faq_search"
 #define HLEVENT_FAQ_UPVOTE_ARTICLE                  @"faq_upvote_article"
 #define HLEVENT_FAQ_DOWNVOTE_ARTICLE                @"faq_downvote_article"
+#define HLEVENT_FAQ_SEARCH                          @"faq_search"
+#define HLEVENT_FAQ_SEARCH_LAUNCH                   @"faq_search_launch"
 #define HLEVENT_CHANNELS_LAUNCH                     @"channels_launch"
 #define HLEVENT_CONVERSATION_SEND_MESSAGE           @"conversation_send_message"
 #define HLEVENT_FAQ_LAUNCH                          @"faqs_launch"
 #define HLEVENT_CONVERSATIONS_LAUNCH                @"conversation_launch"
-#define HLEVENT_FAQ_SEARCH_LAUNCH                   @"faq_search_launch"
 #define HLEVENT_CONVERSATION_DEEPLINK_LAUNCH        @"conversation_deeplink_launch"
 
 //Event Params
@@ -52,6 +52,11 @@
 #define HLEVENT_PARAM_MESSAGE_ALIAS                 @"message_alias"
 #define HLEVENT_PARAM_MESSAGE_TYPE                  @"message_type"
 #define HLEVENT_PARAM_SOURCE                        @"source"
+#define HLEVENT_PARAM_TYPE                          @"type"
+
+//Type of event
+#define HLEVENT_TYPE_SDK                            @"SDK"
+#define HLEVENT_TYPE_USER                           @"USER"
 
 //Events Article Open Source Type
 #define HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST          @"article_list"
@@ -81,11 +86,9 @@
 
 + (instancetype)sharedInstance;
 
-+ (HLEvent *) submitEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
++ (HLEvent *) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
 
 - (void) uploadUserEvents :(NSArray *)events;
-
-+ (NSString *) getUserSessionId;
 
 - (void)startEventsUploadTimer;
 

@@ -39,17 +39,18 @@
     return self;
 }
 
--(void)saveEvent{
+-(NSDictionary *)toEventDictionary:(NSString *) sessionId{
     if([FDUtilities getUserAlias] && [Hotline sharedInstance].config.appID && [FDUtilities getTracker]) {
         NSDictionary *eventDictionary = @{@"_tracker":[FDUtilities getTracker],
                                           @"_userId" :[FDUtilities getUserAlias],
                                           @"_eventName":self.eventName,
-                                          @"_sessionId":[HLEventManager getUserSessionId],
+                                          @"_sessionId":sessionId,
                                           @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)],
                                           @"_appId" : [Hotline sharedInstance].config.appID,
                                           @"_properties":self.properties};
-        [[HLEventManager sharedInstance] updateFileWithEvent:eventDictionary];
+        return eventDictionary;
     }
+    return nil;
 }
 
 @end

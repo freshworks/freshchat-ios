@@ -60,7 +60,7 @@
 }
 
 -(void)handleTapGesture:(id)sender{
-    [HLEventManager submitEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_NOT_HELPFUL];
     }];
     [self.delegate marginalView:self handleTap:sender];

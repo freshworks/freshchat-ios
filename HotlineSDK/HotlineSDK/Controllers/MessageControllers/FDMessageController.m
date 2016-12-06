@@ -103,7 +103,7 @@ typedef struct {
         self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
-        [HLEventManager submitEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
+        [HLEventManager submitSDKEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
             [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
             [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[self.channel.channelID stringValue]];
             [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:self.channel.name];
@@ -869,7 +869,7 @@ typedef struct {
 }
 
 - (void) addConversationDeepLinkLaunchEvent{
-    [HLEventManager submitEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[self.conversation.belongsToChannel.channelID stringValue]];
         [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:self.conversation.belongsToChannel.name];
         [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:self.conversation.conversationAlias];

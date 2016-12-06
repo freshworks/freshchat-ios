@@ -43,7 +43,7 @@
 }
 
 + (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source{
-    [HLEventManager submitEvent:HLEVENT_FAQ_OPEN_ARTICLE withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_FAQ_OPEN_ARTICLE withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[article.categoryID stringValue]];
         [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:article.category.title];
         [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[article.articleID stringValue]];

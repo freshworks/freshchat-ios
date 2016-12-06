@@ -418,7 +418,7 @@
 }
 
 -(void)showFAQs:(UIViewController *)controller{
-    [HLEventManager submitEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
     }];
     HLViewController *preferredController = [self getPreferredCategoryController];
@@ -429,7 +429,7 @@
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
      [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
-         [HLEventManager submitEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
+         [HLEventManager submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
              [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
          }];
          HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
@@ -442,7 +442,7 @@
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
-            [HLEventManager submitEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+            [HLEventManager submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
                 [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
             }];
             if (channelInfos.count == 1) {
