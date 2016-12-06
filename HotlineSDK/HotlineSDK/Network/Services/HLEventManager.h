@@ -15,11 +15,9 @@
 #define HLEVENT_DIR_PATH @"Hotline/Events"
 #define HLEVENT_FILE_NAME @"events.plist" // Hotline/Events/events.plist
 
-//Bulk event dir path
-#define BULK_EVENT_DIR_PATH @"bulkevents/"
-
 //bulk event base url for debug mode only
-#define HLEVENTS_BULK_BASE_URL @"http://events.staging.konotor.com/bulkevents/"
+#define HLEVENTS_BULK_EVENTS_URL @"https://events.hotline.io/bulkevents/"
+#define HLEVENTS_BULK_EVENTS_DEBUG_URL @"http://events.staging.konotor.com/bulkevents/"
 
 //Events api response code
 #define HLEVENTS_REQUEST_ACCEPTED                   200
@@ -84,18 +82,12 @@
 
 @property (nonatomic, strong) NSMutableArray *eventsArray;
 
-+ (instancetype)sharedInstance;
-
++ (instancetype) sharedInstance;
 + (HLEvent *) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
 
 - (void) uploadUserEvents :(NSArray *)events;
-
-- (void)startEventsUploadTimer;
-
-- (void)cancelEventsUploadTimer;
-
-- (void) updateFileWithEvent :(NSDictionary *) eventDict;
-
-- (void) clearEventFile;
+- (void) startEventsUploadTimer;
+- (void) cancelEventsUploadTimer;
+- (void) clearEvents;
 
 @end

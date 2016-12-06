@@ -37,8 +37,7 @@
     return sharedHLEventManager;
 }
 
-- (instancetype)init
-{
+- (instancetype)init{
     self = [super init];
     if (self) {
         self.eventsArray = [NSMutableArray array];
@@ -52,12 +51,18 @@
 }
 
 -(NSString *)getEventsURL{
-    
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *baseURLString = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
-    
-    NSString *domain = [[baseURLString stringByReplacingOccurrencesOfString:@"app" withString:@"events"] stringByAppendingPathComponent:BULK_EVENT_DIR_PATH];
-    return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
+#if DEBUG
+    return HLEVENTS_BULK_EVENTS_DEBUG_URL;
+#else
+    NSString *domain = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    if ([theme rangeOfString:@"mr.orange"].location != NSNotFound ||
+        [theme rangeOfString:@"mr.blonde"].location != NSNotFound ||
+        [theme rangeOfString:@"mr.white"].location != NSNotFound ||
+        [theme rangeOfString:@"staging.konotor.com"].location != NSNotFound){
+        return HLEVENTS_BULK_EVENTS_DEBUG_URL;
+    }
+    return HLEVENTS_BULK_EVENTS_URL;
+#endif
 }
 
 -(void)startEventsUploadTimer{
@@ -139,7 +144,7 @@
     });
 }
      
-- (void) clearEventFile{
+- (void) clearEvents{
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[self returnEventLibraryPath]];
     NSError *error;
     if(exists) {
@@ -177,11 +182,9 @@
         return;
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];
-#ifdef DEBUG
-    NSString *eventURL = [NSString stringWithFormat:@"%@%@",HLEVENTS_BULK_BASE_URL,[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
-#else
+
     NSString *eventURL = [NSString stringWithFormat:@"%@/%@/",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
-#endif
+
     NSMutableArray *tempEventsArray = [[NSMutableArray alloc] initWithArray:self.eventsArray];
     
     for(NSDictionary *event in events){
