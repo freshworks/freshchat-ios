@@ -17,6 +17,16 @@
 #import "FDReachabilityManager.h"
 #import "HLEvent.h"
 
+
+#define isRetriableHttpError(code) code != HLEVENTS_HTTP_RESPONSE_CODE_UNSUPPORTED_MEDIA_TYPE || \
+                                    code != HLEVENTS_HTTP_RESPONSE_CODE_VALIDATION_FAILED
+
+#define canRetryResponseCode(code) !(( code == EVENT_STORE_RESPCODE_VALIDATION_FAILED) || \
+                                    ( code == EVENT_STORE_RESPCODE_UNSUPPORTED_MEDIA_TYPE) || \
+                                    ( code == EVENT_STORE_RESPCODE_INVALID_REQUEST_FORMAT))
+
+#define isSuccessRespCode(code) ( code == EVENT_STORE_RESPCODE_REQUEST_ACCEPTED)
+
 @interface HLEventManager()
 
 @property (nonatomic, strong) NSString *plistURL;
@@ -203,25 +213,24 @@
     dispatch_async(self.serialQueue, ^{
         [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
+            
             //add serial queue code block for serial execution
             if([responseInfo isDict]) {
                 NSMutableArray *eventsToRetry = [[NSMutableArray alloc] init];
                 NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
                 for (int i=0; i<[eventsResponse count]; i++) {
-                        
-                    if(!(([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_VALIDATION_FAILED) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_UNSUPPORTED_MEDIA_TYPE) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_INVALID_REQUEST_FORMAT) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_REQUEST_ACCEPTED))){
-                            
+                    NSInteger status = [[eventsResponse objectAtIndex:i][@"status"] intValue];
+                    if(!isSuccessRespCode(status) && canRetryResponseCode(status)){
                         [eventsToRetry addObject:[events objectAtIndex:i]];
                     }
                 }
                 [self writeArrayEvents:eventsToRetry];
             }
         }else{
-            if((error.code != 422) || (error.code != 415)){//validation error
-                    
+            if(error.code == HLEVENTS_HTTP_RESPONSE_CODE_NOT_SUPPORTED){
+                [self clearEvents];
+            }
+            else if(isRetriableHttpError(error.code)){//validation error
                 [self writeArrayEvents:events];
             }
         }

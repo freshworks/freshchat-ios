@@ -557,7 +557,7 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
-    [[HLEventManager sharedInstance] clearEventFile];
+    [[HLEventManager sharedInstance] clearEvents];
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
     }
