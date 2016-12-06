@@ -24,9 +24,9 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "HLMessageServices.h"
-#import "FDChannelUpdater.h"
 #import "FDIconDownloader.h"
 #import "FDReachabilityManager.h"
+#import "FDControllerUtils.h"
 
 @interface HLChannelViewController ()
 
@@ -52,7 +52,7 @@
                                                                     NSForegroundColorAttributeName: [theme navigationBarTitleColor],
                                                                     NSFontAttributeName: [theme navigationBarTitleFont]
                                                                     };
-    self.channels = [[NSMutableArray alloc] init];
+    self.channels = [[NSArray alloc] init];
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
@@ -82,8 +82,8 @@
     [[[FDChannelUpdater alloc] init] resetTime];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
     self.footerView.hidden = YES;
@@ -114,7 +114,8 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!error) {
                 if (channelInfos.count == 1) {
-                    self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
+                    BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
+                    self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
                 }else{
                     NSArray *sortedChannel = [self sortChannelList:channelInfos];
                     [self showEmptyResultsView:(sortedChannel.count == 0)];
@@ -130,7 +131,8 @@
     
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
-    NSMutableArray *messages = [NSMutableArray array];
+    NSMutableArray *messages = [[NSMutableArray alloc]init];
+    
     for(HLChannelInfo *channel in channelInfos){
         KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
         if (lastMessage) {
@@ -143,7 +145,8 @@
     
     for(KonotorMessage *message in messages){
         if (message.belongsToChannel) {
-            [results addObject:message.belongsToChannel];
+            HLChannelInfo *chInfo = [[HLChannelInfo alloc] initWithChannel:message.belongsToChannel];
+            [results addObject:chInfo];
         }
     }
     
@@ -192,10 +195,14 @@
                                                  name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)localNotificationUnSubscription{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self localNotificationUnSubscription];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -230,7 +237,7 @@
         cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
 
-        NSInteger *unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel.channelID];
+        NSInteger unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
 
@@ -246,8 +253,10 @@
                 NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
                 if(iconURL){
                     if (cell.tag == indexPath.row) {
-                        cell.imgView.image = placeholderImage;
-                        [cell setNeedsLayout];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            cell.imgView.image = placeholderImage;
+                            [cell setNeedsLayout];
+                        });
                     }
                     
                     [self.iconDownloader enqueue:^{
@@ -262,7 +271,10 @@
                                 }
                             });
                         }else{
-                            cell.imgView.image = placeholderImage;
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                cell.imgView.image = placeholderImage;
+                                [cell setNeedsLayout];
+                            });
                         }
                     }];
                 }
@@ -348,6 +360,10 @@
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows]
                      withRowAnimation:UITableViewRowAnimationNone];
+}
+
+-(void)dealloc{
+    [self localNotificationUnSubscription];
 }
 
 @end

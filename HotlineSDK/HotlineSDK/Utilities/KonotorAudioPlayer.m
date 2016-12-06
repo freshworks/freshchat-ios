@@ -20,6 +20,7 @@ KonotorMessage *gCurrentlyPlaying;
 
 BOOL gkIsAudioAlreadyPlaying = NO;
 KonotorAudioPlayer *gkSingletonPlayer = nil;
+static NSString *beforePlayCategory;
 
 +(BOOL) playMessageWithMessageID : (NSString *)messageID
 {
@@ -45,17 +46,27 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     [KonotorAudioPlayer UnInitPlayer];
     
     [KonotorAudioPlayer currentPlaying:nil set:YES];
+    NSError *error;
+    [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
+    if(error){
+        NSLog(@"Failed to set audio %@ session category", beforePlayCategory);
+        return NO;
+    }
+    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
     return YES;
 }
 
 +(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime{
     
+    [FDLocalNotification post:HOTLINE_WILL_PLAY_AUDIO_MESSAGE];
+
     NSError *error;
     KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
     if(!messageObject)
         return NO;
     
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    beforePlayCategory = audioSession.category;
 
     //TODO: set audio session back to the original state when dismissing msg controller
     
@@ -65,7 +76,10 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     [audioSession setActive:YES error:&error];
     
     [audioSession setCategory:AVAudioSessionCategoryPlayback error: &error];
-    
+    if(error){
+        NSLog(@"Failed to set audio session category");
+        return NO;
+    }
     gCurrentlyPlaying = messageObject;
     
     if(gkIsAudioAlreadyPlaying)
@@ -164,11 +178,6 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: YES ];
     
-   NSString *messageid = [KonotorAudioPlayer currentPlaying:nil set:NO];
-    
-    [Konotor performSelector:@selector(MediaStartedNotification:) withObject:
-     messageid];
-    
     gkIsAudioAlreadyPlaying = YES;
     
     return YES;
@@ -262,13 +271,7 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
 }
 
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    NSString *messageid = [KonotorAudioPlayer currentPlaying:nil set:NO];
-    
-    [Konotor performSelector:@selector(messageFinishedPlayingNotification:) withObject:
-     messageid];
-    
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
     gkSingletonPlayer = nil;
     gkIsAudioAlreadyPlaying = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
@@ -277,8 +280,13 @@ KonotorAudioPlayer *gkSingletonPlayer = nil;
     
     [KonotorAudioPlayer UnInitPlayer];
     [KonotorAudioPlayer currentPlaying:nil set:YES];
-
     
+    NSError *error;
+    [[AVAudioSession sharedInstance] setCategory:beforePlayCategory error:&error];
+    if(error){
+        NSLog(@"Failed to set audio %@ play session category", beforePlayCategory);
+    }
+    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
 }
 
 + (double) audioPlayerGetCurrentTime

@@ -14,7 +14,7 @@
 @interface FDDataUpdaterWithInterval : NSObject
 
 @property (nonatomic        ) int              intervalInSecs;
-@property (nonatomic        ) NSString         * intervalConfigKey;
+@property (nonatomic,strong ) NSString         * intervalConfigKey;
 @property (strong, nonatomic) FDSecureStore    *secureStore;
 
 - (void) fetchWithCompletion:(void(^)(BOOL isFetchPerformed, NSError *error))completion;

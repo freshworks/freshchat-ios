@@ -39,6 +39,10 @@ __weak static id <KonotorDelegate> _delegate;
     return[KonotorAudioRecorder stopRecording];
 }
 
++(BOOL) isRecording{
+    return [KonotorAudioRecorder isRecording];
+}
+
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation
 {
     return [KonotorAudioRecorder stopRecordingOnConversation:conversation];
@@ -154,26 +158,13 @@ __weak static id <KonotorDelegate> _delegate;
     
 }
 
-+(void) messageFinishedPlayingNotification:(NSString *) messageID
++(void)NotifyServerError
 {
     if([Konotor delegate])
     {
-        if([[Konotor delegate] respondsToSelector:@selector(didFinishPlaying:) ])
+        if([[Konotor delegate] respondsToSelector:@selector(didNotifyServerError)])
         {
-            
-            [[Konotor delegate] didFinishPlaying:messageID];
-        }
-    }
-}
-
-+(void) MediaStartedNotification:(NSString *) messageID
-{
-    if([Konotor delegate])
-    {
-        if([[Konotor delegate] respondsToSelector:@selector(didStartPlaying:) ])
-        {
-            
-            [[Konotor delegate] didStartPlaying:messageID];
+            [[Konotor delegate] didNotifyServerError];
         }
     }
 }

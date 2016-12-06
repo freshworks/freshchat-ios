@@ -18,14 +18,12 @@
 
 @optional
 
--(void) didFinishPlaying:(NSString *)messageID;
--(void) didStartPlaying:(NSString *)messageID;
-
 -(void) didFinishDownloadingMessages;
 
 -(void) didFinishUploading: (NSString *)messageID;
 -(void) didEncounterErrorWhileUploading: (NSString *) messageID;
 -(void) didEncounterErrorWhileDownloading: (NSString *)messageID;
+-(void) didNotifyServerError;
 -(void) didEncounterErrorWhileDownloadingConversations;
 
 -(void) didStartUploadingNewMessage;
@@ -55,6 +53,17 @@
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 + (BOOL) showNotificationDisabledAlert;
 + (void) setDisabledNotificationAlertShown:(BOOL) shown;
+
+//TODO: The following are indirectly called by KonotorDelegate and need to be removed.
++(void) MediaDownloadFailedNotification:(NSString *) messageID;
++(void) conversationsDownloadFailed;
++(void) conversationsDownloaded;
++(void) UploadFinishedNotification: (NSString *) messageID;
++(void) UploadFailedNotification: (NSString *) messageID;
++(void) NotifyServerError;
++(BOOL) isRecording;
+
+
 
 
 @end

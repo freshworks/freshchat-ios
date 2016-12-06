@@ -27,7 +27,6 @@
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
 @property (nonatomic, strong) HLTheme              *theme;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonYConstraint;
-@property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 @property (nonatomic) BOOL canShowAttachButton;
 
 @property (nonatomic, strong) NSLayoutConstraint   *accessoryViewWidthConstraint;
@@ -210,6 +209,13 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         self.sendButton.hidden = NO;
         accessoryViewWidthConstraint.constant = self.sendButton.frame.size.width;
     }
+}
+
+//TODO: Replace textiew used in this class with FDGrowingTextView
+-(BOOL)containsUserInputText{
+    return (self.textView.text &&
+            ![self.textView.text isEqualToString:@""] &&
+            ![self.textView.text isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)]);
 }
 
 @end

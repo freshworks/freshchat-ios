@@ -13,7 +13,6 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "FDRanking.h"
-#import "HLArticlesController.h"
 #import "FDLocalNotification.h"
 #import "HLCategory.h"
 #import "FDSolutionUpdater.h"
@@ -58,7 +57,6 @@
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     self.theme = [HLTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self updateCategories];
     [self setupSubviews];
     [self adjustUIBounds];
     [self setNavigationItem];
@@ -75,10 +73,11 @@
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [self localNotificationSubscription];
     [self fetchUpdates];
+    [self updateCategories];
 }
 
 -(void)setupSubviews{
@@ -230,8 +229,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
 }
 

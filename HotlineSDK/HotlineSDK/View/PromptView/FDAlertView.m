@@ -13,8 +13,8 @@
 
 @interface FDAlertView ()
 
-@property (nonatomic,strong) UIImageView* iconView;
-@property CGFloat buttonLabelWidth;
+@property (nonatomic, strong) UIImageView* iconView;
+@property (nonatomic, assign) CGFloat buttonLabelWidth;
 @property (weak, nonatomic) id <FDAlertViewDelegate> delegate;
 
 @end

@@ -15,10 +15,10 @@
 
 @interface HLArticleTagManager ()
 
-@property NSMutableDictionary *tagMap;
-@property dispatch_queue_t queue;
-@property NSString *storageFile;
-@property BOOL hasChanges;
+@property (nonatomic,strong)NSMutableDictionary *tagMap;
+@property (nonatomic)dispatch_queue_t queue;
+@property (nonatomic,strong)NSString *storageFile;
+@property (nonatomic)BOOL hasChanges;
 
 @end
 
@@ -52,7 +52,7 @@
             }
             else {
                 self.hasChanges = NO;
-                FDLog(@"Saved file with contents %@", self.tagMap);
+                FDLog(@"Tags: %d files saved", (int)self.tagMap.count);
             }
         }
     });
@@ -64,7 +64,7 @@
             NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
             if(data){
                 self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                 FDLog(@"loaded file with contents %@", self.tagMap);
+                 FDLog(@"Tags: %d files loaded", (int)self.tagMap.count);
             }
         }
     });

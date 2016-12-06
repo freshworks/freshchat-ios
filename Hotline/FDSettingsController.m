@@ -211,6 +211,7 @@
     switch (buttonIndex) {
         case 0:
             [[Hotline sharedInstance]clearUserDataWithCompletion:^{
+                [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
                 [[Hotline sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
@@ -234,12 +235,12 @@
 }
 
 -(void)testNotification:(id)sender{
-    NSNumber *channelId = @1213;
     [[Hotline sharedInstance] handleRemoteNotification:@{
-                                                                  @"kon_c_ch_id" : channelId,
+                                                                  @"kon_c_ch_id" : @200,
                                                                       @"aps" : @{
                                                                           @"alert" : @"Sample Test Message"
-                                                                          }
+                                                                          },
+                                                                  @"source" : @"konotor"
                                                                   }
                                                     andAppstate:UIApplicationStateActive];
          }

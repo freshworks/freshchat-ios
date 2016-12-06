@@ -65,10 +65,11 @@
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:@"plist"];
+    NSString *fileExt = [theme rangeOfString:@".plist"].location != NSNotFound ? nil : @".plist";
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:fileExt];
     if (!path) {
         NSBundle *HLResourcesBundle = [self getHLResourceBundle];
-        path = [HLResourcesBundle pathForResource:theme ofType:@"plist" inDirectory:FD_THEMES_DIR];
+        path = [HLResourcesBundle pathForResource:theme ofType:fileExt inDirectory:FD_THEMES_DIR];
     }
     return path;
 }
@@ -135,7 +136,7 @@
 
 #pragma mark - Status Bar
 
--(UIStatusBarStyle *)statusBarStyle{
+-(UIStatusBarStyle)statusBarStyle{
     NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"OverallSettings.StatusBarStyle"];
     if([statusBarStyle isEqualToString:@"UIStatusBarStyleLightContent"]){
         return UIStatusBarStyleLightContent;
@@ -239,6 +240,69 @@
     UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonColor"];
     return color ? color : [HLTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
 }
+
+
+#pragma mark Cust Sat dialogue
+
+-(UIColor *)custSatDialogueTitleTextColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.LabelFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *)custSatDialogueTitleFont{
+    return [self getFontWithKey:@"CustSatDialogue.Label" andDefaultSize:14];
+}
+
+-(UIColor *)custSatDialogueYesButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
+}
+
+-(UIFont *)custSatDialogueYesButtonFont{
+    return [self getFontWithKey:@"CustSatDialogue.YesButton" andDefaultSize:14];
+}
+
+-(UIColor *)custSatDialogueYesButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
+}
+
+//No Button
+
+-(UIColor *)custSatDialogueNoButtonBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
+}
+
+-(UIColor *)custSatDialogueNoButtonTextColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
+}
+
+-(UIFont *)custSatDialogueNoButtonFont{
+    return [self getFontWithKey:@"CustSatDialogue.NoButton" andDefaultSize:14];
+}
+
+-(UIColor *)custSatDialogueNoButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
+}
+
+-(UIColor *)custSatDialogueYesButtonBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
+}
+
+-(UIColor *)custSatDialogueBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
+}
+
+-(UIColor *)custSatDialogueButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.ButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
+}
+
 
 -(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
     NSString *preferredFontName; CGFloat preferredFontSize;
@@ -456,7 +520,10 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
-
+-(UIColor *)messageUIBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
 
 #pragma mark - Grid View
 -(UIColor *)gridViewCellBorderColor{
@@ -505,7 +572,7 @@
 #pragma mark - Channel List View
 
 -(UIColor *)channelListCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.cellBackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelCellBackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
 }
 
@@ -600,6 +667,37 @@
     NSString  *cssFilePath = [hlResourceBundle pathForResource:key ofType:@"css" inDirectory:FD_THEMES_DIR];
     NSData *cssContent = [NSData dataWithContentsOfFile:cssFilePath];
     return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
+}
+
+#pragma mark CSAT Prompt
+
+-(UIColor *)csatPromptBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.BackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)csatPromptRatingBarColor{
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.RatingBarColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];    
+}
+
+-(UIColor *)csatPromptSubmitButtonColor{
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.SubmitButtonColor"];
+    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+}
+
+-(UIColor *)csatPromptHorizontalLineColor{
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.HorizontalLineColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
+}
+
+-(UIFont *)csatPromptQuestionTextFont{
+    return [self getFontWithKey:@"ChatResolutionPrompt.QuestionText" andDefaultSize:15];
+}
+
+-(UIColor *)csatPromptQuestionTextFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.QuestionTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 @end

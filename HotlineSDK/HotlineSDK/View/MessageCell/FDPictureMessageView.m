@@ -29,17 +29,6 @@
     
     self.contentMode = UIViewContentModeCenter;
     
-    TapOnPictureRecognizer* tapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
-    tapGesture.numberOfTapsRequired=1;
-    if([currentMessage picData]){
-        tapGesture.image=[UIImage imageWithData:[currentMessage picData]];
-    }
-    else{
-        tapGesture.imageURL=[NSURL URLWithString:[currentMessage picUrl]];
-        tapGesture.image=nil;
-    }
-    tapGesture.height=[[currentMessage picHeight] floatValue];
-    tapGesture.width=[[currentMessage picWidth] floatValue];
     self.userInteractionEnabled=YES;
     
     if([currentMessage picThumbData]){
@@ -59,16 +48,6 @@
                         self.layer.cornerRadius=10.0;
                         self.layer.masksToBounds=YES;
                         self.tag=KONOTOR_PICTURE_TAG;
-                        TapOnPictureRecognizer* tapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
-                        tapGesture.numberOfTapsRequired=1;
-                        if(data)
-                            tapGesture.image=[UIImage imageWithData:data];
-                        else{
-                            tapGesture.imageURL=[NSURL URLWithString:[currentMessage picUrl]];
-                            tapGesture.image=nil;
-                        }
-                        tapGesture.height=[[currentMessage picHeight] floatValue];
-                        tapGesture.width=[[currentMessage picWidth] floatValue];
                         self.userInteractionEnabled=YES;
                     }
                 });
@@ -109,16 +88,6 @@
                     self.layer.cornerRadius=10.0;
                     self.layer.masksToBounds=YES;
                     self.tag=KONOTOR_PICTURE_TAG;
-                    TapOnPictureRecognizer* tapGesture=[[TapOnPictureRecognizer alloc] initWithTarget:self action:@selector(tappedOnPicture:)];
-                    tapGesture.numberOfTapsRequired=1;
-                    if(data)
-                        tapGesture.image=[UIImage imageWithData:data];
-                    else{
-                        tapGesture.imageURL=[NSURL URLWithString:[currentMessage picUrl]];
-                        tapGesture.image=nil;
-                    }
-                    tapGesture.height=[[currentMessage picHeight] floatValue];
-                    tapGesture.width=[[currentMessage picWidth] floatValue];
                     self.userInteractionEnabled=YES;
                 }
             });

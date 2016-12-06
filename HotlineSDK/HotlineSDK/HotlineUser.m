@@ -41,7 +41,6 @@
     self.phoneNumber = nil;
     self.externalID = nil;
     self.phoneCountryCode = nil;
-    [[FDSecureStore sharedInstance]clearStoreData];
 }
 
 @end

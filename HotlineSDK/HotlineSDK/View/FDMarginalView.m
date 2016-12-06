@@ -16,7 +16,6 @@
 
 @property (nonatomic,strong) UIImageView *contactUsImgView;
 @property (nonatomic,strong) UILabel *actionLabel;
-@property (nonatomic,strong) id<FDMarginalViewDelegate> delegate;
 
 @end
 

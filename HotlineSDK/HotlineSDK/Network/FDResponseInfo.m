@@ -42,4 +42,8 @@
     return (NSArray *)self.responseBody;
 }
 
+-(NSString *)toString{
+    return [NSString stringWithFormat:@"HEADERS : %@ RESPONSE: %@ HTTP-BODY:%@", [(NSHTTPURLResponse *)self.response allHeaderFields] , self.response, self.responseBody];
+}
+
 @end

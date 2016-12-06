@@ -31,9 +31,10 @@
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
-#import "FDLocalNotification.h"
 #import "KonotorAudioRecorder.h"
 #import "HLEventManager.h"
+#import "FDBackgroundTaskManager.h"
+#import "HLCSATYesNoPrompt.h"
 
 typedef struct {
     BOOL isLoading;
@@ -44,7 +45,7 @@ typedef struct {
 } FDMessageControllerFlags;
 
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
@@ -63,12 +64,17 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
 @property (strong, nonatomic) NSString *appAudioCategory;
+@property (nonatomic,strong) NSNumber *channelID;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
 @property (nonatomic) NSInteger messageCountPrevious;
 @property (nonatomic) NSInteger messagesDisplayedCount;
 @property (nonatomic) NSInteger loadmoreCount;
+
+@property (strong,nonatomic) HLCSATYesNoPrompt *yesNoPrompt;
+@property (strong, nonatomic) HLCSATView *CSATView;
+@property (nonatomic) BOOL isOneWayChannel;
 
 @end
 
@@ -77,6 +83,7 @@ typedef struct {
 #define INPUT_TOOLBAR_HEIGHT  43
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
+#define YES_NO_PROMPT_HEIGHT 80
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -93,7 +100,7 @@ typedef struct {
         self.messageCountPrevious = 0;
         self.messagesDisplayedCount=20;
         self.loadmoreCount=20;
-        
+        self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
         [HLEventManager submitEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
@@ -125,7 +132,6 @@ typedef struct {
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
-    [self registerAppAudioCategory];
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessages:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
@@ -143,29 +149,65 @@ typedef struct {
     return headerView;
 }
 
+- (void)tableViewTapped:(UITapGestureRecognizer *)tapObj {
+    CGPoint touchLoc = [tapObj locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoc];
+    FDMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ( messageCell ) {
+        touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
+        if (! CGRectContainsPoint(messageCell.messageTextView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
+            [self dismissKeyboard];
+        }
+    }
+    else  {
+        [self dismissKeyboard];
+    }
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
+    [self processPendingCSAT];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    if(!self.channel.managedObjectContext) {
+        [self rebuildChannel];
+    }
+    [self refreshView];
+    [self registerAppAudioCategory];
     [self startPoller];
 }
+
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cancelPoller];
-    [Konotor stopRecording];
+    
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
-    [self resetAudioSessionCategory];
+    //add check if audio recording is enabled or not
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    if([secureStore boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED]){
+        [self resetAudioSessionCategory];
+        if([Konotor isRecording]){
+            [Konotor stopRecording];
+        }
+    }
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [self localNotificationUnSubscription];
+    
+    
+    if (self.CSATView.isShowing) {
+        FDLog(@"Leaving message screen with active CSAT, Recording YES state");
+        [self handleUserEvadedCSAT];
+    }
+    
 }
 
 -(void)registerAppAudioCategory{
@@ -237,7 +279,6 @@ typedef struct {
 }
 
 -(void)setSubviews{
-    
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
     
@@ -260,12 +301,14 @@ typedef struct {
     [bannerMessageView addSubview:bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
+    self.tableView.backgroundColor = [[HLTheme sharedInstance]messageUIBackgroundColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.view addSubview:self.tableView];
     
     //Bottomview
@@ -275,6 +318,9 @@ typedef struct {
     
     self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
+    
+    self.yesNoPrompt = [[HLCSATYesNoPrompt alloc]initWithDelegate:self andKey:LOC_CSAT_PROMPT_PARTIAL];
+    self.yesNoPrompt.translatesAutoresizingMaskIntoConstraints = NO;
 
     NSDictionary *views;
     
@@ -309,6 +355,10 @@ typedef struct {
         self.audioMessageInputView.translatesAutoresizingMaskIntoConstraints = NO;
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+    }
+    
+    if([self.channel.type isEqualToString:CHANNEL_TYPE_AGENT_ONLY]){
+        self.isOneWayChannel = YES;
     }
 }
 
@@ -424,11 +474,10 @@ typedef struct {
 
 -(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
     return ((message.messageId==nil)?[NSString stringWithFormat:@"%ul",message.createdMillis.intValue]:message.messageId);
-    //[FDUtilities getKeyForObject:message];
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender{
-    [self.view endEditing:YES];
+    [self dismissKeyboard];
     [self.imageInput showInputOptions:self];
 }
 
@@ -454,16 +503,6 @@ typedef struct {
     }];
 }
 
--(void)messageCell:(FDMessageCell *)cell playButtonIsPressed:(id)sender{
-    //if recording
-    
-    //show prompt to continue of not
-    
-    //if cancel - play audio stop recording
-    
-    //
-}
-
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
     UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
                                         cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -484,6 +523,12 @@ typedef struct {
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     }
     [self refreshView];
+}
+
+-(void) rebuildChannel {
+    self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    self.conversation = [self.channel primaryConversation];
+    self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
 }
 
 -(void)checkPushNotificationState{
@@ -532,6 +577,7 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
+
 }
 
 -(void)networkReachable{
@@ -545,6 +591,8 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -563,9 +611,10 @@ typedef struct {
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     CGFloat calculatedHeight = self.view.bounds.size.height - keyboardRect.origin.y;
-    FDLog(@"calculated height %f", calculatedHeight);
     CGFloat keyboardCoveredHeight = self.keyboardHeight < calculatedHeight ? calculatedHeight : self.keyboardHeight;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
+    self.CSATView.CSATPromptCenterYConstraint.constant = -calculatedHeight/2;
+    
     self.keyboardHeight = keyboardCoveredHeight;
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -579,6 +628,7 @@ typedef struct {
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.keyboardHeight = 0.0;
     self.bottomViewBottomConstraint.constant = 0.0;
+    self.CSATView.CSATPromptCenterYConstraint.constant = 0;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -666,11 +716,21 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
+        [self processPendingCSAT];
+    }
+}
+
+- (void) didNotifyServerError {
+    if(!_flags.isShowingAlert){
+        [self showAlertWithTitle:HLLocalizedString(LOC_MESSAGE_UNSENT_TITLE)
+                      andMessage:HLLocalizedString(LOC_SERVER_ERROR_INFO_TEXT)];
+        _flags.isShowingAlert = YES;
     }
 }
 
 - (void) didFinishUploading:(NSString *)messageID{
     [self refreshView];
+    [self processPendingCSAT];
 }
 
 - (void) didEncounterErrorWhileUploading:(NSString *)messageID{
@@ -775,7 +835,6 @@ typedef struct {
 
 #pragma mark - Message cell delegates
 
-
 -(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
     FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:image];
     [imageController presentOnController:self];
@@ -796,9 +855,6 @@ typedef struct {
     }
     else if(button.actionUrlString!=nil){
         @try{
-            if (cell.messageData.marketingId.integerValue != 0) {
-                [HLMessageServices markMarketingMessageAsClicked:cell.messageData.marketingId];
-            }
             NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
             if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -833,6 +889,7 @@ typedef struct {
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar sendButtonPressed:(id)sender{
     self.currentRecordingMessageId=[Konotor stopRecordingOnConversation:self.conversation];
+    
     if(self.currentRecordingMessageId!=nil){
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
@@ -857,9 +914,131 @@ typedef struct {
 }
 
 - (void) sendMessage{
-    
     [Konotor uploadVoiceRecordingWithMessageID:self.currentRecordingMessageId toConversationID:([self.conversation conversationAlias]) onChannel:self.channel];
     [Konotor cancelRecording];
+}
+
+-(HLCsat *)getCSATObject{
+    return self.conversation.hasCsat.allObjects.firstObject;
+}
+
+-(void)processPendingCSAT{
+    
+    if ([self.inputToolbar containsUserInputText] || [KonotorAudioRecorder isRecording]){
+        FDLog(@"Not showing CSAT prompt, User is currently engaging input toolbar");
+        return;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self hasPendingCSAT] && !self.CSATView.isShowing) {
+            [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
+            [self.view layoutIfNeeded];
+            [self scrollTableViewToLastCell];
+        }
+    });
+}
+
+-(BOOL)hasPendingCSAT{
+    return (self.conversation.hasPendingCsat.boolValue &&
+            [self getCSATObject] &&
+            [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
+}
+
+-(void)displayCSATPromptWithState:(BOOL)isResolved{
+    //Dispose old prompt
+    if (self.CSATView) {
+        [self.CSATView removeFromSuperview];
+        self.CSATView = nil;
+    }
+    
+    HLCsat *csat = self.conversation.hasCsat.allObjects.firstObject;
+    BOOL hideFeedBackView = !csat.mobileUserCommentsAllowed.boolValue;
+    
+    if (isResolved) {
+        self.CSATView = [[HLCSATView alloc]initWithController:self hideFeedbackView:hideFeedBackView isResolved:YES];
+        self.CSATView.surveyTitle.text = csat.question;
+    }else{
+        self.CSATView = [[HLCSATView alloc]initWithController:self hideFeedbackView:NO isResolved:NO];
+        self.CSATView.surveyTitle.text = HLLocalizedString(LOC_CUST_SAT_NOT_RESOLVED_PROMPT);
+    }
+    
+    self.CSATView.delegate = self;
+    [self.CSATView show];
+}
+
+-(void)yesButtonClicked:(id)sender{
+    [self displayCSATPromptWithState:YES];
+    [self updateBottomViewAfterCSATSubmisssion];
+}
+
+-(void)noButtonClicked:(id)sender{
+    [self displayCSATPromptWithState:NO];
+    [self updateBottomViewAfterCSATSubmisssion];
+}
+
+-(void)updateBottomViewAfterCSATSubmisssion{
+    if (!self.isOneWayChannel) {
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+    }else{
+        [self cleanupBottomView];
+    }
+}
+
+-(void)cleanupBottomView{
+    [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.bottomViewHeightConstraint.constant = 0;
+}
+
+-(void)handleUserEvadedCSAT{
+    HLCsatHolder *csatHolder = [[HLCsatHolder alloc]init];
+    csatHolder.isIssueResolved = self.CSATView.isResolved;
+    [self storeAndPostCSAT:csatHolder];
+}
+
+-(void)submittedCSAT:(HLCsatHolder *)csatHolder{
+    [self storeAndPostCSAT:csatHolder];
+}
+
+-(void)storeAndPostCSAT:(HLCsatHolder *)csatHolder{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
+
+        HLCsat *csat = [self getCSATObject];
+        
+        csat.isIssueResolved = csatHolder.isIssueResolved ? @"true" : @"false";
+        
+        if(csatHolder.userRatingCount > 0){
+            csat.userRatingCount = [NSNumber numberWithInt:csatHolder.userRatingCount];
+        }else{
+            csat.userRatingCount = nil;
+        }
+        
+        if (csatHolder.userComments && csatHolder.userComments.length > 0) {
+            csat.userComments = csatHolder.userComments;
+        }else{
+            csat.userComments = nil;
+        }
+        
+        csat.csatStatus = @(CSAT_RATED);
+        
+        [context save:nil];
+        
+        [HLMessageServices postCSATWithID:csat.objectID completion:^(NSError *error) {
+            [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+        }];
+    }];
+}
+- (void) dismissKeyboard {
+    [self.view endEditing:YES];
+}
+
+-(void)dealloc{
+    self.tableView.delegate = nil;
+    self.tableView.dataSource = nil;
+    self.inputToolbar.delegate = nil;
+    self.audioMessageInputView.delegate = nil;
+    [self localNotificationUnSubscription];
 }
 
 @end

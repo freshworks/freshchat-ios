@@ -61,6 +61,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSString *sharedLibraryPath = nil;
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
     sharedLibraryPath = [libraryPath stringByAppendingPathComponent:@"Database"];
+    FDLog(@"\n\n\n%@\n\n\n", sharedLibraryPath);
     NSFileManager *manager = [NSFileManager defaultManager];
     BOOL isDirectory;
     if (![manager fileExistsAtPath:sharedLibraryPath isDirectory:&isDirectory] || !isDirectory) {
@@ -84,7 +85,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     NSString *storePath = [[self sharedLibraryPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
-    FDLog(@"StoreURL %@",storePath);
     NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
     [self logModelVersionData:persistentStoreURL];
     
@@ -251,6 +251,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                 [context deleteObject:object];
             }
             [context save:nil];
+            FDLog(@"Deleting entries from table : %@ ", entity);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (handler) handler(nil);
             });
@@ -309,6 +310,10 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllProperties:(void (^)(NSError *))handler{
     [self deleteAllEntriesOfEntity:HOTLINE_CUSTOM_PROPERTY_ENTITY handler:handler inContext:self.mainObjectContext];
+}
+
+-(void)deleteAllCSATEntries:(void (^)(NSError *))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CSAT_ENTITY handler:handler inContext:self.mainObjectContext];
 }
 
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{

@@ -22,4 +22,6 @@
 
 -(NSDictionary *)responseAsDictionary;
 
+-(NSDictionary *)toString;
+
 @end
