@@ -329,7 +329,7 @@ enum TagFilterType {
 /**
  *  Filter with type either faq articles or categories 
  */
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (NSNumber *) type;
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (int) type;
  
 /**
  *  Preferred navigation bar title

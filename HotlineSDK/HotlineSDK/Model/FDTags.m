@@ -33,7 +33,7 @@
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if(matches.count){
         for (FDTags *object in matches) {
-        [context deleteObject:object];
+            [context deleteObject:object];
         }
     }
     NSError * error = nil;

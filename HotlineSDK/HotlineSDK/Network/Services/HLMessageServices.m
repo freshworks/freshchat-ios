@@ -249,7 +249,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
                 [FDTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: FDTagTypeChannel] inContext:context];
                 NSArray *tags = channelInfo[@"tags"];
-                if(tags.count){
+                if(tags.count >0){
                     if(!([channelInfo[@"hidden"] boolValue])){
                         for(NSString *tagName in tags){
                             [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];

@@ -36,11 +36,10 @@
     self.tagViewTitle = title;
 }
 
-
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (NSNumber *) type{
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (int) type{
     self.filterByTags = tags;
     self.tagViewTitle = title;
-    self.filterType = type;
+    self.filterType = [NSNumber numberWithInt:type];
 }
 
 -(NSString *) filteredViewTitle{

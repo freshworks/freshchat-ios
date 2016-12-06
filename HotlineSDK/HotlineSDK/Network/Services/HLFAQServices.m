@@ -76,7 +76,7 @@
             BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
             BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
             NSArray *tags = categoryInfo[@"tags"];
-            [FDTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
+            [FDTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: FDTagTypeCategory] inContext:context];
             if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
                     FDLog(@"Updating category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
@@ -86,7 +86,7 @@
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
                 
-                if(tags.count){
+                if(tags.count>0){
                     for(NSString *tagName in tags){
                         
                         [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeCategory] andIdvalue:categoryInfo[@"categoryId"]] inContext:context];

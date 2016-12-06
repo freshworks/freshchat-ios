@@ -83,7 +83,7 @@
                 article = [HLArticle createWithInfo:articleInfo inContext:context];
                 [category addArticlesObject:article];
             }
-            if(tags.count){
+            if(tags.count>0){
                 [tagManager removeTagsForArticleId:articleId];//have to remove
                 for(NSString *tagName in tags){
                     
