@@ -165,8 +165,9 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [self checkChannel];
     if(!self.channel.managedObjectContext) {
-        [self rebuildChannel];
+        [self rebuildMessages];
     }
     [self refreshView];
     [self registerAppAudioCategory];
@@ -515,7 +516,28 @@ typedef struct {
     [self refreshView];
 }
 
--(void) rebuildChannel {
+-(void) checkChannel
+{
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+        if (!error) {
+            Boolean isChannelValid = NO;
+            for(HLChannelInfo *channel in channelInfos) {
+                if([channel.channelID isEqual:self.channelID]) {
+                    isChannelValid = YES;
+                    break;
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                if(!isChannelValid){
+                    [self.parentViewController.navigationController popViewControllerAnimated:YES];
+                }
+            });
+          }
+    }];
+}
+
+-(void) rebuildMessages
+{
     self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     self.conversation = [self.channel primaryConversation];
     self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
@@ -567,6 +589,8 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkChannel)
+                                                name:HOTLINE_CHANNELS_UPDATED object:nil];
 
 }
 
@@ -583,6 +607,7 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
