@@ -58,10 +58,10 @@
 //   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:ARTICLE]];
 //    [[Hotline sharedInstance]showFAQs:self withOptions:options];
     
-    ConversationOptions *opt = [ConversationOptions new];
-    [opt filterByTags:@[@"testing"] withTitle:@"channelfilter"];
-    [[Hotline sharedInstance] showConversations:self withOptions:opt];
-
+//    ConversationOptions *opt = [ConversationOptions new];
+//    [opt filterByTags:@[@"testing"] withTitle:@"channelfilter"];
+//    [[Hotline sharedInstance] showConversations:self withOptions:opt];
+    [[Hotline sharedInstance] sendMessageToChannel:@"heyy" withTag:@"bond"];
 }
 
 @end

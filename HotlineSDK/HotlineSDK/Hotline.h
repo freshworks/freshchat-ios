@@ -263,6 +263,8 @@ enum TagFilterType {
 
 -(void)sendMessage:(NSString *)message onChannel:(NSString *)channelName;
 
+-(void) sendMessageToChannel:(NSString *)message withTag:(NSString *)tag;
+
 @end
 
 @interface HotlineUser : NSObject

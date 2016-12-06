@@ -688,6 +688,33 @@
     }];
 }
 
+-(void) sendMessageToChannel:(NSString *)message withTag:(NSString *)tag{
+    if(!message){
+        return;
+    }
+    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
+    [mainContext performBlock:^{
+        //get channel for tag
+        [[HLTagManager sharedInstance] getChannelsForTags:@[tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
+            HLChannel *channel;
+            if(channelIds.count){
+                channel = [HLChannel getWithID:[channelIds firstObject] inContext:mainContext];
+            }
+            if(!channel){
+                channel = [HLChannel getDefaultChannelInContext:mainContext];
+            }
+            if(channel){
+                KonotorConversation *conversation;
+                NSSet *conversations = channel.conversations;
+                if(conversations && [conversations count] > 0 ){
+                    conversation = [conversations anyObject];
+                }
+                [Konotor uploadTextFeedback:message onConversation:conversation onChannel:channel];
+            }
+        }];
+    }];
+}
+
 - (NSString *)validateDomain:(NSString*)domain
 {
     return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
