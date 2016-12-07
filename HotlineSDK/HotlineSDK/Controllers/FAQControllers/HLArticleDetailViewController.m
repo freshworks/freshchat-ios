@@ -146,7 +146,6 @@
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     
     if(self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        //[[HLTagManager sharedInstance] articlesForTags:self.faqOptions.tags withCompletion:^(NSSet *matches) {
         [[HLTagManager sharedInstance] getArticleForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             if([articleIds count] == 1){
                 UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
@@ -349,7 +348,14 @@
 
 -(void)buttonClickedEvent:(id)sender{
     [self hideBottomView];
-    [[Hotline sharedInstance] showConversations:self];
+    if(self.faqOptions.contactUsTags.count){
+        ConversationOptions *options = [ConversationOptions new];
+        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+        [[Hotline sharedInstance] showConversations:self withOptions:options];
+    }
+    else{
+        [[Hotline sharedInstance] showConversations:self];
+    }
 }
 
 @end

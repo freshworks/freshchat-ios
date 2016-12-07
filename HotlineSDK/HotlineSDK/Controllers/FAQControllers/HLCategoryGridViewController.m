@@ -288,7 +288,14 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]showConversations:self];
+    if(self.faqOptions.contactUsTags.count){
+        ConversationOptions *options = [ConversationOptions new];
+        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+        [[Hotline sharedInstance] showConversations:self withOptions:options];
+    }
+    else{
+        [[Hotline sharedInstance] showConversations:self];
+    }
 }
 
 #pragma mark - Collection view delegate

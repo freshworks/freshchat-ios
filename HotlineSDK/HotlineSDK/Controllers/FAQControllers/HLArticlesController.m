@@ -93,8 +93,6 @@
         }];
     }
     else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-//        [[HLTagManager sharedInstance] articlesForTags:[self.faqOptions tags] withCompletion:
-//         ^(NSSet *articleIds) {
         [[HLTagManager sharedInstance] getArticleForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
              

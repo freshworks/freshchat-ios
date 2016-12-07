@@ -354,11 +354,11 @@
             };
             HLViewController *preferedController = [self preferredCategoryController:options];
             if(categoryIds.count < 1){
-                [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
+                [options filterByTags:@[] withTitle:@"" andType:0];// No Matching tags so no need to pass it around
                 faqOptionsCompletion(preferedController);
             }
             else{
-                [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];// No Matching tags so no need to pass it around
+                [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];// No Matching tags so no need to pass it around
                 if (options.showFaqCategoriesAsGrid) {
                     ((HLCategoryGridViewController *)preferedController).tagsArray = categoryIds;
                     faqOptionsCompletion(preferedController);
@@ -371,8 +371,7 @@
             }
         }];
     }
-    else{
-        //[[HLTagManager sharedInstance] articlesForTags:[options tags] withCompletion:^(NSSet *articleIds)  {
+    else if([options.filteredType intValue] == ARTICLE){
         [[HLTagManager sharedInstance] getArticleForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
@@ -402,7 +401,7 @@
             } else {
                 HLViewController *preferedController = nil;
                 //[options filterByTags:@[] withTitle:@""];
-                [options filterByTags:@[] withTitle:@"" andType:nil];// No Matching tags so no need to pass it around
+                [options filterByTags:@[] withTitle:@"" andType:0];// No Matching tags so no need to pass it around
                 preferedController = [self preferredCategoryController:options];
                 faqOptionsCompletion(preferedController);
             }
@@ -453,7 +452,6 @@
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    //[[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
     [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:nil completion:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;

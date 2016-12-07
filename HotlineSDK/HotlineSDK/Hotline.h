@@ -263,6 +263,9 @@ enum TagFilterType {
 
 -(void)sendMessage:(NSString *)message onChannel:(NSString *)channelName;
 
+/**
+ *  Send message to particular channel with specified tag value
+ */
 -(void) sendMessageToChannel:(NSString *)message withTag:(NSString *)tag;
 
 @end
@@ -332,6 +335,11 @@ enum TagFilterType {
  *  Filter with type either faq articles or categories 
  */
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (int) type;
+
+/**
+ *  Filter contactus with tags and title
+ */
+-(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title;
  
 /**
  *  Preferred navigation bar title
@@ -351,6 +359,13 @@ enum TagFilterType {
  *  Tags Filter type - FAQ's or Articles tags
  */
 -(NSNumber *) filteredType;
+
+/**
+ *  List of tags you have supplied for
+ */
+-(NSArray *) contactUsTags;
+
+- (NSString *) contactUsTitle;
 
 @end
 
