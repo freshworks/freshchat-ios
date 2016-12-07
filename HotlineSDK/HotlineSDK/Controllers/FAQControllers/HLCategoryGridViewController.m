@@ -54,13 +54,13 @@
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    if (self.faqOptions && self.tagsArray.count >0 ){
+    if (self.faqOptions.tags && self.tagsArray.count >0 ){
         parent.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     else{
         parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-        [self setNavigationItem];
     }
+    [self setNavigationItem];
     self.theme = [HLTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
     [self updateCategories];
@@ -145,9 +145,9 @@
     else {
         [self configureBackButtonWithGestureDelegate:nil];
     }
-    
+  //  if (self.faqOptions.tags && self.tagsArray.count >0 )
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(self.categories.count){
+    if(self.categories.count && !(self.faqOptions.tags && self.tagsArray.count >0 )){
         [rightBarItems addObject:searchBarButton];
     }
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
