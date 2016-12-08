@@ -39,6 +39,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property (nonatomic) BOOL isLoading;
 
 @end
 
@@ -60,7 +61,9 @@
     [self adjustUIBounds];
     [self setNavigationItem];
     [self theming];
+    [self toggleLoadingView:YES];
     [self addLoadingIndicator];
+    
 }
 
 -(void)addLoadingIndicator{
@@ -170,33 +173,44 @@
     [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
         if (!error) {
             self.categories = solutions;
-
-            if(!self.categories.count){
-                if(!self.emptyResultView){
-                    
-                    NSString *message;
-                    if([[FDReachabilityManager sharedInstance] isReachable]){
-                        message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
-                    }
-                    else{
-                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self removeLoadingIndicator];
-                    }
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
-                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                    [self.view addSubview:self.emptyResultView];
-                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-                }
-            }
-            else{
-                self.emptyResultView.frame = CGRectZero;
-                [self.emptyResultView removeFromSuperview];
-                [self removeLoadingIndicator];
-            }
             [self setNavigationItem];
+            [self toggleLoadingView:NO];
             [self.collectionView reloadData];
         }
     }];
+}
+
+-(void)showEmptyResultsView
+{
+    if(!self.categories.count) {
+        NSString *message;
+        if(self.isLoading){
+            message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
+        }
+        else if(self.categories.count == 0) {
+            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+            [self removeLoadingIndicator];
+        }
+        else {
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+            [self removeLoadingIndicator];
+        }\
+        if(!self.emptyResultView) {
+            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
+            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+            [self.view addSubview:self.emptyResultView];
+            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+        }
+        else {
+            self.emptyResultView.emptyResultLabel.text = message;
+        }
+    }
+    else{
+        self.emptyResultView.frame = CGRectZero;
+        [self.emptyResultView removeFromSuperview];
+        self.emptyResultView = nil;
+        [self removeLoadingIndicator];
+    }
 }
 
 -(void)removeLoadingIndicator{
@@ -205,21 +219,25 @@
     });
 }
 
+-(void) toggleLoadingView : (BOOL) load
+{
+    self.isLoading = load;
+    [self showEmptyResultsView];
+}
+
 -(void)fetchUpdates{
     FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
         if(isEmpty){
             [updater resetTime];
         }
-        else {
-            [self removeLoadingIndicator];
-        }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            HideNetworkActivityIndicator();
             if(isEmpty){
+                [self toggleLoadingView:NO];
                 [self removeLoadingIndicator];
             }
+            HideNetworkActivityIndicator();
         }];
     }];
 }
@@ -246,7 +264,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.categories = @[];
         [self updateCategories];
-        HideNetworkActivityIndicator();
     });
 }
 

@@ -34,7 +34,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
-
+@property (nonatomic) BOOL isLoading;
 @end
 
 @implementation HLChannelViewController
@@ -56,6 +56,7 @@
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
+    [self toggleLoadingView:YES];
 }
 
 -(void)addLoadingIndicator{
@@ -72,6 +73,13 @@
         [self.activityIndicator removeFromSuperview];
     });
 }
+
+-(void) toggleLoadingView : (BOOL) load
+{
+    self.isLoading = load;
+    [self showEmptyResultsView];
+}
+
 
 -(BOOL)canDisplayFooterView{
     return NO;
@@ -95,15 +103,13 @@
         if(isEmpty){
            [[[FDChannelUpdater alloc]init] resetTime];
         }
-        else {
-            [self removeLoadingIndicator];
-        }
         ShowNetworkActivityIndicator();
         [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-            HideNetworkActivityIndicator();
             if(isEmpty){
+                [self toggleLoadingView:NO];
                 [self removeLoadingIndicator];
             }
+            HideNetworkActivityIndicator();
         }];
     }];
 }
@@ -118,8 +124,8 @@
                     self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
                 }else{
                     NSArray *sortedChannel = [self sortChannelList:channelInfos];
-                    [self showEmptyResultsView:(sortedChannel.count == 0)];
                     self.channels = sortedChannel;
+                    [self toggleLoadingView:NO];
                     [self.tableView reloadData];
                 }
             }
@@ -153,27 +159,37 @@
     return results;
 }
 
--(void)showEmptyResultsView:(BOOL)canShow{
-    if(canShow){
+-(void)showEmptyResultsView{
+    if(!self.channels.count){
         HLTheme *theme = [HLTheme sharedInstance];
+        NSString *message;
+        if(self.isLoading) {
+            message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+        }
+        else if(self.channels.count == 0) {
+            message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+            [self removeLoadingIndicator];
+        }
+        else {
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+            [self removeLoadingIndicator];
+        }
+        
         if (!self.emptyResultView) {
-            NSString *message;
-            if([[FDReachabilityManager sharedInstance] isReachable]){
-                message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-            }
-            else{
-                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                [self removeLoadingIndicator];
-            }
             self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
             self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
             [self.view addSubview:self.emptyResultView];
             [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
         }
+        else {
+            self.emptyResultView.emptyResultLabel.text = message;
+        }
     }
     else{
         self.emptyResultView.frame = CGRectZero;
         [self.emptyResultView removeFromSuperview];
+        self.emptyResultView = nil;
+        [self removeLoadingIndicator];
     }
 }
 
