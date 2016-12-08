@@ -692,11 +692,13 @@
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        //get channel for tag
         [[HLTagManager sharedInstance] getChannelsForTags:@[tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
             HLChannel *channel;
-            if(channelIds.count){
+            if(channelIds.count ==1){
                 channel = [HLChannel getWithID:[channelIds firstObject] inContext:mainContext];
+            }
+            else if(channelIds.count >1){
+                channel = [HLChannel getWithID:[channelIds valueForKeyPath:@"@min.intValue"] inContext:mainContext];
             }
             if(!channel){
                 channel = [HLChannel getDefaultChannelInContext:mainContext];
