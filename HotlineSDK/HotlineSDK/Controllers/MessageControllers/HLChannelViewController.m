@@ -166,15 +166,14 @@
         if(self.isLoading) {
             message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
         }
+        else if(![[FDReachabilityManager sharedInstance] isReachable]){
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+            [self removeLoadingIndicator];
+        }
         else if(self.channels.count == 0) {
             message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
             [self removeLoadingIndicator];
         }
-        else {
-            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-            [self removeLoadingIndicator];
-        }
-        
         if (!self.emptyResultView) {
             self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
             self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;

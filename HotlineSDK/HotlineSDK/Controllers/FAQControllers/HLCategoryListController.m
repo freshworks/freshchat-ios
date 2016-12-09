@@ -88,12 +88,12 @@
         if(self.isLoading){
             message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
         }
-        else if(self.categories.count == 0) {
-            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+        else if(![[FDReachabilityManager sharedInstance] isReachable]){
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
             [self removeLoadingIndicator];
         }
-        else {
-            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+        else if(self.categories.count == 0) {
+            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
             [self removeLoadingIndicator];
         }
         if(!self.emptyResultView) {

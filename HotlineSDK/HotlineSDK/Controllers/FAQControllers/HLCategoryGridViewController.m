@@ -187,14 +187,14 @@
         if(self.isLoading){
             message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
         }
+        else if(![[FDReachabilityManager sharedInstance] isReachable]){
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+            [self removeLoadingIndicator];
+        }
         else if(self.categories.count == 0) {
             message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
             [self removeLoadingIndicator];
         }
-        else {
-            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-            [self removeLoadingIndicator];
-        }\
         if(!self.emptyResultView) {
             self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
             self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
