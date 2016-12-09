@@ -19,7 +19,7 @@
 #import "FDPlistManager.h"
 #import "HLCoreServices.h"
 #import "FDLocalNotification.h"
-
+    
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
 @implementation FDUtilities
@@ -381,6 +381,14 @@ static NSInteger networkIndicator = 0;
 
 +(void)initiatePendingTasks{
     [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
+}
+
++ (void) showRemoteNotificationBanner : (NSString *)channelId alertMsg :(NSString *)alertMsg
+{
+    [[Hotline sharedInstance] handleRemoteNotification:@{ @"kon_c_ch_id" : channelId,
+                                                          @"aps"         : @{ @"alert" : alertMsg },
+                                                          @"source"      : @"konotor"
+                                                          } andAppstate:UIApplicationStateActive];
 }
 
 @end

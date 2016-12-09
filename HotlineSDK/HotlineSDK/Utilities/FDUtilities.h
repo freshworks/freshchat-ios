@@ -40,6 +40,8 @@
 
 +(void)initiatePendingTasks;
 
++ (void) showRemoteNotificationBanner : (NSString *)channelId alertMsg :(NSString *)alertMsg;
+
 @end
 
 #endif

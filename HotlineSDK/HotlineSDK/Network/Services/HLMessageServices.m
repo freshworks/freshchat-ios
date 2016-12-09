@@ -223,6 +223,10 @@ static HLNotificationHandler *handleUpdateNotification;
             if (!csat) {
                 csat = [HLCsat createWithInfo:conversationInfo inContext:context];
                 FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
+                BOOL pushEnabled = [HLNotificationHandler areNotificationsEnabled];
+                if(!pushEnabled) {
+                    [FDUtilities showRemoteNotificationBanner:conversationInfo[@"channelId"] alertMsg:[conversationInfo valueForKeyPath:@"csat.question"]];
+                }
             }else{
                 csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
             }
