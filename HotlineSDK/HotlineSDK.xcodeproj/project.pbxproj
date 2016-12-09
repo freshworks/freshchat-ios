@@ -107,6 +107,7 @@
 		3C160B061D05A59C000440D4 /* HLArticleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLArticleUtil.m */; };
 		3C4CEDBA1D1C2FDD000EE1AE /* HLTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C4CEDB91D1C2FDD000EE1AE /* HLTagManager.m */; };
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
+		CE4B29E71DF9A78F00EC6978 /* HLMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4B29E61DF9A78F00EC6978 /* HLMessage.m */; };
 		CE8BF9091DD5FFB700814009 /* FDTags.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8BF9081DD5FFB700814009 /* FDTags.m */; };
 		CE9053521DD47C4E00F52B5F /* FDCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* FDCsat.m */; };
 		CED1384B1DB6401D00404686 /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEF51D000E620014867F /* KonotorModel.xcdatamodeld */; };
@@ -329,6 +330,7 @@
 		CE0C7C6C1D9539A100F545AE /* FDPlistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPlistManager.h; sourceTree = "<group>"; };
 		CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPlistManager.m; sourceTree = "<group>"; };
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE4B29E61DF9A78F00EC6978 /* HLMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLMessage.m; sourceTree = "<group>"; };
 		CE8BF9071DD5FFB700814009 /* FDTags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDTags.h; sourceTree = "<group>"; };
 		CE8BF9081DD5FFB700814009 /* FDTags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDTags.m; sourceTree = "<group>"; };
 		CE9053501DD47C4E00F52B5F /* FDCsat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDCsat.h; sourceTree = "<group>"; };
@@ -423,6 +425,7 @@
 				35B2EEDF1D000E620014867F /* Konotor.m */,
 				35B2EEDD1D000E620014867F /* HotlineUser.m */,
 				35D4E7FB1D10300300EFFE07 /* FAQOptions.m */,
+				CE4B29E61DF9A78F00EC6978 /* HLMessage.m */,
 				35B2EEDB1D000E620014867F /* HotlineConfig.m */,
 				35B2EEDC1D000E620014867F /* HotlineSDK-Prefix.pch */,
 				35B2EEBC1D000E620014867F /* Controllers */,
@@ -902,6 +905,7 @@
 				35B2EFAF1D000E620014867F /* FDReachabilityManager.m in Sources */,
 				35B2EF911D000E620014867F /* FDArticleContent.m in Sources */,
 				35B2EFC31D000E620014867F /* HLEmptyResultView.m in Sources */,
+				CE4B29E71DF9A78F00EC6978 /* HLMessage.m in Sources */,
 				35B2EFBF1D000E620014867F /* FDTableViewCell.m in Sources */,
 				35B2EFA31D000E620014867F /* FDResponseInfo.m in Sources */,
 				35B2EFB71D000E620014867F /* KonotorAudioPlayer.m in Sources */,

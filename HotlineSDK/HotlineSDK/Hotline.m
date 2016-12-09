@@ -686,13 +686,13 @@
     }];
 }
 
--(void) sendMessageToChannel:(NSString *)message withTag:(NSString *)tag{
-    if(!message){
+-(void) sendMessageToChannel:(HLMessage *)messageObject{
+    if(!messageObject.message){
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsForTags:@[tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
+        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
             HLChannel *channel;
             if(channelIds.count ==1){
                 channel = [HLChannel getWithID:[channelIds firstObject] inContext:mainContext];
@@ -709,7 +709,7 @@
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                [Konotor uploadTextFeedback:message onConversation:conversation onChannel:channel];
+                [Konotor uploadTextFeedback:messageObject.message onConversation:conversation onChannel:channel];
             }
         }];
     }];
