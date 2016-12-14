@@ -49,7 +49,7 @@
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
-    [self toggleLoadingView:YES];
+    [self toggleLoading:YES];
     [self addLoadingIndicator];
 }
 
@@ -75,13 +75,13 @@
         if (!error) {
             self.categories = solutions;
             [self setNavigationItem];
-            [self toggleLoadingView:NO];
+            [self toggleLoading:NO];
             [self.tableView reloadData];
         }
     }];
 }
 
--(void)showEmptyResultsView
+-(void)updateResultsView
 {
     if(!self.categories.count) {
         NSString *message;
@@ -92,7 +92,7 @@
             message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
             [self removeLoadingIndicator];
         }
-        else if(self.categories.count == 0) {
+        else {
             message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
             [self removeLoadingIndicator];
         }
@@ -120,10 +120,10 @@
     });
 }
 
--(void) toggleLoadingView : (BOOL) load
+-(void) toggleLoading : (BOOL) load
 {
     self.isLoading = load;
-    [self showEmptyResultsView];
+    [self updateResultsView];
 }
 
 
@@ -198,8 +198,7 @@
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
             if(isEmpty){
-                [self toggleLoadingView:NO];
-                [self removeLoadingIndicator];
+                [self toggleLoading:NO];
                 [self updateSolutions];
             }
             HideNetworkActivityIndicator();

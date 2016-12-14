@@ -52,11 +52,10 @@
                                                                     NSForegroundColorAttributeName: [theme navigationBarTitleColor],
                                                                     NSFontAttributeName: [theme navigationBarTitleFont]
                                                                     };
-    self.channels = [[NSArray alloc] init];
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
-    [self toggleLoadingView:YES];
+    [self toggleLoading:YES];
 }
 
 -(void)addLoadingIndicator{
@@ -74,10 +73,10 @@
     });
 }
 
--(void) toggleLoadingView : (BOOL) load
+-(void) toggleLoading : (BOOL) load
 {
     self.isLoading = load;
-    [self showEmptyResultsView];
+    [self updateResultsView];
 }
 
 
@@ -94,11 +93,12 @@
     [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
+    [self updateChannels];
     self.footerView.hidden = YES;
 }
 
 -(void)fetchUpdates{
-    [self updateChannels];
+    
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
         if(isEmpty){
            [[[FDChannelUpdater alloc]init] resetTime];
@@ -106,8 +106,7 @@
         ShowNetworkActivityIndicator();
         [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
             if(isEmpty){
-                [self toggleLoadingView:NO];
-                [self removeLoadingIndicator];
+                [self toggleLoading:NO];
             }
             HideNetworkActivityIndicator();
         }];
@@ -125,7 +124,7 @@
                 }else{
                     NSArray *sortedChannel = [self sortChannelList:channelInfos];
                     self.channels = sortedChannel;
-                    [self toggleLoadingView:NO];
+                    [self toggleLoading:NO];
                     [self.tableView reloadData];
                 }
             }
@@ -159,7 +158,8 @@
     return results;
 }
 
--(void)showEmptyResultsView{
+-(void) updateResultsView
+{
     if(!self.channels.count){
         HLTheme *theme = [HLTheme sharedInstance];
         NSString *message;
@@ -170,7 +170,7 @@
             message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
             [self removeLoadingIndicator];
         }
-        else if(self.channels.count == 0) {
+        else {
             message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
             [self removeLoadingIndicator];
         }
