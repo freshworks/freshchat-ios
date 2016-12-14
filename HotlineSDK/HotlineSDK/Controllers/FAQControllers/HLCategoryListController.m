@@ -73,9 +73,15 @@
 -(void)updateCategories{
     [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
         if (!error) {
+            BOOL refreshData = NO;
+            if ( self.categories ) {
+                refreshData = YES;
+            }
             self.categories = solutions;
             [self setNavigationItem];
-            [self toggleLoading:NO];
+            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData || self.categories > 0 ) {
+                [self toggleLoading:NO];
+            }
             [self.tableView reloadData];
         }
     }];
@@ -83,7 +89,7 @@
 
 -(void)updateResultsView
 {
-    if(!self.categories.count) {
+    if(self.categories.count == 0) {
         NSString *message;
         if(self.isLoading){
             message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
@@ -197,10 +203,6 @@
         }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            if(isEmpty){
-                [self toggleLoading:NO];
-                [self updateSolutions];
-            }
             HideNetworkActivityIndicator();
         }];
     }];

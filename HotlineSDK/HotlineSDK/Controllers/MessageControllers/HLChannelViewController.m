@@ -98,17 +98,13 @@
 }
 
 -(void)fetchUpdates{
-    
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
         if(isEmpty){
            [[[FDChannelUpdater alloc]init] resetTime];
         }
         ShowNetworkActivityIndicator();
         [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-            if(isEmpty){
-                [self toggleLoading:NO];
-            }
-            HideNetworkActivityIndicator();
+           HideNetworkActivityIndicator();
         }];
     }];
 }
@@ -122,9 +118,15 @@
                     BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
                     self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
                 }else{
+                    BOOL refreshData = NO;
                     NSArray *sortedChannel = [self sortChannelList:channelInfos];
+                    if ( self.channels ) {
+                        refreshData = YES;
+                    }
                     self.channels = sortedChannel;
-                    [self toggleLoading:NO];
+                    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData || self.channels.count > 0 ) {
+                        [self toggleLoading:NO];
+                    }
                     [self.tableView reloadData];
                 }
             }
@@ -160,7 +162,7 @@
 
 -(void) updateResultsView
 {
-    if(!self.channels.count){
+    if(self.channels.count == 0) {
         HLTheme *theme = [HLTheme sharedInstance];
         NSString *message;
         if(self.isLoading) {
