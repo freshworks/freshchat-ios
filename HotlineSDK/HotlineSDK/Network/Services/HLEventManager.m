@@ -98,7 +98,7 @@
                    ofType:(NSString *)eventType
                 withBlock:(void(^)(HLEvent *event))builderBlock{
     HLEvent *event = [[HLEvent alloc] initWithEventName:eventName];
-    [event setValue:HLEVENT_PARAM_TYPE forKey:eventType];
+    [event propKey:HLEVENT_PARAM_TYPE andVal:HLEVENT_PARAM_TYPE];
     builderBlock(event);
     NSDictionary *eventDictionary = [event toEventDictionary:[HLEventManager getUserSessionId]];
     if(eventDictionary){
@@ -193,7 +193,7 @@
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];
 
-    NSString *eventURL = [NSString stringWithFormat:@"%@/%@/",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+    NSString *eventURL = [NSString stringWithFormat:@"%@/%@",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
 
     NSMutableArray *tempEventsArray = [[NSMutableArray alloc] initWithArray:self.eventsArray];
     
