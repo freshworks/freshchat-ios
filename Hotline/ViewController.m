@@ -77,7 +77,7 @@
     }
     [super viewWillAppear:animated];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (appDelegate.pickedImage) {  
+    if (appDelegate.pickedImage) {
         self.imageView.image = appDelegate.pickedImage;
     }else{
         self.imageView.image = [UIImage imageNamed:@"background"];
