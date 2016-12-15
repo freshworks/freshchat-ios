@@ -34,7 +34,6 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property (nonatomic) BOOL isLoading;
 
 @end
 
@@ -49,7 +48,7 @@
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
-    [self toggleLoading:YES];
+    [self updateResultsView:YES];
     [self addLoadingIndicator];
 }
 
@@ -69,6 +68,15 @@
     [self updateCategories];
 }
 
+-(HLEmptyResultView *)emptyResultView
+{
+    if (!_emptyResultView) {
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:@""];
+        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _emptyResultView;
+}
+
 //TODO: Remove duplicate code
 -(void)updateCategories{
     [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
@@ -79,19 +87,20 @@
             }
             self.categories = solutions;
             [self setNavigationItem];
-            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData || self.categories > 0 ) {
-                [self toggleLoading:NO];
+            refreshData = refreshData || (self.categories.count > 0);
+            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+                [self updateResultsView:NO];
             }
             [self.tableView reloadData];
         }
     }];
 }
 
--(void)updateResultsView
+-(void)updateResultsView:(BOOL)isLoading
 {
     if(self.categories.count == 0) {
         NSString *message;
-        if(self.isLoading){
+        if(isLoading){
             message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
         }
         else if(![[FDReachabilityManager sharedInstance] isReachable]){
@@ -102,20 +111,13 @@
             message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
             [self removeLoadingIndicator];
         }
-        if(!self.emptyResultView) {
-            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
-            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.view addSubview:self.emptyResultView];
-            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-        }
-        else {
-            self.emptyResultView.emptyResultLabel.text = message;
-        }
+        self.emptyResultView.emptyResultLabel.text = message;
+        [self.view addSubview:self.emptyResultView];
+        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
     }
     else{
         self.emptyResultView.frame = CGRectZero;
         [self.emptyResultView removeFromSuperview];
-        self.emptyResultView = nil;
         [self removeLoadingIndicator];
     }
 }
@@ -125,13 +127,6 @@
         [self.activityIndicator removeFromSuperview];
     });
 }
-
--(void) toggleLoading : (BOOL) load
-{
-    self.isLoading = load;
-    [self updateResultsView];
-}
-
 
 -(void)setNavigationItem{
     

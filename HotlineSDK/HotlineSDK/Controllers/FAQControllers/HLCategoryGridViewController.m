@@ -39,7 +39,6 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property (nonatomic) BOOL isLoading;
 
 @end
 
@@ -61,7 +60,7 @@
     [self adjustUIBounds];
     [self setNavigationItem];
     [self theming];
-    [self toggleLoading:YES];
+    [self updateResultsView:YES];
     [self addLoadingIndicator];
     
 }
@@ -93,6 +92,15 @@
 
 -(void)theming{
     [self.searchDisplayController.searchResultsTableView setBackgroundColor:[self.theme backgroundColorSDK]];
+}
+
+-(HLEmptyResultView *)emptyResultView
+{
+    if (!_emptyResultView) {
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:@""];
+        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _emptyResultView;
 }
 
 -(void)setupSearchBar{
@@ -178,19 +186,20 @@
             }
             self.categories = solutions;
             [self setNavigationItem];
-            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData || self.categories.count > 0 ) {
-                [self toggleLoading:NO];
+            refreshData = refreshData || (self.categories.count > 0);
+            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+                [self updateResultsView:NO];
             }
             [self.collectionView reloadData];
         }
     }];
 }
 
--(void)updateResultsView
+-(void)updateResultsView:(BOOL)isLoading
 {
     if(self.categories.count == 0) {
         NSString *message;
-        if(self.isLoading){
+        if(isLoading){
             message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
         }
         else if(![[FDReachabilityManager sharedInstance] isReachable]){
@@ -201,20 +210,13 @@
             message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
             [self removeLoadingIndicator];
         }
-        if(!self.emptyResultView) {
-            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
-            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.view addSubview:self.emptyResultView];
-            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-        }
-        else {
-            self.emptyResultView.emptyResultLabel.text = message;
-        }
+        self.emptyResultView.emptyResultLabel.text = message;
+        [self.view addSubview:self.emptyResultView];
+        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
     }
     else{
         self.emptyResultView.frame = CGRectZero;
         [self.emptyResultView removeFromSuperview];
-        self.emptyResultView = nil;
         [self removeLoadingIndicator];
     }
 }
@@ -223,12 +225,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.activityIndicator removeFromSuperview];
     });
-}
-
--(void) toggleLoading : (BOOL) load
-{
-    self.isLoading = load;
-    [self updateResultsView];
 }
 
 -(void)fetchUpdates{

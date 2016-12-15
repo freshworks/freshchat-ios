@@ -34,7 +34,8 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
-@property (nonatomic) BOOL isLoading;
+@property (nonatomic, strong) HLTheme *theme;
+
 @end
 
 @implementation HLChannelViewController
@@ -42,20 +43,20 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
-    HLTheme *theme = [HLTheme sharedInstance];
+    self.theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [theme channelTitleFontColor],
-                                                           NSFontAttributeName: [theme channelTitleFont]
+                                                           NSForegroundColorAttributeName: [self.theme channelTitleFontColor],
+                                                           NSFontAttributeName: [self.theme channelTitleFont]
                                                            }];
-    self.navigationController.navigationBar.barTintColor = [theme navigationBarBackgroundColor];
+    self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     self.navigationController.navigationBar.titleTextAttributes = @{
-                                                                    NSForegroundColorAttributeName: [theme navigationBarTitleColor],
-                                                                    NSFontAttributeName: [theme navigationBarTitleFont]
+                                                                    NSForegroundColorAttributeName: [self.theme navigationBarTitleColor],
+                                                                    NSFontAttributeName: [self.theme navigationBarTitleFont]
                                                                     };
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
-    [self toggleLoading:YES];
+    [self updateResultsView:YES];
 }
 
 -(void)addLoadingIndicator{
@@ -73,13 +74,6 @@
     });
 }
 
--(void) toggleLoading : (BOOL) load
-{
-    self.isLoading = load;
-    [self updateResultsView];
-}
-
-
 -(BOOL)canDisplayFooterView{
     return NO;
 }
@@ -95,6 +89,15 @@
     [self fetchUpdates];
     [self updateChannels];
     self.footerView.hidden = YES;
+}
+
+-(HLEmptyResultView *)emptyResultView
+{
+    if (!_emptyResultView) {
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:@""];
+        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _emptyResultView;
 }
 
 -(void)fetchUpdates{
@@ -124,8 +127,9 @@
                         refreshData = YES;
                     }
                     self.channels = sortedChannel;
-                    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData || self.channels.count > 0 ) {
-                        [self toggleLoading:NO];
+                    refreshData = refreshData || (self.channels.count > 0);
+                    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+                        [self updateResultsView:NO];
                     }
                     [self.tableView reloadData];
                 }
@@ -160,12 +164,11 @@
     return results;
 }
 
--(void) updateResultsView
+-(void)updateResultsView:(BOOL)isLoading
 {
     if(self.channels.count == 0) {
-        HLTheme *theme = [HLTheme sharedInstance];
         NSString *message;
-        if(self.isLoading) {
+        if(isLoading) {
             message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
         }
         else if(![[FDReachabilityManager sharedInstance] isReachable]){
@@ -176,20 +179,13 @@
             message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
             [self removeLoadingIndicator];
         }
-        if (!self.emptyResultView) {
-            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
-            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.view addSubview:self.emptyResultView];
-            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-        }
-        else {
-            self.emptyResultView.emptyResultLabel.text = message;
-        }
+        self.emptyResultView.emptyResultLabel.text = message;
+        [self.view addSubview:self.emptyResultView];
+        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
     }
     else{
         self.emptyResultView.frame = CGRectZero;
         [self.emptyResultView removeFromSuperview];
-        self.emptyResultView = nil;
         [self removeLoadingIndicator];
     }
 }
