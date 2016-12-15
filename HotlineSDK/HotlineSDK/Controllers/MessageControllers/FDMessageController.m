@@ -529,6 +529,7 @@ typedef struct {
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
+                
                 if(!isChannelValid){
                     [self.parentViewController.navigationController popViewControllerAnimated:YES];
                 }
@@ -542,15 +543,16 @@ typedef struct {
                             }
                         }
                     }
+                    
                     if(!containsChannelController && channelInfos.count > 1) {
-                        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:self.channelID andPresentModally:self.embedded?_flags.isModalPresentationPreferred:self.embedded];
-                        UIViewController *msgContainer = [[HLContainerController alloc]initWithController:msgController andEmbed:self.embedded];
-                        
+                        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:self.channelID andPresentModally:NO];
+                        UIViewController *msgContainer = [[HLContainerController alloc]initWithController:msgController andEmbed:NO];
                         HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
                         UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
                         self.navigationController.viewControllers = @[channelContainer,msgContainer];
                     }
                 }
+                
             });
           }
     }];
