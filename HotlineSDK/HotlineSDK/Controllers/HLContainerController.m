@@ -12,8 +12,10 @@
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
 
-@interface HLContainerController ()    
-    @property (strong, nonatomic) HLTheme *theme;
+@interface HLContainerController ()
+
+@property (strong, nonatomic) HLTheme *theme;
+
 @end
 
 @implementation HLContainerController
@@ -108,6 +110,5 @@
     [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
 }
-
 
 @end

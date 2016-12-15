@@ -525,25 +525,22 @@ typedef struct {
             for(HLChannelInfo *channel in channelInfos) {
                 if([channel.channelID isEqual:self.channelID]) {
                     isChannelValid = YES;
-                    break;
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
-                
-                if(!isChannelValid){
+                if(!isChannelValid) {
                     [self.parentViewController.navigationController popViewControllerAnimated:YES];
                 }
                 else {
                     BOOL containsChannelController = NO;
-                    for(UIViewController *controller in self.navigationController.viewControllers){
+                    for(UIViewController *controller in self.navigationController.viewControllers) {
                         if([controller isMemberOfClass:[HLContainerController class]]) {
                             HLContainerController *containerContr = (HLContainerController *)controller;
                             if(containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
                                 containsChannelController = YES;
                             }
                         }
-                    }
-                    
+                    }                    
                     if(!containsChannelController && channelInfos.count > 1) {
                         FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:self.channelID andPresentModally:NO];
                         UIViewController *msgContainer = [[HLContainerController alloc]initWithController:msgController andEmbed:NO];
