@@ -137,7 +137,7 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    [HLEventManager submitEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
     }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
@@ -227,7 +227,7 @@
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
-    [HLEventManager submitEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[category.categoryID stringValue]];
         [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];
     }];

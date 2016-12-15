@@ -16,6 +16,6 @@
 
 -(HLEvent *) propKey:(NSString *) key andVal:(NSString *) value;
 
--(void)saveEvent;
+-(NSDictionary *)toEventDictionary:(NSString *)sessionId;
 
 @end

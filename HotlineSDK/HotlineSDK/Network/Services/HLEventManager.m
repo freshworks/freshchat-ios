@@ -17,6 +17,16 @@
 #import "FDReachabilityManager.h"
 #import "HLEvent.h"
 
+
+#define isRetriableHttpError(code) code != HLEVENTS_HTTP_RESPONSE_CODE_UNSUPPORTED_MEDIA_TYPE || \
+                                    code != HLEVENTS_HTTP_RESPONSE_CODE_VALIDATION_FAILED
+
+#define canRetryResponseCode(code) !(( code == EVENT_STORE_RESPCODE_VALIDATION_FAILED) || \
+                                    ( code == EVENT_STORE_RESPCODE_UNSUPPORTED_MEDIA_TYPE) || \
+                                    ( code == EVENT_STORE_RESPCODE_INVALID_REQUEST_FORMAT))
+
+#define isSuccessRespCode(code) ( code == EVENT_STORE_RESPCODE_REQUEST_ACCEPTED)
+
 @interface HLEventManager()
 
 @property (nonatomic, strong) NSString *plistURL;
@@ -37,8 +47,7 @@
     return sharedHLEventManager;
 }
 
-- (instancetype)init
-{
+- (instancetype)init{
     self = [super init];
     if (self) {
         self.eventsArray = [NSMutableArray array];
@@ -52,12 +61,18 @@
 }
 
 -(NSString *)getEventsURL{
-    
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *baseURLString = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
-    
-    NSString *domain = [[baseURLString stringByReplacingOccurrencesOfString:@"app" withString:@"events"] stringByAppendingPathComponent:BULK_EVENT_DIR_PATH];
-    return [NSString stringWithFormat:HOTLINE_USER_DOMAIN,domain];
+#if DEBUG
+    return HLEVENTS_BULK_EVENTS_DEBUG_URL;
+#else
+    NSString *domain = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DOMAIN];
+    if ([theme rangeOfString:@"mr.orange"].location != NSNotFound ||
+        [theme rangeOfString:@"mr.blonde"].location != NSNotFound ||
+        [theme rangeOfString:@"mr.white"].location != NSNotFound ||
+        [theme rangeOfString:@"staging.konotor.com"].location != NSNotFound){
+        return HLEVENTS_BULK_EVENTS_DEBUG_URL;
+    }
+    return HLEVENTS_BULK_EVENTS_URL;
+#endif
 }
 
 -(void)startEventsUploadTimer{
@@ -79,11 +94,24 @@
     return [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
 }
 
-+ (HLEvent *) submitEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
++ (HLEvent *) submitEvent:(NSString *)eventName
+                   ofType:(NSString *)eventType
+                withBlock:(void(^)(HLEvent *event))builderBlock{
     HLEvent *event = [[HLEvent alloc] initWithEventName:eventName];
+    [event propKey:HLEVENT_PARAM_TYPE andVal:HLEVENT_PARAM_TYPE];
     builderBlock(event);
-    [event saveEvent];
+    NSDictionary *eventDictionary = [event toEventDictionary:[HLEventManager getUserSessionId]];
+    if(eventDictionary){
+        [[HLEventManager sharedInstance] updateFileWithEvent:eventDictionary];
+    }
     return event;
+}
+
++ (HLEvent *) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
+    return [HLEventManager submitEvent:eventName
+            //All events right now are generated from SDK. Add user events when we expose API for events.
+                                ofType:HLEVENT_TYPE_SDK
+                             withBlock:builderBlock];
 }
 
 - (void) getOldEvents {
@@ -126,7 +154,7 @@
     });
 }
      
-- (void) clearEventFile{
+- (void) clearEvents{
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[self returnEventLibraryPath]];
     NSError *error;
     if(exists) {
@@ -164,11 +192,9 @@
         return;
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];
-#ifdef DEBUG
-    NSString *eventURL = [NSString stringWithFormat:@"%@%@",HLEVENTS_BULK_BASE_URL,[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
-#else
-    NSString *eventURL = [NSString stringWithFormat:@"%@/%@/",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
-#endif
+
+    NSString *eventURL = [NSString stringWithFormat:@"%@/%@",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
+
     NSMutableArray *tempEventsArray = [[NSMutableArray alloc] initWithArray:self.eventsArray];
     
     for(NSDictionary *event in events){
@@ -182,31 +208,29 @@
     NSError *error;
     NSData * postData = [NSJSONSerialization dataWithJSONObject:events options:0 error:&error];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:eventURL]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:[NSURL URLWithString:eventURL] andMethod:HTTP_METHOD_POST];
     request.HTTPBody = postData;
-    request.HTTPMethod = HTTP_METHOD_POST;
     dispatch_async(self.serialQueue, ^{
         [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
         if (!error) {
+            
             //add serial queue code block for serial execution
             if([responseInfo isDict]) {
                 NSMutableArray *eventsToRetry = [[NSMutableArray alloc] init];
                 NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
                 for (int i=0; i<[eventsResponse count]; i++) {
-                        
-                    if(!(([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_VALIDATION_FAILED) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_UNSUPPORTED_MEDIA_TYPE) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_INVALID_REQUEST_FORMAT) ||
-                        ([[eventsResponse objectAtIndex:i][@"status"] intValue] == HLEVENTS_REQUEST_ACCEPTED))){
-                            
+                    NSInteger status = [[eventsResponse objectAtIndex:i][@"status"] intValue];
+                    if(!isSuccessRespCode(status) && canRetryResponseCode(status)){
                         [eventsToRetry addObject:[events objectAtIndex:i]];
                     }
                 }
                 [self writeArrayEvents:eventsToRetry];
             }
         }else{
-            if((error.code != 422) || (error.code != 415)){//validation error
-                    
+            if(error.code == HLEVENTS_HTTP_RESPONSE_CODE_NOT_SUPPORTED){
+                [self clearEvents];
+            }
+            else if(isRetriableHttpError(error.code)){//validation error
                 [self writeArrayEvents:events];
             }
         }

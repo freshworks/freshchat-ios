@@ -438,7 +438,7 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 +(void) addSentMessageEventWithChannel :(HLChannel *)channel messageAlias:(NSString *)messageId andType :(NSString *) type {
-    [HLEventManager submitEvent:HLEVENT_CONVERSATION_SEND_MESSAGE withBlock:^(HLEvent *event) {
+    [HLEventManager submitSDKEvent:HLEVENT_CONVERSATION_SEND_MESSAGE withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[channel.channelID stringValue]];
         [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channel.name];
         [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageId];
