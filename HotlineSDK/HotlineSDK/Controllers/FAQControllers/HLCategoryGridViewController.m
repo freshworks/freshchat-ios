@@ -54,7 +54,7 @@
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    if (self.faqOptions.tags && self.tagsArray.count >0 ){
+    if (self.faqOptions.tags && self.tagsArray.count >0 && self.faqOptions.filteredViewTitle.length >0){
         parent.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     else{
@@ -170,7 +170,6 @@
 }
 
 -(void)updateCategories{
-   // [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
     [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:self.tagsArray withCompletion:^(NSArray *solutions, NSError *error) {
         if (!error) {
             self.categories = solutions;

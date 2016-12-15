@@ -58,8 +58,13 @@
         parent.navigationItem.title = self.category.title;
         [self setNavigationItem];
     }
-    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        parent.navigationItem.title = [self.faqOptions filteredViewTitle];
+    else if (self.faqOptions && [[self.faqOptions tags] count] > 0){
+        if(self.faqOptions.filteredViewTitle.length > 0){
+            parent.navigationItem.title = [self.faqOptions filteredViewTitle];
+        }
+        else{
+            parent.navigationItem.title = self.category.title;
+        }
     }
 }
 

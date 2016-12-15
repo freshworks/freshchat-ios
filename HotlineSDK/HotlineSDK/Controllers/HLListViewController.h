@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FDMarginalView.h"
 #import "HLViewController.h"
+#import "FAQOptionsInterface.h"
 
-@interface HLListViewController : HLViewController <UITableViewDelegate, UITableViewDataSource,UIGestureRecognizerDelegate,FDMarginalViewDelegate>
+@interface HLListViewController : HLViewController <UITableViewDelegate, UITableViewDataSource,UIGestureRecognizerDelegate,FDMarginalViewDelegate,FAQOptionsInterface>
 
 @property(nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)FDMarginalView *footerView;

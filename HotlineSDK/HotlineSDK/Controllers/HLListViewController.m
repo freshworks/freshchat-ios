@@ -16,11 +16,20 @@
 #define CELL_OFFSET 16
 #define MAX_ARTICLE_LINES 3
 
+@interface HLListViewController()
+@property (nonatomic, strong) FAQOptions *faqOptions;
+
+@end
+
 @implementation HLListViewController
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
+}
+
+-(void) setFAQOptions:(FAQOptions *)options{
+    self.faqOptions = options;
 }
 
 -(void)setSubviews{
@@ -57,7 +66,14 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]showConversations:self];
+    if(self.faqOptions.contactUsTags.count){
+        ConversationOptions *options = [ConversationOptions new];
+        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+        [[Hotline sharedInstance] showConversations:self withOptions:options];
+    }
+    else{
+        [[Hotline sharedInstance] showConversations:self];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
