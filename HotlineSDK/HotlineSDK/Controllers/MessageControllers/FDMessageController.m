@@ -34,6 +34,7 @@
 #import "KonotorAudioRecorder.h"
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
+#import "HLChannelViewController.h"
 
 typedef struct {
     BOOL isLoading;
@@ -165,10 +166,10 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [self checkChannel];
     if(!self.channel.managedObjectContext) {
         [self rebuildMessages];
     }
+    [self checkChannel];
     [self refreshView];
     [self registerAppAudioCategory];
     [self startPoller];
@@ -520,7 +521,7 @@ typedef struct {
 {
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
-            Boolean isChannelValid = NO;
+            BOOL isChannelValid = NO;
             for(HLChannelInfo *channel in channelInfos) {
                 if([channel.channelID isEqual:self.channelID]) {
                     isChannelValid = YES;
@@ -530,6 +531,25 @@ typedef struct {
             dispatch_async(dispatch_get_main_queue(), ^ {
                 if(!isChannelValid){
                     [self.parentViewController.navigationController popViewControllerAnimated:YES];
+                }
+                else {
+                    BOOL containsChannelController = NO;
+                    for(UIViewController *controller in self.navigationController.viewControllers){
+                        if([controller isMemberOfClass:[HLContainerController class]]) {
+                            HLContainerController *containerContr = (HLContainerController *)controller;
+                            if(containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
+                                containsChannelController = YES;
+                            }
+                        }
+                    }
+                    if(!containsChannelController && channelInfos.count > 1) {
+                        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:self.channelID andPresentModally:self.embedded?_flags.isModalPresentationPreferred:self.embedded];
+                        UIViewController *msgContainer = [[HLContainerController alloc]initWithController:msgController andEmbed:self.embedded];
+                        
+                        HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
+                        UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
+                        self.navigationController.viewControllers = @[channelContainer,msgContainer];
+                    }
                 }
             });
           }

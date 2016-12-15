@@ -13,6 +13,7 @@
 @interface HLContainerController : UIViewController
 
 @property (nonatomic,strong)UIView *containerView;
+@property (nonatomic, strong) HLViewController *childController;
 
 -(instancetype)initWithController:(HLViewController *)controller andEmbed:(BOOL) embed;
 
