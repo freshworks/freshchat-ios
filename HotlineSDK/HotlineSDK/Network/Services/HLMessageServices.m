@@ -231,6 +231,7 @@ static HLNotificationHandler *handleUpdateNotification;
             }else{
                 csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
             }
+
             csat.belongToConversation = conversation;
         }
     }

@@ -19,7 +19,7 @@
 #import "FDPlistManager.h"
 #import "HLCoreServices.h"
 #import "FDLocalNotification.h"
-    
+
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
 @implementation FDUtilities
