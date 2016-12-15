@@ -145,9 +145,8 @@
     else {
         [self configureBackButtonWithGestureDelegate:nil];
     }
-  //  if (self.faqOptions.tags && self.tagsArray.count >0 )
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(self.categories.count && !(self.faqOptions.tags && self.tagsArray.count >0 )){
+    if(!(self.faqOptions.tags.count && self.tagsArray.count)){
         [rightBarItems addObject:searchBarButton];
     }
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
@@ -155,8 +154,6 @@
     }
     
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
-    
-    
 }
 
 -(void)searchButtonAction:(id)sender{
@@ -200,9 +197,9 @@
                 [self.emptyResultView removeFromSuperview];
                 [self removeLoadingIndicator];
             }
-            if (!self.faqOptions && !self.tagsArray.count){
+          //  if (!self.faqOptions && !self.tagsArray.count){
                 [self setNavigationItem];
-            }
+          //  }
             [self.collectionView reloadData];
         }
     }];

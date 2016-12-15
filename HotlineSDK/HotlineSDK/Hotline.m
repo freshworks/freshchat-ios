@@ -354,7 +354,7 @@
             };
             HLViewController *preferedController = [self preferredCategoryController:options];
             if(categoryIds.count < 1){
-                [options filterByTags:@[] withTitle:@"" andType:0];// No Matching tags so no need to pass it around
+                [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];
                 faqOptionsCompletion(preferedController);
             }
             else{
