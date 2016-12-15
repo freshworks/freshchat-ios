@@ -225,12 +225,15 @@ static HLNotificationHandler *handleUpdateNotification;
                 FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
                 BOOL pushEnabled = [HLNotificationHandler areNotificationsEnabled];
                 if(!pushEnabled) {
-                    [FDUtilities showRemoteNotificationBanner:conversationInfo[@"channelId"] alertMsg:[conversationInfo valueForKeyPath:@"csat.question"]];
+                    if(!handleUpdateNotification) {
+                        handleUpdateNotification = [[HLNotificationHandler alloc] init];
+                    }
+                    HLChannel *channel = [HLChannel getWithID:conversationInfo[@"channelId"] inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:[conversationInfo valueForKeyPath:@"csat.question"]];
                 }
             }else{
                 csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
             }
-            
             csat.belongToConversation = conversation;
         }
     }

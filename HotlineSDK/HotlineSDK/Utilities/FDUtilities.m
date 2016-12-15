@@ -383,12 +383,4 @@ static NSInteger networkIndicator = 0;
     [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
 }
 
-+ (void) showRemoteNotificationBanner : (NSString *)channelId alertMsg :(NSString *)alertMsg
-{
-    [[Hotline sharedInstance] handleRemoteNotification:@{ @"kon_c_ch_id" : channelId,
-                                                          @"aps"         : @{ @"alert" : alertMsg },
-                                                          @"source"      : @"konotor"
-                                                          } andAppstate:UIApplicationStateActive];
-}
-
 @end
