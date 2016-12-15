@@ -8,14 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-
-
 @interface HLEvent : NSObject
 
 -(instancetype)initWithEventName:(NSString *)eventName;
-
 -(HLEvent *) propKey:(NSString *) key andVal:(NSString *) value;
-
 -(NSDictionary *)toEventDictionary:(NSString *)sessionId;
 
 @end
