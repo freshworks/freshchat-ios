@@ -110,7 +110,7 @@
     NSMutableSet * articlesSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND (taggableType ==1 OR taggableType ==2)", tag];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND (taggableType ==%d OR taggableType ==%d)", tag, FDTagTypeArticle, FDTagTypeCategory];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
             if([taggedObj.taggableType intValue] == FDTagTypeArticle){
@@ -136,7 +136,7 @@
     NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==2",tag];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, FDTagTypeCategory];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
             [taggedIds addObject:taggedObj.taggableID];
@@ -152,7 +152,7 @@
     NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==3",tag];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, FDTagTypeChannel];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
             [taggedIds addObject:taggedObj.taggableID];
