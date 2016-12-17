@@ -31,9 +31,9 @@ then
   if [ $# -ge 2 ]
   then
     VERSION=$2
-    if [ `git tag -l | grep "${VERSION}" | wc -l` -gt 0 ] 
+    if [ `git tag -l | grep "v${VERSION}" | wc -l` -gt 0 ] 
     then 
-      printHeader "Version ${VERSION} already exists"
+      printHeader "Version v${VERSION} already exists"
       exit; 
     fi;
   else
