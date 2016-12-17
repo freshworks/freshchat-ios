@@ -17,7 +17,6 @@
 #import "FDReachabilityManager.h"
 #import "HLEvent.h"
 
-
 #define isRetriableHttpError(code) code != HLEVENTS_HTTP_RESPONSE_CODE_UNSUPPORTED_MEDIA_TYPE || \
                                     code != HLEVENTS_HTTP_RESPONSE_CODE_VALIDATION_FAILED
 
@@ -29,7 +28,7 @@
 
 @interface HLEventManager()
 
-@property (nonatomic, strong) NSString *plistURL;
+@property (nonatomic, strong) NSString *plistPath;
 @property (nonatomic, strong) NSString *sessionID;
 @property dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSTimer *pollingTimer;
@@ -53,7 +52,7 @@
         self.eventsArray = [NSMutableArray array];
         self.sessionID = [FDStringUtil generateUUID];
         self.serialQueue = dispatch_queue_create("com.freshdesk.hotline.events", DISPATCH_QUEUE_SERIAL);
-        self.plistURL = [self returnEventLibraryPath];
+        self.plistPath = [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
         [self getOldEvents];
         [self startEventsUploadTimer];
     }
@@ -77,7 +76,7 @@
 
 -(void)startEventsUploadTimer{
     if([[FDReachabilityManager sharedInstance] isReachable]){
-        if(![self.pollingTimer isValid] && [self.eventsArray count]){
+        if(![self.pollingTimer isValid] && self.eventsArray.count > 0){
             self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(getEventsAndUpload)
                                                            userInfo:nil repeats:YES];
         }
@@ -88,10 +87,6 @@
     if([self.pollingTimer isValid]){
         [self.pollingTimer invalidate];
     }
-}
-
-- (NSString*)returnEventLibraryPath {
-    return [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
 }
 
 + (HLEvent *) submitEvent:(NSString *)eventName
@@ -107,22 +102,21 @@
     return event;
 }
 
+//All events right now are generated from SDK. Add user events when we expose API for events.
 + (HLEvent *) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
     return [HLEventManager submitEvent:eventName
-            //All events right now are generated from SDK. Add user events when we expose API for events.
                                 ofType:HLEVENT_TYPE_SDK
                              withBlock:builderBlock];
 }
 
 - (void) getOldEvents {
-    NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]];
+    NSData *data = [NSData dataWithContentsOfFile:self.plistPath];
     NSArray *eventsArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     [self.eventsArray addObjectsFromArray:eventsArray];
 }
 
 - (void) updateFileWithEvent:(NSDictionary *) eventDict{
     dispatch_async(self.serialQueue, ^{
-        
         [self.eventsArray addObject:eventDict];
         [self writeEventsToPList];
     });
@@ -130,20 +124,18 @@
 
 - (void) writeEventsToPList{
     NSMutableArray *eventsArrayCopy = [NSMutableArray arrayWithArray:[self.eventsArray copy]];
-    if (![NSKeyedArchiver archiveRootObject:eventsArrayCopy toFile:self.plistURL]) { // NOTE:
+    if (![NSKeyedArchiver archiveRootObject:eventsArrayCopy toFile:self.plistPath]) {
         FDLog(@"%@ unable to create events data", self);
     }
 }
 
 - (void) getEventsAndUpload{
-    
     dispatch_async(self.serialQueue, ^{
-        NSData *data = [NSData dataWithContentsOfFile:[self returnEventLibraryPath]]; //self.url
+        NSData *data = [NSData dataWithContentsOfFile:self.plistPath];
         NSArray *eventsArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         NSMutableArray *events = [NSMutableArray array];
     
         for(int j = 0; j < [eventsArray count]; j += HLEVENTS_BATCH_SIZE) {
-        
             NSArray *subarray = [eventsArray subarrayWithRange:NSMakeRange(j, MIN(HLEVENTS_BATCH_SIZE, [eventsArray count] - j))];
             for (int i=0; i<[subarray count]; i++) {
                 [events addObject:eventsArray[i]];
@@ -154,47 +146,30 @@
     });
 }
      
-- (void) clearEvents{
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[self returnEventLibraryPath]];
+- (void)clearEvents{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL exists = [fileManager fileExistsAtPath:self.plistPath];
     NSError *error;
     if(exists) {
-        [[NSFileManager defaultManager]removeItemAtPath:[self returnEventLibraryPath]  error:&error];
+        [fileManager removeItemAtPath:self.plistPath  error:&error];
     }
     else{
-        FDLog(@"File not exists!!!");
+        FDLog(@"** Event manager :: File not exists!!! ***");
     }
 }
 
 +(NSString *)getUserSessionId{
-    NSString *sessionId =[NSString stringWithFormat:@"%@_%@", [HLEventManager sharedInstance].sessionID, [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
-    return sessionId;
+    return [NSString stringWithFormat:@"%@_%@", [HLEventManager sharedInstance].sessionID, [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
 }
 
-+ (NSDictionary *) getUserProperties{
-    //get all user properties and forward them to
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    if(!userAlias){userAlias=@"Undefined_Alias";}
-    NSString *appAlias = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appName = [FDUtilities appName];
-    NSDictionary *deviceInfo = [FDUtilities deviceInfoProperties];
-    NSDictionary *user = @{ @"userId":userAlias,
-                            @"tracker":[FDUtilities getTracker],
-                            @"groupId":appAlias,
-                            @"appName":appName,
-                            @"properties":deviceInfo};
-    return user;
-}
-
-- (void) uploadUserEvents :(NSMutableArray *)events{
+- (void) uploadUserEvents:(NSMutableArray *)events{
     
     if(![FDUtilities getUserAlias]){
         return;
     }
+    
     FDSecureStore *store = [FDSecureStore sharedInstance];
-
     NSString *eventURL = [NSString stringWithFormat:@"%@/%@",[self getEventsURL],[store objectForKey:HOTLINE_DEFAULTS_APP_ID]];
-
     NSMutableArray *tempEventsArray = [[NSMutableArray alloc] initWithArray:self.eventsArray];
     
     for(NSDictionary *event in events){
@@ -212,33 +187,31 @@
     request.HTTPBody = postData;
     dispatch_async(self.serialQueue, ^{
         [apiClient request:request withHandler:^(FDResponseInfo *responseInfo,NSError *error) {
-        if (!error) {
-            
-            //add serial queue code block for serial execution
-            if([responseInfo isDict]) {
-                NSMutableArray *eventsToRetry = [[NSMutableArray alloc] init];
-                NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
-                for (int i=0; i<[eventsResponse count]; i++) {
-                    NSInteger status = [[eventsResponse objectAtIndex:i][@"status"] intValue];
-                    if(!isSuccessRespCode(status) && canRetryResponseCode(status)){
-                        [eventsToRetry addObject:[events objectAtIndex:i]];
+            if (!error) {
+                if([responseInfo isDict]) {
+                    NSMutableArray *eventsToRetry = [[NSMutableArray alloc] init];
+                    NSArray *eventsResponse = [responseInfo responseAsDictionary][@"result"];
+                    for (int i=0; i<[eventsResponse count]; i++) {
+                        NSInteger status = [[eventsResponse objectAtIndex:i][@"status"] intValue];
+                        if(!isSuccessRespCode(status) && canRetryResponseCode(status)){
+                            [eventsToRetry addObject:[events objectAtIndex:i]];
+                        }
                     }
+                    [self writeArrayEvents:eventsToRetry];
                 }
-                [self writeArrayEvents:eventsToRetry];
+            }else{
+                if(error.code == HLEVENTS_HTTP_RESPONSE_CODE_NOT_SUPPORTED){
+                    [self clearEvents];
+                }
+                else if(isRetriableHttpError(error.code)){
+                    [self writeArrayEvents:events];
+                }
             }
-        }else{
-            if(error.code == HLEVENTS_HTTP_RESPONSE_CODE_NOT_SUPPORTED){
-                [self clearEvents];
-            }
-            else if(isRetriableHttpError(error.code)){//validation error
-                [self writeArrayEvents:events];
-            }
-        }
         }];
     });
 }
 
-- (void) writeArrayEvents :(NSMutableArray *)events{
+- (void)writeArrayEvents:(NSMutableArray *)events{
     if(![events count]){
         [self writeEventsToPList];
         return;
