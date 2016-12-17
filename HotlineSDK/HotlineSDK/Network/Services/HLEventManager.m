@@ -162,21 +162,6 @@
     return [NSString stringWithFormat:@"%@_%@", [HLEventManager sharedInstance].sessionID, [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
 }
 
-+ (NSDictionary *) getUserProperties{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    if(!userAlias) userAlias=@"Undefined_Alias";
-    NSString *appAlias = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appName = [FDUtilities appName];
-    NSDictionary *deviceInfo = [FDUtilities deviceInfoProperties];
-    NSDictionary *user = @{ @"userId":userAlias,
-                            @"tracker":[FDUtilities getTracker],
-                            @"groupId":appAlias,
-                            @"appName":appName,
-                            @"properties":deviceInfo};
-    return user;
-}
-
 - (void) uploadUserEvents:(NSMutableArray *)events{
     
     if(![FDUtilities getUserAlias]){
