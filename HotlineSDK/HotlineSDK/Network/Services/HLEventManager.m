@@ -170,22 +170,6 @@
     return sessionId;
 }
 
-+ (NSDictionary *) getUserProperties{
-    //get all user properties and forward them to
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *userAlias = [FDUtilities getUserAlias];
-    if(!userAlias){userAlias=@"Undefined_Alias";}
-    NSString *appAlias = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appName = [FDUtilities appName];
-    NSDictionary *deviceInfo = [FDUtilities deviceInfoProperties];
-    NSDictionary *user = @{ @"userId":userAlias,
-                            @"tracker":[FDUtilities getTracker],
-                            @"groupId":appAlias,
-                            @"appName":appName,
-                            @"properties":deviceInfo};
-    return user;
-}
-
 - (void) uploadUserEvents :(NSMutableArray *)events{
     
     if(![FDUtilities getUserAlias]){
