@@ -29,8 +29,6 @@
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
-static HLNotificationHandler *handleUpdateNotification;
-
 @implementation HLMessageServices
 
 +(void)fetchChannelsAndMessages:(void (^)(NSError *))handler{
@@ -192,7 +190,7 @@ static HLNotificationHandler *handleUpdateNotification;
         }
         
         if(!isRestore && ![HLNotificationHandler areNotificationsEnabled] && messageText){
-            handleUpdateNotification = [[HLNotificationHandler alloc] init];
+            HLNotificationHandler *handleUpdateNotification = [[HLNotificationHandler alloc] init];
             [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
         }
         
@@ -224,9 +222,10 @@ static HLNotificationHandler *handleUpdateNotification;
                 csat = [HLCsat createWithInfo:conversationInfo inContext:context];
                 FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
                 if(![HLNotificationHandler areNotificationsEnabled]) {
-                    handleUpdateNotification = [[HLNotificationHandler alloc] init];
+                    HLNotificationHandler *handleUpdateNotification = [[HLNotificationHandler alloc] init];
                     HLChannel *channel = [HLChannel getWithID:conversationInfo[@"channelId"] inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:[conversationInfo valueForKeyPath:@"csat.question"]];
+                    [handleUpdateNotification showActiveStateNotificationBanner:channel
+                                                                    withMessage:[conversationInfo valueForKeyPath:@"csat.question"]];
                 }
             }else{
                 csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
