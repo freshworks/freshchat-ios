@@ -151,7 +151,7 @@
 
 -(void)contactUsButtonAction:(id)sender{
     
-    if(self.faqOptions.contactUsTags.count){
+    if(self.faqOptions.contactUsTags.count > 0){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
         [[Hotline sharedInstance] showConversations:self withOptions:options];

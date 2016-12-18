@@ -29,7 +29,6 @@
     }
 
     NSLog(@"launchoptions :%@", launchOptions);
-    //NSLog(@"Documents Directory: %@", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
 
     [Fabric with:@[[Crashlytics class]]];
 

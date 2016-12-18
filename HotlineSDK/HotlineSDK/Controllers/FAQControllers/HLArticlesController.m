@@ -77,12 +77,6 @@
     return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
 }
 
-
-// Figure out if this is a filtered view or normal launch case
-// Property for tag list
-// Create method in FDTagManager which takes 2 arguments ( tag array and tag type )
-
-
 -(void)updateDataSource{
     self.articles = @[];
     [self.tableView reloadData];
