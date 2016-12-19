@@ -16,7 +16,7 @@ enum TagFilterType {
 
 #define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
 
-@class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions, HLMessage;
+@class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions, HotlineMessage;
 
 @interface HotlineConfig : NSObject
 
@@ -266,7 +266,7 @@ enum TagFilterType {
 /**
  *  Send message to particular channel with specified tag value
  */
--(void) sendMessageToChannel:(HLMessage *)messageObject;
+-(void) sendMessage:(HotlineMessage *)messageObject;
 
 @end
 
@@ -361,11 +361,14 @@ enum TagFilterType {
 -(NSNumber *) filteredType;
 
 /**
- *  List of tags you have supplied for
+ *  List of tags supplied for co
  */
 -(NSArray *) contactUsTags;
 
-- (NSString *) contactUsTitle;
+/**
+ *  Title view added for contact us filtered view by tags
+ */
+-(NSString *) contactUsTitle;
 
 @end
 
@@ -400,7 +403,7 @@ enum TagFilterType {
 
 @end
 
-@interface HLMessage : NSObject
+@interface HotlineMessage : NSObject
 
 /**
  *  Message to send a a specific tagged channel

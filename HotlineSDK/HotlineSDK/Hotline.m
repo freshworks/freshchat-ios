@@ -287,7 +287,6 @@
     }
 }
 
-
 /*  This function is called during every launch &
     when the SDK's app is transitioned from background to foreground  */
 
@@ -344,7 +343,6 @@
 }
 
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    
     if([options.filteredType intValue] == CATEGORY){
         [[HLTagManager sharedInstance] getCategoriesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
@@ -649,31 +647,7 @@
     }];
 }
 
--(void) sendMessage: (NSString *) message onChannel: (NSString *) channelName{
-    if(!message){
-        return;
-    }
-    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
-    [mainContext performBlock:^{
-        HLChannel *channel = nil;
-        if(channelName){
-            channel = [HLChannel getWithName:channelName inContext:mainContext];
-        }
-        if(!channel){ // match not found
-            channel = [HLChannel getDefaultChannelInContext:mainContext];// Should use a default channel
-        }
-        if(channel){
-            KonotorConversation *conversation;
-            NSSet *conversations = channel.conversations;
-            if(conversations && [conversations count] > 0 ){
-                conversation = [conversations anyObject];
-            }
-            [Konotor uploadTextFeedback:message onConversation:conversation onChannel:channel];
-        }
-    }];
-}
-
--(void) sendMessageToChannel:(HLMessage *)messageObject{
+-(void) sendMessage:(HotlineMessage *)messageObject{
     if(!messageObject.message){
         return;
     }
