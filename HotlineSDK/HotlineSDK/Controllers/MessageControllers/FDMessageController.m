@@ -537,7 +537,9 @@ typedef struct {
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
                 if (isChannelValid) {
-                    [self alterNavigationStack:channelInfos.count];
+                    if (channelInfos.count > 1) {
+                        [self alterNavigationStack:channelInfos.count];
+                    }
                 }
                 else {
                     [self.parentViewController.navigationController popViewControllerAnimated:YES];
@@ -553,16 +555,16 @@ typedef struct {
 -(void) alterNavigationStack : (NSInteger) channelCount
 {
     BOOL containsChannelController = NO;
-    for(UIViewController *controller in self.navigationController.viewControllers) {
-        if([controller isMemberOfClass:[HLContainerController class]]) {
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isMemberOfClass:[HLContainerController class]]) {
             HLContainerController *containerContr = (HLContainerController *)controller;
-            if(containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
+            if (containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
                 containsChannelController = YES;
             }
         }
     }
     //If channel count changes from 1 to many, alter the navigation stack [channel list controller , current message channel]
-    if(!containsChannelController && channelCount > 1) {
+    if (!containsChannelController) {
         HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
         UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
         self.parentViewController.navigationController.viewControllers = @[channelContainer,self.parentViewController];
