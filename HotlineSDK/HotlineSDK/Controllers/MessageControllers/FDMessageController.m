@@ -632,8 +632,6 @@ typedef struct {
 
 }
 
-
-
 -(void)networkReachable{
     [KonotorMessage uploadAllUnuploadedMessages];
 }
