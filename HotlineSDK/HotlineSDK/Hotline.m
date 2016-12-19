@@ -346,29 +346,21 @@
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     
     if([options.filteredType intValue] == CATEGORY){
-        
         [[HLTagManager sharedInstance] getCategoriesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
                 completion(preferredViewController);
             };
             HLViewController *preferedController = [self preferredCategoryController:options];
-            if(categoryIds.count < 1){
-                [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];// No Matching tags so no need to pass it around
-                faqOptionsCompletion(preferedController);
+
+            [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];
+            if (options.showFaqCategoriesAsGrid) {
+                ((HLCategoryGridViewController *)preferedController).tagsArray = categoryIds;
             }
             else{
-                [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];// No Matching tags so no need to pass it around
-                if (options.showFaqCategoriesAsGrid) {
-                    ((HLCategoryGridViewController *)preferedController).tagsArray = categoryIds;
-                    faqOptionsCompletion(preferedController);
-                }
-                else{
-                    ((HLCategoryListController *)preferedController).tagsArray = categoryIds;
-                    faqOptionsCompletion(preferedController);
-                }
-                
+                ((HLCategoryListController *)preferedController).tagsArray = categoryIds;
             }
+            faqOptionsCompletion(preferedController);
         }];
     }
     else if([options.filteredType intValue] == ARTICLE){
@@ -377,30 +369,25 @@
                 [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
             };
-        
-        
+            
+            HLViewController *preferedController = nil;
             if([articleIds count] > 1 ){
-                HLViewController *preferedController = nil;
                 preferedController = [[HLArticlesController alloc]init];
                 faqOptionsCompletion(preferedController);
             } else if([articleIds count] == 1 ) {
                 NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-            
                 [mContext performBlock:^{
                     HLViewController *preferedController = nil;
                     HLArticle *article = [HLArticle getWithID:[articleIds firstObject] inContext:mContext];
                     if(article){
                         preferedController = [HLArticleUtil getArticleDetailController:article];
-                        faqOptionsCompletion(preferedController);
                     }
-                    else { // This shouldn't happen but lets see
+                    else {
                         preferedController = [self preferredCategoryController:options];
-                        faqOptionsCompletion(preferedController);
                     }
+                    faqOptionsCompletion(preferedController);
                 }];
             } else {
-                HLViewController *preferedController = nil;
-                //[options filterByTags:@[] withTitle:@""];
                 [options filterByTags:@[] withTitle:@"" andType:0];// No Matching tags so no need to pass it around
                 preferedController = [self preferredCategoryController:options];
                 faqOptionsCompletion(preferedController);
