@@ -538,7 +538,7 @@ typedef struct {
             dispatch_async(dispatch_get_main_queue(), ^ {
                 if (isChannelValid) {
                     if (channelInfos.count > 1) {
-                        [self alterNavigationStack:channelInfos.count];
+                        [self alterNavigationStack];
                     }
                 }
                 else {
@@ -552,7 +552,7 @@ typedef struct {
     }];
 }
 
--(void) alterNavigationStack : (NSInteger) channelCount
+-(void) alterNavigationStack
 {
     BOOL containsChannelController = NO;
     for (UIViewController *controller in self.navigationController.viewControllers) {
