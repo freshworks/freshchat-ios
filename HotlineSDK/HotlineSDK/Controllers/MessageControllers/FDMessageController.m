@@ -166,13 +166,16 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    if(!self.channel.managedObjectContext) {
-        [self rebuildMessages];
-    }
-    [self checkChannel];
-    [self refreshView];
     [self registerAppAudioCategory];
-    [self startPoller];
+    [self checkChannel:^(BOOL isChannelValid){
+        if(isChannelValid) {
+            if(!self.channel.managedObjectContext) {
+                [self rebuildMessages];
+            }
+            [self startPoller];
+            [self refreshView];
+        }
+    }];
 }
 
 
@@ -517,42 +520,56 @@ typedef struct {
     [self refreshView];
 }
 
--(void) checkChannel
+-(void) channelsUpdated
+{
+    [self checkChannel:nil];
+}
+
+-(void) checkChannel : (void(^)(BOOL isChannelValid)) completion
 {
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+        BOOL isChannelValid = NO;
         if (!error) {
-            BOOL isChannelValid = NO;
             for(HLChannelInfo *channel in channelInfos) {
                 if([channel.channelID isEqual:self.channelID]) {
                     isChannelValid = YES;
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
-                if(!isChannelValid) {
-                    [self.parentViewController.navigationController popViewControllerAnimated:YES];
+                if (isChannelValid) {
+                    [self alterNavigationStack:channelInfos.count];
                 }
                 else {
-                    BOOL containsChannelController = NO;
-                    for(UIViewController *controller in self.navigationController.viewControllers) {
-                        if([controller isMemberOfClass:[HLContainerController class]]) {
-                            HLContainerController *containerContr = (HLContainerController *)controller;
-                            if(containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
-                                containsChannelController = YES;
-                            }
-                        }
-                    }                    
-                    if(!containsChannelController && channelInfos.count > 1) {
-                        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:self.channelID andPresentModally:NO];
-                        UIViewController *msgContainer = [[HLContainerController alloc]initWithController:msgController andEmbed:NO];
-                        HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
-                        UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
-                        self.navigationController.viewControllers = @[channelContainer,msgContainer];
-                    }
+                    [self.parentViewController.navigationController popViewControllerAnimated:YES];
                 }
-                
             });
-          }
+        }
+        if(completion) {
+            completion(isChannelValid);
+        }
     }];
+}
+
+-(void) alterNavigationStack : (NSInteger) channelCount
+{
+    BOOL containsChannelController = NO;
+    for(UIViewController *controller in self.navigationController.viewControllers) {
+        if([controller isMemberOfClass:[HLContainerController class]]) {
+            HLContainerController *containerContr = (HLContainerController *)controller;
+            if(containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
+                containsChannelController = YES;
+            }
+        }
+    }
+    //If channel count changes from 1 to many, alter the navigation stack [channel list controller , current message channel]
+    if(!containsChannelController && channelCount > 1) {
+        HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
+        UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
+        self.parentViewController.navigationController.viewControllers = @[channelContainer,self.parentViewController];
+        _flags.isModalPresentationPreferred = NO;
+        self.embedded = NO;
+        [self setNavigationItem];
+    }
 }
 
 -(void) rebuildMessages
@@ -608,10 +625,12 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkChannel)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(channelsUpdated)
                                                 name:HOTLINE_CHANNELS_UPDATED object:nil];
 
 }
+
+
 
 -(void)networkReachable{
     [KonotorMessage uploadAllUnuploadedMessages];
