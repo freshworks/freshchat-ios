@@ -974,18 +974,12 @@ typedef struct {
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self hasPendingCSAT] && !self.CSATView.isShowing) {
+        if ([KonotorConversation hasPendingCSAT:self.conversation] && !self.CSATView.isShowing) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
             [self.view layoutIfNeeded];
             [self scrollTableViewToLastCell];
         }
     });
-}
-
--(BOOL)hasPendingCSAT{
-    return (self.conversation.hasPendingCsat.boolValue &&
-            [self getCSATObject] &&
-            [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
 }
 
 -(void)displayCSATPromptWithState:(BOOL)isResolved{
