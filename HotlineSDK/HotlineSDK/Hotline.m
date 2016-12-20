@@ -362,7 +362,7 @@
         }];
     }
     else if([options.filteredType intValue] == ARTICLE){
-        [[HLTagManager sharedInstance] getArticleForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+        [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);

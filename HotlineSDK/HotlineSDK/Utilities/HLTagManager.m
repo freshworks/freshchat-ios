@@ -41,7 +41,7 @@
         self.tagMap = [[NSMutableDictionary alloc] init];
         self.queue = dispatch_queue_create("com.freshdesk.hotline.tagmanager", DISPATCH_QUEUE_SERIAL);
         self.storageFile = [self getFileForStorage:TAGS_FILE_NAME];
-  //      [self migrateTagsfromPlist];
+        //[self removeTagsPlistFile];
         [self load];
     }
     return self;
@@ -104,7 +104,7 @@
     });
 }
 
--(void) getArticleForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion {
+-(void) getArticlesForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion {
     
     NSArray *taggedIds;
     NSMutableSet * articlesSet = [NSMutableSet set];
@@ -198,18 +198,9 @@
     return [filePath stringByAppendingPathComponent:fileName];
 }
 
-- (void) migrateTagsfromPlist{
+- (void) removeTagsPlistFile{
     dispatch_async(self.queue, ^{
         if([[NSFileManager defaultManager] fileExistsAtPath:self.storageFile]){
-            NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
-            if(data){
-                self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                for(NSString *key in [self.tagMap allKeys]) {
-                    for (id item in [self.tagMap objectForKey:key]) {
-                        [FDTags createTagWithInfo:[FDTags createDictWithTagName:key type:[NSNumber numberWithInt: FDTagTypeArticle] andIdvalue:item] inContext:[KonotorDataManager sharedInstance].backgroundContext];
-                    }
-                }
-            }
             [[NSFileManager defaultManager] removeItemAtPath:self.storageFile error:NULL];
         }
     });

@@ -206,14 +206,14 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
-- (void) fetchAllCategoriesForTags  :(NSArray*) tagsIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
+- (void) fetchAllCategoriesForTags  :(NSArray*) categoriesIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
     NSManagedObjectContext *backgroundContext = self.backgroundContext;
     NSManagedObjectContext *mainContext = self.mainObjectContext;
     [backgroundContext performBlock:^{
         NSArray *results;
         NSMutableArray *fetchedSolutions = [NSMutableArray new];
-        if(tagsIds.count){
-            for(NSNumber * categoryId in tagsIds){
+        if(categoriesIds.count > 0){
+            for(NSNumber * categoryId in categoriesIds){
                 HLCategory *category = [HLCategory getWithID:categoryId inContext:mainContext];
                 if(category){
                     [fetchedSolutions addObject :category];
@@ -324,13 +324,13 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
-- (void) fetchAllVisibleChannelsForTags:(NSArray *)TagIds completion:(void (^)(NSArray *channelInfos, NSError *))handler {
+- (void) fetchAllVisibleChannelsForTags:(NSArray *)channelsIds completion:(void (^)(NSArray *channelInfos, NSError *))handler {
     
     NSManagedObjectContext *context = self.mainObjectContext;
     [context performBlock:^{
         NSMutableArray *channelInfos= [NSMutableArray new];
-        if(TagIds.count){
-            for(NSNumber * channelId in TagIds){
+        if(channelsIds.count >0){
+            for(NSNumber * channelId in channelsIds){
                 HLChannel *channel = [HLChannel getWithID:channelId inContext:context];
                 if(channel){
                     [channelInfos addObject:channel];
@@ -352,26 +352,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             }
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(handler) handler(channelInfos,nil);
-        });
-    }];
-}
-
--(void)fetchAllVisibleChannels:(void(^)(NSArray *channelInfos, NSError *error))handler{
-    NSManagedObjectContext *context = self.mainObjectContext;
-    [context performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-        request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
-        request.sortDescriptors = @[position];
-        NSArray *results = [context executeFetchRequest:request error:nil];
-        NSMutableArray *channelInfos = [NSMutableArray new];
-        for (int i=0; i<results.count; i++) {
-            HLChannel *channel = results[i];
-            HLChannelInfo *channelInfo = [[HLChannelInfo alloc ]initWithChannel:channel];
-            [channelInfos addObject:channelInfo];
-        }
         dispatch_async(dispatch_get_main_queue(), ^{
             if(handler) handler(channelInfos,nil);
         });

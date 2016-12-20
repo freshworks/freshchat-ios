@@ -92,7 +92,7 @@
         }];
     }
     else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        [[HLTagManager sharedInstance] getArticleForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+        [[HLTagManager sharedInstance] getArticlesForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
              
              [mainContext performBlock:^{
