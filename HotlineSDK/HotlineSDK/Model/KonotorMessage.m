@@ -154,7 +154,8 @@ static BOOL messageExistsDirty = YES;
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
     request.predicate = predicate;
     NSArray *messages = [context executeFetchRequest:request error:nil];
-    return messages.count;
+    NSInteger pendingCSATCount =  [HLCsat hasPendingCSAT:channel.primaryConversation] ? 1 : 0;
+    return messages.count + pendingCSATCount;
 }
 
 +(void)markAllMessagesAsReadForChannel:(HLChannel *)channel{

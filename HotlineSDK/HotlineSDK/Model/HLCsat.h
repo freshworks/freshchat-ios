@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(HLCsat *)getWithID:(NSString *)conversationID inContext:(NSManagedObjectContext *)context;
 +(HLCsat *)updateCSAT:(HLCsat *)csat withInfo:(NSDictionary *)conversationInfo;
 +(HLCsat *)createWithInfo:(NSDictionary *)conversationInfo inContext:(NSManagedObjectContext *)context;
++(BOOL)hasPendingCSAT:(KonotorConversation *)conversation;
 
 @end
 
@@ -46,6 +47,5 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isIssueResolved;
 
 @end
-
 
 NS_ASSUME_NONNULL_END

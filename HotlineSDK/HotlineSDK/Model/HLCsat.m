@@ -50,6 +50,12 @@
     return [self updateCSAT:csat withInfo:conversationInfo];
 }
 
++(BOOL)hasPendingCSAT:(KonotorConversation *)conversation{
+    HLCsat *csat = conversation.hasCsat.allObjects.firstObject;
+    return (conversation.hasPendingCsat.boolValue && csat &&
+            csat.csatStatus.integerValue == CSAT_NOT_RATED);
+}
+
 @end
 
 
