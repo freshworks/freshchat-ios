@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeHasMessagesObject:(KonotorMessage *)value;
 - (void)addHasMessages:(NSSet<KonotorMessage *> *)values;
 - (void)removeHasMessages:(NSSet<KonotorMessage *> *)values;
++ (BOOL)hasPendingCSAT:(KonotorConversation *)conversation;
 
 
 @end

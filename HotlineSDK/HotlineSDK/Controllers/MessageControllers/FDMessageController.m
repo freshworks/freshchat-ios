@@ -911,7 +911,7 @@ typedef struct {
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([HLCsat hasPendingCSAT:self.conversation] && !self.CSATView.isShowing) {
+        if ([KonotorConversation hasPendingCSAT:self.conversation] && !self.CSATView.isShowing) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
             [self.view layoutIfNeeded];
             [self scrollTableViewToLastCell];
