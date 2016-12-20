@@ -14,7 +14,6 @@
 
 @interface HLContainerController ()
 
-@property (nonatomic, strong) HLViewController *childController;
 @property (strong, nonatomic) HLTheme *theme;
 
 @end
@@ -111,6 +110,5 @@
     [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
 }
-
 
 @end
