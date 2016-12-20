@@ -769,8 +769,8 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
-        [self processPendingCSAT];
     }
+    [self processPendingCSAT];
 }
 
 - (void) didNotifyServerError {
