@@ -48,6 +48,7 @@
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
+    [self updateResultsView:YES];
     [self addLoadingIndicator];
 }
 
@@ -67,37 +68,58 @@
     [self updateCategories];
 }
 
+-(HLEmptyResultView *)emptyResultView
+{
+    if (!_emptyResultView) {
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:@""];
+        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _emptyResultView;
+}
+
 //TODO: Remove duplicate code
 -(void)updateCategories{
     [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
         if (!error) {
+            BOOL refreshData = NO;
+            if ( self.categories ) {
+                refreshData = YES;
+            }
             self.categories = solutions;
             [self setNavigationItem];
-            
-            if(![self.categories count]){
-                if (!self.emptyResultView) {
-                    NSString *message;
-                    if([[FDReachabilityManager sharedInstance] isReachable]){
-                        message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
-                    }
-                    else{
-                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                    }
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
-                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                    [self.view addSubview:self.emptyResultView];
-                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-                }
+            refreshData = refreshData || (self.categories.count > 0);
+            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+                [self updateResultsView:NO];
             }
-            else{
-                self.emptyResultView.frame = CGRectZero;
-                [self.emptyResultView removeFromSuperview];
-                [self removeLoadingIndicator];
-            }
-            
             [self.tableView reloadData];
         }
     }];
+}
+
+-(void)updateResultsView:(BOOL)isLoading
+{
+    if(self.categories.count == 0) {
+        NSString *message;
+        if(isLoading){
+            message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
+        }
+        else if(![[FDReachabilityManager sharedInstance] isReachable]){
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+            [self removeLoadingIndicator];
+        }
+        else {
+            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+            [self removeLoadingIndicator];
+        }
+        self.emptyResultView.emptyResultLabel.text = message;
+        [self.view addSubview:self.emptyResultView];
+        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+    }
+    else{
+        self.emptyResultView.frame = CGRectZero;
+        [self.emptyResultView removeFromSuperview];
+        [self removeLoadingIndicator];
+    }
 }
 
 -(void)removeLoadingIndicator{
@@ -174,15 +196,9 @@
         if(isEmpty){
             [updater resetTime];
         }
-        else {
-            [self removeLoadingIndicator];
-        }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
             HideNetworkActivityIndicator();
-            if(isEmpty){
-                [self removeLoadingIndicator];
-            }
         }];
     }];
 }
