@@ -59,7 +59,7 @@
         self.surveyTitle = [UILabel new];
         self.surveyTitle.font = self.theme.csatPromptQuestionTextFont;
         self.surveyTitle.textColor = self.theme.csatPromptQuestionTextFontColor;
-        self.surveyTitle.numberOfLines = 0;
+        self.surveyTitle.numberOfLines = 3;
         self.surveyTitle.textAlignment = NSTextAlignmentCenter;
         self.surveyTitle.translatesAutoresizingMaskIntoConstraints = NO;
         [self.CSATPrompt addSubview:self.surveyTitle];
@@ -101,14 +101,14 @@
         [controller.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[transparent_view]|" options:0 metrics:nil views:views]];
         
         //CSAT prompt constraints
-        [FDAutolayoutHelper setWidth:250 forView:self.CSATPrompt inView:self.transparentView];
+        [FDAutolayoutHelper setWidth:280 forView:self.CSATPrompt inView:self.transparentView];
         [FDAutolayoutHelper centerX:self.CSATPrompt onView:self.transparentView];
         self.CSATPromptCenterYConstraint = [FDAutolayoutHelper centerY:self.CSATPrompt onView:self.transparentView];
         
         //CSAT prompt subviews
         [FDAutolayoutHelper setWidth:150 forView:starRatingView inView:self.CSATPrompt];
-        [FDAutolayoutHelper setWidth:200 forView:self.surveyTitle inView:self.CSATPrompt];
-        [FDAutolayoutHelper setWidth:200 forView:self.feedbackView inView:self.CSATPrompt];
+        [FDAutolayoutHelper setWidth:240 forView:self.surveyTitle inView:self.CSATPrompt];
+        [FDAutolayoutHelper setWidth:240 forView:self.feedbackView inView:self.CSATPrompt];
         [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[horizontal_line]|" options:0 metrics:nil views:views]];
         
         CGFloat promptHeight, ratingbarHeight, feedbackviewHeight = 0;
