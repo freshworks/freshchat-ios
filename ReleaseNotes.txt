@@ -1,4 +1,12 @@
 
+Ver 1.2.1 
+__________________________
+In app Notification banner now shows CSAT notification when push notification is disabled. 
+CSAT question can now support a larger question/text. 
+Unread count now includes pending CSAT responses.
+Better loading messages to inform users for Channels and FAQs list.
+Minor fixes and improvements.
+
 Ver 1.2.0 
 __________________________
 Release Notes:
