@@ -65,7 +65,8 @@
 
 - (IBAction)articleFilter1:(id)sender{
     NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
-    NSArray *contactUsTagsArray = [self.conatctUstags.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
@@ -103,7 +104,8 @@
 //2
 - (IBAction)articleFilter2:(id)sender{
     NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
-    NSArray *contactUsTagsArray = [self.conatctUstags.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
@@ -116,7 +118,8 @@
 
 - (IBAction)categoryFilter2:(id)sender{
     NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
-    NSArray *contactUsTagsArray = [self.conatctUstags.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
@@ -149,7 +152,9 @@
 }
 
 - (IBAction)contactFilter1:(id)sender{
-    NSArray *arr = [self.conatctUstags.text componentsSeparatedByString:@","];
+    NSMutableArray *arr =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    [arr removeObject:@""];
+    
     FAQOptions *options = [FAQOptions new];
     options.showContactUsOnFaqScreens = YES;
     [options filterContactUsByTags:arr withTitle:self.filterTagsTitle.text];
