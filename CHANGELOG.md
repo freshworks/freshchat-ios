@@ -1,5 +1,34 @@
 # Change Log
 
+## [Unreleased](https://github.com/freshdesk/hotline_ios_dev/tree/HEAD)
+
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.0...HEAD)
+
+**Implemented enhancements:**
+
+- Validate user Info  [\#492](https://github.com/freshdesk/hotline_ios_dev/issues/492)
+- Mark users as uninstalled when clearData is called.  [\#466](https://github.com/freshdesk/hotline_ios_dev/issues/466)
+- Security Test - Static Analysis issue  [\#258](https://github.com/freshdesk/hotline_ios_dev/issues/258)
+- Track unread count for CSAT [\#578](https://github.com/freshdesk/hotline_ios_dev/pull/578) ([AravinthChandran](https://github.com/AravinthChandran))
+- Handle more characters in CSAT survey title [\#577](https://github.com/freshdesk/hotline_ios_dev/pull/577) ([AravinthChandran](https://github.com/AravinthChandran))
+- Events store code cleanup [\#573](https://github.com/freshdesk/hotline_ios_dev/pull/573) ([AravinthChandran](https://github.com/AravinthChandran))
+- Showing csat banner in push disabled mode [\#570](https://github.com/freshdesk/hotline_ios_dev/pull/570) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+
+**Fixed bugs:**
+
+- Loading FAQ/Channels shown while loading. [\#572](https://github.com/freshdesk/hotline_ios_dev/pull/572) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+
+**Closed issues:**
+
+- Same channel image not showing after loading specific channel. Image shown from sdk resources. [\#575](https://github.com/freshdesk/hotline_ios_dev/issues/575)
+- Issues for iOS 10  [\#460](https://github.com/freshdesk/hotline_ios_dev/issues/460)
+
+**Merged pull requests:**
+
+- Pending fixes in Channel messages view. Check for invalid channels when app id or channels deleted/hided. [\#574](https://github.com/freshdesk/hotline_ios_dev/pull/574) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Events updates [\#568](https://github.com/freshdesk/hotline_ios_dev/pull/568) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Fix version check [\#566](https://github.com/freshdesk/hotline_ios_dev/pull/566) ([AravinthChandran](https://github.com/AravinthChandran))
+
 ## [v1.2.0](https://github.com/freshdesk/hotline_ios_dev/tree/v1.2.0) (2016-12-02)
 [Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.1.10...v1.2.0)
 
