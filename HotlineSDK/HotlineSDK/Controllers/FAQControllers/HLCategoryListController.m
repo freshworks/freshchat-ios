@@ -48,12 +48,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
-//    if (self.faqOptions && self.tagsArray.count >0 && self.faqOptions.filteredViewTitle.length>0){
-//        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
-//    }
-//    else{
-        parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-//    }
+    parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self updateCategories];
     [self setNavigationItem];
     [self addLoadingIndicator];

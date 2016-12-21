@@ -124,6 +124,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     self.taggedChannels = channelIds;
+                    [self setNavigationItem];
                     if (channelInfos.count == 1) {
                         self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
                     }else{
