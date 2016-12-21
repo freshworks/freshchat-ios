@@ -29,6 +29,7 @@
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
 #import "HLArticleUtil.h"
+#import "HLTagManager.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -40,6 +41,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property (nonatomic, strong) NSArray *taggedCategories;
 
 @end
 
@@ -54,12 +56,7 @@
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    if (self.faqOptions.tags && self.tagsArray.count >0 && self.faqOptions.filteredViewTitle.length >0){
-        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
-    }
-    else{
-        parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-    }
+    parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     [self setNavigationItem];
     self.theme = [HLTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -146,8 +143,11 @@
         [self configureBackButtonWithGestureDelegate:nil];
     }
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(!(self.faqOptions.tags.count && self.tagsArray.count)){
+    if(self.categories.count && !self.taggedCategories.count){
         [rightBarItems addObject:searchBarButton];
+    }
+    if((self.taggedCategories.count > 0) && (self.faqOptions.filteredViewTitle.length>0)){
+        self.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
         [rightBarItems addObject:contactUsBarButton];
@@ -158,6 +158,9 @@
 
 -(void)searchButtonAction:(id)sender{
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
+    if(self.taggedCategories.count >0){
+        self.faqOptions = nil;
+    }
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
@@ -170,37 +173,38 @@
 }
 
 -(void)updateCategories{
-    [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:self.tagsArray withCompletion:^(NSArray *solutions, NSError *error) {
-        if (!error) {
-            self.categories = solutions;
-
-            if(!self.categories.count){
-                if(!self.emptyResultView){
+    [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
+    
+        [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:categoryIds withCompletion:^(NSArray *solutions, NSError *error) {
+            if (!error) {
+                self.categories = solutions;
+                self.taggedCategories = categoryIds;
+                if(!self.categories.count){
+                    if(!self.emptyResultView){
                     
-                    NSString *message;
-                    if([[FDReachabilityManager sharedInstance] isReachable]){
-                        message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+                        NSString *message;
+                        if([[FDReachabilityManager sharedInstance] isReachable]){
+                            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+                        }
+                        else{
+                            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                            [self removeLoadingIndicator];
+                        }
+                        self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
+                        self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                        [self.view addSubview:self.emptyResultView];
+                        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
                     }
-                    else{
-                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                        [self removeLoadingIndicator];
-                    }
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
-                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                    [self.view addSubview:self.emptyResultView];
-                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
                 }
-            }
-            else{
-                self.emptyResultView.frame = CGRectZero;
-                [self.emptyResultView removeFromSuperview];
-                [self removeLoadingIndicator];
-            }
-          //  if (!self.faqOptions && !self.tagsArray.count){
+                else{
+                    self.emptyResultView.frame = CGRectZero;
+                    [self.emptyResultView removeFromSuperview];
+                    [self removeLoadingIndicator];
+                }
                 [self setNavigationItem];
-          //  }
-            [self.collectionView reloadData];
-        }
+                [self.collectionView reloadData];
+            }
+        }];
     }];
 }
 

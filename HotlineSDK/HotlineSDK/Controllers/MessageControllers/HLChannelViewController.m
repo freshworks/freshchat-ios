@@ -27,6 +27,8 @@
 #import "FDChannelUpdater.h"
 #import "FDIconDownloader.h"
 #import "FDReachabilityManager.h"
+#import "HLTagManager.h"
+#import "HLConversationUtil.h"
 
 @interface HLChannelViewController ()
 
@@ -34,7 +36,8 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
-@property (nonatomic, strong) FAQOptions *faqOptions;
+@property (nonatomic, strong) NSArray *taggedChannels;
+@property (nonatomic, strong) ConversationOptions *convOptions;
 
 @end
 
@@ -42,12 +45,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    if(self.tagsArray.count){
-        parent.navigationItem.title = self.tagsTitle;
-    }
-    else{
-        parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
-    }
+    parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     HLTheme *theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [theme channelTitleFontColor],
@@ -62,6 +60,10 @@
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
+}
+
+- (void) setConversationOptions:(ConversationOptions *)options{
+    self.convOptions = options;
 }
 
 -(void)addLoadingIndicator{
@@ -117,19 +119,22 @@
 -(void)updateChannels{
     
     HideNetworkActivityIndicator();
-    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:self.tagsArray completion:^(NSArray *channelInfos, NSError *error) {
+    [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+        [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds completion:^(NSArray *channelInfos, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (!error) {
-                if (channelInfos.count == 1) {
-                    self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
-                }else{
-                    NSArray *sortedChannel = [self sortChannelList:channelInfos];
-                    [self showEmptyResultsView:(sortedChannel.count == 0)];
-                    self.channels = sortedChannel;
-                    [self.tableView reloadData];
+                if (!error) {
+                    self.taggedChannels = channelIds;
+                    if (channelInfos.count == 1) {
+                        self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
+                    }else{
+                        NSArray *sortedChannel = [self sortChannelList:channelInfos];
+                        [self showEmptyResultsView:(sortedChannel.count == 0)];
+                        self.channels = sortedChannel;
+                        [self.tableView reloadData];
+                    }
                 }
-            }
-        });
+            });
+        }];
     }];
 }
 
@@ -188,6 +193,9 @@
 
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
+    if((self.taggedChannels.count >0) && (self.convOptions.filteredViewTitle.length >0)){
+        self.parentViewController.navigationItem.title = self.convOptions.filteredViewTitle;
     }
     else {
         [self configureBackButtonWithGestureDelegate:nil];

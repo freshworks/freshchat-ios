@@ -26,6 +26,7 @@
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
 #import "HLArticleUtil.h"
+#import "HLTagManager.h"
 
 @interface HLCategoryListController ()
 
@@ -34,6 +35,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property (nonatomic, strong) NSArray *taggedCategories;
 
 @end
 
@@ -46,14 +48,14 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
-    if (self.faqOptions && self.tagsArray.count >0 && self.faqOptions.filteredViewTitle.length>0){
-        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
-    }
-    else{
+//    if (self.faqOptions && self.tagsArray.count >0 && self.faqOptions.filteredViewTitle.length>0){
+//        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
+//    }
+//    else{
         parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-    }
-    [self setNavigationItem];
+//    }
     [self updateCategories];
+    [self setNavigationItem];
     [self addLoadingIndicator];
 }
 
@@ -74,35 +76,37 @@
 
 //TODO: Remove duplicate code
 -(void)updateCategories{
-    //[[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
-    [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:self.tagsArray withCompletion:^(NSArray *solutions, NSError *error) {
-        if (!error) {
-            self.categories = solutions;
-            [self setNavigationItem];
+    [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
+        [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:categoryIds withCompletion:^(NSArray *solutions, NSError *error) {
+            if (!error) {
+                self.categories = solutions;
+                self.taggedCategories = categoryIds;
+                [self setNavigationItem];
             
-            if(![self.categories count]){
-                if (!self.emptyResultView) {
-                    NSString *message;
-                    if([[FDReachabilityManager sharedInstance] isReachable]){
-                        message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+                if(![self.categories count]){
+                    if (!self.emptyResultView) {
+                        NSString *message;
+                        if([[FDReachabilityManager sharedInstance] isReachable]){
+                            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+                        }
+                        else{
+                            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                        }
+                        self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
+                        self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+                        [self.view addSubview:self.emptyResultView];
+                        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
                     }
-                    else{
-                        message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                    }
-                    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:message];
-                    self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-                    [self.view addSubview:self.emptyResultView];
-                    [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
                 }
-            }
-            else{
-                self.emptyResultView.frame = CGRectZero;
-                [self.emptyResultView removeFromSuperview];
-                [self removeLoadingIndicator];
-            }
+                else{
+                    self.emptyResultView.frame = CGRectZero;
+                    [self.emptyResultView removeFromSuperview];
+                    [self removeLoadingIndicator];
+                }
             
-            [self.tableView reloadData];
-        }
+                [self.tableView reloadData];
+            }
+        }];
     }];
 }
 
@@ -128,8 +132,11 @@
         [self configureBackButtonWithGestureDelegate:nil];
     }
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(self.categories.count){
+    if(self.categories.count && !self.taggedCategories.count){
         [rightBarItems addObject:searchBarButton];
+    }
+    if((self.taggedCategories.count > 0) && (self.faqOptions.filteredViewTitle.length>0)){
+        self.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
         [rightBarItems addObject:contactUsBarButton];
@@ -234,6 +241,9 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
+    if(self.taggedCategories.count == 0){
+        self.faqOptions = nil;
+    }
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];

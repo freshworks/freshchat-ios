@@ -8,10 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "HLListViewController.h"
+#import "ConversationOptionsInterface.h"
 
-@interface HLChannelViewController : HLListViewController
-@property (nonatomic, strong) NSArray *tagsArray;
-@property (nonatomic, assign) NSString *tagsTitle;
-
+@interface HLChannelViewController : HLListViewController<ConversationOptionsInterface>
 
 @end

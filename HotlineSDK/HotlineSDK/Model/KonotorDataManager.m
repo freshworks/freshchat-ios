@@ -206,6 +206,8 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
+
+
 - (void) fetchAllCategoriesForTags  :(NSArray*) categoriesIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
     NSManagedObjectContext *backgroundContext = self.backgroundContext;
     NSManagedObjectContext *mainContext = self.mainObjectContext;

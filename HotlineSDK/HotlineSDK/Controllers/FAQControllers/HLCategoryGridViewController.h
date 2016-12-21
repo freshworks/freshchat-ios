@@ -14,7 +14,5 @@
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *searchResults;
-@property (nonatomic, strong) NSArray *tagsArray;
-@property (nonatomic, assign) NSString *tagsTitle;
 
 @end

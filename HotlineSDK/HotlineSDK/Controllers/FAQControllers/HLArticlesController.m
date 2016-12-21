@@ -124,7 +124,9 @@
     UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     [self configureBackButtonWithGestureDelegate:self];
-    self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
+    if(!self.faqOptions){
+        self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
+    }
 }
 
 -(void)searchButtonAction:(id)sender{
