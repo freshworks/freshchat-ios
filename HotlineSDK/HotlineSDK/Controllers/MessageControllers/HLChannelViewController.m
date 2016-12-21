@@ -195,11 +195,12 @@
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
-    if((self.taggedChannels.count >0) && (self.convOptions.filteredViewTitle.length >0)){
-        self.parentViewController.navigationItem.title = self.convOptions.filteredViewTitle;
-    }
     else {
         [self configureBackButtonWithGestureDelegate:nil];
+    }
+    
+    if((self.taggedChannels.count > 0) && (self.convOptions.filteredViewTitle.length > 0)){
+        self.parentViewController.navigationItem.title = self.convOptions.filteredViewTitle;
     }
 }
 
