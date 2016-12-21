@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/freshdesk/hotline_ios_dev/tree/HEAD)
-
-[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.0...HEAD)
+## [v1.2.1](https://github.com/freshdesk/hotline_ios_dev/tree/v1.2.1) (2016-12-21)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.0...v1.2.1)
 
 **Implemented enhancements:**
 
