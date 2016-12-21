@@ -102,6 +102,12 @@
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
+    if((self.faqOptions.tags.count >0) && (self.faqOptions.filteredViewTitle.length > 0)){
+        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
+    }
+    else{
+        parent.navigationItem.title = self.categoryTitle;
+    }
     [self setNavigationItem];
     [self registerAppAudioCategory];
     [self theming];
