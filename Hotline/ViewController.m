@@ -16,11 +16,21 @@
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
 
+@property (nonatomic, strong) IBOutlet UITextField *tagsField1;
+@property (nonatomic, strong) IBOutlet UITextField *tagsField2;
+@property (nonatomic, strong) IBOutlet UITextField *conatctUstags;
+@property (nonatomic, strong) IBOutlet UITextField *messageField;
+@property (nonatomic, strong) IBOutlet UITextField *filterTagsTitle;
+@property (nonatomic, strong) IBOutlet UITextField *sendMessageTag;
+@property (nonatomic, strong) IBOutlet UISwitch *mysWitch;
+@property (nonatomic, assign) BOOL switchVal;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
+    self.switchVal = true;
     [self setupSubview];
     
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
@@ -45,23 +55,110 @@
     if (appDelegate.pickedImage) {
         self.imageView.image = appDelegate.pickedImage;
     }else{
-        self.imageView.image = [UIImage imageNamed:@"background"];
+        //self.imageView.image = [UIImage imageNamed:@"background"];
     }
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-//    FAQOptions *options = [FAQOptions new];
-//    options.showFaqCategoriesAsGrid = YES;
-//    options.showContactUsOnFaqScreens = YES;
-//    //[options filterByTags : @[ @"test"] withTitle:@"newTag"];
-//    ////options.showContactUsOnAppBar = YES;
-//   [options filterByTags:@[@"test"] withTitle:@"newtag" andType:[NSNumber numberWithInt:ARTICLE]];
-//    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Hotline sharedInstance] showFAQs:self];
+}
+
+- (IBAction)articleFilter1:(id)sender{
+    NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
+    NSArray *contactUsTagsArray = [self.conatctUstags.text componentsSeparatedByString:@","];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = YES;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+    }
+    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: ARTICLE];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)categoryFilter1:(id)sender{
+    NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = YES;
+    options.showContactUsOnFaqScreens = self.switchVal;
     
-//    ConversationOptions *opt = [ConversationOptions new];
-//    [opt filterByTags:@[@"testing"] withTitle:@"channelfilter"];
-//    [[Hotline sharedInstance] showConversations:self withOptions:opt];
-    [[Hotline sharedInstance] sendMessageToChannel:@"heyy" withTag:@"bond"];
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+    }
+    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: CATEGORY];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)channelFilter1:(id)sender{
+    
+    NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.filterTagsTitle.text];
+    [[Hotline sharedInstance] showConversations:self withOptions:opt];
+}
+
+
+//2
+- (IBAction)articleFilter2:(id)sender{
+    NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
+    NSArray *contactUsTagsArray = [self.conatctUstags.text componentsSeparatedByString:@","];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = YES;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+    }
+    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: ARTICLE];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)categoryFilter2:(id)sender{
+    NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
+    NSArray *contactUsTagsArray = [self.conatctUstags.text componentsSeparatedByString:@","];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = YES;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+    }
+    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: CATEGORY];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)channelFilter2:(id)sender{
+    NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.filterTagsTitle.text];
+    [[Hotline sharedInstance] showConversations:self withOptions:opt];
+}
+
+- (IBAction)sendMessage:(id)sender{
+    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:self.messageField.text andTag:self.sendMessageTag.text];
+    [[Hotline sharedInstance] sendMessage:userMessage];
+}
+
+- (IBAction)switchAction:(id)sender {
+    
+    if ([self.mysWitch isOn]) {
+        self.switchVal = true;
+    } else {
+        self.switchVal = false;
+    }
+}
+
+- (IBAction)contactFilter1:(id)sender{
+    NSArray *arr = [self.conatctUstags.text componentsSeparatedByString:@","];
+    FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnFaqScreens = YES;
+    [options filterContactUsByTags:arr withTitle:self.filterTagsTitle.text];
+    [options filterByTags:@[] withTitle:self.filterTagsTitle.text andType: CATEGORY];
+    [[Hotline sharedInstance] showFAQs:self withOptions:options];
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];// this will do the trick
 }
 
 @end
