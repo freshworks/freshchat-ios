@@ -58,7 +58,7 @@
         parent.navigationItem.title = self.category.title;
         [self setNavigationItem];
     }
-    else if (self.faqOptions && [[self.faqOptions tags] count] > 0){
+    else if (self.faqOptions.tags.count > 0){
         if(self.faqOptions.filteredViewTitle.length > 0){
             parent.navigationItem.title = [self.faqOptions filteredViewTitle];
         }
@@ -94,7 +94,6 @@
     else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
         [[HLTagManager sharedInstance] getArticlesForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
-             
              [mainContext performBlock:^{
                  NSMutableArray *matchingArticles= [NSMutableArray new];
                  for(NSNumber * articleId in articleIds){
