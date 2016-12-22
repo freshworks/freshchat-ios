@@ -97,6 +97,7 @@
                 if (category.articles.count == 0){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !",category.title, category.categoryID);
                     [context deleteObject:category];
+                    [FDTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: FDTagTypeCategory] inContext:context];
                 }
 
             }else{
