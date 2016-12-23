@@ -655,6 +655,7 @@
 
 -(void) sendMessage:(HotlineMessage *)messageObject{
     if(!messageObject.message.length){
+        NSLog(@"Send messsage API failed! : Empty message value :(");
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
