@@ -34,6 +34,7 @@
 #import "KonotorAudioRecorder.h"
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
+#import "HLChannelViewController.h"
 
 typedef struct {
     BOOL isLoading;
@@ -165,12 +166,16 @@ typedef struct {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    if(!self.channel.managedObjectContext) {
-        [self rebuildChannel];
-    }
-    [self refreshView];
     [self registerAppAudioCategory];
-    [self startPoller];
+    [self checkChannel:^(BOOL isChannelValid){
+        if(isChannelValid) {
+            if(!self.channel.managedObjectContext) {
+                [self rebuildMessages];
+            }
+            [self startPoller];
+            [self refreshView];
+        }
+    }];
 }
 
 
@@ -515,7 +520,62 @@ typedef struct {
     [self refreshView];
 }
 
--(void) rebuildChannel {
+-(void) channelsUpdated
+{
+    [self checkChannel:nil];
+}
+
+-(void) checkChannel : (void(^)(BOOL isChannelValid)) completion
+{
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+        BOOL isChannelValid = NO;
+        if (!error) {
+            for(HLChannelInfo *channel in channelInfos) {
+                if([channel.channelID isEqual:self.channelID]) {
+                    isChannelValid = YES;
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                if (isChannelValid) {
+                    if (channelInfos.count > 1) {
+                        [self alterNavigationStack];
+                    }
+                }
+                else {
+                    [self.parentViewController.navigationController popViewControllerAnimated:YES];
+                }
+            });
+        }
+        if(completion) {
+            completion(isChannelValid);
+        }
+    }];
+}
+
+-(void) alterNavigationStack
+{
+    BOOL containsChannelController = NO;
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isMemberOfClass:[HLContainerController class]]) {
+            HLContainerController *containerContr = (HLContainerController *)controller;
+            if (containerContr.childController && [containerContr.childController isMemberOfClass:[HLChannelViewController class]]) {
+                containsChannelController = YES;
+            }
+        }
+    }
+    //If channel count changes from 1 to many, alter the navigation stack [channel list controller , current message channel]
+    if (!containsChannelController) {
+        HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
+        UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
+        self.parentViewController.navigationController.viewControllers = @[channelContainer,self.parentViewController];
+        _flags.isModalPresentationPreferred = NO;
+        self.embedded = NO;
+        [self setNavigationItem];
+    }
+}
+
+-(void) rebuildMessages
+{
     self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     self.conversation = [self.channel primaryConversation];
     self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
@@ -567,6 +627,8 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(channelsUpdated)
+                                                name:HOTLINE_CHANNELS_UPDATED object:nil];
 
 }
 
@@ -583,6 +645,7 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -706,8 +769,8 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
-        [self processPendingCSAT];
     }
+    [self processPendingCSAT];
 }
 
 - (void) didNotifyServerError {
@@ -911,18 +974,12 @@ typedef struct {
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self hasPendingCSAT] && !self.CSATView.isShowing) {
+        if ([KonotorConversation hasPendingCSAT:self.conversation] && !self.CSATView.isShowing) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
             [self.view layoutIfNeeded];
             [self scrollTableViewToLastCell];
         }
     });
-}
-
--(BOOL)hasPendingCSAT{
-    return (self.conversation.hasPendingCsat.boolValue &&
-            [self getCSATObject] &&
-            [self getCSATObject].csatStatus.integerValue == CSAT_NOT_RATED);
 }
 
 -(void)displayCSATPromptWithState:(BOOL)isResolved{

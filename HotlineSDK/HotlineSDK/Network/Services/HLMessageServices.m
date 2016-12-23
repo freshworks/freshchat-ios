@@ -223,6 +223,11 @@ static HLNotificationHandler *handleUpdateNotification;
             if (!csat) {
                 csat = [HLCsat createWithInfo:conversationInfo inContext:context];
                 FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
+                if(![HLNotificationHandler areNotificationsEnabled]) {
+                    handleUpdateNotification = [[HLNotificationHandler alloc] init];
+                    HLChannel *channel = [HLChannel getWithID:conversationInfo[@"channelId"] inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:[conversationInfo valueForKeyPath:@"csat.question"]];
+                }
             }else{
                 csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
             }
