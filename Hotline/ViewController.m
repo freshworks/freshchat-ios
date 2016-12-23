@@ -16,13 +16,23 @@
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
 
-@property (nonatomic, strong) IBOutlet UITextField *tagsField1;
-@property (nonatomic, strong) IBOutlet UITextField *tagsField2;
-@property (nonatomic, strong) IBOutlet UITextField *conatctUstags;
-@property (nonatomic, strong) IBOutlet UITextField *messageField;
-@property (nonatomic, strong) IBOutlet UITextField *filterTagsTitle;
+@property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqTagsField2;
+@property (nonatomic, strong) IBOutlet UITextField *faqTitleField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqTitleField2;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField2;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField2;
+
+@property (nonatomic, strong) IBOutlet UITextField *conversationTitle;
+@property (nonatomic, strong) IBOutlet UITextField *conversationTags;
+
+@property (nonatomic, strong) IBOutlet UITextField *message;
 @property (nonatomic, strong) IBOutlet UITextField *sendMessageTag;
+
 @property (nonatomic, strong) IBOutlet UISwitch *mysWitch;
+
 @property (nonatomic, assign) BOOL switchVal;
 
 @end
@@ -64,81 +74,75 @@
 }
 
 - (IBAction)articleFilter1:(id)sender{
-    NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
-    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: ARTICLE];
+    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)categoryFilter1:(id)sender{
-    NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
-    
     if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
-    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: CATEGORY];
+    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 
+
+
 - (IBAction)channelFilter1:(id)sender{
     
-    NSArray *arr = [self.tagsField1.text componentsSeparatedByString:@","];
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
     ConversationOptions *opt = [ConversationOptions new];
-    [opt filterByTags:arr withTitle:self.filterTagsTitle.text];
+    [opt filterByTags:arr withTitle:self.conversationTitle.text];
     [[Hotline sharedInstance] showConversations:self withOptions:opt];
 }
 
 
 //2
 - (IBAction)articleFilter2:(id)sender{
-    NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
     }
-    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: ARTICLE];
+    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: ARTICLE];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)categoryFilter2:(id)sender{
-    NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
+    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = YES;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.filterTagsTitle.text];
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
     }
-    [options filterByTags:arr withTitle:self.filterTagsTitle.text andType: CATEGORY];
+    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: CATEGORY];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
 }
 
-- (IBAction)channelFilter2:(id)sender{
-    NSArray *arr = [self.tagsField2.text componentsSeparatedByString:@","];
-    ConversationOptions *opt = [ConversationOptions new];
-    [opt filterByTags:arr withTitle:self.filterTagsTitle.text];
-    [[Hotline sharedInstance] showConversations:self withOptions:opt];
-}
-
 - (IBAction)sendMessage:(id)sender{
-    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:self.messageField.text andTag:self.sendMessageTag.text];
+    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:self.message.text andTag:self.sendMessageTag.text];
     [[Hotline sharedInstance] sendMessage:userMessage];
 }
 
@@ -151,16 +155,6 @@
     }
 }
 
-- (IBAction)contactFilter1:(id)sender{
-    NSMutableArray *arr =[[NSMutableArray alloc] initWithArray:[self.conatctUstags.text componentsSeparatedByString:@","]];
-    [arr removeObject:@""];
-    
-    FAQOptions *options = [FAQOptions new];
-    options.showContactUsOnFaqScreens = YES;
-    [options filterContactUsByTags:arr withTitle:self.filterTagsTitle.text];
-    [options filterByTags:@[] withTitle:self.filterTagsTitle.text andType: CATEGORY];
-    [[Hotline sharedInstance] showFAQs:self withOptions:options];
-}
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];// this will do the trick
