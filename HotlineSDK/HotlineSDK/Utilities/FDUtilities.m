@@ -269,6 +269,11 @@ static NSInteger networkIndicator = 0;
     }
 }
 
++(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags{
+    
+    return [tags valueForKey:@"lowercaseString"];
+}
+
 +(NSString*)deviceModelName{
     struct utsname systemInfo;
     uname(&systemInfo);

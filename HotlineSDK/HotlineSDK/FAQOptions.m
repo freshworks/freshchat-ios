@@ -9,6 +9,7 @@
 #import "Hotline.h"
 
 #import <Foundation/Foundation.h>
+#import "FDUtilities.h"
 
 @interface FAQOptions()
 
@@ -38,7 +39,8 @@
 }
 
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (int) type{
-    self.filterByTags = tags;
+    
+    self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:tags];
     self.tagViewTitle = title;
     self.filterType = [NSNumber numberWithInt:type];
 }
@@ -48,7 +50,7 @@
 }
 
 -(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title {
-    self.contactUsTags = tags;
+    self.contactUsTags = [FDUtilities convertTagsArrayToLowerCase:tags];
     self.contactUsTitle = title;
 }
 
@@ -90,7 +92,7 @@
 }
 
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title{
-    self.filterByTags = tags;
+    self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:tags];
     self.tagViewTitle = title;
 }
 

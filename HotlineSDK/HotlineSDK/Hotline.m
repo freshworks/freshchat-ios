@@ -654,7 +654,7 @@
 }
 
 -(void) sendMessage:(HotlineMessage *)messageObject{
-    if(!messageObject.message){
+    if(!messageObject.message.length){
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];

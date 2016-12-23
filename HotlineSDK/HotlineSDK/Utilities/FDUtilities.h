@@ -33,7 +33,7 @@
 +(NSString *)appName;
 +(NSString*)deviceModelName;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
-
++(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
 +(BOOL)isiOS10;
 
 @end
