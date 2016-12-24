@@ -56,6 +56,10 @@
 		<string>FFFFFF</string>
 		<key>SubmitButtonColor</key>
 		<string>007AFF</string>
+		<key>SubmitButtonTitleFontName</key>
+		<string>SYS_DEFAULT_FONT_NAME</string>
+		<key>SubmitButtonTitleFontSize</key>
+		<string>15</string>
 		<key>RatingBarColor</key>
 		<string>FFA500</string>
 		<key>HorizontalLineColor</key>

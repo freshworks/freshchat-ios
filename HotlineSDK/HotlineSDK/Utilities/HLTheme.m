@@ -686,6 +686,10 @@
     return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
+-(UIFont *)csatPromptSubmitButtonTitleFont{
+    return [self getFontWithKey:@"ChatResolutionPrompt.SubmitButtonTitle" andDefaultSize:15];
+}
+
 -(UIColor *)csatPromptHorizontalLineColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.HorizontalLineColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];

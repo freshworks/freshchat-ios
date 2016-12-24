@@ -70,6 +70,7 @@
         self.submitButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self.submitButton setTitle:HLLocalizedString(LOC_CUST_SAT_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
         [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
+        [self.submitButton.titleLabel setFont:[self.theme csatPromptSubmitButtonTitleFont]];
         [self.CSATPrompt addSubview:self.submitButton];
         
         //Feedback textview
