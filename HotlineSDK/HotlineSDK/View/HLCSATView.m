@@ -78,6 +78,8 @@
         self.feedbackView.placeholder = HLLocalizedString(LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER);
         self.feedbackView.opaque = NO;
         self.feedbackView.alpha = 0.7;
+        self.feedbackView.font = self.theme.csatPromptInputTextFont;
+        self.feedbackView.textColor = self.theme.csatPromptInputTextFontColor;
         self.feedbackView.layer.borderWidth = 0.5;
         self.feedbackView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         self.feedbackView.translatesAutoresizingMaskIntoConstraints = NO;

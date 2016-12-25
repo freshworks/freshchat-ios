@@ -195,5 +195,7 @@
 -(UIColor *)csatPromptHorizontalLineColor;
 -(UIFont *)csatPromptQuestionTextFont;
 -(UIColor *)csatPromptQuestionTextFontColor;
+-(UIFont *)csatPromptInputTextFont;
+-(UIColor *)csatPromptInputTextFontColor;
 
 @end

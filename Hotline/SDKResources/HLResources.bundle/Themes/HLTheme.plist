@@ -64,6 +64,12 @@
 		<string>FFA500</string>
 		<key>HorizontalLineColor</key>
 		<string>D3D3D3</string>
+		<key>InputTextFontColor</key>
+		<string>7A7779</string>
+		<key>InputTextFontName</key>
+		<string>SYS_DEFAULT_FONT_NAME</string>
+		<key>InputTextFontSize</key>
+		<string>13</string>
 		<key>QuestionTextFontSize</key>
 		<string>13</string>
 		<key>QuestionTextFontName</key>

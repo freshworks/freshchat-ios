@@ -690,6 +690,15 @@
     return [self getFontWithKey:@"ChatResolutionPrompt.SubmitButtonTitle" andDefaultSize:15];
 }
 
+-(UIColor *)csatPromptInputTextFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.InputTextFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *)csatPromptInputTextFont{
+    return [self getFontWithKey:@"ChatResolutionPrompt.InputText" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
 -(UIColor *)csatPromptHorizontalLineColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.HorizontalLineColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
