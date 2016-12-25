@@ -10,8 +10,9 @@
 #import "HotlineSDK/Hotline.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
+#define kOFFSET_FOR_KEYBOARD 160.0
 
-@interface ViewController ()
+@interface ViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -45,6 +46,21 @@
     
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
+    
+    self.faqTagsField1.delegate = self;
+    self.faqTagsField2.delegate = self;
+    self.faqTitleField1.delegate = self;
+    self.faqTitleField2.delegate = self;
+    self.faqContactUsTagsField1.delegate = self;
+    self.faqContactUsTagsField2.delegate = self;
+    self.faqContactUsTitleField1.delegate = self;
+    self.faqContactUsTitleField2.delegate = self;
+    self.conversationTitle.delegate = self;
+    self.conversationTags.delegate = self;
+    self.message.delegate = self;
+    self.sendMessageTag.delegate = self;
+    
+
 }
 
 -(void)setupSubview{
@@ -54,9 +70,81 @@
     
     NSDictionary *views = @{@"imgView" : self.imageView};
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imgView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[imgView]|" options:0 metrics:nil views:views]];
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imgView]|" options:0 metrics:nil views:views]];
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[imgView]|" options:0 metrics:nil views:views]];
     
+}
+
+-(void)keyboardWillShow {
+    // Animate the current view out of the way
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)keyboardWillHide {
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)sender
+
+{
+    //move the main view, so that the keyboard does not hide it.
+    if  (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)sender
+{
+    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTitleField2]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqTagsField2]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTagsField2]||[sender isEqual:self.faqContactUsTitleField1]||[sender isEqual:self.faqContactUsTitleField2])
+    {
+        //move the main view, so that the keyboard does not hide it.
+        if  (self.view.frame.origin.y >= 0)
+        {
+            [self setViewMovedUp:YES];
+        }
+    }
+}
+
+//method to move the view up/down whenever the keyboard is shown/dismissed
+-(void)setViewMovedUp:(BOOL)movedUp
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
+    
+    CGRect rect = self.view.frame;
+    if (movedUp)
+    {
+        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
+        // 2. increase the size of the view so that the area behind the keyboard is covered up.
+        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
+        rect.size.height += kOFFSET_FOR_KEYBOARD;
+    }
+    else
+    {
+        // revert back to the normal state.
+        rect.origin.y += kOFFSET_FOR_KEYBOARD;
+        rect.size.height -= kOFFSET_FOR_KEYBOARD;
+    }
+    self.view.frame = rect;
+    
+    [UIView commitAnimations];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -67,6 +155,15 @@
     }else{
         //self.imageView.image = [UIImage imageNamed:@"background"];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
@@ -155,9 +252,21 @@
     }
 }
 
-
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];// this will do the trick
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    // unregister for keyboard notifications while not visible.
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
 }
 
 @end
