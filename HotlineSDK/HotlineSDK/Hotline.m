@@ -402,6 +402,7 @@
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    
      [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
          HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
          UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
@@ -410,12 +411,16 @@
 }
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
-    
-    [self selectConversationController:options withCompletion:^(HLViewController *preferredController) {
+    if(options.tags.count > 0){
+        [self selectConversationController:options withCompletion:^(HLViewController *preferredController) {
         HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
         UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
         [controller presentViewController:navigationController animated:YES completion:nil];
-    }];
+        }];
+    }
+    else{
+        [self showConversations:controller];
+    }
 }
 
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{

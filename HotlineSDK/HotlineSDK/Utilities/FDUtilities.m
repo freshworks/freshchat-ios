@@ -270,8 +270,9 @@ static NSInteger networkIndicator = 0;
 }
 
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags{
-    
-    return [tags valueForKey:@"lowercaseString"];
+    NSArray *noEmptyTags = [tags filteredArrayUsingPredicate:
+                               [NSPredicate predicateWithFormat:@"length > 0"]];
+    return [noEmptyTags valueForKey:@"lowercaseString"];
 }
 
 +(NSString*)deviceModelName{

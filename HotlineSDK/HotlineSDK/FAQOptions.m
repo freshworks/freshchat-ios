@@ -92,7 +92,7 @@
 }
 
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title{
-    self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:tags];
+    self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:[tags mutableCopy]];
     self.tagViewTitle = title;
 }
 

@@ -133,33 +133,33 @@
 
 - (void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
     
-    NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
+    NSMutableSet * categoriesSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
         fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, FDTagTypeCategory];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
-            [taggedIds addObject:taggedObj.taggableID];
+            [categoriesSet addObject:taggedObj.taggableID];
         }
     }
     dispatch_async(dispatch_get_main_queue(),^{
-        completion([taggedIds mutableCopy]);
+        completion([[categoriesSet allObjects] mutableCopy]);
     });
 }
 
 - (void) getChannelsForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
     
-    NSMutableArray *taggedIds = [[NSMutableArray alloc] init];
+    NSMutableSet * channelsSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
         fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, FDTagTypeChannel];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
         for (FDTags *taggedObj in matches){
-            [taggedIds addObject:taggedObj.taggableID];
+            [channelsSet addObject:taggedObj.taggableID];
         }
     }
     dispatch_async(dispatch_get_main_queue(),^{
-        completion([taggedIds mutableCopy]);
+        completion([[channelsSet allObjects] mutableCopy]);
     });
 }
 

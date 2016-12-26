@@ -28,6 +28,8 @@
 
 @property (nonatomic, strong) IBOutlet UITextField *conversationTitle;
 @property (nonatomic, strong) IBOutlet UITextField *conversationTags;
+@property (nonatomic, strong) IBOutlet UITextField *convContactUsTags;
+@property (nonatomic, strong) IBOutlet UITextField *convContactUsTitle;
 
 @property (nonatomic, strong) IBOutlet UITextField *message;
 @property (nonatomic, strong) IBOutlet UITextField *sendMessageTag;
@@ -199,15 +201,19 @@
 }
 
 
-
 - (IBAction)channelFilter1:(id)sender{
     
     NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:arr withTitle:self.conversationTitle.text];
+    FAQOptions *options = [FAQOptions new];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
+    }
     [[Hotline sharedInstance] showConversations:self withOptions:opt];
 }
-
 
 //2
 - (IBAction)articleFilter2:(id)sender{
