@@ -1,4 +1,8 @@
 
+Ver 1.2.2 
+__________________________
+Add missing Bitcode support
+
 Ver 1.2.1 
 __________________________
 In app Notification banner now shows CSAT notification when push notification is disabled. 
