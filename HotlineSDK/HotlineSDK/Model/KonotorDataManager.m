@@ -214,6 +214,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     [backgroundContext performBlock:^{
         NSArray *results;
         NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
         if(categoriesIds.count > 0){
             for(NSNumber * categoryId in categoriesIds){
                 HLCategory *category = [HLCategory getWithID:categoryId inContext:mainContext];
@@ -221,13 +222,15 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                     [fetchedSolutions addObject :category];
                 }
             }
+            
+            NSArray *sortedChannels = [fetchedSolutions sortedArrayUsingDescriptors:@[position]];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if(handler) handler(fetchedSolutions,nil);
+                if(handler) handler(sortedChannels,nil);
             });
         }
         else{
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
-            NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+            //NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             request.sortDescriptors = @[position];
             results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
             [mainContext performBlock:^{
