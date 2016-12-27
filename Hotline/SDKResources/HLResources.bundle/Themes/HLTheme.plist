@@ -65,7 +65,7 @@
 		<key>HorizontalLineColor</key>
 		<string>D3D3D3</string>
 		<key>InputTextFontColor</key>
-		<string>7A7779</string>
+		<string>000000</string>
 		<key>InputTextFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>InputTextFontSize</key>
