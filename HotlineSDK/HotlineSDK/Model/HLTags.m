@@ -1,27 +1,26 @@
 //
-//  FDTags.m
+//  HLTags.m
 //  HotlineSDK
 //
 //  Created by harish on 06/11/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "FDTags.h"
+#import "HLTags.h"
 #import "KonotorDataManager.h"
 
-@implementation FDTags
+@implementation HLTags
 
 @dynamic taggableID;
 @dynamic taggableType;
 @dynamic tagName;
 
 +(void)createTagWithInfo : (NSDictionary *)tagInfo inContext:(NSManagedObjectContext *)context{
-    FDTags *taggedObj;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %@ AND taggableType == %@ AND tagName == %@",tagInfo[@"taggableID"], tagInfo[@"taggableType"], tagInfo[@"tagName"]];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 0) {
-        FDTags *tag = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_TAGS_ENTITY inManagedObjectContext:context];
+        HLTags *tag = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_TAGS_ENTITY inManagedObjectContext:context];
         [self addTag:tag withInfo:tagInfo];
     }
 }
@@ -32,7 +31,7 @@
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %@ AND taggableType == %@", tagId, type];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if(matches.count){
-        for (FDTags *object in matches) {
+        for (HLTags *object in matches) {
             [context deleteObject:object];
         }
     }
@@ -52,7 +51,7 @@
     return tagsDict;
 }
 
-+(FDTags *)addTag:(FDTags *)tag withInfo:(NSDictionary *)tagInfo{
++(HLTags *)addTag:(HLTags *)tag withInfo:(NSDictionary *)tagInfo{
     tag.taggableID = tagInfo[@"taggableID"];
     tag.taggableType = tagInfo[@"taggableType"];
     tag.tagName = tagInfo[@"tagName"];

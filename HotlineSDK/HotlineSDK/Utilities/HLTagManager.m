@@ -8,7 +8,7 @@
 
 #import "HLTagManager.h"
 #import "HLMacros.h"
-#import "FDTags.h"
+#import "HLTags.h"
 #import "HLCategory.h"
 #import "HLArticle.h"
 
@@ -17,10 +17,10 @@
 
 @interface HLTagManager ()
 
-@property NSMutableDictionary *tagMap;
-@property dispatch_queue_t queue;
-@property NSString *storageFile;
-@property BOOL hasChanges;
+@property (nonatomic,strong)NSMutableDictionary *tagMap;
+@property (nonatomic)dispatch_queue_t queue;
+@property (nonatomic,strong)NSString *storageFile;
+@property (nonatomic)BOOL hasChanges;
 
 @end
 
@@ -55,7 +55,7 @@
             }
             else {
                 self.hasChanges = NO;
-                FDLog(@"Saved file with contents %@", self.tagMap);
+                FDLog(@"Tags: %d files saved", (int)self.tagMap.count);
             }
         }
     });
@@ -67,7 +67,7 @@
             NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
             if(data){
                 self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                 FDLog(@"loaded file with contents %@", self.tagMap);
+                 FDLog(@"Tags: %d files loaded", (int)self.tagMap.count);
             }
         }
     });
@@ -110,14 +110,14 @@
     NSMutableSet * articlesSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND (taggableType ==%d OR taggableType ==%d)", tag, FDTagTypeArticle, FDTagTypeCategory];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND (taggableType ==%d OR taggableType ==%d)", tag, HLTagTypeArticle, HLTagTypeCategory];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
-        for (FDTags *taggedObj in matches){
-            if([taggedObj.taggableType intValue] == FDTagTypeArticle){
+        for (HLTags *taggedObj in matches){
+            if([taggedObj.taggableType intValue] == HLTagTypeArticle){
                 
                 [articlesSet addObject:taggedObj.taggableID];
             }
-            else if ([taggedObj.taggableType intValue] == FDTagTypeCategory){
+            else if ([taggedObj.taggableType intValue] == HLTagTypeCategory){
                 HLCategory *category = [HLCategory getWithID:taggedObj.taggableID inContext:context];
                 for(HLArticle *articleInfo in category.articles){
                     [articlesSet addObject:articleInfo.articleID];
@@ -136,9 +136,9 @@
     NSMutableSet * categoriesSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, FDTagTypeCategory];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, HLTagTypeCategory];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
-        for (FDTags *taggedObj in matches){
+        for (HLTags *taggedObj in matches){
             [categoriesSet addObject:taggedObj.taggableID];
         }
     }
@@ -152,9 +152,9 @@
     NSMutableSet * channelsSet = [NSMutableSet set];
     for(NSString *tag in tags){
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, FDTagTypeChannel];
+        fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, HLTagTypeChannel];
         NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
-        for (FDTags *taggedObj in matches){
+        for (HLTags *taggedObj in matches){
             [channelsSet addObject:taggedObj.taggableID];
         }
     }

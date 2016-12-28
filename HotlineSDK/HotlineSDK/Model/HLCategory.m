@@ -11,7 +11,7 @@
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
 #import "HLTagManager.h"
-#import "FDTags.h"
+#import "HLTags.h"
 
 @implementation HLCategory
 
@@ -75,7 +75,7 @@
         BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
         BOOL isIOSPlatformAvail = [articleInfo[@"platforms"] containsObject:@"ios"];
         NSArray *tags = articleInfo[@"tags"];
-        [FDTags removeTagsForTaggableId:articleId andType:[NSNumber numberWithInt: FDTagTypeArticle] inContext:context];
+        [HLTags removeTagsForTaggableId:articleId andType:[NSNumber numberWithInt: HLTagTypeArticle] inContext:context];
         if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
@@ -87,7 +87,7 @@
                 [tagManager removeTagsForArticleId:articleId];//have to remove
                 for(NSString *tagName in tags){
                     
-                    [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeArticle] andIdvalue:articleId] inContext:context];
+                    [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeArticle] andIdvalue:articleId] inContext:context];
                     
                     [tagManager addTag:tagName forArticleId:articleId];//have to remove
                 }

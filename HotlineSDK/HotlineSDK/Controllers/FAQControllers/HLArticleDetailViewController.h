@@ -13,7 +13,7 @@
 #import "FAQOptionsInterface.h"
 
 //Implement FDYesNoPromptViewDelegate if needed
-@interface HLArticleDetailViewController : HLViewController <UIWebViewDelegate, UIScrollViewDelegate, FDYesNoPromptViewDelegate, FDAlertViewDelegate, FAQOptionsInterface>
+@interface HLArticleDetailViewController : HLViewController <UIWebViewDelegate, UIScrollViewDelegate, HLYesNoPromptViewDelegate, FDAlertViewDelegate, FAQOptionsInterface>
 
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;

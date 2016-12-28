@@ -17,6 +17,8 @@
 
 +(NSString *)getUserAlias;
 
++(void)registerUser:(void(^)(NSError *error))completion;
+
 +(void)storeUserAlias:(NSString *)alias;
 +(BOOL)isUserRegistered;
 
@@ -35,6 +37,8 @@
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
 +(BOOL)isiOS10;
+
++(void)initiatePendingTasks;
 
 @end
 

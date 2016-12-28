@@ -1,5 +1,5 @@
 //
-//  FDTags.h
+//  HLTags.h
 //  HotlineSDK
 //
 //  Created by harish on 06/11/16.
@@ -9,14 +9,14 @@
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 
-enum FDTagType {
-    FDTagTypeArticle  = 1,
-    FDTagTypeCategory = 2,
-    FDTagTypeChannel  = 3
+enum HLTagType {
+    HLTagTypeArticle  = 1,
+    HLTagTypeCategory = 2,
+    HLTagTypeChannel  = 3
 };
 
 
-@interface FDTags : NSManagedObject
+@interface HLTags : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * taggableID;
 @property (nonatomic, retain) NSNumber * taggableType;
@@ -28,6 +28,5 @@ enum FDTagType {
 
 +(void)removeTagsForTaggableId:(NSNumber *)tagId andType : (NSNumber*)type inContext:(NSManagedObjectContext *)context;
 
-//-(void)updateWithInfo:(NSDictionary *)tagInfo;
 
 @end

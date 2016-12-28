@@ -26,7 +26,10 @@
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
 #import "FDLocalNotification.h"
-#import "FDTags.h"
+#import "HLTags.h"
+#import "HLCoreServices.h"
+
+#define ERROR_CODE_USER_NOT_CREATED -1
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -63,6 +66,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
 }
 
+
 +(void)fetchMessages:(void(^)(NSError *error))handler{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -89,7 +93,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     return;
                 }
                 
-                FDLog(@"New Messages Count : %lu", (unsigned long)conversations.count);
+                FDLog(@"%lu Conversations created locally", (unsigned long)conversations.count);
                 
                 NSNumber *channelId;
                 
@@ -152,7 +156,11 @@ static HLNotificationHandler *handleUpdateNotification;
         HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         
         NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+        
         KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+        
+        [self processCSATForConversation:conversation withInfo:conversationInfo];
+        
         NSArray *messages = conversationInfo[@"messages"];
         for (int j=0; j<messages.count; j++) {
             __block NSDictionary *messageInfo = messages[j];
@@ -170,7 +178,9 @@ static HLNotificationHandler *handleUpdateNotification;
                     conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
                 }
                 
-                newMessage.belongsToConversation = conversation;
+                if(conversation){
+                    newMessage.belongsToConversation = conversation;
+                }
                 
                 //Do not mark restored mesages as unread
                 if (isRestore) {
@@ -195,6 +205,38 @@ static HLNotificationHandler *handleUpdateNotification;
     [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
     [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
     return true;
+}
+
++(void)processCSATForConversation:(KonotorConversation *)conversation withInfo:(NSDictionary *)conversationInfo{
+    if ([conversationInfo objectForKey:@"hasPendingCsat"]) {
+        conversation.hasPendingCsat = @([conversationInfo[@"hasPendingCsat"] boolValue]);
+        if ([conversationInfo objectForKey:@"csat"]) {
+            
+            if ([conversationInfo[@"hasPendingCsat"] boolValue]) {
+                FDLog(@"*** CSAT for Conversation ID :%@ is pending ***", conversationInfo[@"conversationId"]);
+            }
+
+            NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
+            NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+            HLCsat *csat = [HLCsat getWithID:conversationID inContext:context];
+            
+            FDLog(@"Conversation : %@", conversationInfo);
+            
+            if (!csat) {
+                csat = [HLCsat createWithInfo:conversationInfo inContext:context];
+                FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
+                if(![HLNotificationHandler areNotificationsEnabled]) {
+                    handleUpdateNotification = [[HLNotificationHandler alloc] init];
+                    HLChannel *channel = [HLChannel getWithID:conversationInfo[@"channelId"] inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                    [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:[conversationInfo valueForKeyPath:@"csat.question"]];
+                }
+            }else{
+                csat = [HLCsat updateCSAT:csat withInfo:conversationInfo];
+            }
+            
+            csat.belongToConversation = conversation;
+        }
+    }
 }
 
 +(void)postUnreadCountNotification{
@@ -247,12 +289,12 @@ static HLNotificationHandler *handleUpdateNotification;
             for(int i=0; i<channels.count; i++){
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
-                [FDTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: FDTagTypeChannel] inContext:context];
+                [HLTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: HLTagTypeChannel] inContext:context];
                 NSArray *tags = channelInfo[@"tags"];
                 if(tags.count >0){
                     if(!([channelInfo[@"hidden"] boolValue])){
                         for(NSString *tagName in tags){
-                            [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];
+                            [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];
                         }
                     }
                 }
@@ -281,7 +323,12 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
+//TODO: Temproary hack to avoid user registration occuring parallely
+
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    //Added this to simulate sending unregistered user alias for message create call
+//    [[FDSecureStore sharedInstance] setObject:@"asdf-adf-asdf-asdf" forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
@@ -354,12 +401,14 @@ static HLNotificationHandler *handleUpdateNotification;
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-            if (!error) {
-
-                if (!conversation) {
-                    NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if (!error && statusCode == 201) {
+                NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
+                if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                    pMessage.belongsToConversation = newConversation;
+                    if(newConversation){
+                        pMessage.belongsToConversation = newConversation;
+                    }
                 }else{
                     pMessage.belongsToConversation = conversation;
                 }
@@ -370,17 +419,17 @@ static HLNotificationHandler *handleUpdateNotification;
                 [channel addMessagesObject:pMessage];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
-                if(error && error.code >= 400 ){
-                    FDMemLogger *logger = [FDMemLogger new];
-                    [logger addMessage:@"Server Error during message create"];
-                    [logger addErrorInfo:error.userInfo];
-                    [logger addErrorInfo:@{@"requestURL" : request.URL.absoluteString ,
-                                           @"errorCode" : @(error.code) }];
-                    [logger upload];
+                if ( error && error.code == -1009 ) {
+                    [Konotor UploadFailedNotification:messageAlias];
+                }
+                else if( [self isUserNotCreated:responseInfo] ) {
+                    [self retryUserRegistration];
+                }
+                else {
+                    [Konotor NotifyServerError];
                 }
                 pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
                 [channel addMessagesObject:pMessage];
-                [Konotor performSelector:@selector(UploadFailedNotification:) withObject:messageAlias];
             }
             
             [[KonotorDataManager sharedInstance]save];
@@ -389,7 +438,17 @@ static HLNotificationHandler *handleUpdateNotification;
 
         }];
     }];
+}
 
++(BOOL) isUserNotCreated : (FDResponseInfo *)responseInfo {
+    return (responseInfo && [responseInfo isDict]
+            && [[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_USER_NOT_CREATED);
+}
+
++(void)retryUserRegistration{
+    [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+    [FDUtilities registerUser:nil];
 }
 
 //TODO: Skip messages that are clicked before
@@ -410,9 +469,9 @@ static HLNotificationHandler *handleUpdateNotification;
     [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Marketing message with ID %@ click event pushed to server", marketingId);
+            FDLog(@"*** Marked as Clicked *** Marketing campaign message with ID  %@", marketingId);
         }else{
-            FDLog(@"Failed to register marketing message click event to server");
+            FDLog(@"Failed to register marketing message click event to server : %@", error);
         }
     }];
 }
@@ -439,13 +498,100 @@ static HLNotificationHandler *handleUpdateNotification;
     [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         [context performBlock:^{
             if (!error) {
-                FDLog(@"Marked marketing msg with ID : %@ as read", marketingId);
+                FDLog(@"*** Marked as Seen *** Marketing campaign message with ID : %@ ", marketingId);
             }else{
                 FDLog(@"Failed to mark marketing msg with ID : %@ as read", marketingId);
                 [message markAsUnread];
             }
             [context save:nil];
         }];
+    }];
+}
+
+
++(void)postCSATWithID:(NSManagedObjectID *)csatObjectID completion:(void (^)(NSError *))handler{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        
+        NSError *error;
+        HLCsat *csat = nil;
+
+        if (csatObjectID) {
+            csat = [context existingObjectWithID:csatObjectID error:&error];
+            if (error){
+                if(handler) handler([NSError new]);
+                return;
+            }
+        }else{
+            FDLog(@"CSAT Error, Nil object ID");
+            if(handler) handler([NSError new]);
+            return;
+        }
+        
+        NSMutableDictionary *response = [[NSMutableDictionary alloc]init];
+        
+        NSString *conversationID = csat.belongToConversation.conversationAlias;
+        
+        NSString *csatID = csat.csatID;
+        
+        if (conversationID == nil || csatID == nil || conversationID.length == 0  || csatID.length == 0) {
+            FDLog(@"CSAT error: Something went wrong");
+            if(handler) handler([NSError new]);
+            return;
+        }
+
+        response[@"csatId"] = csatID;
+        
+        response[@"conversationId"] = conversationID;
+        
+        if (csat.userRatingCount) {
+            response[@"stars"] = csat.userRatingCount.stringValue;
+        }
+        
+        if (csat.isIssueResolved) {
+            response[@"issueResolved"] = csat.isIssueResolved;
+        }
+        
+        if (csat.userComments && csat.userComments.length > 0){
+            response[@"response"] = csat.userComments;
+        }
+        
+        HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+        NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
+        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+        NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
+        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
+        [request setRelativePath:path andURLParams:@[appKey]];
+        [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+            [context performBlock:^{
+                NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+                if (!error && statusCode == 201) {
+                    [context deleteObject:csat];
+                    [context save:nil];
+                    FDLog(@"*** CSAT submitted *** \n %@", response);
+                }else{
+                    FDLog(@"CSAT submission failed");
+                }
+                
+                if (handler) handler(error);
+            }];
+        }];
+
+    }];
+}
+
++(void)uploadUnuploadedCSAT{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CSAT_ENTITY];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"csatStatus == %d", CSAT_RATED];
+        NSArray *results = [context executeFetchRequest:fetchRequest error:nil];
+        FDLog(@"There are %d unuploaded CSATs", (int)results.count);
+        for (HLCsat *csat in results) {
+            [HLMessageServices postCSATWithID:csat.objectID completion:nil];
+        }
+
     }];
 }
 

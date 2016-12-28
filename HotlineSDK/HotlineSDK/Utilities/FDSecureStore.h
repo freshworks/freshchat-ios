@@ -32,7 +32,7 @@
 #define HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL @"hotline_defaults_show_channel_thumbnail"
 #define HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE @"hotline_conversation_banner_message"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
-#define HOTLINE_DEFAULTS_OLD_USER_ALIAS @"hotline_defaults_old_user_alias"
+#define HOTLINE_DEFAULTS_OLD_USER_INFO @"hotline_defaults_old_user_info"
 
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME @"hotline_defaults_solutions_last_updated_svr_time_v2"
 //v2 - Version for Force reload of data from server for Tag Data

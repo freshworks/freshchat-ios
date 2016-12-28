@@ -90,6 +90,22 @@
 -(UIColor *)dialogueBackgroundColor;
 -(UIColor *)dialogueButtonColor;
 
+//TODO: Need to refractor this, use a common function for article voting and CSAT dialogue
+
+//CSAT Yes No dialogue
+-(UIFont *)custSatDialogueTitleFont;
+-(UIColor *)custSatDialogueTitleTextColor;
+-(UIFont *)custSatDialogueYesButtonFont;
+-(UIColor *)custSatDialogueYesButtonTextColor;
+-(UIColor *)custSatDialogueYesButtonBackgroundColor;
+-(UIColor *)custSatDialogueNoButtonBorderColor;
+-(UIColor *)custSatDialogueYesButtonBorderColor;
+-(UIColor *)custSatDialogueNoButtonBackgroundColor;
+-(UIFont *)custSatDialogueNoButtonFont;
+-(UIColor *)custSatDialogueNoButtonTextColor;
+-(UIColor *)custSatDialogueBackgroundColor;
+-(UIColor *)custSatDialogueButtonColor;
+
 //NavigationBar
 -(UIColor *)navigationBarBackgroundColor;
 -(UIFont *)navigationBarTitleFont;
@@ -111,13 +127,13 @@
 -(UIColor *)actionButtonColor;
 -(UIColor *)actionButtonBorderColor;
 -(UIColor *)hyperlinkColor;
-//-(NSString *)chatBubbleFontName;
 -(NSString *)conversationUIFontName;
-//-(float)chatBubbleFontSize;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
 - (UIColor *) agentMessageFontColor;
 - (UIColor *) userMessageFontColor;
+
+-(UIColor *)messageUIBackgroundColor;
 
 //Notification
 -(UIColor *)notificationBackgroundColor;
@@ -170,4 +186,16 @@
 -(UIImage *)getImageWithKey:(NSString *)key;
 
 -(NSString *)getCssFileContent:(NSString *)key;
+
+//CSAT Prompt
+-(UIColor *)csatPromptBackgroundColor;
+-(UIColor *)csatPromptRatingBarColor;
+-(UIColor *)csatPromptSubmitButtonColor;
+-(UIFont *)csatPromptSubmitButtonTitleFont;
+-(UIColor *)csatPromptHorizontalLineColor;
+-(UIFont *)csatPromptQuestionTextFont;
+-(UIColor *)csatPromptQuestionTextFontColor;
+-(UIFont *)csatPromptInputTextFont;
+-(UIColor *)csatPromptInputTextFontColor;
+
 @end

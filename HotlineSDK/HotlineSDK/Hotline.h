@@ -15,6 +15,8 @@ enum TagFilterType {
 };
 
 #define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
+#define HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshdesk.hotline_play_inapp_audio"
+#define HOTLINE_WILL_PLAY_AUDIO_MESSAGE @"com.freshdesk.hotline_pause_inapp_audio"
 
 @class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions, HotlineMessage;
 
@@ -260,8 +262,6 @@ enum TagFilterType {
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
 
 -(void)updateConversationBannerMessage:(NSString *)message;
-
--(void)sendMessage:(NSString *)message onChannel:(NSString *)channelName;
 
 /**
  *  Send message to particular channel with specified tag value

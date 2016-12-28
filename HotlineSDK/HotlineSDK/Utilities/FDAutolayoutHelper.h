@@ -29,4 +29,7 @@
 
 +(NSLayoutConstraint *)bottomAlign:(UIView *)subView toView:(UIView *)superView;
 
+//Add a new method, add contraints on view
+//Add way to get objects with translateautoresizemask = no
+
 @end

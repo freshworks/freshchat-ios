@@ -24,11 +24,11 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "HLMessageServices.h"
-#import "FDChannelUpdater.h"
 #import "FDIconDownloader.h"
 #import "FDReachabilityManager.h"
 #import "HLTagManager.h"
 #import "HLConversationUtil.h"
+#import "FDControllerUtils.h"
 
 @interface HLChannelViewController ()
 
@@ -38,6 +38,7 @@
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
 @property (nonatomic, strong) NSArray *taggedChannels;
 @property (nonatomic, strong) ConversationOptions *convOptions;
+@property (nonatomic, strong) HLTheme *theme;
 
 @end
 
@@ -46,20 +47,20 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
-    HLTheme *theme = [HLTheme sharedInstance];
+    self.theme = [HLTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [theme channelTitleFontColor],
-                                                           NSFontAttributeName: [theme channelTitleFont]
+                                                           NSForegroundColorAttributeName: [self.theme channelTitleFontColor],
+                                                           NSFontAttributeName: [self.theme channelTitleFont]
                                                            }];
-    self.navigationController.navigationBar.barTintColor = [theme navigationBarBackgroundColor];
+    self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     self.navigationController.navigationBar.titleTextAttributes = @{
-                                                                    NSForegroundColorAttributeName: [theme navigationBarTitleColor],
-                                                                    NSFontAttributeName: [theme navigationBarTitleFont]
+                                                                    NSForegroundColorAttributeName: [self.theme navigationBarTitleColor],
+                                                                    NSFontAttributeName: [self.theme navigationBarTitleFont]
                                                                     };
-    self.channels = [[NSArray alloc] init];
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
     [self addLoadingIndicator];
+    [self updateResultsView:YES];
 }
 
 - (void) setConversationOptions:(ConversationOptions *)options{
@@ -90,38 +91,43 @@
     [[[FDChannelUpdater alloc] init] resetTime];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
+    [self updateChannels];
     self.footerView.hidden = YES;
 }
 
+-(HLEmptyResultView *)emptyResultView
+{
+    if (!_emptyResultView) {
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:@""];
+        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _emptyResultView;
+}
+
 -(void)fetchUpdates{
-    [self updateChannels];
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
         if(isEmpty){
            [[[FDChannelUpdater alloc]init] resetTime];
         }
-        else {
-            [self removeLoadingIndicator];
-        }
         ShowNetworkActivityIndicator();
         [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-            HideNetworkActivityIndicator();
-            if(isEmpty){
-                [self removeLoadingIndicator];
-            }
+           HideNetworkActivityIndicator();
         }];
     }];
 }
 
 -(void)updateChannels{
-    
+/**
     HideNetworkActivityIndicator();
     [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
         [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds completion:^(NSArray *channelInfos, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+
+<<<<<<< HEAD
                 if (!error) {
                     self.taggedChannels = channelIds;
                     [self setNavigationItem];
@@ -133,11 +139,32 @@
                         self.channels = sortedChannel;
                         [self.tableView reloadData];
                     }
+=======
+            if (!error) {
+                if (channelInfos.count == 1) {
+                    BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
+                    self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
+                }else{
+                    BOOL refreshData = NO;
+                    NSArray *sortedChannel = [self sortChannelList:channelInfos];
+                    if ( self.channels ) {
+                        refreshData = YES;
+                    }
+                    self.channels = sortedChannel;
+                    refreshData = refreshData || (self.channels.count > 0);
+                    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+                        [self updateResultsView:NO];
+                    }
+                    [self.tableView reloadData];
+>>>>>>> staging
+ 
                 }
             });
         }];
     }];
-}
+**/
+ }
+ 
 
 -(NSArray *)sortChannelList:(NSArray *)channelInfos{
     
@@ -165,27 +192,29 @@
     return results;
 }
 
--(void)showEmptyResultsView:(BOOL)canShow{
-    if(canShow){
-        HLTheme *theme = [HLTheme sharedInstance];
-        if (!self.emptyResultView) {
-            NSString *message;
-            if([[FDReachabilityManager sharedInstance] isReachable]){
-                message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-            }
-            else{
-                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                [self removeLoadingIndicator];
-            }
-            self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:message];
-            self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.view addSubview:self.emptyResultView];
-            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
+-(void)updateResultsView:(BOOL)isLoading
+{
+    if(self.channels.count == 0) {
+        NSString *message;
+        if(isLoading) {
+            message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
         }
+        else if(![[FDReachabilityManager sharedInstance] isReachable]){
+            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+            [self removeLoadingIndicator];
+        }
+        else {
+            message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+            [self removeLoadingIndicator];
+        }
+        self.emptyResultView.emptyResultLabel.text = message;
+        [self.view addSubview:self.emptyResultView];
+        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
     }
     else{
         self.emptyResultView.frame = CGRectZero;
         [self.emptyResultView removeFromSuperview];
+        [self removeLoadingIndicator];
     }
 }
 
@@ -216,8 +245,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
 }
 
@@ -269,8 +298,10 @@
                 NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
                 if(iconURL){
                     if (cell.tag == indexPath.row) {
-                        cell.imgView.image = placeholderImage;
-                        [cell setNeedsLayout];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            cell.imgView.image = placeholderImage;
+                            [cell setNeedsLayout];
+                        });
                     }
                     
                     [self.iconDownloader enqueue:^{
@@ -285,7 +316,10 @@
                                 }
                             });
                         }else{
-                            cell.imgView.image = placeholderImage;
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                cell.imgView.image = placeholderImage;
+                                [cell setNeedsLayout];
+                            });
                         }
                     }];
                 }

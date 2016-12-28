@@ -28,7 +28,6 @@
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UIWebView *webView;
-//@property (strong, nonatomic) FDTheme *theme;
 @property (strong, nonatomic) FDSecureStore *secureStore;
 @property (strong, nonatomic) FDVotingManager *votingManager;
 @property (strong,nonatomic) FDYesNoPromptView *articleVotePromptView;

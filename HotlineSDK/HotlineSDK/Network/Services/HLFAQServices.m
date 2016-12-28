@@ -21,7 +21,7 @@
 #import "FDResponseInfo.h"
 #import "FDDateUtil.h"
 #import "HLTagManager.h"
-#import "FDTags.h"
+#import "HLTags.h"
 
 @implementation HLFAQServices
 
@@ -76,7 +76,7 @@
             BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
             BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
             NSArray *tags = categoryInfo[@"tags"];
-            [FDTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: FDTagTypeCategory] inContext:context];
+            [HLTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
             if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
                     FDLog(@"Updating category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
@@ -89,7 +89,7 @@
                 if(tags.count>0){
                     for(NSString *tagName in tags){
                         
-                        [FDTags createTagWithInfo:[FDTags createDictWithTagName:tagName type:[NSNumber numberWithInt: FDTagTypeCategory] andIdvalue:categoryInfo[@"categoryId"]] inContext:context];
+                        [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeCategory] andIdvalue:categoryInfo[@"categoryId"]] inContext:context];
                     }
                 }
                 
@@ -97,7 +97,7 @@
                 if (category.articles.count == 0){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !",category.title, category.categoryID);
                     [context deleteObject:category];
-                    [FDTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: FDTagTypeCategory] inContext:context];
+                    [HLTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
                 }
 
             }else{

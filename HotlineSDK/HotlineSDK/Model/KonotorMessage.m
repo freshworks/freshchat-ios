@@ -154,7 +154,8 @@ static BOOL messageExistsDirty = YES;
     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
     request.predicate = predicate;
     NSArray *messages = [context executeFetchRequest:request error:nil];
-    return messages.count;
+    NSInteger pendingCSATCount =  [KonotorConversation hasPendingCSAT:channel.primaryConversation] ? 1 : 0;
+    return messages.count + pendingCSATCount;
 }
 
 +(void)markAllMessagesAsReadForChannel:(HLChannel *)channel{
@@ -229,7 +230,6 @@ static BOOL messageExistsDirty = YES;
 }
 
 +(void)uploadAllUnuploadedMessages{
-    FDLog(@"Uploading all unuploaded messages");
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;
@@ -363,23 +363,6 @@ static BOOL messageExistsDirty = YES;
     [[KonotorDataManager sharedInstance]save];
     messageExistsDirty = YES;
     return newMessage;
-}
-
-+(NSArray *)getAllMessagesForConversation:(NSString* )conversationID;{
-    KonotorConversation *convo = [KonotorConversation RetriveConversationForConversationId:conversationID];
-    if(convo){
-        NSSet *pMessagesSet =[NSSet setWithSet:[convo valueForKeyPath:@"hasMessages"]];
-        NSMutableArray *pMessages = [NSMutableArray arrayWithArray:[pMessagesSet allObjects]];
-        NSMutableArray *pMessageArrayToReturn = [[NSMutableArray alloc]init];
-        for(int i =0;i<[pMessages count];i++){
-            KonotorMessageData *message = [[pMessages objectAtIndex:i] ReturnMessageDataFromManagedObject];
-            if (message) {
-                [pMessageArrayToReturn addObject:message];
-            }
-        }
-        return pMessageArrayToReturn;
-    }
-    return nil;
 }
 
 -(KonotorMessageData *) ReturnMessageDataFromManagedObject{

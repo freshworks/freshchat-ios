@@ -28,7 +28,7 @@ static BOOL INDEX_INPROGRESS = NO;
 
 +(void)updateIndex{
     if(INDEX_INPROGRESS){
-        FDLog(@"\n\n\n\n***********\n\n\n\nDouble indexing called\n\n\n*********\n\n\n\n")
+        FDLog(@"\n\n\n***********\n\n\n\nDouble indexing called\n\n\n***********\n\n\n")
         return;
     }
     BOOL indexState = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_INDEX_CREATED];

@@ -42,43 +42,82 @@
     return task;
 }
 
+-(NSDictionary *)getUserInfo{
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    NSString *adId = [FDUtilities getAdID];
+    NSString *userAlias = [FDUtilities getUserAlias];
+    NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
+    
+    if (userAlias) {
+        userInfo[@"alias"] = userAlias;
+    }else{
+        if([[FDSecureStore sharedInstance] checkItemWithKey:HOTLINE_DEFAULTS_APP_ID]){
+            // If appID is present then something is terribly wrong. Call the doctor
+            FDMemLogger *memLogger = [[FDMemLogger alloc]init];
+            [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
+            if(!userAlias){
+                [memLogger addErrorInfo:@{ @"Reason": @"userAlias is nil"}];
+            }
+            [memLogger upload];
+        }
+        return nil;
+    }
+
+    if (deviceProps) {
+        userInfo[@"meta"] = deviceProps;
+    }
+    
+    if (adId && adId.length > 0) {
+        userInfo[@"adId"] = adId;
+    }
+    
+    return  @{ @"user" : userInfo };
+}
+
 -(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
-    NSString *adId = [FDUtilities getAdID]; // This can be a empty String
-    NSString *userAlias = [FDUtilities getUserAlias];
     
-    if (userAlias == nil) {
-        FDMemLogger *memLogger = [[FDMemLogger alloc]init];
-        [memLogger addMessage:@"Skipping user registration" withMethodName:NSStringFromSelector(_cmd)];
-        if(!userAlias){
-            [memLogger addErrorInfo:@{ @"Reason": @"userAlias is nil"}];
-        }
-        [memLogger upload];
+    NSDictionary *userInfo = [self getUserInfo];
+    
+    if (!userInfo) {
         return nil;
     }
     
-    NSDictionary *info = @{
-                           @"user" : @{
-                                   @"alias" : userAlias,
-                                   @"meta"  : [FDUtilities deviceInfoProperties],
-                                   @"adId"  : adId
-                                   }
-                           };
+    NSError *error = nil;
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
     
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:info  options:NSJSONWritingPrettyPrinted error:nil];
+    if (error) {
+        FDLog(@"Error while serializing user information");
+    }
     
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:userData];
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
-            [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-            FDLog(@"User registered successfully 👍");
-            if (handler) handler(nil);
+            
+            FDLog(@"*** User registration status ***");
+            
+            if (statusCode == 201 || statusCode == 304) {
+                
+                if (statusCode == 201) FDLog(@"New user created successfully");
+                
+                if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
+                
+                [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                
+                if (handler) handler(nil);
+                
+            }else{
+                FDLog(@"Failed with wrong status code");
+                if (handler) handler([NSError new]);
+            }
+            
         }else{
             FDLog(@"User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
@@ -214,7 +253,7 @@
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"DAU call made");
+            FDLog(@"**** DAU call made ****");
         }else{
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
@@ -236,8 +275,14 @@
     
     NSMutableDictionary *info = [NSMutableDictionary new];
     
-    if (message.belongsToConversation.conversationAlias) {
+    
+    NSString *conversationAlias = message.belongsToConversation.conversationAlias;
+    
+    if (conversationAlias && [conversationAlias longLongValue] > 0) {
         info[@"conversationId"] = message.belongsToConversation.conversationAlias;
+    }else{
+        FDLog(@"*** Do not update read reciept for marketing campaign message ***");
+        return nil;
     }
     
     if (message.belongsToChannel.channelID) {
@@ -256,9 +301,9 @@
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Successful conversation request")
+            FDLog(@"*** Read reciept : Updated Successfully ***")
         }else{
-            FDLog(@"Could not make register user conversation call %@", error);
+            FDLog(@"** Read reciept : failed *** %@ ", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
     }];
@@ -281,20 +326,30 @@
     }
 }
 
-+(NSURLSessionDataTask *)trackUninstallForUser:(NSString *) userAlias withCompletion:(void (^)(NSError *))completion{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userAlias];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
++(NSURLSessionDataTask *)trackUninstallForUser:(NSDictionary *) userInfo withCompletion:(void (^)(NSError *))completion{
+    NSString *appID = userInfo[@"appId"];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",userInfo[@"appKey"]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UNINSTALLED_PATH,appID,userInfo[@"userAlias"]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,userInfo[@"domain"]]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:url andMethod:HTTP_METHOD_PUT];
     [request setRelativePath:path andURLParams:@[appKey]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"User uninstalled call made");
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 202 || statusCode == 200){
+                FDLog(@"Previous user marked as uninstalled");
+            }
         }else{
-            FDLog(@"User uninstall call failed %@", error);
-            FDLog(@"Response : %@", responseInfo.response);
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 404 ){
+                // user does not belong to this app ( or domain )
+                error = nil; // ignore error
+            }
+            else {
+                FDLog(@"User uninstall call failed %@", error);
+                FDLog(@"Response : %@", responseInfo.response);
+            }
         }
         if(completion){
             completion(error);
