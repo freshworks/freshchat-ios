@@ -17,7 +17,7 @@
 
 //bulk event base url for debug mode only
 #define HLEVENTS_BULK_EVENTS_URL @"https://events.hotline.io/bulkevents"
-#define HLEVENTS_BULK_EVENTS_DEBUG_URL @"http://events.staging.konotor.com/bulkevents"
+#define HLEVENTS_BULK_EVENTS_DEBUG_URL @"https://events.staging.konotor.com/bulkevents"
 
 //Events api response code
 #define EVENT_STORE_RESPCODE_REQUEST_ACCEPTED           200
