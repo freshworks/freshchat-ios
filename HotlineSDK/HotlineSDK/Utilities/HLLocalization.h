@@ -30,6 +30,9 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_EMPTY_CHANNEL_TEXT @"empty_channel_text"
 #define LOC_EMPTY_FAQ_TEXT @"empty_faq_text"
 
+#define LOC_LOADING_CHANNEL_TEXT @"loading_channel_text"
+#define LOC_LOADING_FAQ_TEXT @"loading_faq_text"
+
 #define LOC_CHANNELS_TITLE_TEXT @"channels_title_text"
 #define LOC_CHANNELS_CLOSE_BUTTON_TEXT @"channels_close_button_text"
 

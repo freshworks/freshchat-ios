@@ -597,10 +597,17 @@
 
 -(NSInteger)unreadCount{
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
-    request.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
-    NSArray *messages = [context executeFetchRequest:request error:nil];
-    return messages.count;
+    
+    NSFetchRequest *messageQuery = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
+    messageQuery.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
+
+    NSFetchRequest *csatQuery = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CSAT_ENTITY];
+    csatQuery.predicate = [NSPredicate predicateWithFormat:@"csatStatus == %d", CSAT_NOT_RATED];
+
+    NSArray *unreadMessages = [context executeFetchRequest:messageQuery error:nil];
+    NSArray *pendingCSATs = [context executeFetchRequest:csatQuery error:nil];
+
+    return (unreadMessages.count + pendingCSATs.count);
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
