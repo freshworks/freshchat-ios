@@ -348,7 +348,7 @@
 }
 
 - (void) sendEventForArticle :(NSString *) eventName{
-    [HLEventManager submitSDKEvent:eventName withBlock:^(HLEvent *event) {
+    [[HLEventManager sharedInstance] submitSDKEvent:eventName withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[self.articleID stringValue]];
         [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:self.articleTitle];
         [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[self.categoryID stringValue]];
@@ -356,7 +356,7 @@
 }
 
 -(void)buttonClickedEvent:(id)sender{
-    [HLEventManager submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_CONTACTUS];
     }];
     [self hideBottomView];

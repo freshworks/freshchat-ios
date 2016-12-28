@@ -125,7 +125,7 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    [HLEventManager submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
     }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];

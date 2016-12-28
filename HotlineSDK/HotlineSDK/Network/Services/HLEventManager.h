@@ -87,7 +87,7 @@
 @property (nonatomic, strong) NSMutableArray *eventsArray;
 
 + (instancetype) sharedInstance;
-+ (HLEvent *) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
+- (void) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
 
 - (void) uploadUserEvents :(NSArray *)events;
 - (void) startEventsUploadTimer;
