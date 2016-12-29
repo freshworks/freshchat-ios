@@ -448,7 +448,7 @@
 
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     
-    [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+    [[HLTagManager sharedInstance] getChannelsWithOptions:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
         void (^conversationOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
             [HLConversationUtil setConversationOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
@@ -655,7 +655,7 @@
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
+        [[HLTagManager sharedInstance] getChannelsWithOptions:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
             HLChannel *channel;
             if(channelIds.count ==1){
                 channel = [HLChannel getWithID:[channelIds firstObject] inContext:mainContext];

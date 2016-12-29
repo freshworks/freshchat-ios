@@ -123,13 +123,12 @@
 -(void)updateChannels{
 
     HideNetworkActivityIndicator();
-    [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+    [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
         [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds completion:^(NSArray *channelInfos, NSError *error) {
             if (!error) {
                 self.taggedChannels = channelIds;
                 if (channelInfos.count == 1) {
                     BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
-                   // [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)controller];
                     if(self.convOptions && (self.convOptions.tags.count >0)){
                         FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:[[channelInfos firstObject] channelID] andPresentModally:YES];
                         [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)msgController];

@@ -147,7 +147,7 @@
     });
 }
 
-- (void) getChannelsForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
+- (void) getChannelsWithOptions : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
     
     NSMutableSet * channelsSet = [NSMutableSet set];
     for(NSString *tag in tags){

@@ -21,7 +21,6 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
     NSArray *results = [context executeFetchRequest:request error:nil];
-    
     BOOL isModal = !isEmbeded;
     
     if (results.count == 1) {
