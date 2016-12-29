@@ -80,6 +80,9 @@
     [self localNotificationSubscription];
     [self fetchUpdates];
     [self updateCategories];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+    }];
 }
 
 -(void)setupSubviews{

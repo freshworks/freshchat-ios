@@ -347,7 +347,7 @@
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
-        
+        [[HLEventManager sharedInstance] startEventsUploadTimer];
         // TODO: Implement a better retry mechanism, also has a timing issue need to fix it
         [HLMessageServices uploadUnuploadedCSAT];
     });
@@ -418,9 +418,6 @@
 }
 
 -(void)showFAQs:(UIViewController *)controller{
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-    }];
     HLViewController *preferredController = [self getPreferredCategoryController];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
@@ -429,9 +426,6 @@
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
      [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
-         [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
-             [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-         }];
          HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
          UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
          [controller presentViewController:navigationController animated:YES completion:nil];
@@ -442,9 +436,6 @@
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
-            [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
-                [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-            }];
             if (channelInfos.count == 1) {
                 HLChannelInfo *channelInfo = [channelInfos firstObject];
                 FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
@@ -557,7 +548,7 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
-    [[HLEventManager sharedInstance] clearEvents];
+    [[HLEventManager sharedInstance] reset];
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
     }

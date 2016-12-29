@@ -47,6 +47,9 @@
     [self storeArticleVote:NO LocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service vote:NO forArticleID:articleID inCategoryID:categoryID];
+    if(completion){
+        completion(nil);
+    }
 }
 
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
@@ -54,6 +57,9 @@
     [self storeArticleVote:YES LocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service vote:YES forArticleID:articleID inCategoryID:categoryID];
+    if(completion){
+        completion(nil);
+    }
 }
 
 -(BOOL)isArticleVoted:(NSNumber *)articleID{

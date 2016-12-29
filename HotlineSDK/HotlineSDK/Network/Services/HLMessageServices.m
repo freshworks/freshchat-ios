@@ -407,7 +407,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 pMessage.messageAlias = messageInfo[@"alias"];
                 pMessage.createdMillis = messageInfo[@"createdMillis"];
                 [channel addMessagesObject:pMessage];
-                [self addSentMessageEventWithChannel:channel messageAlias:pMessage.messageAlias andType:messageInfo[@"messageType"]];
+                [self addSentMessageEventWithChannel:channel messageAlias:pMessage.messageAlias andType:[[pMessage messageType]intValue]];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
                 if ( error && error.code == -1009 ) {
@@ -442,12 +442,20 @@ static HLNotificationHandler *handleUpdateNotification;
     [FDUtilities registerUser:nil];
 }
 
-+(void) addSentMessageEventWithChannel :(HLChannel *)channel messageAlias:(NSString *)messageId andType :(NSString *) type {
++(void) addSentMessageEventWithChannel :(HLChannel *)channel messageAlias:(NSString *)messageId andType :(int) type {
     [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_SEND_MESSAGE withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[channel.channelID stringValue]];
         [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channel.name];
         [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageId];
-        [event propKey:HLEVENT_PARAM_MESSAGE_TYPE andVal:type];
+        NSString *messageType;
+        switch(type){
+            case 1 : messageType = HLEVENT_MESSAGE_TYPE_TEXT; break;
+            case 2 : messageType = HLEVENT_MESSAGE_TYPE_AUDIO; break;
+            case 3 : messageType = HLEVENT_MESSAGE_TYPE_IMAGE; break;
+            default: messageType = HLEVENT_MESSAGE_TYPE_TEXT; break;
+        }
+        
+        [event propKey:HLEVENT_PARAM_MESSAGE_TYPE andVal:messageType];
     }];
 }
 

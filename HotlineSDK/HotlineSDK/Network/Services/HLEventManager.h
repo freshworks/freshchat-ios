@@ -13,7 +13,7 @@
 
 //Event plist file path
 #define HLEVENT_DIR_PATH @"Hotline/Events"
-#define HLEVENT_FILE_NAME @"events.plist" // Hotline/Events/events.plist
+#define HLEVENT_FILE_NAME @"eventsDict.plist" // Hotline/Events/events.plist
 
 //bulk event base url for debug mode only
 #define HLEVENTS_BULK_EVENTS_URL @"https://events.hotline.io/bulkevents"
@@ -84,14 +84,10 @@
 
 @interface HLEventManager : NSObject
 
-@property (nonatomic, strong) NSMutableArray *eventsArray;
-
 + (instancetype) sharedInstance;
 - (void) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
-
-- (void) uploadUserEvents :(NSArray *)events;
 - (void) startEventsUploadTimer;
 - (void) cancelEventsUploadTimer;
-- (void) clearEvents;
+- (void) reset;
 
 @end
