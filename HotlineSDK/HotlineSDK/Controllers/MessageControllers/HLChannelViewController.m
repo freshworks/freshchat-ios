@@ -121,31 +121,28 @@
 }
 
 -(void)updateChannels{
-/**
+
     HideNetworkActivityIndicator();
     [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
         [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds completion:^(NSArray *channelInfos, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-
-<<<<<<< HEAD
-                if (!error) {
-                    self.taggedChannels = channelIds;
-                    [self setNavigationItem];
-                    if (channelInfos.count == 1) {
-                        self.navigationController.viewControllers = @[[[Hotline sharedInstance] getConversationsControllerForEmbed]];
-                    }else{
-                        NSArray *sortedChannel = [self sortChannelList:channelInfos];
-                        [self showEmptyResultsView:(sortedChannel.count == 0)];
-                        self.channels = sortedChannel;
-                        [self.tableView reloadData];
-                    }
-=======
             if (!error) {
+                self.taggedChannels = channelIds;
                 if (channelInfos.count == 1) {
                     BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
-                    self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
+                   // [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)controller];
+                    if(self.convOptions && (self.convOptions.tags.count >0)){
+                        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:[[channelInfos firstObject] channelID] andPresentModally:YES];
+                        [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)msgController];
+                        UIViewController *controller = [[HLContainerController alloc]initWithController:msgController andEmbed:isEmbedded];
+                        self.navigationController.viewControllers = @[controller];
+                    }
+                    else{
+                        self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
+                    }
+                    
                 }else{
                     BOOL refreshData = NO;
+                    
                     NSArray *sortedChannel = [self sortChannelList:channelInfos];
                     if ( self.channels ) {
                         refreshData = YES;
@@ -156,13 +153,10 @@
                         [self updateResultsView:NO];
                     }
                     [self.tableView reloadData];
->>>>>>> staging
- 
                 }
-            });
+            }
         }];
     }];
-**/
  }
  
 
@@ -194,28 +188,30 @@
 
 -(void)updateResultsView:(BOOL)isLoading
 {
-    if(self.channels.count == 0) {
-        NSString *message;
-        if(isLoading) {
-            message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.channels.count == 0) {
+            NSString *message;
+            if(isLoading) {
+                message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+            }
+            else if(![[FDReachabilityManager sharedInstance] isReachable]){
+                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                [self removeLoadingIndicator];
+            }
+            else {
+                message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+                [self removeLoadingIndicator];
+            }
+            self.emptyResultView.emptyResultLabel.text = message;
+            [self.view addSubview:self.emptyResultView];
+            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
         }
-        else if(![[FDReachabilityManager sharedInstance] isReachable]){
-            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+        else{
+            self.emptyResultView.frame = CGRectZero;
+            [self.emptyResultView removeFromSuperview];
             [self removeLoadingIndicator];
         }
-        else {
-            message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-            [self removeLoadingIndicator];
-        }
-        self.emptyResultView.emptyResultLabel.text = message;
-        [self.view addSubview:self.emptyResultView];
-        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-    }
-    else{
-        self.emptyResultView.frame = CGRectZero;
-        [self.emptyResultView removeFromSuperview];
-        [self removeLoadingIndicator];
-    }
+    });
 }
 
 -(void)setNavigationItem{

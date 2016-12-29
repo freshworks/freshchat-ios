@@ -100,7 +100,7 @@
     self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view insertSubview:self.imageView atIndex:0];
     
-    NSDictionary *views = @{@"imgView" : self.imageView};
+//    NSDictionary *views = @{@"imgView" : self.imageView};
     
 }
 

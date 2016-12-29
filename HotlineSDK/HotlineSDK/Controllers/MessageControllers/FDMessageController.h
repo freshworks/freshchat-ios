@@ -12,8 +12,9 @@
 #import "HLViewController.h"
 #import "FDYesNoPromptView.h"
 #import "HLCSATView.h"
+#import "ConversationOptionsInterface.h"
 
-@interface FDMessageController : HLViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, HLYesNoPromptViewDelegate, HLCSATViewDelegate>
+@interface FDMessageController : HLViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, HLYesNoPromptViewDelegate, HLCSATViewDelegate, ConversationOptionsInterface>
 
 -(BOOL)isModal;
 

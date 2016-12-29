@@ -75,6 +75,7 @@ typedef struct {
 @property (strong,nonatomic) HLCSATYesNoPrompt *yesNoPrompt;
 @property (strong, nonatomic) HLCSATView *CSATView;
 @property (nonatomic) BOOL isOneWayChannel;
+@property (nonatomic, strong) ConversationOptions *convOptions;
 
 @end
 
@@ -104,6 +105,10 @@ typedef struct {
         [Konotor setDelegate:self];
     }
     return self;
+}
+
+-(void) setConversationOptions:(ConversationOptions *)options{
+    self.convOptions = options;
 }
 
 -(KonotorConversation *)conversation{
@@ -537,7 +542,7 @@ typedef struct {
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
                 if (isChannelValid) {
-                    if (channelInfos.count > 1) {
+                    if (channelInfos.count > 1 && !self.convOptions) {
                         [self alterNavigationStack];
                     }
                 }

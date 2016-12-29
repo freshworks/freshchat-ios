@@ -106,28 +106,30 @@
 
 -(void)updateResultsView:(BOOL)isLoading
 {
-    if(self.categories.count == 0) {
-        NSString *message;
-        if(isLoading){
-            message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.categories.count == 0) {
+            NSString *message;
+            if(isLoading){
+                message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
+            }
+            else if(![[FDReachabilityManager sharedInstance] isReachable]){
+                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+                [self removeLoadingIndicator];
+            }
+            else {
+                message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+                [self removeLoadingIndicator];
+            }
+            self.emptyResultView.emptyResultLabel.text = message;
+            [self.view addSubview:self.emptyResultView];
+            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
         }
-        else if(![[FDReachabilityManager sharedInstance] isReachable]){
-            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
+        else{
+            self.emptyResultView.frame = CGRectZero;
+            [self.emptyResultView removeFromSuperview];
             [self removeLoadingIndicator];
         }
-        else {
-            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
-            [self removeLoadingIndicator];
-        }
-        self.emptyResultView.emptyResultLabel.text = message;
-        [self.view addSubview:self.emptyResultView];
-        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-    }
-    else{
-        self.emptyResultView.frame = CGRectZero;
-        [self.emptyResultView removeFromSuperview];
-        [self removeLoadingIndicator];
-    }
+    });
 }
 
 -(void)removeLoadingIndicator{

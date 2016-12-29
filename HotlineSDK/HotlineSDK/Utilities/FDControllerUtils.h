@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HLConversationUtil.h"
 
 //TODO: Move all controller config logic from hotline.m to here
 

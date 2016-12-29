@@ -83,8 +83,8 @@
                                                       andAppKey:@"f1894421-52bc-452e-8a1b-9274cf2ace12"];
     
     
-    config.appID = @"45fa92d7-af5d-4528-b001-a200ce554cb8";
-    config.appKey = @"f1894421-52bc-452e-8a1b-9274cf2ace12";
+//    config.appID = @"45fa92d7-af5d-4528-b001-a200ce554cb8";
+//    config.appKey = @"f1894421-52bc-452e-8a1b-9274cf2ace12";
     
     config.domain=@"mr-blonde.staging.konotor.com";
 
