@@ -32,8 +32,8 @@
 @property (nonatomic, strong) NSMutableDictionary *events;
 @property (nonatomic, strong) NSString *plistPath;
 @property (nonatomic, strong) NSString *sessionID;
-@property (nonatomic, strong)NSTimer *pollingTimer;
-@property dispatch_queue_t eventsQ;
+@property (nonatomic, strong) NSTimer *pollingTimer;
+@property (atomic) dispatch_queue_t eventsQ;
 @property (nonatomic, strong) NSNumber *maxEventId;
 
 @end
@@ -56,7 +56,7 @@
         self.sessionID = [FDStringUtil generateUUID];
         self.eventsQ = dispatch_queue_create("com.freshdesk.hotline.events", DISPATCH_QUEUE_SERIAL);
         self.plistPath = [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
-        self.maxEventId = 0;
+        self.maxEventId = @(0);
         [self loadEvents];
         [self startEventsUploadTimer];
     }
@@ -136,7 +136,7 @@
         NSDictionary *eventsDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         self.events = [eventsDict mutableCopy];
         for(NSNumber *eventId in self.events){
-            if(eventId > self.maxEventId){
+            if([eventId longValue] > [self.maxEventId longValue]){
                 self.maxEventId = eventId;
             }
         }
