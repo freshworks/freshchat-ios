@@ -26,6 +26,7 @@
 @dynamic position;
 @dynamic conversations;
 @dynamic messages;
+@dynamic isRestricted;
 
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     HLChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:context];
@@ -75,6 +76,7 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
+    channel.isRestricted = channelInfo[@"restricted"];
     KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
     NSString *updatedMessage = trimString(channelInfo[@"welcomeMessage"][@"text"]); //set welcome message here
     if (welcomeMessage) {

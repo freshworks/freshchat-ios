@@ -51,12 +51,12 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
     self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
+    [self setNavigationItem];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
     if(self.category){
         parent.navigationItem.title = self.category.title;
-        [self setNavigationItem];
     }
     else if (self.faqOptions.tags.count > 0){
         if(self.faqOptions.filteredViewTitle.length > 0){

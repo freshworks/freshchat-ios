@@ -284,9 +284,6 @@
 }
 
 -(void)handleArticleVotePrompt{
-//    if(self.faqOptions && ![self.faqOptions showContactUsOnFaqScreens]){
-//        return;
-//    }
     if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         if(self.bottomViewHeightConstraint.constant == 0 ) {
             BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];

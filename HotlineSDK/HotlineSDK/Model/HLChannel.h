@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSData *icon;
 @property (nullable, nonatomic, retain) NSString *iconURL;
 @property (nullable, nonatomic, retain) NSNumber *isHidden;
+@property (nullable, nonatomic, retain) NSNumber *isRestricted;
 @property (nullable, nonatomic, retain) NSNumber *isDefault;
 @property (nullable, nonatomic, retain) NSDate *lastUpdated;
 @property (nullable, nonatomic, retain) NSString *name;
