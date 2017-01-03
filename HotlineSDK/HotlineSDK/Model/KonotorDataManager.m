@@ -331,7 +331,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
-- (void) fetchAllVisibleChannelsForTags:(NSArray *)channelsIds completion:(void (^)(NSArray *channelInfos, NSError *))handler {
+- (void) fetchAllVisibleChannelsForTags:(NSArray *)channelsIds hasTags:(BOOL)containstags   completion:(void (^)(NSArray *channelInfos, NSError *))handler {
     
     NSManagedObjectContext *context = self.mainObjectContext;
     [context performBlock:^{
@@ -349,7 +349,9 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         else{
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
             NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-            request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+            
+            NSPredicate *predicate = containstags?[NSPredicate predicateWithFormat:@"isHidden == NO"]:[NSPredicate predicateWithFormat:@"isHidden == NO AND isRestricted == NO"];
+            request.predicate = predicate;
             request.sortDescriptors = @[position];
             NSArray *results = [context executeFetchRequest:request error:nil];
             for (int i=0; i<results.count; i++) {

@@ -123,8 +123,9 @@
 -(void)updateChannels{
 
     HideNetworkActivityIndicator();
+    BOOL containTags = self.convOptions? TRUE : FALSE;
     [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
-        [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds completion:^(NSArray *channelInfos, NSError *error) {
+        [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds hasTags:containTags completion:^(NSArray *channelInfos, NSError *error) {
             if (!error) {
                 self.taggedChannels = channelIds;
                 if (channelInfos.count == 1) {
@@ -138,7 +139,6 @@
                     else{
                         self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
                     }
-                    
                 }else{
                     BOOL refreshData = NO;
                     
@@ -155,6 +155,7 @@
                 }
             }
         }];
+            
     }];
  }
  

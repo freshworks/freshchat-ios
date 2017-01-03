@@ -471,7 +471,7 @@
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:nil completion:^(NSArray *channelInfos, NSError *error) {
+    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:nil hasTags:NO completion:^(NSArray *channelInfos, NSError *error) {
         if (!error) {
             HLContainerController *preferredController = nil;
             if (channelInfos.count == 1) {

@@ -26,6 +26,7 @@
 @property (nonatomic, strong)NSArray *articles;
 @property (strong, nonatomic) HLTheme *theme;
 @property (nonatomic,strong) FAQOptions *faqOptions;
+@property (nonatomic, strong) NSArray *taggedArticles;
 
 @end
 
@@ -93,6 +94,7 @@
     }
     else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
         [[HLTagManager sharedInstance] getArticlesForTags:[self.faqOptions tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+            self.taggedArticles = articleIds;
              NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
              [mainContext performBlock:^{
                  NSMutableArray *matchingArticles= [NSMutableArray new];
@@ -123,7 +125,7 @@
     UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     [self configureBackButtonWithGestureDelegate:self];
-    if(!self.faqOptions){
+    if(!self.faqOptions && !self.taggedArticles.count){
         self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
     }
 }

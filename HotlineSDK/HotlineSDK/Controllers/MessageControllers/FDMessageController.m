@@ -35,6 +35,7 @@
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
 #import "HLChannelViewController.h"
+#import "HLTagManager.h"
 
 typedef struct {
     BOOL isLoading;
@@ -532,29 +533,33 @@ typedef struct {
 
 -(void) checkChannel : (void(^)(BOOL isChannelValid)) completion
 {
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsForTags:@[] completion:^(NSArray *channelInfos, NSError *error) {
-        BOOL isChannelValid = NO;
-        if (!error) {
-            for(HLChannelInfo *channel in channelInfos) {
-                if([channel.channelID isEqual:self.channelID]) {
-                    isChannelValid = YES;
-                }
-            }
-            dispatch_async(dispatch_get_main_queue(), ^ {
-                if (isChannelValid) {
-                    if (channelInfos.count > 1 && !self.convOptions) {
-                        [self alterNavigationStack];
+    BOOL containTags = self.convOptions? TRUE : FALSE;
+    [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+        [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsForTags:channelIds hasTags:containTags completion:^(NSArray *channelInfos, NSError *error) {
+            BOOL isChannelValid = NO;
+            if (!error) {
+                for(HLChannelInfo *channel in channelInfos) {
+                    if([channel.channelID isEqual:self.channelID]) {
+                        isChannelValid = YES;
                     }
                 }
-                else {
-                    [self.parentViewController.navigationController popViewControllerAnimated:YES];
-                }
-            });
-        }
-        if(completion) {
-            completion(isChannelValid);
-        }
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    if (isChannelValid) {
+                        if (channelInfos.count > 1 && !self.convOptions) {
+                            [self alterNavigationStack];
+                        }
+                    }
+                    else {
+                        [self.parentViewController.navigationController popViewControllerAnimated:YES];
+                    }
+                });
+            }
+            if(completion) {
+                completion(isChannelValid);
+            }
+        }];
     }];
+    
 }
 
 -(void) alterNavigationStack
