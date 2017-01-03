@@ -81,24 +81,19 @@
 
 -(void)startEventsUploadTimer{
     [self runSync:^{
-        if([[FDReachabilityManager sharedInstance] isReachable]){
-            if([self.pollingTimer isValid]){
-                FDLog(@"Poller Already running");
-            }
-            else if(self.events.count == 0){
-                FDLog(@"Not Starting poller. No events to send" );
-            }
-            else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15
-                                                                         target:self
-                                                                       selector:@selector(processEventBatch)
-                                                                       userInfo:nil
-                                                                        repeats:YES];
-                    FDLog(@"Started events poller");
-                });
-            }
+        if(![[FDReachabilityManager sharedInstance] isReachable]
+            || [self.pollingTimer isValid]
+            || self.events.count == 0){
+            return;
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15
+                                                                 target:self
+                                                               selector:@selector(processEventBatch)
+                                                               userInfo:nil
+                                                                repeats:YES];
+            FDLog(@"Started events poller");
+        });
     }];
 }
 
@@ -150,19 +145,16 @@
 
 -(void) updateFileWithEvent:(NSDictionary *) eventDict{
     [self.events setObject:eventDict forKey:[self nextEventId]];
-    FDLog(@"Submitted event to store, %@", eventDict);
     [self saveEvents];
 }
 
 -(void) writeEventsToStore{
     NSDictionary *eventsCopy = [self.events copy];
     if (![NSKeyedArchiver archiveRootObject:eventsCopy toFile:self.plistPath]) {
-        FDLog(@"%@ unable to create events data", self);
     }
 }
 
 -(void) processEventBatch{
-    FDLog(@"Scheduling upload");
     [self runSync:^{
         if(![[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID]){
             return;
@@ -176,7 +168,6 @@
             batchCount++ ; total++;
             [eventIds addObject:eventId];
             NSDictionary *eventInfo = [self.events objectForKey:eventId];
-            FDLog(@"collecting event %@", eventInfo )
             [eventsBatch addObject:eventInfo];
             if(batchCount >= HLEVENTS_BATCH_SIZE || total >= numEvents ) {
                 [self uploadUserEvents:eventsBatch withIds:eventIds];
@@ -218,7 +209,6 @@
         NSDictionary *evt = [self.events objectForKey:eventId];
         if(evt){
             [self.events removeObjectForKey:eventId];
-            FDLog(@"Removing Event %@", evt);
         }
     }
     [self saveEvents];
