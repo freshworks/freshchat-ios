@@ -89,6 +89,7 @@
     [self fetchUpdates];
     [self updateChannels];
     self.footerView.hidden = YES;
+    [self setNavigationItem];
 }
 
 -(HLEmptyResultView *)emptyResultView
@@ -195,6 +196,7 @@
 
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+        [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     }
     else {
         [self configureBackButtonWithGestureDelegate:nil];
