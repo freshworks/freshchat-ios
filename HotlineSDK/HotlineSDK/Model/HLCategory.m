@@ -79,17 +79,15 @@
         if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
+                article.category = [HLCategory getWithID:article.categoryID inContext:context];
             }else{
                 article = [HLArticle createWithInfo:articleInfo inContext:context];
                 [category addArticlesObject:article];
             }
             if(tags.count>0){
-                [tagManager removeTagsForArticleId:articleId];//have to remove
                 for(NSString *tagName in tags){
                     
                     [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeArticle] andIdvalue:articleId] inContext:context];
-                    
-                    [tagManager addTag:tagName forArticleId:articleId];//have to remove
                 }
             }
         }else{

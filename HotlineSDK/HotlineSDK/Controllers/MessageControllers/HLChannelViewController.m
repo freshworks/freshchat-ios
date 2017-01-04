@@ -174,8 +174,8 @@
     }
     
     id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
-    id posSort = [NSSortDescriptor sortDescriptorWithKey:@"belongsToChannel.position" ascending:NO];
-    messages = [[messages sortedArrayUsingDescriptors:@[sort,posSort]] mutableCopy];
+    id positionSort = [NSSortDescriptor sortDescriptorWithKey:@"belongsToChannel.position" ascending:NO];
+    messages = [[messages sortedArrayUsingDescriptors:@[sort,positionSort]] mutableCopy];
     for(KonotorMessage *message in messages){
         if (message.belongsToChannel) {
             HLChannelInfo *chInfo = [[HLChannelInfo alloc] initWithChannel:message.belongsToChannel];
