@@ -81,7 +81,8 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)isUserRegistered{
-    return [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+    return [self currentUserAlias] &&
+        [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
 }
 
 +(NSString *) getUUIDLookupKey{
@@ -94,7 +95,15 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 /* This function gets the user-alias from persisted secure store for new customers (Hotline),
  it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
-+(NSString *)getUserAlias{
++(NSString *)currentUserAlias{
+    NSString* userAlias = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    if(userAlias){
+        return userAlias;
+    }
+    return @""; //return empty to prevent null
+}
+
++(NSString *)getUserAliasWithCreate{
     NSString* userAlias = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     if(userAlias){
         return userAlias;
