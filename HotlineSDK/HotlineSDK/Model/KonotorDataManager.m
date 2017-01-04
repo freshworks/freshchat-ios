@@ -350,7 +350,7 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
             NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             
-            NSPredicate *predicate = containstags?[NSPredicate predicateWithFormat:@"isHidden == NO"]:[NSPredicate predicateWithFormat:@"isHidden == NO AND isRestricted == NO"];
+            NSPredicate *predicate = (containstags) ? [NSPredicate predicateWithFormat:@"isHidden == NO"] : [NSPredicate predicateWithFormat:@"isHidden == NO AND isRestricted == NO"];
             request.predicate = predicate;
             request.sortDescriptors = @[position];
             NSArray *results = [context executeFetchRequest:request error:nil];

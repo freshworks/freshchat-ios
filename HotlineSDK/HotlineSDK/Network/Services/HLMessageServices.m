@@ -257,7 +257,7 @@ static HLNotificationHandler *handleUpdateNotification;
     NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
     NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
     BOOL isRestore = [lastUpdateTime isEqualToNumber:@0];
-    [request setRelativePath:path andURLParams:@[token, afterTime]];
+    [request setRelativePath:path andURLParams:@[token, @"tags=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             /* This check is added to delete all messages that are migrated from konotor SDK,
