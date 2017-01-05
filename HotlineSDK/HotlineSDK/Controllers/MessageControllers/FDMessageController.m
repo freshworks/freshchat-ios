@@ -32,6 +32,7 @@
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
 #import "KonotorAudioRecorder.h"
+#import "HLEventManager.h"
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
 #import "HLChannelViewController.h"
@@ -91,6 +92,8 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
+        
+        
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
 
@@ -101,6 +104,12 @@ typedef struct {
         self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
+        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+            [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[self.channel.channelID stringValue]];
+            [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:self.channel.name];
+        }];
+        
         [Konotor setDelegate:self];
     }
     return self;
@@ -512,6 +521,7 @@ typedef struct {
         [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
         
     }else{
+        
         [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
@@ -897,9 +907,10 @@ typedef struct {
 //TODO: Needs refractor
 -(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
+    [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
-           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; // Question - The developer will have no controller over the behaviour
+           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:[FAQOptions new] andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
             NSLog(@"%@",e);
@@ -918,6 +929,14 @@ typedef struct {
             NSLog(@"%@",e);
         }
     }
+}
+
+- (void) addConversationDeepLinkLaunchEvent{
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[self.conversation.belongsToChannel.channelID stringValue]];
+        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:self.conversation.belongsToChannel.name];
+        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:self.conversation.conversationAlias];
+    }];
 }
 
 #pragma mark - Audio toolbar delegates

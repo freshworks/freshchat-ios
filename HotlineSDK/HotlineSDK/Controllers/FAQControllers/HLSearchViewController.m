@@ -26,6 +26,7 @@
 #import "HLEmptyResultView.h"
 #import "FDAutolayoutHelper.h"
 #import "HLArticleUtil.h"
+#import "HLEventManager.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -252,8 +253,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.searchResults.count) {
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
         FDArticleContent *article = self.searchResults[indexPath.row];
-        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
+        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController faqOptions:[FAQOptions new] andSource:HLEVENT_LAUNCH_SOURCE_SEARCH]; //TODO: - Pass this from outside - Rex
     }
 }
 
@@ -320,6 +322,12 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    if([trimString(searchBar.text) length] > 0){
+        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_KEY andVal:searchBar.text];
+            [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_COUNT andVal:[@(self.searchResults.count) stringValue]];
+        }];
+    }
     [self dismissModalViewControllerAnimated:NO];
 }
 

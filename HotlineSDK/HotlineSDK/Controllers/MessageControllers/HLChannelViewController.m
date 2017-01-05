@@ -27,6 +27,7 @@
 #import "FDIconDownloader.h"
 #import "FDReachabilityManager.h"
 #import "FDControllerUtils.h"
+#import "HLEventManager.h"
 
 @interface HLChannelViewController ()
 
@@ -88,6 +89,9 @@
     [self localNotificationSubscription];
     [self fetchUpdates];
     [self updateChannels];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+    }];
     self.footerView.hidden = YES;
     [self setNavigationItem];
 }

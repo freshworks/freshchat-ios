@@ -28,6 +28,7 @@
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
 #import "HLArticleUtil.h"
+#import "HLEventManager.h"
 
 @interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
 
@@ -79,6 +80,9 @@
     [self localNotificationSubscription];
     [self fetchUpdates];
     [self updateCategories];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+    }];
 }
 
 -(void)setupSubviews{
@@ -159,19 +163,19 @@
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
         [rightBarItems addObject:contactUsBarButton];
     }
-    
     self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
-    
     
 }
 
 -(void)searchButtonAction:(id)sender{
+    [[HLEventManager sharedInstance]submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
+    }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
-    
 }
 
 -(void)contactUsButtonAction:(id)sender{
@@ -350,6 +354,10 @@
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
         [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
+        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];
+            [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[category.categoryID stringValue]];
+        }];
         [self.navigationController pushViewController:container animated:YES];
     }
 }

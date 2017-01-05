@@ -34,6 +34,8 @@
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
 +(NSString*)deviceModelName;
++(NSString *) getTracker;
++(NSString *) returnLibraryPathForDir : (NSString *) directory;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 
 +(BOOL)isiOS10;
