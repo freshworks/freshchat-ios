@@ -210,10 +210,8 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 
 - (void) fetchAllCategoriesForTags  :(NSArray*) categoriesIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
-    NSManagedObjectContext *backgroundContext = self.backgroundContext;
     NSManagedObjectContext *mainContext = self.mainObjectContext;
-    [backgroundContext performBlock:^{
-        NSArray *results;
+    [mainContext performBlock:^{
         NSMutableArray *fetchedSolutions = [NSMutableArray new];
         NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
         if(categoriesIds.count > 0){
@@ -223,7 +221,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
                     [fetchedSolutions addObject :category];
                 }
             }
-            
             NSArray *sortedChannels = [fetchedSolutions sortedArrayUsingDescriptors:@[position]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(sortedChannels,nil);
@@ -231,24 +228,15 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         }
         else{
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
-            //NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             request.sortDescriptors = @[position];
-            results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
-            [mainContext performBlock:^{
-                for (int i=0; i< results.count; i++) {
-                    NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
-                    [mainContext refreshObject:newSolution mergeChanges:YES];
-                    
-                    if (newSolution) {
-                        [fetchedSolutions addObject:newSolution];
-                    }
-                    
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(handler) handler(fetchedSolutions,nil);
-                });
-            }];
+            NSArray *results = [mainContext executeFetchRequest:request error:nil];
+            for (int i=0; i< results.count; i++) {
+                [fetchedSolutions addObject:results[i]];
+            }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(handler) handler(fetchedSolutions,nil);
+        });
     }];
 }
 
