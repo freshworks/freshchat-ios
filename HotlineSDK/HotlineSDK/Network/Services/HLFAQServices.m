@@ -93,12 +93,10 @@
                     }
                 }
                 
-                //Delete category with no articles
-                if (category.articles.count == 0){
-                    FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !",category.title, category.categoryID);
-                    [context deleteObject:category];
-                    [HLTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
-                }
+//                //Delete category with no articles
+//                if (category.articles.count == 0){
+//                    
+//                }
 
             }else{
                 if (category){
@@ -109,11 +107,27 @@
         }
         NSError *err;
         [context save:&err];
-        [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
-        [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
-        if(completion){
-            completion(err);
-        }
+        [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:@[] withCompletion:^(NSArray *categories, NSError *error) {
+            NSManagedObjectContext *ctx;
+            for(HLCategory *category in categories){
+                if(category.articles.count == 0){
+                    FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !"
+                          ,category.title, category.categoryID);
+                    [HLTags removeTagsForTaggableId:category.categoryID andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
+                    [category.managedObjectContext deleteObject:category];
+                    ctx = category.managedObjectContext;
+                }
+            }
+            if(ctx){
+                NSError *err;
+                [ctx save:&err];
+            }
+            [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
+            [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
+            if(completion){
+                completion(err);
+            }
+        }];
     }];
 }
 
