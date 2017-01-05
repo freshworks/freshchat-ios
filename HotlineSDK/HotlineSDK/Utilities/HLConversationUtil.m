@@ -13,10 +13,12 @@
 @implementation HLConversationUtil
 
 +(void) setConversationOptions:(ConversationOptions*) options andViewController: (HLViewController *) viewController{
-    if ([viewController conformsToProtocol:@protocol(ConversationOptionsInterface)]){
-        HLViewController <ConversationOptionsInterface> *vc
-        = (HLViewController <ConversationOptionsInterface> *) viewController;
-        [vc setConversationOptions:options];
+    if(options){
+        if ([viewController conformsToProtocol:@protocol(ConversationOptionsInterface)]){
+            HLViewController <ConversationOptionsInterface> *vc
+            = (HLViewController <ConversationOptionsInterface> *) viewController;
+            [vc setConversationOptions:options];
+        }
     }
 }
 

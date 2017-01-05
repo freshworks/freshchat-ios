@@ -55,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeMessages:(NSSet<KonotorMessage *> *)values;
 - (KonotorConversation*) primaryConversation;
 - (BOOL) isActiveChannel;
+- (BOOL)hasAtleastATag:(NSArray *) tags;
 
 @end
 

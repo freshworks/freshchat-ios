@@ -11,6 +11,7 @@
 #import "KonotorMessage.h"
 #import "HLMacros.h"
 #import "HotlineAppState.h"
+#import "HLTags.h" 
 
 @implementation HLChannel
 
@@ -55,6 +56,13 @@
         }
     }
     return conversation;
+}
+
+-(BOOL)hasAtleastATag:(NSArray *) tags{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+    fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName IN %@ AND taggableType ==%d AND taggableID == %@ ",tags, HLTagTypeChannel,self.channelID];
+    NSArray *matches         = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return matches && matches > 0;
 }
 
 -(BOOL)isActiveChannel{

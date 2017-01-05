@@ -36,6 +36,7 @@
 #import "HLCSATYesNoPrompt.h"
 #import "HLChannelViewController.h"
 #import "HLTagManager.h"
+#import "HLTags.h"
 
 typedef struct {
     BOOL isLoading;
@@ -531,35 +532,47 @@ typedef struct {
     [self checkChannel:nil];
 }
 
--(void) checkChannel : (void(^)(BOOL isChannelValid)) completion
+-(void) checkChannel : (void(^)(BOOL)) completion
 {
-    BOOL containTags = self.convOptions? TRUE : FALSE;
-    [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
-        [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsForTags:channelIds hasTags:containTags completion:^(NSArray *channelInfos, NSError *error) {
-            BOOL isChannelValid = NO;
-            if (!error) {
-                for(HLChannelInfo *channel in channelInfos) {
-                    if([channel.channelID isEqual:self.channelID]) {
-                        isChannelValid = YES;
-                    }
+    NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+    [ctx performBlock:^{
+        BOOL isChannelValid = NO;
+        BOOL hasTags =  self.convOptions &&
+                        self.convOptions.tags &&
+                        self.convOptions.tags.count > 0;
+        HLChannel *channelToChk = [HLChannel getWithID:self.channelID inContext:ctx];
+        if ( channelToChk && channelToChk.isHidden != 0 ) {
+            if(hasTags){ // contains tags .. so check that as well
+                if([channelToChk hasAtleastATag:self.convOptions.tags]){
+                    isChannelValid = YES;
                 }
-                dispatch_async(dispatch_get_main_queue(), ^ {
-                    if (isChannelValid) {
-                        if (channelInfos.count > 1 && !self.convOptions) {
-                            [self alterNavigationStack];
-                        }
-                    }
-                    else {
-                        [self.parentViewController.navigationController popViewControllerAnimated:YES];
-                    }
-                });
             }
-            if(completion) {
-                completion(isChannelValid);
+            else {
+                isChannelValid = YES;
             }
-        }];
+        }
+        if(!isChannelValid){ // remove this channel from the view
+            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        }
+        else {
+            // if channel count changed
+            if(!hasTags){
+                [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channelIds){
+                    if(channelIds && channelIds.count  > 1 ){
+                        [self alterNavigationStack];
+                    }
+                }];
+            }
+            else {
+                [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsForTags:@[] hasTags:NO completion:^(NSArray *channelInfos, NSError *error) {
+                    if(!error && channelInfos && channelInfos.count > 1){
+                        [self alterNavigationStack];
+                    }
+                }];
+            }
+        }
+        //completion(isChannelValid);
     }];
-    
 }
 
 -(void) alterNavigationStack

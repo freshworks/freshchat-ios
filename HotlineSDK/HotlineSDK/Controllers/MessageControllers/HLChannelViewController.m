@@ -385,6 +385,7 @@
         HLChannel *channel = self.channels[indexPath.row];
         FDMessageController *conversationController = [[FDMessageController alloc]initWithChannelID:channel.channelID andPresentModally:NO];
         HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
+        [HLConversationUtil setConversationOptions:self.convOptions andViewController:conversationController];
         [self.navigationController pushViewController:container animated:YES];
     }
 }
