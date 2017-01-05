@@ -189,26 +189,44 @@
 }
 
 -(void)updateCategories{
-    [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
     
-        [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:categoryIds withCompletion:^(NSArray *solutions, NSError *error) {
-		if (!error) {
-			self.taggedCategories = categoryIds;
-			BOOL refreshData = NO;
-			if(self.categories) {
-				refreshData = YES;
-			}
-            self.categories = solutions;
-			[self setNavigationItem];
-			refreshData = refreshData || (self.categories.count > 0);
-			if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
-				[self updateResultsView:NO];
-			}
-            [self.collectionView reloadData];
-        }
+    BOOL containTags = self.faqOptions? TRUE : FALSE;
+    if(containTags){
+        [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
+            
+            [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:categoryIds withCompletion:^(NSArray *solutions, NSError *error) {
+                if (!error) {
+                    self.taggedCategories = categoryIds;
+                    [self updateCategoriesWithSolutions:solutions];
+                }
+            }];
         }];
-    }];
+    }
+    else{
+        [[KonotorDataManager sharedInstance] fetchAllCategoriesWithCompletion:^(NSArray *solutions, NSError *error) {
+            if (!error) {
+                [self updateCategoriesWithSolutions:solutions];
+            }
+        }];
+    }
 }
+
+- (void) updateCategoriesWithSolutions : (NSArray *)solutions{
+    
+    BOOL refreshData = NO;
+    if(self.categories) {
+        refreshData = YES;
+    }
+    self.categories = solutions;
+    [self setNavigationItem];
+    refreshData = refreshData || (self.categories.count > 0);
+    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+        [self updateResultsView:NO];
+    }
+    [self.collectionView reloadData];
+}
+
+
 
 -(void)updateResultsView:(BOOL)isLoading{
     dispatch_async(dispatch_get_main_queue(), ^{
