@@ -103,12 +103,6 @@
             }else{
                 if (category){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
-                    
-                    for(HLArticle *article in category.articles){
-                        [[HLTagManager sharedInstance] removeTagsForArticleId:article.articleID];
-            
-                    }
-                    [[HLTagManager sharedInstance]save];
                     [context deleteObject:category];
                 }
             }

@@ -98,9 +98,6 @@
             else {
                FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
             }
-            if(tags){//need to remove
-                [tagManager removeTagsForArticleId:articleId];
-            }
         }
     }
     [tagManager save];
