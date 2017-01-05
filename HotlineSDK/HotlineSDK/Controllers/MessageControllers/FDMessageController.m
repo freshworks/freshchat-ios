@@ -575,14 +575,13 @@ typedef struct {
                 }];
             }
             else {
-                [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsForTags:@[] hasTags:NO completion:^(NSArray *channelInfos, NSError *error) {
+                [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
                     if(!error && channelInfos && channelInfos.count > 1){
                         [self alterNavigationStack];
                     }
                 }];
             }
         }
-        //completion(isChannelValid);
     }];
 }
 

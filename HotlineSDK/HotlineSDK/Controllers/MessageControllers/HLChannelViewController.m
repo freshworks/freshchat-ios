@@ -126,43 +126,56 @@
 }
 
 -(void)updateChannels{
-
     HideNetworkActivityIndicator();
     BOOL containTags = self.convOptions? TRUE : FALSE;
-    [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
-        [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds hasTags:containTags completion:^(NSArray *channelInfos, NSError *error) {
-            if (!error) {
-                self.taggedChannels = channelIds;
-                if (channelInfos.count == 1) {
-                    BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
-                    if(self.convOptions && (self.convOptions.tags.count >0)){
-                        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:[[channelInfos firstObject] channelID] andPresentModally:YES];
-                        [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)msgController];
-                        UIViewController *controller = [[HLContainerController alloc]initWithController:msgController andEmbed:isEmbedded];
-                        self.navigationController.viewControllers = @[controller];
-                    }
-                    else{
-                        self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
-                    }
-                }else{
-                    BOOL refreshData = NO;
-                    
-                    NSArray *sortedChannel = [self sortChannelList:channelInfos];
-                    if ( self.channels ) {
-                        refreshData = YES;
-                    }
-                    self.channels = sortedChannel;
-                    refreshData = refreshData || (self.channels.count > 0);
-                    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
-                        [self updateResultsView:NO];
-                    }
-                    [self.tableView reloadData];
+    if(containTags){
+        [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+            [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds hasTags:containTags completion:^(NSArray *channelInfos, NSError *error) {
+                if (!error) {
+                    self.taggedChannels = channelIds;
+                    [self updateChannelWithInfo:channelInfos];
                 }
+            }];
+        }];
+    }
+    else{
+        [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
+            if (!error) {
+                [self updateChannelWithInfo:channelInfos];
             }
         }];
-            
-    }];
+    }
  }
+
+- (void) updateChannelWithInfo :(NSArray *) channelInfo{
+    
+    if (channelInfo.count == 1) {
+        BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
+        if(self.convOptions && (self.convOptions.tags.count >0)){
+            FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:[[channelInfo firstObject] channelID] andPresentModally:YES];
+            [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)msgController];
+            UIViewController *controller = [[HLContainerController alloc]initWithController:msgController andEmbed:isEmbedded];
+            self.navigationController.viewControllers = @[controller];
+        }
+        else{
+            self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
+        }
+    }else{
+        BOOL refreshData = NO;
+        
+        NSArray *sortedChannel = [self sortChannelList:channelInfo];
+        if ( self.channels ) {
+            refreshData = YES;
+        }
+        self.channels = sortedChannel;
+        refreshData = refreshData || (self.channels.count > 0);
+        if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+            [self updateResultsView:NO];
+        }
+        [self.tableView reloadData];
+    }
+
+}
  
 
 -(NSArray *)sortChannelList:(NSArray *)channelInfos{
