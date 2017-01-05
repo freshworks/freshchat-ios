@@ -139,6 +139,7 @@
     
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+        [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     }
     else {
         [self configureBackButtonWithGestureDelegate:nil];
