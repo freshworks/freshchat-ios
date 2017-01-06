@@ -77,7 +77,7 @@ static HLNotificationHandler *handleUpdateNotification;
         __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
-        [request setRelativePath:path andURLParams:@[appKey, afterTime]];
+        [request setRelativePath:path andURLParams:@[appKey, @"tags=true", afterTime]];
         
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
