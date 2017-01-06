@@ -38,6 +38,7 @@
 #import "HLChannelViewController.h"
 #import "HLTagManager.h"
 #import "HLTags.h"
+#import "HLConversationUtil.h"
 
 typedef struct {
     BOOL isLoading;
@@ -566,7 +567,7 @@ typedef struct {
         }
         else {
             // if channel count changed
-            if(!hasTags){
+            if(hasTags){
                 [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channelIds){
                     if(channelIds && channelIds.count  > 1 ){
                         [self alterNavigationStack];
@@ -600,6 +601,7 @@ typedef struct {
     if (!containsChannelController) {
         HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
         UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
+        [HLConversationUtil setConversationOptions:self.convOptions andViewController:channelController];
         self.parentViewController.navigationController.viewControllers = @[channelContainer,self.parentViewController];
         _flags.isModalPresentationPreferred = NO;
         self.embedded = NO;

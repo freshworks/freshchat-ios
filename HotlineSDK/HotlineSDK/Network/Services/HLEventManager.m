@@ -68,11 +68,11 @@
     return HLEVENTS_BULK_EVENTS_DEBUG_URL;
 #else
     NSString *domain = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DOMAIN];
-    if ([theme rangeOfString:@"orange"].location != NSNotFound ||
-        [theme rangeOfString:@"blonde"].location != NSNotFound ||
-        [theme rangeOfString:@"white"].location != NSNotFound ||
-        [theme rangeOfString:@"black"].location != NSNotFound ||
-        [theme rangeOfString:@"staging"].location != NSNotFound){
+    if ([domain rangeOfString:@"orange"].location != NSNotFound ||
+        [domain rangeOfString:@"blonde"].location != NSNotFound ||
+        [domain rangeOfString:@"white"].location != NSNotFound ||
+        [domain rangeOfString:@"black"].location != NSNotFound ||
+        [domain rangeOfString:@"staging"].location != NSNotFound){
         return HLEVENTS_BULK_EVENTS_DEBUG_URL;
     }
     return HLEVENTS_BULK_EVENTS_URL;

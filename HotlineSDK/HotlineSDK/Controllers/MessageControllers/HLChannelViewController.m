@@ -179,7 +179,7 @@
     }
     
     id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
-    id positionSort = [NSSortDescriptor sortDescriptorWithKey:@"belongsToChannel.position" ascending:NO];
+    id positionSort = [NSSortDescriptor sortDescriptorWithKey:@"belongsToChannel.position" ascending:YES];
     messages = [[messages sortedArrayUsingDescriptors:@[sort,positionSort]] mutableCopy];
     for(KonotorMessage *message in messages){
         if (message.belongsToChannel) {

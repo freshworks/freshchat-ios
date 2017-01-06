@@ -329,8 +329,7 @@ enum TagFilterType {
  *  @param Controller's navigation bar title
  *
  */
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title;
-
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title __attribute__((deprecated("Please use clearUserDataWithCompletion: instead")));
 /**
  *  Filter with type either faq articles or categories 
  */

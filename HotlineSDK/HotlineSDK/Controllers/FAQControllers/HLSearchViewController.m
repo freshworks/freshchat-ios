@@ -255,7 +255,7 @@
     if (indexPath.row < self.searchResults.count) {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
         FDArticleContent *article = self.searchResults[indexPath.row];
-        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController faqOptions:[FAQOptions new] andSource:HLEVENT_LAUNCH_SOURCE_SEARCH]; //TODO: - Pass this from outside - Rex
+        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_SEARCH]; //TODO: - Pass this from outside - Rex
     }
 }
 
