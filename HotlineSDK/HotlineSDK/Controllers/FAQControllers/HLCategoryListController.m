@@ -27,6 +27,7 @@
 #import "FDReachabilityManager.h"
 #import "HLArticleUtil.h"
 #import "HLTagManager.h"
+#import "HLEventManager.h"
 
 @interface HLCategoryListController ()
 
@@ -68,6 +69,9 @@
     [self localNotificationSubscription];
     [self fetchUpdates];
     [self updateCategories];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+    }];
 }
 
 -(HLEmptyResultView *)emptyResultView
@@ -149,6 +153,7 @@
     
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+        [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     }
     else {
         [self configureBackButtonWithGestureDelegate:nil];
@@ -171,6 +176,9 @@
 }
 
 -(void)searchButtonAction:(id)sender{
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
+    }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
@@ -263,6 +271,11 @@
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
     [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[category.categoryID stringValue]];
+        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];
+    }];
+    
     [self.navigationController pushViewController:container animated:YES];
 }
 

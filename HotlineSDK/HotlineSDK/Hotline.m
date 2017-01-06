@@ -40,6 +40,7 @@
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
+#import "HLEventManager.h"
 #import "FDPlistManager.h"
 #import "FDMemLogger.h"
 
@@ -103,6 +104,7 @@
 
 -(void)networkReachable{
     [FDUtilities registerUser:nil];
+    [[HLEventManager sharedInstance] startEventsUploadTimer];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
@@ -194,6 +196,10 @@
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleBecameActive:)
+                                                 name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
@@ -322,6 +328,11 @@
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
     [self cancelPoller];
+    [[HLEventManager sharedInstance] cancelEventsUploadTimer];
+}
+
+-(void)handleBecameActive:(NSNotification *)notification{
+    [[HLEventManager sharedInstance] startEventsUploadTimer];
 }
 
 -(void)performPendingTasks{
@@ -337,7 +348,7 @@
         [self updateSDKBuildNumber];
         [HLCoreServices uploadUnuploadedProperties];
         [self markPreviousUserUninstalledIfPresent];
-        
+        [[HLEventManager sharedInstance] startEventsUploadTimer];
         // TODO: Implement a better retry mechanism, also has a timing issue need to fix it
         [HLMessageServices uploadUnuploadedCSAT];
     });
@@ -586,6 +597,7 @@
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     
+    [[HLEventManager sharedInstance] reset];
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
     }

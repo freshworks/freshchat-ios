@@ -11,6 +11,7 @@
 #import "HLTags.h"
 #import "HLCategory.h"
 #import "HLArticle.h"
+#import "FDUtilities.h"
 
 #define STORAGE_DIR_PATH @"Hotline/Offline"
 #define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
@@ -181,24 +182,8 @@
 }
 
 - (NSString*) getFileForStorage:(NSString *) fileName {
-    FDLog(@"creating tags library");
-    //check for path, if available return else create path
-    
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:STORAGE_DIR_PATH];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        NSError *error = nil;
-        NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
-        
-        [[NSFileManager defaultManager] createDirectoryAtPath:filePath
-                                  withIntermediateDirectories:YES
-                                                   attributes:attr
-                                                        error:&error];
-        if (error){
-            FDLog(@"Error creating directory path: %@", [error localizedDescription]);
-        }
-    }
-    return [filePath stringByAppendingPathComponent:fileName];
+    NSString *dirPath = [FDUtilities returnLibraryPathForDir:TAGS_FILE_NAME];
+    return [dirPath stringByAppendingPathComponent:fileName];
 }
 
 - (void) removeTagsPlistFile{

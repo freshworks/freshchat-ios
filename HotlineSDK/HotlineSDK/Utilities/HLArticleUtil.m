@@ -12,31 +12,44 @@
 #import "HLCategory.h"
 #import "KonotorDataManager.h"
 #import "HLContainerController.h"
+#import "HLEventManager.h"
 
 @implementation HLArticleUtil
 
 +(void) launchArticleID:(NSNumber *) articleId
      withNavigationCtlr:(UIViewController *) controller
-          andFAQOptions:(FAQOptions *)faqOptions{
+          faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source{
     NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
     
     [mContext performBlock:^{
+        //article search
         HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
         if(article){
-            [HLArticleUtil launchArticle:article withNavigationCtlr:controller andFAQOptions:faqOptions];
+            [HLArticleUtil launchArticle:article withNavigationCtlr:controller faqOptions:faqOptions andSource:source];
         }
     }];
 }
 
 +(void) launchArticle:(HLArticle *) article
    withNavigationCtlr:(UINavigationController *) controller
-        andFAQOptions:(FAQOptions *)faqOptions;{
+           faqOptions:(FAQOptions *)faqOptions andSource:(NSString *)source;{
     dispatch_async(dispatch_get_main_queue(),^{
+        [self addFaqOpenArticleEvent:article andSource:source];
         HLArticleDetailViewController *articleDetailController = [self getArticleDetailController:article];
         [HLArticleUtil setFAQOptions:faqOptions andViewController:articleDetailController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
         [controller pushViewController:container animated:YES];
     });
+}
+
++ (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source{
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_ARTICLE withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[article.categoryID stringValue]];
+        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:article.category.title];
+        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[article.articleID stringValue]];
+        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:article.title];
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:source];
+    }];
 }
 
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article{

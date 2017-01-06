@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -93,13 +93,13 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Send Message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZIn-zO-eWh">
-                                <rect key="frame" x="45" y="533" width="266" height="30"/>
+                                <rect key="frame" x="45" y="516" width="266" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UfM-61-ZDl">
-                                <rect key="frame" x="80" y="571" width="194" height="30"/>
+                                <rect key="frame" x="80" y="551" width="194" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="sjt-Xp-1RC"/>
                                 </constraints>
@@ -116,7 +116,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="SendMessage tag" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2NX-Cc-icV">
-                                <rect key="frame" x="72" y="495" width="211" height="30"/>
+                                <rect key="frame" x="72" y="478" width="211" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -269,7 +269,7 @@
                             <constraint firstItem="vvd-O5-Z8Q" firstAttribute="leading" secondItem="ZXU-9Z-Pij" secondAttribute="leading" constant="-84" id="a2D-fx-KoB"/>
                             <constraint firstItem="O2s-Q2-4ac" firstAttribute="bottom" secondItem="7TW-UG-4UY" secondAttribute="bottom" id="aet-G6-3pa"/>
                             <constraint firstItem="E9O-AL-c7N" firstAttribute="centerX" secondItem="2NX-Cc-icV" secondAttribute="centerX" id="bYf-eT-e29"/>
-                            <constraint firstItem="2NX-Cc-icV" firstAttribute="top" secondItem="E9O-AL-c7N" secondAttribute="bottom" constant="26" id="bsD-4G-fbN"/>
+                            <constraint firstItem="2NX-Cc-icV" firstAttribute="top" secondItem="E9O-AL-c7N" secondAttribute="bottom" constant="9" id="bsD-4G-fbN"/>
                             <constraint firstItem="BNf-Bw-oY1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="175" id="cVh-IU-hLT"/>
                             <constraint firstItem="dr5-9e-4lq" firstAttribute="baseline" secondItem="Xhd-ru-pag" secondAttribute="firstBaseline" id="dL9-em-AtZ"/>
                             <constraint firstItem="H6u-Nb-psj" firstAttribute="top" secondItem="SEa-zO-e9J" secondAttribute="top" id="dPV-pL-HSD"/>
@@ -312,7 +312,7 @@
                             <constraint firstItem="wPs-cd-dxH" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="328" id="yhj-ey-ijw"/>
                             <constraint firstItem="UfM-61-ZDl" firstAttribute="centerX" secondItem="2NX-Cc-icV" secondAttribute="centerX" id="ylb-GA-sHb"/>
                             <constraint firstItem="eHB-8x-7aF" firstAttribute="trailing" secondItem="Amd-wv-unf" secondAttribute="trailing" id="yvp-Hh-XHa"/>
-                            <constraint firstItem="UfM-61-ZDl" firstAttribute="top" secondItem="ZIn-zO-eWh" secondAttribute="bottom" constant="8" symbolic="YES" id="ziz-Be-H4P"/>
+                            <constraint firstItem="UfM-61-ZDl" firstAttribute="top" secondItem="ZIn-zO-eWh" secondAttribute="bottom" constant="5" id="ziz-Be-H4P"/>
                         </constraints>
                     </view>
                     <connections>
