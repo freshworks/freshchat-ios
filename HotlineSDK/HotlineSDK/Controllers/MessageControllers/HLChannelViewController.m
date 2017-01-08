@@ -37,9 +37,9 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
-@property (nonatomic, strong) NSArray *taggedChannels;
 @property (nonatomic, strong) ConversationOptions *convOptions;
 @property (nonatomic, strong) HLTheme *theme;
+@property BOOL isFilteredView;
 
 @end
 
@@ -66,6 +66,7 @@
 
 - (void) setConversationOptions:(ConversationOptions *)options{
     self.convOptions = options;
+    self.isFilteredView = [HLConversationUtil hasTags:self.convOptions];
 }
 
 -(void)addLoadingIndicator{
@@ -127,15 +128,13 @@
 
 -(void)updateChannels{
     HideNetworkActivityIndicator();
-    BOOL containTags = self.convOptions? TRUE : FALSE;
-    if(containTags){
-        [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
-            [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsForTags:channelIds hasTags:containTags completion:^(NSArray *channelInfos, NSError *error) {
-                if (!error) {
-                    self.taggedChannels = channelIds;
-                    [self updateChannelWithInfo:channelInfos];
-                }
-            }];
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    if(self.isFilteredView){
+        [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags
+                                                    inContext:context
+                                               withCompletion:^(NSArray<HLChannel *> *channels){
+            
+            [self updateChannelWithInfo:channels];
         }];
     }
     else{
@@ -151,15 +150,8 @@
     
     if (channelInfo.count == 1) {
         BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
-        if(self.convOptions && (self.convOptions.tags.count >0)){
-            FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:[[channelInfo firstObject] channelID] andPresentModally:YES];
-            [HLConversationUtil setConversationOptions:self.convOptions andViewController:(HLViewController*)msgController];
-            UIViewController *controller = [[HLContainerController alloc]initWithController:msgController andEmbed:isEmbedded];
-            self.navigationController.viewControllers = @[controller];
-        }
-        else{
-            self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded]];
-        }
+        self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded
+                                                       withOptions:self.convOptions andChannels:channelInfo]];
     }else{
         BOOL refreshData = NO;
         
@@ -242,7 +234,7 @@
         [self configureBackButtonWithGestureDelegate:nil];
     }
     
-    if((self.taggedChannels.count > 0) && (self.convOptions.filteredViewTitle.length > 0)){
+    if([HLConversationUtil hasFilteredViewTitle:self.convOptions]){
         self.parentViewController.navigationItem.title = self.convOptions.filteredViewTitle;
     }
 }

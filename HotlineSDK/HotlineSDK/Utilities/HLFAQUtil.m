@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "HLArticleDetailViewController.h"
 #import "HLCategory.h"
 #import "KonotorDataManager.h"
 #import "HLContainerController.h"
 #import "HLEventManager.h"
 
-@implementation HLArticleUtil
+@implementation HLFAQUtil
 
 +(void) launchArticleID:(NSNumber *) articleId
      withNavigationCtlr:(UIViewController *) controller
@@ -25,7 +25,7 @@
         //article search
         HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
         if(article){
-            [HLArticleUtil launchArticle:article withNavigationCtlr:controller faqOptions:faqOptions andSource:source];
+            [HLFAQUtil launchArticle:article withNavigationCtlr:controller faqOptions:faqOptions andSource:source];
         }
     }];
 }
@@ -36,7 +36,7 @@
     dispatch_async(dispatch_get_main_queue(),^{
         [self addFaqOpenArticleEvent:article andSource:source];
         HLArticleDetailViewController *articleDetailController = [self getArticleDetailController:article];
-        [HLArticleUtil setFAQOptions:faqOptions andViewController:articleDetailController];
+        [HLFAQUtil setFAQOptions:faqOptions andViewController:articleDetailController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
         [controller pushViewController:container animated:YES];
     });
@@ -69,4 +69,48 @@
         [vc setFAQOptions:options];
     }
 }
+
++(BOOL) hasTags:(FAQOptions *) options{
+    if(options){
+        return options.tags && options.tags.count > 0;
+    }
+    return NO;
+}
+
+
++(BOOL) hasContactUsTags:(FAQOptions *) options{
+    if(options){
+        return options.tags && options.tags.count > 0;
+    }
+    return NO;
+}
+
++(BOOL) hasFilteredViewTitle:(FAQOptions *) options{
+    if(options){
+        return options.filteredViewTitle && options.filteredViewTitle.length > 0;
+    }
+    return NO;
+}
+
++(FAQOptions *)copyFaqOptions:(FAQOptions *) options
+                      includeTags:(BOOL) includeTags {
+    FAQOptions *copy = [FAQOptions new];
+    if(copy){
+        copy.showContactUsOnAppBar = options.showContactUsOnAppBar;
+        copy.showFaqCategoriesAsGrid = options.showFaqCategoriesAsGrid;
+        copy.showContactUsOnFaqScreens = options.showContactUsOnFaqScreens;
+        [copy filterContactUsByTags:options.contactUsTags withTitle:options.contactUsTitle];
+        if(includeTags){
+            [copy filterByTags:options.tags
+                     withTitle:options.filteredViewTitle
+                       andType:options.filteredType];
+        }
+    }
+    return copy;
+}
+
++(FAQOptions *) nonTagCopy:(FAQOptions *)options{
+    return [self copyFaqOptions:options includeTags:false];
+}
+
 @end

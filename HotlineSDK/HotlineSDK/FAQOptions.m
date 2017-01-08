@@ -13,7 +13,7 @@
 
 @interface FAQOptions()
 
-@property (nonatomic) NSNumber *filterType;
+@property (nonatomic) int filterType;
 @property (nonatomic) NSArray *contactUsTags;
 @property (nonatomic) NSString *contactUsTitle;
 @property (nonatomic, strong) NSArray *filterByTags;
@@ -38,11 +38,11 @@
     [self filterByTags:tags withTitle:title andType:ARTICLE];
 }
 
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (int) type{
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (enum TagFilterType) type{
     
     self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:tags];
     self.tagViewTitle = title;
-    self.filterType = [NSNumber numberWithInt:type];
+    self.filterType = type;
 }
 
 -(NSString *) filteredViewTitle{
@@ -58,7 +58,7 @@
     return self.filterByTags;
 }
 
--(NSNumber *) filteredType{
+-(enum TagFilterType) filteredType{
     return self.filterType;
 }
 

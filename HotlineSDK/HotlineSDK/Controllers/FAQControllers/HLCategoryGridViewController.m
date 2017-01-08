@@ -27,7 +27,7 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
 
@@ -41,7 +41,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property (nonatomic, strong) NSArray *taggedCategories;
+@property BOOL isFilteredView;
 
 @end
 
@@ -49,6 +49,7 @@
 
 -(void) setFAQOptions:(FAQOptions *)options{
     self.faqOptions = options;
+    self.isFilteredView = [HLFAQUtil hasTags:options];
 }
 
 -(BOOL)canDisplayFooterView{
@@ -158,10 +159,10 @@
         [self configureBackButtonWithGestureDelegate:nil];
     }
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(self.categories.count && !self.taggedCategories.count){
+    if(self.categories.count && !self.isFilteredView){
         [rightBarItems addObject:searchBarButton];
     }
-    if((self.taggedCategories.count > 0) && (self.faqOptions.filteredViewTitle.length>0)){
+    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
         self.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
@@ -175,10 +176,7 @@
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
     }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    if(self.taggedCategories.count >0){
-        self.faqOptions = nil;
-    }
-    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
+    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
@@ -189,17 +187,11 @@
 }
 
 -(void)updateCategories{
-    
-    BOOL containTags = self.faqOptions? TRUE : FALSE;
-    if(containTags){
-        [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *categoryIds){
-            
-            [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:categoryIds withCompletion:^(NSArray *solutions, NSError *error) {
-                if (!error) {
-                    self.taggedCategories = categoryIds;
-                    [self updateCategoriesWithSolutions:solutions];
-                }
-            }];
+    if(self.isFilteredView){
+        [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags
+                                                  inContext:[KonotorDataManager sharedInstance].mainObjectContext
+                                             withCompletion:^(NSArray<HLCategory *> *categories){
+            [self updateCategoriesWithSolutions:categories];
         }];
     }
     else{
@@ -329,7 +321,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    if(self.faqOptions.contactUsTags.count > 0){
+    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
         [[Hotline sharedInstance] showConversations:self withOptions:options];
@@ -389,7 +381,7 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-        [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
+        [HLFAQUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
             [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];

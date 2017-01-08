@@ -11,14 +11,24 @@
 
 #import "KonotorDataManager.h"
 #import <Foundation/Foundation.h>
+#import "HLArticle.h"
+#import "HLChannel.h"
 
 @interface HLTagManager : NSObject
 
 +(instancetype)sharedInstance;
 
--(void) getArticlesForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion;
--(void) getChannelsWithOptions : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion;
--(void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion;
+- (void) getChannelsWithOptions : (NSArray *)tags
+                      inContext : (NSManagedObjectContext *) context
+                  withCompletion:(void (^)(NSArray<HLChannel *> *))completion;
+
+- (void) getCategoriesForTags : (NSArray *)tags
+                    inContext : (NSManagedObjectContext *) context
+                withCompletion:(void (^)(NSArray<HLCategory *> *))completion;
+
+-(void)getArticlesForTags:(NSArray *)tags
+              inContext:(NSManagedObjectContext *) context
+          withCompletion :(void (^)(NSArray<HLArticle *> *))completion;
 
 @end
 

@@ -17,7 +17,8 @@
 @interface HLConversationUtil : NSObject
 
 +(void) setConversationOptions:(ConversationOptions*) options andViewController: (HLViewController *) viewController;
-
++(BOOL) hasTags:(ConversationOptions *) options;
++(BOOL) hasFilteredViewTitle:(ConversationOptions *) options;
 @end
 
 #endif
