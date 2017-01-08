@@ -60,7 +60,6 @@
     [self setupSubviews];
     [self adjustUIBounds];
     [self setNavigationItem];
-    [self theming];
     [self updateResultsView:YES];
     [self addLoadingIndicator];
     
@@ -92,10 +91,6 @@
 
 -(void)viewWillLayoutSubviews{
     self.searchBar.frame= CGRectMake(0, 0, self.view.frame.size.width, 65);
-}
-
--(void)theming{
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[self.theme backgroundColorSDK]];
 }
 
 -(HLEmptyResultView *)emptyResultView
@@ -296,6 +291,7 @@
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
+    [self.collectionView setBackgroundColor:[self.theme backgroundColorSDK]];
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{

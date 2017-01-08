@@ -40,10 +40,10 @@
 
 -(NSDictionary *)toEventDictionary:(NSString *) sessionId{
     NSDictionary *eventsInfo = nil;
-    if([FDUtilities getUserAlias] && [Hotline sharedInstance].config.appID && [FDUtilities getTracker]) {
+    if([FDUtilities currentUserAlias] && [Hotline sharedInstance].config.appID && [FDUtilities getTracker]) {
         eventsInfo = @{
                            @"_tracker":[FDUtilities getTracker],
-                           @"_userId" :[FDUtilities getUserAlias],
+                           @"_userId" :[FDUtilities currentUserAlias],
                            @"_eventName":self.eventName,
                            @"_sessionId":sessionId,
                            @"_eventTimestamp":[NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)],
