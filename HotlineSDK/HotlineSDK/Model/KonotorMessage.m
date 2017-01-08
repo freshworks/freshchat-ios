@@ -60,7 +60,7 @@ static BOOL messageExistsDirty = YES;
 
 +(NSString *)generateMessageID{
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
-    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *userAlias = [FDUtilities getUserAliasWithCreate];
     NSString *intervalString = [NSString stringWithFormat:@"%.0f", today*1000];
     NSString *messageID  =[NSString stringWithFormat:@"%@%@%@",userAlias,@"_",intervalString];
     return messageID;
