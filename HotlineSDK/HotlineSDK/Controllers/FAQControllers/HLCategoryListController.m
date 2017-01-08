@@ -25,7 +25,7 @@
 #import "HLEmptyResultView.h"
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
 
@@ -192,7 +192,7 @@
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
     }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
+    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
@@ -281,7 +281,7 @@
         self.faqOptions = nil;
     }
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
+    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
     [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[category.categoryID stringValue]];

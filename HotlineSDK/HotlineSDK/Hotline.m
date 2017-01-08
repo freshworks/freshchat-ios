@@ -33,7 +33,7 @@
 #import "HLTagManager.h"
 #import "HLArticlesController.h"
 #import "HLArticleDetailViewController.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "HLConversationUtil.h"
 #import "FAQOptionsInterface.h"
 #import "ConversationOptionsInterface.h"
@@ -389,7 +389,7 @@
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     if([options.filteredType intValue] == CATEGORY){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-                [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+                [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
                 completion(preferredViewController);
             };
             [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];
@@ -398,7 +398,7 @@
     else if([options.filteredType intValue] == ARTICLE){
         [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-                [HLArticleUtil setFAQOptions:options andViewController:preferredViewController];
+                [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
             };
             
@@ -412,7 +412,7 @@
                     HLViewController *preferedController = nil;
                     HLArticle *article = [HLArticle getWithID:[articleIds firstObject] inContext:mContext];
                     if(article){
-                        preferedController = [HLArticleUtil getArticleDetailController:article];
+                        preferedController = [HLFAQUtil getArticleDetailController:article];
                     }
                     else {
                         preferedController = [self preferredCategoryController:options];

@@ -21,7 +21,7 @@
 #import "FDAutolayoutHelper.h"
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
 
@@ -37,6 +37,7 @@
 @property (strong, nonatomic) NSString *appAudioCategory;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property  BOOL isFilteredView;
 
 @end
 
@@ -55,6 +56,7 @@
 
 -(void) setFAQOptions:(FAQOptions *)options{
     self.faqOptions = options;
+    self.isFilteredView = [HLFAQUtil hasTags:self.faqOptions];
 }
 
 -(NSString *)embedHTML{
@@ -101,7 +103,7 @@
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    if((self.faqOptions.tags.count >0) && (self.faqOptions.filteredViewTitle.length > 0)){
+    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
         parent.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     else{
@@ -150,7 +152,7 @@
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     
-    if(self.faqOptions && [[self.faqOptions tags] count] > 0 ){
+    if(self.isFilteredView){
         [[HLTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             if([articleIds count] == 1){
                 UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
@@ -213,7 +215,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK];
+            [HLFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
@@ -368,7 +370,7 @@
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_CONTACTUS];
     }];
     [self hideBottomView];
-    if(self.faqOptions.contactUsTags.count >0){
+    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
         [[Hotline sharedInstance] showConversations:self withOptions:options];

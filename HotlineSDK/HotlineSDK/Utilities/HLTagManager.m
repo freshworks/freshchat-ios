@@ -16,6 +16,8 @@
 #define STORAGE_DIR_PATH @"Hotline/Offline"
 #define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
 
+#define ARTICLE_AND_CATEGORY_TAGS @[@(HLTagTypeArticle),@(HLTagTypeCategory)]
+
 @interface HLTagManager ()
 
 @property (nonatomic,strong)NSMutableDictionary *tagMap;
@@ -46,33 +48,45 @@
     return self;
 }
 
--(void) getArticlesForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion {
-    NSArray *taggedIds;
-    NSMutableSet * articlesSet = [NSMutableSet set];
-    if(tags.count >0){
-        for(NSString *tag in tags){
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-            fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND (taggableType ==%d OR taggableType ==%d)", tag, HLTagTypeArticle, HLTagTypeCategory];
-            NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
-            for (HLTags *taggedObj in matches){
-                if([taggedObj.taggableType intValue] == HLTagTypeArticle){
-                
-                    [articlesSet addObject:taggedObj.taggableID];
-                }
-                else if ([taggedObj.taggableType intValue] == HLTagTypeCategory){
-                    HLCategory *category = [HLCategory getWithID:taggedObj.taggableID inContext:context];
-                    for(HLArticle *articleInfo in category.articles){
-                        [articlesSet addObject:articleInfo.articleID];
-                    }
-                }
-            }
-            taggedIds = [articlesSet allObjects];
-        }
-    }
-    dispatch_async(dispatch_get_main_queue(),^{
-        completion(taggedIds);
-    });
+-(void) getTaggableIdsForTags : (NSArray *)tags
+                     forTypes : (NSArray *) tagTypes
+                inContext   : (NSManagedObjectContext *) context
+                withCompletion:(void (^)(NSArray<HLTags *> *))completion {
+    [context performBlock:^{
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"tagName IN %@ AND taggableType IN %@",
+                                            tags, tagTypes];
+        NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+        completion(matches);
+    }];
 }
+
+-(void)getArticlesForTags:(NSArray *)tags
+              inContext:(NSManagedObjectContext *) context
+          withCompletion :(void (^)(NSArray<HLArticle *> *))completion{
+    [self getTaggableIdsForTags:tags forTypes:ARTICLE_AND_CATEGORY_TAGS inContext:context withCompletion:^(NSArray<HLTags *> *matchingTags){
+        NSMutableArray *articleIds = [NSMutableArray array];
+        NSMutableArray *categoryIds = [NSMutableArray array];
+        for(HLTags *tag in matchingTags){
+            if([tag.taggableType integerValue] == HLTagTypeArticle){
+                [articleIds addObject:tag.taggableID];
+            }
+            else if([tag.taggableType integerValue] == HLTagTypeCategory) {
+                [categoryIds addObject:tag.taggableID];
+            }
+        }
+        [context performBlock:^{
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"articleID IN %@ OR categoryID IN %@",
+                                      articleIds, categoryIds];
+            [fetchRequest setReturnsDistinctResults:YES];
+            NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+            completion(matches);
+        }];
+        
+    }];
+}
+
 
 - (void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
     NSMutableSet * categoriesSet = [NSMutableSet set];

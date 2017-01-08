@@ -30,7 +30,7 @@
 #import "FDSecureStore.h"
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "KonotorAudioRecorder.h"
 #import "HLEventManager.h"
 #import "FDBackgroundTaskManager.h"
@@ -934,7 +934,7 @@ typedef struct {
     [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
-           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:[FAQOptions new] andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
+           [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:[FAQOptions new] andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
             NSLog(@"%@",e);

@@ -27,7 +27,7 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
 
@@ -178,7 +178,7 @@
     if(self.taggedCategories.count >0){
         self.faqOptions = nil;
     }
-    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
+    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.navigationController presentViewController:navController animated:NO completion:nil];
@@ -389,7 +389,7 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-        [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
+        [HLFAQUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
             [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];
