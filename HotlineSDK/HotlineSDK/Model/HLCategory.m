@@ -64,8 +64,6 @@
     });
     category.icon = imageData;
     
-    HLTagManager *tagManager = [HLTagManager sharedInstance];
-    
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];
     for (int j=0; j<articles.count; j++) {
@@ -100,7 +98,6 @@
             }
         }
     }
-    [tagManager save];
     return category;
 }
 

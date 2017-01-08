@@ -39,70 +39,11 @@
 -(instancetype) init {
     self = [super init];
     if (self) {
-        self.tagMap = [[NSMutableDictionary alloc] init];
         self.queue = dispatch_queue_create("com.freshdesk.hotline.tagmanager", DISPATCH_QUEUE_SERIAL);
         self.storageFile = [self getFileForStorage:TAGS_FILE_NAME];
         //[self removeTagsPlistFile];
-        [self load];
     }
     return self;
-}
-
--(void) save {
-    dispatch_async(self.queue, ^{
-        if(self.hasChanges){
-            if (![NSKeyedArchiver archiveRootObject:self.tagMap toFile:self.storageFile]) {
-                FDLog(@"%@ unable to tags data file", self);
-            }
-            else {
-                self.hasChanges = NO;
-                FDLog(@"Tags: %d files saved", (int)self.tagMap.count);
-            }
-        }
-    });
-}
-
--(void) load{
-    dispatch_async(self.queue, ^{
-        if([[NSFileManager defaultManager] fileExistsAtPath:self.storageFile]){
-            NSData *data = [NSData dataWithContentsOfFile:self.storageFile];
-            if(data){
-                self.tagMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                 FDLog(@"Tags: %d files loaded", (int)self.tagMap.count);
-            }
-        }
-    });
-}
-
--(void)addTag:(NSString *)tag forArticleId: (NSNumber *)articleId{
-    tag = [tag lowercaseString];
-    dispatch_async(self.queue, ^{
-        NSMutableSet *articleSet = [self.tagMap objectForKey:tag];
-        if(!articleSet){
-            articleSet = [[NSMutableSet alloc]init];
-        }
-        [articleSet addObject:articleId];
-        [self.tagMap setObject:articleSet forKey:tag];
-        self.hasChanges = YES;
-    });
-}
-
--(void)removeTagsForArticleId:(NSNumber *)articleId{
-    dispatch_async(self.queue, ^{
-        NSMutableDictionary *updatedMap = [[NSMutableDictionary alloc] init];
-        for(NSString *tagName in self.tagMap){
-            NSMutableSet *articleSet = [self.tagMap objectForKey:tagName];
-            if([articleSet containsObject:articleId]){
-                [articleSet removeObject:articleId];
-                [updatedMap setObject:articleSet forKey:tagName];
-                self.hasChanges = YES;
-            }
-            else {
-                [updatedMap setObject:articleSet forKey:tagName];
-            }
-        }
-        self.tagMap = updatedMap;
-    });
 }
 
 -(void) getArticlesForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion {
@@ -191,15 +132,6 @@
         if([[NSFileManager defaultManager] fileExistsAtPath:self.storageFile]){
             [[NSFileManager defaultManager] removeItemAtPath:self.storageFile error:NULL];
         }
-    });
-}
-
--(void)clear{
-    dispatch_async(self.queue, ^{
-        self.tagMap = [[NSMutableDictionary alloc] init];
-        self.hasChanges = YES;
-        [self save];
-        FDLog(@"Fire in the hole");
     });
 }
 

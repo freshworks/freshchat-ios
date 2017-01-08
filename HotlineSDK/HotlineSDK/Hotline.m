@@ -606,7 +606,6 @@
     
     
     [[HotlineUser sharedInstance]clearUserData]; // This clear Sercure Store data as well.
-    [[HLTagManager sharedInstance]clear];
     
     //Clear secure store
     [[FDSecureStore sharedInstance]clearStoreData];

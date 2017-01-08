@@ -16,16 +16,9 @@
 
 +(instancetype)sharedInstance;
 
--(void)addTag:(NSString *)tag forArticleId: (NSNumber *)articleId;
--(void)removeTagsForArticleId: (NSNumber *)articleId;
--(void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion;
-
 -(void) getArticlesForTags : (NSArray *)tags inContext :(NSManagedObjectContext *)context withCompletion:(void (^)(NSArray *))completion;
 -(void) getChannelsWithOptions : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion;
 -(void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion;
-
--(void) save;
--(void) clear;
 
 @end
 
