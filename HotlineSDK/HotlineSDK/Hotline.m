@@ -242,10 +242,14 @@
 -(NSDictionary *) getPreviousUserInfo{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = nil;
-    if( [FDUtilities isUserRegistered] && [store objectForKey:HOTLINE_DEFAULTS_APP_ID] && [store objectForKey:HOTLINE_DEFAULTS_APP_KEY]){
+    if( [FDUtilities isUserRegistered] &&
+       [store objectForKey:HOTLINE_DEFAULTS_APP_ID] &&
+       [store objectForKey:HOTLINE_DEFAULTS_APP_KEY] &&
+       [store objectForKey:HOTLINE_DEFAULTS_DOMAIN] &&
+       [FDUtilities currentUserAlias]){
         previousUserInfo =  @{ @"appId" : [store objectForKey:HOTLINE_DEFAULTS_APP_ID],
                                @"appKey" : [store objectForKey:HOTLINE_DEFAULTS_APP_KEY],
-                               @"userAlias" :[FDUtilities getUserAlias],
+                               @"userAlias" :[FDUtilities currentUserAlias],
                                @"domain" : [store objectForKey:HOTLINE_DEFAULTS_DOMAIN]
                                };
     }
@@ -304,7 +308,7 @@
     if([FDUtilities isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
-            NSString *userAlias = [FDUtilities getUserAlias];
+            NSString *userAlias = [FDUtilities currentUserAlias];
             NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
             [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
         }
