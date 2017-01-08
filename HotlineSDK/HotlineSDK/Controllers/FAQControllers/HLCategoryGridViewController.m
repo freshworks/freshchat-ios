@@ -64,6 +64,7 @@
     [self setupSubviews];
     [self adjustUIBounds];
     [self theming];
+    [self setNavigationItem];
     [self updateResultsView:YES];
     [self addLoadingIndicator];
     
@@ -318,6 +319,7 @@
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
+    [self.collectionView setBackgroundColor:[self.theme backgroundColorSDK]];
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{

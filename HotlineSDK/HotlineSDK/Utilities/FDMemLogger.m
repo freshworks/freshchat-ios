@@ -63,7 +63,8 @@
         appState = @"Background";
     }
     
-    NSString *userAlias = [FDUtilities getUserAlias] ?  [FDUtilities getUserAlias] : @"NIL";
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    userAlias = userAlias ? userAlias : @"NIL";
     
     NSDictionary *additionalInfo = @{
                                      @"Device Model" : [FDUtilities deviceModelName],

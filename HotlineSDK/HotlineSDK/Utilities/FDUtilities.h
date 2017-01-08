@@ -15,11 +15,11 @@
 
 @interface FDUtilities : NSObject
 
-+(NSString *)getUserAlias;
++(NSString *)currentUserAlias;
++(NSString *)getUserAliasWithCreate;
 
 +(void)registerUser:(void(^)(NSError *error))completion;
 
-+(void)storeUserAlias:(NSString *)alias;
 +(BOOL)isUserRegistered;
 
 +(UIImage *)imageWithColor:(UIColor *)color;

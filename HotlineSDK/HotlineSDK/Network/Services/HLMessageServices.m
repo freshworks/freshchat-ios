@@ -71,7 +71,7 @@ static HLNotificationHandler *handleUpdateNotification;
 +(void)fetchMessages:(void(^)(NSError *error))handler{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *userAlias = [FDUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
         __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
@@ -338,7 +338,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
 
@@ -477,7 +477,7 @@ static HLNotificationHandler *handleUpdateNotification;
 
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     
     if (!userAlias) return;
 
@@ -507,7 +507,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
 
     if (!userAlias) return;
@@ -578,7 +578,7 @@ static HLNotificationHandler *handleUpdateNotification;
         
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
         NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
-        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *userAlias = [FDUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
         request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
