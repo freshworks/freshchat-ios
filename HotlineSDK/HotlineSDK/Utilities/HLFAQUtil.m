@@ -92,4 +92,25 @@
     return NO;
 }
 
++(FAQOptions *)copyFaqOptions:(FAQOptions *) options
+                      includeTags:(BOOL) includeTags {
+    FAQOptions *copy = [FAQOptions new];
+    if(copy){
+        copy.showContactUsOnAppBar = options.showContactUsOnAppBar;
+        copy.showFaqCategoriesAsGrid = options.showFaqCategoriesAsGrid;
+        copy.showContactUsOnFaqScreens = options.showContactUsOnFaqScreens;
+        [copy filterContactUsByTags:options.contactUsTags withTitle:options.contactUsTitle];
+        if(includeTags){
+            [copy filterByTags:options.tags
+                     withTitle:options.filteredViewTitle
+                       andType:options.filteredType];
+        }
+    }
+    return copy;
+}
+
++(FAQOptions *) nonTagCopy:(FAQOptions *)options{
+    return [self copyFaqOptions:options includeTags:false];
+}
+
 @end

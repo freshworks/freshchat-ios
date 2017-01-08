@@ -9,8 +9,6 @@
 #import "HLTagManager.h"
 #import "HLMacros.h"
 #import "HLTags.h"
-#import "HLCategory.h"
-#import "HLArticle.h"
 #import "FDUtilities.h"
 
 #define STORAGE_DIR_PATH @"Hotline/Offline"
@@ -87,53 +85,36 @@
     }];
 }
 
-
-- (void) getCategoriesForTags : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
-    NSMutableSet * categoriesSet = [NSMutableSet set];
-    if(tags.count >0){
-        for(NSString *tag in tags){
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-            fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, HLTagTypeCategory];
-            NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
-            for (HLTags *taggedObj in matches){
-                [categoriesSet addObject:taggedObj.taggableID];
-            }
-        }
-    }
-    dispatch_async(dispatch_get_main_queue(),^{
-        completion([[categoriesSet allObjects] mutableCopy]);
-    });
+- (void) getCategoriesForTags : (NSArray *)tags
+                    inContext : (NSManagedObjectContext *) context
+                withCompletion:(void (^)(NSArray<HLCategory *> *))completion {
+    [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeCategory)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags) {
+        NSArray* categoryIds = [matchingTags valueForKey:@"taggableID"];
+        [context performBlock:^{
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"categoryID IN %@",categoryIds];
+            NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+            fetchRequest.sortDescriptors = @[position];
+            NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+            completion(matches);
+        }];
+    }];
 }
 
-- (void) getChannelsWithOptions : (NSArray *)tags inContext : (NSManagedObjectContext *) context withCompletion:(void (^)(NSArray *))completion {
-    NSMutableSet * channelsSet = [NSMutableSet set];
-    if(tags.count >0){
-        for(NSString *tag in tags){
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
-            fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName == %@ AND taggableType ==%d",tag, HLTagTypeChannel];
-            NSArray *matches         = [context executeFetchRequest:fetchRequest error:nil];
-            for (HLTags *taggedObj in matches){
-                [channelsSet addObject:taggedObj.taggableID];
-            }
-        }
-    }
-    dispatch_async(dispatch_get_main_queue(),^{
-        completion([[channelsSet allObjects] mutableCopy]);
-    });
-}
-
-- (void)articlesForTags:(NSArray *) tags withCompletion:(void (^)(NSSet *))completion{
-    dispatch_async(self.queue, ^{
-        NSMutableSet *articleSet = [[NSMutableSet alloc]init];
-        for(NSString *tag in tags){
-            NSString *tagValue = [tag lowercaseString];
-            NSSet *matches = [self.tagMap objectForKey:tagValue];
-            [articleSet addObjectsFromArray:[matches allObjects]];
-        }
-        dispatch_async(dispatch_get_main_queue(),^{
-            completion(articleSet);
-        });
-    });
+- (void) getChannelsWithOptions : (NSArray *)tags
+                      inContext : (NSManagedObjectContext *) context
+                  withCompletion:(void (^)(NSArray<HLChannel *> *))completion {
+    [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeChannel)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags) {
+        NSArray* channelIds = [matchingTags valueForKey:@"taggableID"];
+        [context performBlock:^{
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@ AND isHidden == NO",channelIds];
+            NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+            fetchRequest.sortDescriptors = @[position];
+            NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+            completion(matches);
+        }];
+    }];
 }
 
 - (NSString*) getFileForStorage:(NSString *) fileName {

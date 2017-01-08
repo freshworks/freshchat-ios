@@ -548,9 +548,7 @@ typedef struct {
     NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
     [ctx performBlock:^{
         BOOL isChannelValid = NO;
-        BOOL hasTags =  self.convOptions &&
-                        self.convOptions.tags &&
-                        self.convOptions.tags.count > 0;
+        BOOL hasTags =  [HLConversationUtil hasTags:self.convOptions];
         HLChannel *channelToChk = [HLChannel getWithID:self.channelID inContext:ctx];
         if ( channelToChk && channelToChk.isHidden != 0 ) {
             if(hasTags){ // contains tags .. so check that as well
@@ -568,8 +566,8 @@ typedef struct {
         else {
             // if channel count changed
             if(hasTags){
-                [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channelIds){
-                    if(channelIds && channelIds.count  > 1 ){
+                [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
+                    if(channels && channels.count  > 1 ){
                         [self alterNavigationStack];
                     }
                 }];

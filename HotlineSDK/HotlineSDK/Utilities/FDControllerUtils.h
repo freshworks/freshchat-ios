@@ -13,6 +13,8 @@
 
 @interface FDControllerUtils : NSObject
 
-+(UIViewController *)getConvController:(BOOL)isEmbeded;
++(UIViewController *)getConvController:(BOOL)isEmbeded
+                           withOptions:(ConversationOptions *)options
+                           andChannels:(NSArray *)channels;
 
 @end

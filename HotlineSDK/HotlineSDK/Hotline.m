@@ -387,15 +387,15 @@
 }
 
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    if([options.filteredType intValue] == CATEGORY){
+    if(options.filteredType == CATEGORY){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
                 completion(preferredViewController);
             };
-            [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:[options.filteredType intValue]];
+            [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];
             faqOptionsCompletion([self preferredCategoryController:options]);
     }
-    else if([options.filteredType intValue] == ARTICLE){
+    else if(options.filteredType == ARTICLE){
         [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
@@ -459,19 +459,19 @@
 
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     
-    [[HLTagManager sharedInstance] getChannelsWithOptions:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *channelIds){
+    [[HLTagManager sharedInstance] getChannelsWithOptions:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
         void (^conversationOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
             [HLConversationUtil setConversationOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
         };
         HLViewController *preferedController = nil;
-        if([channelIds count] < 1 ){
+        if([channels count] < 1 ){
             HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
             preferedController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
                                                                                              andPresentModally:YES];
         }
-        else if (channelIds.count == 1) {
-            preferedController = [[FDMessageController alloc]initWithChannelID:[channelIds firstObject]
+        else if (channels.count == 1) {
+            preferedController = [[FDMessageController alloc]initWithChannelID:[channels firstObject].channelID
                                                                                  andPresentModally:YES];
         }
         else{

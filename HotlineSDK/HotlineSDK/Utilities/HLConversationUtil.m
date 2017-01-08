@@ -22,4 +22,18 @@
     }
 }
 
++(BOOL) hasTags:(ConversationOptions *) options{
+    if(options){
+        return options.tags && options.tags.count > 0;
+    }
+    return NO;
+}
+
++(BOOL) hasFilteredViewTitle:(ConversationOptions *) options{
+    if(options){
+        return options.filteredViewTitle && options.filteredViewTitle.length > 0;
+    }
+    return NO;
+}
+
 @end

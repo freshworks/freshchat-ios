@@ -15,22 +15,21 @@
 
 @implementation FDControllerUtils
 
-+(UIViewController *)getConvController:(BOOL)isEmbeded{
++(UIViewController *)getConvController:(BOOL)isEmbeded
+                           withOptions:(ConversationOptions *)options
+                           andChannels:(NSArray *)channels{
     UIViewController *controller;
-    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
-    NSArray *results = [context executeFetchRequest:request error:nil];
+    HLViewController *innerController;
     BOOL isModal = !isEmbeded;
     
-    if (results.count == 1) {
-        HLChannelInfo *channelInfo = [results firstObject];
-        FDMessageController *msgController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:isModal];
-        controller = [[HLContainerController alloc]initWithController:msgController andEmbed:isEmbeded];
+    if (channels.count == 1) {
+        HLChannelInfo *channelInfo = [channels firstObject];
+        innerController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:isModal];
     }else{
-        HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
-        controller = [[HLContainerController alloc]initWithController:channelController andEmbed:isEmbeded];
+        innerController = [[HLChannelViewController alloc]init];
     }
+    [HLConversationUtil setConversationOptions:options  andViewController:innerController];
+    controller = [[HLContainerController alloc]initWithController:innerController andEmbed:isEmbeded];
     return controller;
 }
 

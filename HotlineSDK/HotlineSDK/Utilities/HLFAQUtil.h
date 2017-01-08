@@ -23,6 +23,7 @@
 +(BOOL) hasTags:(FAQOptions *) options;
 +(BOOL) hasContactUsTags:(FAQOptions *) options;
 +(BOOL) hasFilteredViewTitle:(FAQOptions *) options;
++(FAQOptions *) nonTagCopy:(FAQOptions *)options;
 + (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source;
 @end
 

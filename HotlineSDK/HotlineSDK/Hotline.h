@@ -333,7 +333,7 @@ enum TagFilterType {
 /**
  *  Filter with type either faq articles or categories 
  */
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (int) type;
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (enum TagFilterType) type;
 
 /**
  *  Filter contactus with tags and title
@@ -357,7 +357,7 @@ enum TagFilterType {
 /**
  *  Tags Filter type - FAQ's or Articles tags
  */
--(NSNumber *) filteredType;
+-(enum TagFilterType) filteredType;
 
 /**
  *  List of tags supplied for co
