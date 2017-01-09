@@ -148,11 +148,17 @@
 
 - (void) updateChannelWithInfo :(NSArray *) channelInfo{
     
+    if(self.isFilteredView && channelInfo.count == 0 ){
+        HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
+        channelInfo = @[defaultChannel];
+    }
+
     if (channelInfo.count == 1) {
         BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
         self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded
                                                        withOptions:self.convOptions andChannels:channelInfo]];
-    }else{
+    }
+    else{
         BOOL refreshData = NO;
         
         NSArray *sortedChannel = [self sortChannelList:channelInfo];
