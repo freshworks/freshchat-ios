@@ -453,10 +453,15 @@ static HLNotificationHandler *handleUpdateNotification;
     [FDUtilities registerUser:nil];
 }
 
-+(void) addSentMessageEventWithChannel :(HLChannel *)channel messageAlias:(NSString *)messageId andType :(int) type {
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_SEND_MESSAGE withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:[channel.channelID stringValue]];
-        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channel.name];
++(void) addSentMessageEventWithChannel :(HLChannel *)channel
+                           messageAlias:(NSString *)messageId
+                               andType :(int) type {
+    NSString *eventChannelName = channel.name;
+    NSString *eventChannelId = [channel.channelID stringValue];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_SEND_MESSAGE
+                                          withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelId];
+        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
         [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageId];
         NSString *messageType;
         switch(type){

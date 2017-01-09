@@ -41,11 +41,15 @@
 }
 
 + (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source{
+    NSString *categoryName = article.category.title;
+    NSString *categoryId = [article.categoryID stringValue];
+    NSString *articleId = [article.articleID stringValue];
+    NSString *articleName = article.title;
     [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_ARTICLE withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[article.categoryID stringValue]];
-        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:article.category.title];
-        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[article.articleID stringValue]];
-        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:article.title];
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:categoryId];
+        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:categoryName];
+        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:articleId];
+        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:articleName];
         [event propKey:HLEVENT_PARAM_SOURCE andVal:source];
     }];
 }

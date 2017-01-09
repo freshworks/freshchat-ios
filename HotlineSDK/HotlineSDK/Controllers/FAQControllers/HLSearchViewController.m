@@ -322,9 +322,10 @@
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     if([trimString(searchBar.text) length] > 0){
+        NSString *eventSearchResultCount = [@(self.searchResults.count) stringValue];
         [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH withBlock:^(HLEvent *event) {
             [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_KEY andVal:searchBar.text];
-            [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_COUNT andVal:[@(self.searchResults.count) stringValue]];
+            [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_COUNT andVal:eventSearchResultCount];
         }];
     }
     [self dismissModalViewControllerAnimated:NO];

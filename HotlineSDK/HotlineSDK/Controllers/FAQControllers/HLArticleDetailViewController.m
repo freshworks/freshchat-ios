@@ -358,10 +358,13 @@
 }
 
 - (void) sendEventForArticle :(NSString *) eventName{
+    NSString *articleId = [self.articleID stringValue];
+    NSString *articleName =self.articleTitle;
+    NSString *categoryId = [self.categoryID stringValue];
     [[HLEventManager sharedInstance] submitSDKEvent:eventName withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:[self.articleID stringValue]];
-        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:self.articleTitle];
-        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[self.categoryID stringValue]];
+        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:articleId];
+        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:articleName];
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:categoryId];
     }];
 }
 

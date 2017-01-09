@@ -396,9 +396,11 @@
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
         [HLFAQUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
+        NSString *eventCategoryTitle = category.title;
+        NSString *eventCategoryId = [category.categoryID stringValue];
         [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
-            [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:category.title];
-            [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:[category.categoryID stringValue]];
+            [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:eventCategoryTitle];
+            [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:eventCategoryId];
         }];
         [self.navigationController pushViewController:container animated:YES];
     }
