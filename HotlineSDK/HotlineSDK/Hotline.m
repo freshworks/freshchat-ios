@@ -670,13 +670,10 @@
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsWithOptions:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray *channelIds){
+        [[HLTagManager sharedInstance] getChannelsWithOptions:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
             HLChannel *channel;
-            if(channelIds.count ==1){
-                channel = [HLChannel getWithID:[channelIds firstObject] inContext:mainContext];
-            }
-            else if(channelIds.count >1){
-                channel = [HLChannel getWithID:[channelIds valueForKeyPath:@"@min.intValue"] inContext:mainContext];
+            if(channels.count >=1){
+                channel = [channels firstObject];  // 1 will have the match , if more than one. it is ordered by pos
             }
             if(!channel){
                 channel = [HLChannel getDefaultChannelInContext:mainContext];
