@@ -80,7 +80,7 @@
 
 +(BOOL) hasContactUsTags:(FAQOptions *) options{
     if(options){
-        return options.tags && options.tags.count > 0;
+        return options.contactUsTags && options.contactUsTags.count > 0;
     }
     return NO;
 }

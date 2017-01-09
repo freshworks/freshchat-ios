@@ -183,8 +183,19 @@
     [self.navigationController presentViewController:navController animated:NO completion:nil];
 }
 
+-(void) launchConversations {
+    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
+        ConversationOptions *options = [ConversationOptions new];
+        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+        [[Hotline sharedInstance] showConversations:self withOptions:options];
+    }
+    else{
+        [[Hotline sharedInstance] showConversations:self];
+    }
+}
+
 -(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]showConversations:self];
+    [self launchConversations];
 }
 
 -(void)updateCategories{
@@ -323,14 +334,7 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
-        ConversationOptions *options = [ConversationOptions new];
-        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self withOptions:options];
-    }
-    else{
-        [[Hotline sharedInstance] showConversations:self];
-    }
+    [self launchConversations];
 }
 
 #pragma mark - Collection view delegate
