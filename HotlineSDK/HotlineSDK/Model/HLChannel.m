@@ -84,7 +84,13 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
-    channel.isRestricted = channelInfo[@"restricted"];
+    
+    if ([channelInfo objectForKey:@"restricted"]) {
+        channel.isRestricted = channelInfo[@"restricted"];
+    }else{
+        channel.isRestricted = @NO;
+    }
+    
     KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
     NSString *updatedMessage = trimString(channelInfo[@"welcomeMessage"][@"text"]); //set welcome message here
     if (welcomeMessage) {
