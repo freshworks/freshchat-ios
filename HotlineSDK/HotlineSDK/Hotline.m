@@ -400,21 +400,21 @@
             faqOptionsCompletion([self preferredCategoryController:options]);
     }
     else if(options.filteredType == ARTICLE){
-        [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+        [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray <HLArticle *> *articles) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
             completion(preferredViewController);
             };
             
             HLViewController *preferedController = nil;
-            if([articleIds count] > 1 ){
+            if([articles count] > 1 ){
                 preferedController = [[HLArticlesController alloc]init];
                 faqOptionsCompletion(preferedController);
-            } else if([articleIds count] == 1 ) {
+            } else if([articles count] == 1 ) {
                 NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
                 [mContext performBlock:^{
                     HLViewController *preferedController = nil;
-                    HLArticle *article = [HLArticle getWithID:[articleIds firstObject] inContext:mContext];
+                    HLArticle *article = [HLArticle getWithID:[[articles firstObject] articleID] inContext:mContext];
                     if(article){
                         preferedController = [HLFAQUtil getArticleDetailController:article];
                     }
