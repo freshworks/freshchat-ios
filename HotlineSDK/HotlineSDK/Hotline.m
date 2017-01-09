@@ -619,19 +619,17 @@
         [self storePreviousUser:previousUser inStore:store];
     }
     
-    [[KonotorDataManager sharedInstance]deleteAllProperties:^(NSError *error) {
-        [[KonotorDataManager sharedInstance]deleteAllChannels:^(NSError *error) {
-            if(doInit){
-                [self initWithConfig:config completion:completion];
-            }else{
-                if (completion) {
-                    completion();
-                }
+    [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
+        if(doInit){
+            [self initWithConfig:config completion:completion];
+        }else{
+            if (completion) {
+                completion();
             }
-            if (deviceToken) {
-                [self storeDeviceToken:deviceToken];
-            }
-        }];
+        }
+        if (deviceToken) {
+            [self storeDeviceToken:deviceToken];
+        }
     }];
 }
 
