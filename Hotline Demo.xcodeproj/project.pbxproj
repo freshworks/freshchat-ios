@@ -184,7 +184,6 @@
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
-				3C1159FC1DF1EA5800800A6C /* Security.framework */,
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
@@ -239,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */,
+				3C1159FC1DF1EA5800800A6C /* Security.framework */,
 				356F1C131B9DD23B002F1E2A /* CoreMedia.framework */,
 				356F1C111B9DD223002F1E2A /* AudioToolbox.framework */,
 				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,

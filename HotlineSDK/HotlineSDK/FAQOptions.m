@@ -14,8 +14,8 @@
 @interface FAQOptions()
 
 @property (nonatomic) int filterType;
-@property (nonatomic) NSArray *contactUsTags;
-@property (nonatomic) NSString *contactUsTitle;
+@property (nonatomic, strong) NSArray *contactUsTags;
+@property (nonatomic, strong) NSString *contactUsTitle;
 @property (nonatomic, strong) NSArray *filterByTags;
 @property (nonatomic, strong) NSString *tagViewTitle;
 

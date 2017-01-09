@@ -20,9 +20,7 @@
      withNavigationCtlr:(UIViewController *) controller
           faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source{
     NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-    
     [mContext performBlock:^{
-        //article search
         HLArticle *article = [HLArticle getWithID:articleId inContext:mContext];
         if(article){
             [HLFAQUtil launchArticle:article withNavigationCtlr:controller faqOptions:faqOptions andSource:source];

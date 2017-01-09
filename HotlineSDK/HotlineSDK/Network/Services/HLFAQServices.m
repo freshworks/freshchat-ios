@@ -88,16 +88,9 @@
                 
                 if(tags.count>0){
                     for(NSString *tagName in tags){
-                        
                         [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeCategory] andIdvalue:categoryInfo[@"categoryId"]] inContext:context];
                     }
                 }
-                
-//                //Delete category with no articles
-//                if (category.articles.count == 0){
-//                    
-//                }
-
             }else{
                 if (category){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
@@ -105,29 +98,26 @@
                 }
             }
         }
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+        NSArray *allCategories = [context executeFetchRequest:request error:nil];
+        for(HLCategory *category in allCategories){
+            if(category.articles.count == 0){
+                FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !"
+                      ,category.title, category.categoryID);
+                [HLTags removeTagsForTaggableId:category.categoryID andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
+                [context deleteObject:category];
+            }
+        }
+        
         NSError *err;
         [context save:&err];
-        [[KonotorDataManager sharedInstance] fetchAllCategoriesForTags:@[] withCompletion:^(NSArray *categories, NSError *error) {
-            NSManagedObjectContext *ctx;
-            for(HLCategory *category in categories){
-                if(category.articles.count == 0){
-                    FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !"
-                          ,category.title, category.categoryID);
-                    [HLTags removeTagsForTaggableId:category.categoryID andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
-                    [category.managedObjectContext deleteObject:category];
-                    ctx = category.managedObjectContext;
-                }
-            }
-            if(ctx){
-                NSError *err;
-                [ctx save:&err];
-            }
-            [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
-            [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
-            if(completion){
-                completion(err);
-            }
-        }];
+        
+        [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
+        [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
+        if(completion){
+            completion(err);
+        }
     }];
 }
 

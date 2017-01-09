@@ -12,7 +12,7 @@
 #import "FDUtilities.h"
 
 #define STORAGE_DIR_PATH @"Hotline/Offline"
-#define TAGS_FILE_NAME @"tags.plist" // Hotline/Events/events.plist
+#define TAGS_FILE_NAME @"tags.plist"
 
 #define ARTICLE_AND_CATEGORY_TAGS @[@(HLTagTypeArticle),@(HLTagTypeCategory)]
 
@@ -41,7 +41,6 @@
     if (self) {
         self.queue = dispatch_queue_create("com.freshdesk.hotline.tagmanager", DISPATCH_QUEUE_SERIAL);
         self.storageFile = [self getFileForStorage:TAGS_FILE_NAME];
-        //[self removeTagsPlistFile];
     }
     return self;
 }
@@ -131,5 +130,3 @@
 }
 
 @end
-
-

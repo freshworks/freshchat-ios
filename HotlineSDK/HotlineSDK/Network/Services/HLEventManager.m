@@ -16,6 +16,7 @@
 #import "HLMacros.h"
 #import "FDReachabilityManager.h"
 #import "HLEvent.h"
+#import "HLConstants.h"
 
 #define isRetriableHttpError(code) (code != HLEVENTS_HTTP_RESPONSE_CODE_UNSUPPORTED_MEDIA_TYPE || \
                                     code != HLEVENTS_HTTP_RESPONSE_CODE_VALIDATION_FAILED )
@@ -28,7 +29,6 @@
 
 @interface HLEventManager()
 
-//@property (nonatomic, strong) NSMutableArray *eventsArray;
 @property (nonatomic, strong) NSMutableDictionary *events;
 @property (nonatomic, strong) NSString *plistPath;
 @property (nonatomic, strong) NSString *sessionID;
@@ -87,7 +87,7 @@
             return;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15
+            self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:EVENTS_UPLOAD_INTERVAL
                                                                  target:self
                                                                selector:@selector(processEventBatch)
                                                                userInfo:nil
