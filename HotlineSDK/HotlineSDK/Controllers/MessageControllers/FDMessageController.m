@@ -932,7 +932,11 @@ typedef struct {
     [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
-           [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:[FAQOptions new] andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
+            FAQOptions *option = [FAQOptions new];
+            if([HLConversationUtil hasTags:self.convOptions]){
+                [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
+            }
+            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:option andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
             NSLog(@"%@",e);
