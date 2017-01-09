@@ -134,7 +134,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isDefault == YES"];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count == 1) {
+    if (matches.count >= 1) {
         channel = matches.firstObject;
     }
     return channel;

@@ -90,8 +90,15 @@
         [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags
                                                   inContext:[KonotorDataManager sharedInstance].mainObjectContext
                                              withCompletion:^(NSArray<HLCategory *> *categories){
-                                                 [self updateCategoriesWithSolutions:categories];
-                                             }];
+            if (categories.count == 0 ) {
+                [[KonotorDataManager sharedInstance] fetchAllCategoriesWithCompletion:^(NSArray *solutions, NSError *error) {
+                        if (!error) {
+                            [self updateCategoriesWithSolutions:solutions];
+                        }
+                }];
+            }
+            [self updateCategoriesWithSolutions:categories];
+        }];
     }
     else{
         [[KonotorDataManager sharedInstance] fetchAllCategoriesWithCompletion:^(NSArray *solutions, NSError *error) {
