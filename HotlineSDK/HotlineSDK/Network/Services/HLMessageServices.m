@@ -74,7 +74,7 @@ static HLNotificationHandler *handleUpdateNotification;
         NSString *userAlias = [FDUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
-        __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
         [request setRelativePath:path andURLParams:@[appKey, @"tags=true", afterTime]];
@@ -183,7 +183,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     newMessage.belongsToConversation = conversation;
                 }
                 
-                //Do not mark restored mesages as unread
+                //Do not mark restored messages as unread
                 if (isRestore) {
                     newMessage.messageRead = YES;
                 }else {
@@ -202,9 +202,17 @@ static HLNotificationHandler *handleUpdateNotification;
     }
     
     [[KonotorDataManager sharedInstance]save];
-    [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    if([lastUpdateTime integerValue] != 0 ){
+        [secureStore setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    }else{
+        NSNumber *lastUpdatedChannelTime = [secureStore objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+        [secureStore setObject:lastUpdatedChannelTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    }
+    
     [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
-    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
+    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject:nil waitUntilDone:NO];
     return true;
 }
 
