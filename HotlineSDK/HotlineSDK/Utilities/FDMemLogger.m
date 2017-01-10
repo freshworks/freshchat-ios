@@ -103,7 +103,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
             [self reset];
             FDLog(@"successfully uploaded log");
         }else{
-            NSLog(@"Failed  : %@",log);
+            ALog(@"Failed  : %@",log);
             FDLog(@"Response %@", response);
         }
     }]resume];

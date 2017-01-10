@@ -111,6 +111,8 @@
                 
                 if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
                 
+                ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
+                
                 [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 
                 if (handler) handler(nil);
@@ -143,7 +145,7 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
-            FDLog(@"Device token updated on server 👍");
+            ALog(@"Push token registered : %@", pushToken);
         }else{
             FDLog(@"Could not register app :%@", error);
             FDLog(@"Response : %@", responseInfo.response);

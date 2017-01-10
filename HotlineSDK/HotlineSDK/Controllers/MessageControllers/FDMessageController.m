@@ -941,7 +941,7 @@ typedef struct {
             [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:option andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
-            NSLog(@"%@",e);
+            ALog(@"%@",e);
         }
     }
     else if(button.actionUrlString!=nil){
@@ -954,7 +954,7 @@ typedef struct {
             }
         }
         @catch(NSException* e){
-            NSLog(@"%@",e);
+            ALog(@"%@",e);
         }
     }
 }

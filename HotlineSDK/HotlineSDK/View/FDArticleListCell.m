@@ -8,6 +8,7 @@
 
 #import "FDArticleListCell.h"
 #import "HLTheme.h"
+#import "HLMacros.h"
 #import "FDAutolayoutHelper.h"
 
 @interface FDArticleListCell ()
@@ -46,7 +47,7 @@
 }
 
 -(void)addAccessoryView{
-    NSLog(@"WARNING: Unimplemented method. %@ should implement addAccessoryView" , self.class);
+    ALog(@"WARNING: Unimplemented method. %@ should implement addAccessoryView" , self.class);
 }
 
 -(void)setupTheme{

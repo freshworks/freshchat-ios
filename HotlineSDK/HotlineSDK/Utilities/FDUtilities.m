@@ -306,14 +306,14 @@ static NSInteger networkIndicator = 0;
                         [userProperties setObject:value forKey:key];
                     }
                     else {
-                        NSLog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
+                        ALog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
                     }
                 } else {
-                    NSLog(@"Invalid user property value. Not a NSString. %@ - %@ : <validation error>", key, valueObj);
+                    ALog(@"Invalid user property value. Not a NSString. %@ - %@ : <validation error>", key, valueObj);
                 }
             }
             else{
-                NSLog(@"Invalid user property  key %@ : <validation error>", key);
+                ALog(@"Invalid user property  key %@ : <validation error>", key);
             }
         }
     }
@@ -419,6 +419,12 @@ static NSInteger networkIndicator = 0;
 
 +(void)initiatePendingTasks{
     [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
+}
+
++(BOOL)hasInitConfig{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+    return [store checkItemWithKey:HOTLINE_DEFAULTS_APP_ID] && [store checkItemWithKey:HOTLINE_DEFAULTS_APP_KEY] && ctx != nil;
 }
 
 @end

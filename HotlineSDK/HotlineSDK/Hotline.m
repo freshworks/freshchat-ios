@@ -103,8 +103,7 @@
 }
 
 -(void)networkReachable{
-    [FDUtilities registerUser:nil];
-    [[HLEventManager sharedInstance] startEventsUploadTimer];
+    [FDUtilities initiatePendingTasks];
 }
 
 -(void)initWithConfig:(HotlineConfig *)config{
@@ -185,7 +184,7 @@
     
     if (message.length > 0) {
         NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
-        NSLog(@"\n\n** %@ ** \n %@ \n\n", info, message);
+        ALog(@"\n\n** %@ ** \n %@ \n\n", info, message);
     }
 }
 
@@ -196,10 +195,6 @@
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
                                                  name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleBecameActive:)
-                                                 name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
@@ -301,7 +296,7 @@
         [self updateUserProperties:@{ key : value}];
     }
     else {
-        NSLog(@"Null property %@ provided. Not updated", key ? @"value" : @"key" );
+        ALog(@"Null property %@ provided. Not updated", key ? @"value" : @"key" );
     }
 }
 
@@ -324,10 +319,12 @@
     when the SDK's app is transitioned from background to foreground  */
 
 -(void)newSession:(NSNotification *)notification{
-    if(self.config.pollWhenAppActive){
-        [self startPoller];
+    if([FDUtilities hasInitConfig]) {
+        if(self.config.pollWhenAppActive){
+            [self startPoller];
+        }
+        [FDUtilities initiatePendingTasks];
     }
-    [FDUtilities initiatePendingTasks];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
@@ -335,27 +332,29 @@
     [[HLEventManager sharedInstance] cancelEventsUploadTimer];
 }
 
--(void)handleBecameActive:(NSNotification *)notification{
-    [[HLEventManager sharedInstance] startEventsUploadTimer];
-}
-
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
-    dispatch_async(dispatch_get_main_queue(),^{
-        [[[FDSolutionUpdater alloc]init] fetch];
-        [KonotorMessage uploadAllUnuploadedMessages];
-        [HLMessageServices fetchChannelsAndMessages:nil];
-        [[[FDDAUUpdater alloc]init] fetch];
-        [self registerDeviceToken];
-        [self updateAppVersion];
-        [self updateAdId];
-        [self updateSDKBuildNumber];
-        [HLCoreServices uploadUnuploadedProperties];
-        [self markPreviousUserUninstalledIfPresent];
-        [[HLEventManager sharedInstance] startEventsUploadTimer];
-        // TODO: Implement a better retry mechanism, also has a timing issue need to fix it
-        [HLMessageServices uploadUnuploadedCSAT];
-    });
+    if(![FDUtilities isUserRegistered]){
+        [FDUtilities registerUser:nil];
+    }
+    if([FDUtilities hasInitConfig]) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            if([FDUtilities isUserRegistered]){
+                [[[FDDAUUpdater alloc]init] fetch];
+                [self registerDeviceToken];
+                [self updateAppVersion];
+                [self updateAdId];
+                [self updateSDKBuildNumber];
+                [HLMessageServices fetchChannelsAndMessages:nil];
+                [HLCoreServices uploadUnuploadedProperties];
+                [KonotorMessage uploadAllUnuploadedMessages];
+                [HLMessageServices uploadUnuploadedCSAT];
+            }
+            [[[FDSolutionUpdater alloc]init] fetch];
+            [self markPreviousUserUninstalledIfPresent];
+            [[HLEventManager sharedInstance] startEventsUploadTimer];
+        });
+    }
 }
 
 -(void) updateAdId{
@@ -588,7 +587,25 @@
     [self clearUserDataWithCompletion:nil init:true andOldUser:nil];
 }
 
--(void)clearUserDataWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser{
+static BOOL CLEAR_DATA_IN_PROGRESS = NO;
+
+-(void)clearUserDataWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser {
+    if (CLEAR_DATA_IN_PROGRESS == NO) {
+        CLEAR_DATA_IN_PROGRESS = YES;
+        [self processClearUserData:^{
+            CLEAR_DATA_IN_PROGRESS = NO;
+            if(completion){
+                completion();
+            }
+            ALog(@"Clear user data completed");
+        } init:doInit andOldUser:previousUser];
+    }
+    else {
+        ALog(@"Clear user data already in progress");
+    }
+}
+
+-(void)processClearUserData:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];

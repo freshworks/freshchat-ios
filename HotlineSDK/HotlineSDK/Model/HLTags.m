@@ -8,6 +8,7 @@
 
 #import "HLTags.h"
 #import "KonotorDataManager.h"
+#import "HLMacros.h"
 
 @implementation HLTags
 
@@ -38,7 +39,7 @@
     NSError * error = nil;
     if (![context save:&error])
     {
-        NSLog(@"Error in tag deletion! %@", error);
+        ALog(@"Error in tag deletion! %@", error);
     }
 }
 

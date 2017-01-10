@@ -9,6 +9,7 @@
 #import "FDChannelUpdater.h"
 #import "HLMessageServices.h"
 #import "HLConstants.h"
+#import "HLMacros.h"
 #import "KonotorConversation.h"
 
 @implementation FDChannelUpdater
@@ -24,6 +25,7 @@
 
 -(void)doFetch:(void(^)(NSError *error))completion{
     [HLMessageServices fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+        ALog(@"Channels updated");
         if(completion) completion(error);
     }];
 }

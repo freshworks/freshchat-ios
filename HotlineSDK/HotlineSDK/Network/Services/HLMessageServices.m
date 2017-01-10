@@ -406,6 +406,9 @@ static HLNotificationHandler *handleUpdateNotification;
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if (!error && statusCode == 201) {
+                
+                ALog(@"Message sent");
+                
                 NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
                 if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];

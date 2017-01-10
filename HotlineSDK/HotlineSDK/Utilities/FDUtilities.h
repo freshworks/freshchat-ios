@@ -41,7 +41,7 @@
 +(BOOL)isiOS10;
 
 +(void)initiatePendingTasks;
-
++(BOOL)hasInitConfig;
 @end
 
 #endif

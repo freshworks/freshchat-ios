@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HLViewController.h"
 #import "HLTheme.h"
+#import "HLMacros.h"
 #import "FDBarButtonItem.h"
 #import "HLEventManager.h"
 
@@ -17,7 +18,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (self.navigationController == nil) {
-        NSLog(@"Warning: Use Hotline controllers inside navigation controller");
+        ALog(@"Warning: Use Hotline controllers inside navigation controller");
     }
     else {
         self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle] == UIStatusBarStyleLightContent ?

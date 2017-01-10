@@ -329,21 +329,30 @@ enum TagFilterType {
  *  @param Controller's navigation bar title
  *
  */
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title __attribute__((deprecated("Please use clearUserDataWithCompletion: instead")));
+-(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title __attribute__((deprecated("Please use filterByTags:withTitle:andType: with TagFilterType.ARTICLE for same result")));
+
 /**
- *  Filter with type either faq articles or categories 
+ *  @discussion This method lets you to filter the list of Categories or Articles by tags
+ *
+ *  @param Array of tags to filter by. Tags can be configured in the portal
+ *
+ *  @param Title for the list of filtered view
+ *
+ *  @param Type can be either Category or Article determining what to show. ( list of filtered articles or categories)
  */
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (enum TagFilterType) type;
 
 /**
- *  Filter contactus with tags and title
+ *  @discussion This method lets you to filter the list of Channels by tags when user clicks on contact us
+ *
+ *  @param Array of tags to filter the channels list
+ *
+ *  @param Title for the list of filtered channels view
  */
 -(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title;
  
 /**
  *  Preferred navigation bar title
- *
- *  @discussion
  */
 -(NSString *)filteredViewTitle;
 
@@ -360,12 +369,12 @@ enum TagFilterType {
 -(enum TagFilterType) filteredType;
 
 /**
- *  List of tags supplied for co
+ *  Tags used to filter channels when clicking on "Contact Us" on FAQ screens
  */
 -(NSArray *) contactUsTags;
 
 /**
- *  Title view added for contact us filtered view by tags
+ *  Title for the list of filtered channels view which clicking "Contact Us"
  */
 -(NSString *) contactUsTitle;
 
@@ -375,28 +384,24 @@ enum TagFilterType {
 @interface ConversationOptions : NSObject
 
 /**
- *  Show Filtered articles list
+ *  Show Filtered Channels
  *
- *  @discussion This method lets you to launch and present a controller with the list of articles filtered by the tags supplied
+ *  @discussion This method lets you to launch and present a controller with the list of Channels filtered by the tags
  *
- *  @param List of tags that are configured already the portal
+ *  @param Array of tags to filter the channels list
  *
- *  @param Controller's navigation bar title
+ *  @param Title for the list of filtered channels view
  *
  */
 -(void)filterByTags:(NSArray *)tags withTitle:(NSString *)title;
 
 /**
- *  Preferred navigation bar title
- *
- *  @discussion
+ *  Preferred navigation bar title for filtered view of channels
  */
 -(NSString *)filteredViewTitle;
 
 /**
- *  List of tags you have supplied already
- *
- *  @discussion List of tags which are configured in portal
+ *  Tags used for filtering the channels list
  */
 -(NSArray *)tags;
 
@@ -405,17 +410,22 @@ enum TagFilterType {
 @interface HotlineMessage : NSObject
 
 /**
- *  Message to send a a specific tagged channel
+ *  Message text to be sent
  */
 @property (strong, nonatomic) NSString *message;
 
 /**
- *  Tag for specific channel
+ *  Tag of the channel on which the message needs to be sent
+ *  If tag does not match with any channel it is sent on the default channel
  */
 @property (strong, nonatomic) NSString *tag;
 
 /**
- *  Init a MessageObject
+ *  Initialize the message object
+ *
+ *  @param Message text to send to agent
+ *
+ *  @param Tag of the channel on which the message needs to be sent
  */
 -(instancetype)initWithMessage:(NSString *)message andTag:(NSString *)tag;
 
