@@ -1,5 +1,5 @@
 //
-//  FDControllerUtils.h
+//  HLControllerUtils.h
 //  HotlineSDK
 //
 //  Created by user on 03/11/16.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HLConversationUtil.h"
 
-@interface FDControllerUtils : NSObject
+@interface HLControllerUtils : NSObject
 
 +(UIViewController *)getConvController:(BOOL)isEmbeded
                            withOptions:(ConversationOptions *)options

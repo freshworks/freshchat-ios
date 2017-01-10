@@ -18,7 +18,7 @@
 #import "HLLocalization.h"
 #import "HLEventManager.h"
 #import "HLSearchViewController.h"
-#import "FDControllerUtils.h"
+#import "HLControllerUtils.h"
 
 @interface  HLCategoryViewBehaviour ()
 
@@ -145,10 +145,10 @@
    
     
     if (![self.categoryViewDelegate isEmbedded]) {
-        [FDControllerUtils configureCloseButton:self.categoryViewDelegate forTarget:self selector:@selector(closeButton:)];
+        [HLControllerUtils configureCloseButton:self.categoryViewDelegate forTarget:self selector:@selector(closeButton:)];
     }
     else {
-        [FDControllerUtils configureBackButtonForController:self.categoryViewDelegate
+        [HLControllerUtils configureBackButtonForController:self.categoryViewDelegate
                                                      withEmbedded:[self.categoryViewDelegate isEmbedded]];
     }
     

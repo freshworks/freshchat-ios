@@ -28,7 +28,7 @@
 #import "FDReachabilityManager.h"
 #import "HLTagManager.h"
 #import "HLConversationUtil.h"
-#import "FDControllerUtils.h"
+#import "HLControllerUtils.h"
 #import "HLEventManager.h"
 
 @interface HLChannelViewController ()
@@ -159,7 +159,7 @@
 
     if (channelInfo.count == 1) {
         BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
-        self.navigationController.viewControllers = @[[FDControllerUtils getConvController:isEmbedded
+        self.navigationController.viewControllers = @[[HLControllerUtils getConvController:isEmbedded
                                                        withOptions:self.convOptions andChannels:channelInfo]];
     }
     else{

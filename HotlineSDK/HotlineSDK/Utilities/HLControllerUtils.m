@@ -1,12 +1,12 @@
 //
-//  FDControllerUtils.m
+//  HLControllerUtils.m
 //  HotlineSDK
 //
 //  Created by user on 03/11/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "FDControllerUtils.h"
+#import "HLControllerUtils.h"
 #import "HLViewController.h"
 #import "KonotorDataManager.h"
 #import "HLContainerController.h"
@@ -15,7 +15,7 @@
 #import "FDBarButtonItem.h"
 #import "HLLocalization.h"
 
-@implementation FDControllerUtils
+@implementation HLControllerUtils
 
 +(UIViewController *)getConvController:(BOOL)isEmbeded
                            withOptions:(ConversationOptions *)options

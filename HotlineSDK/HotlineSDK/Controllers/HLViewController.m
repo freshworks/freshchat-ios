@@ -12,7 +12,7 @@
 #import "HLMacros.h"
 #import "FDBarButtonItem.h"
 #import "HLEventManager.h"
-#import "FDControllerUtils.h"
+#import "HLControllerUtils.h"
 
 @implementation HLViewController : UIViewController
 
@@ -30,7 +30,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [FDControllerUtils configureGestureDelegate:[self gestureDelegate] forController:self withEmbedded:self.embedded];
+    [HLControllerUtils configureGestureDelegate:[self gestureDelegate] forController:self withEmbedded:self.embedded];
 }
 
 -(UIViewController<UIGestureRecognizerDelegate> *) gestureDelegate {
@@ -38,7 +38,7 @@
 }
 
 -(void)configureBackButton{
-    [FDControllerUtils configureBackButtonForController:self withEmbedded:self.embedded];
+    [HLControllerUtils configureBackButtonForController:self withEmbedded:self.embedded];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{

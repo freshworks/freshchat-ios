@@ -29,7 +29,7 @@
 #import "HLTagManager.h"
 #import "HLEventManager.h"
 #import "HLCategoryViewBehaviour.h"
-#import "FDControllerUtils.h"
+#import "HLControllerUtils.h"
 
 @interface HLCategoryListController () <HLCategoryViewBehaviourDelegate>
 
@@ -86,7 +86,7 @@
     [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
     }];
-    [FDControllerUtils configureGestureDelegate:nil forController:self withEmbedded:[self isEmbedded]];
+    [HLControllerUtils configureGestureDelegate:nil forController:self withEmbedded:[self isEmbedded]];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
