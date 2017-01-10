@@ -28,16 +28,16 @@
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
+#import "HLCategoryViewBehaviour.h"
 
-@interface HLCategoryListController ()
+@interface HLCategoryListController () <HLCategoryViewBehaviourDelegate>
 
 @property (nonatomic, strong)NSArray *categories;
 @property (nonatomic, strong)HLTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property BOOL isFilteredView;
-@property BOOL isFallback;
+@property (nonatomic, strong) HLCategoryViewBehaviour *categoryViewBehaviour;
 
 @end
 
@@ -45,14 +45,23 @@
 
 -(void) setFAQOptions:(FAQOptions *)options{
     self.faqOptions = options;
-    self.isFilteredView = [HLFAQUtil hasTags:options];
+}
+
+-(HLCategoryViewBehaviour*)categoryViewBehaviour {
+    if(_categoryViewBehaviour == nil){
+        _categoryViewBehaviour = [[HLCategoryViewBehaviour alloc] initWithViewController:self andFaqOptions:self.faqOptions];
+    }
+    return _categoryViewBehaviour;
+}
+
+-(BOOL)isEmbbeded {
+    return self.embedded;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-    [self updateCategories];
     [self updateResultsView:YES];
     [self addLoadingIndicator];
 }
@@ -66,14 +75,20 @@
     [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [self.categoryViewBehaviour load];
+}
+
 -(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];    
-    [self localNotificationSubscription];
-    [self fetchUpdates];
-    [self updateCategories];
+    [super viewDidAppear:animated];
     [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
     }];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self.categoryViewBehaviour unload];
 }
 
 -(HLEmptyResultView *)emptyResultView
@@ -85,40 +100,13 @@
     return _emptyResultView;
 }
 
-//TODO: Remove duplicate code
--(void)updateCategories{
-    if(self.isFilteredView){
-        [[HLTagManager sharedInstance] getCategoriesForTags:self.faqOptions.tags
-                                                  inContext:[KonotorDataManager sharedInstance].mainObjectContext
-                                             withCompletion:^(NSArray<HLCategory *> *categories){
-            if (categories.count == 0 ) {
-                [[KonotorDataManager sharedInstance] fetchAllCategoriesWithCompletion:^(NSArray *solutions, NSError *error) {
-                        if (!error) {
-                            [self updateCategoriesWithSolutions:solutions];
-                            self.isFallback = YES;
-                        }
-                }];
-            }
-            [self updateCategoriesWithSolutions:categories];
-        }];
-    }
-    else{
-        [[KonotorDataManager sharedInstance] fetchAllCategoriesWithCompletion:^(NSArray *solutions, NSError *error) {
-            if (!error) {
-                [self updateCategoriesWithSolutions:solutions];
-            }
-        }];
-    }
-}
-
-- (void) updateCategoriesWithSolutions : (NSArray *)solutions{
-    self.categories = solutions;
+- (void) onCategoriesUpdated:(NSArray<HLCategory *> *) categories {
     BOOL refreshData = NO;
     if ( self.categories ) {
         refreshData = YES;
     }
-    self.categories = solutions;
-    [self setNavigationItem];
+    self.categories = categories;
+    [self.categoryViewBehaviour setNavigationItem];
     refreshData = refreshData || (self.categories.count > 0);
     if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
         [self updateResultsView:NO];
@@ -158,99 +146,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.activityIndicator removeFromSuperview];
     });
-}
-
--(void)setNavigationItem{
-    
-    UIBarButtonItem *contactUsBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_CONTACT_US_ICON]
-                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
-    UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
-                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    
-    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    
-    if (!self.embedded) {
-        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
-        [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
-    }
-    else {
-        [self configureBackButtonWithGestureDelegate:nil];
-    }
-    NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(!self.isFilteredView || self.isFallback ){
-        [rightBarItems addObject:searchBarButton];
-    }
-    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
-        self.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
-    }
-    if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
-        [rightBarItems addObject:contactUsBarButton];
-    }
-    self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
-}
-
--(void)closeButton:(id)sender{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)searchButtonAction:(id)sender{
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
-    }];
-    HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
-    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
-    [navController setModalPresentationStyle:UIModalPresentationCustom];
-    [self presentViewController:navController animated:NO completion:nil];
-}
-
--(void)contactUsButtonAction:(id)sender{
-    [self launchConversations];
-}
-
--(void) launchConversations {
-    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
-        ConversationOptions *options = [ConversationOptions new];
-        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self withOptions:options];
-    }
-    else{
-        [[Hotline sharedInstance] showConversations:self];
-    }
-}
-
--(void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
-    [self localNotificationUnSubscription];
-}
-
--(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_SOLUTIONS_UPDATED object:nil];
-}
-
--(void)localNotificationSubscription{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSolutions)
-                                                 name:HOTLINE_SOLUTIONS_UPDATED object:nil];
-}
-
--(void)updateSolutions{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        HideNetworkActivityIndicator();
-        [self updateCategories];
-    });
-}
-
--(void)fetchUpdates{
-    FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
-    [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
-        if(isEmpty){
-            [updater resetTime];
-        }
-        ShowNetworkActivityIndicator();
-        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            HideNetworkActivityIndicator();
-        }];
-    }];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -303,7 +198,7 @@
 }
 
 -(BOOL)canDisplayFooterView{
-    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+    return [self.categoryViewBehaviour canDisplayFooterView];
 }
 
 @end

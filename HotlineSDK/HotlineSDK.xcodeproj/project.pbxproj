@@ -105,6 +105,7 @@
 		35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D4E8151D118E9000EFFE07 /* KonotorImageInput.m */; };
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 		3C160B061D05A59C000440D4 /* HLFAQUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLFAQUtil.m */; };
+		3CADFA251E256F1500829E7F /* HLCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA241E256F1500829E7F /* HLCategoryViewBehaviour.m */; };
 		68A532551D36252A0078339F /* HLEventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532541D36252A0078339F /* HLEventManager.m */; };
 		68A532581D3626300078339F /* HLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532571D3626300078339F /* HLEvent.m */; };
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
@@ -333,6 +334,8 @@
 		35DD93B21D1C11260013245F /* FAQOptionsInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAQOptionsInterface.h; sourceTree = "<group>"; };
 		3C160B041D05A530000440D4 /* HLFAQUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLFAQUtil.h; sourceTree = "<group>"; };
 		3C160B051D05A59C000440D4 /* HLFAQUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLFAQUtil.m; sourceTree = "<group>"; };
+		3CADFA231E256EB900829E7F /* HLCategoryViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryViewBehaviour.h; sourceTree = "<group>"; };
+		3CADFA241E256F1500829E7F /* HLCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryViewBehaviour.m; sourceTree = "<group>"; };
 		68A532531D36252A0078339F /* HLEventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEventManager.h; sourceTree = "<group>"; };
 		68A532541D36252A0078339F /* HLEventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEventManager.m; sourceTree = "<group>"; };
 		68A532561D3626300078339F /* HLEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEvent.h; sourceTree = "<group>"; };
@@ -467,6 +470,7 @@
 		35B2EEBC1D000E620014867F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3CADFA221E256E4900829E7F /* Behaviours */,
 				35D4E8001D118E9000EFFE07 /* FAQControllers */,
 				35D4E80B1D118E9000EFFE07 /* MessageControllers */,
 				35B2EED31D000E620014867F /* HLViewController.h */,
@@ -754,6 +758,15 @@
 			path = MessageControllers;
 			sourceTree = "<group>";
 		};
+		3CADFA221E256E4900829E7F /* Behaviours */ = {
+			isa = PBXGroup;
+			children = (
+				3CADFA231E256EB900829E7F /* HLCategoryViewBehaviour.h */,
+				3CADFA241E256F1500829E7F /* HLCategoryViewBehaviour.m */,
+			);
+			name = Behaviours;
+			sourceTree = "<group>";
+		};
 		843DD249178594180053E19E = {
 			isa = PBXGroup;
 			children = (
@@ -948,6 +961,7 @@
 				35B2EF9E1D000E620014867F /* FDDataUpdaterWithInterval.m in Sources */,
 				35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */,
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,
+				3CADFA251E256F1500829E7F /* HLCategoryViewBehaviour.m in Sources */,
 				35B2EFB31D000E620014867F /* FDVotingManager.m in Sources */,
 				35D4E8191D118E9000EFFE07 /* HLCategoryGridViewController.m in Sources */,
 				35B2EFA11D000E620014867F /* FDSolutionUpdater.m in Sources */,
