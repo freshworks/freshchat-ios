@@ -24,7 +24,7 @@
 
 @property (nonatomic, strong) UIViewController <HLCategoryViewBehaviourDelegate> *categoryViewDelegate;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property (nonatomic, strong)HLTheme *theme;
+@property (nonatomic, strong) HLTheme *theme;
 
 @end
 
@@ -142,15 +142,13 @@
                                                                            style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
     UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+   
     
     if (![self.categoryViewDelegate isEmbedded]) {
-        self.categoryViewDelegate.parentViewController.navigationItem.leftBarButtonItem = closeButton;
-        [self.categoryViewDelegate.navigationController.interactivePopGestureRecognizer setEnabled:NO];
+        [FDControllerUtils configureCloseButton:self.categoryViewDelegate forTarget:self selector:@selector(closeButton:)];
     }
     else {
-        [FDControllerUtils configureBackButtonWithGestureDelegate:nil
-                                                    forController:self.categoryViewDelegate
+        [FDControllerUtils configureBackButtonForController:self.categoryViewDelegate
                                                      withEmbedded:[self.categoryViewDelegate isEmbedded]];
     }
     

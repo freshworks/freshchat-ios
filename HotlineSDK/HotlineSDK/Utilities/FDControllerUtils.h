@@ -9,16 +9,25 @@
 #import <UIKit/UIKit.h>
 #import "HLConversationUtil.h"
 
-//TODO: Move all controller config logic from hotline.m to here
-
 @interface FDControllerUtils : NSObject
 
 +(UIViewController *)getConvController:(BOOL)isEmbeded
                            withOptions:(ConversationOptions *)options
                            andChannels:(NSArray *)channels;
 
-+(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
-                                forController:(UIViewController *) controller
-                                 withEmbedded:(BOOL) isEmbedded;
+//+(void(^__strong)())configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
+                                             //forController:(UIViewController *) controller
+                                              //withEmbedded:(BOOL) isEmbedded;
+
++(void) configureBackButtonForController:(UIViewController *) controller
+                            withEmbedded:(BOOL) isEmbedded;
+
++(void) configureGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
+                   forController:(UIViewController *) controller
+                    withEmbedded:(BOOL) isEmbedded;
+
++(void) configureCloseButton:(UIViewController *) controller
+                   forTarget:(id)targetObj
+                    selector: (SEL) actionSelector;
 
 @end

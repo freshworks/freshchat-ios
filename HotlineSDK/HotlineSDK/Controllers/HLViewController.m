@@ -29,7 +29,8 @@
 }
 
 -(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate{
-    [FDControllerUtils configureBackButtonWithGestureDelegate:gestureDelegate forController:self withEmbedded:self.embedded];
+    [FDControllerUtils configureBackButtonForController:self withEmbedded:self.embedded];
+    [FDControllerUtils configureGestureDelegate:gestureDelegate forController:self withEmbedded:self.embedded];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
