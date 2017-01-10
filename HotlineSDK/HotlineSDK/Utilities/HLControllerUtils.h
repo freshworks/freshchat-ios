@@ -22,8 +22,11 @@
                    forController:(UIViewController *) controller
                     withEmbedded:(BOOL) isEmbedded;
 
+
+//TODO: Replace other close buttons with this API - Rex 
 +(void) configureCloseButton:(UIViewController *) controller
                    forTarget:(id)targetObj
-                    selector: (SEL) actionSelector;
+                    selector:(SEL) actionSelector
+                       title:(NSString *)title;
 
 @end

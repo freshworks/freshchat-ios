@@ -53,8 +53,9 @@
 
 +(void) configureCloseButton:(UIViewController *) controller
                    forTarget:(id)targetObj
-                    selector: (SEL) actionSelector {
-    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT)
+                    selector: (SEL) actionSelector
+                       title: (NSString *)title {
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:title
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:targetObj
                                                                   action:actionSelector];

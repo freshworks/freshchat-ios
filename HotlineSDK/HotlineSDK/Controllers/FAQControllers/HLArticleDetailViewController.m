@@ -24,6 +24,7 @@
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
+#import "HLControllerUtils.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 

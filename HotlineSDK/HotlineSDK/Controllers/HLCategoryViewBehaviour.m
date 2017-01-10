@@ -145,7 +145,8 @@
    
     
     if (![self.categoryViewDelegate isEmbedded]) {
-        [HLControllerUtils configureCloseButton:self.categoryViewDelegate forTarget:self selector:@selector(closeButton:)];
+        [HLControllerUtils configureCloseButton:self.categoryViewDelegate forTarget:self
+                                       selector:@selector(closeButton:) title:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT)];
     }
     else {
         [HLControllerUtils configureBackButtonForController:self.categoryViewDelegate

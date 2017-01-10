@@ -20,4 +20,6 @@
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal;
 
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal fromNotification:(BOOL) fromNotification;
+
 @end
