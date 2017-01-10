@@ -52,7 +52,11 @@
     [self setupSubviews];
     [self setupTap];
     self.view.userInteractionEnabled=YES;
-    [self configureBackButtonWithGestureDelegate:self];
+    [self configureBackButton];
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)localNotificationSubscription{

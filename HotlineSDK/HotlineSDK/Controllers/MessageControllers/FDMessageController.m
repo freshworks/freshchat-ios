@@ -275,9 +275,13 @@ typedef struct {
         [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
     }else{
         if (!self.embedded) {
-            [self configureBackButtonWithGestureDelegate:self];
+            [self configureBackButton];
         }
     }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)closeButtonAction:(id)sender{

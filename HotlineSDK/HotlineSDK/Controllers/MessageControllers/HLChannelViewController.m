@@ -93,11 +93,15 @@
     [[[FDChannelUpdater alloc] init] resetTime];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self loadChannels];
+}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
-    [self updateChannels];
     [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
     }];
@@ -126,7 +130,7 @@
     }];
 }
 
--(void)updateChannels{
+-(void)loadChannels{
     HideNetworkActivityIndicator();
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     if(self.isFilteredView){
@@ -237,7 +241,7 @@
         [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     }
     else {
-        [self configureBackButtonWithGestureDelegate:nil];
+        [self configureBackButton];
     }
     
     if([HLConversationUtil hasFilteredViewTitle:self.convOptions]){
@@ -246,9 +250,9 @@
 }
 
 -(void)localNotificationSubscription{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChannels)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadChannels)
                                                  name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChannels)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadChannels)
                                                  name:HOTLINE_CHANNELS_UPDATED object:nil];
 }
 

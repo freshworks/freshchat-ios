@@ -35,47 +35,8 @@
     return controller;
 }
 
-
-// TODO: Remove this later - Rex
-+(void(^__strong)())configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
-                                forController:(UIViewController *) controller
-                                 withEmbedded:(BOOL) isEmbedded{
-    void (^deferredConfigurationBlock)() = nil;
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
-    UINavigationController *naviController = (controller.parentViewController) ? controller.parentViewController.navigationController : controller.navigationController;
-    if (isBackButtonImageExist && !isEmbedded) {
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:controller.navigationController
-                                                                      action:@selector(popViewControllerAnimated:)];
-        controller.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
-            if(gestureDelegate){
-                deferredConfigurationBlock = ^{
-                    [naviController.interactivePopGestureRecognizer setEnabled:YES];
-                    naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
-                };
-            }else{
-                deferredConfigurationBlock = ^{
-                    [naviController.interactivePopGestureRecognizer setEnabled:NO];
-                };
-            }
-        }
-    }else{
-        controller.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
-                                                                                                      style:controller.parentViewController.navigationItem.backBarButtonItem.style
-                                                                                                     target:nil action:nil];
-        deferredConfigurationBlock = ^{
-            [naviController.interactivePopGestureRecognizer setEnabled:NO];
-        };
-    }
-    return deferredConfigurationBlock;
-}
-
-
-
 +(void) configureBackButtonForController:(UIViewController *) controller
-                                              withEmbedded:(BOOL) isEmbedded{
+                            withEmbedded:(BOOL) isEmbedded{
     BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     if (isBackButtonImageExist && !isEmbedded) {
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
@@ -93,33 +54,33 @@
 +(void) configureCloseButton:(UIViewController *) controller
                    forTarget:(id)targetObj
                     selector: (SEL) actionSelector {
-  UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT)
-                                                                 style:UIBarButtonItemStylePlain
-                                                                target:targetObj
-                                                                action:actionSelector];
-   controller.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT)
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:targetObj
+                                                                  action:actionSelector];
+    if(!controller.parentViewController.navigationItem.leftBarButtonItem ) {
+        controller.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    }
 }
 
 +(void) configureGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
-                                             forController:(UIViewController *) controller
-                                              withEmbedded:(BOOL) isEmbedded{
+                   forController:(UIViewController *) controller
+                    withEmbedded:(BOOL) isEmbedded{
     
     BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     UINavigationController *naviController = (controller.parentViewController) ? controller.parentViewController.navigationController : controller.navigationController;
     if (isBackButtonImageExist && !isEmbedded) {
         if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
             if(gestureDelegate){
-                                    [naviController.interactivePopGestureRecognizer setEnabled:YES];
-                    naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
+                [naviController.interactivePopGestureRecognizer setEnabled:YES];
+                naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
                 
             }else{
-                
-                    [naviController.interactivePopGestureRecognizer setEnabled:NO];
-                
+                [naviController.interactivePopGestureRecognizer setEnabled:NO];
             }
         }
     }else{
-            [naviController.interactivePopGestureRecognizer setEnabled:NO];
+        [naviController.interactivePopGestureRecognizer setEnabled:NO];
     }
 }
 

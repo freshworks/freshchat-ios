@@ -28,9 +28,17 @@
     }
 }
 
--(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate{
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [FDControllerUtils configureGestureDelegate:[self gestureDelegate] forController:self withEmbedded:self.embedded];
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *) gestureDelegate {
+    return nil;
+}
+
+-(void)configureBackButton{
     [FDControllerUtils configureBackButtonForController:self withEmbedded:self.embedded];
-    [FDControllerUtils configureGestureDelegate:gestureDelegate forController:self withEmbedded:self.embedded];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
