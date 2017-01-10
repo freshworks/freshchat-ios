@@ -85,8 +85,9 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)isUserRegistered{
-    return [self currentUserAlias] &&
-        [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+    NSString *userAlias = [self currentUserAlias];
+    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED] &&
+            (userAlias && userAlias.length > 0));
 }
 
 +(NSString *) getUUIDLookupKey{
