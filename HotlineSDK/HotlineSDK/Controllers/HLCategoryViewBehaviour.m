@@ -18,6 +18,7 @@
 #import "HLLocalization.h"
 #import "HLEventManager.h"
 #import "HLSearchViewController.h"
+#import "FDControllerUtils.h"
 
 @interface  HLCategoryViewBehaviour ()
 
@@ -143,13 +144,14 @@
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     
-    if (![self.categoryViewDelegate isEmbbeded]) {
+    if (![self.categoryViewDelegate isEmbedded]) {
         self.categoryViewDelegate.parentViewController.navigationItem.leftBarButtonItem = closeButton;
         [self.categoryViewDelegate.navigationController.interactivePopGestureRecognizer setEnabled:NO];
     }
     else {
-        //TODO : Refactor this
-        //[self.categoryViewDelegate configureBackButtonWithGestureDelegate:nil];
+        [FDControllerUtils configureBackButtonWithGestureDelegate:nil
+                                                    forController:self.categoryViewDelegate
+                                                     withEmbedded:[self.categoryViewDelegate isEmbedded]];
     }
     
     NSMutableArray *rightBarItems = [NSMutableArray new];

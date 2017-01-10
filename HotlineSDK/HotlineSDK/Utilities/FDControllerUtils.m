@@ -12,6 +12,7 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "HLChannelViewController.h"
+#import "FDBarButtonItem.h"
 
 @implementation FDControllerUtils
 
@@ -32,5 +33,34 @@
     controller = [[HLContainerController alloc]initWithController:innerController andEmbed:isEmbeded];
     return controller;
 }
+
+
++(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
+                                forController:(UIViewController *) controller
+                                 withEmbedded:(BOOL) isEmbedded{
+    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
+    UINavigationController *naviController = (controller.parentViewController) ? controller.parentViewController.navigationController : controller.navigationController;
+    if (isBackButtonImageExist && !isEmbedded) {
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:controller.navigationController
+                                                                      action:@selector(popViewControllerAnimated:)];
+        controller.parentViewController.navigationItem.leftBarButtonItem = backButton;
+        if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
+            if(gestureDelegate){
+                [naviController.interactivePopGestureRecognizer setEnabled:YES];
+                naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
+            }else{
+                [naviController.interactivePopGestureRecognizer setEnabled:NO];
+            }
+        }
+    }else{
+        controller.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
+                                                                                                      style:controller.parentViewController.navigationItem.backBarButtonItem.style
+                                                                                                     target:nil action:nil];
+        [naviController.interactivePopGestureRecognizer setEnabled:NO];
+    }
+}
+
 
 @end

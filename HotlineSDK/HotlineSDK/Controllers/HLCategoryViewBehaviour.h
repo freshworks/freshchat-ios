@@ -16,7 +16,7 @@
 @protocol HLCategoryViewBehaviourDelegate
 
 -(void) onCategoriesUpdated:(NSArray <HLCategory *> *)categories;
--(BOOL) isEmbbeded;
+-(BOOL) isEmbedded;
 
 @end
 

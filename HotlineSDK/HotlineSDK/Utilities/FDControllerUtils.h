@@ -17,4 +17,8 @@
                            withOptions:(ConversationOptions *)options
                            andChannels:(NSArray *)channels;
 
++(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate
+                                forController:(UIViewController *) controller
+                                 withEmbedded:(BOOL) isEmbedded;
+
 @end

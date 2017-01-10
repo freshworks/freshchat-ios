@@ -54,7 +54,7 @@
     return _categoryViewBehaviour;
 }
 
--(BOOL)isEmbbeded {
+-(BOOL)isEmbedded {
     return self.embedded;
 }
 
