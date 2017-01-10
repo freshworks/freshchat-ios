@@ -104,7 +104,12 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
-        parent.navigationItem.title = self.faqOptions.filteredViewTitle;
+        if(self.faqOptions.filteredType == ARTICLE){
+            parent.navigationItem.title = self.faqOptions.filteredViewTitle;
+        }
+        else{
+            parent.navigationItem.title = self.categoryTitle;
+        }
     }
     else{
         parent.navigationItem.title = self.categoryTitle;

@@ -36,8 +36,11 @@
 @property (nonatomic, strong) IBOutlet UITextField *sendMessageTag;
 
 @property (nonatomic, strong) IBOutlet UISwitch *mysWitch;
+@property (nonatomic, strong) IBOutlet UISwitch *myGridSwitch;
 
 @property (nonatomic, assign) BOOL switchVal;
+
+@property (nonatomic, assign) BOOL gridval;
 
 @end
 
@@ -208,7 +211,7 @@
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
+    options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
@@ -222,7 +225,7 @@
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
+    options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
@@ -252,7 +255,7 @@
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
+    options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
@@ -266,7 +269,7 @@
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
+    options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
@@ -286,6 +289,15 @@
         self.switchVal = true;
     } else {
         self.switchVal = false;
+    }
+}
+
+- (IBAction)switchGridAction:(id)sender {
+    
+    if ([self.myGridSwitch isOn]) {
+        self.gridval = true;
+    } else {
+        self.gridval = false;
     }
 }
 

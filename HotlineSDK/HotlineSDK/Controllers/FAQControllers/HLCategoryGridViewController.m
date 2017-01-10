@@ -42,6 +42,7 @@
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property BOOL isFilteredView;
+@property BOOL isFallback;
 
 @end
 
@@ -160,7 +161,7 @@
         [self configureBackButtonWithGestureDelegate:nil];
     }
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(self.categories.count && !self.isFilteredView){
+    if(!self.isFilteredView || self.isFallback ){
         [rightBarItems addObject:searchBarButton];
     }
     if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
@@ -207,6 +208,7 @@
                  [[KonotorDataManager sharedInstance] fetchAllCategoriesWithCompletion:^(NSArray *solutions, NSError *error) {
                      if (!error) {
                          [self updateCategoriesWithSolutions:solutions];
+                         self.isFallback = YES;
                      }
                  }];
             }
