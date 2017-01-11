@@ -258,27 +258,26 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 }
 
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler{
-    NSManagedObjectContext *backgroundContext = [KonotorDataManager sharedInstance].backgroundContext;
     NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
-    [backgroundContext performBlock:^{
+    [mainContext performBlock:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
         NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
         request.predicate = [NSPredicate predicateWithFormat:@"categoryID == %@",categoryID];
         request.sortDescriptors = @[position];
-        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
-        NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        NSArray *results =[[mainContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+        //NSMutableArray *fetchedSolutions = [NSMutableArray new];
         [mainContext performBlock:^{
-            for (int i=0; i< results.count; i++) {
-                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
-                [mainContext refreshObject:newSolution mergeChanges:YES];
-                
-                if (newSolution) {
-                    [fetchedSolutions addObject:newSolution];
-                }
-                
-            }
+//            for (int i=0; i< results.count; i++) {
+//                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
+//                [mainContext refreshObject:newSolution mergeChanges:YES];
+//                
+//                if (newSolution) {
+//                    [fetchedSolutions addObject:newSolution];
+//                }
+//                
+//            }
             dispatch_async(dispatch_get_main_queue(), ^{
-                if(handler) handler(fetchedSolutions,nil);
+                if(handler) handler(results,nil);
             });
         }];
     }];

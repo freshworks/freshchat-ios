@@ -612,7 +612,7 @@ typedef struct {
         }
     }
     //If channel count changes from 1 to many, alter the navigation stack [channel list controller , current message channel]
-    if (!containsChannelController) {
+    if (!containsChannelController && self.parentViewController) {
         HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
         UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
         [HLConversationUtil setConversationOptions:self.convOptions andViewController:channelController];
