@@ -105,7 +105,8 @@
 		35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D4E8151D118E9000EFFE07 /* KonotorImageInput.m */; };
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 		3C160B061D05A59C000440D4 /* HLFAQUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLFAQUtil.m */; };
-		3CADFA251E256F1500829E7F /* HLCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA241E256F1500829E7F /* HLCategoryViewBehaviour.m */; };
+		3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */; };
+		3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */; };
 		68A532551D36252A0078339F /* HLEventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532541D36252A0078339F /* HLEventManager.m */; };
 		68A532581D3626300078339F /* HLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532571D3626300078339F /* HLEvent.m */; };
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
@@ -334,8 +335,10 @@
 		35DD93B21D1C11260013245F /* FAQOptionsInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAQOptionsInterface.h; sourceTree = "<group>"; };
 		3C160B041D05A530000440D4 /* HLFAQUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLFAQUtil.h; sourceTree = "<group>"; };
 		3C160B051D05A59C000440D4 /* HLFAQUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLFAQUtil.m; sourceTree = "<group>"; };
-		3CADFA231E256EB900829E7F /* HLCategoryViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCategoryViewBehaviour.h; sourceTree = "<group>"; };
-		3CADFA241E256F1500829E7F /* HLCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCategoryViewBehaviour.m; sourceTree = "<group>"; };
+		3CADFA2C1E25B20D00829E7F /* HLCategoryViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLCategoryViewBehaviour.h; path = Behaviours/HLCategoryViewBehaviour.h; sourceTree = "<group>"; };
+		3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLCategoryViewBehaviour.m; path = Behaviours/HLCategoryViewBehaviour.m; sourceTree = "<group>"; };
+		3CADFA2E1E25B20D00829E7F /* HLLoadingViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLLoadingViewBehaviour.h; path = Behaviours/HLLoadingViewBehaviour.h; sourceTree = "<group>"; };
+		3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLLoadingViewBehaviour.m; path = Behaviours/HLLoadingViewBehaviour.m; sourceTree = "<group>"; };
 		68A532531D36252A0078339F /* HLEventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEventManager.h; sourceTree = "<group>"; };
 		68A532541D36252A0078339F /* HLEventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEventManager.m; sourceTree = "<group>"; };
 		68A532561D3626300078339F /* HLEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEvent.h; sourceTree = "<group>"; };
@@ -761,8 +764,10 @@
 		3CADFA221E256E4900829E7F /* Behaviours */ = {
 			isa = PBXGroup;
 			children = (
-				3CADFA231E256EB900829E7F /* HLCategoryViewBehaviour.h */,
-				3CADFA241E256F1500829E7F /* HLCategoryViewBehaviour.m */,
+				3CADFA2C1E25B20D00829E7F /* HLCategoryViewBehaviour.h */,
+				3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */,
+				3CADFA2E1E25B20D00829E7F /* HLLoadingViewBehaviour.h */,
+				3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */,
 			);
 			name = Behaviours;
 			sourceTree = "<group>";
@@ -926,6 +931,7 @@
 				68A532551D36252A0078339F /* HLEventManager.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
 				CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */,
+				3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */,
 				35B2EFC91D000E620014867F /* FDMessageCell.m in Sources */,
 				35B2EFB51D000E620014867F /* HLTheme.m in Sources */,
 				35D4E81C1D118E9000EFFE07 /* FDImagePreviewController.m in Sources */,
@@ -936,6 +942,7 @@
 				35B2EFC71D000E620014867F /* FDActionButton.m in Sources */,
 				35B2EF8E1D000E620014867F /* HotlineConfig.m in Sources */,
 				354F26C61D0AED2F00DCD158 /* FDKeyChainStore.m in Sources */,
+				3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */,
 				35D4E7FC1D10300300EFFE07 /* FAQOptions.m in Sources */,
 				35B2EFB41D000E620014867F /* HLLocalization.m in Sources */,
 				35B2EF9C1D000E620014867F /* KonotorUser.m in Sources */,
@@ -961,7 +968,6 @@
 				35B2EF9E1D000E620014867F /* FDDataUpdaterWithInterval.m in Sources */,
 				35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */,
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,
-				3CADFA251E256F1500829E7F /* HLCategoryViewBehaviour.m in Sources */,
 				35B2EFB31D000E620014867F /* FDVotingManager.m in Sources */,
 				35D4E8191D118E9000EFFE07 /* HLCategoryGridViewController.m in Sources */,
 				35B2EFA11D000E620014867F /* FDSolutionUpdater.m in Sources */,

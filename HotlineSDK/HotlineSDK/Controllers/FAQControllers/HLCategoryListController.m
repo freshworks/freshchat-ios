@@ -29,9 +29,10 @@
 #import "HLTagManager.h"
 #import "HLEventManager.h"
 #import "HLCategoryViewBehaviour.h"
+#import "HLLoadingViewBehaviour.h"
 #import "HLControllerUtils.h"
 
-@interface HLCategoryListController () <HLCategoryViewBehaviourDelegate>
+@interface HLCategoryListController () <HLCategoryViewBehaviourDelegate,HLLoadingViewBehaviourDelegate>
 
 @property (nonatomic, strong)NSArray *categories;
 @property (nonatomic, strong)HLTheme *theme;
@@ -39,6 +40,7 @@
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property (nonatomic, strong) HLCategoryViewBehaviour *categoryViewBehaviour;
+@property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
 
 @end
 
@@ -55,29 +57,40 @@
     return _categoryViewBehaviour;
 }
 
+-(HLLoadingViewBehaviour*)loadingViewBehaviour {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self];
+    }
+    return _loadingViewBehaviour;
+}
+
+
 -(BOOL)isEmbedded {
     return self.embedded;
 }
+
+-(UIView *)contentDisplayView{
+    return self.tableView;
+}
+
+-(NSString *)emptyText{
+    return HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+}
+
+-(NSString *)loadingText{
+    return HLLocalizedString(LOC_LOADING_FAQ_TEXT);
+}
+
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [HLTheme sharedInstance];
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-    [self updateResultsView:YES];
-    [self addLoadingIndicator];
-}
-
--(void)addLoadingIndicator{
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
-    [self.view insertSubview:self.activityIndicator aboveSubview:self.tableView];
-    [self.activityIndicator startAnimating];
-    [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
-    [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.loadingViewBehaviour load:self.categories.count];
     [self.categoryViewBehaviour load];
 }
 
@@ -94,14 +107,6 @@
     [self.categoryViewBehaviour unload];
 }
 
--(HLEmptyResultView *)emptyResultView
-{
-    if (!_emptyResultView) {
-        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:@""];
-        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-    }
-    return _emptyResultView;
-}
 
 - (void) onCategoriesUpdated:(NSArray<HLCategory *> *) categories {
     BOOL refreshData = NO;
@@ -112,43 +117,9 @@
     [self.categoryViewBehaviour setNavigationItem];
     refreshData = refreshData || (self.categories.count > 0);
     if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
-        [self updateResultsView:NO];
+        [self.loadingViewBehaviour updateResultsView:NO andCount:categories.count];
     }
     [self.tableView reloadData];
-}
-
--(void)updateResultsView:(BOOL)isLoading
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(self.categories.count == 0) {
-            NSString *message;
-            if(isLoading){
-                message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
-            }
-            else if(![[FDReachabilityManager sharedInstance] isReachable]){
-                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                [self removeLoadingIndicator];
-            }
-            else {
-                message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
-                [self removeLoadingIndicator];
-            }
-            self.emptyResultView.emptyResultLabel.text = message;
-            [self.view addSubview:self.emptyResultView];
-            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-        }
-        else{
-            self.emptyResultView.frame = CGRectZero;
-            [self.emptyResultView removeFromSuperview];
-            [self removeLoadingIndicator];
-        }
-    });
-}
-
--(void)removeLoadingIndicator{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.activityIndicator removeFromSuperview];
-    });
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

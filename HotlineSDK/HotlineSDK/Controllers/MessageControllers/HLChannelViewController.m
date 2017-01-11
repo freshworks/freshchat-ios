@@ -30,8 +30,9 @@
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
 #import "HLEventManager.h"
+#import "HLLoadingViewBehaviour.h"
 
-@interface HLChannelViewController ()
+@interface HLChannelViewController () <HLLoadingViewBehaviourDelegate>
 
 @property (nonatomic, strong) NSArray *channels;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -40,10 +41,30 @@
 @property (nonatomic, strong) ConversationOptions *convOptions;
 @property (nonatomic, strong) HLTheme *theme;
 @property BOOL isFilteredView;
+@property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
 
 @end
 
 @implementation HLChannelViewController
+
+-(HLLoadingViewBehaviour*)loadingViewBehaviour {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self];
+    }
+    return _loadingViewBehaviour;
+}
+
+-(UIView *)contentDisplayView{
+    return self.tableView;
+}
+
+-(NSString *)emptyText{
+    return HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+}
+
+-(NSString *)loadingText{
+    return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
@@ -60,28 +81,11 @@
                                                                     };
     self.iconDownloader = [[FDIconDownloader alloc]init];
     [self setNavigationItem];
-    [self addLoadingIndicator];
-    [self updateResultsView:YES];
 }
 
 - (void) setConversationOptions:(ConversationOptions *)options{
     self.convOptions = options;
     self.isFilteredView = [HLConversationUtil hasTags:self.convOptions];
-}
-
--(void)addLoadingIndicator{
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
-    [self.view insertSubview:self.activityIndicator aboveSubview:self.tableView];
-    [self.activityIndicator startAnimating];
-    [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
-    [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
-}
-
--(void)removeLoadingIndicator{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.activityIndicator removeFromSuperview];
-    });
 }
 
 -(BOOL)canDisplayFooterView{
@@ -95,6 +99,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
 }
 
@@ -107,15 +112,6 @@
     }];
     self.footerView.hidden = YES;
     [self setNavigationItem];
-}
-
--(HLEmptyResultView *)emptyResultView
-{
-    if (!_emptyResultView) {
-        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_CHANNEL_ICON] andText:@""];
-        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-    }
-    return _emptyResultView;
 }
 
 -(void)fetchUpdates{
@@ -172,7 +168,7 @@
         self.channels = sortedChannel;
         refreshData = refreshData || (self.channels.count > 0);
         if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
-            [self updateResultsView:NO];
+            [self.loadingViewBehaviour updateResultsView:NO andCount:channelInfo.count];
         }
         [self.tableView reloadData];
     }
@@ -205,34 +201,6 @@
     return results;
 }
 
--(void)updateResultsView:(BOOL)isLoading
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(self.channels.count == 0) {
-            NSString *message;
-            if(isLoading) {
-                message = HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
-            }
-            else if(![[FDReachabilityManager sharedInstance] isReachable]){
-                message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-                [self removeLoadingIndicator];
-            }
-            else {
-                message = HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-                [self removeLoadingIndicator];
-            }
-            self.emptyResultView.emptyResultLabel.text = message;
-            [self.view addSubview:self.emptyResultView];
-            [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-        }
-        else{
-            self.emptyResultView.frame = CGRectZero;
-            [self.emptyResultView removeFromSuperview];
-            [self removeLoadingIndicator];
-        }
-    });
-}
-
 -(void)setNavigationItem{
     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
 
@@ -243,7 +211,6 @@
     else {
         [self configureBackButton];
     }
-    
     if([HLConversationUtil hasFilteredViewTitle:self.convOptions]){
         self.parentViewController.navigationItem.title = self.convOptions.filteredViewTitle;
     }
