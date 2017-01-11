@@ -379,9 +379,10 @@ typedef struct {
 
 - (float)lineCountForLabel:(UILabel *)label {
     CGSize maximumLabelSize = CGSizeMake(self.view.frame.size.width-10,9999);
-    CGSize sizeOfText = [label.text sizeWithFont:label.font
-                                constrainedToSize:maximumLabelSize
-                                    lineBreakMode:label.lineBreakMode];
+    CGSize sizeOfText = [label.text boundingRectWithSize:maximumLabelSize
+                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                            attributes:@{NSFontAttributeName:label.font}
+                                               context:nil].size;
     int numberOfLines = sizeOfText.height / label.font.pointSize;
     
     return numberOfLines;

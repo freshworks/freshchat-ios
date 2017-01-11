@@ -48,6 +48,7 @@
 
 - (void)viewDidLoad {
     self.switchVal = true;
+    self.gridval = true;
     [self setupSubview];
     
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
