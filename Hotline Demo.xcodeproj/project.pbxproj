@@ -33,7 +33,7 @@
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		3C1159FD1DF1EA5800800A6C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1159FC1DF1EA5800800A6C /* Security.framework */; };
 		3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
-		CE2B29BD1E23C60200EF3A91 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE2B29BC1E23C60200EF3A91 /* KonotorModels.bundle */; };
+		3C66F0311E2668BE00E78380 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3C66F0301E2668BE00E78380 /* KonotorModels.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,7 +104,7 @@
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		3C1159FC1DF1EA5800800A6C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		CE2B29BC1E23C60200EF3A91 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		3C66F0301E2668BE00E78380 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -174,7 +174,7 @@
 		354D0D681C48D6D8004D2AA1 /* SDKResources */ = {
 			isa = PBXGroup;
 			children = (
-				CE2B29BC1E23C60200EF3A91 /* KonotorModels.bundle */,
+				3C66F0301E2668BE00E78380 /* KonotorModels.bundle */,
 				3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */,
 				354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */,
 			);
@@ -382,7 +382,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE2B29BD1E23C60200EF3A91 /* KonotorModels.bundle in Resources */,
+				3C66F0311E2668BE00E78380 /* KonotorModels.bundle in Resources */,
 				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				3518351B1D273997000EB496 /* background.png in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
