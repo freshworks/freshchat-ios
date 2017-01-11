@@ -65,6 +65,7 @@
                                                      }];
                                                  }
                                                  else {
+                                                     self.isFallback = NO;
                                                      [self.categoryViewDelegate onCategoriesUpdated:categories];
                                                  }
                                              }];
