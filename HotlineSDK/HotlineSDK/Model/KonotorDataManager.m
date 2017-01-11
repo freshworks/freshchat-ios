@@ -265,21 +265,9 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
         request.predicate = [NSPredicate predicateWithFormat:@"categoryID == %@",categoryID];
         request.sortDescriptors = @[position];
         NSArray *results =[[mainContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
-        //NSMutableArray *fetchedSolutions = [NSMutableArray new];
-        [mainContext performBlock:^{
-//            for (int i=0; i< results.count; i++) {
-//                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
-//                [mainContext refreshObject:newSolution mergeChanges:YES];
-//                
-//                if (newSolution) {
-//                    [fetchedSolutions addObject:newSolution];
-//                }
-//                
-//            }
-            dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
                 if(handler) handler(results,nil);
-            });
-        }];
+        });
     }];
 }
 
