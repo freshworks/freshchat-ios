@@ -29,6 +29,7 @@
         self.showFaqCategoriesAsGrid = YES;
         self.showContactUsOnFaqScreens = YES;
         self.showContactUsOnAppBar = NO;
+        self.filterType = CATEGORY;
         self.filterByTags = @[];
     }
     return self;
