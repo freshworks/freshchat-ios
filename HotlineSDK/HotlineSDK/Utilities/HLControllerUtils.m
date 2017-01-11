@@ -71,15 +71,14 @@
     BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     UINavigationController *naviController = (controller.parentViewController) ? controller.parentViewController.navigationController : controller.navigationController;
     if (isBackButtonImageExist && !isEmbedded) {
-        if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
-            if(gestureDelegate){
-                [naviController.interactivePopGestureRecognizer setEnabled:YES];
-                naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
-                
-            }else{
-                [naviController.interactivePopGestureRecognizer setEnabled:NO];
-            }
+        if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)] && gestureDelegate){
+            [naviController.interactivePopGestureRecognizer setEnabled:YES];
+            naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
+            
+        }else{
+            [naviController.interactivePopGestureRecognizer setEnabled:NO];
         }
+        
     }else{
         [naviController.interactivePopGestureRecognizer setEnabled:NO];
     }
