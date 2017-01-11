@@ -680,7 +680,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void) sendMessage:(HotlineMessage *)messageObject{
-    if(!messageObject.message.length){
+    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
