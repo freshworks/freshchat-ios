@@ -15,6 +15,7 @@
 #import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
 #import "FDUtilities.h"
+#import "HLEventManager.h"
 
 @implementation Konotor
 
@@ -73,6 +74,7 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
@@ -85,12 +87,12 @@ __weak static id <KonotorDelegate> _delegate;
 }
 
 +(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
     KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
     [channel addMessagesObject:message];
     [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
     [[Konotor delegate] didStartUploadingNewMessage];
 }
-
 
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {

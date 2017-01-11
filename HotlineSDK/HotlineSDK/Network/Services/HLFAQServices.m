@@ -20,7 +20,8 @@
 #import "FDIndexManager.h"
 #import "FDResponseInfo.h"
 #import "FDDateUtil.h"
-#import "HLArticleTagManager.h"
+#import "HLTagManager.h"
+#import "HLTags.h"
 
 @implementation HLFAQServices
 
@@ -43,7 +44,8 @@
                     if(responseInfo){
                         NSArray *categories = [responseInfo responseAsDictionary][@"categories"];
                         if(categories && categories.count > 0 ){
-                            // Indexing is costly, don't do it unless there is a need for it.
+                            [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
+                            // Indexing is costly, don't do it unless there is a need for it
                             [FDIndexManager setIndexingCompleted:NO];
                             [FDIndexManager updateIndex];
                         }
@@ -74,6 +76,8 @@
             HLCategory *category = [HLCategory getWithID:categoryInfo[@"categoryId"] inContext:context];
             BOOL isCategoryEnabled = [categoryInfo[@"enabled"]boolValue];
             BOOL isIOSPlatformAvail = [categoryInfo[@"platforms"] containsObject:@"ios"];
+            NSArray *tags = categoryInfo[@"tags"];
+            [HLTags removeTagsForTaggableId:categoryInfo[@"categoryId"] andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
             if (isCategoryEnabled && isIOSPlatformAvail) {
                 if (category) {
                     FDLog(@"Updating category:%@ [%@abled]", categoryInfo[@"title"], ( isCategoryEnabled ? @"en" : @"dis"));
@@ -83,26 +87,32 @@
                     category = [HLCategory createWithInfo:categoryInfo inContext:context];
                 }
                 
-                //Delete category with no articles
-                if (category.articles.count == 0){
-                    FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !",category.title, category.categoryID);
-                    [context deleteObject:category];
+                if(tags.count>0){
+                    for(NSString *tagName in tags){
+                        [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeCategory] andIdvalue:categoryInfo[@"categoryId"]] inContext:context];
+                    }
                 }
-
             }else{
                 if (category){
                     FDLog(@"Deleting category with title : %@ with ID : %@ because its disabled !",category.title, category.categoryID);
-                    for(HLArticle *article in category.articles){
-                        [[HLArticleTagManager sharedInstance] removeTagsForArticleId:article.articleID];
-                    }
-                    [[HLArticleTagManager sharedInstance]save];
                     [context deleteObject:category];
                 }
             }
         }
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+        NSArray *allCategories = [context executeFetchRequest:request error:nil];
+        for(HLCategory *category in allCategories){
+            if(category.articles.count == 0){
+                FDLog(@"Deleting category with title : %@ with ID : %@ because it doesn't contain any articles !"
+                      ,category.title, category.categoryID);
+                [HLTags removeTagsForTaggableId:category.categoryID andType:[NSNumber numberWithInt: HLTagTypeCategory] inContext:context];
+                [context deleteObject:category];
+            }
+        }
+        
         NSError *err;
         [context save:&err];
-        [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
         [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
         if(completion){
             completion(err);

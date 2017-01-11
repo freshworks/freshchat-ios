@@ -80,8 +80,14 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     return image;
 }
 
++(NSString *) getTracker{
+    return [NSString stringWithFormat:@"hl_ios_%@",[Hotline SDKVersion]];
+}
+
 +(BOOL)isUserRegistered{
-    return [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+    NSString *userAlias = [self currentUserAlias];
+    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED] &&
+            (userAlias && userAlias.length > 0));
 }
 
 +(NSString *) getUUIDLookupKey{
@@ -91,10 +97,17 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     return uuIdLookupKey;
 }
 
-
 /* This function gets the user-alias from persisted secure store for new customers (Hotline),
  it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
-+(NSString *)getUserAlias{
++(NSString *)currentUserAlias{
+    NSString* userAlias = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    if(userAlias){
+        return userAlias;
+    }
+    return @""; //return empty to prevent null
+}
+
++(NSString *)getUserAliasWithCreate{
     NSString* userAlias = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     if(userAlias){
         return userAlias;
@@ -136,6 +149,25 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 +(void)storeUserAlias:(NSString *)alias{
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
     [persistedStore setObject:alias forKey:[FDUtilities getUUIDLookupKey]];
+}
+
++ (NSString *) returnLibraryPathForDir : (NSString *) directory{
+    
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:directory];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        
+        NSError *error = nil;
+        NSDictionary *attr = [NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                         forKey:NSFileProtectionKey];
+        [[NSFileManager defaultManager] createDirectoryAtPath:filePath
+                                  withIntermediateDirectories:YES
+                                                   attributes:attr
+                                                        error:&error];
+        if (error){
+            FDLog(@"Error creating directory path: %@", [error localizedDescription]);
+        }
+    }
+    return filePath;
 }
 
 +(NSString *) getKeyForObject:(NSObject *) object {
@@ -274,14 +306,14 @@ static NSInteger networkIndicator = 0;
                         [userProperties setObject:value forKey:key];
                     }
                     else {
-                        NSLog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
+                        ALog(@"Invalid user property value %@ - %@ : <validation error>", key, valueObj);
                     }
                 } else {
-                    NSLog(@"Invalid user property value. Not a NSString. %@ - %@ : <validation error>", key, valueObj);
+                    ALog(@"Invalid user property value. Not a NSString. %@ - %@ : <validation error>", key, valueObj);
                 }
             }
             else{
-                NSLog(@"Invalid user property  key %@ : <validation error>", key);
+                ALog(@"Invalid user property  key %@ : <validation error>", key);
             }
         }
     }
@@ -295,6 +327,12 @@ static NSInteger networkIndicator = 0;
     }else{
         return [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
     }
+}
+
++(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags{
+    NSArray *noEmptyTags = [tags filteredArrayUsingPredicate:
+                               [NSPredicate predicateWithFormat:@"length > 0"]];
+    return [noEmptyTags valueForKey:@"lowercaseString"];
 }
 
 +(NSString*)deviceModelName{
@@ -381,6 +419,12 @@ static NSInteger networkIndicator = 0;
 
 +(void)initiatePendingTasks{
     [FDLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
+}
+
++(BOOL)hasInitConfig{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+    return [store checkItemWithKey:HOTLINE_DEFAULTS_APP_ID] && [store checkItemWithKey:HOTLINE_DEFAULTS_APP_KEY] && ctx != nil;
 }
 
 @end

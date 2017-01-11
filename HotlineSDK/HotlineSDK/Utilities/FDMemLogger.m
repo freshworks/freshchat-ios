@@ -14,6 +14,7 @@
 #import "HLAPIClient.h"
 #import "HLServiceRequest.h"
 #import "HLNotificationHandler.h"
+#import "FDSecureStore.h"
 
 @interface FDMemLogger ()
 
@@ -22,6 +23,8 @@
 @end
 
 @implementation FDMemLogger
+
+static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
 
 -(id)init{
     self = [super init];
@@ -63,7 +66,10 @@
         appState = @"Background";
     }
     
-    NSString *userAlias = [FDUtilities getUserAlias] ?  [FDUtilities getUserAlias] : @"NIL";
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    userAlias = userAlias ? userAlias : @"NIL";
+    
+    BOOL isUserRegistered =  [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
     
     NSDictionary *additionalInfo = @{
                                      @"Device Model" : [FDUtilities deviceModelName],
@@ -73,14 +79,13 @@
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
                                      @"App Name" : [FDUtilities appName],
-                                     @"Device Info" : [FDUtilities deviceInfoProperties]
+                                     @"Device Info" : [FDUtilities deviceInfoProperties],
+                                     @"Is user registered" : isUserRegistered ? @"YES" : @"NO"
                                      };
     
     [self addErrorInfo:additionalInfo withMethodName:@"AdditionalInfo"];
     return [self.logList componentsJoinedByString:@"\n"];
 }
-
-static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
 
 -(void)upload{
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -98,7 +103,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
             [self reset];
             FDLog(@"successfully uploaded log");
         }else{
-            NSLog(@"Failed  : %@",log);
+            ALog(@"Failed  : %@",log);
             FDLog(@"Response %@", response);
         }
     }]resume];

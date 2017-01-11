@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface KonotorMessageData : NSObject
 
-@property (nullable, nonatomic, retain) NSNumber *articleID;
+@property (nullable, nonatomic, retain) NSNumber * articleID;
 @property (nullable, nonatomic, retain) NSNumber * createdMillis;
 @property (nullable, nonatomic, retain) NSNumber * messageType;
 @property (nullable, nonatomic, retain) NSString * messageUserId;

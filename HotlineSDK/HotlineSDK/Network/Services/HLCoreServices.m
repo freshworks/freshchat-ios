@@ -21,9 +21,12 @@
 @implementation HLCoreServices
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion{
+    if(![FDUtilities isUserRegistered]){
+        return nil;
+    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_UPDATE_SDK_BUILD_NUMBER_PATH,appID,userAlias];
     NSString *clientVersion = [NSString stringWithFormat:@"clientVersion=%@",SDKVersion];
@@ -42,10 +45,9 @@
     return task;
 }
 
--(NSDictionary *)getUserInfo{
+-(NSDictionary *)getUserInfo:(NSString *) userAlias{
     NSMutableDictionary *userInfo = [NSMutableDictionary new];
     NSString *adId = [FDUtilities getAdID];
-    NSString *userAlias = [FDUtilities getUserAlias];
     NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
     
     if (userAlias) {
@@ -80,7 +82,7 @@
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
     
-    NSDictionary *userInfo = [self getUserInfo];
+    NSDictionary *userInfo = [self getUserInfo:[FDUtilities getUserAliasWithCreate]];
     
     if (!userInfo) {
         return nil;
@@ -109,6 +111,8 @@
                 
                 if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
                 
+                ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
+                
                 [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 
                 if (handler) handler(nil);
@@ -128,7 +132,7 @@
 }
 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
-    if (!userAlias || !pushToken) return nil;
+    if (![FDUtilities isUserRegistered] || !pushToken) return nil;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
@@ -141,7 +145,7 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
-            FDLog(@"Device token updated on server 👍");
+            ALog(@"Push token registered : %@", pushToken);
         }else{
             FDLog(@"Could not register app :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
@@ -156,6 +160,11 @@
     
     if(IN_PROGRESS){
         return;
+    }
+    
+    if (![FDUtilities isUserRegistered]) {
+        return; // this is required outside and inside the block
+        // double entrant lock
     }
     
     IN_PROGRESS = YES ;
@@ -218,10 +227,13 @@
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
+    if(![FDUtilities isUserRegistered]){
+        return nil; // This should never happen .. just a safety check
+    }
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     if (!userAlias) return nil;
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_PROPERTIES_PATH,appID,userAlias];
@@ -243,9 +255,12 @@
 }
 
 +(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
+    if(![FDUtilities isUserRegistered]){
+        return nil;
+    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_DAU_PATH,appID,userAlias];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
@@ -266,10 +281,9 @@
 }
 
 +(NSURLSessionDataTask *)registerUserConversationActivity :(KonotorMessage *)message{
-    
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_CONVERSATION_ACTIVITY,appID,userAlias];
     

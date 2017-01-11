@@ -55,7 +55,9 @@
 #endif
 
 //ALog always displays output regardless of the DEBUG setting
-#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define ALog(fmt, ...) NSLog((@"HOTLINE: " fmt), ##__VA_ARGS__);
+
+#define ADLog(fmt, ...) NSLog((@"HOTLINE: %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
 //UILog
 #ifdef DEBUG

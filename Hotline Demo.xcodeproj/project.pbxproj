@@ -33,7 +33,7 @@
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
 		3C1159FD1DF1EA5800800A6C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1159FC1DF1EA5800800A6C /* Security.framework */; };
 		3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
-		CE99AAA31DEFE32B007817DA /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE99AAA21DEFE32B007817DA /* KonotorModels.bundle */; };
+		3C66F0311E2668BE00E78380 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3C66F0301E2668BE00E78380 /* KonotorModels.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,7 +104,7 @@
 		35D707151BE2498B0035FD74 /* FDSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSettingsController.m; sourceTree = "<group>"; };
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		3C1159FC1DF1EA5800800A6C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		CE99AAA21DEFE32B007817DA /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		3C66F0301E2668BE00E78380 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -174,7 +174,7 @@
 		354D0D681C48D6D8004D2AA1 /* SDKResources */ = {
 			isa = PBXGroup;
 			children = (
-				CE99AAA21DEFE32B007817DA /* KonotorModels.bundle */,
+				3C66F0301E2668BE00E78380 /* KonotorModels.bundle */,
 				3513FF7F1CDCC3A3009A7034 /* HLLocalization.bundle */,
 				354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */,
 			);
@@ -184,7 +184,6 @@
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
-				3C1159FC1DF1EA5800800A6C /* Security.framework */,
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
@@ -239,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */,
+				3C1159FC1DF1EA5800800A6C /* Security.framework */,
 				356F1C131B9DD23B002F1E2A /* CoreMedia.framework */,
 				356F1C111B9DD223002F1E2A /* AudioToolbox.framework */,
 				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
@@ -318,6 +318,7 @@
 					356F19E61B9DBF14002F1E2A = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = PKUQ4ZWJH3;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
@@ -381,7 +382,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE99AAA31DEFE32B007817DA /* KonotorModels.bundle in Resources */,
+				3C66F0311E2668BE00E78380 /* KonotorModels.bundle in Resources */,
 				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				3518351B1D273997000EB496 /* background.png in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
@@ -577,8 +578,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "Hotline/Supporting Files/Hotline Demo.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: harish kumar (VYP5NB96B3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = PKUQ4ZWJH3;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -592,6 +594,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
 				PRODUCT_NAME = "Hotline Demo";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -601,8 +604,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "Hotline/Supporting Files/Hotline Demo.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: harish kumar (VYP5NB96B3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = PKUQ4ZWJH3;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -616,6 +620,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
 				PRODUCT_NAME = "Hotline Demo";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

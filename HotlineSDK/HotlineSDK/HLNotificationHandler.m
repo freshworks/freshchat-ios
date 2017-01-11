@@ -184,13 +184,13 @@
 }
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{
-    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannelID:channel.channelID andPresentModally:NO];
+    FDMessageController *conversationController = [[FDMessageController alloc]initWithChannelID:channel.channelID andPresentModally:NO fromNotification:YES];
     HLContainerController *container = [[HLContainerController alloc]initWithController:conversationController andEmbed:NO];
     [controller pushViewController:container animated:YES];
 }
 
 -(void)presentMessageControllerOn:(UIViewController *)controller withChannel:(HLChannel *)channel{
-    FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channel.channelID andPresentModally:YES];
+    FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channel.channelID andPresentModally:YES fromNotification:YES];
     HLContainerController *containerController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
     [controller presentViewController:navigationController animated:YES completion:nil];

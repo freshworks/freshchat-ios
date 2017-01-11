@@ -10,7 +10,8 @@
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
 #import "HLMacros.h"
-#import "HLArticleTagManager.h"
+#import "HLTagManager.h"
+#import "HLTags.h"
 
 @implementation HLCategory
 
@@ -63,8 +64,6 @@
     });
     category.icon = imageData;
     
-    HLArticleTagManager *tagManager = [HLArticleTagManager sharedInstance];
-    
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];
     for (int j=0; j<articles.count; j++) {
@@ -74,17 +73,19 @@
         BOOL isArticleEnabled = [articleInfo[@"enabled"]boolValue];
         BOOL isIOSPlatformAvail = [articleInfo[@"platforms"] containsObject:@"ios"];
         NSArray *tags = articleInfo[@"tags"];
+        [HLTags removeTagsForTaggableId:articleId andType:[NSNumber numberWithInt: HLTagTypeArticle] inContext:context];
         if (isArticleEnabled && isIOSPlatformAvail) {
             if (article) {
                 [article updateWithInfo:articleInfo];
+                article.category = [HLCategory getWithID:article.categoryID inContext:context];
             }else{
                 article = [HLArticle createWithInfo:articleInfo inContext:context];
                 [category addArticlesObject:article];
             }
-            if(tags){
-                [tagManager removeTagsForArticleId:articleId];
+            if(tags.count>0){
                 for(NSString *tagName in tags){
-                    [tagManager addTag:tagName forArticleId:articleId];
+                    
+                    [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeArticle] andIdvalue:articleId] inContext:context];
                 }
             }
         }else{
@@ -95,12 +96,8 @@
             else {
                FDLog(@"Skipping article with title : %@ with ID : %@ because its disabled !",articleInfo[@"title"], articleInfo[@"articleId"]);
             }
-            if(tags){
-               [tagManager removeTagsForArticleId:articleId];
-            }
         }
     }
-    [tagManager save];
     return category;
 }
 

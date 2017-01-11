@@ -15,11 +15,11 @@
 
 @interface FDUtilities : NSObject
 
-+(NSString *)getUserAlias;
++(NSString *)currentUserAlias;
++(NSString *)getUserAliasWithCreate;
 
 +(void)registerUser:(void(^)(NSError *error))completion;
 
-+(void)storeUserAlias:(NSString *)alias;
 +(BOOL)isUserRegistered;
 
 +(UIImage *)imageWithColor:(UIColor *)color;
@@ -34,12 +34,14 @@
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
 +(NSString*)deviceModelName;
++(NSString *) getTracker;
++(NSString *) returnLibraryPathForDir : (NSString *) directory;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
-
++(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
 +(BOOL)isiOS10;
 
 +(void)initiatePendingTasks;
-
++(BOOL)hasInitConfig;
 @end
 
 #endif

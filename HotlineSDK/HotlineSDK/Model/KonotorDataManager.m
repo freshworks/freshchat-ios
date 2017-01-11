@@ -11,6 +11,7 @@
 #import "HLConstants.h"
 #import "FDMemLogger.h"
 #import "HLChannel.h"
+#import "HLCategory.h"
 
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
@@ -206,30 +207,67 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
+
+
+- (void) fetchAllCategoriesForTags  :(NSArray*) categoriesIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
+    NSManagedObjectContext *mainContext = self.mainObjectContext;
+    [mainContext performBlock:^{
+        NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        if(categoriesIds.count > 0){
+            for(NSNumber * categoryId in categoriesIds){
+                HLCategory *category = [HLCategory getWithID:categoryId inContext:mainContext];
+                if(category){
+                    [fetchedSolutions addObject :category];
+                }
+            }
+            NSArray *sortedChannels = [fetchedSolutions sortedArrayUsingDescriptors:@[position]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(sortedChannels,nil);
+            });
+        }
+        else{
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+            request.sortDescriptors = @[position];
+            NSArray *results = [mainContext executeFetchRequest:request error:nil];
+            for (int i=0; i< results.count; i++) {
+                [fetchedSolutions addObject:results[i]];
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(handler) handler(fetchedSolutions,nil);
+        });
+    }];
+}
+
+- (void) fetchAllCategoriesWithCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
+    NSManagedObjectContext *mainContext = self.mainObjectContext;
+    [mainContext performBlock:^{
+        NSMutableArray *fetchedSolutions = [NSMutableArray new];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        request.sortDescriptors = @[position];
+        NSArray *results = [mainContext executeFetchRequest:request error:nil];
+        for (int i=0; i< results.count; i++) {
+            [fetchedSolutions addObject:results[i]];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(handler) handler(fetchedSolutions,nil);
+        });
+    }];
+}
+
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler{
-    NSManagedObjectContext *backgroundContext = [KonotorDataManager sharedInstance].backgroundContext;
     NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
-    [backgroundContext performBlock:^{
+    [mainContext performBlock:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_ARTICLE_ENTITY];
         NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
         request.predicate = [NSPredicate predicateWithFormat:@"categoryID == %@",categoryID];
         request.sortDescriptors = @[position];
-        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
-        NSMutableArray *fetchedSolutions = [NSMutableArray new];
-        [mainContext performBlock:^{
-            for (int i=0; i< results.count; i++) {
-                NSManagedObject *newSolution = [mainContext objectWithID:results[i]];
-                [mainContext refreshObject:newSolution mergeChanges:YES];
-                
-                if (newSolution) {
-                    [fetchedSolutions addObject:newSolution];
-                }
-                
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(handler) handler(fetchedSolutions,nil);
-            });
-        }];
+        NSArray *results =[[mainContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+                if(handler) handler(results,nil);
+        });
     }];
 }
 
@@ -284,15 +322,54 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     }];
 }
 
--(void)fetchAllVisibleChannels:(void(^)(NSArray *channelInfos, NSError *error))handler{
+- (void) fetchAllVisibleChannelsForTags:(NSArray *)channelsIds hasTags:(BOOL)containstags   completion:(void (^)(NSArray *channelInfos, NSError *))handler {
+    
     NSManagedObjectContext *context = self.mainObjectContext;
     [context performBlock:^{
+        NSMutableArray *channelInfos= [NSMutableArray new];
+        if(channelsIds.count >0){
+            for(NSNumber * channelId in channelsIds){
+                HLChannel *channel = [HLChannel getWithID:channelId inContext:context];
+                if(channel){
+                    [channelInfos addObject:channel];
+                }
+            }
+            NSSortDescriptor *channelSorter = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
+            [channelInfos sortUsingDescriptors:@[channelSorter]];
+        }
+        else{
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+            NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+            
+            NSPredicate *predicate = (containstags) ? [NSPredicate predicateWithFormat:@"isHidden == NO"] : [NSPredicate predicateWithFormat:@"isHidden == NO AND isRestricted == NO"];
+            request.predicate = predicate;
+            request.sortDescriptors = @[position];
+            NSArray *results = [context executeFetchRequest:request error:nil];
+            for (int i=0; i<results.count; i++) {
+                HLChannel *channel = results[i];
+                HLChannelInfo *channelInfo = [[HLChannelInfo alloc ]initWithChannel:channel];
+                [channelInfos addObject:channelInfo];
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(handler) handler(channelInfos,nil);
+        });
+    }];
+}
+
+- (void) fetchAllVisibleChannelsWithCompletion:(void (^)(NSArray *channelInfos, NSError *))handler {
+    
+    NSManagedObjectContext *context = self.mainObjectContext;
+    [context performBlock:^{
+        NSMutableArray *channelInfos= [NSMutableArray new];
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
         NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-        request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+    
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isHidden == NO AND isRestricted == NO"];
+        request.predicate = predicate;
         request.sortDescriptors = @[position];
         NSArray *results = [context executeFetchRequest:request error:nil];
-        NSMutableArray *channelInfos = [NSMutableArray new];
         for (int i=0; i<results.count; i++) {
             HLChannel *channel = results[i];
             HLChannelInfo *channelInfo = [[HLChannelInfo alloc ]initWithChannel:channel];
@@ -314,6 +391,20 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 -(void)deleteAllCSATEntries:(void (^)(NSError *))handler{
     [self deleteAllEntriesOfEntity:HOTLINE_CSAT_ENTITY handler:handler inContext:self.mainObjectContext];
+}
+
+-(void)cleanUpUser:(void (^)(NSError *))mainHandler{
+    [self deleteAllEntriesOfEntity:HOTLINE_TAGS_ENTITY handler:^(NSError *error){
+        [self deleteAllEntriesOfEntity:HOTLINE_CSAT_ENTITY handler:^(NSError *error){
+            [self deleteAllEntriesOfEntity:HOTLINE_MESSAGE_ENTITY handler:^(NSError *error){
+                [self deleteAllEntriesOfEntity:HOTLINE_CHANNEL_ENTITY handler:^(NSError *error){
+                    [self deleteAllEntriesOfEntity:HOTLINE_CUSTOM_PROPERTY_ENTITY handler:^(NSError *error){
+                        mainHandler(error);
+                    } inContext:self.mainObjectContext];
+                } inContext:self.mainObjectContext];
+            } inContext:self.mainObjectContext];
+        } inContext:self.mainObjectContext];
+    } inContext:self.mainObjectContext];
 }
 
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{

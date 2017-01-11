@@ -11,6 +11,7 @@
 #import "KonotorMessage.h"
 #import "HLMacros.h"
 #import "HotlineAppState.h"
+#import "HLTags.h" 
 
 @implementation HLChannel
 
@@ -26,6 +27,7 @@
 @dynamic position;
 @dynamic conversations;
 @dynamic messages;
+@dynamic isRestricted;
 
 +(HLChannel *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     HLChannel *channel = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:context];
@@ -56,6 +58,13 @@
     return conversation;
 }
 
+-(BOOL)hasAtleastATag:(NSArray *) tags{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+    fetchRequest.predicate   = [NSPredicate predicateWithFormat:@"tagName IN %@ AND taggableType ==%d AND taggableID == %@ ",tags, HLTagTypeChannel,self.channelID];
+    NSArray *matches         = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return matches && matches > 0;
+}
+
 -(BOOL)isActiveChannel{
     HLChannel *currentVisibleChannel = [HotlineAppState sharedInstance].currentVisibleChannel;
     if(currentVisibleChannel && [currentVisibleChannel.channelID isEqual:self.channelID]){
@@ -75,6 +84,13 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
+    
+    if ([channelInfo objectForKey:@"restricted"]) {
+        channel.isRestricted = channelInfo[@"restricted"];
+    }else{
+        channel.isRestricted = @NO;
+    }
+    
     KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
     NSString *updatedMessage = trimString(channelInfo[@"welcomeMessage"][@"text"]); //set welcome message here
     if (welcomeMessage) {
@@ -124,7 +140,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isDefault == YES"];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if (matches.count == 1) {
+    if (matches.count >= 1) {
         channel = matches.firstObject;
     }
     return channel;

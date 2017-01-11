@@ -31,6 +31,7 @@
 -(void)doFetch:(void(^)(NSError *error))completion{
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service fetchAllCategories:^(NSError *error) {
+        ALog(@"Solution updated");
         if(completion){
             completion(error);
         }

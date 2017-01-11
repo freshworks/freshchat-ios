@@ -27,18 +27,23 @@
 #import "FDCell.h"
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
+#import "HLTagManager.h"
+#import "HLEventManager.h"
+#import "HLCategoryViewBehaviour.h"
+#import "HLLoadingViewBehaviour.h"
+#import "HLControllerUtils.h"
 
-@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate>
+@interface HLCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate,HLCategoryViewBehaviourDelegate,HLLoadingViewBehaviourDelegate>
 
 @property (nonatomic, strong) NSArray *categories;
 @property (nonatomic, strong) FDSearchBar *searchBar;
 @property (nonatomic, strong) FDMarginalView *footerView;
 @property (nonatomic, strong) UILabel  *noSolutionsLabel;
 @property (nonatomic, strong) HLTheme *theme;
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property (nonatomic, strong) HLCategoryViewBehaviour *categoryViewBehaviour;
+@property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
 
 @end
 
@@ -48,9 +53,36 @@
     self.faqOptions = options;
 }
 
--(BOOL)canDisplayFooterView{
-    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+-(HLCategoryViewBehaviour*)categoryViewBehaviour {
+    if(_categoryViewBehaviour == nil){
+        _categoryViewBehaviour = [[HLCategoryViewBehaviour alloc] initWithViewController:self andFaqOptions:self.faqOptions];
+    }
+    return _categoryViewBehaviour;
 }
+
+-(HLLoadingViewBehaviour*)loadingViewBehaviour {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self];
+    }
+    return _loadingViewBehaviour;
+}
+
+-(BOOL)isEmbedded {
+    return self.embedded;
+}
+
+-(UIView *)contentDisplayView{
+    return self.collectionView;
+}
+
+-(NSString *)emptyText{
+    return HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
+}
+
+-(NSString *)loadingText{
+    return HLLocalizedString(LOC_LOADING_FAQ_TEXT);
+}
+
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
@@ -58,27 +90,27 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self setupSubviews];
     [self adjustUIBounds];
-    [self setNavigationItem];
     [self theming];
-    [self updateResultsView:YES];
-    [self addLoadingIndicator];
-    
 }
 
--(void)addLoadingIndicator{
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
-    [self.view insertSubview:self.activityIndicator aboveSubview:self.collectionView];
-    [self.activityIndicator startAnimating];
-    [FDAutolayoutHelper centerX:self.activityIndicator onView:self.view M:1 C:0];
-    [FDAutolayoutHelper centerY:self.activityIndicator onView:self.view M:1.5 C:0];
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.loadingViewBehaviour load:self.categories.count];
+    [self.categoryViewBehaviour load];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [self localNotificationSubscription];
-    [self fetchUpdates];
-    [self updateCategories];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+    }];
+    [HLControllerUtils configureGestureDelegate:nil forController:self withEmbedded:[self isEmbedded]];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self.categoryViewBehaviour unload];
 }
 
 -(void)setupSubviews{
@@ -92,15 +124,6 @@
 
 -(void)theming{
     [self.searchDisplayController.searchResultsTableView setBackgroundColor:[self.theme backgroundColorSDK]];
-}
-
--(HLEmptyResultView *)emptyResultView
-{
-    if (!_emptyResultView) {
-        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:@""];
-        _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
-    }
-    return _emptyResultView;
 }
 
 -(void)setupSearchBar{
@@ -123,146 +146,23 @@
     self.searchBar.hidden = YES;
 }
 
--(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    self.searchBar.hidden = YES;
-    self.parentViewController.navigationController.navigationBarHidden=NO;
-}
-
 -(void)adjustUIBounds{
     self.edgesForExtendedLayout=UIRectEdgeNone;
     self.navigationController.view.backgroundColor = [self.theme searchBarOuterBackgroundColor];
 }
 
--(void)setNavigationItem{
-
-    UIBarButtonItem *contactUsBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_CONTACT_US_ICON]
-                                                                           style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
-    UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
-                                                                        style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    
-    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-    
-    //TODO: Need to revisit this to get rid of the repeated code
-
-    if (!self.embedded) {
-        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+- (void) onCategoriesUpdated:(NSArray<HLCategory *> *)categories {
+    BOOL refreshData = NO;
+    if(self.categories) {
+        refreshData = YES;
     }
-    else {
-        [self configureBackButtonWithGestureDelegate:nil];
+    self.categories = categories;
+    [self.categoryViewBehaviour setNavigationItem];
+    refreshData = refreshData || (self.categories.count > 0);
+    if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
+        [self.loadingViewBehaviour  updateResultsView:NO andCount:self.categories.count];
     }
-    
-    NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(self.categories.count){
-        [rightBarItems addObject:searchBarButton];
-    }
-    if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
-        [rightBarItems addObject:contactUsBarButton];
-    }
-    
-    self.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
-    
-    
-}
-
--(void)searchButtonAction:(id)sender{
-    HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
-    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
-    [navController setModalPresentationStyle:UIModalPresentationCustom];
-    [self.navigationController presentViewController:navController animated:NO completion:nil];
-    
-}
-
--(void)contactUsButtonAction:(id)sender{
-    [[Hotline sharedInstance]showConversations:self];
-}
-
--(void)updateCategories{
-    [[KonotorDataManager sharedInstance]fetchAllSolutions:^(NSArray *solutions, NSError *error) {
-        if (!error) {
-            BOOL refreshData = NO;
-            if(self.categories) {
-                refreshData = YES;
-            }
-            self.categories = solutions;
-            [self setNavigationItem];
-            refreshData = refreshData || (self.categories.count > 0);
-            if ( ![[FDReachabilityManager sharedInstance] isReachable] || refreshData ) {
-                [self updateResultsView:NO];
-            }
-            [self.collectionView reloadData];
-        }
-    }];
-}
-
--(void)updateResultsView:(BOOL)isLoading
-{
-    if(self.categories.count == 0) {
-        NSString *message;
-        if(isLoading){
-            message = HLLocalizedString(LOC_LOADING_FAQ_TEXT);
-        }
-        else if(![[FDReachabilityManager sharedInstance] isReachable]){
-            message = HLLocalizedString(LOC_OFFLINE_INTERNET_MESSAGE);
-            [self removeLoadingIndicator];
-        }
-        else {
-            message = HLLocalizedString(LOC_EMPTY_FAQ_TEXT);
-            [self removeLoadingIndicator];
-        }
-        self.emptyResultView.emptyResultLabel.text = message;
-        [self.view addSubview:self.emptyResultView];
-        [FDAutolayoutHelper center:self.emptyResultView onView:self.view];
-    }
-    else{
-        self.emptyResultView.frame = CGRectZero;
-        [self.emptyResultView removeFromSuperview];
-        [self removeLoadingIndicator];
-    }
-}
-
--(void)removeLoadingIndicator{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.activityIndicator removeFromSuperview];
-    });
-}
-
--(void)fetchUpdates{
-    FDSolutionUpdater *updater = [[FDSolutionUpdater alloc]init];
-    [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
-        if(isEmpty){
-            [updater resetTime];
-        }
-        ShowNetworkActivityIndicator();
-        [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-            HideNetworkActivityIndicator();
-        }];
-    }];
-}
-
--(void)closeButton:(id)sender{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
-    [self localNotificationUnSubscription];
-}
-
--(void)localNotificationUnSubscription{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_SOLUTIONS_UPDATED object:nil];
-}
-
--(void)localNotificationSubscription{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSolutions)
-                                                 name:HOTLINE_SOLUTIONS_UPDATED object:nil];
-}
-
--(void)updateSolutions{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.categories = @[];
-        [self updateCategories];
-    });
+    [self.collectionView reloadData];
 }
 
 -(void)setupCollectionView{
@@ -291,10 +191,11 @@
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
+    [self.collectionView setBackgroundColor:[self.theme backgroundColorSDK]];
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]showConversations:self];
+    [self.categoryViewBehaviour launchConversations];
 }
 
 #pragma mark - Collection view delegate
@@ -347,8 +248,14 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-        [HLArticleUtil setFAQOptions:self.faqOptions andViewController:articleController];
+        [HLFAQUtil setFAQOptions:self.faqOptions andViewController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
+        NSString *eventCategoryTitle = category.title;
+        NSString *eventCategoryId = [category.categoryID stringValue];
+        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:eventCategoryTitle];
+            [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:eventCategoryId];
+        }];
         [self.navigationController pushViewController:container animated:YES];
     }
 }
@@ -368,8 +275,12 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-    [self setNavigationItem];
+    [self.categoryViewBehaviour setNavigationItem];
     [self.collectionView reloadData];
+}
+
+-(BOOL)canDisplayFooterView{
+    return [self.categoryViewBehaviour canDisplayFooterView];
 }
 
 @end

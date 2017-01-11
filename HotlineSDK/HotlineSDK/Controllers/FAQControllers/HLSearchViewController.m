@@ -25,7 +25,8 @@
 #import "FDArticleListCell.h"
 #import "HLEmptyResultView.h"
 #import "FDAutolayoutHelper.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
+#import "HLEventManager.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -51,7 +52,11 @@
     [self setupSubviews];
     [self setupTap];
     self.view.userInteractionEnabled=YES;
-    [self configureBackButtonWithGestureDelegate:self];
+    [self configureBackButton];
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)localNotificationSubscription{
@@ -132,13 +137,13 @@
     for (id subview in mainSubView.subviews) {
         if ([subview isKindOfClass:[UITextField class]]) {
             UITextField *textField = (UITextField *)subview;
-            textField.backgroundColor = [[HLTheme sharedInstance] searchBarInnerBackgroundColor];
+            textField.backgroundColor = [self.theme searchBarInnerBackgroundColor];
         }
     }
     
     self.tableView = [[UITableView alloc] init];
     self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
-    self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
+    self.tableView.separatorColor = [self.theme tableViewCellSeparatorColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints=NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -253,7 +258,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.searchResults.count) {
         FDArticleContent *article = self.searchResults[indexPath.row];
-        [HLArticleUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; //TODO: - Pass this from outside - Rex
+        [HLFAQUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_SEARCH]; //TODO: - Pass this from outside - Rex
     }
 }
 
@@ -320,13 +325,20 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    if([trimString(searchBar.text) length] > 0){
+        NSString *eventSearchResultCount = [@(self.searchResults.count) stringValue];
+        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_KEY andVal:searchBar.text];
+            [event propKey:HLEVENT_PARAM_ARTICLE_SEARCH_COUNT andVal:eventSearchResultCount];
+        }];
+    }
     [self dismissModalViewControllerAnimated:NO];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     searchText = trimString(searchText);
     if (searchText.length!=0) {
-        self.tableView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        [self.tableView setBackgroundColor:[self.theme backgroundColorSDK]];
         [self filterArticlesForSearchTerm:searchText];
         [self.view removeGestureRecognizer:self.recognizer];
     }else{
@@ -339,8 +351,15 @@
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
-    [[Hotline sharedInstance]showConversations:self];
-}
+    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
+        ConversationOptions *options = [ConversationOptions new];
+        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+        [[Hotline sharedInstance] showConversations:self withOptions:options];
+    }
+    else{
+        [[Hotline sharedInstance] showConversations:self];
+    }
+} 
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     return YES;

@@ -1,10 +1,48 @@
 # Change Log
 
+## [v1.3.0](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.0) (2017-01-11)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.2...v1.3.0)
+
+**Merged pull requests:**
+
+- Add send message tag and message length as constraint [\#598](https://github.com/freshdesk/hotline_ios_dev/pull/598) ([harish6989](https://github.com/harish6989))
+- Inconsistent 2 [\#597](https://github.com/freshdesk/hotline_ios_dev/pull/597) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- minor test ui fixes and iOS 7 depricate method fix [\#596](https://github.com/freshdesk/hotline_ios_dev/pull/596) ([harish6989](https://github.com/harish6989))
+- Inconsitencies [\#595](https://github.com/freshdesk/hotline_ios_dev/pull/595) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Fixed Pending issues check for migration issue [\#594](https://github.com/freshdesk/hotline_ios_dev/pull/594) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- fix migration restore issue [\#593](https://github.com/freshdesk/hotline_ios_dev/pull/593) ([harish6989](https://github.com/harish6989))
+- filtered article or category title fix [\#592](https://github.com/freshdesk/hotline_ios_dev/pull/592) ([harish6989](https://github.com/harish6989))
+- Tags last changes [\#591](https://github.com/freshdesk/hotline_ios_dev/pull/591) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Changes related to theming and searchbar: [\#590](https://github.com/freshdesk/hotline_ios_dev/pull/590) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Fix Nil when marking user as uninstalled. [\#588](https://github.com/freshdesk/hotline_ios_dev/pull/588) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Channel/ FAQ Page screen freeze [\#587](https://github.com/freshdesk/hotline_ios_dev/pull/587) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Tags latest changes [\#586](https://github.com/freshdesk/hotline_ios_dev/pull/586) ([harish6989](https://github.com/harish6989))
+- Csat theme fixes [\#585](https://github.com/freshdesk/hotline_ios_dev/pull/585) ([harish6989](https://github.com/harish6989))
+- iOS Event store changes [\#487](https://github.com/freshdesk/hotline_ios_dev/pull/487) ([harish6989](https://github.com/harish6989))
+
+## [v1.2.2](https://github.com/freshdesk/hotline_ios_dev/tree/v1.2.2) (2016-12-26)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.1...v1.2.2)
+
+**Implemented enhancements:**
+
+- Show a Notification banner for CSAT push notification.  [\#565](https://github.com/freshdesk/hotline_ios_dev/issues/565)
+
+**Fixed bugs:**
+
+- Displaying incorrect label in FAQ and Channel screen when loading [\#569](https://github.com/freshdesk/hotline_ios_dev/issues/569)
+- Issues found in tab bar when there is only one channel [\#545](https://github.com/freshdesk/hotline_ios_dev/issues/545)
+
+**Merged pull requests:**
+
+- Update Master to Latest [\#583](https://github.com/freshdesk/hotline_ios_dev/pull/583) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Add change log for v1.2.1 [\#582](https://github.com/freshdesk/hotline_ios_dev/pull/582) ([AravinthChandran](https://github.com/AravinthChandran))
+
 ## [v1.2.1](https://github.com/freshdesk/hotline_ios_dev/tree/v1.2.1) (2016-12-21)
 [Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.0...v1.2.1)
 
 **Implemented enhancements:**
 
+- Track unread count for CSAT [\#567](https://github.com/freshdesk/hotline_ios_dev/issues/567)
 - Validate user Info  [\#492](https://github.com/freshdesk/hotline_ios_dev/issues/492)
 - Mark users as uninstalled when clearData is called.  [\#466](https://github.com/freshdesk/hotline_ios_dev/issues/466)
 - Security Test - Static Analysis issue  [\#258](https://github.com/freshdesk/hotline_ios_dev/issues/258)
@@ -39,7 +77,6 @@
 
 - Do not show incorrect error message when message is failed to upload [\#547](https://github.com/freshdesk/hotline_ios_dev/issues/547)
 - Input toolbar is not returning to its default position after keyboard is dismissed [\#542](https://github.com/freshdesk/hotline_ios_dev/issues/542)
-- FAQ and channel screen freezes when user edge swipes from left to right  [\#531](https://github.com/freshdesk/hotline_ios_dev/issues/531)
 - Channels thumbnail missing sometimes when come from background state to active state  [\#451](https://github.com/freshdesk/hotline_ios_dev/issues/451)
 
 **Closed issues:**

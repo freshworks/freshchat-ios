@@ -16,9 +16,10 @@
 #import "KonotorDataManager.h"
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"
-#import "HLArticleUtil.h"
-#import "HLArticleTagManager.h"
+#import "HLFAQUtil.h"
+#import "HLTagManager.h"
 #import "HLLocalization.h"
+#import "HLEventManager.h"
 
 @interface HLArticlesController ()
 
@@ -26,6 +27,7 @@
 @property (nonatomic, strong)NSArray *articles;
 @property (strong, nonatomic) HLTheme *theme;
 @property (nonatomic,strong) FAQOptions *faqOptions;
+@property BOOL isFilteredView;
 
 @end
 
@@ -51,16 +53,23 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
     self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
+    [self setNavigationItem];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
-    if(self.category){
-        parent.navigationItem.title = self.category.title;
+    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
+        if(self.faqOptions.filteredType == ARTICLE){
+            parent.navigationItem.title = [self.faqOptions filteredViewTitle];
+        }
+        else{
+            parent.navigationItem.title = self.category.title;
+        }
     }
-    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        parent.navigationItem.title = [self.faqOptions filteredViewTitle];
+    else{
+        if(self.category){
+            parent.navigationItem.title = self.category.title;
+        }
     }
-    [self setNavigationItem];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -86,19 +95,11 @@
             [self.tableView reloadData];
         }];
     }
-    else if (self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        [[HLArticleTagManager sharedInstance] articlesForTags:[self.faqOptions tags] withCompletion:
-         ^(NSSet *articleIds) {
-             NSManagedObjectContext *mainContext = [KonotorDataManager sharedInstance].mainObjectContext;
-             
-             [mainContext performBlock:^{
-                 NSMutableArray *matchingArticles= [NSMutableArray new];
-                 for(NSNumber * articleId in articleIds){
-                     HLArticle *article = [HLArticle getWithID:articleId inContext:mainContext];
-                     if(article){
-                         [matchingArticles addObject:article];
-                     }
-                 }
+    else if (self.isFilteredView){
+        NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+        [[HLTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags inContext:ctx withCompletion:^(NSArray<HLArticle *> *articles) {
+             [ctx performBlock:^{
+                 NSMutableArray *matchingArticles = [articles mutableCopy];
                  NSSortDescriptor *categorySorter = [[NSSortDescriptor alloc] initWithKey:@"category.position" ascending:YES];
                  NSSortDescriptor *articleSorter = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
                  [matchingArticles sortUsingDescriptors:@[categorySorter, articleSorter]];
@@ -119,13 +120,22 @@
 -(void)setNavigationItem{
     UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    [self configureBackButtonWithGestureDelegate:self];
-    self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
+    [self configureBackButton];
+    if(!self.isFilteredView){
+        self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
+    }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)searchButtonAction:(id)sender{
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
+    }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    [HLArticleUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
+    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];
@@ -182,12 +192,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLArticleUtil launchArticle:article withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];
+        [HLFAQUtil launchArticle:article withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
     }
 }
 
 -(void) setFAQOptions:(FAQOptions *)options {
     self.faqOptions = options;
+    self.isFilteredView = [HLFAQUtil hasTags:self.faqOptions];
 }
 
 @end

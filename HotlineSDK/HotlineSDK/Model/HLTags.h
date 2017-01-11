@@ -22,7 +22,11 @@ enum HLTagType {
 @property (nonatomic, retain) NSNumber * taggableType;
 @property (nonatomic, retain) NSString * tagName;
 
-+(HLTags *)createWithInfo:(NSDictionary *)TagsInfo inContext:(NSManagedObjectContext *)context;
--(void)updateWithInfo:(NSDictionary *)tagInfo;
++(void)createTagWithInfo : (NSDictionary *)tagInfo inContext:(NSManagedObjectContext *)context;
+
++(NSDictionary *) createDictWithTagName :(NSString *)tagname type :(NSNumber *) type andIdvalue :(NSNumber *)tagId;
+
++(void)removeTagsForTaggableId:(NSNumber *)tagId andType : (NSNumber*)type inContext:(NSManagedObjectContext *)context;
+
 
 @end

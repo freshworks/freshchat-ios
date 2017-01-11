@@ -30,11 +30,16 @@
 #import "FDSecureStore.h"
 #import "HLNotificationHandler.h"
 #import "FDAutolayoutHelper.h"
-#import "HLArticleUtil.h"
+#import "HLFAQUtil.h"
 #import "KonotorAudioRecorder.h"
+#import "HLEventManager.h"
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
 #import "HLChannelViewController.h"
+#import "HLTagManager.h"
+#import "HLTags.h"
+#import "HLConversationUtil.h"
+#import "HLControllerUtils.h"
 
 typedef struct {
     BOOL isLoading;
@@ -75,7 +80,8 @@ typedef struct {
 @property (strong,nonatomic) HLCSATYesNoPrompt *yesNoPrompt;
 @property (strong, nonatomic) HLCSATView *CSATView;
 @property (nonatomic) BOOL isOneWayChannel;
-
+@property (nonatomic, strong) ConversationOptions *convOptions;
+@property (nonatomic) BOOL fromNotification;
 @end
 
 @implementation FDMessageController
@@ -85,11 +91,21 @@ typedef struct {
 #define CELL_HORIZONTAL_PADDING 4
 #define YES_NO_PROMPT_HEIGHT 80
 
+
+
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
+    return [self initWithChannelID:channelID andPresentModally:isModal fromNotification:NO];
+}
+
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal fromNotification:(BOOL) fromNotification {
+    self = [super init];
     if (self) {
+        self.fromNotification = fromNotification;
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
+        
+        
         
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
@@ -101,9 +117,21 @@ typedef struct {
         self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
+        NSString *eventChannelID = [self.channel.channelID stringValue];
+        NSString *eventChannelName = self.channel.name;
+        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
+            [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
+            [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelID];
+            [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
+        }];
+        
         [Konotor setDelegate:self];
     }
     return self;
+}
+
+-(void) setConversationOptions:(ConversationOptions *)options{
+    self.convOptions = options;
 }
 
 -(KonotorConversation *)conversation{
@@ -251,14 +279,16 @@ typedef struct {
 
 -(void)setNavigationItem{
     if(_flags.isModalPresentationPreferred){
-        UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
-        
-        [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
+        [HLControllerUtils configureCloseButton:self forTarget:self selector:@selector(closeButtonAction:) title:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)];
     }else{
         if (!self.embedded) {
-            [self configureBackButtonWithGestureDelegate:self];
+            [self configureBackButton];
         }
     }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)closeButtonAction:(id)sender{
@@ -360,9 +390,10 @@ typedef struct {
 
 - (float)lineCountForLabel:(UILabel *)label {
     CGSize maximumLabelSize = CGSizeMake(self.view.frame.size.width-10,9999);
-    CGSize sizeOfText = [label.text sizeWithFont:label.font
-                                constrainedToSize:maximumLabelSize
-                                    lineBreakMode:label.lineBreakMode];
+    CGSize sizeOfText = [label.text boundingRectWithSize:maximumLabelSize
+                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                            attributes:@{NSFontAttributeName:label.font}
+                                               context:nil].size;
     int numberOfLines = sizeOfText.height / label.font.pointSize;
     
     return numberOfLines;
@@ -512,6 +543,7 @@ typedef struct {
         [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
         
     }else{
+        
         [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
@@ -525,35 +557,51 @@ typedef struct {
     [self checkChannel:nil];
 }
 
--(void) checkChannel : (void(^)(BOOL isChannelValid)) completion
+-(void) checkChannel : (void(^)(BOOL)) completion
 {
-    [[KonotorDataManager sharedInstance]fetchAllVisibleChannels:^(NSArray *channelInfos, NSError *error) {
+    NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+    [ctx performBlock:^{
         BOOL isChannelValid = NO;
-        if (!error) {
-            for(HLChannelInfo *channel in channelInfos) {
-                if([channel.channelID isEqual:self.channelID]) {
+        BOOL hasTags =  [HLConversationUtil hasTags:self.convOptions];
+        HLChannel *channelToChk = [HLChannel getWithID:self.channelID inContext:ctx];
+        if ( channelToChk && channelToChk.isHidden != 0 ) {
+            if(hasTags){ // contains tags .. so check that as well
+                if([channelToChk hasAtleastATag:self.convOptions.tags]){
                     isChannelValid = YES;
                 }
             }
-            dispatch_async(dispatch_get_main_queue(), ^ {
-                if (isChannelValid) {
-                    if (channelInfos.count > 1) {
+            else {
+                isChannelValid = YES;
+            }
+        }
+        if(!isChannelValid){ // remove this channel from the view
+            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        }
+        else {
+            // if channel count changed
+            if(hasTags){
+                [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
+                    if(channels && channels.count  > 1 ){
                         [self alterNavigationStack];
                     }
-                }
-                else {
-                    [self.parentViewController.navigationController popViewControllerAnimated:YES];
-                }
-            });
-        }
-        if(completion) {
-            completion(isChannelValid);
+                }];
+            }
+            else {
+                [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
+                    if(!error && channelInfos && channelInfos.count > 1){
+                        [self alterNavigationStack];
+                    }
+                }];
+            }
         }
     }];
 }
 
 -(void) alterNavigationStack
 {
+    if(self.fromNotification) {
+        return;
+    }
     BOOL containsChannelController = NO;
     for (UIViewController *controller in self.navigationController.viewControllers) {
         if ([controller isMemberOfClass:[HLContainerController class]]) {
@@ -564,9 +612,10 @@ typedef struct {
         }
     }
     //If channel count changes from 1 to many, alter the navigation stack [channel list controller , current message channel]
-    if (!containsChannelController) {
+    if (!containsChannelController && self.parentViewController) {
         HLChannelViewController *channelController = [[HLChannelViewController alloc]init];
         UIViewController *channelContainer = [[HLContainerController alloc]initWithController:channelController andEmbed:self.embedded];
+        [HLConversationUtil setConversationOptions:self.convOptions andViewController:channelController];
         self.parentViewController.navigationController.viewControllers = @[channelContainer,self.parentViewController];
         _flags.isModalPresentationPreferred = NO;
         self.embedded = NO;
@@ -897,12 +946,17 @@ typedef struct {
 //TODO: Needs refractor
 -(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
+    [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
-           [HLArticleUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFAQOptions:[FAQOptions new]]; // Question - The developer will have no controller over the behaviour
+            FAQOptions *option = [FAQOptions new];
+            if([HLConversationUtil hasTags:self.convOptions]){
+                [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
+            }
+            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:option andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
-            NSLog(@"%@",e);
+            ALog(@"%@",e);
         }
     }
     else if(button.actionUrlString!=nil){
@@ -915,9 +969,21 @@ typedef struct {
             }
         }
         @catch(NSException* e){
-            NSLog(@"%@",e);
+            ALog(@"%@",e);
         }
     }
+}
+
+- (void) addConversationDeepLinkLaunchEvent{
+    NSString *channelId = [self.conversation.belongsToChannel.channelID stringValue];
+    NSString *channelName = self.conversation.belongsToChannel.name ;
+    NSString *messageAlias = self.conversation.conversationAlias;
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH
+                                          withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:channelId];
+        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channelName];
+        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageAlias];
+    }];
 }
 
 #pragma mark - Audio toolbar delegates

@@ -12,11 +12,14 @@
 #import "HLViewController.h"
 #import "FDYesNoPromptView.h"
 #import "HLCSATView.h"
+#import "ConversationOptionsInterface.h"
 
-@interface FDMessageController : HLViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, HLYesNoPromptViewDelegate, HLCSATViewDelegate>
+@interface FDMessageController : HLViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, HLYesNoPromptViewDelegate, HLCSATViewDelegate, ConversationOptionsInterface>
 
 -(BOOL)isModal;
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal;
+
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal fromNotification:(BOOL) fromNotification;
 
 @end

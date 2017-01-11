@@ -79,13 +79,14 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"e3280bde-4696-4bd5-8be7-e7919249bf9a"
-                                                       andAppKey:@"9d456296-5f38-45ce-884e-b595f7e6301a"];
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"1fa378bc-af06-4a5a-ac2f-8844a890b18c"
+                                                      andAppKey:@"c57650b0-6f47-45a5-8c80-9dfe7393b438"];
     
-    config.appID = @"45fa92d7-af5d-4528-b001-a200ce554cb8";
-    config.appKey = @"f1894421-52bc-452e-8a1b-9274cf2ace12";
     
-    config.domain=@"mr.orange.konotor.com";
+//    config.appID = @"45fa92d7-af5d-4528-b001-a200ce554cb8";
+//    config.appKey = @"f1894421-52bc-452e-8a1b-9274cf2ace12";
+    
+    config.domain=@"mr-white.staging.konotor.com";
 
 //    prod
 //    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
@@ -114,6 +115,8 @@
                                                      @"SDK Version" : [Hotline SDKVersion]
                                                      }];
     
+
+    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
     [[Hotline sharedInstance]initWithConfig:config];
 
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {

@@ -10,24 +10,64 @@
 #import "HotlineSDK/Hotline.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
+#define kOFFSET_FOR_KEYBOARD 160.0
 
-
-@interface ViewController ()
+@interface ViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) NSURL *soundUrl;
+
+@property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqTagsField2;
+@property (nonatomic, strong) IBOutlet UITextField *faqTitleField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqTitleField2;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField2;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField1;
+@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField2;
+
+@property (nonatomic, strong) IBOutlet UITextField *conversationTitle;
+@property (nonatomic, strong) IBOutlet UITextField *conversationTags;
+@property (nonatomic, strong) IBOutlet UITextField *convContactUsTags;
+@property (nonatomic, strong) IBOutlet UITextField *convContactUsTitle;
+
+@property (nonatomic, strong) IBOutlet UITextField *message;
+@property (nonatomic, strong) IBOutlet UITextField *sendMessageTag;
+
+@property (nonatomic, strong) IBOutlet UISwitch *mysWitch;
+@property (nonatomic, strong) IBOutlet UISwitch *myGridSwitch;
+
+@property (nonatomic, assign) BOOL switchVal;
+
+@property (nonatomic, assign) BOOL gridval;
 
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
+    self.switchVal = true;
+    self.gridval = true;
     [self setupSubview];
     
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
     
+    self.faqTagsField1.delegate = self;
+    self.faqTagsField2.delegate = self;
+    self.faqTitleField1.delegate = self;
+    self.faqTitleField2.delegate = self;
+    self.faqContactUsTagsField1.delegate = self;
+    self.faqContactUsTagsField2.delegate = self;
+    self.faqContactUsTitleField1.delegate = self;
+    self.faqContactUsTitleField2.delegate = self;
+    self.conversationTitle.delegate = self;
+    self.conversationTags.delegate = self;
+    self.message.delegate = self;
+    self.sendMessageTag.delegate = self;
+    
+
     // Construct URL to sound file
     NSString *path = [NSString stringWithFormat:@"%@/youraudio.mp3", [[NSBundle mainBundle] resourcePath]];
     _soundUrl = [NSURL fileURLWithPath:path];
@@ -64,33 +104,218 @@
     self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view insertSubview:self.imageView atIndex:0];
     
-    NSDictionary *views = @{@"imgView" : self.imageView};
+//    NSDictionary *views = @{@"imgView" : self.imageView};
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imgView]|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[imgView]|" options:0 metrics:nil views:views]];
+}
+
+-(void)keyboardWillShow {
+    // Animate the current view out of the way
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)keyboardWillHide {
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)sender
+
+{
+    //move the main view, so that the keyboard does not hide it.
+    if  (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)sender
+{
+    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTitleField2]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqTagsField2]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTagsField2]||[sender isEqual:self.faqContactUsTitleField1]||[sender isEqual:self.faqContactUsTitleField2])
+    {
+        //move the main view, so that the keyboard does not hide it.
+        if  (self.view.frame.origin.y >= 0)
+        {
+            [self setViewMovedUp:YES];
+        }
+    }
+}
+
+//method to move the view up/down whenever the keyboard is shown/dismissed
+-(void)setViewMovedUp:(BOOL)movedUp
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
+    
+    CGRect rect = self.view.frame;
+    if (movedUp)
+    {
+        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
+        // 2. increase the size of the view so that the area behind the keyboard is covered up.
+        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
+        rect.size.height += kOFFSET_FOR_KEYBOARD;
+    }
+    else
+    {
+        // revert back to the normal state.
+        rect.origin.y += kOFFSET_FOR_KEYBOARD;
+        rect.size.height -= kOFFSET_FOR_KEYBOARD;
+    }
+    self.view.frame = rect;
+    
+    [UIView commitAnimations];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
     if(![_audioPlayer isPlaying]){
         [_audioPlayer play];
     }
-    [super viewWillAppear:animated];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if (appDelegate.pickedImage) {
         self.imageView.image = appDelegate.pickedImage;
     }else{
-        self.imageView.image = [UIImage imageNamed:@"background"];
+        //self.imageView.image = [UIImage imageNamed:@"background"];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
+    [[Hotline sharedInstance] showFAQs:self];
+}
+
+- (IBAction)articleFilter1:(id)sender{
+    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = YES;
-    options.showContactUsOnFaqScreens = YES;
-//    [options filterByTags : @[ @"sample"] withTitle:@"newTag"];
-    //options.showContactUsOnAppBar = YES;
+    options.showFaqCategoriesAsGrid = self.gridval;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+    }
+    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
     [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)categoryFilter1:(id)sender{
+    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = self.gridval;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+    }
+    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+
+- (IBAction)channelFilter1:(id)sender{
+    
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.conversationTitle.text];
+    FAQOptions *options = [FAQOptions new];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
+    }
+    [[Hotline sharedInstance] showConversations:self withOptions:opt];
+}
+
+//2
+- (IBAction)articleFilter2:(id)sender{
+    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = self.gridval;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
+    }
+    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: ARTICLE];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)categoryFilter2:(id)sender{
+    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    FAQOptions *options = [FAQOptions new];
+    options.showFaqCategoriesAsGrid = self.gridval;
+    options.showContactUsOnFaqScreens = self.switchVal;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
+    }
+    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: CATEGORY];
+    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+}
+
+- (IBAction)sendMessage:(id)sender{
+    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:self.message.text andTag:self.sendMessageTag.text];
+    [[Hotline sharedInstance] sendMessage:userMessage];
+}
+
+- (IBAction)switchAction:(id)sender {
+    
+    if ([self.mysWitch isOn]) {
+        self.switchVal = true;
+    } else {
+        self.switchVal = false;
+    }
+}
+
+- (IBAction)switchGridAction:(id)sender {
+    
+    if ([self.myGridSwitch isOn]) {
+        self.gridval = true;
+    } else {
+        self.gridval = false;
+    }
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];// this will do the trick
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    // unregister for keyboard notifications while not visible.
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
 }
 
 @end

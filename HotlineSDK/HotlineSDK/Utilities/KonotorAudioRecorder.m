@@ -11,6 +11,7 @@
 #import "KonotorMessage.h"
 #import "KonotorMessageBinary.h"
 #import "FDUtilities.h"
+#import "HLMacros.h"
 #import "HLMessageServices.h"
 #import "FDLocalNotification.h"
 
@@ -101,13 +102,13 @@ static NSString *beforeRecordCategory;
     
     if(error)
     {
-        //NSLog(@"%@", @"Error in setting recording settings in Audio Recorder");
+        //ALog(@"%@", @"Error in setting recording settings in Audio Recorder");
         return NO;
     }
     BOOL err =  [gkAudioRecorder prepareToRecord];
     if(err == NO)
     {
-        //NSLog(@"%@", @"Error in pAudioRecorder prepareToRecord in Audio Recorder");
+        //ALog(@"%@", @"Error in pAudioRecorder prepareToRecord in Audio Recorder");
         return NO;
     }
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: YES ];
@@ -118,7 +119,7 @@ static NSString *beforeRecordCategory;
     {
         if(![gkAudioRecorder record])
         {
-            //NSLog(@"%@", @"Error in pAudioRecorder record in Audio Recorder");
+            //ALog(@"%@", @"Error in pAudioRecorder record in Audio Recorder");
             [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
             
             [audioSession setActive:NO error:&error];
@@ -194,13 +195,13 @@ static NSString *beforeRecordCategory;
     
     if(error)
     {
-        //NSLog(@"%@", @"Retry of Audio recorder set up failed");
+        //ALog(@"%@", @"Retry of Audio recorder set up failed");
         return NO;
     }
     BOOL err =  [gkAudioRecorder prepareToRecord];
     if(err == NO)
     {
-        //NSLog(@"%@", @"Retry of Audio recorder set up failed");
+        //ALog(@"%@", @"Retry of Audio recorder set up failed");
 
         return NO;
     }
@@ -211,7 +212,7 @@ static NSString *beforeRecordCategory;
     {
         if(![gkAudioRecorder record])
         {
-            //NSLog(@"%@", @"Retry of Audio recorder set up failed");
+            //ALog(@"%@", @"Retry of Audio recorder set up failed");
 
             [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
             
@@ -306,7 +307,7 @@ static NSString *beforeRecordCategory;
     NSError *error;
     [audioSession setCategory:beforeRecordCategory error:&error];
     if(error){
-        NSLog(@"Failed to set audio session category");
+        ALog(@"Failed to set audio session category");
         return NO;
     }
     [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];

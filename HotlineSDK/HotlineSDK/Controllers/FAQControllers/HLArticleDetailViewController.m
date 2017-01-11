@@ -21,9 +21,10 @@
 #import "FDAutolayoutHelper.h"
 #import "HLArticle.h"
 #import "KonotorDataManager.h"
-#import "HLArticleUtil.h"
-#import "HLArticleTagManager.h"
-
+#import "HLFAQUtil.h"
+#import "HLTagManager.h"
+#import "HLEventManager.h"
+#import "HLControllerUtils.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -37,6 +38,7 @@
 @property (strong, nonatomic) NSString *appAudioCategory;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property  BOOL isFilteredView;
 
 @end
 
@@ -55,6 +57,7 @@
 
 -(void) setFAQOptions:(FAQOptions *)options{
     self.faqOptions = options;
+    self.isFilteredView = [HLFAQUtil hasTags:self.faqOptions];
 }
 
 -(NSString *)embedHTML{
@@ -101,6 +104,17 @@
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
+    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
+        if(self.faqOptions.filteredType == ARTICLE){
+            parent.navigationItem.title = self.faqOptions.filteredViewTitle;
+        }
+        else{
+            parent.navigationItem.title = self.categoryTitle;
+        }
+    }
+    else{
+        parent.navigationItem.title = self.categoryTitle;
+    }
     [self setNavigationItem];
     [self registerAppAudioCategory];
     [self theming];
@@ -144,20 +158,24 @@
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     
-    if(self.faqOptions && [[self.faqOptions tags] count] > 0 ){
-        [[HLArticleTagManager sharedInstance] articlesForTags:self.faqOptions.tags withCompletion:^(NSSet *matches) {
-            if([matches count] == 1){
+    if(self.isFilteredView){
+        [[HLTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+            if([articleIds count] == 1){
                 UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
                 self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
             }
             else {
-                [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+                [self configureBackButton];
             }
         }];
     }
     else {
-        [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+        [self configureBackButton];
     }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return (self.isFromSearchView? nil : self);
 }
 
 -(void)closeButton:(id)sender{
@@ -207,7 +225,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLArticleUtil launchArticleID:articleId withNavigationCtlr:self.navigationController andFAQOptions:self.faqOptions];
+            [HLFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
@@ -278,9 +296,6 @@
 }
 
 -(void)handleArticleVotePrompt{
-    if(self.faqOptions && ![self.faqOptions showContactUsOnFaqScreens]){
-        return;
-    }
     if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         if(self.bottomViewHeightConstraint.constant == 0 ) {
             BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
@@ -302,7 +317,12 @@
 }
 
 -(void)showContactUsPrompt{
-    self.thankYouPromptView.Button1.hidden = NO;
+    if(self.faqOptions && ![self.faqOptions showContactUsOnFaqScreens]){
+        self.thankYouPromptView.Button1.hidden = YES;
+    }
+    else{
+        self.thankYouPromptView.Button1.hidden = NO;
+    }
     [self updateBottomViewWith:self.thankYouPromptView];
 }
 
@@ -334,20 +354,43 @@
 -(void)yesButtonClicked:(id)sender{
     [self showThankYouPrompt];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        FDLog(@"Voting Completed");
+        [self sendEventForArticle:HLEVENT_FAQ_UPVOTE_ARTICLE];
+        FDLog(@"UpVoting Completed");
     }];
 }
 
 -(void)noButtonClicked:(id)sender{
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        FDLog(@"Voting Completed");
+        [self sendEventForArticle:HLEVENT_FAQ_DOWNVOTE_ARTICLE];
+        FDLog(@"DownVoting Completed");
+    }];
+}
+
+- (void) sendEventForArticle :(NSString *) eventName{
+    NSString *articleId = [self.articleID stringValue];
+    NSString *articleName =self.articleTitle;
+    NSString *categoryId = [self.categoryID stringValue];
+    [[HLEventManager sharedInstance] submitSDKEvent:eventName withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:articleId];
+        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:articleName];
+        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:categoryId];
     }];
 }
 
 -(void)buttonClickedEvent:(id)sender{
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_CONTACTUS];
+    }];
     [self hideBottomView];
-    [[Hotline sharedInstance] showConversations:self];
+    if([HLFAQUtil hasContactUsTags:self.faqOptions]){
+        ConversationOptions *options = [ConversationOptions new];
+        [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+        [[Hotline sharedInstance] showConversations:self withOptions:options];
+    }
+    else{
+        [[Hotline sharedInstance] showConversations:self];
+    }
 }
 
 @end

@@ -8,7 +8,9 @@
 
 #import "FDVotingManager.h"
 #import "FDSecureStore.h"
+#import "HLMacros.h"
 #import "HLFAQServices.h"
+#import "HLEventManager.h"
 
 @interface FDVotingManager()
 
@@ -42,17 +44,23 @@
 }
 
 -(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
-    NSLog(@"Article Downvoted");
+    ALog(@"Article Downvoted");
     [self storeArticleVote:NO LocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service vote:NO forArticleID:articleID inCategoryID:categoryID];
+    if(completion){
+        completion(nil);
+    }
 }
 
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
-    NSLog(@"Article Upvoted");
+    ALog(@"Article Upvoted");
     [self storeArticleVote:YES LocallyForArticleID:articleID];
     HLFAQServices *service = [[HLFAQServices alloc]init];
     [service vote:YES forArticleID:articleID inCategoryID:categoryID];
+    if(completion){
+        completion(nil);
+    }
 }
 
 -(BOOL)isArticleVoted:(NSNumber *)articleID{

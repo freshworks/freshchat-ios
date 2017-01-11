@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "HLListViewController.h"
+#import "ConversationOptionsInterface.h"
 
-@interface HLChannelViewController : HLListViewController
+@interface HLChannelViewController : HLListViewController<ConversationOptionsInterface>
 
 @end

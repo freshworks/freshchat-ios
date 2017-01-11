@@ -25,6 +25,9 @@
 #import "FDChannelUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
+#import "FDLocalNotification.h"
+#import "HLTags.h"
+#import "HLEventManager.h"
 #import "HLCoreServices.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
@@ -68,13 +71,13 @@ static HLNotificationHandler *handleUpdateNotification;
 +(void)fetchMessages:(void(^)(NSError *error))handler{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *userAlias = [FDUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
-        __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
-        [request setRelativePath:path andURLParams:@[appKey, afterTime]];
+        [request setRelativePath:path andURLParams:@[appKey, @"tags=true", afterTime]];
         
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
@@ -180,7 +183,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     newMessage.belongsToConversation = conversation;
                 }
                 
-                //Do not mark restored mesages as unread
+                //Do not mark restored messages as unread
                 if (isRestore) {
                     newMessage.messageRead = YES;
                 }else {
@@ -199,9 +202,18 @@ static HLNotificationHandler *handleUpdateNotification;
     }
     
     [[KonotorDataManager sharedInstance]save];
-    [[FDSecureStore sharedInstance] setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-    [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
-    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject: nil waitUntilDone:NO];
+
+    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    if([lastUpdateTime integerValue] != 0 ){
+        [secureStore setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    }else{
+        NSNumber *lastUpdatedChannelTime = [secureStore objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+        [secureStore setObject:lastUpdatedChannelTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    }
+    if( conversations && conversations.count > 0 ){
+        [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
+    }
+    [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject:nil waitUntilDone:NO];
     return true;
 }
 
@@ -254,13 +266,15 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
     NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
-    BOOL isRestore = [lastUpdateTime isEqualToNumber:@0];
-    [request setRelativePath:path andURLParams:@[token, afterTime]];
+    
+    [request setRelativePath:path andURLParams:@[token, @"tags=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             /* This check is added to delete all messages that are migrated from konotor SDK,
                but this is also performed for new installs as well (a harmless side-effect). */
-            
+            // TODO : Come up with a better logic to do this migration
+            NSNumber *messageLastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+            BOOL isRestore = [messageLastUpdatedTime isEqualToNumber:@0];
             if (isRestore) {
                 [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
                     [self importChannels:[responseInfo responseAsArray] handler:handler];
@@ -287,6 +301,16 @@ static HLNotificationHandler *handleUpdateNotification;
             for(int i=0; i<channels.count; i++){
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
+                [HLTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: HLTagTypeChannel] inContext:context];
+                NSArray *tags = channelInfo[@"tags"];
+                if(tags.count >0){
+                    if(!([channelInfo[@"hidden"] boolValue])){
+                        for(NSString *tagName in tags){
+                            [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];
+                        }
+                    }
+                }
+                
                 if (channel) {
                     [HLChannel updateChannel:channel withInfo:channelInfo];
                     FDLog(@"Channel updated ID:%@ name:%@", channel.channelID , channel.name);
@@ -307,11 +331,11 @@ static HLNotificationHandler *handleUpdateNotification;
         [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         [context save:nil];
         if (handler) handler(channelList,nil);
-        [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
+        if(channelCount > 0) {
+            [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
+        }
     }];
 }
-
-//TODO: Temproary hack to avoid user registration occuring parallely
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     
@@ -325,7 +349,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
 
@@ -391,6 +415,9 @@ static HLNotificationHandler *handleUpdateNotification;
         [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if (!error && statusCode == 201) {
+                
+                ALog(@"Message sent");
+                
                 NSString *conversationID = [messageInfo[@"hostConversationId"] stringValue];
                 if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
@@ -405,6 +432,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 pMessage.messageAlias = messageInfo[@"alias"];
                 pMessage.createdMillis = messageInfo[@"createdMillis"];
                 [channel addMessagesObject:pMessage];
+                [self addSentMessageEventWithChannel:channel messageAlias:pMessage.messageAlias andType:[[pMessage messageType]intValue]];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
                 if ( error && error.code == -1009 ) {
@@ -439,13 +467,36 @@ static HLNotificationHandler *handleUpdateNotification;
     [FDUtilities registerUser:nil];
 }
 
++(void) addSentMessageEventWithChannel :(HLChannel *)channel
+                           messageAlias:(NSString *)messageId
+                               andType :(int) type {
+    NSString *eventChannelName = channel.name;
+    NSString *eventChannelId = [channel.channelID stringValue];
+    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_SEND_MESSAGE
+                                          withBlock:^(HLEvent *event) {
+        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelId];
+        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
+        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageId];
+        NSString *messageType;
+        switch(type){
+            case 1 : messageType = HLEVENT_MESSAGE_TYPE_TEXT; break;
+            case 2 : messageType = HLEVENT_MESSAGE_TYPE_AUDIO; break;
+            case 3 : messageType = HLEVENT_MESSAGE_TYPE_IMAGE; break;
+            default: messageType = HLEVENT_MESSAGE_TYPE_TEXT; break;
+        }
+        
+        [event propKey:HLEVENT_PARAM_MESSAGE_TYPE andVal:messageType];
+    }];
+}
+
+
 //TODO: Skip messages that are clicked before
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{
     if((marketingId == nil) || ([marketingId intValue] ==0)) return;
 
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     
     if (!userAlias) return;
 
@@ -475,7 +526,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities getUserAlias];
+    NSString *userAlias = [FDUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
 
     if (!userAlias) return;
@@ -546,7 +597,7 @@ static HLNotificationHandler *handleUpdateNotification;
         
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
         NSString *appID = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID];
-        NSString *userAlias = [FDUtilities getUserAlias];
+        NSString *userAlias = [FDUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
         request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
