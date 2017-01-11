@@ -22,7 +22,7 @@
 
 @interface  HLCategoryViewBehaviour ()
 
-@property (nonatomic, strong) UIViewController <HLCategoryViewBehaviourDelegate> *categoryViewDelegate;
+@property (nonatomic, weak) UIViewController <HLCategoryViewBehaviourDelegate> *categoryViewDelegate;
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property (nonatomic, strong) HLTheme *theme;
 

@@ -25,7 +25,7 @@
 
 @interface  HLLoadingViewBehaviour ()
 
-@property (nonatomic, strong) UIViewController <HLLoadingViewBehaviourDelegate> *loadingViewDelegate;
+@property (nonatomic, weak) UIViewController <HLLoadingViewBehaviourDelegate> *loadingViewDelegate;
 @property (nonatomic, strong) HLTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
