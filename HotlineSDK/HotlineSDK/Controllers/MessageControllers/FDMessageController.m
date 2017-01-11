@@ -39,6 +39,7 @@
 #import "HLTagManager.h"
 #import "HLTags.h"
 #import "HLConversationUtil.h"
+#import "HLControllerUtils.h"
 
 typedef struct {
     BOOL isLoading;
@@ -80,7 +81,7 @@ typedef struct {
 @property (strong, nonatomic) HLCSATView *CSATView;
 @property (nonatomic) BOOL isOneWayChannel;
 @property (nonatomic, strong) ConversationOptions *convOptions;
-
+@property (nonatomic) BOOL fromNotification;
 @end
 
 @implementation FDMessageController
@@ -90,9 +91,17 @@ typedef struct {
 #define CELL_HORIZONTAL_PADDING 4
 #define YES_NO_PROMPT_HEIGHT 80
 
+
+
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
+    return [self initWithChannelID:channelID andPresentModally:isModal fromNotification:NO];
+}
+
+-(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal fromNotification:(BOOL) fromNotification {
+    self = [super init];
     if (self) {
+        self.fromNotification = fromNotification;
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
@@ -270,14 +279,16 @@ typedef struct {
 
 -(void)setNavigationItem{
     if(_flags.isModalPresentationPreferred){
-        UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)  style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonAction:)];
-        
-        [self.parentViewController.navigationItem setLeftBarButtonItem:closeButton];
+        [HLControllerUtils configureCloseButton:self forTarget:self selector:@selector(closeButtonAction:) title:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)];
     }else{
         if (!self.embedded) {
-            [self configureBackButtonWithGestureDelegate:self];
+            [self configureBackButton];
         }
     }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)closeButtonAction:(id)sender{
@@ -588,6 +599,9 @@ typedef struct {
 
 -(void) alterNavigationStack
 {
+    if(self.fromNotification) {
+        return;
+    }
     BOOL containsChannelController = NO;
     for (UIViewController *controller in self.navigationController.viewControllers) {
         if ([controller isMemberOfClass:[HLContainerController class]]) {

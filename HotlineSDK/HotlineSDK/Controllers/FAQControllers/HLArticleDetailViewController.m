@@ -24,6 +24,7 @@
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLEventManager.h"
+#import "HLControllerUtils.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -164,13 +165,17 @@
                 self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
             }
             else {
-                [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+                [self configureBackButton];
             }
         }];
     }
     else {
-        [self configureBackButtonWithGestureDelegate:(self.isFromSearchView? nil : self)];
+        [self configureBackButton];
     }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return (self.isFromSearchView? nil : self);
 }
 
 -(void)closeButton:(id)sender{

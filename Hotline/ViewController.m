@@ -181,11 +181,10 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
     if(![_audioPlayer isPlaying]){
         [_audioPlayer play];
     }
-    [super viewWillAppear:animated];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if (appDelegate.pickedImage) {
         self.imageView.image = appDelegate.pickedImage;

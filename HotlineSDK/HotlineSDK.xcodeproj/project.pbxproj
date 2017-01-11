@@ -105,12 +105,14 @@
 		35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D4E8151D118E9000EFFE07 /* KonotorImageInput.m */; };
 		3C160B021D00F46A000440D4 /* Hotline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Hotline.h */; };
 		3C160B061D05A59C000440D4 /* HLFAQUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLFAQUtil.m */; };
+		3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */; };
+		3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */; };
 		68A532551D36252A0078339F /* HLEventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532541D36252A0078339F /* HLEventManager.m */; };
 		68A532581D3626300078339F /* HLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A532571D3626300078339F /* HLEvent.m */; };
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
 		CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = CE16BA231DEDAC4F00EE714C /* HLCSATYesNoPrompt.m */; };
 		CE274D041DB78E5C00733EDB /* HLStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE274D021DB78E5C00733EDB /* HLStarRatingView.m */; };
-		CE39CF721DCB694300A46660 /* FDControllerUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CE39CF711DCB694300A46660 /* FDControllerUtils.m */; };
+		CE39CF721DCB694300A46660 /* HLControllerUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CE39CF711DCB694300A46660 /* HLControllerUtils.m */; };
 		CE4B29E71DF9A78F00EC6978 /* HLMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4B29E61DF9A78F00EC6978 /* HLMessage.m */; };
 		CE85F5B51E1FAAEA00BAA5A8 /* HLTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE85F5B41E1FAAEA00BAA5A8 /* HLTagManager.m */; };
 		CE8BF9091DD5FFB700814009 /* HLTags.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8BF9081DD5FFB700814009 /* HLTags.m */; };
@@ -333,6 +335,10 @@
 		35DD93B21D1C11260013245F /* FAQOptionsInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAQOptionsInterface.h; sourceTree = "<group>"; };
 		3C160B041D05A530000440D4 /* HLFAQUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLFAQUtil.h; sourceTree = "<group>"; };
 		3C160B051D05A59C000440D4 /* HLFAQUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLFAQUtil.m; sourceTree = "<group>"; };
+		3CADFA2C1E25B20D00829E7F /* HLCategoryViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLCategoryViewBehaviour.h; path = Behaviours/HLCategoryViewBehaviour.h; sourceTree = "<group>"; };
+		3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLCategoryViewBehaviour.m; path = Behaviours/HLCategoryViewBehaviour.m; sourceTree = "<group>"; };
+		3CADFA2E1E25B20D00829E7F /* HLLoadingViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLLoadingViewBehaviour.h; path = Behaviours/HLLoadingViewBehaviour.h; sourceTree = "<group>"; };
+		3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLLoadingViewBehaviour.m; path = Behaviours/HLLoadingViewBehaviour.m; sourceTree = "<group>"; };
 		68A532531D36252A0078339F /* HLEventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEventManager.h; sourceTree = "<group>"; };
 		68A532541D36252A0078339F /* HLEventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLEventManager.m; sourceTree = "<group>"; };
 		68A532561D3626300078339F /* HLEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLEvent.h; sourceTree = "<group>"; };
@@ -344,8 +350,8 @@
 		CE16BA231DEDAC4F00EE714C /* HLCSATYesNoPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCSATYesNoPrompt.m; sourceTree = "<group>"; };
 		CE274D011DB78E5C00733EDB /* HLStarRatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLStarRatingView.h; sourceTree = "<group>"; };
 		CE274D021DB78E5C00733EDB /* HLStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLStarRatingView.m; sourceTree = "<group>"; };
-		CE39CF701DCB694300A46660 /* FDControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDControllerUtils.h; sourceTree = "<group>"; };
-		CE39CF711DCB694300A46660 /* FDControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDControllerUtils.m; sourceTree = "<group>"; };
+		CE39CF701DCB694300A46660 /* HLControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLControllerUtils.h; sourceTree = "<group>"; };
+		CE39CF711DCB694300A46660 /* HLControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLControllerUtils.m; sourceTree = "<group>"; };
 		CE4B29E61DF9A78F00EC6978 /* HLMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLMessage.m; sourceTree = "<group>"; };
 		CE662A991E1A448000B94744 /* KonotorModel 24.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 24.xcdatamodel"; sourceTree = "<group>"; };
 		CE85F5B31E1FAAEA00BAA5A8 /* HLTagManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLTagManager.h; sourceTree = "<group>"; };
@@ -467,6 +473,7 @@
 		35B2EEBC1D000E620014867F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3CADFA221E256E4900829E7F /* Behaviours */,
 				35D4E8001D118E9000EFFE07 /* FAQControllers */,
 				35D4E80B1D118E9000EFFE07 /* MessageControllers */,
 				35B2EED31D000E620014867F /* HLViewController.h */,
@@ -593,8 +600,8 @@
 				35B2EF3C1D000E620014867F /* FDStringUtil.h */,
 				35B2EF3D1D000E620014867F /* FDStringUtil.m */,
 				35B2EF3E1D000E620014867F /* FDThemeConstants.h */,
-				CE39CF701DCB694300A46660 /* FDControllerUtils.h */,
-				CE39CF711DCB694300A46660 /* FDControllerUtils.m */,
+				CE39CF701DCB694300A46660 /* HLControllerUtils.h */,
+				CE39CF711DCB694300A46660 /* HLControllerUtils.m */,
 				35B2EF3F1D000E620014867F /* FDUtilities.h */,
 				35B2EF401D000E620014867F /* FDUtilities.m */,
 				35B2EF411D000E620014867F /* FDVotingManager.h */,
@@ -754,6 +761,17 @@
 			path = MessageControllers;
 			sourceTree = "<group>";
 		};
+		3CADFA221E256E4900829E7F /* Behaviours */ = {
+			isa = PBXGroup;
+			children = (
+				3CADFA2C1E25B20D00829E7F /* HLCategoryViewBehaviour.h */,
+				3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */,
+				3CADFA2E1E25B20D00829E7F /* HLLoadingViewBehaviour.h */,
+				3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */,
+			);
+			name = Behaviours;
+			sourceTree = "<group>";
+		};
 		843DD249178594180053E19E = {
 			isa = PBXGroup;
 			children = (
@@ -907,12 +925,13 @@
 				35B2EFC41D000E620014867F /* HLGridViewCell.m in Sources */,
 				35B2EFBA1D000E620014867F /* FDBadgeView.m in Sources */,
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
-				CE39CF721DCB694300A46660 /* FDControllerUtils.m in Sources */,
+				CE39CF721DCB694300A46660 /* HLControllerUtils.m in Sources */,
 				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
 				68A532551D36252A0078339F /* HLEventManager.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
 				CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */,
+				3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */,
 				35B2EFC91D000E620014867F /* FDMessageCell.m in Sources */,
 				35B2EFB51D000E620014867F /* HLTheme.m in Sources */,
 				35D4E81C1D118E9000EFFE07 /* FDImagePreviewController.m in Sources */,
@@ -923,6 +942,7 @@
 				35B2EFC71D000E620014867F /* FDActionButton.m in Sources */,
 				35B2EF8E1D000E620014867F /* HotlineConfig.m in Sources */,
 				354F26C61D0AED2F00DCD158 /* FDKeyChainStore.m in Sources */,
+				3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */,
 				35D4E7FC1D10300300EFFE07 /* FAQOptions.m in Sources */,
 				35B2EFB41D000E620014867F /* HLLocalization.m in Sources */,
 				35B2EF9C1D000E620014867F /* KonotorUser.m in Sources */,

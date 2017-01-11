@@ -120,10 +120,14 @@
 -(void)setNavigationItem{
     UIBarButtonItem *searchBarButton = [[FDBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
-    [self configureBackButtonWithGestureDelegate:self];
+    [self configureBackButton];
     if(!self.isFilteredView){
         self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
     }
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
+    return self;
 }
 
 -(void)searchButtonAction:(id)sender{

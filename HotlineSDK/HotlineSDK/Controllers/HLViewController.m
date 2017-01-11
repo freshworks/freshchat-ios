@@ -12,6 +12,7 @@
 #import "HLMacros.h"
 #import "FDBarButtonItem.h"
 #import "HLEventManager.h"
+#import "HLControllerUtils.h"
 
 @implementation HLViewController : UIViewController
 
@@ -27,29 +28,17 @@
     }
 }
 
--(void)configureBackButtonWithGestureDelegate:(UIViewController <UIGestureRecognizerDelegate> *)gestureDelegate{
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
-    UINavigationController *naviController = (self.parentViewController) ? self.parentViewController.navigationController : self.navigationController;
-    if (isBackButtonImageExist && ![self embedded]) {
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self.navigationController
-                                                                      action:@selector(popViewControllerAnimated:)];
-        self.parentViewController.navigationItem.leftBarButtonItem = backButton;
-        if([self conformsToProtocol:@protocol(UIGestureRecognizerDelegate)]){
-            if(gestureDelegate){
-                [naviController.interactivePopGestureRecognizer setEnabled:YES];
-                naviController.interactivePopGestureRecognizer.delegate = gestureDelegate;
-            }else{
-                [naviController.interactivePopGestureRecognizer setEnabled:NO];
-            }
-        }
-    }else{
-        self.parentViewController.navigationItem.backBarButtonItem = [[FDBarButtonItem alloc] initWithTitle:@""
-                                                                                                      style:self.parentViewController.navigationItem.backBarButtonItem.style
-                                                                                                     target:nil action:nil];
-        [naviController.interactivePopGestureRecognizer setEnabled:NO];
-    }
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [HLControllerUtils configureGestureDelegate:[self gestureDelegate] forController:self withEmbedded:self.embedded];
+}
+
+-(UIViewController<UIGestureRecognizerDelegate> *) gestureDelegate {
+    return nil;
+}
+
+-(void)configureBackButton{
+    [HLControllerUtils configureBackButtonForController:self withEmbedded:self.embedded];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{

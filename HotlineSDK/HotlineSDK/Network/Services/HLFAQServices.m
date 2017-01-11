@@ -44,7 +44,8 @@
                     if(responseInfo){
                         NSArray *categories = [responseInfo responseAsDictionary][@"categories"];
                         if(categories && categories.count > 0 ){
-                            // Indexing is costly, don't do it unless there is a need for it.
+                            [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
+                            // Indexing is costly, don't do it unless there is a need for it
                             [FDIndexManager setIndexingCompleted:NO];
                             [FDIndexManager updateIndex];
                         }
@@ -112,8 +113,6 @@
         
         NSError *err;
         [context save:&err];
-        
-        [FDLocalNotification post:HOTLINE_SOLUTIONS_UPDATED];
         [[FDSecureStore sharedInstance] setObject:lastUpdated forKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
         if(completion){
             completion(err);

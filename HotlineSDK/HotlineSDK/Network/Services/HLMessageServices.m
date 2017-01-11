@@ -210,8 +210,9 @@ static HLNotificationHandler *handleUpdateNotification;
         NSNumber *lastUpdatedChannelTime = [secureStore objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         [secureStore setObject:lastUpdatedChannelTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
     }
-    
-    [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
+    if( conversations && conversations.count > 0 ){
+        [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
+    }
     [Konotor performSelectorOnMainThread:@selector(conversationsDownloaded) withObject:nil waitUntilDone:NO];
     return true;
 }
@@ -330,11 +331,11 @@ static HLNotificationHandler *handleUpdateNotification;
         [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         [context save:nil];
         if (handler) handler(channelList,nil);
-        [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
+        if(channelCount > 0) {
+            [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
+        }
     }];
 }
-
-//TODO: Temproary hack to avoid user registration occuring parallely
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     
