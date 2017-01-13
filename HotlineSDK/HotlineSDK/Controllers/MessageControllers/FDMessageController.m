@@ -105,8 +105,6 @@ typedef struct {
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
         
-        
-        
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
 
@@ -200,10 +198,10 @@ typedef struct {
             if(!self.channel.managedObjectContext) {
                 [self rebuildMessages];
             }
-            [self startPoller];
             [self refreshView];
         }
     }];
+    [self startPoller];
 }
 
 
@@ -576,9 +574,11 @@ typedef struct {
         }
         if(!isChannelValid){ // remove this channel from the view
             [self.parentViewController.navigationController popViewControllerAnimated:YES];
+            completion(isChannelValid);
         }
         else {
             // if channel count changed
+            completion(isChannelValid);
             if(hasTags){
                 [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
                     if(channels && channels.count  > 1 ){
@@ -623,8 +623,7 @@ typedef struct {
     }
 }
 
--(void) rebuildMessages
-{
+-(void) rebuildMessages{
     self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     self.conversation = [self.channel primaryConversation];
     self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
