@@ -128,11 +128,13 @@
 - (void) loadEvents {
     [self runSync:^{
         NSData *data = [NSData dataWithContentsOfFile:self.plistPath];
-        NSDictionary *eventsDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        self.events = [eventsDict mutableCopy];
-        for(NSNumber *eventId in self.events){
-            if([eventId longValue] > [self.maxEventId longValue]){
-                self.maxEventId = eventId;
+        if(data){
+            NSDictionary *eventsDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            self.events = [eventsDict mutableCopy];
+            for(NSNumber *eventId in self.events){
+                if([eventId longValue] > [self.maxEventId longValue]){
+                    self.maxEventId = eventId;
+                }
             }
         }
     }];
@@ -151,6 +153,7 @@
 -(void) writeEventsToStore{
     NSDictionary *eventsCopy = [self.events copy];
     if (![NSKeyedArchiver archiveRootObject:eventsCopy toFile:self.plistPath]) {
+        //Should we not handle anything here ?
     }
 }
 
