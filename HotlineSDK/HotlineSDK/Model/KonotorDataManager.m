@@ -18,16 +18,14 @@
 
 @interface KonotorDataManager ()
 
+@property (nonatomic, strong) NSPersistentStoreCoordinator *psc;
+@property (nonatomic, strong) NSPersistentStore *persistentStore;
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
-@property FDMemLogger *logger;
+@property (nonatomic, strong) FDMemLogger *logger;
 
 @end
 
 @implementation KonotorDataManager
-
-NSString * const kDataManagerBundleName = @"KonotorModels";
-NSString * const kDataManagerModelName = @"KonotorModel";
-NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
 
 + (KonotorDataManager*)sharedInstance {
     static dispatch_once_t pred;
@@ -35,19 +33,24 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
     });
-    if(!sharedInstance.persistentStoreCoordinator){
+    if(![sharedInstance isReady]){
         @synchronized(sharedInstance) {
-            if(!sharedInstance.persistentStoreCoordinator){
+            if(![sharedInstance isReady]){
                 @try {
-                    [sharedInstance preparePersistantStoreCoordinator];
-                    [sharedInstance setMainQueueContext];
+                    [sharedInstance preparePSC];
+                    [sharedInstance prepareMainContext];
                 } @catch (NSException *exception) {
-                    //[[FDMemLogger new]addMessage:exception.description];
+                    NSString *exceptionDesc = [NSString stringWithFormat:@"COREDATA_EXCEPTION: %@", exception.description];
+                    [[FDMemLogger new]addMessage:exceptionDesc];
                 }
             }
         }
     }
 	return sharedInstance;
+}
+
+-(BOOL)isReady{
+    return (self.persistentStore && self.psc) ? YES : NO;
 }
 
 -(id)init{
@@ -58,88 +61,201 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     return  self;
 }
 
-- (NSString*)sharedLibraryPath {
-    NSString *sharedLibraryPath = nil;
+- (NSString*)konotorSQLiteDirPath {
+    NSString *path = nil;
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-    sharedLibraryPath = [libraryPath stringByAppendingPathComponent:@"Database"];
-    FDLog(@"\n\n\n%@\n\n\n", sharedLibraryPath);
+    path = [libraryPath stringByAppendingPathComponent:@"Database"];
+    FDLog(@"\n\n\n%@\n\n\n", path);
     NSFileManager *manager = [NSFileManager defaultManager];
     BOOL isDirectory;
-    if (![manager fileExistsAtPath:sharedLibraryPath isDirectory:&isDirectory] || !isDirectory) {
+    if (![manager fileExistsAtPath:path isDirectory:&isDirectory]) {
         NSError *error = nil;
         NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
-        [manager createDirectoryAtPath:sharedLibraryPath withIntermediateDirectories:YES attributes:attr error:&error];
+        [manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:attr error:&error];
         if (error){
             NSDictionary *errorInfo = @{@"Folder Creation Failed" :@{
                                                 @"Reason:"   : error.description,
-                                                @"FolderPath" : sharedLibraryPath
+                                                @"FolderPath" : path
                                                 }};
             logInfo(errorInfo);
         }
     }
-    return sharedLibraryPath;
+    return path;
 }
 
--(void)preparePersistantStoreCoordinator{
+-(NSDictionary *)configWithJournalDisabled{
+    return @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
+              NSInferMappingModelAutomaticallyOption : @YES,
+              NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"} };
+}
+
+-(NSDictionary *)configWithJournalWALMode{
+    return @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
+              NSInferMappingModelAutomaticallyOption : @YES,
+              NSSQLitePragmasOption: @{@"journal_mode": @"WAL"} };
+}
+
+-(NSManagedObjectModel *)loadKonotorDataModel{
     NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"KonotorModels" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
-    NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-    NSString *storePath = [[self sharedLibraryPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
-    NSURL *persistentStoreURL = [NSURL fileURLWithPath:storePath];
-    [self logModelVersionData:persistentStoreURL];
-    
-    NSError* error = nil;
-    NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES };
-    [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
-                                                            URL:persistentStoreURL options:options error:&error];
-    if (error) {
-        logInfo((@{@"Persistent store creation failed" :@{
-                          @"Reason" : error.description,
-                          @"SQLLiteFilePath" : persistentStoreURL.description
-                          }}));
-        [self.logger upload];
-        
-        // OK now lets try to create this on next attempt
-        _persistentStoreCoordinator = nil;
-    }
-    else {
-        [self.logger reset]; //clean up
-    }
+    return [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 }
 
--(void)logModelVersionData:(NSURL *)storeURL{
+-(NSURL *)konotorSQLiteURL{
+    NSString *storePath = [[self konotorSQLiteDirPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    return [NSURL fileURLWithPath:storePath];
+}
+
+// Link PSC with SQLite file, if successful return a valid PS object, log errors if any
+-(NSPersistentStore *)linkPSC:(NSPersistentStoreCoordinator *)psc URL:(NSURL *)url
+                         mode:(NSDictionary *)mode errorInfo:(NSDictionary *)errorInfo{
+    NSError *error = nil;
+    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:mode error:&error];
     
-    @try {
-        NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator
-                                        metadataForPersistentStoreOfType:NSSQLiteStoreType
-                                        URL:storeURL error:nil];
-        if (sourceMetadata) {
-            logInfo(@{@"Store Info: ": sourceMetadata});
+    if (error) {
+        if (errorInfo == nil) errorInfo = @{};
+        
+        logInfo(( @{ @"Error" : @[@{ @"Create PSC failed" : error }, @{ @"Additional Info" :  errorInfo }]} ));
+        
+        //TODO: Remove this check if we are not seeing this issue in loggly.
+        if(store){
+            [self unlinkStore:store fromPSC:self.psc errorInfo:@{@"RARE_PSC_ERROR" : @"Getting valid store and error when linking PSC with PS"}];
         }
         
-    } @catch (NSException *exception) {
-        logInfo(@{@"Error while accesing store info ": exception});
+        store = nil;
+    }
+    
+    return store;
+}
+
+-(void)preparePSC{
+    NSURL *SQLiteURL = [self konotorSQLiteURL];
+    BOOL requiresMigration = [self isMigrationRequired:self.psc storeURL:SQLiteURL];
+    self.psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self loadKonotorDataModel]];
+    
+    self.persistentStore = [self linkPSC:self.psc URL:SQLiteURL mode:[self configWithJournalWALMode]
+                                             errorInfo:@{@"FAILURE_POINT" : @"Link PSC with Journal-WAL mode failed"}];
+    
+    if (self.persistentStore == nil) {
+        
+        if (requiresMigration) {
+            
+            logMsg(@"Core data errored out in migration, attempting to link using Journal-DELETE mode");
+            
+            self.psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self loadKonotorDataModel]];
+            
+            self.persistentStore = [self linkPSC:self.psc URL:SQLiteURL mode:[self configWithJournalDisabled]
+                                  errorInfo:@{@"FAILURE_POINT" : @"Link PSC with Journal-DELETE mode failed"}];
+            
+            if (self.persistentStore) {
+                
+                BOOL hasUnlinked = [self unlinkStore:self.persistentStore fromPSC:self.psc
+                                           errorInfo:@{@"FAILURE_POINT" : @"Unlinking PSC with Journal-Delete mode failed"}];
+                
+                if (hasUnlinked == NO) {
+                    [self.logger upload];
+                    return;
+                }
+                
+                //relink to WAL mode in the same session. [ WAL mode for everyone :) ]
+                self.persistentStore = [self linkPSC:self.psc URL:SQLiteURL mode:[self configWithJournalWALMode]
+                                           errorInfo:@{@"FAILURE_POINT" : @"Relinking PSC with Journal-WAL mode failed"}];
+                
+                if (self.persistentStore == nil) {
+                    [self.logger upload];
+                    return;
+                }else{
+                    //Just adding one log message at the end to figure we have reached the goal..
+                    logMsg(@"Handled core data migration failure successfully");
+                }
+                
+            }else{
+                logMsg(@"Journal-DELETE mode not helping much, so flushing out konotor SQLite files");
+                [self deleteKonotorSQLiteFiles:[self konotorSQLiteDirPath]];
+                [self.logger upload];
+                return;
+            }
+        }else{
+            logMsg(@"Core data errored out in normal launch");
+        }
+        
+        [self.logger upload];
+        
+    }else{
+        [self.logger reset];
     }
 }
 
--(void)setMainQueueContext{
-    if(!self.persistentStoreCoordinator){
-        return;
+
+-(BOOL)deleteKonotorSQLiteFiles:(NSString *)dirPath{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"Konotor.*" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSDirectoryEnumerator *filesEnumerator = [fileManager enumeratorAtPath:dirPath];
+    BOOL status = YES;
+    NSString *file;
+    while (file = [filesEnumerator nextObject]) {
+        NSUInteger match = [regex numberOfMatchesInString:file options:0 range:NSMakeRange(0, [file length])];
+        if (match) {
+            NSError *error;
+            NSString *filePath = [dirPath stringByAppendingPathComponent:file];
+            FDLog(@"Deleting file at URL :%@", filePath);
+            [fileManager removeItemAtPath:filePath error:&error];
+            if (!error) {
+                FDLog(@"Deleted %@",file);
+            }else{
+                FDLog(@"File: %@ could not be deleted %@",file, error);
+                status = NO;
+                break;
+            }
+        }
     }
-    self.mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    self.mainObjectContext.undoManager = nil;
-    self.mainObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
-    self.mainObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+    return status;
+}
+
+-(BOOL)unlinkStore:(NSPersistentStore *)store fromPSC:(NSPersistentStoreCoordinator *)psc errorInfo:(NSDictionary *)info{
+    NSError *error = nil;
+    
+    BOOL status = [psc removePersistentStore:store error:&error];
+    
+    if (status && error == nil) {
+        return YES;
+    }else{
+        if (info == nil) info = @{};
+        if (error == nil) error = [NSError errorWithDomain:@"PSC_ERROR" code:1 userInfo:@{ @"Reason" : @"PSC Could not be unlinked" }];
+        logInfo((@{@"Unlinking PSC from PC failed" : @[ @{@"error" : error}, @{@"Additional Info" : info} ] }));
+        return NO;
+    }
+}
+
+-(BOOL)isMigrationRequired:(NSPersistentStoreCoordinator *)store storeURL:(NSURL *)storeURL{
+    NSError *error = nil;
+    NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                                                                              URL:storeURL
+                                                                                            error:&error];
+    //At first launch, there won't be any store, so NO migration
+    if (sourceMetadata == nil) return NO;
+    
+    NSManagedObjectModel *destinationModel = [store managedObjectModel];
+    BOOL pscCompatible = [destinationModel isConfiguration:nil compatibleWithStoreMetadata:sourceMetadata];
+    return !pscCompatible;
 }
 
 -(NSManagedObjectContext *)backgroundContext{
-    if (!_backgroundContext) {
+    if ([self isReady] && _backgroundContext == nil) {
         _backgroundContext = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        _backgroundContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
+        _backgroundContext.persistentStoreCoordinator = self.psc;
         _backgroundContext.undoManager = nil;
     }
     return _backgroundContext;
+}
+
+-(void)prepareMainContext{
+    if ([self isReady]) {
+        self.mainObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        self.mainObjectContext.undoManager = nil;
+        self.mainObjectContext.persistentStoreCoordinator = self.psc;
+        self.mainObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+    }
 }
 
 - (BOOL)save {
@@ -174,40 +290,6 @@ NSString * const kDataManagerSQLiteName = @"Konotor.sqlite";
     
     return YES;
 }
-
-
-/* Execute fetch request on the background context (I/O)
-   fetch objects from updated PSC from main context (non I/O)
-   controllers can safely call this method without blocking UI.
-   returned managed objects are managed by the Main context.  */
-
--(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler{
-    NSManagedObjectContext *backgroundContext = self.backgroundContext;
-    NSManagedObjectContext *mainContext = self.mainObjectContext;
-    [backgroundContext performBlock:^{
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
-        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-        request.sortDescriptors = @[position];
-        NSArray *results =[[backgroundContext executeFetchRequest:request error:nil]valueForKey:@"objectID"];
-        NSMutableArray *fetchedSolutions = [NSMutableArray new];
-        [mainContext performBlock:^{
-            for (int i=0; i< results.count; i++) {
-                NSManagedObject *newSolution = [mainContext existingObjectWithID:results[i] error:nil];
-                [mainContext refreshObject:newSolution mergeChanges:YES];
-                
-                if (newSolution) {
-                    [fetchedSolutions addObject:newSolution];
-                }
-                
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(handler) handler(fetchedSolutions,nil);
-            });
-        }];
-    }];
-}
-
-
 
 - (void) fetchAllCategoriesForTags  :(NSArray*) categoriesIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler{
     NSManagedObjectContext *mainContext = self.mainObjectContext;

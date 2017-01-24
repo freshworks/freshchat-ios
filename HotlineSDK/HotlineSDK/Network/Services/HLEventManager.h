@@ -85,6 +85,7 @@
 @interface HLEventManager : NSObject
 
 + (instancetype) sharedInstance;
++ (NSString *)getUserSessionId;
 - (void) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock;
 - (void) startEventsUploadTimer;
 - (void) cancelEventsUploadTimer;

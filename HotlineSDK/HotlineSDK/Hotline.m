@@ -85,7 +85,7 @@
 }
 
 -(BOOL)checkPersistence {
-    if(![KonotorDataManager sharedInstance].persistentStoreCoordinator){
+    if(![[KonotorDataManager sharedInstance] isReady]){
         return false;
     }
     return true;
