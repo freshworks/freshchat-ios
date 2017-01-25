@@ -261,6 +261,17 @@ enum TagFilterType {
  */
 -(void)unreadCountWithCompletion:(void(^)(NSInteger count))completion;
 
+/**
+ *  Get the unread conversations count.
+ *
+ *  @discussion This method lets you asynchronously fetch the latest count of conversations that require the user's attention. It is updated with a 2 min interval.
+ *
+ *  @param tags Tags of channels for which unread count is required.
+ *  @param completion Completion block with count.
+ *
+ */
+-(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion;
+
 -(void)updateConversationBannerMessage:(NSString *)message;
 
 /**

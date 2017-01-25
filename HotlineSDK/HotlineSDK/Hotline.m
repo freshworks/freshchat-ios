@@ -670,13 +670,37 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-        if (completion) {
+    if (completion) {
+        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                 completion([self unreadCount]);
+                completion([self unreadCount]);
             });
-        }
-    }];
+        }];
+    }
+}
+
+-(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
+    __block int count=0;
+    if (completion) {
+        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
+            if(error) {
+                completion(count);
+                return;
+            }
+            else {
+                [[HLTagManager sharedInstance] getChannelsWithOptions:tags
+                                                            inContext:[KonotorDataManager sharedInstance].mainObjectContext
+                                                       withCompletion:^(NSArray<HLChannel *> * channels) {
+                                                           for(HLChannel *channel in channels){
+                                                               count += [channel unreadCount];
+                                                           }
+                                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                                               completion(count);
+                                                           });
+                                                       }];
+            }
+        }];
+    }
 }
 
 -(void) sendMessage:(HotlineMessage *)messageObject{

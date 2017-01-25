@@ -149,13 +149,7 @@ static BOOL messageExistsDirty = YES;
 
 +(NSInteger)getUnreadMessagesCountForChannel:(NSNumber *)channelID{
     HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
-    request.predicate = predicate;
-    NSArray *messages = [context executeFetchRequest:request error:nil];
-    NSInteger pendingCSATCount =  [KonotorConversation hasPendingCSAT:channel.primaryConversation] ? 1 : 0;
-    return messages.count + pendingCSATCount;
+    return [channel unreadCount];
 }
 
 +(void)markAllMessagesAsReadForChannel:(HLChannel *)channel{

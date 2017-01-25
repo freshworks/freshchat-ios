@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (KonotorConversation*) primaryConversation;
 - (BOOL) isActiveChannel;
 - (BOOL)hasAtleastATag:(NSArray *) tags;
+- (NSInteger)unreadCount;
 
 @end
 
