@@ -99,7 +99,8 @@
 }
 
 -(NSString *)normalizeCssContent{
-    return [[HLTheme sharedInstance] getCssFileContent:@"normalize"];
+    HLTheme *theme = [HLTheme sharedInstance];
+    return [theme getCssFileContent:[theme getArticleDetailCSSFileName]];
 }
 #pragma mark - Life cycle methods
 
