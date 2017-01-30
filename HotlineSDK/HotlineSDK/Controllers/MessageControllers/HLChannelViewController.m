@@ -10,7 +10,6 @@
 #import "HLMacros.h"
 #import "HLTheme.h"
 #import "FDLocalNotification.h"
-#import "FDChannelUpdater.h"
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "KonotorMessage.h"
@@ -31,6 +30,7 @@
 #import "HLControllerUtils.h"
 #import "HLEventManager.h"
 #import "HLLoadingViewBehaviour.h"
+#import "FDSecureStore.h"
 
 @interface HLChannelViewController () <HLLoadingViewBehaviourDelegate>
 
@@ -94,7 +94,6 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    [[[FDChannelUpdater alloc] init] resetTime];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -116,11 +115,11 @@
 
 -(void)fetchUpdates{
     [[KonotorDataManager sharedInstance]areChannelsEmpty:^(BOOL isEmpty) {
-        if(isEmpty){
-           [[[FDChannelUpdater alloc]init] resetTime];
-        }
+        enum MessageFetchType type = isEmpty ? FetchAll : ScreenLaunchFetch;
         ShowNetworkActivityIndicator();
-        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
+        [HLMessageServices fetchChannelsAndMessagesWithFetchType:type
+                                                          source:ChatScreen
+                                                      andHandler:^(NSError *error) {
            HideNetworkActivityIndicator();
         }];
     }];

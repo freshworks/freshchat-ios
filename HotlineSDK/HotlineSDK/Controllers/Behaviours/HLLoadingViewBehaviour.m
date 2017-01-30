@@ -10,7 +10,6 @@
 #import "HLLoadingViewBehaviour.h"
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
-#import "FDSolutionUpdater.h"
 #import "FDLocalNotification.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"

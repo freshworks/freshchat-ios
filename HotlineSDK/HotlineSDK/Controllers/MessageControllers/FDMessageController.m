@@ -40,6 +40,7 @@
 #import "HLTags.h"
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
+#import "HLMessagePoller.h"
 
 typedef struct {
     BOOL isLoading;
@@ -63,13 +64,14 @@ typedef struct {
 @property (nonatomic, strong) UIImage *sentImage;
 @property (nonatomic, strong) KonotorConversation *conversation;
 @property (nonatomic, strong) KonotorImageInput *imageInput;
-@property (nonatomic, strong) NSTimer *pollingTimer;
 @property (nonatomic, strong) NSString* currentRecordingMessageId;
 @property (nonatomic, strong) NSMutableDictionary* messageHeightMap;
 @property (nonatomic, strong) NSMutableDictionary* messageWidthMap;
 @property (nonatomic, assign) FDMessageControllerFlags flags;
 @property (strong, nonatomic) NSString *appAudioCategory;
 @property (nonatomic,strong) NSNumber *channelID;
+
+@property (nonatomic, strong) HLMessagePoller *messagesPoller;
 
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) NSInteger messageCount;
@@ -90,8 +92,8 @@ typedef struct {
 #define TABLE_VIEW_TOP_OFFSET 10
 #define CELL_HORIZONTAL_PADDING 4
 #define YES_NO_PROMPT_HEIGHT 80
-
-
+#define KONOTOR_REFRESHINDICATOR_TAG 80
+#define KONOTOR_MESSAGESPERPAGE 25
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -122,7 +124,7 @@ typedef struct {
             [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelID];
             [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
         }];
-        
+        self.messagesPoller = [[HLMessagePoller alloc] initWithPollType:OnscreenPollFetch];
         [Konotor setDelegate:self];
     }
     return self;
@@ -151,7 +153,7 @@ typedef struct {
     [self updateMessages];
     [self setNavigationItem];
     [self scrollTableViewToLastCell];
-    [HLMessageServices fetchChannelsAndMessages:nil];
+    [HLMessageServices fetchChannelsAndMessagesWithFetchType:ScreenLaunchFetch source:ChatScreen andHandler:nil];
     [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
     [self prepareInputToolbar];
 }
@@ -201,13 +203,13 @@ typedef struct {
             [self refreshView];
         }
     }];
-    [self startPoller];
+    [self.messagesPoller begin];
 }
 
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self cancelPoller];
+    [self.messagesPoller end];
     
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
@@ -254,25 +256,6 @@ typedef struct {
     if(self.audioMessageInputView.window)
         [self audioMessageInput:self.audioMessageInputView dismissButtonPressed:nil];
 
-}
-
--(void)startPoller{
-    if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:ON_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollMessages:)
-                                                           userInfo:nil repeats:YES];
-        FDLog(@"Starting Poller");
-    }
-}
-
--(void)cancelPoller{
-    if([self.pollingTimer isValid]){
-        [self.pollingTimer invalidate];
-        FDLog(@"Cancelled Poller");
-    }
-}
-
--(void)pollMessages:(NSTimer *)timer{
-    [HLMessageServices fetchChannelsAndMessages:nil];
 }
 
 -(void)setNavigationItem{
@@ -548,6 +531,7 @@ typedef struct {
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     }
     [self refreshView];
+    [self.messagesPoller reset];
 }
 
 -(void) channelsUpdated
@@ -574,11 +558,15 @@ typedef struct {
         }
         if(!isChannelValid){ // remove this channel from the view
             [self.parentViewController.navigationController popViewControllerAnimated:YES];
-            completion(isChannelValid);
+            if(completion) {
+                completion(isChannelValid);
+            }
         }
         else {
             // if channel count changed
-            completion(isChannelValid);
+            if(completion) {
+                completion(isChannelValid);
+            }
             if(hasTags){
                 [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
                     if(channels && channels.count  > 1 ){
@@ -697,11 +685,11 @@ typedef struct {
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
-    [self startPoller];
+    [self.messagesPoller begin];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
-    [self cancelPoller];
+    [self.messagesPoller end];
 }
 
 #pragma mark Keyboard delegate
@@ -817,6 +805,7 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
+        [self.messagesPoller reset];
     }
     [self processPendingCSAT];
 }

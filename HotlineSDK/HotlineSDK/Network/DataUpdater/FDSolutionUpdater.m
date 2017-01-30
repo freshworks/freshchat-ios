@@ -22,8 +22,8 @@
 -(id)init{
     self = [super init];
     if (self) {
-        self.intervalInSecs = SOLUTIONS_FETCH_INTERVAL;
-        self.intervalConfigKey = HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME;
+        [self useInterval:SOLUTIONS_FETCH_INTERVAL_DEFAULT];
+        [self useConfigKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }

@@ -1,4 +1,4 @@
-//
+    //
 //  HLCollectionView.m
 //  HotlineSDK
 //
@@ -15,7 +15,6 @@
 #import "FDRanking.h"
 #import "FDLocalNotification.h"
 #import "HLCategory.h"
-#import "FDSolutionUpdater.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"

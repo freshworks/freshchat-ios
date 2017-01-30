@@ -10,6 +10,14 @@
 #import "FDDataUpdaterWithInterval.h"
 #import "HLMacros.h"
 
+@interface FDDataUpdaterWithInterval()
+
+@property (nonatomic        ) int              intervalInSecs;
+@property (nonatomic,strong ) NSString         * intervalConfigKey;
+@property (strong, nonatomic) FDSecureStore    *secureStore;
+
+@end
+
 @implementation FDDataUpdaterWithInterval
 
 #pragma mark - Lazy Instantiations
@@ -22,6 +30,14 @@
     return self;
 }
 
+- (void) useInterval:(int) interval{
+    self.intervalInSecs = interval;
+}
+
+- (void) useConfigKey:(NSString *) configKey{
+    self.intervalConfigKey = configKey;
+}
+
 -(NSTimeInterval) lastFetchTime{
     return [[self.secureStore objectForKey:self.intervalConfigKey] doubleValue];
 }
@@ -31,7 +47,7 @@
     NSTimeInterval lastUpdatedTime = [self lastFetchTime];
     if (!lastUpdatedTime) return YES;
     NSTimeInterval currentTime = round([[NSDate date] timeIntervalSince1970]*1000);
-    if ((currentTime-lastUpdatedTime)>self.intervalInSecs * 1000) {
+    if ((currentTime-lastUpdatedTime)>=self.intervalInSecs * 1000) {
         return YES;
     }else{
         return NO;
@@ -69,7 +85,11 @@
 }
 
 - (void) resetTime{
-    [self.secureStore setObject:nil forKey:self.intervalConfigKey];
+    [self resetTimeTo:nil];
+}
+
+- (void) resetTimeTo:(NSNumber *) value {
+    [self.secureStore setObject:value forKey:self.intervalConfigKey];
 }
 
 @end

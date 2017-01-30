@@ -26,6 +26,15 @@
 @implementation HLFAQServices
 
 -(NSURLSessionDataTask *)fetchAllCategories:(void (^)(NSError *))completion{
+    static BOOL CATEGORIES_DOWNLOAD_IN_PROGRESS = NO;
+    if (CATEGORIES_DOWNLOAD_IN_PROGRESS) {
+        FDLog(@"download solution in progress, so skip");
+        if(completion){
+            completion(nil);
+        }
+        return nil;
+    }
+    CATEGORIES_DOWNLOAD_IN_PROGRESS = YES;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
@@ -54,12 +63,14 @@
                 if(completion){
                     completion(error);
                 }
+                CATEGORIES_DOWNLOAD_IN_PROGRESS = NO;
             }];
         }
         else {
             if(completion){
                 completion(error);
             }
+            CATEGORIES_DOWNLOAD_IN_PROGRESS = NO;
         }
     }];
     return task;

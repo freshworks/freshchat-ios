@@ -94,6 +94,7 @@
                                                                 repeats:YES];
             FDLog(@"Started events poller");
         });
+        [self processEventBatch];//process once on start
     }];
 }
 

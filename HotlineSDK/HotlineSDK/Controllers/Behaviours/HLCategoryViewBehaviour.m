@@ -19,6 +19,7 @@
 #import "HLEventManager.h"
 #import "HLSearchViewController.h"
 #import "HLControllerUtils.h"
+#import "HLConstants.h"
 
 @interface  HLCategoryViewBehaviour ()
 
@@ -84,6 +85,9 @@
     [[KonotorDataManager sharedInstance]areSolutionsEmpty:^(BOOL isEmpty) {
         if(isEmpty){
             [updater resetTime];
+        }
+        else {
+            [updater useInterval:SOLUTIONS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
         }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {

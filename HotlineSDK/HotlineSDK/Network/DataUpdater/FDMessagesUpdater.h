@@ -11,4 +11,6 @@
 
 @interface FDMessagesUpdater : FDDataUpdaterWithInterval
 
+@property (nonatomic) enum MessageRequestSource requestSource;
+
 @end

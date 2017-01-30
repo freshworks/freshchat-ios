@@ -54,7 +54,9 @@
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"tagName IN %@ AND taggableType IN %@",
                                             tags, tagTypes];
         NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
-        completion(matches);
+        if(completion) {
+            completion(matches);
+        }
     }];
 }
 
@@ -78,7 +80,9 @@
                                       articleIds, categoryIds];
             [fetchRequest setReturnsDistinctResults:YES];
             NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
-            completion(matches);
+            if(completion) {
+                completion(matches);
+            }
         }];
         
     }];
@@ -95,7 +99,9 @@
             NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             fetchRequest.sortDescriptors = @[position];
             NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
-            completion(matches);
+            if(completion) {
+                completion(matches);
+            }
         }];
     }];
 }
@@ -111,7 +117,9 @@
             NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             fetchRequest.sortDescriptors = @[position];
             NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
-            completion(matches);
+            if(completion) {
+                completion(matches);
+            }
         }];
     }];
 }

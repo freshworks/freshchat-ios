@@ -15,8 +15,6 @@
 #import "FDMessageController.h"
 #import "HLContainerController.h"
 #import "FDMemLogger.h"
-#import "FDChannelUpdater.h"
-#import "FDMessagesUpdater.h"
 #import "HLMessageServices.h"
 
 @interface HLNotificationHandler ()
@@ -46,8 +44,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
-
-            [[[FDMessagesUpdater alloc]init]resetTime];
             
             NSNumber *channelID = nil;
             
@@ -65,30 +61,34 @@
             
             HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
             
-            if (!channel){
-                [[[FDChannelUpdater alloc] init]resetTime];
-                [HLMessageServices fetchChannelsAndMessages:^(NSError *error){
-                    if(!error){
-                        NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-                        [mContext performBlock:^{
-                            @try {
-                                HLChannel *ch = [HLChannel getWithID:channelID inContext:mContext];
-                                if(ch){
-                                    [self handleNotification:ch withMessage:message andState:appState];
-                                }
+            enum MessageFetchType fetchType = channel ? FetchMessages : FetchAll;
+            
+            [HLMessageServices fetchChannelsAndMessagesWithFetchType:fetchType
+                                                              source:Notification
+                                                          andHandler:^(NSError *error){
+                if(!error){
+                    NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
+                    [mContext performBlock:^{
+                        @try {
+                            HLChannel *ch;
+                            if (!channel){
+                                ch = [HLChannel getWithID:channelID inContext:mContext];
                             }
-                            @catch(NSException *exception) {
-                                [FDMemLogger sendMessage:exception.description
-                                              fromMethod:NSStringFromSelector(_cmd)];
+                            else {
+                                ch = channel;
                             }
-                        }];
-                    }
-                }];
-            }
-            else {
-                [HLMessageServices fetchChannelsAndMessages:nil];
-                [self handleNotification:channel withMessage:message andState:appState];
-            }
+                            if(ch){
+                                [self handleNotification:ch withMessage:message andState:appState];
+                            }
+                        }
+                        @catch(NSException *exception) {
+                            [FDMemLogger sendMessage:exception.description
+                                          fromMethod:NSStringFromSelector(_cmd)];
+                        }
+                    }];
+                }
+            }];
+            
         }
         @catch(NSException *exception){
             [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];

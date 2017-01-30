@@ -19,7 +19,6 @@
 #import "Konotor.h"
 #import "HLCoreServices.h"
 #import "FDUtilities.h"
-#import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDDAUUpdater.h"
@@ -43,13 +42,14 @@
 #import "HLEventManager.h"
 #import "FDPlistManager.h"
 #import "FDMemLogger.h"
+#import "HLMessagePoller.h"
 
 @interface Hotline ()
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
-@property (nonatomic, strong) NSTimer *pollingTimer;
 @property (nonatomic, strong) HLNotificationHandler *notificationHandler;
+@property (nonatomic, strong) HLMessagePoller *messagePoller;
 
 @end
 
@@ -98,6 +98,7 @@
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
         [self registerAppNotificationListeners];
+        self.messagePoller = [[HLMessagePoller alloc] initWithPollType:OffScreenPollFetch];
     }
     return self;
 }
@@ -135,7 +136,7 @@
     config.domain = [self validateDomain: config.domain];
 
     if(config.pollWhenAppActive){
-        [self startPoller];
+        [self.messagePoller begin];
     }
 
     [self checkMediaPermissions:config];
@@ -321,14 +322,14 @@
 -(void)newSession:(NSNotification *)notification{
     if([FDUtilities hasInitConfig]) {
         if(self.config.pollWhenAppActive){
-            [self startPoller];
+            [self.messagePoller begin];
         }
         [FDUtilities initiatePendingTasks];
     }
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
-    [self cancelPoller];
+    [self.messagePoller end];
     [[HLEventManager sharedInstance] cancelEventsUploadTimer];
 }
 
@@ -345,7 +346,9 @@
                 [self updateAppVersion];
                 [self updateAdId];
                 [self updateSDKBuildNumber];
-                [HLMessageServices fetchChannelsAndMessages:nil];
+                [HLMessageServices fetchChannelsAndMessagesWithFetchType:InitFetch
+                                                                 source : Init
+                                                              andHandler:nil];
                 [HLCoreServices uploadUnuploadedProperties];
                 [KonotorMessage uploadAllUnuploadedMessages];
                 [HLMessageServices uploadUnuploadedCSAT];
@@ -393,7 +396,9 @@
     if(options.filteredType == CATEGORY){
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
-                completion(preferredViewController);
+                if(completion) {
+                    completion(preferredViewController);
+                }
             };
             [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];
             faqOptionsCompletion([self preferredCategoryController:options]);
@@ -402,7 +407,9 @@
         [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray <HLArticle *> *articles) {
             void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
                 [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
-            completion(preferredViewController);
+                if(completion) {
+                    completion(preferredViewController);
+                }
             };
             
             HLViewController *preferedController = nil;
@@ -465,7 +472,9 @@
     [[HLTagManager sharedInstance] getChannelsWithOptions:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
         void (^conversationOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
             [HLConversationUtil setConversationOptions:options andViewController:preferredViewController];
-            completion(preferredViewController);
+            if(completion) {
+                completion(preferredViewController);
+            }
         };
         HLViewController *preferedController = nil;
         if([channels count] < 1 ){
@@ -670,19 +679,23 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    if (completion) {
-        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion([self unreadCount]);
-            });
-        }];
-    }
+  if (completion) {
+    [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
+                                                      source:UnreadCount
+                                                  andHandler:^(NSError *error) {
+                                                      if(completion) {
+                                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                                    completion([self unreadCount]);
+                                                                });
+                                                          }
+                                                  }];
+  }
 }
 
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
     __block int count=0;
     if (completion) {
-        [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
+        [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
             if(error) {
                 completion(count);
                 return;
@@ -729,40 +742,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }];
 }
 
-- (NSString *)validateDomain:(NSString*)domain
-{
+- (NSString *)validateDomain:(NSString*)domain{
     return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
-}
-
-// Polling changes
-
--(void)startPoller{
-    if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
-                                                           userInfo:nil repeats:YES];
-        FDLog(@"Start off-screen message poller");
-    }
-}
-
--(void) pollNewMessages:(id)sender{
-    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
-    [mainContext performBlock:^{
-        if([KonotorMessage hasUserMessageInContext:mainContext]){
-            [HLMessageServices fetchChannelsAndMessages:nil];
-            FDLog(@"Triggering poller");
-        }
-        else {
-            FDLog(@"POLLER: Not fetching updates .. No user messages present");
-        }
-        
-    }];
-}
-
--(void)cancelPoller{
-    if([self.pollingTimer isValid]){
-        [self.pollingTimer invalidate];
-        FDLog(@"Cancel off-screen message poller");
-    }
 }
 
 -(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore{

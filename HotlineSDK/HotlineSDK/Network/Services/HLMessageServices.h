@@ -9,14 +9,38 @@
 #import <Foundation/Foundation.h>
 #import "HLChannel.h"
 
+enum MessageFetchType{
+    OffScreenPollFetch,
+    OnscreenPollFetch,
+    InitFetch,
+    ScreenLaunchFetch,
+    FetchAll,
+    FetchMessages,
+    DefaultFetch
+};
+
+enum MessageRequestSource {
+    Restore                     = 1,  // Not used
+    Init                        = 2,
+    ChannelList                 = 3,
+    ChatScreen                  = 4,
+    UnreadCount                 = 5,
+    Notification                = 6,
+    MissingConversation         = 7, // Not used
+    OnScreenPollWithToken       = 11,
+    OnScreenPollWithoutToken    = 12,
+    OffScreenPoll               = 13
+};
 
 @interface HLMessageServices : NSObject
 
-+(void)fetchChannelsAndMessages:(void (^)(NSError *))handler;
++(void)fetchChannelsAndMessagesWithFetchType:(enum MessageFetchType) priority
+                                     source :(enum MessageRequestSource ) requestSource
+                                  andHandler:(void (^)(NSError *))handler;
 
 +(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler;
 
-+(void)fetchMessages:(void(^)(NSError *error))handler;
++(void)fetchMessagesForSrc:(enum MessageRequestSource) requestSource andCompletion:(void(^)(NSError *error))handler;
 
 +(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 

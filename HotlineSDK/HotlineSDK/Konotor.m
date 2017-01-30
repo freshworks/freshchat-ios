@@ -12,10 +12,10 @@
 #import "KonotorAudioPlayer.h"
 #import "HLMacros.h"
 #import "HLMessageServices.h"
-#import "FDChannelUpdater.h"
-#import "FDSolutionUpdater.h"
 #import "FDUtilities.h"
 #import "HLEventManager.h"
+#import "FDSecureStore.h"
+
 
 @implementation Konotor
 

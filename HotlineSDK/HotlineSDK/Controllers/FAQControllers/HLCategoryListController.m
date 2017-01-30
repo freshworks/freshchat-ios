@@ -14,7 +14,6 @@
 #import "HLMacros.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
-#import "FDSolutionUpdater.h"
 #import "HLTheme.h"
 #import "HLSearchViewController.h"
 #import "Hotline.h"
