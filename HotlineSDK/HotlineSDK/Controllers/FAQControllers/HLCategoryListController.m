@@ -154,7 +154,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HLCategory *category =  self.categories[indexPath.row];
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
-    [HLFAQUtil setFAQOptions: self.faqOptions andViewController:articleController];
+    [HLFAQUtil setFAQOptions: self.faqOptions onController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
     NSString *eventCategoryID = [category.categoryID stringValue];
     NSString *eventCategoryName = category.title;

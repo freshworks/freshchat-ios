@@ -129,7 +129,7 @@
     HideNetworkActivityIndicator();
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     if(self.isFilteredView){
-        [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags
+        [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags
                                                     inContext:context
                                                withCompletion:^(NSArray<HLChannel *> *channels){
             

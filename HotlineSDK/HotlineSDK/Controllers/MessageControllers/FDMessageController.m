@@ -258,8 +258,10 @@ typedef struct {
 
 }
 
+//TODO: isModal value for embedded controller is wrong. Added (&& !self.embedded) as a quick fix - Arv
+// Update it in the next release
 -(void)setNavigationItem{
-    if(_flags.isModalPresentationPreferred){
+    if(_flags.isModalPresentationPreferred && !self.embedded){
         [HLControllerUtils configureCloseButton:self forTarget:self selector:@selector(closeButtonAction:) title:HLLocalizedString(LOC_MESSAGES_CLOSE_BUTTON_TEXT)];
     }else{
         if (!self.embedded) {
@@ -568,7 +570,7 @@ typedef struct {
                 completion(isChannelValid);
             }
             if(hasTags){
-                [[HLTagManager sharedInstance] getChannelsWithOptions:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
+                [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
                     if(channels && channels.count  > 1 ){
                         [self alterNavigationStack];
                     }

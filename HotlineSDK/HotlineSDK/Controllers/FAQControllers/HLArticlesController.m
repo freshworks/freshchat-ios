@@ -20,6 +20,7 @@
 #import "HLTagManager.h"
 #import "HLLocalization.h"
 #import "HLEventManager.h"
+#import "HLControllerUtils.h"
 
 @interface HLArticlesController ()
 
@@ -69,6 +70,17 @@
         if(self.category){
             parent.navigationItem.title = self.category.title;
         }
+        else{
+            parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+        }
+            
+    }
+}
+
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if(self.isFilteredView){
+        [HLControllerUtils configureGestureDelegate:nil forController:self withEmbedded:true];
     }
 }
 
@@ -135,7 +147,7 @@
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
     }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
+    [HLFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self presentViewController:navController animated:NO completion:nil];

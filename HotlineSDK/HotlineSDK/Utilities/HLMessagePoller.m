@@ -77,7 +77,7 @@
     [mainContext performBlock:^{
         if([KonotorMessage hasUserMessageInContext:mainContext]){
             if([KonotorMessage daysSinceLastMessageInContext:mainContext] <= MAX_DAYS_SINCE_LAST_MESSAGE_FOR_POLL) {
-                [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %lld"
+                [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
                               ,[KonotorMessage daysSinceLastMessageInContext:mainContext]]];
                 enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?
                         ([HLNotificationHandler areNotificationsEnabled]?OnScreenPollWithToken:OnScreenPollWithoutToken)

@@ -247,7 +247,7 @@
     if (indexPath.row < self.categories.count) {
         HLCategory *category = self.categories[indexPath.row];
         HLArticlesController *articleController = [[HLArticlesController alloc] initWithCategory:category];
-        [HLFAQUtil setFAQOptions:self.faqOptions andViewController:articleController];
+        [HLFAQUtil setFAQOptions:self.faqOptions onController:articleController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
         NSString *eventCategoryTitle = category.title;
         NSString *eventCategoryId = [category.categoryID stringValue];

@@ -32,16 +32,14 @@
 #import "HLTagManager.h"
 #import "HLArticlesController.h"
 #import "HLArticleDetailViewController.h"
-#import "HLFAQUtil.h"
-#import "HLConversationUtil.h"
-#import "FAQOptionsInterface.h"
-#import "ConversationOptionsInterface.h"
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
 #import "HLEventManager.h"
 #import "FDPlistManager.h"
 #import "FDMemLogger.h"
+#import "HLInterstitialViewController.h"
+#import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
 
 @interface Hotline ()
@@ -56,6 +54,10 @@
 @interface HotlineUser ()
 
 -(void)clearUserData;
+
+@end
+
+@implementation HotlineOptions
 
 @end
 
@@ -279,7 +281,6 @@
 
 
 -(void)updateUserProperties:(NSDictionary*)props{
-    
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         NSDictionary *filteredProps = [FDUtilities filterValidUserPropEntries:props];
         if(filteredProps){
@@ -370,171 +371,38 @@
     }
 }
 
--(HLViewController *)getPreferredCategoryController{
-    return [self preferredCategoryController:[FAQOptions new]];
-}
-
--(HLViewController *) preferredCategoryController:(FAQOptions *)options {
-    HLViewController *preferedController = nil;
-    if (options.showFaqCategoriesAsGrid) {
-        preferedController = [[HLCategoryGridViewController alloc]init];
-    }else{
-        preferedController = [[HLCategoryListController alloc]init];
-    }
-    return preferedController;
-}
-
--(HLViewController *) preferredConversationController:(ConversationOptions *)options {
-    HLViewController *preferedController = nil;
-    
-    preferedController = [[HLChannelViewController alloc]init];
-    
-    return preferedController;
-}
-
--(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    if(options.filteredType == CATEGORY){
-            void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-                [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
-                if(completion) {
-                    completion(preferredViewController);
-                }
-            };
-            [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];
-            faqOptionsCompletion([self preferredCategoryController:options]);
-    }
-    else if(options.filteredType == ARTICLE){
-        [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray <HLArticle *> *articles) {
-            void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-                [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
-                if(completion) {
-                    completion(preferredViewController);
-                }
-            };
-            
-            HLViewController *preferedController = nil;
-            if([articles count] > 1 ){
-                preferedController = [[HLArticlesController alloc]init];
-                faqOptionsCompletion(preferedController);
-            } else if([articles count] == 1 ) {
-                NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-                [mContext performBlock:^{
-                    HLViewController *preferedController = nil;
-                    HLArticle *article = [HLArticle getWithID:[[articles firstObject] articleID] inContext:mContext];
-                    if(article){
-                        preferedController = [HLFAQUtil getArticleDetailController:article];
-                    }
-                    else {
-                        preferedController = [self preferredCategoryController:options];
-                    }
-                    faqOptionsCompletion(preferedController);
-                }];
-            } else {
-                [options filterByTags:@[] withTitle:@"" andType:0];// No Matching tags so no need to pass it around
-                preferedController = [self preferredCategoryController:options];
-                faqOptionsCompletion(preferedController);
-            }
-        }];
-    }
-}
+#pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
-    HLViewController *preferredController = [self getPreferredCategoryController];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-    [controller presentViewController:navigationController animated:YES completion:nil];
-}
-
--(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
-    
-     [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
-         HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-         UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-         [controller presentViewController:navigationController animated:YES completion:nil];
-    }];
-}
-
-- (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
-    if(options.tags.count > 0){
-        [self selectConversationController:options withCompletion:^(HLViewController *preferredController) {
-        HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-        UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-        [controller presentViewController:navigationController animated:YES completion:nil];
-        }];
-    }
-    else{
-        [self showConversations:controller];
-    }
-}
-
--(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    
-    [[HLTagManager sharedInstance] getChannelsWithOptions:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
-        void (^conversationOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-            [HLConversationUtil setConversationOptions:options andViewController:preferredViewController];
-            if(completion) {
-                completion(preferredViewController);
-            }
-        };
-        HLViewController *preferedController = nil;
-        if([channels count] < 1 ){
-            HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
-            preferedController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
-                                                                                             andPresentModally:YES];
-        }
-        else if (channels.count == 1) {
-            preferedController = [[FDMessageController alloc]initWithChannelID:[channels firstObject].channelID
-                                                                                 andPresentModally:YES];
-        }
-        else{
-            preferedController = [self preferredConversationController:options];
-        }
-        conversationOptionsCompletion(preferedController);
-    }];
+    [self showFAQs:controller withOptions:[FAQOptions new]];
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
-        if (!error) {
-            HLContainerController *preferredController = nil;
-            if (channelInfos.count == 1) {
-                HLChannelInfo *channelInfo = [channelInfos firstObject];
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
-                                                                                   andPresentModally:YES];
-                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
-            }else{
-                HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
-            }
-            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
-            [controller presentViewController:navigationController animated:YES completion:nil];
-        }
-    }];
+    [self showConversations:controller withOptions:[ConversationOptions new]];
 }
 
--(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
-    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:YES];
-    return preferredController;
+-(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    [HLControllerUtils presentOn:controller option:options];
+}
+
+- (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
+    [HLControllerUtils presentOn:controller option:options];
 }
 
 -(UIViewController*) getFAQsControllerForEmbed{
-    return [self getControllerForEmbed:[self preferredCategoryController:[FAQOptions new]]];
+    return [self getFAQsControllerForEmbedWithOptions:[FAQOptions new]];
 }
 
 -(UIViewController*) getConversationsControllerForEmbed{
-    HLViewController *controller;
-    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
-    NSArray *results = [context executeFetchRequest:request error:nil];
-    if (results.count == 1){
-        HLChannelInfo *channelInfo = [results firstObject];
-        controller = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:NO];
-    }else{
-        controller = [[HLChannelViewController alloc]init];
-    }
+    return [self getConversationsControllerForEmbedWithOptions:[ConversationOptions new]];
+}
 
-    return [self getControllerForEmbed:controller];
+-(UIViewController*) getConversationsControllerForEmbedWithOptions:(ConversationOptions *) convOptions{
+    return [HLControllerUtils getEmbedded:convOptions];
+}
+
+-(UIViewController*) getFAQsControllerForEmbedWithOptions:(FAQOptions *) faqOptions{
+    return [HLControllerUtils getEmbedded:faqOptions];
 }
 
 #pragma mark Push notifications
@@ -683,11 +551,11 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
                                                       source:UnreadCount
                                                   andHandler:^(NSError *error) {
-                                                      if(completion) {
-                                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                                    completion([self unreadCount]);
-                                                                });
-                                                          }
+                                                    if(completion) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          completion([self unreadCount]);
+                                                          });
+                                                    }
                                                   }];
   }
 }
@@ -701,16 +569,16 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 return;
             }
             else {
-                [[HLTagManager sharedInstance] getChannelsWithOptions:tags
-                                                            inContext:[KonotorDataManager sharedInstance].mainObjectContext
-                                                       withCompletion:^(NSArray<HLChannel *> * channels) {
-                                                           for(HLChannel *channel in channels){
-                                                               count += [channel unreadCount];
-                                                           }
-                                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                                               completion(count);
-                                                           });
-                                                       }];
+                [[HLTagManager sharedInstance] getChannelsForTags:tags
+                                                        inContext:[KonotorDataManager sharedInstance].mainObjectContext
+                                                   withCompletion:^(NSArray<HLChannel *> * channels) {
+                                                       for(HLChannel *channel in channels){
+                                                           count += [channel unreadCount];
+                                                       }
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           completion(count);
+                                                       });
+                                                   }];
             }
         }];
     }
@@ -722,7 +590,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsWithOptions:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
+        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
             HLChannel *channel;
             if(channels.count >=1){
                 channel = [channels firstObject];  // 1 will have the match , if more than one. it is ordered by pos

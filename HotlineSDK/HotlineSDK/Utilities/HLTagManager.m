@@ -106,9 +106,9 @@
     }];
 }
 
-- (void) getChannelsWithOptions : (NSArray *)tags
-                      inContext : (NSManagedObjectContext *) context
-                  withCompletion:(void (^)(NSArray<HLChannel *> *))completion {
+- (void) getChannelsForTags : (NSArray *)tags
+                  inContext : (NSManagedObjectContext *) context
+              withCompletion:(void (^)(NSArray<HLChannel *> *))completion {
     [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeChannel)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags) {
         NSArray* channelIds = [matchingTags valueForKey:@"taggableID"];
         [context performBlock:^{

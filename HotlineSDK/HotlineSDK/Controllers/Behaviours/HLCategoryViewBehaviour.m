@@ -127,7 +127,7 @@
         [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
     }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
-    [HLFAQUtil setFAQOptions:self.faqOptions andViewController:searchViewController];
+    [HLFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
     [self.categoryViewDelegate.navigationController presentViewController:navController animated:NO completion:nil];
@@ -162,7 +162,7 @@
     if(!self.isFilteredView || self.isFallback ){
         [rightBarItems addObject:searchBarButton];
     }
-    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions]){
+    if([HLFAQUtil hasFilteredViewTitle:self.faqOptions] && [HLFAQUtil hasTags:self.faqOptions] && !self.isFallback){
         self.categoryViewDelegate.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){

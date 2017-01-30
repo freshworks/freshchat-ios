@@ -34,7 +34,7 @@
     dispatch_async(dispatch_get_main_queue(),^{
         [self addFaqOpenArticleEvent:article andSource:source];
         HLArticleDetailViewController *articleDetailController = [self getArticleDetailController:article];
-        [HLFAQUtil setFAQOptions:faqOptions andViewController:articleDetailController];
+        [HLFAQUtil setFAQOptions:faqOptions onController:articleDetailController];
         HLContainerController *container = [[HLContainerController alloc]initWithController:articleDetailController andEmbed:NO];
         [controller pushViewController:container animated:YES];
     });
@@ -64,10 +64,10 @@
     return articleDetailController;
 }
 
-+(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController{
-    if ([viewController conformsToProtocol:@protocol(FAQOptionsInterface)]){
++(void)setFAQOptions:(FAQOptions*) options onController:(HLViewController *)controller{
+    if ([controller conformsToProtocol:@protocol(FAQOptionsInterface)]){
         HLViewController <FAQOptionsInterface> *vc
-        = (HLViewController <FAQOptionsInterface> *) viewController;
+        = (HLViewController <FAQOptionsInterface> *) controller;
         [vc setFAQOptions:options];
     }
 }
