@@ -79,6 +79,10 @@
     });
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.loadingViewBehaviour unload];
+}
+
 -(void)prepareController{
     if([self.options isKindOfClass:[FAQOptions class]]){
         [self handleFAQs:self withOptions:(FAQOptions *)self.options andEmbed:self.isEmbedView];
@@ -211,6 +215,7 @@
     NSMutableArray<UIViewController *> *viewControllers = [self.navigationController.viewControllers mutableCopy];
     [viewControllers removeObject:self];
     [viewControllers addObject:controller];
+    [self.loadingViewBehaviour unload];
     [self.navigationController setViewControllers:viewControllers animated:NO];
 }
 
