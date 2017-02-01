@@ -357,6 +357,7 @@
             [[[FDSolutionUpdater alloc]init] fetch];
             [self markPreviousUserUninstalledIfPresent];
             [[HLEventManager sharedInstance] startEventsUploadTimer];
+            [[HLEventManager sharedInstance] upload]; // trigger upload for any pending events
         });
     }
 }

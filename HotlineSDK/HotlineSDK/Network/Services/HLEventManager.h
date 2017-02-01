@@ -90,5 +90,6 @@
 - (void) startEventsUploadTimer;
 - (void) cancelEventsUploadTimer;
 - (void) reset;
+- (void) upload;
 
 @end

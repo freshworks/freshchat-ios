@@ -12,9 +12,10 @@
 
 @interface FDDataUpdaterWithInterval()
 
-@property (nonatomic        ) int              intervalInSecs;
-@property (nonatomic,strong ) NSString         * intervalConfigKey;
-@property (strong, nonatomic) FDSecureStore    *secureStore;
+@property (nonatomic        ) NSTimeInterval    intervalInSecs;
+@property (nonatomic,strong ) NSString          *intervalConfigKey;
+@property (strong, nonatomic) FDSecureStore     *secureStore;
+@property (nonatomic)         NSTimeInterval    currentPollRequestTime;
 
 @end
 
@@ -42,20 +43,21 @@
     return [[self.secureStore objectForKey:self.intervalConfigKey] doubleValue];
 }
 
-//TODO: when migrating mobihelp -> hotline, clear intervalconfigkey from secure store
 -(BOOL)hasTimedOut{
     NSTimeInterval lastUpdatedTime = [self lastFetchTime];
+    //Record the time at which the poller/update was requested
+    self.currentPollRequestTime = ceil(([[NSDate date] timeIntervalSince1970]) * 1000);
     if (!lastUpdatedTime) return YES;
-    NSTimeInterval currentTime = round([[NSDate date] timeIntervalSince1970]*1000);
-    if ((currentTime-lastUpdatedTime)>=self.intervalInSecs * 1000) {
+    
+    FDLog(@"diff [%f] interval[%f]", (self.currentPollRequestTime-lastUpdatedTime) , self.intervalInSecs * 1000);
+    if (ceil(self.currentPollRequestTime-lastUpdatedTime+1000)>=self.intervalInSecs * 1000) { // allow for a 1 second swing - 1000
         return YES;
     }else{
         return NO;
     }
 }
 
-- (void) noUpdate
-{
+- (void) noUpdate{
     // Hook for no update functionality
 }
 
@@ -63,7 +65,10 @@
     if([self hasTimedOut]){
         [self doFetch:^(NSError * error) {
             if(!error){
-                NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:round([[NSDate date] timeIntervalSince1970]*1000)];
+                // On slow network , the fetch can take about 3-4 secs.
+                // use the time when the fetch started ( self.currentTime) instead of the completion time to avoid the time drift
+                NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:self.currentPollRequestTime];
+                
                 [self.secureStore setObject:lastUpdatedTime forKey:self.intervalConfigKey];
                 FDLog("%@ Completed Update", [[self class] debugDescription]);
             }
