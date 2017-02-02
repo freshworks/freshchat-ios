@@ -162,8 +162,10 @@
     if(self.isFilteredView){
         [[HLTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
             if([articleIds count] == 1){
-                UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-                self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+                if(!self.embedded){
+                    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+                    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+                }
             }
             else {
                 [self configureBackButton];

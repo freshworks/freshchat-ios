@@ -117,8 +117,10 @@
                  [matchingArticles sortUsingDescriptors:@[categorySorter, articleSorter]];
                  
                  self.articles = matchingArticles;
-                  UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-                 self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+                 if(!self.embedded){
+                     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+                     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+                 }
                  [self.tableView reloadData];
              }];
          }];
