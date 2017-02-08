@@ -146,6 +146,16 @@
     return channel;
 }
 
+//assumes this method is called from whichever thread invokes this.
+-(NSInteger)unreadCount{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
+    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",self];
+    request.predicate = predicate;
+    NSArray *messages = [self.managedObjectContext executeFetchRequest:request error:nil];
+    NSInteger pendingCSATCount =  [self.primaryConversation isCSATResponsePending] ? 1 : 0;
+    return messages.count + pendingCSATCount;
+}
+
 @end
 
 

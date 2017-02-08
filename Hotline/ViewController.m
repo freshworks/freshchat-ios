@@ -203,7 +203,7 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance] showFAQs:self];
+    [[Hotline sharedInstance] showConversations:self];
 }
 
 - (IBAction)articleFilter1:(id)sender{

@@ -172,7 +172,11 @@ static float EXTRA_HEIGHT_WITH_SENDER_NAME =KONOTOR_VERTICAL_PADDING+16 + KONOTO
 }
 
 -(void)tappedOnPicture:(id)gesture{
-    [self.delegate messageCell:self pictureTapped:self.messagePictureImageView.image];
+    UIImage *image=[UIImage imageWithData:[self.messageData picData]];
+    if(!image) {
+        image = [[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER];
+    }
+    [self.delegate messageCell:self pictureTapped:image];
 }
 
 +(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID{

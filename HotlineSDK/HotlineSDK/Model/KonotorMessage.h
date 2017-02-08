@@ -91,6 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(BOOL) isMarketingMessage;
 +(NSArray *)getAllMesssageForChannel:(HLChannel *)channel;
 +(bool) hasUserMessageInContext:(NSManagedObjectContext *)context;
++(long long) lastMessageTimeInContext:(NSManagedObjectContext *)context;
++(long) daysSinceLastMessageInContext:(NSManagedObjectContext *)context;
 
 @end
 

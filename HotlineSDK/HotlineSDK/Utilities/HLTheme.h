@@ -180,6 +180,9 @@
 - (UIEdgeInsets) getAgentBubbleInsets;
 - (UIEdgeInsets) getUserBubbleInsets;
 
+//Article detail theme name
+-(NSString *)getArticleDetailCSSFileName;
+
 //Voice Recording Prompt
 -(UIFont *)voiceRecordingTimeLabelFont;
 

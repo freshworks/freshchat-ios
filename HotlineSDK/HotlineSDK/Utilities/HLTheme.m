@@ -459,6 +459,14 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
+-(NSString *)getArticleDetailCSSFileName{
+    NSString *filename = [self.themePreferences valueForKeyPath:@"OverallSettings.ArticleDetailCSSFileName"];
+    if (!filename) {
+        filename = FD_DEFAULT_ARTICLE_DETAIL_CSS_FILENAME;
+    }
+    return filename;
+}
+
 -(UIColor *)inputTextFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];

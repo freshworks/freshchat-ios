@@ -17,8 +17,8 @@
 -(id)init{
     self = [super init];
     if (self) {
-        self.intervalInSecs = CHANNELS_FETCH_INTERVAL;
-        self.intervalConfigKey = HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME;
+        [self useInterval:CHANNELS_FETCH_INTERVAL_DEFAULT];
+        [self useConfigKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }

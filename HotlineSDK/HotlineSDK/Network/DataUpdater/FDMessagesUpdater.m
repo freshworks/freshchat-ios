@@ -19,18 +19,20 @@
 -(id)init{
     self = [super init];
     if (self) {
-        self.intervalInSecs = MESSAGES_FETCH_INTERVAL;
-        self.intervalConfigKey = HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME;
+        [self useInterval:MESSAGES_FETCH_INTERVAL_DEFAULT];
+        [self useConfigKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLMessageServices fetchMessages:completion];
+    [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
 }
 
 - (void) resetTime{
-    [self.secureStore setObject:@(1) forKey:self.intervalConfigKey]; //TODO: Hacky .. We need to do a better way - Rex
+    // This is set to 1 to not trigger the restore case. #damn
+    //TODO: Hacky .. We need to do a better way - Rex
+    [self resetTimeTo:@(1)];
 }
 
 @end

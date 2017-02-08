@@ -19,7 +19,6 @@
 #import "Konotor.h"
 #import "HLCoreServices.h"
 #import "FDUtilities.h"
-#import "FDChannelUpdater.h"
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDDAUUpdater.h"
@@ -33,29 +32,32 @@
 #import "HLTagManager.h"
 #import "HLArticlesController.h"
 #import "HLArticleDetailViewController.h"
-#import "HLFAQUtil.h"
-#import "HLConversationUtil.h"
-#import "FAQOptionsInterface.h"
-#import "ConversationOptionsInterface.h"
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
 #import "HLEventManager.h"
 #import "FDPlistManager.h"
 #import "FDMemLogger.h"
+#import "HLInterstitialViewController.h"
+#import "HLControllerUtils.h"
+#import "HLMessagePoller.h"
 
 @interface Hotline ()
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
-@property (nonatomic, strong) NSTimer *pollingTimer;
 @property (nonatomic, strong) HLNotificationHandler *notificationHandler;
+@property (nonatomic, strong) HLMessagePoller *messagePoller;
 
 @end
 
 @interface HotlineUser ()
 
 -(void)clearUserData;
+
+@end
+
+@implementation HotlineOptions
 
 @end
 
@@ -85,7 +87,7 @@
 }
 
 -(BOOL)checkPersistence {
-    if(![KonotorDataManager sharedInstance].persistentStoreCoordinator){
+    if(![[KonotorDataManager sharedInstance] isReady]){
         return false;
     }
     return true;
@@ -98,6 +100,7 @@
         [KonotorMessageBinary load];
         [[FDReachabilityManager sharedInstance] start];
         [self registerAppNotificationListeners];
+        self.messagePoller = [[HLMessagePoller alloc] initWithPollType:OffScreenPollFetch];
     }
     return self;
 }
@@ -135,7 +138,7 @@
     config.domain = [self validateDomain: config.domain];
 
     if(config.pollWhenAppActive){
-        [self startPoller];
+        [self.messagePoller begin];
     }
 
     [self checkMediaPermissions:config];
@@ -278,7 +281,6 @@
 
 
 -(void)updateUserProperties:(NSDictionary*)props{
-    
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         NSDictionary *filteredProps = [FDUtilities filterValidUserPropEntries:props];
         if(filteredProps){
@@ -321,14 +323,14 @@
 -(void)newSession:(NSNotification *)notification{
     if([FDUtilities hasInitConfig]) {
         if(self.config.pollWhenAppActive){
-            [self startPoller];
+            [self.messagePoller begin];
         }
         [FDUtilities initiatePendingTasks];
     }
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
-    [self cancelPoller];
+    [self.messagePoller end];
     [[HLEventManager sharedInstance] cancelEventsUploadTimer];
 }
 
@@ -345,7 +347,9 @@
                 [self updateAppVersion];
                 [self updateAdId];
                 [self updateSDKBuildNumber];
-                [HLMessageServices fetchChannelsAndMessages:nil];
+                [HLMessageServices fetchChannelsAndMessagesWithFetchType:InitFetch
+                                                                 source : Init
+                                                              andHandler:nil];
                 [HLCoreServices uploadUnuploadedProperties];
                 [KonotorMessage uploadAllUnuploadedMessages];
                 [HLMessageServices uploadUnuploadedCSAT];
@@ -353,6 +357,7 @@
             [[[FDSolutionUpdater alloc]init] fetch];
             [self markPreviousUserUninstalledIfPresent];
             [[HLEventManager sharedInstance] startEventsUploadTimer];
+            [[HLEventManager sharedInstance] upload]; // trigger upload for any pending events
         });
     }
 }
@@ -367,165 +372,38 @@
     }
 }
 
--(HLViewController *)getPreferredCategoryController{
-    return [self preferredCategoryController:[FAQOptions new]];
-}
-
--(HLViewController *) preferredCategoryController:(FAQOptions *)options {
-    HLViewController *preferedController = nil;
-    if (options.showFaqCategoriesAsGrid) {
-        preferedController = [[HLCategoryGridViewController alloc]init];
-    }else{
-        preferedController = [[HLCategoryListController alloc]init];
-    }
-    return preferedController;
-}
-
--(HLViewController *) preferredConversationController:(ConversationOptions *)options {
-    HLViewController *preferedController = nil;
-    
-    preferedController = [[HLChannelViewController alloc]init];
-    
-    return preferedController;
-}
-
--(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    if(options.filteredType == CATEGORY){
-            void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-                [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
-                completion(preferredViewController);
-            };
-            [options filterByTags:options.tags withTitle:options.filteredViewTitle andType:options.filteredType];
-            faqOptionsCompletion([self preferredCategoryController:options]);
-    }
-    else if(options.filteredType == ARTICLE){
-        [[HLTagManager sharedInstance] getArticlesForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray <HLArticle *> *articles) {
-            void (^faqOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-                [HLFAQUtil setFAQOptions:options andViewController:preferredViewController];
-            completion(preferredViewController);
-            };
-            
-            HLViewController *preferedController = nil;
-            if([articles count] > 1 ){
-                preferedController = [[HLArticlesController alloc]init];
-                faqOptionsCompletion(preferedController);
-            } else if([articles count] == 1 ) {
-                NSManagedObjectContext *mContext = [KonotorDataManager sharedInstance].mainObjectContext;
-                [mContext performBlock:^{
-                    HLViewController *preferedController = nil;
-                    HLArticle *article = [HLArticle getWithID:[[articles firstObject] articleID] inContext:mContext];
-                    if(article){
-                        preferedController = [HLFAQUtil getArticleDetailController:article];
-                    }
-                    else {
-                        preferedController = [self preferredCategoryController:options];
-                    }
-                    faqOptionsCompletion(preferedController);
-                }];
-            } else {
-                [options filterByTags:@[] withTitle:@"" andType:0];// No Matching tags so no need to pass it around
-                preferedController = [self preferredCategoryController:options];
-                faqOptionsCompletion(preferedController);
-            }
-        }];
-    }
-}
+#pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
-    HLViewController *preferredController = [self getPreferredCategoryController];
-    HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-    [controller presentViewController:navigationController animated:YES completion:nil];
-}
-
--(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
-    
-     [self selectFAQController:options withCompletion:^(HLViewController *preferredController) {
-         HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-         UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-         [controller presentViewController:navigationController animated:YES completion:nil];
-    }];
-}
-
-- (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
-    if(options.tags.count > 0){
-        [self selectConversationController:options withCompletion:^(HLViewController *preferredController) {
-        HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:NO];
-        UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
-        [controller presentViewController:navigationController animated:YES completion:nil];
-        }];
-    }
-    else{
-        [self showConversations:controller];
-    }
-}
-
--(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    
-    [[HLTagManager sharedInstance] getChannelsWithOptions:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
-        void (^conversationOptionsCompletion)(HLViewController *) = ^(HLViewController * preferredViewController){
-            [HLConversationUtil setConversationOptions:options andViewController:preferredViewController];
-            completion(preferredViewController);
-        };
-        HLViewController *preferedController = nil;
-        if([channels count] < 1 ){
-            HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
-            preferedController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
-                                                                                             andPresentModally:YES];
-        }
-        else if (channels.count == 1) {
-            preferedController = [[FDMessageController alloc]initWithChannelID:[channels firstObject].channelID
-                                                                                 andPresentModally:YES];
-        }
-        else{
-            preferedController = [self preferredConversationController:options];
-        }
-        conversationOptionsCompletion(preferedController);
-    }];
+    [self showFAQs:controller withOptions:[FAQOptions new]];
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
-        if (!error) {
-            HLContainerController *preferredController = nil;
-            if (channelInfos.count == 1) {
-                HLChannelInfo *channelInfo = [channelInfos firstObject];
-                FDMessageController *messageController = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID
-                                                                                   andPresentModally:YES];
-                preferredController = [[HLContainerController alloc]initWithController:messageController andEmbed:NO];
-            }else{
-                HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
-                preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:NO];
-            }
-            UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:preferredController];
-            [controller presentViewController:navigationController animated:YES completion:nil];
-        }
-    }];
+    [self showConversations:controller withOptions:[ConversationOptions new]];
 }
 
--(UIViewController *)getControllerForEmbed:(HLViewController*)controller{
-    HLContainerController *preferredController =[[HLContainerController alloc]initWithController:controller andEmbed:YES];
-    return preferredController;
+-(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    [HLControllerUtils presentOn:controller option:options];
+}
+
+- (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
+    [HLControllerUtils presentOn:controller option:options];
 }
 
 -(UIViewController*) getFAQsControllerForEmbed{
-    return [self getControllerForEmbed:[self preferredCategoryController:[FAQOptions new]]];
+    return [self getFAQsControllerForEmbedWithOptions:[FAQOptions new]];
 }
 
 -(UIViewController*) getConversationsControllerForEmbed{
-    HLViewController *controller;
-    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    request.predicate = [NSPredicate predicateWithFormat:@"isHidden == NO"];
-    NSArray *results = [context executeFetchRequest:request error:nil];
-    if (results.count == 1){
-        HLChannelInfo *channelInfo = [results firstObject];
-        controller = [[FDMessageController alloc]initWithChannelID:channelInfo.channelID andPresentModally:NO];
-    }else{
-        controller = [[HLChannelViewController alloc]init];
-    }
+    return [self getConversationsControllerForEmbedWithOptions:[ConversationOptions new]];
+}
 
-    return [self getControllerForEmbed:controller];
+-(UIViewController*) getConversationsControllerForEmbedWithOptions:(ConversationOptions *) convOptions{
+    return [HLControllerUtils getEmbedded:convOptions];
+}
+
+-(UIViewController*) getFAQsControllerForEmbedWithOptions:(FAQOptions *) faqOptions{
+    return [HLControllerUtils getEmbedded:faqOptions];
 }
 
 #pragma mark Push notifications
@@ -670,13 +548,41 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    [HLMessageServices fetchChannelsAndMessages:^(NSError *error) {
-        if (completion) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                 completion([self unreadCount]);
-            });
-        }
-    }];
+  if (completion) {
+    [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
+                                                      source:UnreadCount
+                                                  andHandler:^(NSError *error) {
+                                                    if(completion) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          completion([self unreadCount]);
+                                                          });
+                                                    }
+                                                  }];
+  }
+}
+
+-(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
+    __block int count=0;
+    if (completion) {
+        [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
+            if(error) {
+                completion(count);
+                return;
+            }
+            else {
+                [[HLTagManager sharedInstance] getChannelsForTags:tags
+                                                        inContext:[KonotorDataManager sharedInstance].mainObjectContext
+                                                   withCompletion:^(NSArray<HLChannel *> * channels) {
+                                                       for(HLChannel *channel in channels){
+                                                           count += [channel unreadCount];
+                                                       }
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           completion(count);
+                                                       });
+                                                   }];
+            }
+        }];
+    }
 }
 
 -(void) sendMessage:(HotlineMessage *)messageObject{
@@ -685,7 +591,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsWithOptions:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
+        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
             HLChannel *channel;
             if(channels.count >=1){
                 channel = [channels firstObject];  // 1 will have the match , if more than one. it is ordered by pos
@@ -705,40 +611,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }];
 }
 
-- (NSString *)validateDomain:(NSString*)domain
-{
+- (NSString *)validateDomain:(NSString*)domain{
     return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
-}
-
-// Polling changes
-
--(void)startPoller{
-    if(![self.pollingTimer isValid]){
-        self.pollingTimer = [NSTimer scheduledTimerWithTimeInterval:OFF_CHAT_SCREEN_POLL_INTERVAL target:self selector:@selector(pollNewMessages:)
-                                                           userInfo:nil repeats:YES];
-        FDLog(@"Start off-screen message poller");
-    }
-}
-
--(void) pollNewMessages:(id)sender{
-    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
-    [mainContext performBlock:^{
-        if([KonotorMessage hasUserMessageInContext:mainContext]){
-            [HLMessageServices fetchChannelsAndMessages:nil];
-            FDLog(@"Triggering poller");
-        }
-        else {
-            FDLog(@"POLLER: Not fetching updates .. No user messages present");
-        }
-        
-    }];
-}
-
--(void)cancelPoller{
-    if([self.pollingTimer isValid]){
-        [self.pollingTimer invalidate];
-        FDLog(@"Cancel off-screen message poller");
-    }
 }
 
 -(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore{

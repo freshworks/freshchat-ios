@@ -19,7 +19,7 @@
 +(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
 +(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
-+(void) setFAQOptions:(FAQOptions*) options andViewController: (HLViewController *) viewController;
++(void) setFAQOptions:(FAQOptions*) options onController:(HLViewController *)controller;
 +(BOOL) hasTags:(FAQOptions *) options;
 +(BOOL) hasContactUsTags:(FAQOptions *) options;
 +(BOOL) hasFilteredViewTitle:(FAQOptions *) options;

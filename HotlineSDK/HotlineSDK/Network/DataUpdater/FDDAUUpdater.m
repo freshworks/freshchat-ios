@@ -16,8 +16,8 @@
 -(id)init{
     self = [super init];
     if (self) {
-        self.intervalInSecs = DAU_UPDATE_INTERVAL;
-        self.intervalConfigKey = HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME;
+        [self useInterval:DAU_UPDATE_INTERVAL];
+        [self useConfigKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }

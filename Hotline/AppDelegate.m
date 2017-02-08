@@ -19,6 +19,9 @@
 
 @implementation AppDelegate
 
+#define STORYBOARD_NAME @"Main"
+#define STORYBOARD_IDENTIFIER @"HotlineViewController"
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self registerAppForNotifications];
     [self setupRootController];
@@ -32,36 +35,39 @@
 
 -(void)setupRootController{
     
+    Hotline *hotlineSDK = [Hotline sharedInstance];
+    
     BOOL isTabViewPreferred = YES;
-
+    
     if (isTabViewPreferred) {
-        UIViewController* mainView=[self.window rootViewController];
-        [mainView setTitle:@"Order"];
+
+        ConversationOptions *convOptions = [[ConversationOptions alloc] init];
+        [convOptions filterByTags:@[@"airbus"] withTitle:@"Bus Group"];
         
-        UITabBarController* tabBarController=[[UITabBarController alloc] init];
-        
-        UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
-                                                        [[Hotline sharedInstance] getFAQsControllerForEmbed]];
-        [FAQController setTitle:@"FAQs"];
-        
-        UIViewController* channelsController = [[UINavigationController alloc]initWithRootViewController:
-                                                [[Hotline sharedInstance] getConversationsControllerForEmbed]];
-        
-        [channelsController setTitle:@"Channels"];
-        
-        [tabBarController setViewControllers:@[mainView, FAQController, channelsController]];
-        [tabBarController.tabBar setClipsToBounds:NO];
-        [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
-        [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
-        [self.window setRootViewController:tabBarController];
-        NSArray* items = [tabBarController.tabBar items];
-        if(items){
-            [[items objectAtIndex:0] setImage:[[UIImage imageNamed:@"tab1Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-            [[items objectAtIndex:1] setImage:[[UIImage imageNamed:@"tab2Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-            [[items objectAtIndex:2] setImage:[[UIImage imageNamed:@"tab3Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        }
-        [self.window makeKeyAndVisible];
-        
+            UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
+            ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
+            UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
+                                                     [hotlineSDK getFAQsControllerForEmbed]];
+            UINavigationController* channelsController = [[UINavigationController alloc]initWithRootViewController:[hotlineSDK getConversationsControllerForEmbed]];
+            
+            mainController.title = @"Hotline";
+            channelsController.title = @"Channels";
+            FAQController.title = @"FAQs";
+            
+            UITabBarController* tabBarController=[[UITabBarController alloc] init];
+            [tabBarController setViewControllers:@[mainController, FAQController, channelsController]];
+            [tabBarController.tabBar setClipsToBounds:NO];
+            [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
+            [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
+            NSArray* items = [tabBarController.tabBar items];
+            if(items){
+                [[items objectAtIndex:0] setImage:[[UIImage imageNamed:@"tab1Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+                [[items objectAtIndex:1] setImage:[[UIImage imageNamed:@"tab2Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+                [[items objectAtIndex:2] setImage:[[UIImage imageNamed:@"tab3Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            }
+            
+            [self.window setRootViewController:tabBarController];
+            [self.window makeKeyAndVisible];
     }
 }
 
@@ -81,18 +87,17 @@
 -(void)hotlineIntegration{
     HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"1fa378bc-af06-4a5a-ac2f-8844a890b18c"
                                                       andAppKey:@"c57650b0-6f47-45a5-8c80-9dfe7393b438"];
-    
-    
-//    config.appID = @"45fa92d7-af5d-4528-b001-a200ce554cb8";
-//    config.appKey = @"f1894421-52bc-452e-8a1b-9274cf2ace12";
-    
-    config.domain=@"mr-white.staging.konotor.com";
 
 //    prod
-//    config.appID = @"aa221747-9e28-437f-9297-3336353331eb";
-//    config.appKey = @"46cd9572-c6ff-4fcb-ac58-6c61a76e3f81";
-//    config.domain = @"app.hotline.io";
+    //sid+demo@freshdesk.com
+    //siddemo
+    config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
+    config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
     
+//       config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
+//       config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
+//       config.domain = @"mobihelp.ngrok.io";
+//    
 //      config.domain = @"satheeshjm.pagekite.me";
 //      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
 //      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";

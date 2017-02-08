@@ -25,15 +25,14 @@
 @interface KonotorDataManager : NSObject
 
 @property (nonatomic, strong) NSManagedObjectContext *mainObjectContext;
-@property (nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectContext *backgroundContext;
 
 +(KonotorDataManager*)sharedInstance;
+-(BOOL)isReady;
 -(BOOL)save;
 -(void)areSolutionsEmpty:(void(^)(BOOL isEmpty))handler;
 -(void)deleteAllIndices:(void(^)(NSError *error))handler;
 -(void)deleteAllSolutions:(void(^)(NSError *error))handler;
--(void)fetchAllSolutions:(void(^)(NSArray *solutions, NSError *error))handler;
 -(void) fetchAllCategoriesForTags  :(NSArray*) tagsIds withCompletion :(void(^)(NSArray *solutions, NSError *error))handler;
 -(void) fetchAllCategoriesWithCompletion :(void(^)(NSArray *solutions, NSError *error))handler;
 -(void)fetchAllArticlesOfCategoryID:(NSNumber *)categoryID handler:(void(^)(NSArray *articles, NSError *error))handler;

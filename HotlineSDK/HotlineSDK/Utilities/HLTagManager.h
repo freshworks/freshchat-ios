@@ -18,7 +18,7 @@
 
 +(instancetype)sharedInstance;
 
-- (void) getChannelsWithOptions : (NSArray *)tags
+- (void) getChannelsForTags : (NSArray *)tags
                       inContext : (NSManagedObjectContext *) context
                   withCompletion:(void (^)(NSArray<HLChannel *> *))completion;
 

@@ -15,6 +15,7 @@
 #import "HLServiceRequest.h"
 #import "HLNotificationHandler.h"
 #import "FDSecureStore.h"
+#import "HLEventManager.h"
 
 @interface FDMemLogger ()
 
@@ -71,6 +72,8 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     
     BOOL isUserRegistered =  [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
     
+    NSString *sessionID = [HLEventManager getUserSessionId];
+    
     NSDictionary *additionalInfo = @{
                                      @"Device Model" : [FDUtilities deviceModelName],
                                      @"Application state" : appState,
@@ -80,7 +83,8 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
                                      @"App Name" : [FDUtilities appName],
                                      @"Device Info" : [FDUtilities deviceInfoProperties],
-                                     @"Is user registered" : isUserRegistered ? @"YES" : @"NO"
+                                     @"Is user registered" : isUserRegistered ? @"YES" : @"NO",
+                                     @"SessionID" : sessionID ? sessionID : @"NIL"
                                      };
     
     [self addErrorInfo:additionalInfo withMethodName:@"AdditionalInfo"];
@@ -88,6 +92,9 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
 }
 
 -(void)upload{
+    
+    if (self.logList.count == 0) return;
+    
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     NSURL *url = [NSURL URLWithString:LOGGER_API];

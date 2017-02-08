@@ -57,6 +57,7 @@
 NSMutableDictionary *gkMessageIdMessageMap;
 
 static BOOL messageExistsDirty = YES;
+static BOOL messageTimeDirty = YES;
 
 +(NSString *)generateMessageID{
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
@@ -78,8 +79,13 @@ static BOOL messageExistsDirty = YES;
     message.belongsToConversation = conversation;
     message.isWelcomeMessage = NO;
     [datamanager save];
-    messageExistsDirty = YES;
+    [KonotorMessage markDirty];
     return message;
+}
+
++(void) markDirty{
+    messageExistsDirty = YES;
+    messageTimeDirty = YES;
 }
 
 +(KonotorMessage* )savePictureMessageInCoreData:(UIImage *)image withCaption:(NSString *)caption onConversation:(nonnull KonotorConversation *)conversation{
@@ -143,19 +149,13 @@ static BOOL messageExistsDirty = YES;
     message.belongsToConversation = conversation;
     message.isWelcomeMessage = NO;
     [datamanager save];
-    messageExistsDirty=YES;
+    [KonotorMessage markDirty];
     return message;
 }
 
 +(NSInteger)getUnreadMessagesCountForChannel:(NSNumber *)channelID{
     HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",channel];
-    request.predicate = predicate;
-    NSArray *messages = [context executeFetchRequest:request error:nil];
-    NSInteger pendingCSATCount =  [KonotorConversation hasPendingCSAT:channel.primaryConversation] ? 1 : 0;
-    return messages.count + pendingCSATCount;
+    return [channel unreadCount];
 }
 
 +(void)markAllMessagesAsReadForChannel:(HLChannel *)channel{
@@ -361,7 +361,7 @@ static BOOL messageExistsDirty = YES;
         [newMessage setPicCaption:[message valueForKey:@"picCaption"]];
     }
     [[KonotorDataManager sharedInstance]save];
-    messageExistsDirty = YES;
+    [KonotorMessage markDirty];
     return newMessage;
 }
 
@@ -462,6 +462,30 @@ static BOOL messageExistsDirty = YES;
     return messageExists;
 }
 
++(long long) lastMessageTimeInContext:(NSManagedObjectContext *)context {
+    static long long lastMessageTime = 0;
+    if(messageTimeDirty){
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isWelcomeMessage <> 1"];
+        NSError *error;
+        NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
+        if(!error){
+            for(KonotorMessage *message in matches){
+                NSNumber *createdMillis = message.createdMillis;
+                if( lastMessageTime < [createdMillis longLongValue] ){
+                    lastMessageTime = [createdMillis longLongValue];
+                }
+            }
+            messageTimeDirty = NO;
+        }
+    }
+    return lastMessageTime;
+}
+
++(long) daysSinceLastMessageInContext:(NSManagedObjectContext *)context{
+    long long lastMessageTime = [KonotorMessage lastMessageTimeInContext:context];
+    return ([[NSDate date] timeIntervalSince1970] - (lastMessageTime/1000))/86400;
+}
 
 @end
 

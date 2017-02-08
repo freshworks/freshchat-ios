@@ -14,6 +14,10 @@
 #import "HLChannelViewController.h"
 #import "FDBarButtonItem.h"
 #import "HLLocalization.h"
+#import "HLInterstitialViewController.h"
+#import "HLCategoryGridViewController.h"
+#import "HLCategoryListController.h"
+#import "HLFAQUtil.h"
 
 @implementation HLControllerUtils
 
@@ -82,6 +86,28 @@
     }else{
         [naviController.interactivePopGestureRecognizer setEnabled:NO];
     }
+}
+
++(UIViewController *)getEmbedded:(id)option{
+    return [[HLInterstitialViewController alloc] initViewControllerWithOptions:option andIsEmbed:YES];
+}
+
++(void)presentOn:(UIViewController *)controller option:(id)options{
+    HLInterstitialViewController *interstitialCtr = [[HLInterstitialViewController alloc]
+                                                   initViewControllerWithOptions:options andIsEmbed:NO];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:interstitialCtr];
+    [controller presentViewController:navigationController animated:YES completion:nil];
+}
+
++(HLViewController *) getCategoryController:(FAQOptions *)options {
+    HLViewController *controller = nil;
+    if (options.showFaqCategoriesAsGrid) {
+        controller = [[HLCategoryGridViewController alloc]init];
+    }else{
+        controller = [[HLCategoryListController alloc]init];
+    }
+    [HLFAQUtil setFAQOptions:options onController:controller];
+    return controller;
 }
 
 @end

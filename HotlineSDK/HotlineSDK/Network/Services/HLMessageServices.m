@@ -25,19 +25,20 @@
 #import "FDChannelUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
-#import "FDLocalNotification.h"
 #import "HLTags.h"
 #import "HLEventManager.h"
 #import "HLCoreServices.h"
+#import "HLConstants.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
 static HLNotificationHandler *handleUpdateNotification;
 
 @implementation HLMessageServices
-
-+(void)fetchChannelsAndMessages:(void (^)(NSError *))handler{
-
+    
++(void)fetchChannelsAndMessagesWithFetchType:(enum MessageFetchType) priority
+                                     source :(enum MessageRequestSource ) requestSource
+                                  andHandler:(void (^)(NSError *))handler{
     static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
@@ -50,10 +51,41 @@ static HLNotificationHandler *handleUpdateNotification;
     
     ShowNetworkActivityIndicator();
     MESSAGES_DOWNLOAD_IN_PROGRESS = YES;
+    FDChannelUpdater *channelsUpdater = [FDChannelUpdater new];
+    FDMessagesUpdater *messageUpdater = [FDMessagesUpdater new];
     
-    [[FDChannelUpdater new]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+    switch (priority) {
+        case OffScreenPollFetch:
+            [messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_OFF_SCREEN_POLL];
+            break;
+            
+        case OnscreenPollFetch:
+            [messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_POLL];
+            break;
+            
+        case FetchAll:
+            [channelsUpdater resetTime];
+            [messageUpdater resetTime];
+            break;
+            
+        case FetchMessages:
+            [messageUpdater resetTime];
+            break;
+        
+        case ScreenLaunchFetch:
+            [messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            [channelsUpdater useInterval:CHANNELS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            break;
+            
+        default:
+            break;
+    }
+    
+    messageUpdater.requestSource = requestSource;
+    
+    [channelsUpdater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
         if (!error) {
-            [[FDMessagesUpdater new]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+            [messageUpdater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
                 if(handler) handler(error);
                 HideNetworkActivityIndicator();
                 MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
@@ -68,7 +100,7 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 
-+(void)fetchMessages:(void(^)(NSError *error))handler{
++(void)fetchMessagesForSrc:(enum MessageRequestSource) requestSource andCompletion:(void(^)(NSError *error))handler{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
         NSString *userAlias = [FDUtilities currentUserAlias];
@@ -77,7 +109,9 @@ static HLNotificationHandler *handleUpdateNotification;
         NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
-        [request setRelativePath:path andURLParams:@[appKey, @"tags=true", afterTime]];
+        NSString *source = [NSString stringWithFormat:@"src=%d",requestSource];
+
+        [request setRelativePath:path andURLParams:@[appKey, afterTime, source]];
         
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
@@ -106,9 +140,6 @@ static HLNotificationHandler *handleUpdateNotification;
                     HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                     
                     if (!channel) {
-                        // Channel does not exist; reset channel interval key to force fetch channels
-                        // skipping fetched msg import to DB in the current run.
-                        [[FDChannelUpdater new]resetTime];
                         channelPresent = NO;
                         break;
                     }
@@ -116,7 +147,11 @@ static HLNotificationHandler *handleUpdateNotification;
                 
                 
                 if(!channelPresent){
-                    [[[FDChannelUpdater alloc]init]fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+                    // Channel does not exist; reset channel interval key to force fetch channels
+                    // skipping fetched msg import to DB in the current run.
+                    FDChannelUpdater *channelUpdater = [FDChannelUpdater new];
+                    [channelUpdater resetTime];
+                    [channelUpdater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
                         if(!error){
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [self processMessageResponse:response];

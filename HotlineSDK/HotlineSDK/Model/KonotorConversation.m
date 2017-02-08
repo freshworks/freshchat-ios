@@ -85,9 +85,9 @@
     return newConversation;
 }
 
-+(BOOL)hasPendingCSAT:(KonotorConversation *)conversation{
-    HLCsat *csat = conversation.hasCsat.allObjects.firstObject;
-    return (conversation.hasPendingCsat.boolValue && csat &&
+-(BOOL)isCSATResponsePending{
+    HLCsat *csat = self.hasCsat.allObjects.firstObject;
+    return (self.hasPendingCsat.boolValue && csat &&
             csat.csatStatus.integerValue == CSAT_NOT_RATED);
 }
 

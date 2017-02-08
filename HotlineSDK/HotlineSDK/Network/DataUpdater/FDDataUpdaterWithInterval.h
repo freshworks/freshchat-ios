@@ -13,15 +13,14 @@
 
 @interface FDDataUpdaterWithInterval : NSObject
 
-@property (nonatomic        ) int              intervalInSecs;
-@property (nonatomic,strong ) NSString         * intervalConfigKey;
-@property (strong, nonatomic) FDSecureStore    *secureStore;
-
 - (void) fetchWithCompletion:(void(^)(BOOL isFetchPerformed, NSError *error))completion;
 - (void) fetch;
 - (void) doFetch:(void(^)(NSError *error))completion;
 - (void) resetTime;
+- (void) resetTimeTo:(NSNumber *) value;
 - (BOOL) hasTimedOut;
 - (void) noUpdate;
+- (void) useInterval:(int) interval;
+- (void) useConfigKey:(NSString *) configKey;
 
 @end

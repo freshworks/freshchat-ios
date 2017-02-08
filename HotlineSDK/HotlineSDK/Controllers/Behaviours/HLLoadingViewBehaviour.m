@@ -10,7 +10,6 @@
 #import "HLLoadingViewBehaviour.h"
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
-#import "FDSolutionUpdater.h"
 #import "FDLocalNotification.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
@@ -53,6 +52,7 @@
 -(void) unload{
     self.activityIndicator = nil;
     self.emptyResultView = nil;
+    self.loadingViewDelegate = nil;
 }
 
 -(void)addLoadingIndicator{
@@ -87,6 +87,11 @@
 
 -(void)updateResultsView:(BOOL)isLoading andCount:(long) count{
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if(self.loadingViewDelegate == nil ) {
+            return;
+        }
+        
         if(!isLoading){
             [self removeLoadingIndicator];
         }

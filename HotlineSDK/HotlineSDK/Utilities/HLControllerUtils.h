@@ -29,4 +29,10 @@
                     selector:(SEL) actionSelector
                        title:(NSString *)title;
 
++(UIViewController *)getEmbedded:(id)option;
+
++(void)presentOn:(UIViewController *)controller option:(id)options;
+
++(HLViewController *)getCategoryController:(FAQOptions *)options;
+
 @end
