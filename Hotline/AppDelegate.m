@@ -10,6 +10,7 @@
 #import "ViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "HotlineConfigStrings.h"
 
 @interface AppDelegate ()
 
@@ -93,6 +94,10 @@
     //siddemo
     config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
     config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
+    
+    config.appID = HOTLINE_APP_ID;
+    config.appKey = HOTLINE_APP_KEY;
+    config.domain = HOTLINE_DOMAIN;
     
 //       config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
 //       config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
