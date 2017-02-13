@@ -157,14 +157,14 @@
             [self pushMessageControllerFrom:visibleSDKController.navigationController withChannel:channel];
         } else if ([visibleSDKController isKindOfClass:[FDMessageController class]]) {
             FDMessageController *msgController = (FDMessageController *)visibleSDKController;
-            if (msgController.isModal) {
-                if (![channel isActiveChannel]) {
-                    [self presentMessageControllerOn:visibleSDKController withChannel:channel];
+            if (![channel isActiveChannel]) {
+                if (msgController.isModal) {
+                        [self presentMessageControllerOn:visibleSDKController withChannel:channel];
+                }else{
+                    UINavigationController *navController = msgController.navigationController;
+                    [navController popViewControllerAnimated:NO];
+                    [self pushMessageControllerFrom:navController withChannel:channel];
                 }
-            }else{
-                UINavigationController *navController = msgController.navigationController;
-                [navController popViewControllerAnimated:NO];
-                [self pushMessageControllerFrom:navController withChannel:channel];
             }
         }else {
             [self presentMessageControllerOn:visibleSDKController withChannel:channel];
