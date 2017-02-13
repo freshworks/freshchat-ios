@@ -43,32 +43,44 @@
     if (isTabViewPreferred) {
 
         ConversationOptions *convOptions = [[ConversationOptions alloc] init];
-        [convOptions filterByTags:@[@"airbus"] withTitle:@"Bus Group"];
+        [convOptions filterByTags:@[@"sanjith"] withTitle:@"Sanjith Conversatios"];
+        NSArray *arr = @[@"yoyo"];
+        NSArray *contactUsTagsArray = @[@"yoyo"];
+        FAQOptions *faqOptions = [FAQOptions new];
+        faqOptions.showFaqCategoriesAsGrid = NO;
+        faqOptions.showContactUsOnFaqScreens = YES;
+        [faqOptions filterContactUsByTags:contactUsTagsArray withTitle:@"Yoyo ContactUS"];
+        [faqOptions filterByTags:arr withTitle:@"Yoyo Articles" andType: ARTICLE];
+        UINavigationController* faqControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Hotline sharedInstance]getFAQsControllerForEmbedWithOptions:faqOptions]];
+        UINavigationController* convControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Hotline sharedInstance]getConversationsControllerForEmbedWithOptions:convOptions]];
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
+        ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
+        UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
+                                                 [hotlineSDK getFAQsControllerForEmbed]];
+        UINavigationController* channelsController = [[UINavigationController alloc]initWithRootViewController:[hotlineSDK getConversationsControllerForEmbed]];
         
-            UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
-            ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
-            UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
-                                                     [hotlineSDK getFAQsControllerForEmbed]];
-            UINavigationController* channelsController = [[UINavigationController alloc]initWithRootViewController:[hotlineSDK getConversationsControllerForEmbed]];
-            
-            mainController.title = @"Hotline";
-            channelsController.title = @"Channels";
-            FAQController.title = @"FAQs";
-            
-            UITabBarController* tabBarController=[[UITabBarController alloc] init];
-            [tabBarController setViewControllers:@[mainController, FAQController, channelsController]];
-            [tabBarController.tabBar setClipsToBounds:NO];
-            [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
-            [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
-            NSArray* items = [tabBarController.tabBar items];
-            if(items){
-                [[items objectAtIndex:0] setImage:[[UIImage imageNamed:@"tab1Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-                [[items objectAtIndex:1] setImage:[[UIImage imageNamed:@"tab2Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-                [[items objectAtIndex:2] setImage:[[UIImage imageNamed:@"tab3Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-            }
-            
-            [self.window setRootViewController:tabBarController];
-            [self.window makeKeyAndVisible];
+        mainController.title = @"Hotline";
+        channelsController.title = @"Channels";
+        FAQController.title = @"FAQs";
+        faqControllerOption.title = @"FQAsWithOptions";
+        convControllerOption.title = @"ConvWithOptions";
+
+        UITabBarController* tabBarController=[[UITabBarController alloc] init];
+        [tabBarController setViewControllers:@[mainController, FAQController,faqControllerOption, channelsController,convControllerOption]];
+        [tabBarController.tabBar setClipsToBounds:NO];
+        [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
+        [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
+        NSArray* items = [tabBarController.tabBar items];
+        if(items){
+            [[items objectAtIndex:0] setImage:[[UIImage imageNamed:@"tab1Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            [[items objectAtIndex:1] setImage:[[UIImage imageNamed:@"tab2Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            [[items objectAtIndex:2] setImage:[[UIImage imageNamed:@"tab2Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            [[items objectAtIndex:3] setImage:[[UIImage imageNamed:@"tab3Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+            [[items objectAtIndex:4] setImage:[[UIImage imageNamed:@"tab3Image"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        }
+        
+        [self.window setRootViewController:tabBarController];
+        [self.window makeKeyAndVisible];
     }
 }
 
@@ -89,11 +101,16 @@
     HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"1fa378bc-af06-4a5a-ac2f-8844a890b18c"
                                                       andAppKey:@"c57650b0-6f47-45a5-8c80-9dfe7393b438"];
 
-//    prod
-    //sid+demo@freshdesk.com
+    //sid+demo@freshdesk.com prod
     //siddemo
     config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
     config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
+
+    //sid+demo1@freshdesk.com prod
+    //testtest
+    config.appID = @"e3280bde-4696-4bd5-8be7-e7919249bf9a";
+    config.appKey = @"9d456296-5f38-45ce-884e-b595f7e6301a";
+
     
     config.appID = HOTLINE_APP_ID;
     config.appKey = HOTLINE_APP_KEY;

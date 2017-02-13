@@ -73,13 +73,12 @@
         else{
             parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
         }
-            
     }
 }
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if(self.isFilteredView){
+    if(self.isFilteredView && !self.category){
         [HLControllerUtils configureGestureDelegate:nil forController:self withEmbedded:true];
     }
 }
@@ -115,12 +114,7 @@
                  NSSortDescriptor *categorySorter = [[NSSortDescriptor alloc] initWithKey:@"category.position" ascending:YES];
                  NSSortDescriptor *articleSorter = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
                  [matchingArticles sortUsingDescriptors:@[categorySorter, articleSorter]];
-                 
                  self.articles = matchingArticles;
-                 if(!self.embedded){
-                     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-                     self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
-                 }
                  [self.tableView reloadData];
              }];
          }];
@@ -137,6 +131,10 @@
     [self configureBackButton];
     if(!self.isFilteredView){
         self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
+    }
+    if(!self.category && !self.embedded){
+        UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
 }
 
