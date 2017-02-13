@@ -68,15 +68,15 @@
     NSString *fileExt = [theme rangeOfString:@".plist"].location != NSNotFound ? nil : @".plist";
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:fileExt];
     if (!path) {
-        NSBundle *HLResourcesBundle = [self getHLResourceBundle];
-        path = [HLResourcesBundle pathForResource:theme ofType:fileExt inDirectory:FD_THEMES_DIR];
+        NSBundle *hlResourcesBundle = [self getHLResourceBundle];
+        path = [hlResourcesBundle pathForResource:theme ofType:fileExt inDirectory:FD_THEMES_DIR];
     }
     return path;
 }
 
 -(NSBundle *)getHLResourceBundle{
-    NSBundle *HLResourcesBundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"HLResources" withExtension:@"bundle"]];
-    return HLResourcesBundle;
+    NSBundle *hlResourcesBundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    return hlResourcesBundle;
 }
 
 -(UIImage *)getImageWithKey:(NSString *)key{
@@ -671,9 +671,13 @@
 }
 
 -(NSString *)getCssFileContent:(NSString *)key{
-    NSBundle *hlResourceBundle = [self getHLResourceBundle];
-    NSString  *cssFilePath = [hlResourceBundle pathForResource:key ofType:@"css" inDirectory:FD_THEMES_DIR];
-    NSData *cssContent = [NSData dataWithContentsOfFile:cssFilePath];
+    NSString *fileExt = [key rangeOfString:@".css"].location != NSNotFound ? nil : @".css";
+    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:key ofType:fileExt];
+    if (!filePath) {
+        NSBundle *hlResourcesBundle = [self getHLResourceBundle];
+        filePath = [hlResourcesBundle pathForResource:key ofType:fileExt inDirectory:FD_THEMES_DIR];
+    }
+    NSData *cssContent = [NSData dataWithContentsOfFile:filePath];
     return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
 }
 
