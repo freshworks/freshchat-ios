@@ -28,6 +28,7 @@
 +(NSString *)generateOfflineMessageAlias;
 +(NSDictionary *)deviceInfoProperties;
 +(void)setActivityIndicator:(BOOL)isVisible;
++(UIViewController*) topMostController;
 
 +(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule;
 +(BOOL) isPoweredByHidden;

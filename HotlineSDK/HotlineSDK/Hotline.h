@@ -298,6 +298,11 @@ enum TagFilterType {
  */
 -(void) sendMessage:(HotlineMessage *)messageObject;
 
+/**
+ *  Dismiss SDK for deeplink screens
+ */
+-(void) dismissHotlineViews;
+
 @end
 
 

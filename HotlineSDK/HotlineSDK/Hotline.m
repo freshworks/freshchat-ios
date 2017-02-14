@@ -634,4 +634,13 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
+-(void) dismissHotlineViews {
+    UIViewController *vc = [FDUtilities topMostController];
+    for(UIViewController *tempVC in vc.childViewControllers){
+        if([tempVC isKindOfClass:[HLContainerController class]]){
+            [tempVC dismissViewControllerAnimated:NO completion:nil];
+        }
+    }
+}
+
 @end

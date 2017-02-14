@@ -16,6 +16,7 @@
 #import "HLContainerController.h"
 #import "FDMemLogger.h"
 #import "HLMessageServices.h"
+#import "FDUtilities.h"
 
 @interface HLNotificationHandler ()
 
@@ -171,16 +172,8 @@
         }
         
     }else{
-        [self presentMessageControllerOn:[self topMostController] withChannel:channel];
+        [self presentMessageControllerOn:[FDUtilities topMostController] withChannel:channel];
     }
-}
-
--(UIViewController*) topMostController {
-    UIViewController *topController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    while (topController.presentedViewController) {
-        topController = topController.presentedViewController;
-    }
-    return topController;
 }
 
 -(void)pushMessageControllerFrom:(UINavigationController *)controller withChannel:(HLChannel *)channel{

@@ -121,6 +121,14 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     return userAlias;
 }
 
++(UIViewController*) topMostController {
+    UIViewController *topController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    return topController;
+}
+
 +(NSString *)generateUserAlias{
     NSString *userAlias;
     //TODO: This logic is too nested. Need to remove this - Rex
