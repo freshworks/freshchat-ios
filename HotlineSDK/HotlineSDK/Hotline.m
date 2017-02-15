@@ -634,16 +634,27 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
--(void) dismissHotlineViews {
-    UIViewController *topController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    while (topController.presentedViewController) {
-        topController = topController.presentedViewController;
-        for(UIViewController *tempVC in topController.childViewControllers){
+-(void)dismissHotlineViewInController:(UIViewController *) controller
+                       withCompletion: (void(^)())completion  {
+    void (^clearHLControllers)() = ^void() {
+        for(UIViewController *tempVC in controller.childViewControllers){
             if([tempVC isKindOfClass:[HLContainerController class]]){
-                [tempVC dismissViewControllerAnimated:NO completion:nil];
+                [tempVC dismissViewControllerAnimated:NO completion:completion];
             }
         }
+    };
+    if(controller.presentedViewController){
+        [self dismissHotlineViewInController:controller.presentedViewController
+         withCompletion:clearHLControllers];
     }
+    else {
+        clearHLControllers();
+    }
+}
+
+-(void) dismissHotlineViews {
+    UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [self dismissHotlineViewInController:rootController withCompletion:nil];
 }
 
 @end
