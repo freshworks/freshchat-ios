@@ -1,5 +1,64 @@
 # Change Log
 
+## [v1.3.3](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.3) (2017-02-15)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.3.2...v1.3.3)
+
+**Closed issues:**
+
+- Image preview in iPad [\#599](https://github.com/freshdesk/hotline_ios_dev/issues/599)
+
+**Merged pull requests:**
+
+- Dismiss api for hotline screen [\#635](https://github.com/freshdesk/hotline_ios_dev/pull/635) ([harish6989](https://github.com/harish6989))
+- Refactor dismiss api for hotline screen [\#634](https://github.com/freshdesk/hotline_ios_dev/pull/634) ([harish6989](https://github.com/harish6989))
+- Create shared scheme to build using xcodebuild archive [\#631](https://github.com/freshdesk/hotline_ios_dev/pull/631) ([AravinthChandran](https://github.com/AravinthChandran))
+- Dismiss hotline views for deeplink [\#630](https://github.com/freshdesk/hotline_ios_dev/pull/630) ([harish6989](https://github.com/harish6989))
+- Background notification tap inconsistency fix [\#629](https://github.com/freshdesk/hotline_ios_dev/pull/629) ([harish6989](https://github.com/harish6989))
+- Localize article detail css file [\#628](https://github.com/freshdesk/hotline_ios_dev/pull/628) ([harish6989](https://github.com/harish6989))
+- Swipe & Back button related changes. [\#626](https://github.com/freshdesk/hotline_ios_dev/pull/626) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Staging merge request [\#625](https://github.com/freshdesk/hotline_ios_dev/pull/625) ([AravinthChandran](https://github.com/AravinthChandran))
+- Add back button fix for embed article and article detail [\#624](https://github.com/freshdesk/hotline_ios_dev/pull/624) ([harish6989](https://github.com/harish6989))
+
+## [v1.3.2](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.2) (2017-02-01)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.3.1...v1.3.2)
+
+**Implemented enhancements:**
+
+- Add NSLogs for the important events in the SDK for debugging [\#581](https://github.com/freshdesk/hotline_ios_dev/issues/581)
+- Handle Core-Data errors in Migration [\#611](https://github.com/freshdesk/hotline_ios_dev/pull/611) ([AravinthChandran](https://github.com/AravinthChandran))
+
+**Fixed bugs:**
+
+- FAQ and channel screen freezes when user edge swipes from left to right  [\#531](https://github.com/freshdesk/hotline_ios_dev/issues/531)
+
+**Closed issues:**
+
+- API to get un read count by tags  [\#609](https://github.com/freshdesk/hotline_ios_dev/issues/609)
+
+**Merged pull requests:**
+
+- Fix issue with poller firing always [\#622](https://github.com/freshdesk/hotline_ios_dev/pull/622) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Cleanups on Interstitial controller [\#621](https://github.com/freshdesk/hotline_ios_dev/pull/621) ([AravinthChandran](https://github.com/AravinthChandran))
+- Add theme entry for article-detail CSS filename [\#619](https://github.com/freshdesk/hotline_ios_dev/pull/619) ([harish6989](https://github.com/harish6989))
+- 'ImagePreview' - bad image quality [\#617](https://github.com/freshdesk/hotline_ios_dev/pull/617) ([SanjithKanagavel](https://github.com/SanjithKanagavel))
+- Fix all Message fetch intervals. [\#616](https://github.com/freshdesk/hotline_ios_dev/pull/616) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Fix loading empty events plist [\#614](https://github.com/freshdesk/hotline_ios_dev/pull/614) ([AravinthChandran](https://github.com/AravinthChandran))
+- Unread Count Filtered by  Tags\[\#609\] [\#613](https://github.com/freshdesk/hotline_ios_dev/pull/613) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Add a intermediate controller to route appropriate controllers [\#610](https://github.com/freshdesk/hotline_ios_dev/pull/610) ([harish6989](https://github.com/harish6989))
+
+## [v1.3.1](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.1) (2017-01-13)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.3.0...v1.3.1)
+
+**Fixed bugs:**
+
+- Fix empty category being displayed in the sdk [\#544](https://github.com/freshdesk/hotline_ios_dev/issues/544)
+
+**Merged pull requests:**
+
+- Fix poller [\#608](https://github.com/freshdesk/hotline_ios_dev/pull/608) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Add changelog for v1.3.0 [\#603](https://github.com/freshdesk/hotline_ios_dev/pull/603) ([AravinthChandran](https://github.com/AravinthChandran))
+- Staging [\#602](https://github.com/freshdesk/hotline_ios_dev/pull/602) ([AravinthChandran](https://github.com/AravinthChandran))
+
 ## [v1.3.0](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.0) (2017-01-11)
 [Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.2.2...v1.3.0)
 
