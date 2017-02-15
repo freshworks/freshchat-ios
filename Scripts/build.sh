@@ -111,7 +111,7 @@ REL_NOTES=$OUTPUTDIR/ReleaseNotes.txt
 RELEASE_HEADER=$( cat <<RELEASEINFO
 Hotline iOS SDK - Powered by Freshdesk
 
-Documentation   : https://hotline.freshdesk.com/support/solutions
+Documentation   : https://support.hotline.io/support/solutions
 Support Email   : support@hotline.io 
 Version         : $VERSION
 
