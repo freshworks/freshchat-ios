@@ -62,6 +62,9 @@
         self.surveyTitle.numberOfLines = 3;
         self.surveyTitle.textAlignment = NSTextAlignmentCenter;
         self.surveyTitle.translatesAutoresizingMaskIntoConstraints = NO;
+        #if DEBUG
+            self.surveyTitle.accessibilityIdentifier = @"lblSurveyTitle";
+        #endif
         [self.CSATPrompt addSubview:self.surveyTitle];
         
         //Submit button
@@ -71,6 +74,9 @@
         [self.submitButton setTitle:HLLocalizedString(LOC_CUST_SAT_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
         [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
         [self.submitButton.titleLabel setFont:[self.theme csatPromptSubmitButtonTitleFont]];
+        #if DEBUG
+        self.submitButton.accessibilityIdentifier = @"btnFeedbackSubmit";
+        #endif
         [self.CSATPrompt addSubview:self.submitButton];
         
         //Feedback textview
@@ -83,6 +89,9 @@
         self.feedbackView.layer.borderWidth = 0.5;
         self.feedbackView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         self.feedbackView.translatesAutoresizingMaskIntoConstraints = NO;
+        #if DEBUG
+        self.feedbackView.accessibilityIdentifier = @"txtFeedback";
+        #endif
         [self.CSATPrompt addSubview:self.feedbackView];
         
         //Horizontal line
