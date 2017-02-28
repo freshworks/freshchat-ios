@@ -120,6 +120,12 @@
     }
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 -(void)keyboardWillHide {
     if (self.view.frame.origin.y >= 0)
     {
