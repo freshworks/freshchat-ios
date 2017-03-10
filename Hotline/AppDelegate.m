@@ -98,36 +98,8 @@
 }
 
 -(void)hotlineIntegration{
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"1fa378bc-af06-4a5a-ac2f-8844a890b18c"
-                                                      andAppKey:@"c57650b0-6f47-45a5-8c80-9dfe7393b438"];
-
-    //sid+demo@freshdesk.com prod
-    //siddemo
-    config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
-    config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
-
-    //sid+demo1@freshdesk.com prod
-    //testtest
-    config.appID = @"e3280bde-4696-4bd5-8be7-e7919249bf9a";
-    config.appKey = @"9d456296-5f38-45ce-884e-b595f7e6301a";
-
-    
-    config.appID = HOTLINE_APP_ID;
-    config.appKey = HOTLINE_APP_KEY;
-    config.domain = HOTLINE_DOMAIN;
-    
-//       config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
-//       config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
-//       config.domain = @"mobihelp.ngrok.io";
-//    
-//      config.domain = @"satheeshjm.pagekite.me";
-//      config.appID = @"0e611e03-572a-4c49-82a9-e63ae6a3758e";
-//      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
-    
-//    config.domain = @"mr.white.konotor.com";
-//    config.appID = @"92124c8f-bd1a-4362-a390-72e76ef7125c";
-//    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
-    
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
+    config.domain = HOTLINE_DOMAIN;    
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
     config.pollWhenAppActive = YES;
