@@ -109,13 +109,9 @@
     }
     
     
-    [[Hotline sharedInstance] updateUserProperties:@{
-                                                     @"Unread messages" : @([[Hotline sharedInstance]unreadCount]).description,
-                                                     @"SDK Version" : [Hotline SDKVersion]
-                                                     }];
+    [[Hotline sharedInstance] updateUserProperties:@{ @"SDK Version" : [Hotline SDKVersion] }];
     
-
-    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
+    
     [[Hotline sharedInstance]initWithConfig:config];
 
     [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
@@ -157,8 +153,9 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{
-    NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:unreadCount];
+    [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
+    }];
 }
 
 /* 

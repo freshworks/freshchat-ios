@@ -75,7 +75,7 @@
             return nil;
         }
         return sharedInstance;
-
+        
     } @catch (NSException *exception) {
         [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
         return nil; // Return a valid value to avoid inconsistency
@@ -136,11 +136,11 @@
     config.appID  = trimString(config.appID);
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
-
+    
     if(config.pollWhenAppActive){
         [self.messagePoller begin];
     }
-
+    
     [self checkMediaPermissions:config];
     return config;
 }
@@ -168,7 +168,7 @@
 -(void)checkMediaPermissions:(HotlineConfig *)config{
     FDPlistManager *plistManager = [[FDPlistManager alloc] init];
     NSMutableString *message = [NSMutableString new];
-
+    
     if (config.voiceMessagingEnabled) {
         if (![plistManager micUsageEnabled]) {
             [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
@@ -318,7 +318,7 @@
 }
 
 /*  This function is called during every launch &
-    when the SDK's app is transitioned from background to foreground  */
+ when the SDK's app is transitioned from background to foreground  */
 
 -(void)newSession:(NSNotification *)notification{
     if([FDUtilities hasInitConfig]) {
@@ -500,7 +500,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
     }
-  
+    
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
     
@@ -532,33 +532,16 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [self clearUserDataWithCompletion:completion init:true andOldUser:nil];
 }
 
--(NSInteger)unreadCount{
-    NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
-    
-    NSFetchRequest *messageQuery = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
-    messageQuery.predicate = [NSPredicate predicateWithFormat:@"messageRead == NO"];
-
-    NSFetchRequest *csatQuery = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CSAT_ENTITY];
-    csatQuery.predicate = [NSPredicate predicateWithFormat:@"csatStatus == %d", CSAT_NOT_RATED];
-
-    NSArray *unreadMessages = [context executeFetchRequest:messageQuery error:nil];
-    NSArray *pendingCSATs = [context executeFetchRequest:csatQuery error:nil];
-
-    return (unreadMessages.count + pendingCSATs.count);
-}
-
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-  if (completion) {
-    [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
-                                                      source:UnreadCount
-                                                  andHandler:^(NSError *error) {
-                                                    if(completion) {
-                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                          completion([self unreadCount]);
-                                                          });
-                                                    }
-                                                  }];
-  }
+    if (completion) {
+        [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
+                                                          source:UnreadCount
+                                                      andHandler:^(NSError *error) {
+                                                          [FDUtilities unreadCountInternalHandler:^(NSInteger count) {
+                                                              completion(count);
+                                                          }];
+                                                      }];
+    }
 }
 
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
@@ -645,7 +628,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     };
     if(controller.presentedViewController){
         [self dismissHotlineViewInController:controller.presentedViewController
-         withCompletion:clearHLControllers];
+                              withCompletion:clearHLControllers];
     }
     else {
         clearHLControllers();

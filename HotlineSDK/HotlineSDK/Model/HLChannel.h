@@ -66,6 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *iconURL;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSNumber *channelID;
+@property (nonatomic) NSInteger unreadMessages;
 
 -(HLChannelInfo *)initWithChannel:(HLChannel *)channel;
 
