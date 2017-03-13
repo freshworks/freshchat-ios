@@ -168,6 +168,7 @@
         self.iconURL = channel.iconURL;
         self.icon = channel.icon;
         self.channelID = channel.channelID;
+        self.unreadMessages = channel.unreadCount;
     }
     return self;
 }

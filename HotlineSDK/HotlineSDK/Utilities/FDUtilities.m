@@ -435,4 +435,14 @@ static NSInteger networkIndicator = 0;
     return [store checkItemWithKey:HOTLINE_DEFAULTS_APP_ID] && [store checkItemWithKey:HOTLINE_DEFAULTS_APP_KEY] && ctx != nil;
 }
 
++(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
+    [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
+        NSInteger result = 0;
+        for (HLChannelInfo *channel in channelInfos) {
+            if (channel.unreadMessages > 0) result = result + channel.unreadMessages;
+        }
+        completion(result);
+    }];
+}
+
 @end

@@ -43,6 +43,8 @@
 
 +(void)initiatePendingTasks;
 +(BOOL)hasInitConfig;
++(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
+
 @end
 
 #endif

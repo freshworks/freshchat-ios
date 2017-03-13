@@ -285,8 +285,9 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 +(void)postUnreadCountNotification{
-    NSInteger unreadCount = [[Hotline sharedInstance]unreadCount];
-    [FDLocalNotification post:HOTLINE_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(unreadCount)}];
+    [FDUtilities unreadCountInternalHandler:^(NSInteger count) {
+        [FDLocalNotification post:HOTLINE_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(count)}];
+    }];
 }
 
 /* fetches channel list, updates existing channels including hidden channels */

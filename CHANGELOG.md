@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.3.4](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.4) (2017-03-13)
+[Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.3.3...v1.3.4)
+
+**Merged pull requests:**
+
+- Fix agentname on chat bubble [\#643](https://github.com/freshdesk/hotline_ios_dev/pull/643) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Agent name fixes [\#642](https://github.com/freshdesk/hotline_ios_dev/pull/642) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Added Accessibility for UI components [\#641](https://github.com/freshdesk/hotline_ios_dev/pull/641) ([kabilan-ravi](https://github.com/kabilan-ravi))
+- Added hide keyboard for all textfields in demo app Hotline Tab [\#640](https://github.com/freshdesk/hotline_ios_dev/pull/640) ([kabilan-ravi](https://github.com/kabilan-ravi))
+- Display agent name in message cell [\#639](https://github.com/freshdesk/hotline_ios_dev/pull/639) ([harish6989](https://github.com/harish6989))
+- Convert node script to shell script [\#638](https://github.com/freshdesk/hotline_ios_dev/pull/638) ([hrishikesh-p](https://github.com/hrishikesh-p))
+- Add script to build IPA [\#637](https://github.com/freshdesk/hotline_ios_dev/pull/637) ([AravinthChandran](https://github.com/AravinthChandran))
+- Unread count changes [\#636](https://github.com/freshdesk/hotline_ios_dev/pull/636) ([AravinthChandran](https://github.com/AravinthChandran))
+
 ## [v1.3.3](https://github.com/freshdesk/hotline_ios_dev/tree/v1.3.3) (2017-02-15)
 [Full Changelog](https://github.com/freshdesk/hotline_ios_dev/compare/v1.3.2...v1.3.3)
 
