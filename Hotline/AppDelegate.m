@@ -98,19 +98,21 @@
 }
 
 -(void)hotlineIntegration{
+    
     HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
-    config.domain = HOTLINE_DOMAIN;    
+
+    config.appID = HOTLINE_APP_ID;
+    config.appKey = HOTLINE_APP_KEY;
+    config.domain = HOTLINE_DOMAIN;
+    
     config.voiceMessagingEnabled = YES;
     config.pictureMessagingEnabled = YES;
     config.pollWhenAppActive = YES;
-
     if(![HotlineUser sharedInstance].name){
         [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
     }
     
-    
     [[Hotline sharedInstance] updateUserProperties:@{ @"SDK Version" : [Hotline SDKVersion] }];
-    
     
     [[Hotline sharedInstance]initWithConfig:config];
 

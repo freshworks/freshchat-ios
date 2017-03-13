@@ -130,9 +130,10 @@
 -(NSString *)conversationUIFontName;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
-- (UIColor *) agentMessageFontColor;
-- (UIColor *) userMessageFontColor;
-
+-(UIColor *)agentMessageFontColor;
+-(UIColor *)userMessageFontColor;
+-(UIColor *)agentNameTextColor;
+-(UIFont *)agentNameFont;
 -(UIColor *)messageUIBackgroundColor;
 
 //Notification

@@ -528,6 +528,15 @@
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
+-(UIColor *)agentNameTextColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentNameTextColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *)agentNameFont{
+    return [self getFontWithKey:@"ConversationsUI.AgentName" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
 -(UIColor *)messageUIBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BackgroundColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];

@@ -162,4 +162,8 @@
     NSArray<NSTextCheckingResult *> *matches =  [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
     return [matches count] > 0;
 }
+
++(BOOL)isNotEmpty:(NSString *)str{
+    return str && str.length > 0;
+}
 @end
