@@ -26,6 +26,7 @@
 +(BOOL) checkRegexPattern:(NSString *)regex inString:(NSString *)string;
 +(NSString *)replaceInString:(NSString *)string usingRegex:(NSString *)regexString replaceWith:(NSString *) replaceString;
 +(BOOL) isNotEmpty:(NSString *)str;
++(BOOL)isEmpty:(NSString *)str;
 
 @end
 

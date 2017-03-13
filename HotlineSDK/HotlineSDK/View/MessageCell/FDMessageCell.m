@@ -61,7 +61,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     static BOOL SHOW_AGENT_AVATAR_LABEL;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        SHOW_AGENT_AVATAR_LABEL = (HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT).length >0)?YES : NO;
+        SHOW_AGENT_AVATAR_LABEL = [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT];
     });
     return SHOW_AGENT_AVATAR_LABEL;
 }

@@ -103,6 +103,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 @interface HLLocalization : NSObject
 
 +(NSString *)localize:(NSString *)key;
++(BOOL) isNotEmpty:(NSString *)key;
 
 @end
 

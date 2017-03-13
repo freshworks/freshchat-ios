@@ -166,4 +166,8 @@
 +(BOOL)isNotEmpty:(NSString *)str{
     return str && str.length > 0;
 }
+
++(BOOL)isEmpty:(NSString *)str{
+    return ![FDStringUtil isNotEmpty:str];
+}
 @end

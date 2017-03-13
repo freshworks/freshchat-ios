@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
+#import "FDStringUtil.h"
 
 @interface HLLocalization ()
 
@@ -66,6 +67,11 @@
     }else{
         return NO;
     }
+}
+
++(BOOL) isNotEmpty:(NSString *)key{
+    NSString *value = [HLLocalization localize:key];
+    return [FDStringUtil isNotEmpty:value] && [HLLocalization isLocalizedString:value forKey:key];
 }
 
 @end
