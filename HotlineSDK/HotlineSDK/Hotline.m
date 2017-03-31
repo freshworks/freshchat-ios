@@ -159,6 +159,7 @@
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
         [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
+        [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
     
@@ -495,6 +496,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+    config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
     
     [[HLEventManager sharedInstance] reset];
     if(!previousUser) {
