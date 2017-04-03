@@ -22,6 +22,7 @@
 #define HOTLINE_DEFAULTS_SDK_BUILD_NUMBER @"hotline_defaults_sdk_build_number"
 #define HOTLINE_DEFAULTS_APP_ID @"hotline_defaults_app_id"
 #define HOTLINE_DEFAULTS_DOMAIN @"hotline_defaults_domain"
+#define HOTLINE_DEFAULTS_THEME_NAME @"hotline_defaults_theme_name"
 #define HOTLINE_DEFAULTS_APP_KEY @"hotline_defaults_app_key"
 #define HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED @"hotline_defaults_voice_message_enabled"
 #define HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED @"hotline_defaults_picture_message_enabled"
