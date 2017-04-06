@@ -57,8 +57,8 @@
         self.eventsQ = dispatch_queue_create("com.freshdesk.hotline.events", DISPATCH_QUEUE_SERIAL);
         self.plistPath = [[FDUtilities returnLibraryPathForDir:HLEVENT_DIR_PATH] stringByAppendingPathComponent:HLEVENT_FILE_NAME];
         self.maxEventId = @(0);
-        [self loadEvents];
-        [self startEventsUploadTimer];
+//        [self loadEvents]; //Stop uplaoding events
+//        [self startEventsUploadTimer]; //Stop uplaoding events
     }
     return self;
 }
@@ -80,7 +80,8 @@
 }
 
 -(void)startEventsUploadTimer{
-    [self runSync:^{
+    return; //Stop Events upload api
+/*    [self runSync:^{
         if(![[FDReachabilityManager sharedInstance] isReachable]
             || [self.pollingTimer isValid]
             || self.events.count == 0){
@@ -94,7 +95,7 @@
                                                                 repeats:YES];
             FDLog(@"Started events poller");
         });
-    }];
+    }];*/
 }
 
 -(void)cancelEventsUploadTimer{
@@ -120,9 +121,11 @@
 
 //All events right now are generated from SDK. Add user events when we expose API for events.
 -(void) submitSDKEvent:(NSString *)eventName withBlock:(void(^)(HLEvent *event))builderBlock{
-    [self submitEvent:eventName
-                         ofType:HLEVENT_TYPE_SDK
-                      withBlock:builderBlock];
+    return;
+    //Stop Events Recording
+//    [self submitEvent:eventName
+//                         ofType:HLEVENT_TYPE_SDK
+//                      withBlock:builderBlock];
 }
 
 - (void) loadEvents {
