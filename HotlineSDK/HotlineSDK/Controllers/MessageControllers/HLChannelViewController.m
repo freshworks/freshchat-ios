@@ -28,7 +28,6 @@
 #import "HLTagManager.h"
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
-#import "HLEventManager.h"
 #import "HLLoadingViewBehaviour.h"
 #import "FDSecureStore.h"
 
@@ -106,9 +105,6 @@
     [super viewDidAppear:animated];    
     [self localNotificationSubscription];
     [self fetchUpdates];
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-    }];
     self.footerView.hidden = YES;
     [self setNavigationItem];
 }

@@ -35,7 +35,6 @@
 #import "FDIndex.h"
 #import "KonotorMessageBinary.h"
 #import "FDLocalNotification.h"
-#import "HLEventManager.h"
 #import "FDPlistManager.h"
 #import "FDMemLogger.h"
 #import "HLInterstitialViewController.h"
@@ -332,7 +331,6 @@
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
     [self.messagePoller end];
-    [[HLEventManager sharedInstance] cancelEventsUploadTimer];
 }
 
 -(void)performPendingTasks{
@@ -357,8 +355,6 @@
             }
             [[[FDSolutionUpdater alloc]init] fetch];
             [self markPreviousUserUninstalledIfPresent];
-            [[HLEventManager sharedInstance] startEventsUploadTimer];
-            [[HLEventManager sharedInstance] upload]; // trigger upload for any pending events
         });
     }
 }
@@ -498,7 +494,6 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
     
-    [[HLEventManager sharedInstance] reset];
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
     }

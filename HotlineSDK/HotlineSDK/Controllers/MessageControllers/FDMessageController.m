@@ -32,7 +32,6 @@
 #import "FDAutolayoutHelper.h"
 #import "HLFAQUtil.h"
 #import "KonotorAudioRecorder.h"
-#import "HLEventManager.h"
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
 #import "HLChannelViewController.h"
@@ -117,13 +116,6 @@ typedef struct {
         self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
-        NSString *eventChannelID = [self.channel.channelID stringValue];
-        NSString *eventChannelName = self.channel.name;
-        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
-            [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-            [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelID];
-            [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
-        }];
         self.messagesPoller = [[HLMessagePoller alloc] initWithPollType:OnscreenPollFetch];
         [Konotor setDelegate:self];
     }
@@ -936,14 +928,13 @@ typedef struct {
 //TODO: Needs refractor
 -(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
-    [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
             FAQOptions *option = [FAQOptions new];
             if([HLConversationUtil hasTags:self.convOptions]){
                 [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
             }
-            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:option andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
+            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
             ALog(@"%@",e);
@@ -962,18 +953,6 @@ typedef struct {
             ALog(@"%@",e);
         }
     }
-}
-
-- (void) addConversationDeepLinkLaunchEvent{
-    NSString *channelId = [self.conversation.belongsToChannel.channelID stringValue];
-    NSString *channelName = self.conversation.belongsToChannel.name ;
-    NSString *messageAlias = self.conversation.conversationAlias;
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH
-                                          withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:channelId];
-        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channelName];
-        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageAlias];
-    }];
 }
 
 #pragma mark - Audio toolbar delegates
