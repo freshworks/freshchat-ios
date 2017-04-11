@@ -15,7 +15,6 @@
 #import "FDUtilities.h"
 #import "FDBarButtonItem.h"
 #import "HLLocalization.h"
-#import "HLEventManager.h"
 #import "HLSearchViewController.h"
 #import "HLControllerUtils.h"
 #import "HLEmptyResultView.h"

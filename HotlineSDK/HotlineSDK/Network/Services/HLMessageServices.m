@@ -26,7 +26,6 @@
 #import "FDMessagesUpdater.h"
 #import "FDMemLogger.h"
 #import "HLTags.h"
-#import "HLEventManager.h"
 #import "HLCoreServices.h"
 #import "HLConstants.h"
 
@@ -468,7 +467,6 @@ static HLNotificationHandler *handleUpdateNotification;
                 pMessage.messageAlias = messageInfo[@"alias"];
                 pMessage.createdMillis = messageInfo[@"createdMillis"];
                 [channel addMessagesObject:pMessage];
-                [self addSentMessageEventWithChannel:channel messageAlias:pMessage.messageAlias andType:[[pMessage messageType]intValue]];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
                 if ( error && error.code == -1009 ) {
@@ -502,29 +500,6 @@ static HLNotificationHandler *handleUpdateNotification;
     [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
     [FDUtilities registerUser:nil];
 }
-
-+(void) addSentMessageEventWithChannel :(HLChannel *)channel
-                           messageAlias:(NSString *)messageId
-                               andType :(int) type {
-    NSString *eventChannelName = channel.name;
-    NSString *eventChannelId = [channel.channelID stringValue];
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_SEND_MESSAGE
-                                          withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelId];
-        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
-        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageId];
-        NSString *messageType;
-        switch(type){
-            case 1 : messageType = HLEVENT_MESSAGE_TYPE_TEXT; break;
-            case 2 : messageType = HLEVENT_MESSAGE_TYPE_AUDIO; break;
-            case 3 : messageType = HLEVENT_MESSAGE_TYPE_IMAGE; break;
-            default: messageType = HLEVENT_MESSAGE_TYPE_TEXT; break;
-        }
-        
-        [event propKey:HLEVENT_PARAM_MESSAGE_TYPE andVal:messageType];
-    }];
-}
-
 
 //TODO: Skip messages that are clicked before
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId{

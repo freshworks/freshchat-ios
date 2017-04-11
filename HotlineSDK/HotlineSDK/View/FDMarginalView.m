@@ -10,7 +10,7 @@
 #import "HLMacros.h"
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
-#import "HLEventManager.h"
+
 
 @interface FDMarginalView ()
 
@@ -60,9 +60,6 @@
 }
 
 -(void)handleTapGesture:(id)sender{
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_NOT_HELPFUL];
-    }];
     [self.delegate marginalView:self handleTap:sender];
 }
 

@@ -13,7 +13,6 @@
 #import "HLMacros.h"
 #import "HLMessageServices.h"
 #import "FDUtilities.h"
-#import "HLEventManager.h"
 #import "FDSecureStore.h"
 
 

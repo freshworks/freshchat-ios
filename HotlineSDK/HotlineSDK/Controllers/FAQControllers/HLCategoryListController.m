@@ -26,7 +26,6 @@
 #import "FDReachabilityManager.h"
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
-#import "HLEventManager.h"
 #import "HLCategoryViewBehaviour.h"
 #import "HLLoadingViewBehaviour.h"
 #import "HLControllerUtils.h"
@@ -95,9 +94,6 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-    }];
     [HLControllerUtils configureGestureDelegate:nil forController:self withEmbedded:[self isEmbedded]];
 }
 
@@ -156,12 +152,6 @@
     HLArticlesController *articleController = [[HLArticlesController alloc]initWithCategory:category];
     [HLFAQUtil setFAQOptions: self.faqOptions onController:articleController];
     HLContainerController *container = [[HLContainerController alloc]initWithController:articleController andEmbed:NO];
-    NSString *eventCategoryID = [category.categoryID stringValue];
-    NSString *eventCategoryName = category.title;
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_OPEN_CATEGORY withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:eventCategoryID];
-        [event propKey:HLEVENT_PARAM_CATEGORY_NAME andVal:eventCategoryName];
-    }];
     
     [self.navigationController pushViewController:container animated:YES];
 }
