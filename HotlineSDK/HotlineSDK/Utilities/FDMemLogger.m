@@ -19,7 +19,6 @@
 @interface FDMemLogger ()
 
 @property (nonatomic, strong) NSMutableArray *logList;
-@property (nonatomic, strong) NSString *sessionID;
 
 @end
 
@@ -27,19 +26,18 @@
 
 static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
 
-+ (instancetype)sharedInstance{
-    static FDMemLogger *sharedFDMemLogger = nil;
++(NSString*) getSessionId{
+    static NSString *sessionId;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedFDMemLogger = [[self alloc]init];
+        sessionId = [FDStringUtil generateUUID];
     });
-    return sharedFDMemLogger;
+    return sessionId;
 }
 
 -(id)init{
     self = [super init];
     if(self){
-        self.sessionID = [FDStringUtil generateUUID];
         _logList = [[NSMutableArray alloc] init];
     }
     return self;
@@ -101,7 +99,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
 }
 
 -(NSString *)getUserSessionId{
-    return [NSString stringWithFormat:@"%@_%@", [FDMemLogger sharedInstance].sessionID, [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
+    return [NSString stringWithFormat:@"%@_%@", [FDMemLogger getSessionId], [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
 }
 
 -(void)upload{
