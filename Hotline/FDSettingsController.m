@@ -212,7 +212,7 @@
         case 0:
             [[Hotline sharedInstance]clearUserDataWithCompletion:^{
                 [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
-                [[Hotline sharedInstance]initWithConfig:config];
+                //[[Hotline sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
             break;

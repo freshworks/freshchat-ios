@@ -427,7 +427,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
             
             txtheight=sizer.height-16;
             
-            [messageTextView setTextContainerInset:UIEdgeInsetsMake(([FDMessageCell getAgentnamePadding]), 0, 0, 0)];
+           [messageTextView setTextContainerInset:UIEdgeInsetsMake(([FDMessageCell getAgentnamePadding])+height+KONOTOR_AGENT_NAME_MIN_PADDING, 0, 0, 0)];
             
         }
         else
