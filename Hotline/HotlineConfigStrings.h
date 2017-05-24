@@ -1,8 +1,8 @@
 
 
 #define HOTLINE_DOMAIN @"app.hotline.io"
-#define HOTLINE_APP_ID @"7baba8ff-d18e-4e20-a096-3ea5be53ba67"
-#define HOTLINE_APP_KEY @"72645c38-b738-491e-94b4-0eb0b9e98e2f"
+#define HOTLINE_APP_ID @"e3280bde-4696-4bd5-8be7-e7919249bf9a"
+#define HOTLINE_APP_KEY @"9d456296-5f38-45ce-884e-b595f7e6301a"
 
 
 //sid+demo@freshdesk.com prod
