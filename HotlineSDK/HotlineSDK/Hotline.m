@@ -272,6 +272,7 @@
 -(void) updateConversationBannerMessage:(NSString *) message{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
+    [FDLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
 }
 
 -(void)updateUser:(HotlineUser *)user{
