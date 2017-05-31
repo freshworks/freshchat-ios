@@ -22,6 +22,8 @@
 
 #define HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS @"com.freshdesk.notification.perform_pending_tasks"
 
+#define HOTLINE_BANNER_MESSAGE_UPDATED @"com.freshdesk.hotline_banner_message_updated"
+
 @interface FDLocalNotification : NSObject
 
 +(void)post:(NSString *)name;
