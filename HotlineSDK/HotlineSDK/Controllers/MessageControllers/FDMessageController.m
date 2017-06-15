@@ -11,7 +11,7 @@
 #import "FDMessageCell.h"
 #import "KonotorImageInput.h"
 #import "Hotline.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "Konotor.h"
 #import "HLMacros.h"
 #import "FDLocalNotification.h"
@@ -146,7 +146,7 @@ typedef struct {
     [self setNavigationItem];
     [self scrollTableViewToLastCell];
     [HLMessageServices fetchChannelsAndMessagesWithFetchType:ScreenLaunchFetch source:ChatScreen andHandler:nil];
-    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [Message markAllMessagesAsReadForChannel:self.channel];
     [self prepareInputToolbar];
 }
 
@@ -309,6 +309,8 @@ typedef struct {
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;    
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.view addSubview:self.tableView];
     
@@ -392,8 +394,9 @@ typedef struct {
         cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier andDelegate:self];
     }
     if (indexPath.row < self.messages.count) {
-        KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
+        MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
         cell.messageData = message;
+        
         [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
     }
     
@@ -437,8 +440,8 @@ typedef struct {
     return self.messagesDisplayedCount;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
+/*-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
     float height;
     NSString *key = [self getIdentityForMessage:message];
     if(key){
@@ -453,10 +456,10 @@ typedef struct {
         height = 0;
     }
     return height+CELL_HORIZONTAL_PADDING;
-}
+}*/
 
 
--(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
+-(CGFloat)getWidthForMessage:(MessageData *) message{
     float width;
     NSString *key = [self getIdentityForMessage:message];
     if(key){
@@ -474,7 +477,7 @@ typedef struct {
 }
 
 
--(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
+-(NSString *)getIdentityForMessage:(MessageData *)message{
     return ((message.messageId==nil)?[NSString stringWithFormat:@"%ul",message.createdMillis.intValue]:message.messageId);
 }
 
@@ -519,7 +522,13 @@ typedef struct {
         
     }else{
         
-        [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
+        NSDictionary *textFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @1, @"fragmentType",
+                                                                                        @"text/html",@"contentType",
+                                                                                        self.inputToolbar.textView.text,@"content",
+                                                                                        @0,@"position",nil];
+        
+        NSArray *fragmentInfo = [[NSArray alloc] initWithObjects:textFragmentInfo, nil];        
+        [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
@@ -663,7 +672,7 @@ typedef struct {
 }
 
 -(void)networkReachable{
-    [KonotorMessage uploadAllUnuploadedMessages];
+    [Message uploadAllUnuploadedMessages];
 }
 
 -(void)localNotificationUnSubscription{
@@ -679,11 +688,11 @@ typedef struct {
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
-    [self.messagesPoller begin];
+    //[self.messagesPoller begin];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
-    [self.messagesPoller end];
+    //[self.messagesPoller end];
 }
 
 #pragma mark Keyboard delegate
@@ -799,7 +808,7 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
-        [self.messagesPoller reset];
+        //[self.messagesPoller reset];
     }
     [self processPendingCSAT];
 }
@@ -878,7 +887,7 @@ typedef struct {
     }
 
     [self.tableView reloadData];
-    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [Message markAllMessagesAsReadForChannel:self.channel];
     if(obj==nil)
         [self scrollTableViewToLastCell];
     else{
@@ -888,11 +897,7 @@ typedef struct {
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[KonotorMessage getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
-    KonotorMessageData *firstMessage = messages.firstObject;
-    if (firstMessage.isWelcomeMessage && !firstMessage.text.length) {
-        [messages removeObject:firstMessage];
-    }
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[Message getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];        
     return messages;
 }
 
@@ -923,6 +928,14 @@ typedef struct {
     FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:image];
     [imageController presentOnController:self];
     FDLog(@"Picture message tapped");
+}
+
+-(void)perfomAction:(FragmentData *)fragment {
+    NSNumber *fragmentType = @([fragment.type intValue]);
+    if ([fragmentType isEqualToValue:@2]) {
+        FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:[UIImage imageWithData:fragment.binaryData1]];
+        [imageController presentOnController:self];
+    }
 }
 
 //TODO: Needs refractor
@@ -972,7 +985,8 @@ typedef struct {
     if(self.currentRecordingMessageId!=nil){
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
-        float audioMsgDuration = [[[KonotorMessage retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
+        float audioMsgDuration = 0.0f;
+        //[[[Message retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
         
         if(audioMsgDuration <= 1){
             

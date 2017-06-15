@@ -12,6 +12,14 @@
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 
+#import "FDDeeplinkFragment.h"
+#import "FDHtmlFragment.h"
+#import "FDImageFragment.h"
+#import "FDVideoFragment.h"
+#import "FDAudioFragment.h"
+#import "FDFileFragment.h"
+
+
 #define KONOTOR_VERTICAL_PADDING 2
 #define KONOTOR_AGENT_NAME_MIN_PADDING 8
 #define KONOTOR_TIMEFIELD_HEIGHT 16
@@ -19,6 +27,8 @@
 #define KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME NO
 #define KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING 20
 #define WIDTH_BUFFER_IF_NO_PROFILE_AVAILABLE 5*KONOTOR_HORIZONTAL_PADDING;
+
+#define MAX_MESSAGE_WIDTH 400
 
 static UITextView* tempView=nil;
 static UITextView* txtView=nil;
@@ -43,9 +53,9 @@ static float ACTION_URL_HEIGHT = KONOTOR_ACTIONBUTTON_HEIGHT+KONOTOR_VERTICAL_PA
 static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KONOTOR_VERTICAL_PADDING*2 + EXTRA_TIMESTAMP_HEIGHT ;
 
 
-@synthesize messageActionButton,messagePictureImageView,messageSentTimeLabel,messageTextView,chatCalloutImageView,uploadStatusImageView,profileImageView,audioItem,senderNameLabel,messageTextFont;
+@synthesize messageActionButton,messagePictureImageView,messageSentTimeLabel,messageTextView,chatBubbleImageView,uploadStatusImageView,profileImageView,audioItem,senderNameLabel,messageTextFont;
 
-@synthesize isSenderOther,showsProfile,showsSenderName,customFontName,showsTimeStamp,showsUploadStatus,sentImage,sendingImage;
+@synthesize isAgentMessage,showsProfile,showsSenderName,customFontName,showsTimeStamp,showsUploadStatus,sentImage,sendingImage;
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<FDMessageCellDelegate>)delegate{
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
@@ -75,6 +85,8 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
         txtView=[[UITextView alloc] init];
     }
     
+    self.maxcontentWidth =(NSInteger) self.contentView.frame.size.width - ((self.contentView.frame.size.width/100)*30) ;
+    
     sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     showsProfile = YES;
@@ -83,20 +95,19 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     showsUploadStatus=YES;
     showsTimeStamp=YES;
     /* setup callout*/
-    chatCalloutImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
-    [self.contentView addSubview:chatCalloutImageView];
+    chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
     
     /* setup UserName field*/
     senderNameLabel=[[UITextView alloc] initWithFrame:CGRectZero];
     [senderNameLabel setFont:[[HLTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
-    
+    senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameTextColor];
     [senderNameLabel setEditable:NO];
     [senderNameLabel setScrollEnabled:NO];
     [senderNameLabel setSelectable:NO];
-    [self.contentView addSubview:senderNameLabel];
+    //[self.contentView addSubview:senderNameLabel];
     
     self.userNameFieldHeight = [[HLTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]);
     
@@ -109,7 +120,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
         [messageSentTimeLabel setEditable:NO];
         [messageSentTimeLabel setSelectable:NO];
         [messageSentTimeLabel setScrollEnabled:NO];
-        [self.contentView addSubview:messageSentTimeLabel];
+        messageSentTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
     }
     
     /* setup message text field*/
@@ -125,7 +136,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     [messageTextView setEditable:NO];
     [messageTextView setScrollEnabled:NO];
     messageTextView.scrollsToTop=NO;
-    [self.contentView addSubview:messageTextView];
+    //[self.contentView addSubview:messageTextView];
     
     /* setup audio message elements*/
     
@@ -137,16 +148,17 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     /* setup profile image view*/
     if(showsProfile){
         profileImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
-        [self.contentView addSubview:profileImageView];
-        profileImageView.layer.masksToBounds=YES;
-        profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
+        //[self.contentView addSubview:profileImageView];
+        //profileImageView.layer.masksToBounds=YES;
+        //profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
     }
     
     /* setup message sent status*/
     if(showsUploadStatus){
         uploadStatusImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
         [uploadStatusImageView setImage:sentImage];
-        [self.contentView addSubview:uploadStatusImageView];
+        uploadStatusImageView.translatesAutoresizingMaskIntoConstraints = NO;
+        //[self.contentView addSubview:uploadStatusImageView];
     }
     
     /* setup message picture view */
@@ -172,7 +184,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     [messageActionButton addTarget:self action:@selector(openActionUrl:) forControlEvents:UIControlEventTouchUpInside];
     [messageActionButton setUpStyle];
     [messageActionButton setActionUrlString:nil];
-    [self addSubview:messageActionButton];
+    //[self addSubview:messageActionButton];
 }
 
 + (float) getAgentnamePadding{
@@ -189,11 +201,13 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 }
 
 -(void)tappedOnPicture:(id)gesture{
+    /*
     UIImage *image=[UIImage imageWithData:[self.messageData picData]];
     if(!image) {
         image = [[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER];
     }
-    [self.delegate messageCell:self pictureTapped:image];
+    [self.delegate messageCell:self pictureTapped:image]; 
+     */
 }
 
 +(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID{
@@ -203,8 +217,8 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 }
 
 
-+ (float) getWidthForMessage:(KonotorMessageData*)message{
-    
++ (float) getWidthForMessage:(MessageData*)message{
+    /*
     if(tempView==nil){
         tempView=[[UITextView alloc] init];
         txtView=[[UITextView alloc] init];
@@ -253,14 +267,15 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
             messageContentViewWidth = msgWidth;
         }
     }
-    if(([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2)){
+    /*if(([message messageType].integerValue==KonotorMessageTypePicture)||([message messageType].integerValue==KonotorMessageTypePictureV2)){
         CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:message];
         if((picSize.width+16)>messageContentViewWidth)
             messageContentViewWidth=MIN(picSize.width+16,KONOTOR_TEXTMESSAGE_MAXWIDTH);
 
-    }
+    }*/
     
-    return messageContentViewWidth;
+    //return messageContentViewWidth;
+    return 0;
 }
 
 + (int) getNoOfLines :(NSString *)messageText {
@@ -271,208 +286,209 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 }
 
 
-- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)contentViewWidth{
-    
-    NSInteger messageType = [currentMessage.messageType integerValue];
-    
-    isSenderOther=[Konotor isUserMe:[currentMessage messageUserId]]?NO:YES;
-    float profileX=0.0, messageContentViewX=0.0, messageContentViewY=0.0, messageTextBoxX=0.0, messageTextBoxY=0.0,messageContentViewWidth=0.0,messageTextBoxWidth=0.0;
-    
-    messageContentViewWidth=contentViewWidth;
-    
-    //add for config into user file
+- (void) drawMessageViewForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)contentViewWidth{
+    NSArray *subViewArr = [self.contentView subviews];
+    NSMutableArray *fragmensViewArr = [[NSMutableArray alloc]init];
+    for (int i=0; i<[subViewArr count]; i++) {
+        [subViewArr[i] removeFromSuperview];
+    }
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
     BOOL isAgentAvatarEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
     BOOL isUserAvatarEnabled = FALSE;//Set Default as false will use it in later versions
-    showsProfile = isSenderOther?isAgentAvatarEnabled:isUserAvatarEnabled;
-    
-    // get the length of the textview if one line and calculate page sides
-    
-    float messageDisplayWidth=parentView.frame.size.width;
-    
-    if(showsProfile){
-        profileX=isSenderOther?KONOTOR_HORIZONTAL_PADDING:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION);
-        messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth=MIN(messageDisplayWidth-KONOTOR_PROFILEIMAGE_DIMENSION-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
-        messageContentViewX=isSenderOther?(profileX+KONOTOR_PROFILEIMAGE_DIMENSION+KONOTOR_HORIZONTAL_PADDING)-4:(messageDisplayWidth-KONOTOR_HORIZONTAL_PADDING-KONOTOR_PROFILEIMAGE_DIMENSION-KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
-        
-        messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
-        messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);
-        
-        messageTextBoxY=messageContentViewY;
-    }
-    else{
-        messageContentViewY=KONOTOR_VERTICAL_PADDING;
-        messageContentViewWidth= MIN(messageDisplayWidth-4*KONOTOR_HORIZONTAL_PADDING,messageContentViewWidth)+8;
-        messageContentViewX=isSenderOther?(KONOTOR_HORIZONTAL_PADDING*2):(messageDisplayWidth-2*KONOTOR_HORIZONTAL_PADDING-messageContentViewWidth);
-        messageTextBoxWidth=messageContentViewWidth-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING;
-        messageTextBoxX=isSenderOther?(messageContentViewX+KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING):(messageContentViewX+KONOTOR_HORIZONTAL_PADDING);
-        messageTextBoxY=messageContentViewY;
-    }
-    
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-    
-    if(currentMessage.isWelcomeMessage){
-        messageSentTimeLabel.text = nil;
-        if([FDMessageCell getNoOfLines : currentMessage.text]==1){
-            messageTextBoxY= 22 - (KONOTOR_VERTICAL_PADDING+6+(messageTextFont.lineHeight/2));
-        }
-    }
-    else{
-        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
-    }
-    
-    CGRect messageTextBoxFrame=CGRectMake(messageTextBoxX,messageTextBoxY,messageTextBoxWidth,0);
-    CGRect messageContentViewFrame=CGRectMake(messageContentViewX, messageContentViewY, messageContentViewWidth, 0);
-    
-    [senderNameLabel setFrame:CGRectMake(messageTextBoxX, messageTextBoxY, messageTextBoxWidth, self.userNameFieldHeight)];
-    
-    if([currentMessage uploadStatus].integerValue==MessageUploaded)
-        [uploadStatusImageView setImage:sentImage];
-    else
-        [uploadStatusImageView setImage:sendingImage];
-        
     UIImage *otherChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
     UIImage *userChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
-    
     UIEdgeInsets otherChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
     UIEdgeInsets userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
-    messageTextView.tintColor = [[HLTheme sharedInstance] hyperlinkColor];
-    UIColor *messageTextColor;
     
-    if(isSenderOther){
-        messageTextColor = [[HLTheme sharedInstance] agentMessageFontColor];
-        [uploadStatusImageView setImage:nil];
-        [chatCalloutImageView setImage:[otherChatBubble resizableImageWithCapInsets:otherChatBubbleInsets]];
-        [messageTextView setTextColor:messageTextColor];
-        [messageSentTimeLabel setTextColor:messageTextColor];
-    }
-    else{
-        messageTextColor = [[HLTheme sharedInstance] userMessageFontColor];
-        [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
-        [messageTextView setTextColor:messageTextColor];
-        [messageSentTimeLabel setTextColor:messageTextColor];
-    }
+    isAgentMessage = [Konotor isUserMe:[currentMessage messageUserType]]?NO:YES; //Changed
+    showsProfile = isAgentMessage?isAgentAvatarEnabled:isUserAvatarEnabled;
     
-    showsSenderName = isSenderOther && [FDMessageCell showAgentAvatarLabel];
-    if(showsSenderName){
-        [senderNameLabel setHidden:NO];
-        senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-    }
-    else {
-        [senderNameLabel setHidden:YES];
-    }
-    NSString* actionUrl=currentMessage.actionURL;
-    NSString* actionLabel=currentMessage.actionLabel;
-    messageActionButton.actionUrlString=actionUrl;
-    messageActionButton.articleID=currentMessage.articleID;
+    UIView *contentEncloser = [[UIView alloc]init];
+    contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
     
-    if([messageTextView respondsToSelector:@selector(setTextContainerInset:)])
-        [messageTextView setTextContainerInset:UIEdgeInsetsMake(6, 0, 8, 0)];
+    profileImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    profileImageView.clipsToBounds = YES;
+    profileImageView.contentMode = UIViewContentModeScaleAspectFit;
+    profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
     
-    if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)) {
-        [audioItem.mediaProgressBar setHidden:YES];
-        [audioItem.audioPlayButton setHidden:YES];
-        
-        
-        NSString *simpleString=currentMessage.text;
-        [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
-        
-        CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:messageTextFont];
-        float msgHeight=sizer.height;
-        float textViewY=(showsSenderName?self.userNameFieldHeight:0);
-        float contentViewY=(showsSenderName?self.userNameFieldHeight:0);
-        
-        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
-        
-        [messagePictureImageView setHidden:YES];
-        [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
-        
-    }else if(messageType == KonotorMessageTypeAudio){
-        
-        [messageTextView setText:@""];
-        
-        float msgHeight=KONOTOR_AUDIOMESSAGE_HEIGHT;
-        float textViewY=(showsSenderName?self.userNameFieldHeight:KONOTOR_VERTICAL_PADDING);
-        float contentViewY=(showsSenderName?self.userNameFieldHeight:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING;
-        
-        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
-        
-        [audioItem displayMessage:(FDMessage*)currentMessage];
-        
-        [messagePictureImageView setHidden:YES];
-        [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
+    chatBubbleImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    chatBubbleImageView.clipsToBounds = YES;
+    
+    [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
+    
+    [self.contentView addSubview:contentEncloser];
+    [contentEncloser addSubview:chatBubbleImageView];
+    [views setObject:contentEncloser forKey:@"contentEncloser"];
+    [views setObject:chatBubbleImageView forKey:@"chatBubbleImageView"];
 
-    }else if((messageType ==KonotorMessageTypePicture)||(messageType == KonotorMessageTypePictureV2)){
-        if((![currentMessage picData])&&(([[currentMessage picUrl] isEqualToString:@""])|| ([currentMessage picUrl]==nil))&&((currentMessage.text==nil)||([currentMessage.text isEqualToString:@""])))
-            currentMessage.text=HLLocalizedString(LOC_PICTURE_MSG_UPLOAD_ERROR);
-            
-        CGSize picSize=[FDPictureMessageView getSizeForImageFromMessage:currentMessage];
-        
-        float height=picSize.height;
-        
-        float txtheight=0.0;
-        
-        [messagePictureImageView setUpPictureMessageInteractionsForMessage:currentMessage withMessageWidth:messageContentViewWidth];
-        
-        if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
-           
-            NSString *simpleString=currentMessage.text;
-            
-            
-            [messageTextView setText:[NSString stringWithFormat:@"\u200b%@",currentMessage.text]];
-            CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:messageTextBoxWidth text:simpleString withFont:messageTextFont];
-
-            
-            txtheight=sizer.height-16;
-            
-           [messageTextView setTextContainerInset:UIEdgeInsetsMake(([FDMessageCell getAgentnamePadding])+height+KONOTOR_AGENT_NAME_MIN_PADDING, 0, 0, 0)];
-            
+    if(isAgentMessage){ //Agent Message
+        [chatBubbleImageView setImage:[otherChatBubble resizableImageWithCapInsets:otherChatBubbleInsets]];
+    }
+    else{ //User Message
+        if([currentMessage uploadStatus].integerValue==2)  {
+            [uploadStatusImageView setImage:sentImage];
         }
-        else
-            [messageTextView setText:@""];
-        
-        float msgHeight=16+height+txtheight;
-        float textViewY=(showsSenderName?self.userNameFieldHeight:0);
-        float contentViewY=(showsSenderName?self.userNameFieldHeight:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING;
-        
-        [self adjustHeightForMessageBubble:chatCalloutImageView textView:messageTextView actionUrl:actionUrl height:msgHeight articleID:currentMessage.articleID textBoxRect:messageTextBoxFrame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName sender:isSenderOther textFrameAdjustY:textViewY contentFrameAdjustY:contentViewY];
-        
+        else {
+            [uploadStatusImageView setImage:sendingImage];
+        }
+        [views setObject:uploadStatusImageView forKey:@"uploadStatusImageView"];
+        [contentEncloser addSubview:uploadStatusImageView];
+        [chatBubbleImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
+    }
 
-        [audioItem setHidden:YES];
-        [messagePictureImageView setHidden:NO];
-        
-        messagePictureImageView.layer.cornerRadius=10.0;
-        messagePictureImageView.layer.masksToBounds=YES;
-        [messageActionButton setupWithLabel:actionLabel frame:messageTextView.frame];
-        
+    showsSenderName = isAgentMessage && [FDMessageCell showAgentAvatarLabel]; //Buid considering always false
+    if(showsSenderName){
+        senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        //[views setObject:senderNameLabel forKey:@"senderNameLabel"]; Constraints not yet set.
     }
     
-    [self adjustPositionForTimeView:messageSentTimeLabel textBoxRect:messageTextView.frame contentViewRect:messageContentViewFrame showsSenderName:showsSenderName messageType:(enum KonotorMessageType)[currentMessage messageType].integerValue isAgentMessage:(BOOL)isSenderOther];
     
-   if(showsProfile){
-       if(isSenderOther){
-           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
-       }else{
-           profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_USER];
-       }
-       
-       profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
-       profileImageView.hidden = NO;
-       
-    }else{
-        profileImageView.hidden = YES;
+    if(showsProfile){
+        if(isAgentMessage){
+            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        }else{
+            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_USER];
+        }
+        profileImageView.frame = CGRectMake(0, 0, 40, 40);
+        [self.contentView addSubview:profileImageView];
+        [views setObject:profileImageView forKey:@"profileImageView"];
     }
-     
+    
+    if(!currentMessage.isWelcomeMessage){
+        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
+        messageSentTimeLabel.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        [contentEncloser addSubview:messageSentTimeLabel];
+        [views setObject:messageSentTimeLabel forKey:@"messageSentTimeLabel"]; //Constraints not yet set.
+    }
+    
+    for(int i=0; i<currentMessage.fragments.count; i++) {
+        FragmentData *fragment = currentMessage.fragments[i];
+        if ([fragment.type isEqualToString:@"1"]) {
+            //HTML
+            FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initWithFragment:fragment];
+            [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
+            [contentEncloser addSubview:htmlFragment];
+            [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];
+            NSLog(@"HTML");
+        } else if([fragment.type isEqualToString:@"2"]) {
+            //IMAGE
+            FDImageFragment *imageFragment = [[FDImageFragment alloc]initWithFragment:fragment ofMessage:currentMessage];
+            imageFragment.delegate = self.delegate;
+            [views setObject:imageFragment forKey:[@"image_" stringByAppendingFormat:@"%d",i]];
+            [contentEncloser addSubview:imageFragment];
+            [fragmensViewArr addObject:[@"image_" stringByAppendingFormat:@"%d",i]];
+            NSLog(@"IMAGE");
+        } else if([fragment.type isEqualToString:@"3"]) {
+            //AUDIO
+            //Skip now
+            NSLog(@"AUDIO");
+        } else if([fragment.type isEqualToString:@"4"]) {
+            //VIDEO
+            //Skip now
+            NSLog(@"VIDEO");
+        } else if([fragment.type isEqualToString:@"5"]) {
+            //BTN
+            FDFileFragment *fileFragment = [[FDFileFragment alloc] initWithFragment:fragment];
+            [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
+            [contentEncloser addSubview:fileFragment];
+            [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
+            NSLog(@"BUTTON");
+        } else if([fragment.type isEqualToString:@"6"]) {
+            //FILE
+            FDFileFragment *fileFragment = [[FDFileFragment alloc] initWithFragment:fragment];
+            [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
+            [contentEncloser addSubview:fileFragment];
+            [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
+            NSLog(@"FILE");
+        }
+    }
+    
+    //All details are in contentview but no constrains set
+    
+    
+    NSString *leftPadding = isAgentMessage ? @"10": @"(>=5)";
+    NSString *rightPadding = isAgentMessage ? @"(>=5)": @"10";
+    
+    if(showsProfile) {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[contentEncloser]-%@-|",rightPadding] options:0 metrics:nil views:views]]; //Correct
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImageView(40)]-5-|" options:0 metrics:nil views:views]];
+    } else {
+        if(isAgentMessage) {
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[contentEncloser]-%@-|",rightPadding] options:0 metrics:nil views: views]];
+        } else {
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%@-[contentEncloser]-5-|",leftPadding] options:0 metrics:nil views: views]];
+        }
+    }
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+    //Constraints for profileview and contentEncloser are done.
+
+    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
+    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
+    //Constraints for chatbubble are done.
+    
+    
+    
+    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|"];
+    for(int i=0;i<fragmensViewArr.count;i++) { //Set Constraints here
+        NSString *str = fragmensViewArr[i];
+        if([str containsString:@"image_"]) {
+            FDImageFragment *imageFragment = views[str];
+            NSString *imageHeight = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.height];
+            NSString *imageWidth = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.width];
+            if (isAgentMessage) {
+                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=10)-[%@(%@)]-(>=5)-|",str,imageHeight];
+                [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+            } else {
+                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=5)-[%@(%@)]-(>=10)-|",str,imageHeight];
+                [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+            }
+            NSLayoutConstraint *centerConstraint = [NSLayoutConstraint constraintWithItem:imageFragment
+                                             attribute:NSLayoutAttributeCenterX
+                                             relatedBy:NSLayoutRelationEqual
+                                                toItem:contentEncloser
+                                             attribute:NSLayoutAttributeCenterX
+                                            multiplier:1
+                                              constant:0];
+            [contentEncloser addConstraint:centerConstraint];
+            
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(%@)]",str,imageWidth]];
+        } else if([str containsString:@"text_"]) {
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+        } else if([str containsString:@"button_"]) {
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@]-%@-|",leftPadding,str,rightPadding];
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+        }
+    }
+    
+    if(!currentMessage.isWelcomeMessage) { //Show time for non welcome messages.
+        [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(20)]"];
+        if(isAgentMessage) { //Show only time
+           [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-5-[messageSentTimeLabel]-(>=5)-|" options:0 metrics:nil views:views]];
+        } else { //Show time and upload status
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-(>=5)-[messageSentTimeLabel]-1-[uploadStatusImageView(10)]-10-|" options:0 metrics:nil views:views]];
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"V:[uploadStatusImageView(10)]-5-|" options:0 metrics:nil views:views]];
+        }
+    }
+    
+    [veriticalConstraint appendString:@"-5-|"];
+    //Constraints for details inside contentEncloser is done.
+    if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {
+        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : veriticalConstraint options:0 metrics:nil views:views]];
+    }
     [self setBackgroundColor:[UIColor clearColor]];
     [self.contentView setClipsToBounds:YES];
     self.tag=[currentMessage.messageId hash];
 }
 
-+ (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView{
++ (float) getHeightForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView{
     
-    BOOL KONOTOR_SHOWPROFILEIMAGE=YES;
+/*    BOOL KONOTOR_SHOWPROFILEIMAGE=YES;
     
     NSInteger messageType = [currentMessage.messageType integerValue];
     BOOL isAgent=[Konotor isUserMe:[currentMessage messageUserId]]?NO:YES;
@@ -528,9 +544,10 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     }
     cellHeight = (isAgent && isAgentNameEnabled)?(cellHeight -(2*KONOTOR_VERTICAL_PADDING)) : cellHeight;
     return cellHeight;
+     */
 }
 
-- (void) adjustPositionForTimeView:(UITextView*) timeField textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)showSenderName messageType:(enum KonotorMessageType) messageType isAgentMessage:(BOOL)isAgentMessage{
+/*- (void) adjustPositionForTimeView:(UITextView*) timeField textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)showSenderName messageType:(enum KonotorMessageType) messageType isAgentMessage:(BOOL)isAgentMessage{
     
     float messageTextBoxX=messageTextFrame.origin.x-KONOTOR_HORIZONTAL_PADDING-(isAgentMessage?0:15);
     float messageTextBoxY=messageTextFrame.origin.y+(self.messageActionButton.isHidden?0:(KONOTOR_ACTIONBUTTON_HEIGHT+2*KONOTOR_VERTICAL_PADDING));
@@ -582,9 +599,9 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     
     [uploadStatusImageView setFrame:CGRectMake(messageTextBoxX+messageTextBoxWidth, messageTextBoxY+messageTextView.frame.size.height+2, 10, 10)];
     
-}
+}*/
 
-- (void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight articleID:(NSNumber*) articleID textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)showSenderName sender:(BOOL)isSenderOther textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY{
+- (void) adjustHeightForMessageBubble:(UIImageView*)messageBackground textView:(UITextView*)messageText actionUrl:(NSString*)actionUrl height:(float)msgHeight articleID:(NSNumber*) articleID textBoxRect:(CGRect)messageTextFrame contentViewRect:(CGRect)messageContentFrame showsSenderName:(BOOL)showSenderName sender:(BOOL)isAgentMessage textFrameAdjustY:(float)textViewY contentFrameAdjustY:(float)contentViewY{
     
     float messageTextBoxX=messageTextFrame.origin.x;
     float messageTextBoxY=messageTextFrame.origin.y;

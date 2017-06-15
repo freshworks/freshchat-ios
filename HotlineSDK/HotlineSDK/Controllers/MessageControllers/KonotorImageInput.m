@@ -173,8 +173,8 @@
     [self.sourceViewController presentViewController:navcontroller animated:YES completion:nil];
 }
 
--(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image{
-    [Konotor uploadImage:self.imagePicked onConversation:self.conversation onChannel:self.channel];
+-(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image withCaption:(NSString *)caption {
+    [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
 }
 
 @end

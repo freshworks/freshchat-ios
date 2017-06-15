@@ -17,7 +17,6 @@
 #import "KonotorConversation.h"
 #import "FDUtilities.h"
 #import "Konotor.h"
-#import "KonotorMessage.h"
 #import "FDResponseInfo.h"
 #import "FDBackgroundTaskManager.h"
 #import "FDDateUtil.h"
@@ -28,6 +27,8 @@
 #import "HLTags.h"
 #import "HLCoreServices.h"
 #import "HLConstants.h"
+#import "Message.h"
+#import "Fragment.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
@@ -199,10 +200,10 @@ static HLNotificationHandler *handleUpdateNotification;
         NSArray *messages = conversationInfo[@"messages"];
         for (int j=0; j<messages.count; j++) {
             __block NSDictionary *messageInfo = messages[j];
-            KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageInfo[@"alias"]];
+            Message *message = [Message retriveMessageForMessageId:messageInfo[@"alias"]];
             lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
             if (!message) {
-                KonotorMessage *newMessage = [KonotorMessage createNewMessage:messageInfo];
+                Message *newMessage = [Message createNewMessage:messageInfo toChannelID:channel.channelID];
                 newMessage.uploadStatus = @2;
                 
                 if (channel) {
@@ -219,11 +220,10 @@ static HLNotificationHandler *handleUpdateNotification;
                 
                 //Do not mark restored messages as unread
                 if (isRestore) {
-                    newMessage.messageRead = YES;
+                    newMessage.isRead = YES;
                 }else {
-                    if([newMessage.messageType intValue] == KonotorMessageTypeText){
-                        messageText = newMessage.text;
-                    }
+                    newMessage.isRead = NO;
+                    messageText = [newMessage getDetailDescriptionForMessage];
                 }
             }
         }
@@ -372,7 +372,7 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-+(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
++(void)uploadMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     
     //Added this to simulate sending unregistered user alias for message create call
 //    [[FDSecureStore sharedInstance] setObject:@"asdf-adf-asdf-asdf" forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
@@ -392,7 +392,7 @@ static HLNotificationHandler *handleUpdateNotification;
     
     if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING){
         return;
-    }else{
+    } else{
         pMessage.uploadStatus = @(MESSAGE_UPLOADING);
         [[KonotorDataManager sharedInstance]save];
     }
@@ -412,7 +412,7 @@ static HLNotificationHandler *handleUpdateNotification;
             FDLog(@"Message sending without conversation ID");
         }
         
-        //Audio message
+        /*//Audio message
         if([[pMessage messageType]intValue]== 2){
             KonotorMessageBinary *pBinary = (KonotorMessageBinary*)[pMessage valueForKeyPath:@"hasMessageBinary"];
             
@@ -433,6 +433,8 @@ static HLNotificationHandler *handleUpdateNotification;
                 }
             }
         }
+         */
+        //fragments here
         
     }];
     
@@ -490,6 +492,136 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
+
++(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    if(![pMessage isMarkedForUpload]){
+        pMessage.isMarkedForUpload = YES;
+        [[KonotorDataManager sharedInstance]save];
+    }
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
+    
+    __block NSString *messageAlias = pMessage.messageAlias;
+    
+    if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING){
+        return;
+    } else{
+        pMessage.uploadStatus = @(MESSAGE_UPLOADING);
+        [[KonotorDataManager sharedInstance]save];
+    }
+    
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UPLOAD_MESSAGE, appID,userAlias];
+    NSMutableDictionary *data1 = [pMessage convertMessageToDictionary];
+    data1[@"conversationId"] = conversation.conversationAlias;
+    data1[@"channelId"] = channel.channelID;
+    
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:data1 options:NSJSONWritingPrettyPrinted error:nil];
+    [request setBody:userData];
+    
+    [request setRelativePath:path andURLParams:@[token]];
+    
+    ShowNetworkActivityIndicator();
+    
+    UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
+    [[HLAPIClient sharedInstance]request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        
+        NSDictionary* messageInfo = responseInfo.responseAsDictionary;
+        [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if (!error && statusCode == 201) {
+                
+                ALog(@"Message sent");
+                
+                NSString *conversationID = [messageInfo[@"conversationId"] stringValue];
+                if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
+                    KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+                    if(newConversation){
+                        pMessage.belongsToConversation = newConversation;
+                    }
+                }else{
+                    pMessage.belongsToConversation = conversation;
+                }
+                
+                pMessage.uploadStatus = @(MESSAGE_UPLOADED);
+                pMessage.messageAlias = messageInfo[@"alias"];
+                pMessage.createdMillis = messageInfo[@"createdMillis"];
+                pMessage.isMarkedForUpload = NO;
+                [channel addMessagesObject:pMessage];
+                [[KonotorDataManager sharedInstance]save];
+                [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
+            }else{
+                if ( error && error.code == -1009 ) {
+                    [Konotor UploadFailedNotification:messageAlias];
+                }
+                else if( [self isUserNotCreated:responseInfo] ) {
+                    [self retryUserRegistration];
+                }
+                else {
+                    [Konotor NotifyServerError];
+                }
+                pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+                [channel addMessagesObject:pMessage];
+                [[KonotorDataManager sharedInstance]save];
+            }
+            [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+            HideNetworkActivityIndicator();
+            
+        }];
+    }];
+}
+
+
++(void)uploadPictureMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel withCompletion:(void (^)())completion {
+    
+    Fragment *fragment = [Fragment getImageFragment:pMessage];
+    if(!fragment) {
+        return;
+    }
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
+    
+    HLServiceRequest *request = [[HLServiceRequest alloc]initMultipartFormRequestWithBody:^(id<HLMultipartFormData> formData) {
+        [formData addFilePart:fragment.binaryData1 name:@"pic" fileName:@".jpg" mimeType:@"image/jpeg"];
+        [formData addTextPart:[NSString stringWithFormat:@"pic_%@.jpg",fragment.index] name:@"name"];
+    }];
+    
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_UPLOAD_IMAGE, appID,userAlias];
+    
+    [request setRelativePath:path andURLParams:@[token]];
+    
+    ShowNetworkActivityIndicator();
+    UIBackgroundTaskIdentifier taskID = [[FDBackgroundTaskManager sharedInstance]beginTask];
+    
+    [[HLAPIClient sharedInstance]request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {        
+        NSDictionary* messageInfo = responseInfo.responseAsDictionary;
+        [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if (!error && statusCode == 201) {
+                ALog(@"Fragment Data uploaded and sent");
+                [fragment updateWithInfo:messageInfo[@"image"]];
+                [[KonotorDataManager sharedInstance]save];
+                if(completion) {
+                    completion();
+                }
+            }
+            [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+            HideNetworkActivityIndicator();
+            
+        }];
+    }];
+}
+
+
 +(BOOL) isUserNotCreated : (FDResponseInfo *)responseInfo {
     return (responseInfo && [responseInfo isDict]
             && [[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_USER_NOT_CREATED);
@@ -526,14 +658,14 @@ static HLNotificationHandler *handleUpdateNotification;
     }];
 }
 
-+(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context{
-    if (message.messageRead == YES) return;
++(void)markMarketingMessageAsRead:(Message *)message context:(NSManagedObjectContext *)context{
+    if (message.isRead == YES) return;
     
     NSNumber *marketingId = message.marketingId;
     
     if((marketingId == nil) || ([marketingId intValue] ==0)) return;
     
-    message.messageRead = YES;
+    message.isRead = YES;
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -613,6 +745,7 @@ static HLNotificationHandler *handleUpdateNotification;
         NSString *path = [NSString stringWithFormat:HOTLINE_API_CSAT_PATH, appID, userAlias, conversationID, csatID];
         request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
         [request setRelativePath:path andURLParams:@[appKey]];
+        
         [[HLAPIClient sharedInstance] request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
             [context performBlock:^{
                 NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;

@@ -23,15 +23,29 @@
 #define STORYBOARD_NAME @"Main"
 #define STORYBOARD_IDENTIFIER @"HotlineViewController"
 
+#define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self registerAppForNotifications];
-    [self setupRootController];
+    //[self setupRootController];
+    [self launchSampleController];
     [self hotlineIntegration];
+    /*[[Hotline sharedInstance]clearUserDataWithCompletion:^{
+        [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
+    }];*/
     if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
     [Fabric with:@[[Crashlytics class]]];
     return YES;
+}
+
+
+-(void)launchSampleController {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
+    ViewController *mainController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
+    [self.window setRootViewController:mainController];
+    [self.window makeKeyAndVisible];
 }
 
 -(void)setupRootController{
@@ -105,7 +119,7 @@
     config.appKey = HOTLINE_APP_KEY;
     config.domain = HOTLINE_DOMAIN;
     
-    config.voiceMessagingEnabled = YES;
+    config.voiceMessagingEnabled = NO;
     config.pictureMessagingEnabled = YES;
     config.pollWhenAppActive = YES;
     if(![HotlineUser sharedInstance].name){

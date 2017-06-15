@@ -42,11 +42,16 @@ enum MessageRequestSource {
 
 +(void)fetchMessagesForSrc:(enum MessageRequestSource) requestSource andCompletion:(void(^)(NSError *error))handler;
 
-+(void)uploadMessage:(KonotorMessage *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 
++(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+
++(void)uploadPictureMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel withCompletion:(void (^)())completion;
+                                                               
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId;
+                                                               
 
-+(void)markMarketingMessageAsRead:(KonotorMessage *)message context:(NSManagedObjectContext *)context;
++(void)markMarketingMessageAsRead:(Message *)message context:(NSManagedObjectContext *)context;
 
 +(void)postCSATWithID:(NSManagedObjectID *)csatObjectID completion:(void (^)(NSError *))handler;
 

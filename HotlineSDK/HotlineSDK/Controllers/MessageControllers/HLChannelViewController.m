@@ -12,7 +12,7 @@
 #import "FDLocalNotification.h"
 #import "HLContainerController.h"
 #import "FDMessageController.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
 #import "FDUtilities.h"
@@ -178,7 +178,7 @@
     NSMutableArray *messages = [[NSMutableArray alloc]init];
     
     for(HLChannelInfo *channel in channelInfos){
-        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
+        Message *lastMessage = [self getLastMessageInChannel:channel.channelID];
         if (lastMessage) {
             [messages addObject:lastMessage];
         }
@@ -187,7 +187,7 @@
     id sort = [NSSortDescriptor sortDescriptorWithKey:@"createdMillis" ascending:NO];
     id positionSort = [NSSortDescriptor sortDescriptorWithKey:@"belongsToChannel.position" ascending:YES];
     messages = [[messages sortedArrayUsingDescriptors:@[sort,positionSort]] mutableCopy];
-    for(KonotorMessage *message in messages){
+    for(Message *message in messages){
         if (message.belongsToChannel) {
             HLChannelInfo *chInfo = [[HLChannelInfo alloc] initWithChannel:message.belongsToChannel];
             [results addObject:chInfo];
@@ -242,7 +242,7 @@
     if (indexPath.row < self.channels.count) {
         HLChannelInfo *channel =  self.channels[indexPath.row];
 
-        KonotorMessage *lastMessage = [self getLastMessageInChannel:channel.channelID];
+        Message *lastMessage = [self getLastMessageInChannel:channel.channelID];
         
         cell.titleLabel.text  = channel.name;
         
@@ -256,11 +256,16 @@
         else{
             cell.lastUpdatedLabel.text = nil;
         }
+        
+        //Change here
+        NSString *fragmentHTML = [lastMessage getDetailDescriptionForMessage];
+        fragmentHTML = [fragmentHTML stringByAppendingString:@"<style>body{font-family:'HelveticaNeue'; font-size:'20';}</style>"];
+        
+        NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[fragmentHTML dataUsingEncoding:NSUnicodeStringEncoding]             options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
+        cell.detailLabel.attributedText = attributedTitleString;
 
-        cell.detailLabel.text = [self getDetailDescriptionForMessage:lastMessage];
 
-
-        NSInteger unreadCount = [KonotorMessage getUnreadMessagesCountForChannel:channel.channelID];
+        NSInteger unreadCount = [Message getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
 
@@ -314,40 +319,7 @@
     return cell;
 }
 
--(NSString *)getDetailDescriptionForMessage:(KonotorMessage *)message{
-    
-    NSString *description = nil;
-
-    NSInteger messageType = message.messageType.integerValue;
-    
-    switch (messageType) {
-        case KonotorMessageTypeText:
-            description = message.text;
-            break;
-            
-        case KonotorMessageTypeAudio:
-            description = HLLocalizedString(LOC_AUDIO_MSG_TITLE);
-            break;
-            
-        case KonotorMessageTypePicture:
-        case KonotorMessageTypePictureV2:{
-            if (message.text) {
-                description = message.text;
-            }else{
-                description = HLLocalizedString(LOC_PICTURE_MSG_TITLE);
-            }
-            break;
-        }
-            
-        default:
-            description = message.text;
-            break;
-    }
-    
-    return description;
-}
-
--(KonotorMessage *)getLastMessageInChannel:(NSNumber *)channelID{
+-(Message *)getLastMessageInChannel:(NSNumber *)channelID{
     HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
     NSArray *messages = channel.messages.allObjects;

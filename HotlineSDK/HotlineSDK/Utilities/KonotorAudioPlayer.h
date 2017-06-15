@@ -7,7 +7,7 @@
 //
 
 #import <AVFoundation/AVFoundation.h>
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "KonotorMessageBinary.h"
 #import "KonotorDataManager.h"
 #import <UIKit/UIApplication.h>

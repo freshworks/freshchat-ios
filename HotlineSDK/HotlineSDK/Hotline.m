@@ -22,7 +22,7 @@
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
 #import "FDDAUUpdater.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
 #import "KonotorCustomProperty.h"
@@ -350,7 +350,7 @@
                                                                  source : Init
                                                               andHandler:nil];
                 [HLCoreServices uploadUnuploadedProperties];
-                [KonotorMessage uploadAllUnuploadedMessages];
+                [Message uploadAllUnuploadedMessages];
                 [HLMessageServices uploadUnuploadedCSAT];
             }
             [[[FDSolutionUpdater alloc]init] fetch];
@@ -585,7 +585,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                [Konotor uploadTextFeedback:messageObject.message onConversation:conversation onChannel:channel];
+                //[Konotor uploadTextFeedback:messageObject.message onConversation:conversation onChannel:channel];
             }
         }];
     }];

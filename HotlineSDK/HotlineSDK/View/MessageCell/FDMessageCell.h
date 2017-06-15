@@ -10,7 +10,7 @@
 #import "FDAudioMessageUnit.h"
 #import "FDPictureMessageView.h"
 #import "FDActionButton.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 
 #define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
 #define KONOTOR_HORIZONTAL_PADDING 5
@@ -23,17 +23,18 @@
 
 @protocol FDMessageCellDelegate <NSObject>
 
--(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image;
--(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender;
+-(void)messageCell:(Fragment *)cell pictureTapped:(UIImage *)image;
+-(void)messageCell:(Fragment *)cell openActionUrl:(id)sender;
+-(void)perfomAction:(FragmentData *)fragment;
 
 @end
 
 @interface FDMessageCell : UITableViewCell
 
-@property (nonatomic, strong) KonotorMessageData *messageData;
+@property (nonatomic, strong) MessageData *messageData;
 
 /* customization options */
-@property (nonatomic) BOOL isSenderOther;
+@property (nonatomic) BOOL isAgentMessage;
 @property (nonatomic) BOOL showsProfile;
 @property (nonatomic) BOOL showsSenderName;
 @property (nonatomic) BOOL showsTimeStamp;
@@ -45,7 +46,7 @@
 /* message cell UI elements */
 @property (nonatomic) CGRect messageTextBoxRect;
 @property (nonatomic) CGRect messageContentViewRect;
-@property (strong, nonatomic) UIImageView* chatCalloutImageView;
+@property (strong, nonatomic) UIImageView* chatBubbleImageView;
 @property (strong, nonatomic) UITextView* messageTextView;
 @property (strong, nonatomic) FDAudioMessageUnit* audioItem;
 @property (strong, nonatomic) UIImageView* profileImageView;
@@ -55,6 +56,7 @@
 @property (strong, nonatomic) FDPictureMessageView* messagePictureImageView;
 @property (strong, nonatomic) FDActionButton* messageActionButton;
 @property (strong, nonatomic) UIFont *messageTextFont;
+@property (nonatomic) NSInteger maxcontentWidth;
 
 +(BOOL) hasButtonForURL:(NSString*)actionURL articleID:(NSNumber*)articleID;
 
@@ -62,9 +64,9 @@
 @property (nonatomic, weak) id<FDMessageCellDelegate> delegate;
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<FDMessageCellDelegate>)delegate;
-- (void) drawMessageViewForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView withWidth:(float)width;
-+ (float) getHeightForMessage:(KonotorMessageData*)currentMessage parentView:(UIView*)parentView;
-+ (float) getWidthForMessage:(KonotorMessageData*)message;
+- (void) drawMessageViewForMessage:(MessageData *)currentMessage parentView:(UIView*)parentView withWidth:(float)width;
++ (float) getHeightForMessage:(MessageData *)currentMessage parentView:(UIView*)parentView;
++ (float) getWidthForMessage:(MessageData *)message;
 
 @end
 

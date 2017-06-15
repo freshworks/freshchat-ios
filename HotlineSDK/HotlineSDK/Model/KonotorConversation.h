@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *unreadMessagesCount;
 @property (nullable, nonatomic, retain) NSNumber *updatedMillis;
 @property (nullable, nonatomic, retain) HLChannel *belongsToChannel;
-@property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *hasMessages;
+@property (nullable, nonatomic, retain) NSSet<Message *> *hasMessages;
 @property (nullable, nonatomic, retain) NSSet<HLCsat *> *hasCsat;
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel;
@@ -36,10 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface KonotorConversation (CoreDataGeneratedAccessors)
 
-- (void)addHasMessagesObject:(KonotorMessage *)value;
-- (void)removeHasMessagesObject:(KonotorMessage *)value;
-- (void)addHasMessages:(NSSet<KonotorMessage *> *)values;
-- (void)removeHasMessages:(NSSet<KonotorMessage *> *)values;
+- (void)addHasMessagesObject:(Message *)value;
+- (void)removeHasMessagesObject:(Message *)value;
+- (void)addHasMessages:(NSSet<Message *> *)values;
+- (void)removeHasMessages:(NSSet<Message *> *)values;
 - (BOOL)isCSATResponsePending;
 
 

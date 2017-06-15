@@ -8,7 +8,7 @@
 
 #import "KonotorConversation.h"
 #import "KonotorDataManager.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "Konotor.h"
 #import "HLMessageServices.h"
 #import "HLMacros.h"

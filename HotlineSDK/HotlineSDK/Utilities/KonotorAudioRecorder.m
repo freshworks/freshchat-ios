@@ -8,7 +8,7 @@
 
 #import "KonotorAudioRecorder.h"
 #import "KonotorDataManager.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "KonotorMessageBinary.h"
 #import "FDUtilities.h"
 #import "HLMacros.h"
@@ -236,7 +236,7 @@ static NSString *beforeRecordCategory;
     NSString *messageID = nil;
     if(gkAudioRecorder)
     {
-         messageID = [KonotorMessage generateMessageID];
+         messageID = [Message generateMessageID];
         gkAudioRecorder.messageID = messageID;
         
         [gkAudioRecorder stop];
@@ -259,7 +259,7 @@ static NSString *beforeRecordCategory;
     NSString *messageID = nil;
     if(gkAudioRecorder)
     {
-        messageID = [KonotorMessage generateMessageID];
+        messageID = [Message generateMessageID];
         gkAudioRecorder.messageID = messageID;
         
         [gkAudioRecorder stop];
@@ -322,7 +322,7 @@ static NSString *beforeRecordCategory;
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID toConversationID:(NSString *) conversationID
 {
     KonotorConversation *conversation = nil;
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
+    Message *message = [Message retriveMessageForMessageId:messageID];
     
     if(conversationID)
        conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
@@ -331,7 +331,8 @@ static NSString *beforeRecordCategory;
         return NO;
     
     
-    float audioDurationSeconds = [[message durationInSecs]floatValue];
+    float audioDurationSeconds = 0.0f;
+    //[[message durationInSecs]floatValue];
     if(audioDurationSeconds < 0.5)
     {
         
@@ -386,7 +387,7 @@ static NSString *beforeRecordCategory;
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID toConversationID:(NSString *) conversationID onChannel:(HLChannel*)channel
 {
     KonotorConversation *conversation = nil;
-    KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
+    Message *message = [Message retriveMessageForMessageId:messageID];
     
     [channel addMessagesObject:message];
     
@@ -441,12 +442,12 @@ float gKonoDecibels;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
+    Message *message = (Message *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     
-    [message setMessageUserId:USER_TYPE_MOBILE];
+    //[message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:pRec.messageID];
-    [message setMessageType:[NSNumber numberWithInt:2]];
-    [message setMessageRead:YES];
+    //[message setMessageType:[NSNumber numberWithInt:2]];
+    //[message setMessageRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
 
     
@@ -459,7 +460,7 @@ float gKonoDecibels;
     
     CMTime audioDuration = audioAsset.duration;
     float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
-    [message setDurationInSecs:[NSNumber numberWithFloat:audioDurationSeconds]];
+    //[message setDurationInSecs:[NSNumber numberWithFloat:audioDurationSeconds]];
 
     
     [messageBinary setBinaryAudio:data];
@@ -481,12 +482,12 @@ float gKonoDecibels;
     KonotorDataManager *datamanager = [KonotorDataManager sharedInstance];
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     
-    KonotorMessage *message = (KonotorMessage *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
+    Message *message = (Message *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
     
-    [message setMessageUserId:USER_TYPE_MOBILE];
+    //[message setMessageUserId:USER_TYPE_MOBILE];
     [message setMessageAlias:pRec.messageID];
-    [message setMessageType:[NSNumber numberWithInt:2]];
-    [message setMessageRead:YES];
+    //[message setMessageType:[NSNumber numberWithInt:2]];
+    [message setIsRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     message.belongsToConversation=conversation;
     
@@ -500,7 +501,7 @@ float gKonoDecibels;
     
     CMTime audioDuration = audioAsset.duration;
     float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
-    [message setDurationInSecs:[NSNumber numberWithFloat:audioDurationSeconds]];
+    //[message setDurationInSecs:[NSNumber numberWithFloat:audioDurationSeconds]];
     
     
     [messageBinary setBinaryAudio:data];

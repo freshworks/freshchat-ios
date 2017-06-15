@@ -98,7 +98,8 @@
 -(NSManagedObjectModel *)loadKonotorDataModel{
     NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"KonotorModels" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
-    return [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    NSManagedObjectModel *obj =  [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return obj;
 }
 
 -(NSURL *)konotorSQLiteURL{
@@ -364,6 +365,9 @@
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
         @try {
+            if ([entity isEqualToString:HOTLINE_MESSAGE_ENTITY]) {
+                NSLog(@"hello");
+            }
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
             NSArray *results = [context executeFetchRequest:request error:nil];
             for (int i=0; i<results.count; i++) {

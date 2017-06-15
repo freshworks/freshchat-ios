@@ -285,7 +285,7 @@
 }
 
 - (IBAction)sendMessage:(id)sender{
-    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:self.message.text andTag:self.sendMessageTag.text];
+    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
     [[Hotline sharedInstance] sendMessage:userMessage];
 }
 

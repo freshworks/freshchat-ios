@@ -34,6 +34,8 @@
 		3C1159FD1DF1EA5800800A6C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1159FC1DF1EA5800800A6C /* Security.framework */; };
 		3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* HLResources.bundle */; };
 		3C66F0311E2668BE00E78380 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3C66F0301E2668BE00E78380 /* KonotorModels.bundle */; };
+		CE130DCC1EF188F00028CEE7 /* SampleController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */; };
+		CE130DD11EF189090028CEE7 /* SampleController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE130DD01EF189090028CEE7 /* SampleController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +107,9 @@
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		3C1159FC1DF1EA5800800A6C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3C66F0301E2668BE00E78380 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
+		CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SampleController.storyboard; sourceTree = "<group>"; };
+		CE130DCF1EF189090028CEE7 /* SampleController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleController.h; sourceTree = "<group>"; };
+		CE130DD01EF189090028CEE7 /* SampleController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleController.m; sourceTree = "<group>"; };
 		CEDFEEC71E4CD825002DCB4B /* HotlineConfigStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotlineConfigStrings.h; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -185,6 +190,9 @@
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
+				CE130DCF1EF189090028CEE7 /* SampleController.h */,
+				CE130DD01EF189090028CEE7 /* SampleController.m */,
+				CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */,
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
@@ -384,6 +392,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE130DCC1EF188F00028CEE7 /* SampleController.storyboard in Resources */,
 				3C66F0311E2668BE00E78380 /* KonotorModels.bundle in Resources */,
 				3C314F0C1C97DFCA00A255D4 /* HLResources.bundle in Resources */,
 				3518351B1D273997000EB496 /* background.png in Resources */,
@@ -445,6 +454,7 @@
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
 				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
+				CE130DD11EF189090028CEE7 /* SampleController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

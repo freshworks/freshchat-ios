@@ -18,7 +18,8 @@
 #define HOTLINE_INDEX_ENTITY @"FDIndex"
 #define HOTLINE_CUSTOM_PROPERTY_ENTITY @"KonotorCustomProperty"
 #define HOTLINE_CONVERSATION_ENTITY @"KonotorConversation"
-#define HOTLINE_MESSAGE_ENTITY @"KonotorMessage"
+#define HOTLINE_MESSAGE_ENTITY @"Message"
+#define HOTLINE_FRAGMENT_ENTITY @"Fragment"
 #define HOTLINE_MESSAGE_BINARY_ENTITY @"KonotorMessageBinary"
 #define HOTLINE_USER_ENTITY @"KonotorUser"
 

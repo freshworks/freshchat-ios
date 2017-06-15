@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KonotorMessage.h"
+#import "Message.h"
 
 @interface HLCoreServices : NSObject
 
@@ -19,7 +19,7 @@
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 
-+(NSURLSessionDataTask *)registerUserConversationActivity :(KonotorMessage *)message;
++(NSURLSessionDataTask *)registerUserConversationActivity :(Message *)message;
 
 +(void)uploadUnuploadedProperties;
 

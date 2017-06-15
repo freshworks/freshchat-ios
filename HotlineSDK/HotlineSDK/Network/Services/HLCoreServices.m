@@ -280,7 +280,7 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)registerUserConversationActivity :(KonotorMessage *)message{
++(NSURLSessionDataTask *)registerUserConversationActivity :(Message *)message{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities currentUserAlias];
@@ -328,13 +328,13 @@
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     
-    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"messageRead == 1 AND belongsToChannel == %@", channel];
-    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserId != %@", USER_TYPE_MOBILE];
+    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"isRead == 1 AND belongsToChannel == %@", channel];
+    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserAlias != %@", USER_TYPE_MOBILE];
     request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[queryChannelAndRead, queryType]];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
-    KonotorMessage *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
+    Message *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
     if(latestMessage){
         [HLCoreServices registerUserConversationActivity:latestMessage];
     }

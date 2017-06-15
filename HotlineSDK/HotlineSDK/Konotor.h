@@ -35,7 +35,7 @@
 +(void) setDelegate:(id) delegate;
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
-+(BOOL) isUserMe:(NSString *) userId;
++(BOOL) isUserMe:(NSNumber *) userId;
 +(NSString*) stopRecording;
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;
@@ -47,9 +47,9 @@
 +(double) getCurrentPlayingAudioTime;
 +(NSString *)getCurrentPlayingMessageID;
 
-+(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+
++(void)uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 + (BOOL) showNotificationDisabledAlert;
 + (void) setDisabledNotificationAlertShown:(BOOL) shown;
