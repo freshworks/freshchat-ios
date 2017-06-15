@@ -29,6 +29,10 @@
     [[Hotline sharedInstance] showConversations:self];
 }
 
+- (IBAction)loadFAQs:(id)sender {
+    [[Hotline sharedInstance] showFAQs:self];
+}
+
 
 /*
 #pragma mark - Navigation

@@ -460,9 +460,9 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
         } else if([str containsString:@"button_"]) {
-            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@]-%@-|",leftPadding,str,rightPadding];
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(>=50)]-%@-|",leftPadding,str,rightPadding];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
-            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=30)]",str]];
         }
     }
     

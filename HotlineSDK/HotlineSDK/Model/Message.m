@@ -323,6 +323,10 @@
         description = @"[Picture Message]";
     } else if([fragment.type isEqualToString:@"1"]) {
         description = fragment.content;
+    } else if ([fragment.type isEqualToString:@"5"]) {
+        NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
+        description = extraJSONDict[@"label"];
     }
     return description;
 }

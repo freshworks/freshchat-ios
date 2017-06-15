@@ -40,6 +40,10 @@
 #import "HLInterstitialViewController.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "FDUtilities.h"
+#import "FDLocaleUtil.h"
+#import "FDConstants.h"
+#import "HLUserDefaults.h"
 
 @interface Hotline ()
 
@@ -293,6 +297,15 @@
     }];
 }
 
+-(void)updateUserLocaleProperties:(NSString *)locale {
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        [KonotorCustomProperty createNewPropertyForKey:LOCALE WithValue:locale isUserProperty:YES];
+        [HLCoreServices uploadUnuploadedProperties];
+    }];
+}
+
+
+
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if (key && value) {
         [self updateUserProperties:@{ key : value}];
@@ -333,6 +346,14 @@
     [self.messagePoller end];
 }
 
+-(void) updateLocaleMeta {    
+    if([FDLocaleUtil hadLocaleChange]) {
+        [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
+        NSString *localLocale = [FDLocaleUtil getLocalLocale];
+        [[Hotline sharedInstance] updateUserLocaleProperties:localLocale];
+    }
+}
+
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     if(![FDUtilities isUserRegistered]){
@@ -353,6 +374,7 @@
                 [Message uploadAllUnuploadedMessages];
                 [HLMessageServices uploadUnuploadedCSAT];
             }
+            [self updateLocaleMeta];
             [[[FDSolutionUpdater alloc]init] fetch];
             [self markPreviousUserUninstalledIfPresent];
         });
@@ -506,6 +528,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     //Clear secure store
     [[FDSecureStore sharedInstance]clearStoreData];
     [[FDSecureStore persistedStoreInstance]clearStoreData];
+    
+    [HLUserDefaults clearUserDefaults];
     
     if(previousUser) {
         [self storePreviousUser:previousUser inStore:store];
