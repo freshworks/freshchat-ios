@@ -12,6 +12,7 @@
 #import "FDMemLogger.h"
 #import "HLChannel.h"
 #import "HLCategory.h"
+#import "HLTagManager.h"
 
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
@@ -360,6 +361,15 @@
 -(void)deleteAllIndices:(void(^)(NSError *error))handler{
     [self deleteAllEntriesOfEntity:HOTLINE_INDEX_ENTITY handler:handler inContext:self.backgroundContext];
 }
+
+-(void)deleteAllFAQ:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CATEGORY_ENTITY handler:^(NSError *error) {
+        [self deleteAllEntriesOfEntity:HOTLINE_INDEX_ENTITY handler:^(NSError *error) {
+            [[HLTagManager sharedInstance] deleteTagWithTaggableType:@[@1,@2] handler:handler inContext:self.backgroundContext];
+        } inContext:self.backgroundContext];
+    } inContext:self.backgroundContext];
+}
+
 
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{

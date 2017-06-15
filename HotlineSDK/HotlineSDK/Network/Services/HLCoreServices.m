@@ -17,6 +17,8 @@
 #import "FDResponseInfo.h"
 #import "KonotorCustomProperty.h"
 #import "FDMemLogger.h"
+#import "FDLocaleUtil.h"
+#import "FDConstants.h"
 
 @implementation HLCoreServices
 

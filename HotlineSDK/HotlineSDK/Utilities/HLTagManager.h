@@ -30,6 +30,11 @@
               inContext:(NSManagedObjectContext *) context
           withCompletion :(void (^)(NSArray<HLArticle *> *))completion;
 
+
+-(void)deleteTagWithTaggableType: (NSArray *)tagTypes
+                 handler:(void(^)(NSError *error))handler
+               inContext:(NSManagedObjectContext *) context;
+
 @end
 
 #endif /* HLTagManager_h */

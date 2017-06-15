@@ -40,6 +40,7 @@
 -(void) fetchAllVisibleChannelsWithCompletion:(void (^)(NSArray *channelInfos, NSError *))handler;
 -(void)deleteAllChannels:(void(^)(NSError *error))handler;
 -(void)deleteAllMessages:(void(^)(NSError *error))handler;
+-(void)deleteAllFAQ:(void(^)(NSError *error))handler;
 -(void)deleteAllProperties:(void(^)(NSError *error))handler;
 -(void)deleteAllCSATEntries:(void(^)(NSError *error))handler;
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler;

@@ -1,8 +1,8 @@
 
 
-#define HOTLINE_DOMAIN @"app.hotline.io"
-#define HOTLINE_APP_ID @"7baba8ff-d18e-4e20-a096-3ea5be53ba67"
-#define HOTLINE_APP_KEY @"72645c38-b738-491e-94b4-0eb0b9e98e2f"
+#define HOTLINE_DOMAIN @"mr-orange.staging.konotor.com"
+#define HOTLINE_APP_ID @"7c8bd99c-898c-46b7-9e52-25b30ffbbe8d"
+#define HOTLINE_APP_KEY @"ee558253-0f3e-4078-b855-30790db4b39b"
 
 
 //sid+demo@freshdesk.com prod

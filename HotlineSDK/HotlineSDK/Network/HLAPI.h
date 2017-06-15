@@ -28,11 +28,11 @@
 
 #define HOTLINE_API_USER_PROPERTIES_PATH @"/app/services/app/%@/user/%@"
 
-#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/category"
+#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/v2/category"
 
 #define HOTLINE_API_ARTICLES_PATH @"/app/services/app/%@/sdk/faq/category/%@/article"
 
-#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/category/%@/article/%@"
+#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/v2/category/%@/article/%@"
 
 #define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"
 

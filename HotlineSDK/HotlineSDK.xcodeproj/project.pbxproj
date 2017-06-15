@@ -108,6 +108,8 @@
 		3C160B061D05A59C000440D4 /* HLFAQUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLFAQUtil.m */; };
 		3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */; };
 		3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */; };
+		C5D4ED991E57036100E121B4 /* HLUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4ED981E57036100E121B4 /* HLUserDefaults.m */; };
+		C5D4ED9D1E574B5C00E121B4 /* FDLocaleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4ED9C1E574B5C00E121B4 /* FDLocaleUtil.m */; };
 		CE06F8B91E2CD18F00D4063B /* HLInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE06F8B81E2CD18F00D4063B /* HLInterstitialViewController.m */; };
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
 		CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = CE16BA231DEDAC4F00EE714C /* HLCSATYesNoPrompt.m */; };
@@ -341,7 +343,13 @@
 		3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLCategoryViewBehaviour.m; path = Behaviours/HLCategoryViewBehaviour.m; sourceTree = "<group>"; };
 		3CADFA2E1E25B20D00829E7F /* HLLoadingViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLLoadingViewBehaviour.h; path = Behaviours/HLLoadingViewBehaviour.h; sourceTree = "<group>"; };
 		3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLLoadingViewBehaviour.m; path = Behaviours/HLLoadingViewBehaviour.m; sourceTree = "<group>"; };
-		CE06F8B71E2CD18F00D4063B /* HLInterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLInterstitialViewController.h; path = ../Utilities/HLInterstitialViewController.h; sourceTree = "<group>"; };
+		C5D4ED981E57036100E121B4 /* HLUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLUserDefaults.m; sourceTree = "<group>"; };
+		C5D4ED9A1E5704E000E121B4 /* HLUserDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLUserDefaults.h; sourceTree = "<group>"; };
+		C5D4ED9B1E574B5C00E121B4 /* FDLocaleUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDLocaleUtil.h; sourceTree = "<group>"; };
+		C5D4ED9C1E574B5C00E121B4 /* FDLocaleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDLocaleUtil.m; sourceTree = "<group>"; };
+		C5E3CC8E1E5C556900A885B4 /* FDConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDConstants.h; sourceTree = "<group>"; };
+
+        CE06F8B71E2CD18F00D4063B /* HLInterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLInterstitialViewController.h; path = ../Utilities/HLInterstitialViewController.h; sourceTree = "<group>"; };
 		CE06F8B81E2CD18F00D4063B /* HLInterstitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLInterstitialViewController.m; path = ../Utilities/HLInterstitialViewController.m; sourceTree = "<group>"; };
 		CE0C7C6C1D9539A100F545AE /* FDPlistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPlistManager.h; sourceTree = "<group>"; };
 		CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPlistManager.m; sourceTree = "<group>"; };
@@ -625,6 +633,11 @@
 				CEC95A841E097B43009A1FCD /* HLConversationUtil.m */,
 				3C0651021E38C88500F8B190 /* HLMessagePoller.h */,
 				3C0651031E38C8A100F8B190 /* HLMessagePoller.m */,
+				C5D4ED981E57036100E121B4 /* HLUserDefaults.m */,
+				C5D4ED9A1E5704E000E121B4 /* HLUserDefaults.h */,
+				C5D4ED9B1E574B5C00E121B4 /* FDLocaleUtil.h */,
+				C5D4ED9C1E574B5C00E121B4 /* FDLocaleUtil.m */,
+				C5E3CC8E1E5C556900A885B4 /* FDConstants.h */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -925,6 +938,7 @@
 				35B2EFC41D000E620014867F /* HLGridViewCell.m in Sources */,
 				CE06F8B91E2CD18F00D4063B /* HLInterstitialViewController.m in Sources */,
 				35B2EFBA1D000E620014867F /* FDBadgeView.m in Sources */,
+				C5D4ED9D1E574B5C00E121B4 /* FDLocaleUtil.m in Sources */,
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
 				CE39CF721DCB694300A46660 /* HLControllerUtils.m in Sources */,
 				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
@@ -969,6 +983,7 @@
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,
 				35B2EFB31D000E620014867F /* FDVotingManager.m in Sources */,
 				35D4E8191D118E9000EFFE07 /* HLCategoryGridViewController.m in Sources */,
+				C5D4ED991E57036100E121B4 /* HLUserDefaults.m in Sources */,
 				35B2EFA11D000E620014867F /* FDSolutionUpdater.m in Sources */,
 				35B2EF941D000E620014867F /* HLCategory.m in Sources */,
 				35B2EFAA1D000E620014867F /* FDBackgroundTaskManager.m in Sources */,
