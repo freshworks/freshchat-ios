@@ -34,7 +34,10 @@
 
 #define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/v2/category/%@/article/%@"
 
-#define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"
+//#define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"
+
+//new api
+#define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel/v2"
 
 #define HOTLINE_API_USER_CONVERSATION_ACTIVITY @"app/services/app/%@/user/%@/conversation/read"
 

@@ -29,6 +29,8 @@
 #import "HLConstants.h"
 #import "Message.h"
 #import "Fragment.h"
+#import "FDLocaleUtil.h"
+#import "FDConstants.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
@@ -300,11 +302,15 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
-    NSString *afterTime = [NSString stringWithFormat:@"after=%@",lastUpdateTime];
-    
-    [request setRelativePath:path andURLParams:@[token, @"tags=true", afterTime]];
+    NSString *afterTime = [NSString stringWithFormat:PARAM_SINCE,lastUpdateTime];
+    NSNumber *requestlocaleId = [FDLocaleUtil getContentLocaleId];
+    NSMutableArray *reqParams = [[NSMutableArray alloc]initWithArray:@[token,afterTime,PARAM_PLATFORM_IOS]];
+    [reqParams addObjectsFromArray:[FDLocaleUtil channelLocaleParams]];
+    [request setRelativePath:path andURLParams:reqParams];
+    //[request setRelativePath:path andURLParams:@[token, @"tags=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        if (!error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if (!error && statusCode == 200) {
             /* This check is added to delete all messages that are migrated from konotor SDK,
                but this is also performed for new installs as well (a harmless side-effect). */
             // TODO : Come up with a better logic to do this migration
@@ -312,11 +318,13 @@ static HLNotificationHandler *handleUpdateNotification;
             BOOL isRestore = [messageLastUpdatedTime isEqualToNumber:@0];
             if (isRestore) {
                 [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
-                    [self importChannels:[responseInfo responseAsArray] handler:handler];
+                    [self importChannels:[responseInfo responseAsDictionary][@"channels"] handler:handler];
                 }];
             }else{
-                [self importChannels:[responseInfo responseAsArray] handler:handler];
+                [self importChannels:[responseInfo responseAsDictionary][@"channels"] handler:handler];
             }
+        }else if(statusCode == 200){//8949445170
+            FDLog(@"No change in channel  data")
         }else{
             if (handler) handler(nil, error);
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
@@ -333,7 +341,7 @@ static HLNotificationHandler *handleUpdateNotification;
         NSInteger channelCount = [channels count];
         HLChannel *channel = nil;
         if (channelCount!=0) {
-            for(int i=0; i<channels.count; i++){
+            for(int i=0; i< channels.count; i++){
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
                 [HLTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: HLTagTypeChannel] inContext:context];

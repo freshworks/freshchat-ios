@@ -39,6 +39,18 @@
     return params;
 }
 
++ (NSArray *) channelLocaleParams{
+    NSString *localLocale = [self getLocalLocale];
+    NSMutableArray *params = [[NSMutableArray alloc]init];
+    [params addObject:[NSString stringWithFormat:PARAM_LOCALE,localLocale]];
+    NSNumber *defaultLocaleId = [FDLocaleUtil getContentLocaleId];
+    if(!defaultLocaleId){
+        defaultLocaleId = [NSNumber numberWithInt:0];
+    }
+    [params addObject:[NSString stringWithFormat:PARAM_LAST_LOCALEID,defaultLocaleId]];
+    return params;
+}
+
 +(NSString *)getLocalLocale{
     NSString *locale = [[NSLocale preferredLanguages] objectAtIndex:0]; //Current configured Locale
     return locale;

@@ -13,6 +13,7 @@
 +(NSString *)getLocalLocale;
 +(NSString *)getUserLocale;
 +(NSArray *)userLocaleParams:(BOOL)voteReq;
++ (NSArray *) channelLocaleParams;
 +(NSNumber *)getContentLocaleId;
 +(void)updateLocale:(NSString *)localLocale;
 +(BOOL)hadLocaleChange;
