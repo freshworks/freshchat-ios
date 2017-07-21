@@ -16,7 +16,11 @@
 
 
 +(NSNumber *)getContentLocaleId{
-    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_CONTENT_LOCALEID];
+    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_FAQ_LOCALEID];
+}
+
++(NSNumber *) getConvLocaleId{
+    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_CONV_LOCALEID];
 }
 
 +(NSString *)getUserLocale{
@@ -43,7 +47,7 @@
     NSString *localLocale = [self getLocalLocale];
     NSMutableArray *params = [[NSMutableArray alloc]init];
     [params addObject:[NSString stringWithFormat:PARAM_LOCALE,localLocale]];
-    NSNumber *defaultLocaleId = [FDLocaleUtil getContentLocaleId];
+    NSNumber *defaultLocaleId = [FDLocaleUtil getConvLocaleId];
     if(!defaultLocaleId){
         defaultLocaleId = [NSNumber numberWithInt:0];
     }
