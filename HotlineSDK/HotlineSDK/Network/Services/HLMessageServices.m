@@ -31,6 +31,7 @@
 #import "Fragment.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
+#import "HLUserDefaults.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
@@ -303,11 +304,10 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
     NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
     NSString *afterTime = [NSString stringWithFormat:PARAM_SINCE,lastUpdateTime];
-    NSNumber *requestlocaleId = [FDLocaleUtil getContentLocaleId];
-    NSMutableArray *reqParams = [[NSMutableArray alloc]initWithArray:@[token,afterTime,PARAM_PLATFORM_IOS]];
+    NSNumber *requestlocaleId = [FDLocaleUtil getConvLocaleId];
+    NSMutableArray *reqParams = [[NSMutableArray alloc]initWithArray:@[token,afterTime]];
     [reqParams addObjectsFromArray:[FDLocaleUtil channelLocaleParams]];
     [request setRelativePath:path andURLParams:reqParams];
-    //[request setRelativePath:path andURLParams:@[token, @"tags=true", afterTime]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error && statusCode == 200) {
@@ -315,15 +315,25 @@ static HLNotificationHandler *handleUpdateNotification;
                but this is also performed for new installs as well (a harmless side-effect). */
             // TODO : Come up with a better logic to do this migration
             NSNumber *messageLastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+            NSMutableDictionary *dictionary = [responseInfo responseAsDictionary][CONTENT_LOCALE];
+            NSNumber *responseLocaleId = [dictionary objectForKey:@"localeId"];
+            if( ![requestlocaleId isEqualToNumber:responseLocaleId] ) {
+                [HLUserDefaults setNumber:responseLocaleId forKey:HOTLINE_DEFAULTS_CONV_LOCALEID];
+            }
+            
+            [FDLocaleUtil scanLocale];
+            
             BOOL isRestore = [messageLastUpdatedTime isEqualToNumber:@0];
             if (isRestore) {
                 [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
-                    [self importChannels:[responseInfo responseAsDictionary][@"channels"] handler:handler];
+                    [self importChannels:[responseInfo responseAsDictionary] handler:handler];
                 }];
             }else{
-                [self importChannels:[responseInfo responseAsDictionary][@"channels"] handler:handler];
+                [self hideAllChannelsWithCompletion:^(NSError *error) {
+                    [self importChannels:[responseInfo responseAsDictionary] handler:handler];
+                }];
             }
-        }else if(statusCode == 200){//8949445170
+        }else if(statusCode == 304){
             FDLog(@"No change in channel  data")
         }else{
             if (handler) handler(nil, error);
@@ -333,7 +343,28 @@ static HLNotificationHandler *handleUpdateNotification;
     return task;
 }
 
-+(void)importChannels:(NSArray *)channels handler:(void (^)(NSArray *channels, NSError *error))handler;{
++(void)hideAllChannelsWithCompletion:(void(^)(NSError *error))completion{
+    
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    NSBatchUpdateRequest *batchUpdateRequest = [[NSBatchUpdateRequest alloc] initWithEntity:entityDescription];
+    [batchUpdateRequest setResultType:NSUpdatedObjectIDsResultType];
+    [batchUpdateRequest setPropertiesToUpdate:@{@"isHidden": @(1)}];
+    NSError *batchUpdateRequestError = nil;
+    [[KonotorDataManager sharedInstance].mainObjectContext executeRequest:batchUpdateRequest error:&batchUpdateRequestError];
+    if (batchUpdateRequestError) {
+        FDLog(@"Unable to execute channel hide request");
+        NSLog(@"%@, %@", batchUpdateRequestError, batchUpdateRequestError.localizedDescription);
+    } else {
+        FDLog(@"Update Successful for hiding channels");
+    }
+    
+    if(completion){
+        completion(nil);
+    }
+}
+
++(void)importChannels:(NSDictionary *)channelsInfo handler:(void (^)(NSArray *channels, NSError *error))handler;{
+    NSArray *channels = channelsInfo[@"channels"];
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
@@ -345,14 +376,6 @@ static HLNotificationHandler *handleUpdateNotification;
                 NSDictionary *channelInfo = channels[i];
                 channel = [HLChannel getWithID:channelInfo[@"channelId"] inContext:context];
                 [HLTags removeTagsForTaggableId:channelInfo[@"channelId"] andType:[NSNumber numberWithInt: HLTagTypeChannel] inContext:context];
-                NSArray *tags = channelInfo[@"tags"];
-                if(tags.count >0){
-                    if(!([channelInfo[@"hidden"] boolValue])){
-                        for(NSString *tagName in tags){
-                            [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];
-                        }
-                    }
-                }
                 
                 if (channel) {
                     [HLChannel updateChannel:channel withInfo:channelInfo];
@@ -366,12 +389,19 @@ static HLNotificationHandler *handleUpdateNotification;
                     [channelList addObject:channel];
                 }
                 
+                NSArray *tags = channelInfo[@"tags"];
+                if(tags.count >0){
+                        for(NSString *tagName in tags){
+                            [HLTags createTagWithInfo:[HLTags createDictWithTagName:tagName type:[NSNumber numberWithInt: HLTagTypeChannel] andIdvalue:channelInfo[@"channelId"]] inContext:context];
+                        }
+                }
+                
                 if(channelInfo[@"updated"]){
                     lastUpdatedTime = [FDDateUtil maxDateOfNumber:lastUpdatedTime andStr:channelInfo[@"updated"]];
                 }
             }
         }
-        [[FDSecureStore sharedInstance] setObject:lastUpdatedTime forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+        [[FDSecureStore sharedInstance] setObject: channelsInfo[LAST_MODIFIED_AT] forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
         [context save:nil];
         if (handler) handler(channelList,nil);
         if(channelCount > 0) {

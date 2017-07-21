@@ -10,8 +10,8 @@
 #define HOTLINE_APP_KEY @"d110a0e7-b185-411a-9c21-577eebb6c6dc"*/
 
 #define HOTLINE_DOMAIN @"jm.freshpori.com"
-#define HOTLINE_APP_ID @"286a5921-06fd-4634-bad8-72f389f72a8c"
-#define HOTLINE_APP_KEY @"e541b37f-ce29-423e-95ae-0291215ddfef"
+#define HOTLINE_APP_ID @"f8c6d70e-cd72-4c39-a6a7-d827ee8b28b3"
+#define HOTLINE_APP_KEY @"5a3026c9-85c4-4e6c-b25d-6ea7ec50326a"
 
 //sid+demo@freshdesk.com prod
 //siddemo

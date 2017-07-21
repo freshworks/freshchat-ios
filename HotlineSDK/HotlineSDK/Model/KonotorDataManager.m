@@ -371,11 +371,6 @@
     } inContext:self.backgroundContext];
 }
 
--(void) disableAllChannels{
-    //mark all channel as disabled
-    
-}
-
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
         @try {
