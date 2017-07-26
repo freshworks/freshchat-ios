@@ -19,7 +19,6 @@
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLLocalization.h"
-#import "HLEventManager.h"
 #import "HLControllerUtils.h"
 
 @interface HLArticlesController ()
@@ -143,9 +142,6 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
-    }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
@@ -204,7 +200,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         HLArticle *article = self.articles[indexPath.row];
-        [HLFAQUtil launchArticle:article withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_ARTICLE_LIST];
+        [HLFAQUtil launchArticle:article withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions];
     }
 }
 

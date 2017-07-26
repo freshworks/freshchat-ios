@@ -32,7 +32,6 @@
 #import "FDAutolayoutHelper.h"
 #import "HLFAQUtil.h"
 #import "KonotorAudioRecorder.h"
-#import "HLEventManager.h"
 #import "FDBackgroundTaskManager.h"
 #import "HLCSATYesNoPrompt.h"
 #import "HLChannelViewController.h"
@@ -84,6 +83,12 @@ typedef struct {
 @property (nonatomic) BOOL isOneWayChannel;
 @property (nonatomic, strong) ConversationOptions *convOptions;
 @property (nonatomic) BOOL fromNotification;
+
+@property (nonatomic, strong) UILabel *bannerMesagelabel;
+@property (nonatomic, strong) UIView *bannerMessageView;
+@property (nonatomic, strong) NSArray *viewVerticalConstraints;
+@property (nonatomic, strong) NSDictionary *views;
+
 @end
 
 @implementation FDMessageController
@@ -117,13 +122,6 @@ typedef struct {
         self.channelID = channelID;        
         self.channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
         self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
-        NSString *eventChannelID = [self.channel.channelID stringValue];
-        NSString *eventChannelName = self.channel.name;
-        [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATIONS_LAUNCH withBlock:^(HLEvent *event) {
-            [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_DEFAULT];
-            [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:eventChannelID];
-            [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:eventChannelName];
-        }];
         self.messagesPoller = [[HLMessagePoller alloc] initWithPollType:OnscreenPollFetch];
         [Konotor setDelegate:self];
     }
@@ -287,27 +285,26 @@ typedef struct {
     return headerView;
 }
 
+
+
 -(void)setSubviews{
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
     
-    UIView *bannerMessageView= [UIView new];
-    bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
-    bannerMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
-    [self.view addSubview:bannerMessageView];
+    self.bannerMessageView = [UIView new];
+    self.bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.bannerMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
+    [self.view addSubview:self.bannerMessageView];
+
+    self.bannerMesagelabel = [[UILabel alloc] init];
+    self.bannerMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    self.bannerMesagelabel.text = overlayText;
+    self.bannerMesagelabel.numberOfLines = 3;
+    self.bannerMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
+    self.bannerMesagelabel.textAlignment = UITextAlignmentCenter;
     
-    UILabel *bannerMesagelabel = [[UILabel alloc] init];
-    bannerMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
-    bannerMesagelabel.text = overlayText;
-    bannerMesagelabel.numberOfLines = 3;
-    bannerMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
-    bannerMesagelabel.textAlignment = UITextAlignmentCenter;
-    
-    float overlayViewHeight = (MIN([self lineCountForLabel:bannerMesagelabel],3.0) *bannerMesagelabel.font.pointSize)+15;
-    
-    bannerMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [bannerMessageView addSubview:bannerMesagelabel];
+    self.bannerMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.bannerMessageView addSubview:self.bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
     self.tableView.backgroundColor = [[HLTheme sharedInstance]messageUIBackgroundColor];
@@ -331,28 +328,21 @@ typedef struct {
     self.yesNoPrompt = [[HLCSATYesNoPrompt alloc]initWithDelegate:self andKey:LOC_CSAT_PROMPT_PARTIAL];
     self.yesNoPrompt.translatesAutoresizingMaskIntoConstraints = NO;
 
-    NSDictionary *views;
+     self.views = @{@"tableView" : self.tableView,
+                    @"bottomView" : self.bottomView,
+                    @"messageOverlayView": self.bannerMessageView,
+                    @"overlayText" : self.bannerMesagelabel};
     
-    NSDictionary *metrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
-
-    if(overlayText.length >0){
-        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView, @"messageOverlayView": bannerMessageView, @"overlayText" : bannerMesagelabel};
-        
-        [bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlayText]|" options:0 metrics:nil views:views]];
-        [bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[overlayText]-5-|" options:0 metrics:nil views:views]];
-        
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:views]];
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:metrics views:views]];
-        
-    }
-    else{
-        views = @{@"tableView" : self.tableView, @"bottomView" : self.bottomView};
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][bottomView]" options:0 metrics:nil views:views]];
-    }
+    [self.bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlayText]|" options:0 metrics:nil views:self.views]];
+    [self.bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[overlayText]-5-|" options:0 metrics:nil views:self.views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:self.views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:views]];
+    [self setViewVerticalConstraint:overlayText];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:self.views]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:self.views]];
     
     if([self.channel.type isEqualToString:CHANNEL_TYPE_BOTH]){
         
@@ -587,6 +577,26 @@ typedef struct {
     }];
 }
 
+-(void) bannerMessageUpdated {
+    if (self.bannerMesagelabel != nil) {
+        FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+        NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
+        self.bannerMesagelabel.text = overlayText;
+        [self.view removeConstraints:self.viewVerticalConstraints];
+        [self setViewVerticalConstraint: overlayText];
+    }
+}
+
+-(void) setViewVerticalConstraint : (NSString *)overlayText {
+    float overlayViewHeight = 0.0;
+    if (overlayText.length > 0) {
+        overlayViewHeight= (MIN([self lineCountForLabel:self.bannerMesagelabel],3.0) *self.bannerMesagelabel.font.pointSize)+15;
+    }
+    NSDictionary *overlayHeightmetrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
+    self.viewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:overlayHeightmetrics views:self.views];
+    [self.view addConstraints:self.viewVerticalConstraints];
+}
+
 -(void) alterNavigationStack
 {
     if(self.fromNotification) {
@@ -665,9 +675,12 @@ typedef struct {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
                                                  name:HOTLINE_NETWORK_REACHABLE object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(channelsUpdated)
                                                 name:HOTLINE_CHANNELS_UPDATED object:nil];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bannerMessageUpdated)
+                                                 name:HOTLINE_BANNER_MESSAGE_UPDATED object:nil];
 }
 
 -(void)networkReachable{
@@ -684,6 +697,7 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_BANNER_MESSAGE_UPDATED object:nil];
 }
 
 -(void)handleBecameActive:(NSNotification *)notification{
@@ -936,14 +950,13 @@ typedef struct {
 //TODO: Needs refractor
 -(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
     FDActionButton* button=(FDActionButton*)sender;
-    [self addConversationDeepLinkLaunchEvent];
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
             FAQOptions *option = [FAQOptions new];
             if([HLConversationUtil hasTags:self.convOptions]){
                 [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
             }
-            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController faqOptions:option andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK]; // Question - The developer will have no controller over the behaviour
+            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
         }
         @catch(NSException* e){
             ALog(@"%@",e);
@@ -962,18 +975,6 @@ typedef struct {
             ALog(@"%@",e);
         }
     }
-}
-
-- (void) addConversationDeepLinkLaunchEvent{
-    NSString *channelId = [self.conversation.belongsToChannel.channelID stringValue];
-    NSString *channelName = self.conversation.belongsToChannel.name ;
-    NSString *messageAlias = self.conversation.conversationAlias;
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CONVERSATION_DEEPLINK_LAUNCH
-                                          withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_CHANNEL_ID andVal:channelId];
-        [event propKey:HLEVENT_PARAM_CHANNEL_NAME andVal:channelName];
-        [event propKey:HLEVENT_PARAM_MESSAGE_ALIAS andVal:messageAlias];
-    }];
 }
 
 #pragma mark - Audio toolbar delegates

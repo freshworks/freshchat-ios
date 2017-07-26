@@ -16,7 +16,6 @@
 #import "FDUtilities.h"
 #import "FDBarButtonItem.h"
 #import "HLLocalization.h"
-#import "HLEventManager.h"
 #import "HLSearchViewController.h"
 #import "HLControllerUtils.h"
 #import "HLConstants.h"
@@ -123,9 +122,6 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    [[HLEventManager sharedInstance]submitSDKEvent:HLEVENT_FAQ_SEARCH_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_SEARCH_LAUNCH_CATEGORY_LIST];
-    }];
     HLSearchViewController *searchViewController = [[HLSearchViewController alloc] init];
     [HLFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];

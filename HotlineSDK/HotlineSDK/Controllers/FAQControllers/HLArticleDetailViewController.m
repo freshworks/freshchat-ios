@@ -23,7 +23,6 @@
 #import "KonotorDataManager.h"
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
-#import "HLEventManager.h"
 #import "HLControllerUtils.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
@@ -228,7 +227,7 @@
         if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [HLFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController faqOptions:self.faqOptions andSource:HLEVENT_LAUNCH_SOURCE_DEEPLINK];
+            [HLFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions];
             return NO;
         }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
@@ -357,7 +356,6 @@
 -(void)yesButtonClicked:(id)sender{
     [self showThankYouPrompt];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        [self sendEventForArticle:HLEVENT_FAQ_UPVOTE_ARTICLE];
         FDLog(@"UpVoting Completed");
     }];
 }
@@ -365,26 +363,11 @@
 -(void)noButtonClicked:(id)sender{
     [self showContactUsPrompt];
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
-        [self sendEventForArticle:HLEVENT_FAQ_DOWNVOTE_ARTICLE];
         FDLog(@"DownVoting Completed");
     }];
 }
 
-- (void) sendEventForArticle :(NSString *) eventName{
-    NSString *articleId = [self.articleID stringValue];
-    NSString *articleName =self.articleTitle;
-    NSString *categoryId = [self.categoryID stringValue];
-    [[HLEventManager sharedInstance] submitSDKEvent:eventName withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_ARTICLE_ID andVal:articleId];
-        [event propKey:HLEVENT_PARAM_ARTICLE_NAME andVal:articleName];
-        [event propKey:HLEVENT_PARAM_CATEGORY_ID andVal:categoryId];
-    }];
-}
-
 -(void)buttonClickedEvent:(id)sender{
-    [[HLEventManager sharedInstance] submitSDKEvent:HLEVENT_CHANNELS_LAUNCH withBlock:^(HLEvent *event) {
-        [event propKey:HLEVENT_PARAM_SOURCE andVal:HLEVENT_LAUNCH_SOURCE_CONTACTUS];
-    }];
     [self hideBottomView];
     if([HLFAQUtil hasContactUsTags:self.faqOptions]){
         ConversationOptions *options = [ConversationOptions new];

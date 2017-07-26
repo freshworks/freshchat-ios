@@ -11,7 +11,6 @@
 #import "HLTheme.h"
 #import "HLMacros.h"
 #import "FDBarButtonItem.h"
-#import "HLEventManager.h"
 #import "HLControllerUtils.h"
 
 @implementation HLViewController : UIViewController

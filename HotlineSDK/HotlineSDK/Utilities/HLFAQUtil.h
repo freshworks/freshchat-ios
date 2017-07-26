@@ -16,15 +16,14 @@
 
 @interface HLFAQUtil : NSObject
 
-+(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
-+(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller faqOptions:(FAQOptions *)faqOptions andSource : (NSString *)source;
++(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller andFaqOptions:(FAQOptions *)faqOptions;
++(void) launchArticle:(HLArticle *) article withNavigationCtlr:(UIViewController *) controller andFaqOptions:(FAQOptions *)faqOptions;
 +(HLArticleDetailViewController *) getArticleDetailController:(HLArticle *) article;
 +(void) setFAQOptions:(FAQOptions*) options onController:(HLViewController *)controller;
 +(BOOL) hasTags:(FAQOptions *) options;
 +(BOOL) hasContactUsTags:(FAQOptions *) options;
 +(BOOL) hasFilteredViewTitle:(FAQOptions *) options;
 +(FAQOptions *) nonTagCopy:(FAQOptions *)options;
-+ (void) addFaqOpenArticleEvent :(HLArticle *) article andSource :(NSString *) source;
 @end
 
 #endif /* HLFAQUtil_h */

@@ -10,7 +10,6 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "HLFAQServices.h"
-#import "HLEventManager.h"
 
 @interface FDVotingManager()
 
