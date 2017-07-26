@@ -165,7 +165,6 @@
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
-    
     [FDUtilities registerUser:completion];
 }
 

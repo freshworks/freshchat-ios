@@ -17,6 +17,12 @@
     [defaults synchronize];
 }
 
++ (void) setArray : (NSMutableArray *)array forKey : (NSString *)key{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:array forKey:key];
+    [defaults synchronize];
+}
+
 +(id)getObjectForKey:(NSString *)key{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     return [defaults objectForKey:key];
@@ -44,6 +50,7 @@
     [defaults setObject:value forKey:key];
     [defaults synchronize];
 }
+
 
 +(NSNumber *)getNumberForKey:(NSString *)key{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

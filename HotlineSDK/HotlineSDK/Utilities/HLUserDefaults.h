@@ -25,6 +25,8 @@
 +(void)setString:(NSString *)value forKey:(NSString *)key;
 +(NSString *) getStringForKey:(NSString *)key;
 
++ (void) setArray : (NSMutableArray *)array forKey : (NSString *)key;
+
 +(void)removeObjectForKey:(NSString *)key;
 
 +(void)clearUserDefaults;
