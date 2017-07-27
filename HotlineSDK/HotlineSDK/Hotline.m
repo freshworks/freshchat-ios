@@ -40,6 +40,7 @@
 #import "HLInterstitialViewController.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "FDThemeConstants.h"
 #import "FDUtilities.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
@@ -276,6 +277,7 @@
 -(void) updateConversationBannerMessage:(NSString *) message{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
+    [FDLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
 }
 
 -(void)updateUser:(HotlineUser *)user{
@@ -514,7 +516,11 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-    config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
+    if([store objectForKey:HOTLINE_DEFAULTS_THEME_NAME]){
+        config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
+    } else {
+        config.themeName = FD_DEFAULT_THEME_NAME;
+    }
     
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
