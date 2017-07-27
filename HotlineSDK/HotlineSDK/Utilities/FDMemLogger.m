@@ -15,7 +15,6 @@
 #import "HLServiceRequest.h"
 #import "HLNotificationHandler.h"
 #import "FDSecureStore.h"
-#import "HLEventManager.h"
 
 @interface FDMemLogger ()
 
@@ -26,6 +25,15 @@
 @implementation FDMemLogger
 
 static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.amazonaws.com/prod/error";
+
++(NSString*) getSessionId{
+    static NSString *sessionId;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sessionId = [FDStringUtil generateUUID];
+    });
+    return sessionId;
+}
 
 -(id)init{
     self = [super init];
@@ -71,8 +79,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     userAlias = userAlias ? userAlias : @"NIL";
     
     BOOL isUserRegistered =  [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-    
-    NSString *sessionID = [HLEventManager getUserSessionId];
+    NSString *sessionID = [self getUserSessionId];
     
     NSDictionary *additionalInfo = @{
                                      @"Device Model" : [FDUtilities deviceModelName],
@@ -89,6 +96,10 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     
     [self addErrorInfo:additionalInfo withMethodName:@"AdditionalInfo"];
     return [self.logList componentsJoinedByString:@"\n"];
+}
+
+-(NSString *)getUserSessionId{
+    return [NSString stringWithFormat:@"%@_%@", [FDMemLogger getSessionId], [[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000] stringValue]];
 }
 
 -(void)upload{
