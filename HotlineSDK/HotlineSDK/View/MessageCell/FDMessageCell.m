@@ -499,10 +499,11 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 
     float cellHeight=0;
     NSString *simpleString=currentMessage.text; //[messageText string];
+    UIFont *messageFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)){
         
-        float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
+        float height=[FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:messageFont];
         if(KONOTOR_SHOWPROFILEIMAGE){
             cellHeight= MAX(height+extraHeight, MIN_HEIGHT);
         }
@@ -530,7 +531,10 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
         
         if((currentMessage.text)&&(![currentMessage.text isEqualToString:@""])){
             NSString *simpleString=currentMessage.text;
-            txtheight = [FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
+            txtheight = [FDMessageCell getTextViewHeightForMaxWidth:width text:simpleString withFont:messageFont] + messageFont.pointSize;
+            if(isAgentNameEnabled){
+                txtheight = txtheight + 2*KONOTOR_VERTICAL_PADDING ;
+            }
         }
         cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+((isAgent && isAgentNameEnabled)?[[HLTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]):KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     }
