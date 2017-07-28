@@ -18,10 +18,6 @@
 +(NSString *)currentUserAlias;
 +(NSString *)getUserAliasWithCreate;
 
-+(void)registerUser:(void(^)(NSError *error))completion;
-
-+(BOOL)isUserRegistered;
-
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *) getKeyForObject:(NSObject *) object;
 +(NSString *)getAdID;

@@ -107,9 +107,9 @@
 		35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSPDFUIKitMainThreadGuard.m; sourceTree = "<group>"; };
 		3C1159FC1DF1EA5800800A6C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3C66F0301E2668BE00E78380 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
-		CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SampleController.storyboard; sourceTree = "<group>"; };
-		CE130DCF1EF189090028CEE7 /* SampleController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleController.h; sourceTree = "<group>"; };
-		CE130DD01EF189090028CEE7 /* SampleController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleController.m; sourceTree = "<group>"; };
+		CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = SampleController.storyboard; path = ../SampleController.storyboard; sourceTree = "<group>"; };
+		CE130DCF1EF189090028CEE7 /* SampleController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SampleController.h; path = ../SampleController.h; sourceTree = "<group>"; };
+		CE130DD01EF189090028CEE7 /* SampleController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SampleController.m; path = ../SampleController.m; sourceTree = "<group>"; };
 		CEDFEEC71E4CD825002DCB4B /* HotlineConfigStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotlineConfigStrings.h; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -190,9 +190,6 @@
 		356F19DE1B9DBF14002F1E2A = {
 			isa = PBXGroup;
 			children = (
-				CE130DCF1EF189090028CEE7 /* SampleController.h */,
-				CE130DD01EF189090028CEE7 /* SampleController.m */,
-				CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */,
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
@@ -211,6 +208,9 @@
 		356F19E91B9DBF14002F1E2A /* Hotline */ = {
 			isa = PBXGroup;
 			children = (
+				CE130DCF1EF189090028CEE7 /* SampleController.h */,
+				CE130DD01EF189090028CEE7 /* SampleController.m */,
+				CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */,
 				356F19EE1B9DBF14002F1E2A /* AppDelegate.h */,
 				356F19EF1B9DBF14002F1E2A /* AppDelegate.m */,
 				CEDFEEC71E4CD825002DCB4B /* HotlineConfigStrings.h */,

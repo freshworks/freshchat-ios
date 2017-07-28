@@ -15,7 +15,6 @@
             self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
             self.translatesAutoresizingMaskIntoConstraints = NO;
             self.layer.cornerRadius = 5; // this value vary as per your desire
-            
             [self setBackgroundColor:[UIColor lightGrayColor]];
             self.clipsToBounds = YES;
             NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];

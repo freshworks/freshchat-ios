@@ -45,6 +45,7 @@
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
 #import "HLUserDefaults.h"
+#import "HLUser.h"
 
 @interface Hotline ()
 
@@ -167,7 +168,10 @@
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
     
-    [FDUtilities registerUser:completion];
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:completion];
+    }
+    
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
@@ -247,7 +251,7 @@
 -(NSDictionary *) getPreviousUserInfo{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = nil;
-    if( [FDUtilities isUserRegistered] &&
+    if( [HLUser isUserRegistered] &&
        [store objectForKey:HOTLINE_DEFAULTS_APP_ID] &&
        [store objectForKey:HOTLINE_DEFAULTS_APP_KEY] &&
        [store objectForKey:HOTLINE_DEFAULTS_DOMAIN] &&
@@ -319,7 +323,7 @@
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    if([FDUtilities isUserRegistered]){
+    if([HLUser isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
             NSString *userAlias = [FDUtilities currentUserAlias];
@@ -358,12 +362,12 @@
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
-    if(![FDUtilities isUserRegistered]){
-        [FDUtilities registerUser:nil];
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:nil];
     }
     if([FDUtilities hasInitConfig]) {
         dispatch_async(dispatch_get_main_queue(),^{
-            if([FDUtilities isUserRegistered]){
+            if([HLUser isUserRegistered]){
                 [[[FDDAUUpdater alloc]init] fetch];
                 [self registerDeviceToken];
                 [self updateAppVersion];

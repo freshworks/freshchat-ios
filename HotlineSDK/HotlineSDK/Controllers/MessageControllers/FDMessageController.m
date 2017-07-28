@@ -8,7 +8,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import "FDMessageController.h"
-#import "FDMessageCell.h"
+#import "HLMessageCell.h"
 #import "KonotorImageInput.h"
 #import "Hotline.h"
 #import "Message.h"
@@ -40,6 +40,7 @@
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "HLUser.h"
 
 typedef struct {
     BOOL isLoading;
@@ -50,7 +51,7 @@ typedef struct {
 } FDMessageControllerFlags;
 
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
@@ -170,7 +171,7 @@ typedef struct {
 - (void)tableViewTapped:(UITapGestureRecognizer *)tapObj {
     CGPoint touchLoc = [tapObj locationInView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoc];
-    FDMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    HLMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
     if ( messageCell ) {
         touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
         if (! CGRectContainsPoint(messageCell.messageTextView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
@@ -386,16 +387,16 @@ typedef struct {
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = @"FDMessageCell";
-    FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    NSString *cellIdentifier = @"HLMessageCell";
+    HLMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier andDelegate:self];
+        cell = [[HLMessageCell alloc] initWithReuseIdentifier:cellIdentifier andDelegate:self];
     }
     if (indexPath.row < self.messages.count) {
         MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
         cell.messageData = message;
         
-        [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
+        [cell drawMessageViewForMessage:message parentView:self.view];
     }
     
     
@@ -437,43 +438,6 @@ typedef struct {
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.messagesDisplayedCount;
 }
-
-/*-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
-    float height;
-    NSString *key = [self getIdentityForMessage:message];
-    if(key){
-        if(self.messageHeightMap[key]){
-            height = [self.messageHeightMap[key] floatValue];
-        }
-        else {
-            height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-            self.messageHeightMap[key] = @(height);
-        }
-    }else{
-        height = 0;
-    }
-    return height+CELL_HORIZONTAL_PADDING;
-}*/
-
-
--(CGFloat)getWidthForMessage:(MessageData *) message{
-    float width;
-    NSString *key = [self getIdentityForMessage:message];
-    if(key){
-        if(self.messageWidthMap[key]){
-            width = [self.messageWidthMap[key] floatValue];
-        }
-        else {
-            width = [FDMessageCell getWidthForMessage:message];
-            self.messageWidthMap[key] = @(width);
-        }
-    }else{
-        width = 0;
-    }
-    return width;
-}
-
 
 -(NSString *)getIdentityForMessage:(MessageData *)message{
     return ((message.messageId==nil)?[NSString stringWithFormat:@"%ul",message.createdMillis.intValue]:message.messageId);
@@ -525,8 +489,17 @@ typedef struct {
                                                                                         self.inputToolbar.textView.text,@"content",
                                                                                         @0,@"position",nil];
         
-        NSArray *fragmentInfo = [[NSArray alloc] initWithObjects:textFragmentInfo, nil];        
-        [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
+        NSArray *fragmentInfo = [[NSArray alloc] initWithObjects:textFragmentInfo, nil];
+        [HLUser setUserMessageInitiated];
+        if ([HLUser canRegisterUser]) {
+            [HLUser registerUser:^(NSError *error) {
+                if (!error) {
+                    [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
+                }
+            }];
+        } else {
+            [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
+        }
         [self checkPushNotificationState];
         self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
@@ -946,7 +919,7 @@ typedef struct {
 
 #pragma mark - Message cell delegates
 
--(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
+-(void)messageCell:(HLMessageCell *)cell pictureTapped:(UIImage *)image{
     FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:image];
     [imageController presentOnController:self];
     FDLog(@"Picture message tapped");
@@ -961,8 +934,8 @@ typedef struct {
 }
 
 //TODO: Needs refractor
--(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
-    FDActionButton* button=(FDActionButton*)sender;
+-(void)messageCell:(HLMessageCell *)cell openActionUrl:(id)sender{
+/*    FDActionButton* button=(FDActionButton*)sender;
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
             FAQOptions *option = [FAQOptions new];
@@ -988,6 +961,7 @@ typedef struct {
             ALog(@"%@",e);
         }
     }
+ */
 }
 
 #pragma mark - Audio toolbar delegates

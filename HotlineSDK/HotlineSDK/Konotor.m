@@ -15,7 +15,7 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import <ImageIO/ImageIO.h>
-
+#import "HLUser.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -75,12 +75,13 @@ __weak static id <KonotorDelegate> _delegate;
     return [KonotorAudioPlayer currentPlaying:nil set:NO ];
 }
 
-+(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{     
++(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
     [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];    
     [[Konotor delegate] didStartUploadingNewMessage];
+    
 }
 
 +(void) uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{

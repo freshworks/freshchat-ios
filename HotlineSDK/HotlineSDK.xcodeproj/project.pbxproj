@@ -117,6 +117,8 @@
 		CE274D041DB78E5C00733EDB /* HLStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE274D021DB78E5C00733EDB /* HLStarRatingView.m */; };
 		CE2A883E1EF006D900082811 /* MessageData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2A883D1EF006D900082811 /* MessageData.m */; };
 		CE372FC41EEA8CBB001C803F /* FDDeeplinkFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE372FC31EEA8CBB001C803F /* FDDeeplinkFragment.m */; };
+		CE390FAF1F2B144C006A1BDD /* HLMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE390FAE1F2B144C006A1BDD /* HLMessageCell.m */; };
+		CE390FB31F2B3479006A1BDD /* HLUser.m in Sources */ = {isa = PBXBuildFile; fileRef = CE390FB21F2B3479006A1BDD /* HLUser.m */; };
 		CE39CF721DCB694300A46660 /* HLControllerUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CE39CF711DCB694300A46660 /* HLControllerUtils.m */; };
 		CE3EFB531EDFEEE000470AB1 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3EFB521EDFEEE000470AB1 /* Message.m */; };
 		CE3EFB571EDFF9B000470AB1 /* Fragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3EFB561EDFF9B000470AB1 /* Fragment.m */; };
@@ -358,8 +360,7 @@
 		C5D4ED9B1E574B5C00E121B4 /* FDLocaleUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDLocaleUtil.h; sourceTree = "<group>"; };
 		C5D4ED9C1E574B5C00E121B4 /* FDLocaleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDLocaleUtil.m; sourceTree = "<group>"; };
 		C5E3CC8E1E5C556900A885B4 /* FDConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDConstants.h; sourceTree = "<group>"; };
-
-        CE06F8B71E2CD18F00D4063B /* HLInterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLInterstitialViewController.h; path = ../Utilities/HLInterstitialViewController.h; sourceTree = "<group>"; };
+		CE06F8B71E2CD18F00D4063B /* HLInterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLInterstitialViewController.h; path = ../Utilities/HLInterstitialViewController.h; sourceTree = "<group>"; };
 		CE06F8B81E2CD18F00D4063B /* HLInterstitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLInterstitialViewController.m; path = ../Utilities/HLInterstitialViewController.m; sourceTree = "<group>"; };
 		CE0C7C6C1D9539A100F545AE /* FDPlistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDPlistManager.h; sourceTree = "<group>"; };
 		CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDPlistManager.m; sourceTree = "<group>"; };
@@ -374,6 +375,10 @@
 		CE2A883D1EF006D900082811 /* MessageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageData.m; sourceTree = "<group>"; };
 		CE372FC21EEA8CBB001C803F /* FDDeeplinkFragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FDDeeplinkFragment.h; path = MessageFragments/FDDeeplinkFragment.h; sourceTree = "<group>"; };
 		CE372FC31EEA8CBB001C803F /* FDDeeplinkFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDDeeplinkFragment.m; path = MessageFragments/FDDeeplinkFragment.m; sourceTree = "<group>"; };
+		CE390FAD1F2B144C006A1BDD /* HLMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLMessageCell.h; sourceTree = "<group>"; };
+		CE390FAE1F2B144C006A1BDD /* HLMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLMessageCell.m; sourceTree = "<group>"; };
+		CE390FB21F2B3479006A1BDD /* HLUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLUser.m; sourceTree = "<group>"; };
+		CE390FB41F2B3488006A1BDD /* HLUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLUser.h; sourceTree = "<group>"; };
 		CE39CF701DCB694300A46660 /* HLControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLControllerUtils.h; sourceTree = "<group>"; };
 		CE39CF711DCB694300A46660 /* HLControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLControllerUtils.m; sourceTree = "<group>"; };
 		CE3EFB521EDFEEE000470AB1 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
@@ -677,6 +682,8 @@
 				C5D4ED9B1E574B5C00E121B4 /* FDLocaleUtil.h */,
 				C5D4ED9C1E574B5C00E121B4 /* FDLocaleUtil.m */,
 				C5E3CC8E1E5C556900A885B4 /* FDConstants.h */,
+				CE390FB21F2B3479006A1BDD /* HLUser.m */,
+				CE390FB41F2B3488006A1BDD /* HLUser.h */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -750,6 +757,8 @@
 				35B2EF751D000E620014867F /* FDMessageCell.m */,
 				35B2EF761D000E620014867F /* FDPictureMessageView.h */,
 				35B2EF771D000E620014867F /* FDPictureMessageView.m */,
+				CE390FAD1F2B144C006A1BDD /* HLMessageCell.h */,
+				CE390FAE1F2B144C006A1BDD /* HLMessageCell.m */,
 			);
 			path = MessageCell;
 			sourceTree = "<group>";
@@ -1016,6 +1025,7 @@
 				35B2EFAC1D000E620014867F /* FDIndexManager.m in Sources */,
 				35B2EFB11D000E620014867F /* FDStringUtil.m in Sources */,
 				35B2EFC71D000E620014867F /* FDActionButton.m in Sources */,
+				CE390FB31F2B3479006A1BDD /* HLUser.m in Sources */,
 				35B2EF8E1D000E620014867F /* HotlineConfig.m in Sources */,
 				354F26C61D0AED2F00DCD158 /* FDKeyChainStore.m in Sources */,
 				3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */,
@@ -1042,6 +1052,7 @@
 				35B2EF881D000E620014867F /* HLListViewController.m in Sources */,
 				35B2EFC81D000E620014867F /* FDAudioMessageUnit.m in Sources */,
 				35B2EF9F1D000E620014867F /* FDDAUUpdater.m in Sources */,
+				CE390FAF1F2B144C006A1BDD /* HLMessageCell.m in Sources */,
 				35B2EF9E1D000E620014867F /* FDDataUpdaterWithInterval.m in Sources */,
 				35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */,
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,

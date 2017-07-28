@@ -49,6 +49,7 @@
     ViewController *mainController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     [self.window setRootViewController:mainController];
     [self.window makeKeyAndVisible];
+    [[Hotline sharedInstance] clearUserDataWithCompletion:nil];
 }
 
 -(void)setupRootController{
