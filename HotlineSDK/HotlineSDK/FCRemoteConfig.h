@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FCRefreshIntervals.h"
+#import "FCFeatures.h"
 
 @interface FCRemoteConfig : NSObject
 
@@ -16,5 +17,6 @@
 @property (nonatomic) long activeConvWindow;
 @property (nonatomic) double activeConvFetchBackoffRatio;
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
+@property (nonatomic, strong) FCFeatures *features;
 
 @end

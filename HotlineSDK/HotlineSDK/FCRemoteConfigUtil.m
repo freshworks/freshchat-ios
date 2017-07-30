@@ -7,6 +7,7 @@
 //
 
 #import "FCRemoteConfigUtil.h"
+#import "FDSecureStore.h"
 
 @implementation FCRemoteConfigUtil
 
@@ -29,13 +30,42 @@
             [HLUserDefaults setNumber:@(intervals.faqFetchIntervalNormal) forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL];
             [HLUserDefaults setNumber:@(intervals.msgFetchIntervalLaidback) forKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK];
             [HLUserDefaults setNumber:@(intervals.msgFetchIntervalNormal) forKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL];
-            
-            
         }
     }
     return self;
 }
 
+-(void)updateFeaturesConfig:(FCFeatures *)features{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    if (features) {
+        [store setBoolValue:features.isFAQEnabled forKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
+        [store setBoolValue:features.isInboxEnabled forKey:FRESHCHAT_CONFIG_RC_INBOX_ENABLED];
+        [store setBoolValue:features.isAutoCampaignsEnabled forKey:FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED];
+        [store setBoolValue:features.isManualCampaignsEnabled forKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED];
+        [store setBoolValue:features.isUserEventsEnabled forKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
+        [store setBoolValue:features.isAOTUserCreateEnabled forKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
+        [store setBoolValue:features.showCustomBrandBanner forKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
+    }
+}
 
++ (BOOL) isAccountActive {
+    return ([HLUserDefaults getBoolForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE]);
+}
+
++ (BOOL) isFAQEnabled {
+    return ([[[FDSecureStore sharedInstance] valueForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED] boolValue]);
+}
+
++ (BOOL) isInboxEnabled {
+    return ([[[FDSecureStore sharedInstance] valueForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED] boolValue]);
+}
+
++ (BOOL) isActiveInboxAndAccount{
+    return ([self isAccountActive] && [self isInboxEnabled]);
+}
+
++ (BOOL) isActiveFAQAndAccount{
+    return ([self isAccountActive] && [self isFAQEnabled]);
+}
 
 @end

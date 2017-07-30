@@ -8,10 +8,7 @@
 
 #import "FCRefreshIntervals.h"
 
-#define ONE_SECONDS_IN_MS 1000
-#define ONE_HOUR_IN_MS (3600 * ONE_SECONDS_IN_MS)
-#define ONE_MINUTE_IN_MS (60 * 1000)
-#define ONE_DAY_IN_MS (24 * ONE_HOUR_IN_MS)
+
 
 @implementation FCRefreshIntervals
 

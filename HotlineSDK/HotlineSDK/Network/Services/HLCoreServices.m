@@ -19,6 +19,8 @@
 #import "FDMemLogger.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
+#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfigUtil.h"
 
 @implementation HLCoreServices
 
@@ -133,6 +135,13 @@
     return task;
 }
 
+- (void) getRemoteAPIInfo{
+    
+    //after response from api
+    FCRemoteConfigUtil *util = [[FCRemoteConfigUtil alloc] init];
+    [util updateFeaturesConfig:util.remoteConfig.features];
+}
+ 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
     if (![FDUtilities isUserRegistered] || !pushToken) return nil;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -327,6 +336,9 @@
 }
 
 +(void)sendLatestUserActivity:(HLChannel *)channel{
+    if (!([FCRemoteConfigUtil isAccountActive] && [FDUtilities isUserRegistered])){
+        return;
+    }
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     
@@ -338,7 +350,10 @@
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
     Message *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
     if(latestMessage){
-        [HLCoreServices registerUserConversationActivity:latestMessage];
+        //update read activity
+        if([FCRemoteConfigUtil isAccountActive] && [FDUtilities isUserRegistered]){
+            [HLCoreServices registerUserConversationActivity:latestMessage];
+        }
     }
 }
 

@@ -294,6 +294,16 @@ static NSInteger networkIndicator = 0;
     return lastUpdateTime;
 }
 
++(void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText{
+    
+    if(title.length == 0) {
+        return;
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelText otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
 +(BOOL) isValidPropKey: (NSString *) str {
     return str && [str length] <=32 && [FDStringUtil isValidUserPropName:str];
 }

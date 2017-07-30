@@ -43,7 +43,8 @@
 #import "FDUtilities.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
-#import "HLUserDefaults.h"
+#import "FCRemoteConfigUtil.h"
+#import "HLLocalization.h"
 
 @interface Hotline ()
 
@@ -210,14 +211,16 @@
 }
 
 -(void)updateAppVersion{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
-    NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
-    if (storedValue && ![storedValue isEqualToString:currentValue]) {
-        [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
-        [HLCoreServices uploadUnuploadedProperties];
+    if([FDUtilities isUserRegistered]){
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
+        NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
+        if (storedValue && ![storedValue isEqualToString:currentValue]) {
+            [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
+            [HLCoreServices uploadUnuploadedProperties];
+        }
+        [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
     }
-    [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
 }
 
 -(void)updateSDKBuildNumber{
@@ -319,9 +322,11 @@
     if([FDUtilities isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
-            NSString *userAlias = [FDUtilities currentUserAlias];
-            NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+            if([FDUtilities isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
+                NSString *userAlias = [FDUtilities currentUserAlias];
+                NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+                [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+            }
         }
     }
     else {
@@ -346,7 +351,7 @@
 }
 
 -(void) updateLocaleMeta {    
-    if([FDLocaleUtil hadLocaleChange]) {
+    if([FDLocaleUtil hadLocaleChange] && [FDUtilities isUserRegistered])  {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
         [[Hotline sharedInstance] updateUserLocaleProperties:localLocale];
@@ -393,11 +398,22 @@
 #pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
-    [self showFAQs:controller withOptions:[FAQOptions new]];
+    
+    if([FCRemoteConfigUtil isActiveFAQAndAccount]){
+        [self showFAQs:controller withOptions:[FAQOptions new]];
+    }
+    else{
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_FAQ_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+    }
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [self showConversations:controller withOptions:[ConversationOptions new]];
+    if([FCRemoteConfigUtil isActiveInboxAndAccount]){
+        [self showConversations:controller withOptions:[ConversationOptions new]];
+    }
+    else{
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_CHANNELS_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+    }
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{

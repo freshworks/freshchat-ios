@@ -40,6 +40,7 @@
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "FCRemoteConfigUtil.h"
 
 typedef struct {
     BOOL isLoading;
@@ -488,6 +489,10 @@ typedef struct {
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
     
+    if(![FCRemoteConfigUtil isActiveInboxAndAccount]){
+        return;
+    }
+    
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
@@ -515,6 +520,11 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
+    
+    if(![FCRemoteConfigUtil isActiveInboxAndAccount]){
+        return;
+    }
+    
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     if(([toSend isEqualToString:@""]) || ([toSend isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)])){

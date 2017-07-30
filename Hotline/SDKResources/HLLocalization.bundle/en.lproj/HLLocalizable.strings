@@ -9,6 +9,7 @@
 "faq_title_text"="FAQs";
 "faq_close_button_text"="Close";
 "contact_us_button_text"="Message Us";
+"faq_feature_not_enabled_text"="FAQ feature is disabled";
 
 /* Article UpVote DownVote */
 "article_vote_prompt_text"="Was this helpful?";
@@ -28,6 +29,7 @@
 /*Channels*/
 "channels_title_text"="Talk to us";
 "channels_close_button_text"="Close";
+"channels_feature_not_enabled_text"="Conversation feature is disabled";
 
 /* Message UI */
 "message_placeholder_text" = "Type a message";

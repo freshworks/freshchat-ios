@@ -45,6 +45,8 @@
 +(BOOL)hasInitConfig;
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
 
++(void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText;
+
 @end
 
 #endif

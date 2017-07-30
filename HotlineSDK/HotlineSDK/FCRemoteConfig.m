@@ -8,17 +8,17 @@
 
 #import "FCRemoteConfig.h"
 
-
 @implementation FCRemoteConfig
 
 - (instancetype)init{
     self = [super init];
     if (self) {
         self.accountActive = true;
-        self.sessionDuration = 120;
-        self.activeConvWindow = 0;
-        self.activeConvFetchBackoffRatio = 0;
+        self.sessionDuration = 30 * ONE_MINUTE_IN_MS;
+        self.activeConvWindow = 3 * ONE_DAY_IN_MS;
+        self.activeConvFetchBackoffRatio = 1.25;
         self.refreshIntervals = [[FCRefreshIntervals alloc] init];
+        self.features = [[FCFeatures alloc] init];
     }
     return self;
 }

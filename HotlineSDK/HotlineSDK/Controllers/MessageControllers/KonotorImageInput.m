@@ -13,6 +13,7 @@
 #import "HLMacros.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
+#import "FCRemoteConfigUtil.h"
 
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate, UIPopoverControllerDelegate>{
@@ -46,6 +47,9 @@
 
 - (void) showInputOptions:(UIViewController*) viewController{
    
+    if(![FCRemoteConfigUtil isActiveInboxAndAccount]){
+        return;
+    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     isCameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     NSArray *actionButtons;

@@ -15,4 +15,10 @@
 
 @property(nonatomic, strong) FCRemoteConfig *remoteConfig;
 
+-(void)updateFeaturesConfig:(FCFeatures *)features;
++ (BOOL) isAccountActive;
++ (BOOL) isFAQEnabled;
++ (BOOL) isInboxEnabled;
++ (BOOL) isActiveInboxAndAccount;
++ (BOOL) isActiveFAQAndAccount;
 @end
