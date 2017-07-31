@@ -36,6 +36,7 @@
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) isUserMe:(NSString *) userId;
++(BOOL) isCurrentUser:(NSNumber *) userId;
 +(NSString*) stopRecording;
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;

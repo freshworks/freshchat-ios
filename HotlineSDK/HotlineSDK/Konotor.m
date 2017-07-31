@@ -219,6 +219,10 @@ __weak static id <KonotorDelegate> _delegate;
     return NO;
 }
 
++(BOOL)isCurrentUser:(NSNumber *)userId{
+    return [userId  isEqual: USER_TYPE_MOBILE];
+}
+
 +(void) conversationsDownloaded
 {
     if([Konotor delegate])

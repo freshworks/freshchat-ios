@@ -49,13 +49,19 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)canDeferUser {
-    BOOL val = [HLUserDefaults getBoolForKey:HOTLINE_DEFAULTS_IS_USER_DEFERED];
-    return val;
+    NSObject *userDefered = [HLUserDefaults getObjectForKey:HOTLINE_DEFAULTS_IS_USER_DEFERED];
+    if(userDefered != nil) {
+        return (BOOL)userDefered;
+    }
+    return true; //Default
 }
 
 +(BOOL)hasMessageIintiated {
-    BOOL val = [HLUserDefaults getBoolForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
-    return val;
+    NSObject *hasUserInitiatedMessage = [HLUserDefaults getObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
+    if(hasUserInitiatedMessage != nil) {
+        return (BOOL)hasUserInitiatedMessage;
+    }
+    return false; //Default
 }
 
 +(void)setUserMessageInitiated {

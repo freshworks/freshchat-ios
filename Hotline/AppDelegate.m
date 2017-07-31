@@ -24,17 +24,20 @@
 
 #define STORYBOARD_NAME @"Main"
 #define STORYBOARD_IDENTIFIER @"HotlineViewController"
-
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define LAUNCH_SAMPLE_CONTROLLERT YES
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self registerAppForNotifications];
-    //[self setupRootController];
-    [self launchSampleController];
     [self hotlineIntegration];
-    /*[[Hotline sharedInstance]clearUserDataWithCompletion:^{
+    if (LAUNCH_SAMPLE_CONTROLLERT) {
+        [self launchSampleController];
+    } else {
+        [self setupRootController];
+    }
+    [[Hotline sharedInstance]clearUserDataWithCompletion:^{
         [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
-    }];*/
+    }];
     if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }

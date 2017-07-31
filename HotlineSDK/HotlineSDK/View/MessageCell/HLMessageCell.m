@@ -98,7 +98,7 @@
     UIEdgeInsets otherChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
     UIEdgeInsets userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
     
-    isAgentMessage = [Konotor isUserMe:[currentMessage messageUserType]]?NO:YES; //Changed
+    isAgentMessage = [Konotor isCurrentUser:[currentMessage messageUserType]]?NO:YES; //Changed
     showsProfile = isAgentMessage?isAgentAvatarEnabled:isUserAvatarEnabled;
     
     UIView *contentEncloser = [[UIView alloc]init];
