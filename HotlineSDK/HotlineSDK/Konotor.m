@@ -17,6 +17,8 @@
 #import <ImageIO/ImageIO.h>
 #import "HLUser.h"
 
+#import "Message.h"
+
 #define KONOTOR_IMG_COMPRESSION YES
 
 @implementation Konotor

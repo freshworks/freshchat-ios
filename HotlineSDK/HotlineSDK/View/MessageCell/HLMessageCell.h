@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Message.h"
 
+#define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
+
 @protocol HLMessageCellDelegate <NSObject>
 
 -(void)messageCell:(Fragment *)cell pictureTapped:(UIImage *)image;
@@ -17,6 +19,15 @@
 
 @end
 
+@class FDImageFragment;
+
+@protocol HLMessageCellDelegate <NSObject>
+
+-(void)messageCell:(Fragment *)cell pictureTapped:(UIImage *)image;
+-(void)messageCell:(Fragment *)cell openActionUrl:(id)sender;
+-(void)perfomAction:(FragmentData *)fragment;
+
+@end
 
 @interface HLMessageCell : UITableViewCell
 

@@ -19,7 +19,6 @@
 #import "FDAudioFragment.h"
 #import "FDFileFragment.h"
 
-
 @implementation HLMessageCell
 
 @synthesize isAgentMessage,showsProfile,showsSenderName,customFontName,

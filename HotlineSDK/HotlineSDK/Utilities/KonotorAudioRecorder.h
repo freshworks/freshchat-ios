@@ -8,7 +8,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
-#import "Message.h"
+#import "KonotorMessage.h"
 
 @interface KonotorAudioRecorder : AVAudioRecorder <UIAlertViewDelegate, AVAudioRecorderDelegate>
 @property   (strong) NSURL *pFileDest;
@@ -31,7 +31,9 @@
 @interface KonotorAlertView : UIAlertView
 
 @property (strong) KonotorConversation *conversation;
-@property (strong) Message *messageToBeSent;
+@property (strong) KonotorMessage *messageToBeSent;
 @property (strong) HLChannel* channel;
 
 @end
+
+

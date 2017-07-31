@@ -79,10 +79,8 @@ NS_ASSUME_NONNULL_BEGIN
 +(NSString *)generateMessageID;
 +(KonotorMessage *)createNewMessage:(NSDictionary *)message;
 -(void) associateMessageToConversation: (KonotorConversation *)conversation;
-
 +(KonotorMessage *)saveTextMessageInCoreData:(NSString *)text onConversation:(KonotorConversation *)conversation;
 +(KonotorMessage *)savePictureMessageInCoreData:(UIImage *)image withCaption: (NSString *) caption onConversation:(KonotorConversation *)conversation;
-
 +(void)uploadAllUnuploadedMessages;
 -(void) markAsRead;
 -(void) markAsUnread;

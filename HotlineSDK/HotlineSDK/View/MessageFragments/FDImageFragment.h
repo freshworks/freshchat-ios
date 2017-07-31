@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Fragment.h"
-#import "FDMessageCell.h"
+#import "HLMessageCell.h"
 #import "HLTheme.h"
 
 @interface FDImageFragment : UIImageView
     -(id) initWithFragment: (FragmentData *) fragment ofMessage:(MessageData*)message;
-    @property (nonatomic, weak) id<FDMessageCellDelegate> delegate;
+    @property (nonatomic, weak) id<HLMessageCellDelegate> delegate;
     @property CGRect imgFrame;
     @property FragmentData *fragmentData;
 @end
