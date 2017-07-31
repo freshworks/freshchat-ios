@@ -60,14 +60,14 @@
     return locale;
 }
 
-+(void)updateLocale:(NSString *)locale {
++(void)updateLocaleWith:(NSString *)locale {
     [HLUserDefaults setObject:locale forKey:HOTLINE_DEFAULTS_CONTENT_LOCALE];
 }
 
-+ (void)scanLocale{
++ (void)updateLocale{
     if([self hadLocaleChange]) {
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
-        [FDLocaleUtil updateLocale:localLocale];
+        [FDLocaleUtil updateLocaleWith:localLocale];
     }
 }
 

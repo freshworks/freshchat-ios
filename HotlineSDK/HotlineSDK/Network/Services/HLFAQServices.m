@@ -74,7 +74,7 @@
                             }
                             
                             //Updating userLocale
-                            [FDLocaleUtil scanLocale];
+                            [FDLocaleUtil updateLocale];
                             
                             NSArray *categories = [responseInfo responseAsDictionary][@"categories"];
                             if(categories && categories.count > 0 ){

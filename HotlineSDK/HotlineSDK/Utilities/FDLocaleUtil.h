@@ -16,8 +16,8 @@
 + (NSArray *) channelLocaleParams;
 +(NSNumber *)getContentLocaleId;
 +(NSNumber *) getConvLocaleId;
-+(void)updateLocale:(NSString *)localLocale;
-+(void)scanLocale;
++(void)updateLocaleWith:(NSString *)localLocale;
++(void)updateLocale;
 +(BOOL)hadLocaleChange;
 
 @end

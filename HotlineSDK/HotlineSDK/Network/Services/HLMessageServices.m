@@ -321,7 +321,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 [HLUserDefaults setNumber:responseLocaleId forKey:HOTLINE_DEFAULTS_CONV_LOCALEID];
             }
             
-            [FDLocaleUtil scanLocale];
+            [FDLocaleUtil updateLocale];
             
             BOOL isRestore = [messageLastUpdatedTime isEqualToNumber:@0];
             if (isRestore) {
