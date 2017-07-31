@@ -13,6 +13,7 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "Message.h"
+#import "KonotorMessage.h"
 #import "KonotorConversation.h"
 #import "FDDateUtil.h"
 #import "FDUtilities.h"

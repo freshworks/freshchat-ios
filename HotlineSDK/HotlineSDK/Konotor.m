@@ -165,6 +165,27 @@ __weak static id <KonotorDelegate> _delegate;
     }];
 }
 
++(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
+    [channel addMessagesObject:message];
+    [[KonotorDataManager sharedInstance]save];
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
+    [[Konotor delegate] didStartUploadingNewMessage];
+}
+
++(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    [self uploadImage:image withCaption:nil onConversation:conversation onChannel:channel];
+}
+
++(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
+    [channel addMessagesObject:message];
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
+    [[Konotor delegate] didStartUploadingNewMessage];
+}
+
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {
     return [KonotorAudioPlayer playMessageWithMessageID:messageID];
@@ -179,17 +200,21 @@ __weak static id <KonotorDelegate> _delegate;
 
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId
 {
-    //return [KonotorMessage setBinaryImage:imageData forMessageId:messageId];
-    return true;
+    return [KonotorMessage setBinaryImage:imageData forMessageId:messageId];
 }
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId
 {
-    //return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
-    return true;
+    return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
 }
 
-+(BOOL)isUserMe:(NSNumber *)userId{
-    return [userId  isEqual: USER_TYPE_MOBILE];
++(BOOL)isUserMe:(NSString *)userId{
+    NSString *currentUserID = USER_TYPE_MOBILE;
+    if(currentUserID){
+        if([userId isEqualToString:currentUserID]){
+            return YES;
+        }
+    }
+    return NO;
 }
 
 +(void) conversationsDownloaded

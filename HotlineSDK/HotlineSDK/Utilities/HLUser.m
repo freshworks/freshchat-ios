@@ -35,6 +35,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
                                 completion(error);
                             }
                         });
+                        
                     }];
                 }else{
                     IS_USER_REGISTRATION_IN_PROGRESS = NO;
@@ -49,17 +50,11 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(BOOL)canDeferUser {
     BOOL val = [HLUserDefaults getBoolForKey:HOTLINE_DEFAULTS_IS_USER_DEFERED];
-    if(val == NULL){
-        return true;
-    }
     return val;
 }
 
 +(BOOL)hasMessageIintiated {
     BOOL val = [HLUserDefaults getBoolForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
-    if(val == NULL){
-        return false;
-    }
     return val;
 }
 

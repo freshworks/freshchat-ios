@@ -11,6 +11,7 @@
 #import "HLMessageCell.h"
 #import "KonotorImageInput.h"
 #import "Hotline.h"
+#import "KonotorMessage.h"
 #import "Message.h"
 #import "Konotor.h"
 #import "HLMacros.h"
@@ -803,7 +804,7 @@ typedef struct {
     if( _flags.isLoading || (count > self.messageCountPrevious) ){
         _flags.isLoading = NO;
         [self refreshView];
-        //[self.messagesPoller reset];
+        [self.messagesPoller reset];
     }
     [self processPendingCSAT];
 }
@@ -935,7 +936,7 @@ typedef struct {
 
 //TODO: Needs refractor
 -(void)messageCell:(HLMessageCell *)cell openActionUrl:(id)sender{
-/*    FDActionButton* button=(FDActionButton*)sender;
+    /*FDActionButton* button=(FDActionButton*)sender;
     if(button.articleID!=nil && button.articleID.integerValue > 0){
         @try{
             FAQOptions *option = [FAQOptions new];
@@ -960,8 +961,7 @@ typedef struct {
         @catch(NSException* e){
             ALog(@"%@",e);
         }
-    }
- */
+    }*/
 }
 
 #pragma mark - Audio toolbar delegates
