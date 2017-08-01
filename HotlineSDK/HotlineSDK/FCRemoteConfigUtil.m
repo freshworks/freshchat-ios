@@ -53,11 +53,11 @@
 }
 
 + (BOOL) isFAQEnabled {
-    return ([[[FDSecureStore sharedInstance] valueForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED] boolValue]);
+    return ([[FDSecureStore sharedInstance] boolValueForKey :FRESHCHAT_CONFIG_RC_FAQ_ENABLED]);
 }
 
 + (BOOL) isInboxEnabled {
-    return ([[[FDSecureStore sharedInstance] valueForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED] boolValue]);
+    return ([[FDSecureStore sharedInstance] boolValueForKey :FRESHCHAT_CONFIG_RC_INBOX_ENABLED]);
 }
 
 + (BOOL) isActiveInboxAndAccount{
@@ -66,6 +66,10 @@
 
 + (BOOL) isActiveFAQAndAccount{
     return ([self isAccountActive] && [self isFAQEnabled]);
+}
+
++ (BOOL) isSubscribedUser {
+    return ([[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED]);
 }
 
 @end

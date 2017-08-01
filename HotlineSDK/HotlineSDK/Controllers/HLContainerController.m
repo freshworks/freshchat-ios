@@ -11,6 +11,7 @@
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
+#import "FCRemoteConfigUtil.h"
 
 @interface HLContainerController ()
 
@@ -49,7 +50,9 @@
     footerView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:footerView];
     
-    BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    //#imclude both changes server check and internal md5 check also :)
+    //BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    BOOL isSubscribed = [FCRemoteConfigUtil isSubscribedUser];
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];

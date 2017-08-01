@@ -21,4 +21,5 @@
 + (BOOL) isInboxEnabled;
 + (BOOL) isActiveInboxAndAccount;
 + (BOOL) isActiveFAQAndAccount;
++ (BOOL) isSubscribedUser;
 @end
