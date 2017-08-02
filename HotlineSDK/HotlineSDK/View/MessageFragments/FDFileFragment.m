@@ -7,25 +7,34 @@
 //
 
 #import "FDFileFragment.h"
+#import "HLTheme.h"
+#import "HLLocalization.h"
 
 @implementation FDFileFragment
-    -(id) initWithFragment: (FragmentData *) fragment {
-        self = [super initWithFrame:CGRectZero];
-        if (self) {
-            self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-            self.translatesAutoresizingMaskIntoConstraints = NO;
-            self.layer.cornerRadius = 5; // this value vary as per your desire
-            [self setBackgroundColor:[UIColor lightGrayColor]];
-            self.clipsToBounds = YES;
-            NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
-            self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:13.0f];
-            [self setTitle:extraJSONDict[@"label"] forState:UIControlStateNormal];
-            [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            self.translatesAutoresizingMaskIntoConstraints = false;
-            self.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-            self.userInteractionEnabled = true;
-        }
-        return self;
+-(id) initWithFragment: (FragmentData *) fragment {
+    self = [super initWithFrame:CGRectZero];
+    if (self) {
+        self.fragmentData = fragment;
+        HLTheme *theme = [HLTheme sharedInstance];
+        UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
+        float padding = 10;
+        self.backgroundColor = [theme actionButtonColor];
+        self.contentEdgeInsets = UIEdgeInsetsMake(padding, padding, padding, padding);
+        self.backgroundColor = [theme actionButtonColor];
+        self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
+        self.layer.borderWidth=0.5;
+        self.layer.cornerRadius=5.0;
+        NSString *actionLabel = @"Open File";
+        [self setAttributedTitle:
+         [[NSAttributedString alloc] initWithString:actionLabel
+                                         attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]]
+                        forState:UIControlStateNormal];
+        [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.userInteractionEnabled = true;        
     }
+    return self;
+}
+
 @end

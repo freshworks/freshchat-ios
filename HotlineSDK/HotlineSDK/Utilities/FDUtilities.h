@@ -41,6 +41,9 @@
 +(BOOL)hasInitConfig;
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
 
++(BOOL) containsHTMLContent: (NSString *)content;
++(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
+
 @end
 
 #endif

@@ -7,19 +7,40 @@
 //
 
 #import "FDDeeplinkFragment.h"
+#import "HLTheme.h"
+#import "HLLocalization.h"
 
 @implementation FDDeeplinkFragment
-    -(id) initWithFragment: (Fragment *) fragment {
+    -(id) initWithFragment: (FragmentData *) fragment {
         self = [super initWithFrame:CGRectZero];
         if (self) {
+            self.fragmentData = fragment;
+            HLTheme *theme = [HLTheme sharedInstance];
+            UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
+            float padding = 10;
+            self.backgroundColor = [theme actionButtonColor];
+            self.contentEdgeInsets = UIEdgeInsetsMake(padding, padding, padding, padding);
+            self.backgroundColor = [theme actionButtonColor];
+            self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
+            self.layer.borderWidth=0.5;
+            self.layer.cornerRadius=5.0;
+            NSString *actionLabel = @"View Article";
+            if([actionLabel isEqualToString:@""]||(actionLabel==nil)) {
+                actionLabel=HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
+            }            
+            [self setAttributedTitle:
+             [[NSAttributedString alloc] initWithString:actionLabel
+                                        attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]]
+                                        forState:UIControlStateNormal];
+            [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
             self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
             self.translatesAutoresizingMaskIntoConstraints = NO;
-            [self setTitle:@"File" forState:UIControlStateNormal];
-            [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            self.backgroundColor = [UIColor lightGrayColor];
-            self.translatesAutoresizingMaskIntoConstraints = false;
             self.userInteractionEnabled = true;
+            [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(showFAQs:)]];
         }
         return self;
+    }
+    -(void) showFAQs:(id) sender {
+        [self.agentMessageDelegate agentCellPerfomAction:self.fragmentData];
     }
 @end

@@ -13,28 +13,18 @@
 
 @protocol HLMessageCellDelegate <NSObject>
 
--(void)messageCell:(Fragment *)cell pictureTapped:(UIImage *)image;
--(void)messageCell:(Fragment *)cell openActionUrl:(id)sender;
--(void)perfomAction:(FragmentData *)fragment;
+-(void)agentCellPerfomAction:(FragmentData *)fragment;
 
 @end
 
 @class FDImageFragment;
+@class FDHtmlFragment;
 
-@protocol HLMessageCellDelegate <NSObject>
-
--(void)messageCell:(Fragment *)cell pictureTapped:(UIImage *)image;
--(void)messageCell:(Fragment *)cell openActionUrl:(id)sender;
--(void)perfomAction:(FragmentData *)fragment;
-
-@end
-
-@interface HLMessageCell : UITableViewCell
+@interface HLAgentMessageCell : UITableViewCell
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<HLMessageCellDelegate>)delegate;
 - (void) drawMessageViewForMessage:(MessageData *)currentMessage parentView:(UIView*)parentView;
 
-@property (nonatomic) BOOL isAgentMessage;
 @property (nonatomic) BOOL showsProfile;
 @property (nonatomic) BOOL showsSenderName;
 @property (nonatomic) BOOL showsTimeStamp;
@@ -45,6 +35,9 @@
 @property (nonatomic, strong) MessageData *messageData;
 @property (nonatomic, weak) id<HLMessageCellDelegate> delegate;
 
+@property (nonatomic) UIEdgeInsets agentChatBubbleInsets;
+@property (strong, nonatomic) UIImage *agentChatBubble;
+@property (strong, nonatomic) UIView* contentEncloser;
 @property (strong, nonatomic) UITextView* senderNameLabel;
 @property (strong, nonatomic) UITextView* messageSentTimeLabel;
 @property (strong, nonatomic) UITextView* messageTextView;

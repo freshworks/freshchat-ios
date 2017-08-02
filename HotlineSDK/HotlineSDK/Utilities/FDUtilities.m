@@ -311,6 +311,29 @@ static NSInteger networkIndicator = 0;
     return [noEmptyTags valueForKey:@"lowercaseString"];
 }
 
++(BOOL) containsHTMLContent: (NSString *)content {
+    if ((([FDUtilities containsString:content andTarget:@"<b>"]) && ([FDUtilities containsString:content andTarget:@"</b>"]))
+    || (([FDUtilities containsString:content andTarget:@"<i>"]) && ([FDUtilities containsString:content andTarget:@"</i>"]))
+    || (([FDUtilities containsString:content andTarget:@"<u>"]) && ([FDUtilities containsString:content andTarget:@"</u>"]))
+    || (([FDUtilities containsString:content andTarget:@"<a>"]) && ([FDUtilities containsString:content andTarget:@"</a>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h1>"]) && ([FDUtilities containsString:content andTarget:@"</h1>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h2>"]) && ([FDUtilities containsString:content andTarget:@"</h2>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h3>"]) && ([FDUtilities containsString:content andTarget:@"</h3>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h4>"]) && ([FDUtilities containsString:content andTarget:@"</h4>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h5>"]) && ([FDUtilities containsString:content andTarget:@"</h5>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h6>"]) && ([FDUtilities containsString:content andTarget:@"</h6>"]))) {
+        return true;
+    }
+    return false;
+}
+
++(BOOL) containsString: (NSString *)original andTarget:(NSString *)target {
+    if([original rangeOfString:target].location == NSNotFound) {
+        return false;
+    }
+    return true;
+}
+
 +(NSString*)deviceModelName{
     struct utsname systemInfo;
     uname(&systemInfo);

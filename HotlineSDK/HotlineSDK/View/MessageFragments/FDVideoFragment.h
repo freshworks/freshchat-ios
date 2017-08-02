@@ -10,6 +10,7 @@
 #import "UIKit/UIKit.h"
 #import "Fragment.h"
 
-@interface FDVideoFragment: UIView
-    -(id) initWithFragment: (Fragment *) fragment;
+@interface FDVideoFragment: UIButton
+    -(id) initWithFragment: (FragmentData *) fragment;
+    @property FragmentData *fragmentData;
 @end

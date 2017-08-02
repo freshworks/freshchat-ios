@@ -27,7 +27,7 @@
 #import "HLTags.h"
 #import "HLCoreServices.h"
 #import "HLConstants.h"
-#import "HLMessageCell.h"
+#import "HLAgentMessageCell.h"
 #import "Message.h"
 #import "Fragment.h"
 #import "HLUser.h"
