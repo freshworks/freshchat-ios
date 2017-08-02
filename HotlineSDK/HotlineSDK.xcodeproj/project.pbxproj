@@ -128,6 +128,7 @@
 		CE85F5B51E1FAAEA00BAA5A8 /* HLTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE85F5B41E1FAAEA00BAA5A8 /* HLTagManager.m */; };
 		CE8BF9091DD5FFB700814009 /* HLTags.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8BF9081DD5FFB700814009 /* HLTags.m */; };
 		CE9053521DD47C4E00F52B5F /* HLCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* HLCsat.m */; };
+		CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */; };
 		CEA6AC3A1DD94C6D00B60002 /* FDGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */; };
 		CEC95A851E097B44009A1FCD /* HLConversationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC95A841E097B43009A1FCD /* HLConversationUtil.m */; };
 		CED138481DB4D55200404686 /* HLCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* HLCSATView.m */; };
@@ -400,6 +401,7 @@
 		CE8BF9081DD5FFB700814009 /* HLTags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLTags.m; sourceTree = "<group>"; };
 		CE9053501DD47C4E00F52B5F /* HLCsat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCsat.h; sourceTree = "<group>"; };
 		CE9053511DD47C4E00F52B5F /* HLCsat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCsat.m; sourceTree = "<group>"; };
+		CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFileFragment.m; sourceTree = "<group>"; };
 		CEA6AC381DD94C6D00B60002 /* FDGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDGrowingTextView.h; sourceTree = "<group>"; };
 		CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDGrowingTextView.m; sourceTree = "<group>"; };
 		CEC95A821E0973A5009A1FCD /* ConversationOptionsInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConversationOptionsInterface.h; path = ../FAQControllers/ConversationOptionsInterface.h; sourceTree = "<group>"; };
@@ -879,6 +881,7 @@
 			children = (
 				CEFA05631EE82F7400DC74CF /* FDFileFragment.h */,
 				CEFA05641EE82F7400DC74CF /* FDFileFragment.m */,
+				CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */,
 				CEFA05541EE82F2000DC74CF /* FDAudioFragment.h */,
 				CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */,
 				CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */,
@@ -1069,6 +1072,7 @@
 				35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */,
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,
 				35B2EFB31D000E620014867F /* FDVotingManager.m in Sources */,
+				CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */,
 				35D4E8191D118E9000EFFE07 /* HLCategoryGridViewController.m in Sources */,
 				C5D4ED991E57036100E121B4 /* HLUserDefaults.m in Sources */,
 				35B2EFA11D000E620014867F /* FDSolutionUpdater.m in Sources */,

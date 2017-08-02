@@ -25,7 +25,15 @@
         self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
         self.layer.borderWidth=0.5;
         self.layer.cornerRadius=5.0;
-        NSString *actionLabel = @"Watch Video";
+        NSString *actionLabel;
+        NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
+        if(extraJSONDict[@"label"]) {
+            actionLabel = extraJSONDict[@"label"];
+        }
+        if (!actionLabel) {
+             actionLabel = HLLocalizedString(LOC_DEFAULT_VIDEO_BUTTON_TEXT);
+        }
         [self setAttributedTitle:
          [[NSAttributedString alloc] initWithString:actionLabel
                                          attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]]

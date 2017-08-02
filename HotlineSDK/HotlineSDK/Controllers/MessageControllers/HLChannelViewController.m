@@ -258,12 +258,19 @@
             cell.lastUpdatedLabel.text = nil;
         }
         
-        //Change here
         NSString *fragmentHTML = [lastMessage getDetailDescriptionForMessage];
-        fragmentHTML = [fragmentHTML stringByAppendingString:@"<style>body{font-family:'HelveticaNeue'; font-size:'20';}</style>"];
+        NSError *parseErr;
+        NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[fragmentHTML dataUsingEncoding:NSUnicodeStringEncoding]
+                                                                                            options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
+                                                                                            documentAttributes:nil
+                                                                                            error:&parseErr];
         
-        NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[fragmentHTML dataUsingEncoding:NSUnicodeStringEncoding]             options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType } documentAttributes:nil error:nil];
-        cell.detailLabel.attributedText = attributedTitleString;
+        if(parseErr) {
+            cell.detailLabel.text = fragmentHTML;
+        } else {
+            cell.detailLabel.text = [attributedTitleString string];
+        }
+        
 
 
         NSInteger unreadCount = [Message getUnreadMessagesCountForChannel:channel.channelID];
