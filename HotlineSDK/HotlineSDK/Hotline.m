@@ -125,7 +125,7 @@
     HotlineConfig *processedConfig = [self processConfig:config];
     
     self.config = processedConfig;
-    
+    [self initRemoteConfig];
     if ([self hasUpdatedConfig:processedConfig]) {
         [self cleanUpData:^{
             [self updateConfig:processedConfig andRegisterUser:completion];
@@ -134,6 +134,14 @@
     else {
         [self updateConfig:processedConfig andRegisterUser:completion];
     }
+}
+
+- (void) initRemoteConfig {
+    
+    FCRemoteConfigUtil *rc = [[FCRemoteConfigUtil alloc] init];
+    FCFeatures *feature = [[FCFeatures alloc] init];
+    [rc updateFeaturesConfig:feature];
+    
 }
 
 -(HotlineConfig *)processConfig:(HotlineConfig *)config{

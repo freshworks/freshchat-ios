@@ -15,6 +15,7 @@
 #import "FDUtilities.h"
 #import "math.h"
 #import "HLNotificationHandler.h"
+#import "FCRemoteConfigUtil.h"
 
 #define MAX_POLL_INTERVAL_ON_SCREEN     5 // 1 minute;
 #define MAX_POLL_INTERVAL_OFF_SCREEN    5 // 2 minutes;
@@ -46,7 +47,7 @@
 -(void)begin{
     if(self.pollType == OnscreenPollFetch){
         self.interval = ON_CHAT_SCREEN_POLLER_INTERVAL * ([HLNotificationHandler areNotificationsEnabled]?2:1);
-        self.backOff = 1.5;
+        self.backOff = [FCRemoteConfigUtil getActiveConvFetchBackoffRatio];
     }
     if(self.pollType == OffScreenPollFetch){
         self.interval = OFF_CHAT_SCREEN_POLLER_INTERVAL;
@@ -76,7 +77,7 @@
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
         if([Message hasUserMessageInContext:mainContext]){
-            if([Message daysSinceLastMessageInContext:mainContext] <= MAX_DAYS_SINCE_LAST_MESSAGE_FOR_POLL) {
+            if([Message daysSinceLastMessageInContext:mainContext] <= [FCRemoteConfigUtil getActiveConvWindow]) {
                 [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
                               ,[Message daysSinceLastMessageInContext:mainContext]]];
                 enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?

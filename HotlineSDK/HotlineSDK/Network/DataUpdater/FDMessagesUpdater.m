@@ -9,6 +9,7 @@
 #import "FDMessagesUpdater.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
+#import "FCRemoteConfigUtil.h"
 
 @interface FDMessagesUpdater()
 
@@ -26,7 +27,9 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
+    if([FCRemoteConfigUtil isActiveInboxAndAccount]){
+        [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
+    }
 }
 
 - (void) resetTime{

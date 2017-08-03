@@ -266,9 +266,6 @@
 }
 
 +(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
-    if(![FDUtilities isUserRegistered]){
-        return nil;
-    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities currentUserAlias];
@@ -351,7 +348,7 @@
     Message *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
     if(latestMessage){
         //update read activity
-        if([FCRemoteConfigUtil isAccountActive] && [FDUtilities isUserRegistered]){
+        if([FCRemoteConfigUtil isActiveInboxAndAccount]){
             [HLCoreServices registerUserConversationActivity:latestMessage];
         }
     }

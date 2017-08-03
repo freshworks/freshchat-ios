@@ -22,4 +22,25 @@
 + (BOOL) isActiveInboxAndAccount;
 + (BOOL) isActiveFAQAndAccount;
 + (BOOL) isSubscribedUser;
+
++ (float) getActiveConvFetchBackoffRatio;
+
+//Config intervals -
++ (long) getRemoteConfigFetchInterval;
+
++ (long) getActiveConvMaxFetchInterval;
++ (long) getActiveConvMinFetchInterval;
+
++ (long) getMsgFetchIntervalNormal;
++ (long) getMsgFetchIntervalLaidback;
+
++ (long) getFaqFetchIntervalNormal;
++ (long) setFaqFetchIntervalLaidback;
+
++ (long) getChannelsFetchIntervalNormal;
++ (long) setChannelsFetchIntervalLaidback;
++ (int) getActiveConvWindow;
+
++ (long) getSessionDuration;
+
 @end

@@ -72,4 +72,54 @@
     return ([[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED]);
 }
 
++ (float) getActiveConvFetchBackoffRatio{
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO] floatValue]);
+}
+
+//FC interval call
++ (long) getRemoteConfigFetchInterval{
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_API_FETCH_INTERVAL] longValue]);
+}
+
++ (long) getActiveConvMaxFetchInterval {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL] longValue]);
+}
+
++ (long) getActiveConvMinFetchInterval {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL] longValue]);
+}
+
++ (long) getMsgFetchIntervalNormal {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL] longValue]);
+}
+
++ (long) getMsgFetchIntervalLaidback {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK] longValue]);
+}
+
++ (long) getFaqFetchIntervalNormal {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL] longValue]);
+}
+
++ (long) setFaqFetchIntervalLaidback {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK] longValue]);
+}
+
++ (long) getChannelsFetchIntervalNormal {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL] longValue]);
+}
+
++ (long) setChannelsFetchIntervalLaidback {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK] longValue]);
+}
+
++ (int) getActiveConvWindow {
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] intValue]);
+}
+//FC CONFIG_RC_ACTIVE_CONV_WINDOW
+
++ (long) getSessionDuration{
+    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_SESSION_DURATION_SECS] longValue]);
+}
+
 @end

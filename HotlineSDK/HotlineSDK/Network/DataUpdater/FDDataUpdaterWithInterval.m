@@ -31,7 +31,7 @@
     return self;
 }
 
-- (void) useInterval:(int) interval{
+- (void) useInterval:(long) interval{
     self.intervalInSecs = interval;
 }
 

@@ -11,23 +11,26 @@
 #import "HLConstants.h"
 #import "HLMacros.h"
 #import "KonotorConversation.h"
+#import "FCRemoteConfigUtil.h"
 
 @implementation FDChannelUpdater
 
 -(id)init{
     self = [super init];
     if (self) {
-        [self useInterval:CHANNELS_FETCH_INTERVAL_DEFAULT];
+        [self useInterval:[FCRemoteConfigUtil setChannelsFetchIntervalLaidback]];
         [self useConfigKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLMessageServices fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
-        ALog(@"Channels updated");
-        if(completion) completion(error);
-    }];
+    if([FCRemoteConfigUtil isActiveInboxAndAccount]){
+        [HLMessageServices fetchAllChannels:^(NSArray<HLChannel *> *channels, NSError *error) {
+            ALog(@"Channels updated");
+            if(completion) completion(error);
+        }];
+    }
 }
 
 @end

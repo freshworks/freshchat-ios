@@ -12,6 +12,7 @@
 #import "HLMacros.h"
 #import "KonotorDataManager.h"
 #import "HLFAQServices.h"
+#import "FCRemoteConfigUtil.h"
 
 @interface FDSolutionUpdater ()
 
@@ -22,20 +23,22 @@
 -(id)init{
     self = [super init];
     if (self) {
-        [self useInterval:SOLUTIONS_FETCH_INTERVAL_DEFAULT];
+        [self useInterval:[FCRemoteConfigUtil setFaqFetchIntervalLaidback]];
         [self useConfigKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    HLFAQServices *service = [[HLFAQServices alloc]init];
-    [service fetchAllCategories:^(NSError *error) {
-        ALog(@"Solution updated");
-        if(completion){
-            completion(error);
-        }
-    }];
+    if([FCRemoteConfigUtil isActiveFAQAndAccount]){
+        HLFAQServices *service = [[HLFAQServices alloc]init];
+        [service fetchAllCategories:^(NSError *error) {
+            ALog(@"Solution updated");
+            if(completion){
+                completion(error);
+            }
+        }];
+    }
 }
 
 @end

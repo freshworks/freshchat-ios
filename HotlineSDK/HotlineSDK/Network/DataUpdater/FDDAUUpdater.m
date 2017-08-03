@@ -9,24 +9,26 @@
 #import "FDDAUUpdater.h"
 #import "HLConstants.h"
 #import "HLCoreServices.h"
-
+#import "FCRemoteConfigUtil.h"
 
 @implementation FDDAUUpdater
 
 -(id)init{
     self = [super init];
     if (self) {
-        [self useInterval:DAU_UPDATE_INTERVAL];
+        [self useInterval:[FCRemoteConfigUtil getSessionDuration]];
         [self useConfigKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLCoreServices DAUCall:^(NSError *error) {
-        if(completion){
-            completion(error);
-        }
-    }];
+    if([FDUtilities isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
+        [HLCoreServices DAUCall:^(NSError *error) {
+            if(completion){
+                completion(error);
+            }
+        }];
+    }
 }
 @end

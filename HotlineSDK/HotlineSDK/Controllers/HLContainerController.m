@@ -51,7 +51,7 @@
     [self.view addSubview:footerView];
     
     //#imclude both changes server check and internal md5 check also :)
-    //BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    BOOL isPoweredByHidden = [FDUtilities isPoweredByHidden];
     BOOL isSubscribed = [FCRemoteConfigUtil isSubscribedUser];
     
     //Footerview label
@@ -65,7 +65,7 @@
     
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    if(isSubscribed){
+    if(isSubscribed && isPoweredByHidden){
         [footerView removeFromSuperview];
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
     }
