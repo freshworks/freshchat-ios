@@ -17,8 +17,8 @@
 #import "HLNotificationHandler.h"
 #import "FCRemoteConfigUtil.h"
 
-#define MAX_POLL_INTERVAL_ON_SCREEN     5 // 1 minute;
-#define MAX_POLL_INTERVAL_OFF_SCREEN    5 // 2 minutes;
+#define MAX_POLL_INTERVAL_ON_SCREEN     60 // 1 minute;
+#define MAX_POLL_INTERVAL_OFF_SCREEN    120 // 2 minutes;
 
 @interface HLMessagePoller()
 

@@ -23,6 +23,7 @@
 -(id)init{
     self = [super init];
     if (self) {
+        //[self useInterval:SOLUTIONS_FETCH_INTERVAL_DEFAULT];
         [self useInterval:[FCRemoteConfigUtil setFaqFetchIntervalLaidback]];
         [self useConfigKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
     }

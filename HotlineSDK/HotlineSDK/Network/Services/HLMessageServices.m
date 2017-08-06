@@ -29,6 +29,7 @@
 #import "HLConstants.h"
 #import "Message.h"
 #import "Fragment.h"
+#import "FCRemoteConfigUtil.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
@@ -73,8 +74,10 @@ static HLNotificationHandler *handleUpdateNotification;
             break;
         
         case ScreenLaunchFetch:
-            [messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
-            [channelsUpdater useInterval:CHANNELS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            //[messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            [messageUpdater useInterval:[FCRemoteConfigUtil getMsgFetchIntervalNormal]];
+            //[channelsUpdater useInterval:CHANNELS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            [channelsUpdater useInterval:[FCRemoteConfigUtil getChannelsFetchIntervalNormal]];
             break;
             
         default:

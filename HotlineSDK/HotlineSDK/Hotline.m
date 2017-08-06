@@ -140,7 +140,9 @@
     
     FCRemoteConfigUtil *rc = [[FCRemoteConfigUtil alloc] init];
     FCFeatures *feature = [[FCFeatures alloc] init];
-    [rc updateFeaturesConfig:feature];
+    rc.remoteConfig.activeConvFetchBackoffRatio = 1.75;
+    
+        [rc updateFeaturesConfig:feature];
     
 }
 

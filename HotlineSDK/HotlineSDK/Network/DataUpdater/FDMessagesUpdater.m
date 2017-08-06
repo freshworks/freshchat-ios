@@ -20,7 +20,8 @@
 -(id)init{
     self = [super init];
     if (self) {
-        [self useInterval:MESSAGES_FETCH_INTERVAL_DEFAULT];
+        //[self useInterval:MESSAGES_FETCH_INTERVAL_DEFAULT];
+        [self useInterval:[FCRemoteConfigUtil getMsgFetchIntervalLaidback]];
         [self useConfigKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;

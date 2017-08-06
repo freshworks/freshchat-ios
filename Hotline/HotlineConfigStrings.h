@@ -9,9 +9,9 @@
 #define HOTLINE_APP_ID @"016cc417-b858-437f-90ea-e88a27bfcd18"
 #define HOTLINE_APP_KEY @"d110a0e7-b185-411a-9c21-577eebb6c6dc"*/
 
-#define HOTLINE_DOMAIN @"mr-blonde.freshpori.com"
-#define HOTLINE_APP_ID @"1076c6c4-a949-442b-89af-1c2cb5b07f02"
-#define HOTLINE_APP_KEY @"a5a2a720-5d20-4726-8d15-c2cc18cf4b72"
+#define HOTLINE_DOMAIN @"mr-brown.freshpori.com"
+#define HOTLINE_APP_ID @"994ec22c-aacc-4d7e-a455-bc28d79ff16d"
+#define HOTLINE_APP_KEY @"0a758098-0974-4651-a547-9a32e357ef37"
 
 
 //sid+demo@freshdesk.com prod

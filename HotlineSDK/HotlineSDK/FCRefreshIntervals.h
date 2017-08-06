@@ -16,21 +16,20 @@
 
 @interface FCRefreshIntervals : NSObject
 
-@property (nonatomic) long remoteConfigFetchInterval;
+@property (nonatomic, assign) long remoteConfigFetchInterval;
 
-@property (nonatomic) long activeConvMinFetchInterval;
-@property (nonatomic) long activeConvMaxFetchInterval;
+@property (nonatomic, assign) long activeConvMinFetchInterval;
+@property (nonatomic, assign) long activeConvMaxFetchInterval;
 
-@property (nonatomic) long msgFetchIntervalNormal;
-@property (nonatomic) long msgFetchIntervalLaidback;
+@property (nonatomic, assign) long msgFetchIntervalNormal;
+@property (nonatomic, assign) long msgFetchIntervalLaidback;
 
-@property (nonatomic) long faqFetchIntervalNormal;
-@property (nonatomic) long faqFetchIntervalLaidback;
+@property (nonatomic, assign) long faqFetchIntervalNormal;
+@property (nonatomic, assign) long faqFetchIntervalLaidback;
 
-@property (nonatomic) long channelsFetchIntervalNormal;
-@property (nonatomic) long channelsFetchIntervalLaidback;
+@property (nonatomic, assign) long channelsFetchIntervalNormal;
+@property (nonatomic, assign) long channelsFetchIntervalLaidback;
 
 - (instancetype)init;
-- (void) setFaqFetchIntervalNormal:(long)faqFetchIntervalNormal;
 
 @end

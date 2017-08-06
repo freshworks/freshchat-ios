@@ -20,8 +20,73 @@
         self.isUserEventsEnabled = NO;
         self.isAOTUserCreateEnabled = NO;
         self.showCustomBrandBanner = YES;
+        self.miscfeatures = [[FCMiscFeatures alloc] init];
     }
     return self;
+}
+
+- (void) setIsFAQEnabled:(BOOL)isFAQEnabled{
+    _isFAQEnabled = isFAQEnabled;
+}
+
+- (BOOL) getIsFAQEnabled{
+    return self.isFAQEnabled;
+}
+
+- (void) setIsInboxEnabled:(BOOL)isInboxEnabled{
+    _isInboxEnabled = isInboxEnabled;
+}
+
+- (BOOL) getIsInboxEnabled {
+    return self.isInboxEnabled;
+}
+
+- (void) setIsAutoCampaignsEnabled:(BOOL)isAutoCampaignsEnabled{
+    _isAutoCampaignsEnabled = isAutoCampaignsEnabled;
+}
+
+- (BOOL) getIsAutoCampaignsEnabled{
+    return self.isAutoCampaignsEnabled;
+}
+
+- (void) setIsManualCampaignsEnabled:(BOOL)isManualCampaignsEnabled{
+    _isManualCampaignsEnabled = isManualCampaignsEnabled;
+}
+
+- (BOOL) getIsManualCampaignsEnabled{
+    return self.isManualCampaignsEnabled;
+}
+
+- (void) setIsUserEventsEnabled:(BOOL)isUserEventsEnabled{
+    _isUserEventsEnabled = isUserEventsEnabled;
+}
+
+- (BOOL) getIsUserEventsEnabled{
+    return self.isUserEventsEnabled;
+}
+
+- (void) setIsAOTUserCreateEnabled:(BOOL)isAOTUserCreateEnabled{
+    _isAOTUserCreateEnabled = isAOTUserCreateEnabled;
+}
+
+- (BOOL) getIsAOTUserCreateEnabled{
+    return self.isAOTUserCreateEnabled;
+}
+
+- (void) setShowCustomBrandBanner:(BOOL)showCustomBrandBanner{
+    _showCustomBrandBanner = showCustomBrandBanner;
+}
+
+- (BOOL) getShowCustomBrandBanner {
+    return self.showCustomBrandBanner;
+}
+
+- (void) setMiscfeatures:(FCMiscFeatures *)miscfeatures{
+    _miscfeatures = miscfeatures;
+}
+
+- (FCMiscFeatures *) getMiscfeatures {
+    return self.miscfeatures;
 }
 
 @end

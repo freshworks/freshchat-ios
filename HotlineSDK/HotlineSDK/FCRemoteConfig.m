@@ -13,7 +13,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.accountActive = true;
+        self.accountActive = YES;
         self.sessionDuration = 30 * ONE_MINUTE_IN_MS;
         self.activeConvWindow = 3 * ONE_DAY_IN_MS;
         self.activeConvFetchBackoffRatio = 1.25;
@@ -28,9 +28,9 @@
     return self.accountActive;
 }
 
-- (void) setAccountActive:(BOOL)accountActive{
-    
+- (void) setAccountActive:(BOOL)accountActive {
     [HLUserDefaults setBool:accountActive forKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
+    _accountActive = accountActive;
 }
 
 - (long) getSessionDuration{
@@ -39,7 +39,8 @@
 }
 
 - (void) setSessionDuration:(long)sessionDuration{
-    [HLUserDefaults setObject:[NSNumber numberWithLong:sessionDuration] forKey:CONFIG_RC_SESSION_DURATION_SECS];
+    _sessionDuration = sessionDuration;
+    [HLUserDefaults setLong:sessionDuration forKey:CONFIG_RC_SESSION_DURATION_SECS];
 }
 
 - (long) getActiveConvWindow{
@@ -49,7 +50,8 @@
 
 - (void) setActiveConvWindow:(long)activeConvWindow{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:activeConvWindow] forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
+    _activeConvWindow = activeConvWindow;
+    [HLUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
 }
 
 - (double) getActiveConvFetchBackoffRatio{
@@ -57,9 +59,10 @@
     return self.activeConvFetchBackoffRatio;
 }
 
-- (void) setActiveConvFetchBackoffRatio:(double)activeConvFetchBackoffRatio{
+- (void) setActiveConvFetchBackoffRatio:(float)activeConvFetchBackoffRatio{
     
-    [HLUserDefaults setObject:[NSNumber numberWithDouble:activeConvFetchBackoffRatio] forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    [HLUserDefaults setLong:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    _activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
 
 - (FCRefreshIntervals *) getRefreshIntervals{
@@ -67,5 +70,16 @@
     return self.refreshIntervals;
 }
 
+- (void) setRefreshIntervals:(FCRefreshIntervals *)refreshIntervals{
+    _refreshIntervals = refreshIntervals;
+}
+
+- (void) setFeatures:(FCFeatures *)features{
+    _features = features;
+}
+
+- (FCFeatures *) getFeatures {
+    return self.features;
+}
 
 @end

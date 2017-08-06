@@ -41,6 +41,12 @@
 +(void)setString:(NSString *)value forKey:(NSString *)key;
 +(NSString *) getStringForKey:(NSString *)key;
 
++ (void) setFloat :(float)value forKey: (NSString *) key;
++ (float) getFloatForKey : (NSString *) key;
+
++ (void) setLong : (long) value forKey : (NSString *) key;
++ (long) getLongForKey : (NSString *) key;
+
 + (void) setArray : (NSMutableArray *)array forKey : (NSString *)key;
 
 +(void)removeObjectForKey:(NSString *)key;

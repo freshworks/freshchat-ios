@@ -15,22 +15,6 @@
     self = [super init];
     if (self) {
         self.remoteConfig = [[FCRemoteConfig alloc] init];
-        [HLUserDefaults setNumber : @(self.remoteConfig.sessionDuration) forKey: CONFIG_RC_SESSION_DURATION_SECS];
-        [HLUserDefaults setNumber : @(self.remoteConfig.activeConvWindow) forKey: CONFIG_RC_ACTIVE_CONV_WINDOW];
-        [HLUserDefaults setString : [@(self.remoteConfig.activeConvFetchBackoffRatio) stringValue] forKey: CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
-        
-        FCRefreshIntervals *intervals = self.remoteConfig.refreshIntervals;
-        if(intervals){
-            
-            [HLUserDefaults setNumber:@(intervals.activeConvMinFetchInterval) forKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL];
-            [HLUserDefaults setNumber:@(intervals.activeConvMaxFetchInterval) forKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL];
-            [HLUserDefaults setNumber:@(intervals.channelsFetchIntervalLaidback) forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];
-            [HLUserDefaults setNumber:@(intervals.channelsFetchIntervalNormal) forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL];
-            [HLUserDefaults setNumber:@(intervals.faqFetchIntervalLaidback) forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK];
-            [HLUserDefaults setNumber:@(intervals.faqFetchIntervalNormal) forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL];
-            [HLUserDefaults setNumber:@(intervals.msgFetchIntervalLaidback) forKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK];
-            [HLUserDefaults setNumber:@(intervals.msgFetchIntervalNormal) forKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL];
-        }
     }
     return self;
 }
@@ -45,6 +29,9 @@
         [store setBoolValue:features.isUserEventsEnabled forKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
         [store setBoolValue:features.isAOTUserCreateEnabled forKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
         [store setBoolValue:features.showCustomBrandBanner forKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
+        [store setBoolValue:features.miscfeatures.showAgentAvatars forKey:FRESHCHAT_CONFIG_RC_SHOW_AGENT_AVATAR];
+        [store setBoolValue:features.miscfeatures.showRealAgentAvatars forKey:FRESHCHAT_CONFIG_RC_SHOW_REAL_AGENT_AVATAR];
+        [store setBoolValue:features.miscfeatures.launchDeeplinkFromNotification forKey:FRESHCHAT_CONFIG_RC_LAUNCH_DEEPLINK_NOTIFICATION];
     }
 }
 
@@ -73,44 +60,44 @@
 }
 
 + (float) getActiveConvFetchBackoffRatio{
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO] floatValue]);
+    return ([HLUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO]);
 }
 
 //FC interval call
 + (long) getRemoteConfigFetchInterval{
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_API_FETCH_INTERVAL] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_API_FETCH_INTERVAL]);
 }
 
 + (long) getActiveConvMaxFetchInterval {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL]);
 }
 
 + (long) getActiveConvMinFetchInterval {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL]);
 }
 
 + (long) getMsgFetchIntervalNormal {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL]);
 }
 
 + (long) getMsgFetchIntervalLaidback {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK]);
 }
 
 + (long) getFaqFetchIntervalNormal {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL]);
 }
 
 + (long) setFaqFetchIntervalLaidback {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK]);
 }
 
 + (long) getChannelsFetchIntervalNormal {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL]);
 }
 
 + (long) setChannelsFetchIntervalLaidback {
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK]);
 }
 
 + (int) getActiveConvWindow {
@@ -119,7 +106,9 @@
 //FC CONFIG_RC_ACTIVE_CONV_WINDOW
 
 + (long) getSessionDuration{
-    return ([[HLUserDefaults getNumberForKey:CONFIG_RC_SESSION_DURATION_SECS] longValue]);
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_SESSION_DURATION_SECS]);
 }
+
+
 
 @end

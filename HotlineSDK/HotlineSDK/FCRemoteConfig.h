@@ -12,10 +12,10 @@
 
 @interface FCRemoteConfig : NSObject
 
-@property (nonatomic) BOOL accountActive;
-@property (nonatomic) long sessionDuration;
-@property (nonatomic) long activeConvWindow;
-@property (nonatomic) double activeConvFetchBackoffRatio;
+@property (nonatomic, assign) BOOL accountActive;
+@property (nonatomic, assign) long sessionDuration;
+@property (nonatomic, assign) long activeConvWindow;
+@property (nonatomic, assign) float activeConvFetchBackoffRatio;
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
 @property (nonatomic, strong) FCFeatures *features;
 

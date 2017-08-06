@@ -19,6 +19,7 @@
 #import "HLSearchViewController.h"
 #import "HLControllerUtils.h"
 #import "HLConstants.h"
+#import "FCRemoteConfigUtil.h"
 
 @interface  HLCategoryViewBehaviour ()
 
@@ -86,7 +87,8 @@
             [updater resetTime];
         }
         else {
-            [updater useInterval:SOLUTIONS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            //[updater useInterval:SOLUTIONS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            [updater useInterval:[FCRemoteConfigUtil getFaqFetchIntervalNormal]];
         }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {

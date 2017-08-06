@@ -39,7 +39,8 @@
 
 - (void) setRemoteConfigFetchInterval:(long)remoteConfigFetchInterval{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:remoteConfigFetchInterval] forKey:CONFIG_RC_API_FETCH_INTERVAL];
+    _remoteConfigFetchInterval = remoteConfigFetchInterval;
+    [HLUserDefaults setLong:remoteConfigFetchInterval forKey:CONFIG_RC_API_FETCH_INTERVAL];
 }
 
 - (long) getActiveConvMaxFetchInterval{
@@ -49,7 +50,8 @@
 
 - (void) setActiveConvMaxFetchInterval:(long)activeConvMaxFetchInterval{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:activeConvMaxFetchInterval] forKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL];
+    _activeConvMaxFetchInterval = activeConvMaxFetchInterval;
+    [HLUserDefaults setLong:activeConvMaxFetchInterval forKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL];
 }
 
 - (long) getActiveConvMinFetchInterval:(long)activeConvMinFetchInterval{
@@ -59,7 +61,8 @@
 
 - (void) setActiveConvMinFetchInterval:(long)activeConvMinFetchInterval{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:activeConvMinFetchInterval] forKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL];
+    _activeConvMinFetchInterval = activeConvMinFetchInterval;
+    [HLUserDefaults setLong:activeConvMinFetchInterval forKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL];
 }
 
 - (long) getMsgFetchIntervalNormal:(long)msgFetchIntervalNormal{
@@ -69,7 +72,8 @@
 
 - (void) setMsgFetchIntervalNormal:(long)msgFetchIntervalNormal{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:msgFetchIntervalNormal] forKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL];
+    _msgFetchIntervalNormal = msgFetchIntervalNormal;
+    [HLUserDefaults setLong:msgFetchIntervalNormal forKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL];
 }
 
 - (long) getMsgFetchIntervalLaidback:(long)msgFetchIntervalLaidback{
@@ -79,7 +83,8 @@
 
 - (void) setMsgFetchIntervalLaidback:(long)msgFetchIntervalLaidback{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:msgFetchIntervalLaidback] forKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK];
+    _msgFetchIntervalLaidback = msgFetchIntervalLaidback;
+    [HLUserDefaults setLong:msgFetchIntervalLaidback forKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK];
 }
 
 - (long) getFaqFetchIntervalNormal:(long)faqFetchIntervalNormal{
@@ -89,7 +94,8 @@
 
 - (void) setFaqFetchIntervalNormal:(long)faqFetchIntervalNormal{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:faqFetchIntervalNormal] forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL];
+    _faqFetchIntervalNormal = faqFetchIntervalNormal;
+    [HLUserDefaults setLong:faqFetchIntervalNormal forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL];
 }
 
 - (long) getFaqFetchIntervalLaidback:(long)faqFetchIntervalLaidback{
@@ -99,7 +105,8 @@
 
 - (void) setFaqFetchIntervalLaidback:(long)faqFetchIntervalLaidback{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:faqFetchIntervalLaidback] forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK];
+    _faqFetchIntervalLaidback = faqFetchIntervalLaidback;
+    [HLUserDefaults setLong:faqFetchIntervalLaidback forKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK];
 }
 
 - (long) getChannelsFetchIntervalNormal:(long)channelsFetchIntervalNormal{
@@ -109,7 +116,8 @@
 
 - (void) setChannelsFetchIntervalNormal:(long)channelsFetchIntervalNormal{
     
-    [HLUserDefaults setObject:[NSNumber numberWithLong:channelsFetchIntervalNormal] forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL];
+    _channelsFetchIntervalNormal = channelsFetchIntervalNormal;
+    [HLUserDefaults setLong:channelsFetchIntervalNormal forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL];
 }
 
 - (long) getChannelsFetchIntervalLaidback:(long)channelsFetchIntervalLaidback{
@@ -119,6 +127,7 @@
 
 - (void) setChannelsFetchIntervalLaidback:(long)channelsFetchIntervalLaidback{
     
+    _channelsFetchIntervalLaidback = channelsFetchIntervalLaidback;
     [HLUserDefaults setObject:[NSNumber numberWithLong:channelsFetchIntervalLaidback] forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];
 }
 

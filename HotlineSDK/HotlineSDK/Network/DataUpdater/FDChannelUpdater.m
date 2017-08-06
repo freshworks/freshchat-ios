@@ -18,6 +18,7 @@
 -(id)init{
     self = [super init];
     if (self) {
+        //[self useInterval:CHANNELS_FETCH_INTERVAL_DEFAULT];
         [self useInterval:[FCRemoteConfigUtil setChannelsFetchIntervalLaidback]];
         [self useConfigKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
     }

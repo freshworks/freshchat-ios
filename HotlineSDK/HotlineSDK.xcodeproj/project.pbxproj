@@ -132,6 +132,7 @@
 		CECB55221F2A34C20061227E /* FCFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB55211F2A34C20061227E /* FCFeatures.m */; };
 		CED138481DB4D55200404686 /* HLCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* HLCSATView.m */; };
 		CED1384B1DB6401D00404686 /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEF51D000E620014867F /* KonotorModel.xcdatamodeld */; };
+		CEF6B9031F3739F000692519 /* FCMiscFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF6B9021F3739F000692519 /* FCMiscFeatures.m */; };
 		CEFA055A1EE82F2000DC74CF /* FDAudioFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */; };
 		CEFA055B1EE82F2000DC74CF /* FDHtmlFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */; };
 		CEFA055C1EE82F2000DC74CF /* FDVideoFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05591EE82F2000DC74CF /* FDVideoFragment.m */; };
@@ -408,6 +409,8 @@
 		CED138461DB4D55200404686 /* HLCSATView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCSATView.h; sourceTree = "<group>"; };
 		CED138471DB4D55200404686 /* HLCSATView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCSATView.m; sourceTree = "<group>"; };
 		CED1384A1DB63FC100404686 /* KonotorModel 23.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 23.xcdatamodel"; sourceTree = "<group>"; };
+		CEF6B9011F3739F000692519 /* FCMiscFeatures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCMiscFeatures.h; sourceTree = "<group>"; };
+		CEF6B9021F3739F000692519 /* FCMiscFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCMiscFeatures.m; sourceTree = "<group>"; };
 		CEFA05541EE82F2000DC74CF /* FDAudioFragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FDAudioFragment.h; path = MessageFragments/FDAudioFragment.h; sourceTree = "<group>"; };
 		CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDAudioFragment.m; path = MessageFragments/FDAudioFragment.m; sourceTree = "<group>"; };
 		CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDHtmlFragment.m; path = MessageFragments/FDHtmlFragment.m; sourceTree = "<group>"; };
@@ -514,6 +517,8 @@
 				CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */,
 				CE982B881F2728B900B87A66 /* FCRemoteConfig.h */,
 				CE982B891F2728B900B87A66 /* FCRemoteConfig.m */,
+				CEF6B9011F3739F000692519 /* FCMiscFeatures.h */,
+				CEF6B9021F3739F000692519 /* FCMiscFeatures.m */,
 				CECB55201F2A34C20061227E /* FCFeatures.h */,
 				CECB55211F2A34C20061227E /* FCFeatures.m */,
 				CE982B8B1F277A5F00B87A66 /* FCRemoteConfigUtil.h */,
@@ -1020,6 +1025,7 @@
 				C5D4ED9D1E574B5C00E121B4 /* FDLocaleUtil.m in Sources */,
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
 				CE39CF721DCB694300A46660 /* HLControllerUtils.m in Sources */,
+				CEF6B9031F3739F000692519 /* FCMiscFeatures.m in Sources */,
 				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,

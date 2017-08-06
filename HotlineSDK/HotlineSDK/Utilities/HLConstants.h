@@ -24,8 +24,8 @@
 
 //These values needs to be equal to or less than the poller intervals below
 //The poller should smartly manage the backoff.
-#define MESSAGES_FETCH_INTERVAL_ON_SCREEN_POLL 10 //when in channel list
-#define MESSAGES_FETCH_INTERVAL_OFF_SCREEN_POLL 120
+#define MESSAGES_FETCH_INTERVAL_ON_SCREEN_POLL 10 * 1000//when in channel list
+#define MESSAGES_FETCH_INTERVAL_OFF_SCREEN_POLL 120 * 1000
 
 /* Timer Interval */
 #define ON_CHAT_SCREEN_POLLER_INTERVAL 10//actual message poll
