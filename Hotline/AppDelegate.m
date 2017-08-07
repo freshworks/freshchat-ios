@@ -135,7 +135,6 @@
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
     
     config.pictureMessagingEnabled = YES;
-    config.pollWhenAppActive = YES;
     if(![HotlineUser sharedInstance].name){
         [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
     }

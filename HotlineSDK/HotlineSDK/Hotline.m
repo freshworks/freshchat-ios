@@ -46,6 +46,8 @@
 #import "FCRemoteConfigUtil.h"
 #import "HLLocalization.h"
 
+#define FC_POLL_WHEN_APP_AVTIVE NO
+
 @interface Hotline ()
 
 @property(nonatomic, strong, readwrite) HotlineConfig *config;
@@ -151,7 +153,7 @@
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
     
-    if(config.pollWhenAppActive){
+    if(FC_POLL_WHEN_APP_AVTIVE){
         [self.messagePoller begin];
     }
     
@@ -349,7 +351,7 @@
 
 -(void)newSession:(NSNotification *)notification{
     if([FDUtilities hasInitConfig]) {
-        if(self.config.pollWhenAppActive){
+        if(FC_POLL_WHEN_APP_AVTIVE){
             [self.messagePoller begin];
         }
         [FDUtilities initiatePendingTasks];
