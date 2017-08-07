@@ -6,8 +6,8 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-#import "FDImagePreviewController.h"
 #import "HLTheme.h"
+#import "FDImagePreviewController.h"
 
 @interface FDImagePreviewController (){
     CGFloat beginX, beginY;

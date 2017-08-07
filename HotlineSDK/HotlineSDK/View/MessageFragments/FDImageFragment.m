@@ -9,21 +9,24 @@
 #import "FDImageFragment.h"
 #import "FDImagePreviewController.h"
 
+#define DEFAULT_THUMBNAIL_HEIGHT 200
+#define DEFAULT_THUMBNAIL_WIDTH 200
+
 @implementation FDImageFragment
 
     -(id) initWithFragment: (FragmentData *) fragment ofMessage:(MessageData*)message {
         self = [super init];
         if(self) {
             self.fragmentData = fragment;
+            self.contentMode = UIViewContentModeScaleAspectFit;
             self.translatesAutoresizingMaskIntoConstraints = NO;
             self.clipsToBounds = YES;
             self.backgroundColor = [UIColor whiteColor];
-            self.contentMode = UIViewContentModeCenter;
             self.userInteractionEnabled = YES;
             NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
             __block BOOL imageToBeDownloaded = true;
-            if( !fragment.binaryData1 || !fragment.binaryData2) { //Data needed to be downloaded
+            if ( !fragment.binaryData1 || !fragment.binaryData2) { //Data needed to be downloaded
                 [fragment storeImageDataOfMessage:message withCompletion:^{
                     dispatch_async(dispatch_get_main_queue(), ^{
                         UIImage *sampleImage = [UIImage imageWithData:fragment.binaryData2];
@@ -34,35 +37,46 @@
             } else {
                 imageToBeDownloaded = false;
             }
-            
+            int thumbnailHeight = DEFAULT_THUMBNAIL_HEIGHT;
+            int thumbnailWidth =  DEFAULT_THUMBNAIL_WIDTH ;
             if(extraJSONDict[@"thumbnail"]) {
                 NSDictionary *thumbnailDict = extraJSONDict[@"thumbnail"];
-                NSNumber *thumbnailHeight = thumbnailDict[@"height"] < 200 ? thumbnailDict[@"height"] : @200 ;
-                NSNumber *thumbnailWidth =  thumbnailDict[@"width"] < 200 ? thumbnailDict[@"width"] : @200 ;
+                if(thumbnailDict[@"height"] && thumbnailDict[@"width"]) {
+                    if ((int)thumbnailDict[@"height"] < DEFAULT_THUMBNAIL_HEIGHT) {
+                        thumbnailHeight = (int)thumbnailDict[@"height"];
+                    }
+                        
+                    if ((int)thumbnailDict[@"width"] < DEFAULT_THUMBNAIL_WIDTH) {
+                        thumbnailWidth = (int)thumbnailDict[@"width"];
+                    }
+                }
                 if (imageToBeDownloaded) {
                     [self setImage:[[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
+                    //NSLog(@"FRAGMENT::Setting the PLACEHOLDER::::");
                 } else {
                     [self setImage:[UIImage imageWithData:fragment.binaryData2]];
+                    //NSLog(@"FRAGMENT:: Setting the thumbnail image::::");
                 }
-                self.imgFrame = CGRectMake(0, 0, [thumbnailWidth floatValue], [thumbnailHeight floatValue]);
+                self.imgFrame = CGRectMake(0, 0, thumbnailWidth, thumbnailHeight);
             } else {
-                NSNumber *thumbnailHeight = extraJSONDict[@"height"] < 200 ? extraJSONDict[@"height"] : @200 ;
-                NSNumber *thumbnailWidth =  extraJSONDict[@"width"] < 200 ? extraJSONDict[@"width"] : @200 ;
                 if (imageToBeDownloaded) {
                     [self setImage:[[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
                 } else {
-                    [self setImage:[UIImage imageWithData:fragment.binaryData1]];
+                    //NSLog(@"FRAGMENT::Setting the original image::::");
+                    [self setImage:[UIImage imageWithData:fragment.binaryData1]]; //Set the original image
                 }
-                self.imgFrame = CGRectMake(0, 0, [thumbnailWidth floatValue], [thumbnailHeight floatValue]);
+                self.imgFrame = CGRectMake(0, 0, thumbnailWidth, thumbnailHeight);
             }
-            UITapGestureRecognizer *imageClick = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(showImagePreview:)];
-            [self addGestureRecognizer:imageClick];
-            
+            [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(showImagePreview:)]];
         }
         return self;
     }
 
     -(void) showImagePreview:(id) sender {
-        [self.delegate perfomAction:self.fragmentData];
+        if (self.agentMessageDelegate != nil) {
+            [self.agentMessageDelegate agentCellPerfomAction:self.fragmentData];
+        } else {
+            [self.userMessageDelegate userCellPerfomAction:self.fragmentData];
+        }
     }
 @end

@@ -18,10 +18,6 @@
 +(NSString *)currentUserAlias;
 +(NSString *)getUserAliasWithCreate;
 
-+(void)registerUser:(void(^)(NSError *error))completion;
-
-+(BOOL)isUserRegistered;
-
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *) getKeyForObject:(NSObject *) object;
 +(NSString *)getAdID;
@@ -44,6 +40,9 @@
 +(void)initiatePendingTasks;
 +(BOOL)hasInitConfig;
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
+
++(BOOL) containsHTMLContent: (NSString *)content;
++(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
 
 @end
 

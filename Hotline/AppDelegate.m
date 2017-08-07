@@ -24,14 +24,17 @@
 
 #define STORYBOARD_NAME @"Main"
 #define STORYBOARD_IDENTIFIER @"HotlineViewController"
-
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define LAUNCH_SAMPLE_CONTROLLERT NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self registerAppForNotifications];
-    //[self setupRootController];
-    [self launchSampleController];
     [self hotlineIntegration];
+    if (LAUNCH_SAMPLE_CONTROLLERT) {
+        [self launchSampleController];
+    } else {
+        [self setupRootController];
+    }
     /*[[Hotline sharedInstance]clearUserDataWithCompletion:^{
         [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
     }];*/
@@ -49,6 +52,7 @@
     ViewController *mainController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     [self.window setRootViewController:mainController];
     [self.window makeKeyAndVisible];
+    //[[Hotline sharedInstance] clearUserDataWithCompletion:nil];
 }
 
 -(void)setupRootController{
