@@ -61,7 +61,7 @@
 
 - (void) setActiveConvFetchBackoffRatio:(float)activeConvFetchBackoffRatio{
     
-    [HLUserDefaults setLong:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    [HLUserDefaults setFloat:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
     _activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
 

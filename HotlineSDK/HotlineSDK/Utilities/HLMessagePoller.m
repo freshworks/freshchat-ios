@@ -46,7 +46,7 @@
 
 -(void)begin{
     if(self.pollType == OnscreenPollFetch){
-        self.interval = ON_CHAT_SCREEN_POLLER_INTERVAL * ([HLNotificationHandler areNotificationsEnabled]?2:1);
+        self.interval = [FCRemoteConfigUtil getActiveConvMinFetchInterval]/ONE_SECONDS_IN_MS;
         self.backOff = [FCRemoteConfigUtil getActiveConvFetchBackoffRatio];
     }
     if(self.pollType == OffScreenPollFetch){
@@ -101,7 +101,7 @@
 -(void)setNext {
     [self.pollingTimer invalidate]; // Not required since poller is not on repeat, but do it anyways
     self.interval =  fmin(self.interval * self.backOff,
-                          self.pollType == OnscreenPollFetch ? MAX_POLL_INTERVAL_ON_SCREEN : MAX_POLL_INTERVAL_OFF_SCREEN);
+                          self.pollType == OnscreenPollFetch ? [FCRemoteConfigUtil getActiveConvMaxFetchInterval]/ONE_SECONDS_IN_MS : MAX_POLL_INTERVAL_OFF_SCREEN);
     if(!self.ended){
         [self poll];
     }
