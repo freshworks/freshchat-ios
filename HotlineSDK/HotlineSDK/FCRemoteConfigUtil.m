@@ -8,6 +8,7 @@
 
 #import "FCRemoteConfigUtil.h"
 #import "FDSecureStore.h"
+#import "Message.h"
 
 @implementation FCRemoteConfigUtil
 
@@ -109,6 +110,13 @@
     return ([HLUserDefaults getLongForKey:CONFIG_RC_SESSION_DURATION_SECS]);
 }
 
-
++ (BOOL) isActiveConvAvailable{
+    
+    long days = [Message daysSinceLastMessageInContext: [[KonotorDataManager sharedInstance] mainObjectContext]];
+    if( days * ONE_SECONDS_IN_MS < [FCRemoteConfigUtil getActiveConvWindow]){
+        return true;
+    }
+    return false;
+}
 
 @end

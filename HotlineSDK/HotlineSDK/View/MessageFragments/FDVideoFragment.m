@@ -7,23 +7,44 @@
 //
 
 #import "FDVideoFragment.h"
+#import "HLTheme.h"
+#import "HLLocalization.h"
 
 @implementation FDVideoFragment
 
-    -(id) initWithFragment: (Fragment *) fragment {
-        self = [self initWithFrame:CGRectZero];
-        if(self) {
-            self.translatesAutoresizingMaskIntoConstraints = false;
-            self.numberOfLines = 0;
-            self.text = @"Asynchronous image downloader with cache support as a UIImageView .... For iOS 5 and 6, use any 3.x version up to 3.7.6; For iOS < 5.0, please use the last 2.0 version. ... For details about how to use the library and clear examples,";
-            [self setLineBreakMode:NSLineBreakByWordWrapping];
-            self.backgroundColor = [UIColor clearColor];
-            self.contentMode = UIViewContentModeLeft;
-            self.textColor = [UIColor blackColor];
-            [self setFont:[UIFont fontWithName:@"HelveticaNeue" size:16.0f]];
+-(id) initWithFragment: (FragmentData *) fragment {
+    self = [super initWithFrame:CGRectZero];
+    if (self) {
+        self.fragmentData = fragment;
+        HLTheme *theme = [HLTheme sharedInstance];
+        UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
+        float padding = 10;
+        self.backgroundColor = [theme actionButtonColor];
+        self.contentEdgeInsets = UIEdgeInsetsMake(padding, padding, padding, padding);
+        self.backgroundColor = [theme actionButtonColor];
+        self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
+        self.layer.borderWidth=0.5;
+        self.layer.cornerRadius=5.0;
+        NSString *actionLabel;
+        NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
+        if(extraJSONDict[@"label"]) {
+            actionLabel = extraJSONDict[@"label"];
         }
-        return self;
+        if (!actionLabel) {
+             actionLabel = HLLocalizedString(LOC_DEFAULT_VIDEO_BUTTON_TEXT);
+        }
+        [self setAttributedTitle:
+         [[NSAttributedString alloc] initWithString:actionLabel
+                                         attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]]
+                        forState:UIControlStateNormal];
+        [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.userInteractionEnabled = true;
     }
+    return self;
+}
 
 @end
 

@@ -7,17 +7,19 @@
 //
 
 #import "FDAttachmentImageController.h"
+#import "FDInputToolbarView.h"
 #import "Konotor.h"
 #import "FDBarButtonItem.h"
 #import "HLTheme.h"
+#import "HLLocalization.h"
 
 @interface FDAttachmentImageController ()
 
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UITextView *textView;
-@property (nonatomic, strong) UILabel *placeholderLabel;
-@property (nonatomic) NSNumber *keyboardHeight;
+@property (nonatomic, strong) FDInputToolbarView *inputToolbar;
+@property (nonatomic) CGFloat keyboardHeight;
+@property (nonatomic) CGRect viewFrame;
 @end
 
 @implementation FDAttachmentImageController
@@ -38,170 +40,103 @@
     self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.keyboardHeight = 0;
-    self.textView = [[UITextView alloc]init];
-    self.textView.translatesAutoresizingMaskIntoConstraints = NO;
-    //self.textView.text = @"Type Image caption here(Optional)";
+    self.viewFrame = CGRectNull;
+    self.inputToolbar = [[FDInputToolbarView alloc]initWithDelegate:self];
+    self.inputToolbar.translatesAutoresizingMaskIntoConstraints = NO;
+    self.inputToolbar.isFromAttachmentScreen = YES;
+    [self setHeightForTextView:self.inputToolbar.textView];
+    [self.inputToolbar prepareView];
     
-    [[self.textView layer] setBorderColor:[[UIColor grayColor] CGColor]];
-    [[self.textView layer] setBorderWidth:2.3];
-    [[self.textView layer] setCornerRadius:15];
-    self.textView.textColor = [[HLTheme sharedInstance] inputTextFontColor];
-    self.textView.font = [[HLTheme sharedInstance] inputTextFont];
-    [self.textView setDelegate:self];
-    
-    self.placeholderLabel = [[UILabel alloc]init];
-    self.placeholderLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.placeholderLabel.text = @"Type Image caption here(Optional)";
-    
-    [self.view addSubview:self.textView];
-    //[self.view addSubview:self.placeholderLabel];
+    [self.view addSubview:self.inputToolbar];
     [self.view addSubview:self.imageView];
     
     NSDictionary *views = @{ @"imageView"        : self.imageView,
-                             @"textView"         : self.textView };
-                             //@"placeholderLabel" : self.placeholderLabel};
+                             @"inputToolbar"         : self.inputToolbar };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[imageView]-20-|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[textView]-20-|" options:0 metrics:nil views:views]];
-    //[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[placeholderLabel]-20-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[inputToolbar]-0-|" options:0 metrics:nil views:views]];
     
-    //[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[imageView]-10-[placeholderLabel]" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[imageView(>=0)]-10-[textView(50)]-10-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(<=100)]-0-|" options:0 metrics:nil views:views]];
+    [self localNotificationSubscription];
+    
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
+-(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender {
     
+}
+-(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender {
+    [self sendMessage];
+}
+-(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender {
+    
+}
+
+-(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{
+    [self setHeightForTextView:textView];
+}
+
+-(void)setHeightForTextView:(UITextView *)textView{
+    CGFloat NUM_OF_LINES = 5;
+    CGFloat MAX_HEIGHT = textView.font.lineHeight * NUM_OF_LINES;    
+    CGFloat preferredTextViewHeight = 0;
+    CGFloat messageHeight = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, CGFLOAT_MAX)].height;
+    if(messageHeight > MAX_HEIGHT)
+    {
+        preferredTextViewHeight = MAX_HEIGHT;
+        textView.scrollEnabled=YES;
+    }
+    else{
+        preferredTextViewHeight = messageHeight;
+        textView.scrollEnabled=NO;
+    }
+    textView.frame=CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, preferredTextViewHeight);
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+-(void)localNotificationSubscription {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide)
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidShowNotification
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillHideNotification
-                                                  object:nil];
+    [self localNotificationUnSubscription];
 }
 
+-(void)localNotificationUnSubscription {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];// this will do the trick
 }
 
 
 -(void)setNavigationItem{
-    UIBarButtonItem *sendButton = [[FDBarButtonItem alloc]initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendButton:)];
     UIBarButtonItem *backButton = [[FDBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
-    self.navigationItem.rightBarButtonItem = sendButton;
     self.navigationItem.leftBarButtonItem = backButton;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [[HLTheme sharedInstance ]navigationBarBackgroundColor];
 }
 
-#pragma mark Text view delegates
-
-- (void)textViewDidChange:(UITextView *)inputTextView{
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    if (textView == self.textView)
-    {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationBeginsFromCurrentState:YES];
-        //self.view.frame = CGRectMake(self.view.frame.origin.x , (self.view.frame.origin.y + 80), self.view.frame.size.width, self.view.frame.size.height);
-        [UIView commitAnimations];
-    }
-}
-
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    if (textView == self.textView)
-    {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationBeginsFromCurrentState:YES];
-        //self.view.frame = CGRectMake(self.view.frame.origin.x , (self.view.frame.origin.y - 80), self.view.frame.size.width, self.view.frame.size.height);
-        [UIView commitAnimations];
-    }
-}
-
--(void)keyboardWasShown:(NSNotification *)notification {
-    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    int height = MIN(keyboardSize.height,keyboardSize.width);
-    self.keyboardHeight = [[NSNumber alloc] initWithInt:height];
-    
-    if (self.view.frame.origin.y >= 0)
-    {
-        [self setViewMovedUp:YES];
-    }
-    else if (self.view.frame.origin.y < 0)
-    {
-        [self setViewMovedUp:NO];
-    }
-}
-
--(void)keyboardWillHide {
-    if (self.view.frame.origin.y >= 0)
-    {
-        [self setViewMovedUp:YES];
-    }
-    else if (self.view.frame.origin.y < 0)
-    {
-        [self setViewMovedUp:NO];
-    }
-}
-
--(void)setViewMovedUp:(BOOL)movedUp
-{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
-    
-    CGRect rect = self.view.frame;
-    if (movedUp)
-    {
-        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
-        // 2. increase the size of the view so that the area behind the keyboard is covered up.
-        
-        self.view.frame = CGRectMake(self.view.frame.origin.x , (self.view.frame.origin.y - [self.keyboardHeight floatValue]), self.view.frame.size.width, self.view.frame.size.height);
-        
-        //rect.origin.y -= [self.keyboardHeight floatValue];
-        //rect.size.height += [self.keyboardHeight floatValue];
-    }
-    else
-    {
-        self.view.frame = CGRectMake(self.view.frame.origin.x , (self.view.frame.origin.y + [self.keyboardHeight floatValue]), self.view.frame.size.width, self.view.frame.size.height);
-        
-        // revert back to the normal state.
-        //rect.origin.y += [self.keyboardHeight floatValue];
-        //rect.size.height -= [self.keyboardHeight floatValue];
-    }
-    //self.view.frame = rect;
-    
-    [UIView commitAnimations];
-}
-
-
-
--(void)sendButton:(UIBarButtonItem *)button{
-    
+-(void)sendMessage {
     [self dismissPresentedView];
     if(self.delegate){
-        [self.delegate attachmentController:self didFinishSelectingImage:self.image withCaption:self.textView.text];
+        NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
+        if (([toSend isEqualToString:@""]) || ([toSend isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)])) {
+            toSend = @"";
+        }
+        [self.delegate attachmentController:self didFinishSelectingImage:self.image withCaption:toSend];
     }
 }
 
@@ -209,8 +144,33 @@
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
--(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return self.imageView;
+#pragma mark Orientation Change delegate
+
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 }
+
+
+#pragma mark Keyboard delegate
+
+-(void) keyboardWillShow:(NSNotification *)notification {
+    if(CGRectIsNull(self.viewFrame) || self.keyboardHeight == 0) {
+        self.viewFrame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    }
+    CGRect keyboardFrame = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
+    self.keyboardHeight = keyboardRect.size.height;
+    self.view.frame = CGRectMake(self.view.frame.origin.x , (self.viewFrame.origin.y - self.keyboardHeight), self.view.frame.size.width, self.view.frame.size.height);
+}
+
+-(void) keyboardWillHide:(NSNotification *)notification {
+    self.view.frame = CGRectMake(self.view.frame.origin.x , self.viewFrame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    self.keyboardHeight = 0;
+}
+
+-(void)dealloc{
+    self.inputToolbar.delegate = nil;
+}
+
 
 @end

@@ -14,10 +14,9 @@
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 #import "FCRemoteConfigUtil.h"
-
+#import "HLUser.h"
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate, UIPopoverControllerDelegate>{
-    
     BOOL isCameraCaptureEnabled;
 }
 
@@ -178,7 +177,16 @@
 }
 
 -(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image withCaption:(NSString *)caption {
-    [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
+    [HLUser setUserMessageInitiated];
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:^(NSError *error) {
+            if (!error) {
+                [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
+            }
+        }];
+    } else {
+        [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
+    }
 }
 
 @end

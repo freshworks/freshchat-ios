@@ -43,4 +43,6 @@
 
 + (long) getSessionDuration;
 
++ (BOOL) isActiveConvAvailable;
+
 @end

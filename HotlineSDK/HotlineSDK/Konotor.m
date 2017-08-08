@@ -15,7 +15,9 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import <ImageIO/ImageIO.h>
+#import "HLUser.h"
 
+#import "Message.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -75,12 +77,13 @@ __weak static id <KonotorDelegate> _delegate;
     return [KonotorAudioPlayer currentPlaying:nil set:NO ];
 }
 
-+(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{     
++(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
     [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];    
     [[Konotor delegate] didStartUploadingNewMessage];
+    
 }
 
 +(void) uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
@@ -164,6 +167,27 @@ __weak static id <KonotorDelegate> _delegate;
     }];
 }
 
++(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
+    [channel addMessagesObject:message];
+    [[KonotorDataManager sharedInstance]save];
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
+    [[Konotor delegate] didStartUploadingNewMessage];
+}
+
++(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    [self uploadImage:image withCaption:nil onConversation:conversation onChannel:channel];
+}
+
++(void) uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    
+    KonotorMessage *message = [KonotorMessage savePictureMessageInCoreData:image withCaption:caption onConversation:conversation];
+    [channel addMessagesObject:message];
+    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
+    [[Konotor delegate] didStartUploadingNewMessage];
+}
+
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {
     return [KonotorAudioPlayer playMessageWithMessageID:messageID];
@@ -178,16 +202,24 @@ __weak static id <KonotorDelegate> _delegate;
 
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId
 {
-    //return [KonotorMessage setBinaryImage:imageData forMessageId:messageId];
-    return true;
+    return [KonotorMessage setBinaryImage:imageData forMessageId:messageId];
 }
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId
 {
-    //return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
-    return true;
+    return [KonotorMessage setBinaryImageThumbnail:imageData forMessageId:messageId];
 }
 
-+(BOOL)isUserMe:(NSNumber *)userId{
++(BOOL)isUserMe:(NSString *)userId{
+    NSString *currentUserID = USER_TYPE_MOBILE;
+    if(currentUserID){
+        if([userId isEqualToString:currentUserID]){
+            return YES;
+        }
+    }
+    return NO;
+}
+
++(BOOL)isCurrentUser:(NSNumber *)userId{
     return [userId  isEqual: USER_TYPE_MOBILE];
 }
 

@@ -124,7 +124,7 @@
         [self startAnimating];
 }
 
-- (void) displayMessage:(MessageData*) currentMessage
+- (void) displayMessage:(KonotorMessageData*) currentMessage
 {
     /*[self.audioPlayButton setHidden:NO];
     [self.mediaProgressBar setHidden:NO];
@@ -135,8 +135,7 @@
     [self.mediaProgressBar setValue:0.0 animated:NO];
     [self.mediaProgressBar setMaximumValue:currentMessage.durationInSecs.floatValue];
     if([[Konotor getCurrentPlayingMessageID] isEqualToString:[currentMessage messageId]])
-        [self startAnimating];
-     */
+        [self startAnimating];*/
 }
 
 

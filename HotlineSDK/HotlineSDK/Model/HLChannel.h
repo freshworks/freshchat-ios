@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class KonotorConversation, Message;
+@class KonotorConversation, KonotorMessage, Message;
 
 #define CHANNEL_TYPE_AGENT_ONLY @"AGENT_ONLY"
 #define CHANNEL_TYPE_USER_ONLY @"USER_ONLY"

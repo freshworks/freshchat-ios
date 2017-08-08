@@ -48,7 +48,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         
         self.delegate = delegate;
         self.theme = [HLTheme sharedInstance];
-        
+        self.isFromAttachmentScreen = NO;
         self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
         textView=[[UITextView alloc] init];
         [textView setFont:[self.theme inputTextFont]];
@@ -61,7 +61,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
         textView.text = placeHolderText;
         textView.delegate = self;
-
+        
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
         UIImage *attachmentImage = [self.theme getImageWithKey:IMAGE_ATTACH_ICON];
@@ -130,9 +130,9 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 
     BOOL isPictureMessageEnabled = [plistManager isPictureMessageEnabled];
 
-    attachButtonWidthConstraint.constant = (isPictureMessageEnabled) ? 24.0 : 0;
+    attachButtonWidthConstraint.constant = (!self.isFromAttachmentScreen && isPictureMessageEnabled) ? 24.0 : 0;
     
-    self.isVoiceMessageEnabled = [plistManager isVoiceMessageEnabled];
+    self.isVoiceMessageEnabled = [plistManager isVoiceMessageEnabled] && !self.isFromAttachmentScreen;
 
     [self updateActionButtons:textView];
     
@@ -190,8 +190,10 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     }
 }
 
+//TODO: Replace once support for audio is enabled
 -(void)updateActionButtons:(UITextView *)inputTextView{
-    if(!self.isVoiceMessageEnabled){
+    //if(!self.isVoiceMessageEnabled){
+    if(true) {
         [self showMicButton:NO];
     }else{
         BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);

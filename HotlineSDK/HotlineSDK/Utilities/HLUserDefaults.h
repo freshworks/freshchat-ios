@@ -10,13 +10,14 @@
 
 #define HOTLINE_DEFAULTS_CONTENT_LOCALEID @"hotline_defaults_content_localeid"
 #define HOTLINE_DEFAULTS_CONTENT_LOCALE @"hotline_defaults_content_locale"
+#define HOTLINE_DEFAULTS_IS_USER_DEFERED @"hotline_defaults_is_user_defered"
+#define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"
 
 #define CONFIG_RC_ACTIVE_CONV_WINDOW @"config_rc_active_conv_window"
 #define CONFIG_RC_SESSION_DURATION_SECS @"config_rc_session_duration_secs"
 #define CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO @"config_rc_active_conv_fetch_backoff_ratio"
 #define CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL @"config_rc_active_conv_max_fetch_interval"
 #define CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL @"config_rc_active_conv_min_fetch_interval"
-#define CONFIG_RC_ACTIVE_CONV_WINDOW @"config_rc_active_conv_window"
 #define CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK @"config_rc_channels_fetch_interval_laidback"
 #define CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL @"config_rc_channels_fetch_interval_normal"
 #define CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK @"config_rc_faq_fetch_interval_laidback"

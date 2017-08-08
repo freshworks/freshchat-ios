@@ -21,11 +21,12 @@
 #import "FDConstants.h"
 #import "FCRemoteConfigUtil.h"
 #import "FCRemoteConfigUtil.h"
+#import "HLUser.h"
 
 @implementation HLCoreServices
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion{
-    if(![FDUtilities isUserRegistered]){
+    if(![HLUser isUserRegistered]){
         return nil;
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -143,7 +144,7 @@
 }
  
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
-    if (![FDUtilities isUserRegistered] || !pushToken) return nil;
+    if (![HLUser isUserRegistered] || !pushToken) return nil;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
@@ -173,7 +174,7 @@
         return;
     }
     
-    if (![FDUtilities isUserRegistered]) {
+    if (![HLUser isUserRegistered]) {
         return; // this is required outside and inside the block
         // double entrant lock
     }
@@ -182,7 +183,7 @@
     
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         
-        if (![FDUtilities isUserRegistered]) {
+        if (![HLUser isUserRegistered]) {
             IN_PROGRESS = NO;
             return;
         }
@@ -238,7 +239,7 @@
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
-    if(![FDUtilities isUserRegistered]){
+    if(![HLUser isUserRegistered]){
         return nil; // This should never happen .. just a safety check
     }
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -266,6 +267,9 @@
 }
 
 +(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
+    if(![HLUser isUserRegistered]){
+        return nil;
+    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities currentUserAlias];
@@ -333,7 +337,7 @@
 }
 
 +(void)sendLatestUserActivity:(HLChannel *)channel{
-    if (!([FCRemoteConfigUtil isAccountActive] && [FDUtilities isUserRegistered])){
+    if (!([FCRemoteConfigUtil isAccountActive] && [HLUser isUserRegistered])){
         return;
     }
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Fragment.h"
 
+
 @interface FDFileFragment : UIButton
     -(id) initWithFragment: (FragmentData *) fragment;
+    @property FragmentData *fragmentData;
 @end

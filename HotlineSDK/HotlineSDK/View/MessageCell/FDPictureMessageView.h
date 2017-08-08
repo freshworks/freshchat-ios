@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "FDMessageCell.h"
-#import "Message.h"
+#import "KonotorMessage.h"
 
 @interface FDPictureMessageView : UIImageView
 
-@property (strong, nonatomic) MessageData* message;
+@property (strong, nonatomic) KonotorMessageData* message;
 
-- (void) setUpPictureMessageInteractionsForMessage:(MessageData*)message withMessageWidth:(float)messageWidth;
-+ (CGSize) getSizeForImageFromMessage:(MessageData*) message;
+- (void) setUpPictureMessageInteractionsForMessage:(KonotorMessageData*)message withMessageWidth:(float)messageWidth;
++ (CGSize) getSizeForImageFromMessage:(KonotorMessageData*) message;
 
 @end
+

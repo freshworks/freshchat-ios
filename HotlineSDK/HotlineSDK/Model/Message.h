@@ -16,7 +16,7 @@
 #import "HLCoreServices.h"
 #import "MessageData.h"
 #import "Fragment.h"
-
+#import "Konotor.h"
 
 #define MESSAGE_NOT_UPLOADED 0
 #define MESSAGE_UPLOADING 1

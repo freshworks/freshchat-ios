@@ -10,6 +10,7 @@
 #import "HLConstants.h"
 #import "HLCoreServices.h"
 #import "FCRemoteConfigUtil.h"
+#import "HLUser.h"
 
 @implementation FDDAUUpdater
 
@@ -23,7 +24,7 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    if([FDUtilities isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
+    if([HLUser isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
         [HLCoreServices DAUCall:^(NSError *error) {
             if(completion){
                 completion(error);

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FDInputToolbarView.h"
 
 @class FDAttachmentImageController;
 
@@ -18,7 +19,7 @@
 
 @end
 
-@interface FDAttachmentImageController : UIViewController<UITextViewDelegate>
+@interface FDAttachmentImageController : UIViewController<FDInputToolbarViewDelegate, UITextViewDelegate>
 
 -(instancetype)initWithImage:(UIImage *)image;
 

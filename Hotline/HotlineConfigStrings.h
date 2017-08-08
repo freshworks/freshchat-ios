@@ -1,5 +1,3 @@
-
-
 /*#define HOTLINE_DOMAIN @"mr-orange.staging.konotor.com"
 #define HOTLINE_APP_ID @"50cc6bd5-fce6-4887-b8fc-7d20d5794668"
 #define HOTLINE_APP_KEY @"3ddf0425-8c1f-4469-a988-90284f2b3ffd"*/
@@ -9,10 +7,9 @@
 #define HOTLINE_APP_ID @"016cc417-b858-437f-90ea-e88a27bfcd18"
 #define HOTLINE_APP_KEY @"d110a0e7-b185-411a-9c21-577eebb6c6dc"*/
 
-#define HOTLINE_DOMAIN @"mr-brown.freshpori.com"
-#define HOTLINE_APP_ID @"994ec22c-aacc-4d7e-a455-bc28d79ff16d"
-#define HOTLINE_APP_KEY @"0a758098-0974-4651-a547-9a32e357ef37"
-
+#define HOTLINE_DOMAIN @"mr-orange.freshpori.com"
+#define HOTLINE_APP_ID @"133bae8a-20fa-462d-895c-58535394e0bf"
+#define HOTLINE_APP_KEY @"830e704a-4b9a-4644-93e0-ecd03f7b2332"
 
 //sid+demo@freshdesk.com prod
 //siddemo
@@ -35,4 +32,3 @@
 //    config.domain = @"mr.white.konotor.com";
 //    config.appID = @"92124c8f-bd1a-4362-a390-72e76ef7125c";
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
-

@@ -27,9 +27,11 @@
 #import "HLTags.h"
 #import "HLCoreServices.h"
 #import "HLConstants.h"
+#import "HLAgentMessageCell.h"
 #import "Message.h"
 #import "Fragment.h"
 #import "FCRemoteConfigUtil.h"
+#import "HLUser.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
@@ -41,6 +43,12 @@ static HLNotificationHandler *handleUpdateNotification;
                                      source :(enum MessageRequestSource ) requestSource
                                   andHandler:(void (^)(NSError *))handler{
     static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+    
+    if(priority == OffScreenPollFetch){
+        if (!([FCRemoteConfigUtil isActiveInboxAndAccount] && [HLUser isUserRegistered] && ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED] || [FCRemoteConfigUtil isActiveConvAvailable]))){
+            return;
+        }
+    }
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
@@ -630,10 +638,10 @@ static HLNotificationHandler *handleUpdateNotification;
             && [[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_USER_NOT_CREATED);
 }
 
-+(void)retryUserRegistration{
++(void)retryUserRegistration {
     [[FDSecureStore sharedInstance] setObject:nil forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-    [FDUtilities registerUser:nil];
+    [HLUser registerUser:nil];
 }
 
 //TODO: Skip messages that are clicked before

@@ -29,38 +29,6 @@
 
 static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
-+(void)registerUser:(void(^)(NSError *error))completion{
-    if([FCRemoteConfigUtil isActiveInboxAndAccount]){
-        @synchronized ([FDUtilities class]) {
-            
-            if (IS_USER_REGISTRATION_IN_PROGRESS == NO) {
-                
-                IS_USER_REGISTRATION_IN_PROGRESS = YES;
-                
-                BOOL isUserRegistered = [FDUtilities isUserRegistered];
-                if (!isUserRegistered) {
-                    [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
-                        if (!error) {
-                            [FDUtilities initiatePendingTasks];
-                        }
-                        dispatch_async(dispatch_get_main_queue(), ^ {
-                            IS_USER_REGISTRATION_IN_PROGRESS = NO;
-                            if (completion) {
-                                completion(error);
-                            }
-                        });
-                    }];
-                }else{
-                    IS_USER_REGISTRATION_IN_PROGRESS = NO;
-                    if (completion) {
-                        completion(nil);
-                    }
-                }
-            }
-        }
-    }
-}
-
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
     static dispatch_once_t predicate;
@@ -85,12 +53,6 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(NSString *) getTracker{
     return [NSString stringWithFormat:@"hl_ios_%@",[Hotline SDKVersion]];
-}
-
-+(BOOL)isUserRegistered{
-    NSString *userAlias = [self currentUserAlias];
-    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED] &&
-            (userAlias && userAlias.length > 0));
 }
 
 +(NSString *) getUUIDLookupKey{
@@ -354,6 +316,29 @@ static NSInteger networkIndicator = 0;
     NSArray *noEmptyTags = [tags filteredArrayUsingPredicate:
                                [NSPredicate predicateWithFormat:@"length > 0"]];
     return [noEmptyTags valueForKey:@"lowercaseString"];
+}
+
++(BOOL) containsHTMLContent: (NSString *)content {
+    if ((([FDUtilities containsString:content andTarget:@"<b>"]) && ([FDUtilities containsString:content andTarget:@"</b>"]))
+    || (([FDUtilities containsString:content andTarget:@"<i>"]) && ([FDUtilities containsString:content andTarget:@"</i>"]))
+    || (([FDUtilities containsString:content andTarget:@"<u>"]) && ([FDUtilities containsString:content andTarget:@"</u>"]))
+    || (([FDUtilities containsString:content andTarget:@"<a>"]) && ([FDUtilities containsString:content andTarget:@"</a>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h1>"]) && ([FDUtilities containsString:content andTarget:@"</h1>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h2>"]) && ([FDUtilities containsString:content andTarget:@"</h2>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h3>"]) && ([FDUtilities containsString:content andTarget:@"</h3>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h4>"]) && ([FDUtilities containsString:content andTarget:@"</h4>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h5>"]) && ([FDUtilities containsString:content andTarget:@"</h5>"]))
+    || (([FDUtilities containsString:content andTarget:@"<h6>"]) && ([FDUtilities containsString:content andTarget:@"</h6>"]))) {
+        return true;
+    }
+    return false;
+}
+
++(BOOL) containsString: (NSString *)original andTarget:(NSString *)target {
+    if([original rangeOfString:target].location == NSNotFound) {
+        return false;
+    }
+    return true;
 }
 
 +(NSString*)deviceModelName{

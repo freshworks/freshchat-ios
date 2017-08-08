@@ -41,6 +41,8 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_MESSAGES_CLOSE_BUTTON_TEXT @"messages_close_button_text"
 #define LOC_MESSAGES_AGENT_LABEL_TEXT @"messages_agent_label_text"
 #define LOC_DEFAULT_ACTION_BUTTON_TEXT @"default_action_button_text"
+#define LOC_DEFAULT_VIDEO_BUTTON_TEXT @"default_video_button_text"
+#define LOC_DEFAULT_FILE_BUTTON_TEXT @"default_file_button_text"
 
 #define LOC_EMPTY_MSG_TITLE @"empty_message_title"
 #define LOC_EMPTY_MSG_INFO_TEXT @"empty_message_info_text"

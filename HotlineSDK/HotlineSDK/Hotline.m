@@ -40,11 +40,14 @@
 #import "HLInterstitialViewController.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "FDThemeConstants.h"
 #import "FDUtilities.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
 #import "FCRemoteConfigUtil.h"
 #import "HLLocalization.h"
+#import "HLUserDefaults.h"
+#import "HLUser.h"
 
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
@@ -178,7 +181,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[HLTheme sharedInstance]setThemeName:config.themeName];
     }
-    [FDUtilities registerUser:completion];
+    
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:completion];
+    }
 }
 
 -(void)checkMediaPermissions:(HotlineConfig *)config{
@@ -223,7 +229,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)updateAppVersion{
-    if([FDUtilities isUserRegistered]){
+    if([HLUser isUserRegistered]){
         FDSecureStore *store = [FDSecureStore sharedInstance];
         NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
         NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
@@ -260,7 +266,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(NSDictionary *) getPreviousUserInfo{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = nil;
-    if( [FDUtilities isUserRegistered] &&
+    if( [HLUser isUserRegistered] &&
        [store objectForKey:HOTLINE_DEFAULTS_APP_ID] &&
        [store objectForKey:HOTLINE_DEFAULTS_APP_KEY] &&
        [store objectForKey:HOTLINE_DEFAULTS_DOMAIN] &&
@@ -290,6 +296,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void) updateConversationBannerMessage:(NSString *) message{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
+    [FDLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
 }
 
 -(void)updateUser:(HotlineUser *)user{
@@ -331,10 +338,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)registerDeviceToken{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    if([FDUtilities isUserRegistered]){
+    if([HLUser isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
-            if([FDUtilities isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
+            if([HLUser isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
                 NSString *userAlias = [FDUtilities currentUserAlias];
                 NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
                 [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
@@ -363,7 +370,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void) updateLocaleMeta {    
-    if([FDLocaleUtil hadLocaleChange] && [FDUtilities isUserRegistered])  {
+    if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
         [[Hotline sharedInstance] updateUserLocaleProperties:localLocale];
@@ -372,12 +379,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
-    if(![FDUtilities isUserRegistered]){
-        [FDUtilities registerUser:nil];
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:nil];
     }
     if([FDUtilities hasInitConfig]) {
         dispatch_async(dispatch_get_main_queue(),^{
-            if([FDUtilities isUserRegistered]){
+            if([HLUser isUserRegistered]){
                 [[[FDDAUUpdater alloc]init] fetch];
                 [self registerDeviceToken];
                 [self updateAppVersion];
@@ -541,7 +548,11 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-    config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
+    if([store objectForKey:HOTLINE_DEFAULTS_THEME_NAME]){
+        config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
+    } else {
+        config.themeName = FD_DEFAULT_THEME_NAME;
+    }
     
     if(!previousUser) {
         previousUser = [self getPreviousUserInfo];
@@ -582,6 +593,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
     if (completion) {
+        NSLog(@"Unread Fetch here");
         [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
                                                           source:UnreadCount
                                                       andHandler:^(NSError *error) {
@@ -595,6 +607,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
     __block int count=0;
     if (completion) {
+        NSLog(@"Unread tags Fetch here");
         [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
             if(error) {
                 completion(count);
@@ -636,7 +649,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                //[Konotor uploadTextFeedback:messageObject.message onConversation:conversation onChannel:channel];
+                [Konotor uploadTextFeedback:messageObject.message onConversation:conversation onChannel:channel];
             }
         }];
     }];

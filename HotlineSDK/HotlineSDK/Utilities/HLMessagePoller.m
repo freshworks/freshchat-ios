@@ -16,6 +16,7 @@
 #import "math.h"
 #import "HLNotificationHandler.h"
 #import "FCRemoteConfigUtil.h"
+#import "HLUser.h"
 
 #define MAX_POLL_INTERVAL_ON_SCREEN     60 // 1 minute;
 #define MAX_POLL_INTERVAL_OFF_SCREEN    120 // 2 minutes;
@@ -74,28 +75,30 @@
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
-    [mainContext performBlock:^{
-        if([Message hasUserMessageInContext:mainContext]){
-            if([Message daysSinceLastMessageInContext:mainContext] <= [FCRemoteConfigUtil getActiveConvWindow]) {
-                [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
-                              ,[Message daysSinceLastMessageInContext:mainContext]]];
-                enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?
-                        ([HLNotificationHandler areNotificationsEnabled]?OnScreenPollWithToken:OnScreenPollWithoutToken)
-                        :OffScreenPoll;
-                [HLMessageServices fetchChannelsAndMessagesWithFetchType:self.pollType
-                                                                  source:source
-                                                              andHandler:^(NSError *error) {}];
+    if([FCRemoteConfigUtil isActiveInboxAndAccount] && [HLUser isUserRegistered] && [FCRemoteConfigUtil isActiveConvAvailable]){
+        NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
+        [mainContext performBlock:^{
+            if([Message hasUserMessageInContext:mainContext]){
+                if([Message daysSinceLastMessageInContext:mainContext] <= [FCRemoteConfigUtil getActiveConvWindow]) {
+                    [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
+                                  ,[Message daysSinceLastMessageInContext:mainContext]]];
+                    enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?
+                    ([HLNotificationHandler areNotificationsEnabled]?OnScreenPollWithToken:OnScreenPollWithoutToken)
+                    :OffScreenPoll;
+                    [HLMessageServices fetchChannelsAndMessagesWithFetchType:self.pollType
+                                                                      source:source
+                                                                  andHandler:^(NSError *error) {}];
+                }
+                else {
+                    [self logMsg:@"It has been long time since last message.not polling server"];
+                }
             }
             else {
-                [self logMsg:@"It has been long time since last message.not polling server"];
+                [self logMsg:@"No user Messages. Skipping Fetch"];
             }
-        }
-        else {
-            [self logMsg:@"No user Messages. Skipping Fetch"];
-        }
-    }];
-    [self setNext];
+        }];
+        [self setNext];
+    }
 }
 
 -(void)setNext {

@@ -15,6 +15,8 @@
 @interface AppDelegate ()
 
 @property (nonatomic, strong)UIViewController *rootController;
+@property (nonatomic, strong)UIViewController *rootController1;
+@property (nonatomic, strong)UINavigationController *channelsController;
 
 @end
 
@@ -22,14 +24,17 @@
 
 #define STORYBOARD_NAME @"Main"
 #define STORYBOARD_IDENTIFIER @"HotlineViewController"
-
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define LAUNCH_SAMPLE_CONTROLLERT NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self registerAppForNotifications];
-    //[self setupRootController];
-    [self launchSampleController];
     [self hotlineIntegration];
+    if (LAUNCH_SAMPLE_CONTROLLERT) {
+        [self launchSampleController];
+    } else {
+        [self setupRootController];
+    }
     /*[[Hotline sharedInstance]clearUserDataWithCompletion:^{
         [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
     }];*/
@@ -47,16 +52,18 @@
     ViewController *mainController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     [self.window setRootViewController:mainController];
     [self.window makeKeyAndVisible];
+    //[[Hotline sharedInstance] clearUserDataWithCompletion:nil];
 }
 
 -(void)setupRootController{
     
     Hotline *hotlineSDK = [Hotline sharedInstance];
+    _rootController1 = [hotlineSDK getConversationsControllerForEmbed];
+    _channelsController = [[UINavigationController alloc]initWithRootViewController:_rootController1];
     
     BOOL isTabViewPreferred = YES;
     
     if (isTabViewPreferred) {
-
         ConversationOptions *convOptions = [[ConversationOptions alloc] init];
         [convOptions filterByTags:@[@"sanjith"] withTitle:@"Sanjith Conversatios"];
         NSArray *arr = @[@"yoyo"];
@@ -72,16 +79,15 @@
         ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
                                                  [hotlineSDK getFAQsControllerForEmbed]];
-        UINavigationController* channelsController = [[UINavigationController alloc]initWithRootViewController:[hotlineSDK getConversationsControllerForEmbed]];
         
         mainController.title = @"Hotline";
-        channelsController.title = @"Channels";
+        _channelsController.title = @"Channels";
         FAQController.title = @"FAQs";
         faqControllerOption.title = @"FQAsWithOptions";
         convControllerOption.title = @"ConvWithOptions";
 
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
-        [tabBarController setViewControllers:@[mainController, FAQController,faqControllerOption, channelsController,convControllerOption]];
+        [tabBarController setViewControllers:@[mainController, FAQController,faqControllerOption, _channelsController,convControllerOption]];
         [tabBarController.tabBar setClipsToBounds:NO];
         [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
@@ -177,7 +183,18 @@
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     NSLog(@"Push recieved :%@", info);
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
-        [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
+        for ( int i=0; i<_channelsController.viewControllers.count ; i++ ) {
+            NSLog(@"-->%@\n",NSStringFromClass(_channelsController.viewControllers[i].class));
+            for( int j=0 ;j<_channelsController.viewControllers[i].childViewControllers.count ;j++ ) {
+                NSLog(@"---->%@\n",NSStringFromClass(_channelsController.viewControllers[i].childViewControllers[j].class));
+                if ( i == 1 && j == 0 ) {
+                    NSLog(@"---->: FDMEssage controller");
+                    UIViewController *vc = _channelsController.viewControllers[i].childViewControllers[j];
+                    [[Hotline sharedInstance] updateConversationBannerMessage:[NSString stringWithFormat:@"%i", arc4random() %(100)-1 ]];
+                    [vc willMoveToParentViewController:vc.parentViewController];
+                }
+            }
+        }
     }
 }
 
