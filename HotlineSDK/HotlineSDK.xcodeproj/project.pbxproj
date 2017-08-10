@@ -125,6 +125,7 @@
 		CE4B29E71DF9A78F00EC6978 /* HLMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4B29E61DF9A78F00EC6978 /* HLMessage.m */; };
 		CE642C1F1F308C1D00264CA0 /* HLAgentMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE642C1B1F308C1D00264CA0 /* HLAgentMessageCell.m */; };
 		CE642C201F308C1D00264CA0 /* HLUserMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE642C1C1F308C1D00264CA0 /* HLUserMessageCell.m */; };
+		CE64FEE71F3C37A000291669 /* FDParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = CE64FEE61F3C37A000291669 /* FDParticipant.m */; };
 		CE85F5B51E1FAAEA00BAA5A8 /* HLTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE85F5B41E1FAAEA00BAA5A8 /* HLTagManager.m */; };
 		CE8BF9091DD5FFB700814009 /* HLTags.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8BF9081DD5FFB700814009 /* HLTags.m */; };
 		CE9053521DD47C4E00F52B5F /* HLCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* HLCsat.m */; };
@@ -394,6 +395,8 @@
 		CE642C1C1F308C1D00264CA0 /* HLUserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLUserMessageCell.m; sourceTree = "<group>"; };
 		CE642C1D1F308C1D00264CA0 /* HLAgentMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLAgentMessageCell.h; sourceTree = "<group>"; };
 		CE642C1E1F308C1D00264CA0 /* HLUserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLUserMessageCell.h; sourceTree = "<group>"; };
+		CE64FEE51F3C37A000291669 /* FDParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDParticipant.h; sourceTree = "<group>"; };
+		CE64FEE61F3C37A000291669 /* FDParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDParticipant.m; sourceTree = "<group>"; };
 		CE662A991E1A448000B94744 /* KonotorModel 24.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 24.xcdatamodel"; sourceTree = "<group>"; };
 		CE85F5B31E1FAAEA00BAA5A8 /* HLTagManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLTagManager.h; sourceTree = "<group>"; };
 		CE85F5B41E1FAAEA00BAA5A8 /* HLTagManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLTagManager.m; sourceTree = "<group>"; };
@@ -557,6 +560,8 @@
 				35B2EEE81D000E620014867F /* HLCategory.m */,
 				35B2EEE91D000E620014867F /* HLChannel.h */,
 				35B2EEEA1D000E620014867F /* HLChannel.m */,
+				CE64FEE51F3C37A000291669 /* FDParticipant.h */,
+				CE64FEE61F3C37A000291669 /* FDParticipant.m */,
 				35B2EEEB1D000E620014867F /* KonotorConversation.h */,
 				35B2EEEC1D000E620014867F /* KonotorConversation.m */,
 				35B2EEED1D000E620014867F /* KonotorCustomProperty.h */,
@@ -1027,6 +1032,7 @@
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
 				CE340D2C1F3077610095A50E /* HLAttributedText.m in Sources */,
+				CE64FEE71F3C37A000291669 /* FDParticipant.m in Sources */,
 				CEFA05621EE82F5400DC74CF /* FDImageFragment.m in Sources */,
 				CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */,
 				CEFA055A1EE82F2000DC74CF /* FDAudioFragment.m in Sources */,

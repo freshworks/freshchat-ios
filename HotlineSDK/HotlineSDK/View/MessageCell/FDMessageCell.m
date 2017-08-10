@@ -557,7 +557,6 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
             
             if((KONOTOR_SHOW_TIMESTAMP)&&(showSenderName))
             {
-                
                 [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
             }
             else{
