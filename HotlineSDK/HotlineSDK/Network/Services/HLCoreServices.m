@@ -375,4 +375,26 @@
     return task;
 }
 
++(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FDResponseInfo *responseInfo, NSError *error))handler {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_TYPLICAL_REPLY,appID];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if (!error) {
+            if (statusCode == 200) {
+                if (handler) handler(responseInfo,nil);
+            } else{
+                if (handler) handler(responseInfo,[NSError new]);
+            }
+        }
+        if (handler) handler(responseInfo,error);
+    }];
+    return task;
+}
+
 @end
