@@ -50,3 +50,5 @@
 #define HOTLINE_API_CSAT_PATH @"/app/services/app/%@/user/%@/conversation/%@/csat/%@/response"
 
 #define HOTLINE_API_UPLOAD_IMAGE @"app/services/app/%@/user/%@/image"
+
+#define HOTLINE_API_TYPLICAL_REPLY @"app/services/app/%@/channels/response_time"

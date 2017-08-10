@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Message.h"
+#import "FDResponseInfo.h"
 
 @interface HLCoreServices : NSObject
 
@@ -26,5 +27,7 @@
 +(void)sendLatestUserActivity:(HLChannel *)channel;
 
 +(NSURLSessionDataTask *)trackUninstallForUser:(NSDictionary *) userAlias withCompletion:(void (^)(NSError *))completion;
+
++(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FDResponseInfo *responseInfo, NSError *error))handler;
 
 @end
