@@ -18,6 +18,13 @@
 #import "FDVideoFragment.h"
 #import "FDAudioFragment.h"
 #import "FDFileFragment.h"
+#import "FDAutolayoutHelper.h"
+
+@interface HLAgentMessageCell ()
+
+@property (strong, nonatomic) NSLayoutConstraint *senderLabelHeight;
+
+@end
 
 @implementation HLAgentMessageCell
 
@@ -115,13 +122,16 @@
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
     [views setObject:self.contentEncloser forKey:@"contentEncloser"];
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
-
+    int senderNameHeight = 0;
+    self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
     if(showsSenderName){
+        senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-        //[views setObject:senderNameLabel forKey:@"senderNameLabel"]; Constraints not yet set.
     }
+    self.senderLabelHeight.constant =senderNameHeight;
     [contentEncloser addSubview:chatBubbleImageView];
-    
+    [contentEncloser addSubview:senderNameLabel];
+    [views setObject:self.senderNameLabel forKey:@"senderLabel"];
     
     if(showsProfile){
         profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
@@ -206,7 +216,7 @@
     
     
     
-    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|"];
+    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|[senderLabel]"];
     for(int i=0;i<fragmensViewArr.count;i++) { //Set Constraints here
         NSString *str = fragmensViewArr[i];
         if([str containsString:@"image_"]) {
@@ -234,12 +244,11 @@
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@]",str]];
         }
     }
-    
     if(!currentMessage.isWelcomeMessage) { //Show time for non welcome messages.
         [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(<=20)]"];
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-5-[messageSentTimeLabel]-(>=5)-|" options:0 metrics:nil views:views]];
     }
-    
+    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-[senderLabel]-|" options:0 metrics:nil views:views]];
     [veriticalConstraint appendString:@"-5-|"];
     //Constraints for details inside contentEncloser is done.
     if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {

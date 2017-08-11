@@ -8,7 +8,8 @@
     </entity>
     <entity name="FDParticipant" syncable="YES">
         <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profilePicURL" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Fragment" representedClassName="Fragment" syncable="YES">
@@ -156,6 +157,6 @@
         <element name="KonotorShareMessageEvent" positionX="54" positionY="-25" width="128" height="30"/>
         <element name="KonotorUser" positionX="-578" positionY="162" width="128" height="163"/>
         <element name="Message" positionX="-812" positionY="117" width="128" height="270"/>
-        <element name="FDParticipant" positionX="-1188" positionY="135" width="128" height="90"/>
+        <element name="FDParticipant" positionX="-1188" positionY="135" width="128" height="105"/>
     </elements>
 </model>

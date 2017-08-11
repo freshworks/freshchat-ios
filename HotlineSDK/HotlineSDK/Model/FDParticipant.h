@@ -12,7 +12,8 @@
 @interface FDParticipant : NSManagedObject
 
 @property (nonatomic, retain) NSString *alias;
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *firstName;
+@property (nonatomic, retain) NSString *lastName;
 @property (nonatomic, retain) NSString *profilePicURL;
 
 

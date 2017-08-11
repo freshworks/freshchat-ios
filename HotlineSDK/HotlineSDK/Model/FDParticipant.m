@@ -11,7 +11,8 @@
 
 @implementation FDParticipant
 @dynamic alias;
-@dynamic name;
+@dynamic firstName;
+@dynamic lastName;
 @dynamic profilePicURL;
 
 +(void)createParticipantWithInfo : (NSDictionary *)participantInfo inContext:(NSManagedObjectContext *)context{
@@ -39,9 +40,10 @@
 
 + (FDParticipant*) updateParticipant: (FDParticipant *) participant withInfo : (NSDictionary *) participantInfo{
     
-    participant.name    = [participantInfo valueForKey: @"name"];
-    participant.alias   = [participantInfo valueForKey: @"alias"];
-    participant.alias   = [participantInfo valueForKey: @"profilePicURL"];
+    participant.firstName = [participantInfo valueForKey: @"firstName"];
+    participant.lastName  = [participantInfo valueForKey: @"lastName"];
+    participant.alias     = [participantInfo valueForKey: @"alias"];
+    participant.alias     = [participantInfo valueForKey: @"profilePicURL"];
     return participant;
 }
 

@@ -111,12 +111,14 @@
     [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
-    user.name = [@"User - " stringByAppendingString:dateString];
+    user.firstName = [@"User - " stringByAppendingString:dateString];
     user.email = @"user@freshdesk.com";
     user.phoneNumber = @"9898989898";
     user.phoneCountryCode = @"+91";
     return user;
+    
 }
+
 
 -(void)hotlineIntegration{
     
@@ -140,7 +142,7 @@
     
     config.pictureMessagingEnabled = YES;
     config.pollWhenAppActive = YES;
-    if(![HotlineUser sharedInstance].name){
+    if(![HotlineUser sharedInstance].firstName){
         [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
     }
     

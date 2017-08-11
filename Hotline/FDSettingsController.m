@@ -188,7 +188,7 @@
 -(void)updateUserPropertiesButtonAction:(id)sender{
     NSLog(@"updating user info");
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.name = self.userNameField.text;
+    user.firstName = self.userNameField.text;
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
@@ -228,7 +228,7 @@
     self.appIDField.text = [Hotline sharedInstance].config.appID;
     self.appKeyField.text = [Hotline sharedInstance].config.appKey;
     
-    self.userNameField.text = [HotlineUser sharedInstance].name;
+    self.userNameField.text = [HotlineUser sharedInstance].firstName;
     self.emailField.text = [HotlineUser sharedInstance].email;
     self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
     self.externalIDField.text = [HotlineUser sharedInstance].externalID;
