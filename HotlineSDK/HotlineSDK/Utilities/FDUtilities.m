@@ -334,6 +334,11 @@ static NSInteger networkIndicator = 0;
     return true;
 }
 
++(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName{
+    
+    return [firstName stringByAppendingString:lastName];
+}
+
 +(NSString*)deviceModelName{
     struct utsname systemInfo;
     uname(&systemInfo);

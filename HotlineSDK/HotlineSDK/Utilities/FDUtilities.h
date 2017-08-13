@@ -44,6 +44,8 @@
 +(BOOL) containsHTMLContent: (NSString *)content;
 +(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
 
++(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
+
 @end
 
 #endif

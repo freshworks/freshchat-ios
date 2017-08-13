@@ -34,6 +34,7 @@
 #import "FDConstants.h"
 #import "HLUserDefaults.h"
 #import "HLUser.h"
+#import "FDParticipant.h"
 
 #define ERROR_CODE_USER_NOT_CREATED -1
 
@@ -143,6 +144,12 @@ static HLNotificationHandler *handleUpdateNotification;
                     NSDictionary *conversationInfo = conversations[i];
                     channelId = conversationInfo[@"channelId"];
                     HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                    NSArray *participants = conversationInfo[@"participants"];
+                    if(participants > 0){
+                        for(NSDictionary *participant in participants) {
+                            [FDParticipant addParticipantWithInfo:participant inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                        }
+                    }
                     
                     if (!channel) {
                         channelPresent = NO;

@@ -19,6 +19,7 @@
 #import "FDAudioFragment.h"
 #import "FDFileFragment.h"
 #import "FDAutolayoutHelper.h"
+#import "FDParticipant.h"
 
 @interface HLAgentMessageCell ()
 
@@ -124,9 +125,11 @@
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
     int senderNameHeight = 0;
     self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
+    FDParticipant *participant = [FDParticipant fetchParticipantForAlias:@"" :[KonotorDataManager sharedInstance].mainObjectContext];
     if(showsSenderName){
         senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
     }
     self.senderLabelHeight.constant =senderNameHeight;
     [contentEncloser addSubview:chatBubbleImageView];
@@ -135,9 +138,19 @@
     
     if(showsProfile){
         profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
+//        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+//        
+//        [manager loadImageWithURL:[NSURL URLWithString:imageLink] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+//            
+//        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+//            
+//            imageFrame.image = image;
+//            
+//        }];
     }
     
     if(!currentMessage.isWelcomeMessage){

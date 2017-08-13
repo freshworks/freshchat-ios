@@ -16,5 +16,8 @@
 @property (nonatomic, retain) NSString *lastName;
 @property (nonatomic, retain) NSString *profilePicURL;
 
++(void)addParticipantWithInfo : (NSDictionary *)participantInfo inContext:(NSManagedObjectContext *)context;
+
++ (FDParticipant *) fetchParticipantForAlias : (NSString *) alias :(NSManagedObjectContext *)context;
 
 @end
