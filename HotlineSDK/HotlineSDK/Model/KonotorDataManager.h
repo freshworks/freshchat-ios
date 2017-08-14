@@ -22,7 +22,7 @@
 #define HOTLINE_FRAGMENT_ENTITY @"Fragment"
 #define HOTLINE_MESSAGE_BINARY_ENTITY @"KonotorMessageBinary"
 #define HOTLINE_USER_ENTITY @"KonotorUser"
-#define FRESHCHAT_PARTICIPANT @"FDParticipants"
+#define FRESHCHAT_PARTICIPANT @"FDParticipant"
 
 @interface KonotorDataManager : NSObject
 

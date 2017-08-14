@@ -126,9 +126,9 @@
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
     int senderNameHeight = 0;
     self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
-   // FDParticipant *participant = [FDParticipant fetchParticipantForAlias:@"" :[KonotorDataManager sharedInstance].mainObjectContext];
+    FDParticipant *participant = [FDParticipant fetchParticipantForAlias:@"" :[KonotorDataManager sharedInstance].mainObjectContext];
     if(showsSenderName){
-        senderNameHeight = 12;//self.senderNameLabel.intrinsicContentSize.height;
+       // senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
         senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
    //     senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
     }
