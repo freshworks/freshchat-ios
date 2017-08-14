@@ -147,7 +147,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     NSArray *participants = conversationInfo[@"participants"];
                     if(participants > 0){
                         for(NSDictionary *participant in participants) {
-                            [FDParticipant addParticipantWithInfo:participant inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                          //  [FDParticipant addParticipantWithInfo:participant inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                         }
                     }
                     
@@ -344,6 +344,7 @@ static HLNotificationHandler *handleUpdateNotification;
             }
         }else if(statusCode == 304){
             FDLog(@"No change in channel  data")
+            if (handler) handler(nil, error);
         }else{
             if (handler) handler(nil, error);
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
