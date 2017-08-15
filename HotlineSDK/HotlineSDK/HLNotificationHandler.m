@@ -38,7 +38,7 @@
 
 +(BOOL)isHotlineNotification:(NSDictionary *)info{
     NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
-    return ([payload[@"source"] isEqualToString:@"konotor"] || [payload[@"source"] isEqualToString:@"hotline"]);
+    return ([payload[@"source"] isEqualToString:FRESHCHAT_NOTIFICATION_PAYLOAD_SOURCE_USER]);
 }
 
 -(void)handleNotification:(NSDictionary *)info appState:(UIApplicationState)appState{
@@ -48,17 +48,17 @@
             
             NSNumber *channelID = nil;
             
-            if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
-                channelID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID] integerValue]);
+            if ([payload objectForKey:FRESHCHAT_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
+                channelID = @([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_CHANNEL_ID] integerValue]);
             }else{
                 return;
             }
             
-            if ([payload objectForKey:HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID]) {
-                self.marketingID = @([payload[HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
+            if ([payload objectForKey:FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID]) {
+                self.marketingID = @([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
             }
             
-            NSString *message = [payload valueForKeyPath:@"aps.alert"];
+            NSString *message = [payload valueForKeyPath:@"aps.alert.body"];
             
             HLChannel *channel = [HLChannel getWithID:channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
             

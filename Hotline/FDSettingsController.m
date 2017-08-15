@@ -236,11 +236,12 @@
 
 -(void)testNotification:(id)sender{
     [[Hotline sharedInstance] handleRemoteNotification:@{
-                                                                  @"kon_c_ch_id" : @200,
+                                                                  @"channel_id" : @200,
                                                                       @"aps" : @{
-                                                                          @"alert" : @"Sample Test Message"
+                                                                          @"alert" :  @{ @"body" : @"Sample Test Message"
+                                                                                        }
                                                                           },
-                                                                  @"source" : @"konotor"
+                                                                  @"source" : @"freshchat_user"
                                                                   }
                                                     andAppstate:UIApplicationStateActive];
          }
