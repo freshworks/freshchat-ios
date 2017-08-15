@@ -336,6 +336,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 }];
             }
         }else if(statusCode == 304){
+            if (handler) handler(nil, error);
             FDLog(@"No change in channel  data")
         }else{
             if (handler) handler(nil, error);
@@ -347,19 +348,16 @@ static HLNotificationHandler *handleUpdateNotification;
 
 +(void)hideAllChannelsWithCompletion:(void(^)(NSError *error))completion{
     
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_CHANNEL_ENTITY inManagedObjectContext:[KonotorDataManager sharedInstance].mainObjectContext];
-    NSBatchUpdateRequest *batchUpdateRequest = [[NSBatchUpdateRequest alloc] initWithEntity:entityDescription];
-    [batchUpdateRequest setResultType:NSUpdatedObjectIDsResultType];
-    [batchUpdateRequest setPropertiesToUpdate:@{@"isHidden": @(1)}];
-    NSError *batchUpdateRequestError = nil;
-    [[KonotorDataManager sharedInstance].mainObjectContext executeRequest:batchUpdateRequest error:&batchUpdateRequestError];
-    if (batchUpdateRequestError) {
-        FDLog(@"Unable to execute channel hide request");
-        NSLog(@"%@, %@", batchUpdateRequestError, batchUpdateRequestError.localizedDescription);
-    } else {
-        FDLog(@"Update Successful for hiding channels");
+    NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+    NSArray *matches             = [ctx executeFetchRequest:fetchRequest error:nil];
+    if(matches.count){
+        for (HLChannel *channel in matches) {
+            [channel setValue:@(1) forKey:@"isHidden"];
+            [ctx save:nil];
+        }
     }
-    
     if(completion){
         completion(nil);
     }
