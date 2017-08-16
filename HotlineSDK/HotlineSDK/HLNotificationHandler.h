@@ -14,7 +14,7 @@
 #define FRESHCHAT_NOTIFICATION_PAYLOAD_CONV_ID @"conv_id"
 #define FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID @"marketing_id"
 #define FRESHCHAT_NOTIFICATION_PAYLOAD_SOURCE_USER @"freshchat_user"
-#define FRESHCHAT_NOTIFICATION_PAYLOAD _TARGET_USER_ALIAS @"target_user_alias"
+#define FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS @"target_user_alias"
 
 @interface HLNotificationHandler : NSObject<FDNotificationBannerDelegate>
 

@@ -44,8 +44,12 @@
 -(void)handleNotification:(NSDictionary *)info appState:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
             
+            NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
+            // Check if current user alias and payload user alias are same
+            if(![payload[FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS] isEqualToString:[FDUtilities currentUserAlias]]){
+                return;
+            }
             NSNumber *channelID = nil;
             
             if ([payload objectForKey:FRESHCHAT_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
