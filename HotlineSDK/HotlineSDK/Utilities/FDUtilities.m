@@ -336,7 +336,7 @@ static NSInteger networkIndicator = 0;
 
 +(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName{
     
-    return [firstName stringByAppendingString:lastName];
+    return ([@[firstName, @" ", lastName] componentsJoinedByString:@""]);
 }
 
 +(NSString*)deviceModelName{

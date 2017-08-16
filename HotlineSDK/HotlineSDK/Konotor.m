@@ -229,7 +229,6 @@ __weak static id <KonotorDelegate> _delegate;
     {
         if([[Konotor delegate] respondsToSelector:@selector(didFinishDownloadingMessages) ])
         {
-    
             [[Konotor delegate] didFinishDownloadingMessages];
         }
     }
@@ -249,11 +248,9 @@ __weak static id <KonotorDelegate> _delegate;
     {
         if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileUploading:) ])
         {
-            
             [[Konotor delegate] didEncounterErrorWhileUploading:messageID];
         }
     }
-    
 }
 
 +(void)NotifyServerError
@@ -273,7 +270,6 @@ __weak static id <KonotorDelegate> _delegate;
     {
         if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileDownloading:) ])
         {
-            
             [[Konotor delegate] didEncounterErrorWhileDownloading:messageID];
         }
     }
@@ -283,9 +279,8 @@ __weak static id <KonotorDelegate> _delegate;
 {
     if([Konotor delegate])
     {
-        if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileDownloadingConversations) ])
+        if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileDownloadingConversations)])
         {
-            
             [[Konotor delegate] didEncounterErrorWhileDownloadingConversations];
         }
     }

@@ -47,9 +47,12 @@
 
 +(BOOL) showAgentAvatarLabel{
     static BOOL SHOW_AGENT_AVATAR_LABEL;
+    FDParticipant *participant; //= [FDParticipant fetchParticipantForAlias:<#(NSString *)#> :<#(NSManagedObjectContext *)#>
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        SHOW_AGENT_AVATAR_LABEL = [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT];
+        if (participant.firstName || participant.lastName || [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+            SHOW_AGENT_AVATAR_LABEL = TRUE;
+        }
     });
     return SHOW_AGENT_AVATAR_LABEL;
 }
@@ -128,9 +131,12 @@
     self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
     FDParticipant *participant = [FDParticipant fetchParticipantForAlias:@"" :[KonotorDataManager sharedInstance].mainObjectContext];
     if(showsSenderName){
-       // senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
-        senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-   //     senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
+        if(participant.firstName || participant.lastName){
+            senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
+        }
+        else{
+            senderNameLabel.text = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        }
     }
     self.senderLabelHeight.constant =senderNameHeight;
     [contentEncloser addSubview:chatBubbleImageView];
