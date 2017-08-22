@@ -1,3 +1,3 @@
-#define HOTLINE_DOMAIN @"sdk.freshchat.com"
-#define HOTLINE_APP_ID @"63d96e60-642f-48cb-b40a-dfbf16306fe8"
-#define HOTLINE_APP_KEY @"60b7af4d-5729-45e2-b94f-9ea1af8bad20"
+#define HOTLINE_DOMAIN @"mr-blonde.freshpori.com"
+#define HOTLINE_APP_ID @"b3e76505-7e58-45af-a6ed-4c63a33494e0"
+#define HOTLINE_APP_KEY @"c3120572-fb07-49f0-87bf-ef4e4d28aedc"
