@@ -29,8 +29,12 @@
     unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
     NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
     NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
-    if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
-        return true;
+    NSComparisonResult result;
+    result = [currentdate compare:lastFetchDate];
+    if(result == NSOrderedDescending){//date comparision, current should be greater than
+        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+            return true;
+        }
     }
     return 0;
 }

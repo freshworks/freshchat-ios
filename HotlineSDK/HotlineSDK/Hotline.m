@@ -366,9 +366,9 @@
         [HLUser registerUser:nil];
     }
     if([FDUtilities hasInitConfig]) {
+        [[[FDDAUUpdater alloc]init] fetch];
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
-                [[[FDDAUUpdater alloc]init] fetch];
                 [self registerDeviceToken];
                 [self updateAppVersion];
                 [self updateAdId];
@@ -548,6 +548,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
         if(doInit){
             [self initWithConfig:config completion:completion];
+             [[[FDDAUUpdater alloc]init] fetch];
         }else{
             if (completion) {
                 completion();
@@ -555,6 +556,9 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         }
         if (deviceToken) {
             [self storeDeviceToken:deviceToken];
+            if (completion) {
+                completion();
+            }
         }
     }];
 }
