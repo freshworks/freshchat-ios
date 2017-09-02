@@ -24,7 +24,7 @@
 
 #define HOTLINE_API_DAU_PATH @"/app/services/app/%@/user/%@/activity"
 
-#define HOTLINE_API_SESSION_PATH @"/app/services/app/%@/user/%@/session" //post
+#define HOTLINE_API_SESSION_PATH @"/app/services/app/%@/user/%@/session"
 
 #define HOTLINE_API_UNINSTALLED_PATH @"/app/services/app/%@/user/%@/uninstalled"
 
