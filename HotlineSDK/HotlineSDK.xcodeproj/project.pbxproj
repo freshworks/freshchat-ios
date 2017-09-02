@@ -44,7 +44,7 @@
 		35B2EF9C1D000E620014867F /* KonotorUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF0D1D000E620014867F /* KonotorUser.m */; };
 		35B2EF9D1D000E620014867F /* FDChannelUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF111D000E620014867F /* FDChannelUpdater.m */; };
 		35B2EF9E1D000E620014867F /* FDDataUpdaterWithInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF131D000E620014867F /* FDDataUpdaterWithInterval.m */; };
-		35B2EF9F1D000E620014867F /* FDDAUUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF151D000E620014867F /* FDDAUUpdater.m */; };
+		35B2EF9F1D000E620014867F /* FDSessionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF151D000E620014867F /* FDSessionUpdater.m */; };
 		35B2EFA01D000E620014867F /* FDMessagesUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF171D000E620014867F /* FDMessagesUpdater.m */; };
 		35B2EFA11D000E620014867F /* FDSolutionUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF191D000E620014867F /* FDSolutionUpdater.m */; };
 		35B2EFA21D000E620014867F /* FDIconDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF1B1D000E620014867F /* FDIconDownloader.m */; };
@@ -226,8 +226,8 @@
 		35B2EF111D000E620014867F /* FDChannelUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDChannelUpdater.m; sourceTree = "<group>"; };
 		35B2EF121D000E620014867F /* FDDataUpdaterWithInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDDataUpdaterWithInterval.h; sourceTree = "<group>"; };
 		35B2EF131D000E620014867F /* FDDataUpdaterWithInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDataUpdaterWithInterval.m; sourceTree = "<group>"; };
-		35B2EF141D000E620014867F /* FDDAUUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDDAUUpdater.h; sourceTree = "<group>"; };
-		35B2EF151D000E620014867F /* FDDAUUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDAUUpdater.m; sourceTree = "<group>"; };
+		35B2EF141D000E620014867F /* FDSessionUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSessionUpdater.h; sourceTree = "<group>"; };
+		35B2EF151D000E620014867F /* FDSessionUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSessionUpdater.m; sourceTree = "<group>"; };
 		35B2EF161D000E620014867F /* FDMessagesUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDMessagesUpdater.h; sourceTree = "<group>"; };
 		35B2EF171D000E620014867F /* FDMessagesUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDMessagesUpdater.m; sourceTree = "<group>"; };
 		35B2EF181D000E620014867F /* FDSolutionUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSolutionUpdater.h; sourceTree = "<group>"; };
@@ -605,8 +605,8 @@
 				35B2EF111D000E620014867F /* FDChannelUpdater.m */,
 				35B2EF121D000E620014867F /* FDDataUpdaterWithInterval.h */,
 				35B2EF131D000E620014867F /* FDDataUpdaterWithInterval.m */,
-				35B2EF141D000E620014867F /* FDDAUUpdater.h */,
-				35B2EF151D000E620014867F /* FDDAUUpdater.m */,
+				35B2EF141D000E620014867F /* FDSessionUpdater.h */,
+				35B2EF151D000E620014867F /* FDSessionUpdater.m */,
 				35B2EF161D000E620014867F /* FDMessagesUpdater.h */,
 				35B2EF171D000E620014867F /* FDMessagesUpdater.m */,
 				35B2EF181D000E620014867F /* FDSolutionUpdater.h */,
@@ -1067,7 +1067,7 @@
 				CE0FDB171EF10E4000E686BE /* FragmentData.m in Sources */,
 				35B2EF881D000E620014867F /* HLListViewController.m in Sources */,
 				35B2EFC81D000E620014867F /* FDAudioMessageUnit.m in Sources */,
-				35B2EF9F1D000E620014867F /* FDDAUUpdater.m in Sources */,
+				35B2EF9F1D000E620014867F /* FDSessionUpdater.m in Sources */,
 				35B2EF9E1D000E620014867F /* FDDataUpdaterWithInterval.m in Sources */,
 				35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */,
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,

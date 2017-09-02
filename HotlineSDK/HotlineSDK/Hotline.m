@@ -21,7 +21,7 @@
 #import "FDUtilities.h"
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
-#import "FDDAUUpdater.h"
+#import "FDSessionUpdater.h"
 #import "Message.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
@@ -366,9 +366,12 @@
         [HLUser registerUser:nil];
     }
     if([FDUtilities hasInitConfig]) {
-        [[[FDDAUUpdater alloc]init] fetch];
+        if([self canMakeDAUCall]){
+            [HLCoreServices performDAUCall];
+        }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
+                [[[FDSessionUpdater alloc]init] fetch];
                 [self registerDeviceToken];
                 [self updateAppVersion];
                 [self updateAdId];
@@ -385,6 +388,23 @@
             [self markPreviousUserUninstalledIfPresent];
         });
     }
+}
+
+-(BOOL) canMakeDAUCall {
+    NSDate *currentdate = [NSDate date];
+    NSDate *lastFetchDate = [NSDate dateWithTimeIntervalSince1970:[[[FDSecureStore sharedInstance] objectForKey: HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME] doubleValue]/1000];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
+    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
+    NSComparisonResult result;
+    result = [currentdate compare:lastFetchDate];
+    if(result == NSOrderedDescending){//date comparision, current should be greater than
+        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+            return true;
+        }
+    }
+    return 0;
 }
 
 -(void) updateAdId{
@@ -548,7 +568,9 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
         if(doInit){
             [self initWithConfig:config completion:completion];
-             [[[FDDAUUpdater alloc]init] fetch];
+            if([self canMakeDAUCall]){
+                [HLCoreServices performDAUCall];
+            }
         }else{
             if (completion) {
                 completion();

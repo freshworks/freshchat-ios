@@ -1,18 +1,18 @@
 //
-//  FDDAUUpdater.h
+//  FDSessionUpdater.h
 //  HotlineSDK
 //
 //  Created by Hrishikesh on 14/05/16.
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#ifndef FDDAUUpdater_h
-#define FDDAUUpdater_h
+#ifndef FDSessionUpdater_h
+#define FDSessionUpdater_h
 #import <Foundation/Foundation.h>
 #import "FDDataUpdaterWithInterval.h"
 
-@interface FDDAUUpdater : FDDataUpdaterWithInterval
+@interface FDSessionUpdater : FDDataUpdaterWithInterval
 
 @end
 
-#endif /* FDDAUUpdater_h */
+#endif /* FDSessionUpdater_h */
