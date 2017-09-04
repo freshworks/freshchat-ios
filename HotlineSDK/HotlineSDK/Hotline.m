@@ -21,7 +21,6 @@
 #import "FDUtilities.h"
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
-#import "FDSessionUpdater.h"
 #import "Message.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
@@ -349,10 +348,18 @@
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
+    //save last message session
     [self.messagePoller end];
+    [self updateSessionInterval];
 }
 
--(void) updateLocaleMeta {    
+- (void) updateSessionInterval{
+    if([HLUser isUserRegistered]){
+        [HLUserDefaults setObject:[NSDate date] forKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
+    }
+}
+
+-(void) updateLocaleMeta {
     if([FDLocaleUtil hadLocaleChange]) {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
@@ -371,7 +378,11 @@
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
-                [[[FDSessionUpdater alloc]init] fetch];
+                [HLCoreServices performHeartbeatCall];
+                if([self canMakeSessionCall]){
+                    [self updateSessionInterval];
+                    [HLCoreServices performSessionCall];
+                }
                 [self registerDeviceToken];
                 [self updateAppVersion];
                 [self updateAdId];
@@ -388,6 +399,18 @@
             [self markPreviousUserUninstalledIfPresent];
         });
     }
+}
+
+-(BOOL) canMakeSessionCall {
+    if(![HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
+        return  true;
+    }
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
+    NSLog(@"Time interval b/w dates %f", interval);
+    if(interval > SESSION_UPDATE_INTERVAL){
+        return true;
+    }
+    return false;
 }
 
 -(BOOL) canMakeDAUCall {

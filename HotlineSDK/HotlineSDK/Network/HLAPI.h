@@ -26,6 +26,8 @@
 
 #define HOTLINE_API_SESSION_PATH @"/app/services/app/%@/user/%@/session"
 
+#define HOTLINE_API_HEARTBEAT_PATH @"/app/services/app/%@/user/%@/heartbeat"
+
 #define HOTLINE_API_UNINSTALLED_PATH @"/app/services/app/%@/user/%@/uninstalled"
 
 #define HOTLINE_API_USER_PROPERTIES_PATH @"/app/services/app/%@/user/%@"

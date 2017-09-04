@@ -13,6 +13,7 @@
 #define HOTLINE_DEFAULTS_CONTENT_LOCALE @"hotline_defaults_content_locale"
 #define HOTLINE_DEFAULTS_IS_USER_DEFERED @"hotline_defaults_is_user_defered"
 #define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"
+#define FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME @"freshchat_defaults_session_updated_time"
 
 @interface HLUserDefaults : NSObject
 

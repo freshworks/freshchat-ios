@@ -280,7 +280,7 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)performSessionCall:(void (^)(NSError *))completion{
++(NSURLSessionDataTask *)performSessionCall{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities currentUserAlias];
@@ -299,8 +299,28 @@
             FDLog(@"Could not make Session call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
-        if(completion){
-            completion(error);
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)performHeartbeatCall{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_HEARTBEAT_PATH,appID,userAlias];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"**** heartbeat call done ****");
+            }
+        }else{
+            FDLog(@"Could not make Session call %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
         }
     }];
     return task;

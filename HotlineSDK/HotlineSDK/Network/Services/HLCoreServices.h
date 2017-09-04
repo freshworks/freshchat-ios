@@ -18,13 +18,15 @@
 
 +(NSURLSessionDataTask *)performDAUCall;
 
-+(NSURLSessionDataTask *)performSessionCall:(void (^)(NSError *))completion;
++(NSURLSessionDataTask *)performSessionCall;
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 
 +(NSURLSessionDataTask *)registerUserConversationActivity :(Message *)message;
 
 +(void)uploadUnuploadedProperties;
+
++(NSURLSessionDataTask *)performHeartbeatCall;
 
 +(void)sendLatestUserActivity:(HLChannel *)channel;
 
