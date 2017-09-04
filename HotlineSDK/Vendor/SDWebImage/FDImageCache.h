@@ -7,8 +7,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SDWebImageCompat.h"
-#import "SDImageCacheConfig.h"
+#import "FDWebImageCompat.h"
+#import "FDImageCacheConfig.h"
 
 typedef NS_ENUM(NSInteger, SDImageCacheType) {
     /**
@@ -36,14 +36,14 @@ typedef void(^SDWebImageCalculateSizeBlock)(NSUInteger fileCount, NSUInteger tot
  * SDImageCache maintains a memory cache and an optional disk cache. Disk cache write operations are performed
  * asynchronous so it doesn’t add unnecessary latency to the UI.
  */
-@interface SDImageCache : NSObject
+@interface FDImageCache : NSObject
 
 #pragma mark - Properties
 
 /**
  *  Cache Config object - storing all kind of settings
  */
-@property (nonatomic, nonnull, readonly) SDImageCacheConfig *config;
+@property (nonatomic, nonnull, readonly) FDImageCacheConfig *config;
 
 /**
  * The maximum "total cost" of the in-memory image cache. The cost function is the number of pixels held in memory.

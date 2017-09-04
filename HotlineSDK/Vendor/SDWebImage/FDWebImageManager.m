@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImageManager.h"
+#import "FDWebImageManager.h"
 #import <objc/message.h>
 #import "NSImage+WebCache.h"
 
@@ -20,7 +20,7 @@
 
 @interface SDWebImageManager ()
 
-@property (strong, nonatomic, readwrite, nonnull) SDImageCache *imageCache;
+@property (strong, nonatomic, readwrite, nonnull) FDImageCache *imageCache;
 @property (strong, nonatomic, readwrite, nonnull) SDWebImageDownloader *imageDownloader;
 @property (strong, nonatomic, nonnull) NSMutableSet<NSURL *> *failedURLs;
 @property (strong, nonatomic, nonnull) NSMutableArray<SDWebImageCombinedOperation *> *runningOperations;
@@ -39,12 +39,12 @@
 }
 
 - (nonnull instancetype)init {
-    SDImageCache *cache = [SDImageCache sharedImageCache];
+    FDImageCache *cache = [FDImageCache sharedImageCache];
     SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
     return [self initWithCache:cache downloader:downloader];
 }
 
-- (nonnull instancetype)initWithCache:(nonnull SDImageCache *)cache downloader:(nonnull SDWebImageDownloader *)downloader {
+- (nonnull instancetype)initWithCache:(nonnull FDImageCache *)cache downloader:(nonnull SDWebImageDownloader *)downloader {
     if ((self = [super init])) {
         _imageCache = cache;
         _imageDownloader = downloader;

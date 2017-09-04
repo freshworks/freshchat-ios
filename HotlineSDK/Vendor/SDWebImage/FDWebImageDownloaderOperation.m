@@ -6,11 +6,11 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImageDownloaderOperation.h"
-#import "SDWebImageDecoder.h"
+#import "FDWebImageDownloaderOperation.h"
+#import "FDWebImageDecoder.h"
 #import "UIImage+MultiFormat.h"
 #import <ImageIO/ImageIO.h>
-#import "SDWebImageManager.h"
+#import "FDWebImageManager.h"
 #import "NSImage+WebCache.h"
 
 NSString *const SDWebImageDownloadStartNotification = @"SDWebImageDownloadStartNotification";

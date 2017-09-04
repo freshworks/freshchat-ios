@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImageDecoder.h"
+#import "FDWebImageDecoder.h"
 
 @implementation UIImage (ForceDecode)
 

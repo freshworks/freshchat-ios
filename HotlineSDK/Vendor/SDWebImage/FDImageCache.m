@@ -6,8 +6,8 @@
  * file that was distributed with this source code.
  */
 
-#import "SDImageCache.h"
-#import "SDWebImageDecoder.h"
+#import "FDImageCache.h"
+#import "FDWebImageDecoder.h"
 #import "UIImage+MultiFormat.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "UIImage+GIF.h"
@@ -47,7 +47,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 #endif
 }
 
-@interface SDImageCache ()
+@interface FDImageCache ()
 
 #pragma mark - Properties
 @property (strong, nonatomic, nonnull) NSCache *memCache;
@@ -58,7 +58,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 @end
 
 
-@implementation SDImageCache {
+@implementation FDImageCache {
     NSFileManager *_fileManager;
 }
 
@@ -90,7 +90,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
         // Create IO serial queue
         _ioQueue = dispatch_queue_create("com.hackemist.SDWebImageCache", DISPATCH_QUEUE_SERIAL);
         
-        _config = [[SDImageCacheConfig alloc] init];
+        _config = [[FDImageCacheConfig alloc] init];
         
         // Init the memory cache
         _memCache = [[AutoPurgeCache alloc] init];

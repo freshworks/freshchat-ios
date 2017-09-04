@@ -6,11 +6,11 @@
  * file that was distributed with this source code.
  */
 
-#import "SDImageCacheConfig.h"
+#import "FDImageCacheConfig.h"
 
 static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 
-@implementation SDImageCacheConfig
+@implementation FDImageCacheConfig
 
 - (instancetype)init {
     if (self = [super init]) {

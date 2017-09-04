@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImageCompat.h"
+#import "FDWebImageCompat.h"
 #import "NSData+ImageContentType.h"
 
 @interface UIImage (MultiFormat)

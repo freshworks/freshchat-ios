@@ -8,7 +8,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SDWebImageCompat.h"
+#import "FDWebImageCompat.h"
 
 typedef NS_ENUM(NSInteger, SDImageFormat) {
     SDImageFormatUndefined = -1,

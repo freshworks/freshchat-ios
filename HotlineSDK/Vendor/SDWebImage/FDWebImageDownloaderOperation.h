@@ -7,8 +7,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SDWebImageDownloader.h"
-#import "SDWebImageOperation.h"
+#import "FDWebImageDownloader.h"
+#import "FDWebImageOperation.h"
 
 FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadStartNotification;
 FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadReceiveResponseNotification;

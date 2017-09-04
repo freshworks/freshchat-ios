@@ -6,11 +6,11 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImageCompat.h"
+#import "FDWebImageCompat.h"
 
 #if SD_UIKIT || SD_MAC
 
-#import "SDWebImageManager.h"
+#import "FDWebImageManager.h"
 
 typedef void(^SDSetImageBlock)(UIImage * _Nullable image, NSData * _Nullable imageData);
 

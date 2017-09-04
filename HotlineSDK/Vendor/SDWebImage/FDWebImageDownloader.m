@@ -6,8 +6,8 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImageDownloader.h"
-#import "SDWebImageDownloaderOperation.h"
+#import "FDWebImageDownloader.h"
+#import "FDWebImageDownloaderOperation.h"
 #import <ImageIO/ImageIO.h>
 
 @implementation SDWebImageDownloadToken

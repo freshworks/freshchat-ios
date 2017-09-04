@@ -60,7 +60,7 @@
                                          progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
                                         completed:(nullable SDExternalCompletionBlock)completedBlock {
     NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:url];
-    UIImage *lastPreviousCachedImage = [[SDImageCache sharedImageCache] imageFromCacheForKey:key];
+    UIImage *lastPreviousCachedImage = [[FDImageCache sharedImageCache] imageFromCacheForKey:key];
     
     [self sd_setImageWithURL:url placeholderImage:lastPreviousCachedImage ?: placeholder options:options progress:progressBlock completed:completedBlock];    
 }

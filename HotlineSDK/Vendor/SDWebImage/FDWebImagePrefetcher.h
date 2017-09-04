@@ -7,7 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SDWebImageManager.h"
+#import "FDWebImageManager.h"
 
 @class SDWebImagePrefetcher;
 
@@ -41,7 +41,7 @@ typedef void(^SDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, 
 /**
  * Prefetch some URLs in the cache for future use. Images are downloaded in low priority.
  */
-@interface SDWebImagePrefetcher : NSObject
+@interface FDWebImagePrefetcher : NSObject
 
 /**
  *  The web image manager

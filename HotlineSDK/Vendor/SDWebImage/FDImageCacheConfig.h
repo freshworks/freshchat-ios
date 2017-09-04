@@ -7,9 +7,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SDWebImageCompat.h"
+#import "FDWebImageCompat.h"
 
-@interface SDImageCacheConfig : NSObject
+@interface FDImageCacheConfig : NSObject
 
 /**
  * Decompressing images that are downloaded and cached can improve performance but can consume lot of memory.

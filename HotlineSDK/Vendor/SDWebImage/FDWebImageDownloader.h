@@ -7,8 +7,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SDWebImageCompat.h"
-#import "SDWebImageOperation.h"
+#import "FDWebImageCompat.h"
+#import "FDWebImageOperation.h"
 
 typedef NS_OPTIONS(NSUInteger, SDWebImageDownloaderOptions) {
     SDWebImageDownloaderLowPriority = 1 << 0,

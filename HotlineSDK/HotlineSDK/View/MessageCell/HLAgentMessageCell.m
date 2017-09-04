@@ -149,8 +149,8 @@
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        
+//        FDWebImageManager *manager = [FDWebImageManager sharedManager];
+//        
 //        [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
 //            
 //        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {

@@ -6,9 +6,9 @@
  * file that was distributed with this source code.
  */
 
-#import "SDWebImagePrefetcher.h"
+#import "FDWebImagePrefetcher.h"
 
-@interface SDWebImagePrefetcher ()
+@interface FDWebImagePrefetcher ()
 
 @property (strong, nonatomic, nonnull) SDWebImageManager *manager;
 @property (strong, nonatomic, nullable) NSArray<NSURL *> *prefetchURLs;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation SDWebImagePrefetcher
+@implementation FDWebImagePrefetcher
 
 + (nonnull instancetype)sharedImagePrefetcher {
     static dispatch_once_t once;
