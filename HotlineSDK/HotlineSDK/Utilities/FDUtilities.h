@@ -44,6 +44,8 @@
 +(BOOL) containsHTMLContent: (NSString *)content;
 +(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
 
++(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
+
 @end
 
 #endif

@@ -106,3 +106,11 @@
 "cust_sat_not_resolved_prompt"="How could we have helped better ?";
 "cust_sat_user_comments_placeholder"="Enter your feedback here";
 "cust_sat_submit_button_text"="SUBMIT";
+
+/* Typically replies */
+"typically_replies_within_a_minute"="Typically replies within a minute";
+"typically_replies_within_x_minutes"="Typically replies within";
+"typically_replies_within_an_hour"="Typically replies within an hour";
+"typically_replies_within_2_hours"="Typically replies within 2 hours";
+"typically_replies_within_few_hours"="Typically replies within 2 hours";
+"placeholder_minutes"="minutes";
