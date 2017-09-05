@@ -373,13 +373,13 @@
         [HLUser registerUser:nil];
     }
     if([FDUtilities hasInitConfig]) {
-        if([self canMakeDAUCall]){
+        if([FDUtilities canMakeDAUCall]){
             [HLCoreServices performDAUCall];
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
                 [HLCoreServices performHeartbeatCall];
-                if([self canMakeSessionCall]){
+                if([FDUtilities canMakeSessionCall]){
                     [self updateSessionInterval];
                     [HLCoreServices performSessionCall];
                 }
@@ -399,35 +399,6 @@
             [self markPreviousUserUninstalledIfPresent];
         });
     }
-}
-
--(BOOL) canMakeSessionCall {
-    if(![HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
-        return  true;
-    }
-    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
-    NSLog(@"Time interval b/w dates %f", interval);
-    if(interval > SESSION_UPDATE_INTERVAL){
-        return true;
-    }
-    return false;
-}
-
--(BOOL) canMakeDAUCall {
-    NSDate *currentdate = [NSDate date];
-    NSDate *lastFetchDate = [NSDate dateWithTimeIntervalSince1970:[[[FDSecureStore sharedInstance] objectForKey: HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME] doubleValue]/1000];
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
-    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
-    NSComparisonResult result;
-    result = [currentdate compare:lastFetchDate];
-    if(result == NSOrderedDescending){//date comparision, current should be greater than
-        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
-            return true;
-        }
-    }
-    return 0;
 }
 
 -(void) updateAdId{
@@ -591,7 +562,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
         if(doInit){
             [self initWithConfig:config completion:completion];
-            if([self canMakeDAUCall]){
+            if([FDUtilities canMakeDAUCall]){
                 [HLCoreServices performDAUCall];
             }
         }else{
