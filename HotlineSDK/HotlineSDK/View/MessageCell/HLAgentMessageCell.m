@@ -69,7 +69,7 @@
     self.showsUploadStatus=YES;
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
-    self.senderNameLabel=[[UITextView alloc] initWithFrame:CGRectZero];
+    self.senderNameLabel=[[UILabel alloc] initWithFrame:CGRectZero];
     contentEncloser = [[UIView alloc] init];
     contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
     [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
@@ -80,9 +80,9 @@
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameTextColor];
-    [senderNameLabel setEditable:NO];
-    [senderNameLabel setScrollEnabled:NO];
-    [senderNameLabel setSelectable:NO];
+//    [senderNameLabel setEditable:NO];
+//    [senderNameLabel setScrollEnabled:NO];
+//    [senderNameLabel setSelectable:NO];
     
     messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
     [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
@@ -127,7 +127,7 @@
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
     [views setObject:self.contentEncloser forKey:@"contentEncloser"];
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
-    int senderNameHeight = 0;
+    int senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
     self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
     FDParticipant *participant = [FDParticipant fetchParticipantForAlias:@"" :[KonotorDataManager sharedInstance].mainObjectContext];
     if(showsSenderName){
@@ -236,7 +236,7 @@
     
     
     
-    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|[senderLabel]"];
+    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|-4-[senderLabel]"];
     for(int i=0;i<fragmensViewArr.count;i++) { //Set Constraints here
         NSString *str = fragmensViewArr[i];
         if([str containsString:@"image_"]) {
@@ -268,7 +268,7 @@
         [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(<=20)]"];
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-5-[messageSentTimeLabel]-(>=5)-|" options:0 metrics:nil views:views]];
     }
-    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-[senderLabel]-|" options:0 metrics:nil views:views]];
+    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[senderLabel]-|" options:0 metrics:nil views:views]];
     [veriticalConstraint appendString:@"-5-|"];
     //Constraints for details inside contentEncloser is done.
     if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {
