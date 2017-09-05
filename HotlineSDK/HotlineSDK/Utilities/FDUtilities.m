@@ -318,7 +318,7 @@ static NSInteger networkIndicator = 0;
         return  true;
     }
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
-    NSLog(@"Time interval b/w dates %f", interval);
+    FDLog(@"Time interval b/w dates %f", interval);
     if(interval > SESSION_UPDATE_INTERVAL){
         return true;
     }
