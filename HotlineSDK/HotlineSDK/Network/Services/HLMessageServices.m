@@ -347,20 +347,22 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 +(void)hideAllChannelsWithCompletion:(void(^)(NSError *error))completion{
-    
-    NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isHidden == NO"];
-    NSArray *matches             = [ctx executeFetchRequest:fetchRequest error:nil];
-    if(matches.count){
-        for (HLChannel *channel in matches) {
-            [channel setValue:@(1) forKey:@"isHidden"];
-            [ctx save:nil];
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    [context performBlock:^{
+        NSManagedObjectContext *ctx = [KonotorDataManager sharedInstance].mainObjectContext;
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
+        fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"isHidden == NO"];
+        NSArray *matches             = [ctx executeFetchRequest:fetchRequest error:nil];
+        if(matches.count > 0){
+            for (HLChannel *channel in matches) {
+                [channel setValue:@(1) forKey:@"isHidden"];
+                [ctx save:nil];
+            }
         }
-    }
-    if(completion){
-        completion(nil);
-    }
+        if(completion){
+            completion(nil);
+        }
+    }];
 }
 
 +(void)importChannels:(NSDictionary *)channelsInfo handler:(void (^)(NSArray *channels, NSError *error))handler;{
