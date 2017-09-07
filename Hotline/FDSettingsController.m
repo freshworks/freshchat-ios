@@ -19,7 +19,8 @@
 @property (strong, nonatomic) UITextField *appKeyField;
 @property (strong, nonatomic) UIButton *updateConfigButton;
 
-@property (strong, nonatomic) UITextField *userNameField;
+@property (strong, nonatomic) UITextField *userFirstNameField;
+@property (strong, nonatomic) UITextField *userLastNameField;
 @property (strong, nonatomic) UITextField *emailField;
 @property (strong, nonatomic) UITextField *phoneNumField;
 @property (strong, nonatomic) UITextField *externalIDField;
@@ -57,7 +58,8 @@
     self.appKeyField = [self getTextFieldWithPlaceHolder:@"App Key"];
     self.updateConfigButton = [self getCustomAutoLayoutButtonWithTitle:@"Update config" withAction:@selector(updateConfigButtonAction:)];
     
-    self.userNameField = [self getTextFieldWithPlaceHolder:@"User name"];
+    self.userFirstNameField = [self getTextFieldWithPlaceHolder:@"First Name"];
+    self.userLastNameField = [self getTextFieldWithPlaceHolder:@"Last Name"];
     
     self.emailField = [self getTextFieldWithPlaceHolder:@"Email address"];
     self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -87,7 +89,7 @@
     [self.containerView addSubview:self.selectImageButton];
     [self.containerView addSubview:self.testNotificationButton];
     
-    NSDictionary *configFields = @{ @"domainField":self.domainField, @"appIDField":self.appIDField, @"appKeyField":self.appKeyField, @"userNameField":self.userNameField, @"emailField":self.emailField, @"phoneNumField":self.phoneNumField, @"externalIDField":self.externalIDField, @"selectImageButton": self.selectImageButton};
+    NSDictionary *configFields = @{ @"domainField":self.domainField, @"appIDField":self.appIDField, @"appKeyField":self.appKeyField, @"userFirstNameField":self.userFirstNameField, @"userLastNameField":self.userLastNameField, @"emailField":self.emailField, @"phoneNumField":self.phoneNumField, @"externalIDField":self.externalIDField, @"selectImageButton": self.selectImageButton};
     
     NSMutableDictionary *views = [NSMutableDictionary new];
     [views addEntriesFromDictionary:configFields];
@@ -106,7 +108,7 @@
     
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[updateUserPropertiesButton(contentWidth)]-10-|" options:0 metrics:metrics views:views]];
     
-    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[domainField]-[appIDField]-[appKeyField]-[updateConfigButton]-20-[userNameField]-[emailField]-[phoneNumField]-[externalIDField]-[updateUserPropertiesButton]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
+    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[domainField]-[appIDField]-[appKeyField]-[updateConfigButton]-20-[userFirstNameField]-[userLastNameField]-[emailField]-[phoneNumField]-[externalIDField]-[updateUserPropertiesButton]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
     
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[updateUserPropertiesButton]-20-[keyField]" options:0 metrics:nil views:views]];
     
@@ -188,7 +190,8 @@
 -(void)updateUserPropertiesButtonAction:(id)sender{
     NSLog(@"updating user info");
     HotlineUser *user = [HotlineUser sharedInstance];
-    user.firstName = self.userNameField.text;
+    user.firstName = self.userFirstNameField.text;
+    user.lastName = self.userLastNameField.text;
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
@@ -228,7 +231,8 @@
     self.appIDField.text = [Hotline sharedInstance].config.appID;
     self.appKeyField.text = [Hotline sharedInstance].config.appKey;
     
-    self.userNameField.text = [HotlineUser sharedInstance].firstName;
+    self.userFirstNameField.text = [HotlineUser sharedInstance].firstName;
+    self.userLastNameField.text = [HotlineUser sharedInstance].lastName;
     self.emailField.text = [HotlineUser sharedInstance].email;
     self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
     self.externalIDField.text = [HotlineUser sharedInstance].externalID;

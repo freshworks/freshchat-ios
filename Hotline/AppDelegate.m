@@ -112,6 +112,7 @@
     dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
     user.firstName = [@"User - " stringByAppendingString:dateString];
+    user.lastName = @"Ohsumi";
     user.email = @"user@freshdesk.com";
     user.phoneNumber = @"9898989898";
     user.phoneCountryCode = @"+91";
