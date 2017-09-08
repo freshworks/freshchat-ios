@@ -195,6 +195,7 @@
                     }
                 }
             }
+            userInfo[@"alias"] = [FDUtilities currentUserAlias];
             userInfo[@"meta"] = metaInfo;
             info[@"user"] = userInfo;
         }else{
