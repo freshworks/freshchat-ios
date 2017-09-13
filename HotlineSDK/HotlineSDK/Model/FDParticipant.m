@@ -35,15 +35,14 @@
 }
 
 + (FDParticipant*) updateParticipant: (FDParticipant *) participant withInfo : (NSDictionary *) participantInfo{
-    
-    participant.firstName = [participantInfo valueForKey: @"firstName"];
-    participant.lastName  = [participantInfo valueForKey: @"lastName"];
-    participant.alias     = [participantInfo valueForKey: @"alias"];
-    participant.alias     = [participantInfo valueForKey: @"profilePicURL"];
+    participant.firstName      = [participantInfo valueForKey: @"firstName"];
+    participant.lastName       = [participantInfo valueForKey: @"lastName"];
+    participant.alias          = [participantInfo valueForKey: @"alias"];
+    participant.profilePicURL  = [participantInfo valueForKey: @"profilePicURL"];
     return participant;
 }
 
-+ (FDParticipant *) fetchParticipantForAlias : (NSString *) alias :(NSManagedObjectContext *)context {
++(FDParticipant *) fetchParticipantForAlias : (NSString *) alias inContext:(NSManagedObjectContext *)context{
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_PARTICIPANT];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"alias == %@",alias];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];

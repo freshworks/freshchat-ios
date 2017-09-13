@@ -18,6 +18,6 @@
 
 +(void)addParticipantWithInfo : (NSDictionary *)participantInfo inContext:(NSManagedObjectContext *)context;
 
-+ (FDParticipant *) fetchParticipantForAlias : (NSString *) alias :(NSManagedObjectContext *)context;
++(FDParticipant *) fetchParticipantForAlias : (NSString *) alias inContext:(NSManagedObjectContext *)context;
 
 @end

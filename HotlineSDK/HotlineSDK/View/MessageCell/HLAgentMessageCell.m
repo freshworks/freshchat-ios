@@ -129,7 +129,7 @@
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
     int senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
     self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
-    FDParticipant *participant = [FDParticipant fetchParticipantForAlias:@"" :[KonotorDataManager sharedInstance].mainObjectContext];
+    FDParticipant *participant = [FDParticipant fetchParticipantForAlias:currentMessage.messageUserAlias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     if(showsSenderName){
         if(participant.firstName || participant.lastName){
             senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
@@ -149,15 +149,15 @@
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
-        FDWebImageManager *manager = [FDWebImageManager sharedManager];
-        
-        [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            
-        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            
-            profileImageView.image = image;
-            
-        }];
+//        FDWebImageManager *manager = [FDWebImageManager sharedManager];
+//        
+//        [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+//            
+//        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+//            
+//            profileImageView.image = image;
+//            
+//        }];
     }
     
     if(!currentMessage.isWelcomeMessage){
@@ -268,7 +268,7 @@
         [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(<=20)]"];
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-5-[messageSentTimeLabel]-(>=5)-|" options:0 metrics:nil views:views]];
     }
-    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[senderLabel]-|" options:0 metrics:nil views:views]];
+    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[senderLabel]-7-|" options:0 metrics:nil views:views]];
     [veriticalConstraint appendString:@"-5-|"];
     //Constraints for details inside contentEncloser is done.
     if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {

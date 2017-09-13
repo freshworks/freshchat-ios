@@ -147,7 +147,7 @@ static HLNotificationHandler *handleUpdateNotification;
                     NSArray *participants = conversationInfo[@"participants"];
                     if(participants > 0){
                         for(NSDictionary *participant in participants) {
-                          //  [FDParticipant addParticipantWithInfo:participant inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+                            [FDParticipant addParticipantWithInfo:participant inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                         }
                     }
                     
