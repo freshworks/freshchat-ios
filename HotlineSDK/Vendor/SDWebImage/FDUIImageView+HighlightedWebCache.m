@@ -6,12 +6,12 @@
  * file that was distributed with this source code.
  */
 
-#import "UIImageView+HighlightedWebCache.h"
+#import "FDUIImageView+HighlightedWebCache.h"
 
 #if SD_UIKIT
 
-#import "UIView+WebCacheOperation.h"
-#import "UIView+WebCache.h"
+#import "FDUIView+WebCacheOperation.h"
+#import "FDUIView+WebCache.h"
 
 @implementation UIImageView (HighlightedWebCache)
 

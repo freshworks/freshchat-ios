@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "FDWebImageCompat.h"
 
-typedef NS_ENUM(NSInteger, SDImageFormat) {
+typedef NS_ENUM(NSInteger, FDImageFormat) {
     SDImageFormatUndefined = -1,
     SDImageFormatJPEG = 0,
     SDImageFormatPNG,
@@ -28,6 +28,6 @@ typedef NS_ENUM(NSInteger, SDImageFormat) {
  *
  *  @return the image format as `SDImageFormat` (enum)
  */
-+ (SDImageFormat)sd_imageFormatForImageData:(nullable NSData *)data;
++ (FDImageFormat)sd_imageFormatForImageData:(nullable NSData *)data;
 
 @end

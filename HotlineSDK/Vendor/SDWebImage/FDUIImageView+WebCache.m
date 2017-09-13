@@ -6,13 +6,13 @@
  * file that was distributed with this source code.
  */
 
-#import "UIImageView+WebCache.h"
+#import "FDUIImageView+WebCache.h"
 
 #if SD_UIKIT || SD_MAC
 
 #import "objc/runtime.h"
-#import "UIView+WebCacheOperation.h"
-#import "UIView+WebCache.h"
+#import "FDUIView+WebCacheOperation.h"
+#import "FDUIView+WebCache.h"
 
 @implementation UIImageView (WebCache)
 
@@ -59,7 +59,7 @@
                                           options:(SDWebImageOptions)options
                                          progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
                                         completed:(nullable SDExternalCompletionBlock)completedBlock {
-    NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:url];
+    NSString *key = [[FDWebImageManager sharedManager] cacheKeyForURL:url];
     UIImage *lastPreviousCachedImage = [[FDImageCache sharedImageCache] imageFromCacheForKey:key];
     
     [self sd_setImageWithURL:url placeholderImage:lastPreviousCachedImage ?: placeholder options:options progress:progressBlock completed:completedBlock];    
@@ -76,7 +76,7 @@
     NSMutableArray<id<SDWebImageOperation>> *operationsArray = [[NSMutableArray alloc] init];
 
     [arrayOfURLs enumerateObjectsUsingBlock:^(NSURL *logoImageURL, NSUInteger idx, BOOL * _Nonnull stop) {
-        id <SDWebImageOperation> operation = [SDWebImageManager.sharedManager loadImageWithURL:logoImageURL options:0 progress:nil completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        id <SDWebImageOperation> operation = [FDWebImageManager.sharedManager loadImageWithURL:logoImageURL options:0 progress:nil completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             if (!wself) return;
             dispatch_main_async_safe(^{
                 __strong UIImageView *sself = wself;

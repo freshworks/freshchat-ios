@@ -6,13 +6,13 @@
  * file that was distributed with this source code.
  */
 
-#import "UIButton+WebCache.h"
+#import "FDUIButton+WebCache.h"
 
 #if SD_UIKIT
 
 #import "objc/runtime.h"
-#import "UIView+WebCacheOperation.h"
-#import "UIView+WebCache.h"
+#import "FDUIView+WebCacheOperation.h"
+#import "FDUIView+WebCache.h"
 
 static char imageURLStorageKey;
 

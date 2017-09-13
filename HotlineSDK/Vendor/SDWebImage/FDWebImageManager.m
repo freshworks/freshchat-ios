@@ -8,7 +8,7 @@
 
 #import "FDWebImageManager.h"
 #import <objc/message.h>
-#import "NSImage+WebCache.h"
+#import "FDNSImage+WebCache.h"
 
 @interface SDWebImageCombinedOperation : NSObject <SDWebImageOperation>
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface SDWebImageManager ()
+@interface FDWebImageManager ()
 
 @property (strong, nonatomic, readwrite, nonnull) FDImageCache *imageCache;
 @property (strong, nonatomic, readwrite, nonnull) SDWebImageDownloader *imageDownloader;
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation SDWebImageManager
+@implementation FDWebImageManager
 
 + (nonnull instancetype)sharedManager {
     static dispatch_once_t once;

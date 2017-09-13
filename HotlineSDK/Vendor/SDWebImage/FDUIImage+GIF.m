@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-#import "UIImage+GIF.h"
+#import "FDUIImage+GIF.h"
 #import <ImageIO/ImageIO.h>
 #import "objc/runtime.h"
-#import "NSImage+WebCache.h"
+#import "FDNSImage+WebCache.h"
 
 @implementation UIImage (GIF)
 

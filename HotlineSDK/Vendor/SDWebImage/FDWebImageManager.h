@@ -156,7 +156,7 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
 
  * @endcode
  */
-@interface SDWebImageManager : NSObject
+@interface FDWebImageManager : NSObject
 
 @property (weak, nonatomic, nullable) id <SDWebImageManagerDelegate> delegate;
 

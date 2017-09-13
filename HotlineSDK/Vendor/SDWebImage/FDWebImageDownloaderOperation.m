@@ -8,10 +8,10 @@
 
 #import "FDWebImageDownloaderOperation.h"
 #import "FDWebImageDecoder.h"
-#import "UIImage+MultiFormat.h"
+#import "FDUIImage+MultiFormat.h"
 #import <ImageIO/ImageIO.h>
 #import "FDWebImageManager.h"
-#import "NSImage+WebCache.h"
+#import "FDNSImage+WebCache.h"
 
 NSString *const SDWebImageDownloadStartNotification = @"SDWebImageDownloadStartNotification";
 NSString *const SDWebImageDownloadReceiveResponseNotification = @"SDWebImageDownloadReceiveResponseNotification";
@@ -363,7 +363,7 @@ didReceiveResponse:(NSURLResponse *)response
 #elif SD_MAC
                 UIImage *image = [[UIImage alloc] initWithCGImage:partialImageRef size:NSZeroSize];
 #endif
-                NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
+                NSString *key = [[FDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
                 UIImage *scaledImage = [self scaledImageForKey:key image:image];
                 if (self.shouldDecompressImages) {
                     image = [UIImage decodedImageWithImage:scaledImage];
@@ -429,7 +429,7 @@ didReceiveResponse:(NSURLResponse *)response
              */
             if (self.imageData) {
                 UIImage *image = [UIImage sd_imageWithData:self.imageData];
-                NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
+                NSString *key = [[FDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
                 image = [self scaledImageForKey:key image:image];
                 
                 // Do not force decoding animated GIFs

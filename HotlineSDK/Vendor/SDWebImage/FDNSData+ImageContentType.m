@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-#import "NSData+ImageContentType.h"
+#import "FDNSData+ImageContentType.h"
 
 
 @implementation NSData (ImageContentType)
 
-+ (SDImageFormat)sd_imageFormatForImageData:(nullable NSData *)data {
++ (FDImageFormat)sd_imageFormatForImageData:(nullable NSData *)data {
     if (!data) {
         return SDImageFormatUndefined;
     }

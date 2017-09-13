@@ -20,7 +20,7 @@
 #import "FDFileFragment.h"
 #import "FDAutolayoutHelper.h"
 #import "FDParticipant.h"
-#import "UIImageView+WebCache.h"
+#import "FDUIImageView+WebCache.h"
 
 @interface HLAgentMessageCell ()
 
@@ -149,15 +149,15 @@
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
-//        FDWebImageManager *manager = [FDWebImageManager sharedManager];
-//        
-//        [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-//            
-//        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-//            
-//            profileImageView.image = image;
-//            
-//        }];
+        FDWebImageManager *manager = [FDWebImageManager sharedManager];
+        
+        [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            
+        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+            
+            profileImageView.image = image;
+            
+        }];
     }
     
     if(!currentMessage.isWelcomeMessage){

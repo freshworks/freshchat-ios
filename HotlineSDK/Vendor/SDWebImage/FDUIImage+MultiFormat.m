@@ -6,9 +6,9 @@
  * file that was distributed with this source code.
  */
 
-#import "UIImage+MultiFormat.h"
-#import "UIImage+GIF.h"
-#import "NSData+ImageContentType.h"
+#import "FDUIImage+MultiFormat.h"
+#import "FDUIImage+GIF.h"
+#import "FDNSData+ImageContentType.h"
 #import <ImageIO/ImageIO.h>
 
 #ifdef SD_WEBP
@@ -23,7 +23,7 @@
     }
     
     UIImage *image;
-    SDImageFormat imageFormat = [NSData sd_imageFormatForImageData:data];
+    FDImageFormat imageFormat = [NSData sd_imageFormatForImageData:data];
     if (imageFormat == SDImageFormatGIF) {
         image = [UIImage sd_animatedGIFWithData:data];
     }
@@ -120,7 +120,7 @@
     return [self sd_imageDataAsFormat:SDImageFormatUndefined];
 }
 
-- (nullable NSData *)sd_imageDataAsFormat:(SDImageFormat)imageFormat {
+- (nullable NSData *)sd_imageDataAsFormat:(FDImageFormat)imageFormat {
     NSData *imageData = nil;
     if (self) {
 #if SD_UIKIT || SD_WATCH

@@ -46,7 +46,7 @@ typedef void(^SDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, 
 /**
  *  The web image manager
  */
-@property (strong, nonatomic, readonly, nonnull) SDWebImageManager *manager;
+@property (strong, nonatomic, readonly, nonnull) FDWebImageManager *manager;
 
 /**
  * Maximum number of URLs to prefetch at the same time. Defaults to 3.

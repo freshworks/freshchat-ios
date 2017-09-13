@@ -8,11 +8,11 @@
 
 #import "FDImageCache.h"
 #import "FDWebImageDecoder.h"
-#import "UIImage+MultiFormat.h"
+#import "FDUIImage+MultiFormat.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "UIImage+GIF.h"
-#import "NSData+ImageContentType.h"
-#import "NSImage+WebCache.h"
+#import "FDUIImage+GIF.h"
+#import "FDNSData+ImageContentType.h"
+#import "FDNSImage+WebCache.h"
 
 // See https://github.com/rs/SDWebImage/pull/1141 for discussion
 @interface AutoPurgeCache : NSCache
@@ -220,7 +220,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
             @autoreleasepool {
                 NSData *data = imageData;
                 if (!data && image) {
-                    SDImageFormat imageFormatFromData = [NSData sd_imageFormatForImageData:data];
+                    FDImageFormat imageFormatFromData = [NSData sd_imageFormatForImageData:data];
                     data = [image sd_imageDataAsFormat:imageFormatFromData];
                 }                
                 [self storeImageDataToDisk:data forKey:key];

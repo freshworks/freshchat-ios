@@ -10,7 +10,7 @@
 
 @interface FDWebImagePrefetcher ()
 
-@property (strong, nonatomic, nonnull) SDWebImageManager *manager;
+@property (strong, nonatomic, nonnull) FDWebImageManager *manager;
 @property (strong, nonatomic, nullable) NSArray<NSURL *> *prefetchURLs;
 @property (assign, nonatomic) NSUInteger requestedCount;
 @property (assign, nonatomic) NSUInteger skippedCount;
@@ -33,7 +33,7 @@
 }
 
 - (nonnull instancetype)init {
-    return [self initWithImageManager:[SDWebImageManager new]];
+    return [self initWithImageManager:[FDWebImageManager new]];
 }
 
 - (nonnull instancetype)initWithImageManager:(SDWebImageManager *)manager {

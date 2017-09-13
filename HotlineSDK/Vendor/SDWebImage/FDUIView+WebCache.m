@@ -6,12 +6,12 @@
  * file that was distributed with this source code.
  */
 
-#import "UIView+WebCache.h"
+#import "FDUIView+WebCache.h"
 
 #if SD_UIKIT || SD_MAC
 
 #import "objc/runtime.h"
-#import "UIView+WebCacheOperation.h"
+#import "FDUIView+WebCacheOperation.h"
 
 static char imageURLKey;
 
@@ -51,7 +51,7 @@ static char TAG_ACTIVITY_SHOW;
         }
         
         __weak __typeof(self)wself = self;
-        id <SDWebImageOperation> operation = [SDWebImageManager.sharedManager loadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        id <SDWebImageOperation> operation = [FDWebImageManager.sharedManager loadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             __strong __typeof (wself) sself = wself;
             [sself sd_removeActivityIndicator];
             if (!sself) {

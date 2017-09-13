@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-#import "NSImage+WebCache.h"
+#import "FDNSImage+WebCache.h"
 
 #if SD_MAC
 
