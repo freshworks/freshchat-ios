@@ -161,7 +161,7 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
 @property (weak, nonatomic, nullable) id <SDWebImageManagerDelegate> delegate;
 
 @property (strong, nonatomic, readonly, nullable) FDImageCache *imageCache;
-@property (strong, nonatomic, readonly, nullable) SDWebImageDownloader *imageDownloader;
+@property (strong, nonatomic, readonly, nullable) FDWebImageDownloader *imageDownloader;
 
 /**
  * The cache filter is a block used each time SDWebImageManager need to convert an URL into a cache key. This can
@@ -192,7 +192,7 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
  * Allows to specify instance of cache and image downloader used with image manager.
  * @return new instance of `SDWebImageManager` with specified cache and downloader.
  */
-- (nonnull instancetype)initWithCache:(nonnull FDImageCache *)cache downloader:(nonnull SDWebImageDownloader *)downloader NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithCache:(nonnull FDImageCache *)cache downloader:(nonnull FDWebImageDownloader *)downloader NS_DESIGNATED_INITIALIZER;
 
 /**
  * Downloads the image at the given URL if not present in cache or return the cached version otherwise.

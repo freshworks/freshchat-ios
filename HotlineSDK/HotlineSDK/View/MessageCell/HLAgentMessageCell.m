@@ -80,9 +80,6 @@
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameTextColor];
-//    [senderNameLabel setEditable:NO];
-//    [senderNameLabel setScrollEnabled:NO];
-//    [senderNameLabel setSelectable:NO];
     
     messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
     [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
@@ -151,12 +148,15 @@
         [views setObject:profileImageView forKey:@"profileImageView"];
 //        FDWebImageManager *manager = [FDWebImageManager sharedManager];
 //        
-//        [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+//        [manager loadImageWithURL:[NSURL URLWithString:@"https://www.atomix.com.au/media/2015/06/atomix_user31.png"] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
 //            
 //        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-//            
-//            profileImageView.image = image;
-//            
+//            if(image && finished){
+//                profileImageView.image = image;
+//            }
+//            else{
+//                profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+//            }
 //        }];
     }
     

@@ -21,7 +21,7 @@
 @interface FDWebImageManager ()
 
 @property (strong, nonatomic, readwrite, nonnull) FDImageCache *imageCache;
-@property (strong, nonatomic, readwrite, nonnull) SDWebImageDownloader *imageDownloader;
+@property (strong, nonatomic, readwrite, nonnull) FDWebImageDownloader *imageDownloader;
 @property (strong, nonatomic, nonnull) NSMutableSet<NSURL *> *failedURLs;
 @property (strong, nonatomic, nonnull) NSMutableArray<SDWebImageCombinedOperation *> *runningOperations;
 
@@ -40,11 +40,11 @@
 
 - (nonnull instancetype)init {
     FDImageCache *cache = [FDImageCache sharedImageCache];
-    SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+    FDWebImageDownloader *downloader = [FDWebImageDownloader sharedDownloader];
     return [self initWithCache:cache downloader:downloader];
 }
 
-- (nonnull instancetype)initWithCache:(nonnull FDImageCache *)cache downloader:(nonnull SDWebImageDownloader *)downloader {
+- (nonnull instancetype)initWithCache:(nonnull FDImageCache *)cache downloader:(nonnull FDWebImageDownloader *)downloader {
     if ((self = [super init])) {
         _imageCache = cache;
         _imageDownloader = downloader;

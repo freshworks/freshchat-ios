@@ -94,7 +94,7 @@ typedef SDHTTPHeadersDictionary * _Nullable (^SDWebImageDownloaderHeadersFilterB
 /**
  * Asynchronous downloader dedicated and optimized for image loading.
  */
-@interface SDWebImageDownloader : NSObject
+@interface FDWebImageDownloader : NSObject
 
 /**
  * Decompressing images that are downloaded and cached can improve performance but can consume lot of memory.
