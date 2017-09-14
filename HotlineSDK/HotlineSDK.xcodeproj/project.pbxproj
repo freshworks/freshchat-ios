@@ -128,16 +128,16 @@
 		CE85F5B51E1FAAEA00BAA5A8 /* HLTagManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE85F5B41E1FAAEA00BAA5A8 /* HLTagManager.m */; };
 		CE8BF9091DD5FFB700814009 /* HLTags.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8BF9081DD5FFB700814009 /* HLTags.m */; };
 		CE9053521DD47C4E00F52B5F /* HLCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* HLCsat.m */; };
+		CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */; };
 		CE982B821F261F1600B87A66 /* FCRemoteConfigUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B811F261F1600B87A66 /* FCRemoteConfigUtil.m */; };
 		CE982B871F262D5B00B87A66 /* FCRefreshIntervals.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */; };
 		CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B891F2728B900B87A66 /* FCRemoteConfig.m */; };
-		CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */; };
 		CEA6AC3A1DD94C6D00B60002 /* FDGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */; };
 		CEC95A851E097B44009A1FCD /* HLConversationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC95A841E097B43009A1FCD /* HLConversationUtil.m */; };
-		CECB55221F2A34C20061227E /* FCFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB55211F2A34C20061227E /* FCFeatures.m */; };
+		CECB55221F2A34C20061227E /* FCEnabledFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB55211F2A34C20061227E /* FCEnabledFeatures.m */; };
 		CED138481DB4D55200404686 /* HLCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* HLCSATView.m */; };
 		CED1384B1DB6401D00404686 /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEF51D000E620014867F /* KonotorModel.xcdatamodeld */; };
-		CEF6B9031F3739F000692519 /* FCMiscFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF6B9021F3739F000692519 /* FCMiscFeatures.m */; };
+		CEF6B9031F3739F000692519 /* FCConversationConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF6B9021F3739F000692519 /* FCConversationConfig.m */; };
 		CEFA055A1EE82F2000DC74CF /* FDAudioFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */; };
 		CEFA055B1EE82F2000DC74CF /* FDHtmlFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */; };
 		CEFA055C1EE82F2000DC74CF /* FDVideoFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05591EE82F2000DC74CF /* FDVideoFragment.m */; };
@@ -406,25 +406,25 @@
 		CE8BF9081DD5FFB700814009 /* HLTags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLTags.m; sourceTree = "<group>"; };
 		CE9053501DD47C4E00F52B5F /* HLCsat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCsat.h; sourceTree = "<group>"; };
 		CE9053511DD47C4E00F52B5F /* HLCsat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCsat.m; sourceTree = "<group>"; };
+		CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFileFragment.m; sourceTree = "<group>"; };
 		CE982B811F261F1600B87A66 /* FCRemoteConfigUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRemoteConfigUtil.m; sourceTree = "<group>"; };
 		CE982B851F262D5B00B87A66 /* FCRefreshIntervals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRefreshIntervals.h; sourceTree = "<group>"; };
 		CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRefreshIntervals.m; sourceTree = "<group>"; };
 		CE982B881F2728B900B87A66 /* FCRemoteConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRemoteConfig.h; sourceTree = "<group>"; };
 		CE982B891F2728B900B87A66 /* FCRemoteConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRemoteConfig.m; sourceTree = "<group>"; };
 		CE982B8B1F277A5F00B87A66 /* FCRemoteConfigUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCRemoteConfigUtil.h; sourceTree = "<group>"; };
-		CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFileFragment.m; sourceTree = "<group>"; };
 		CEA6AC381DD94C6D00B60002 /* FDGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDGrowingTextView.h; sourceTree = "<group>"; };
 		CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDGrowingTextView.m; sourceTree = "<group>"; };
 		CEC95A821E0973A5009A1FCD /* ConversationOptionsInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConversationOptionsInterface.h; path = ../FAQControllers/ConversationOptionsInterface.h; sourceTree = "<group>"; };
 		CEC95A831E097B43009A1FCD /* HLConversationUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLConversationUtil.h; sourceTree = "<group>"; };
 		CEC95A841E097B43009A1FCD /* HLConversationUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLConversationUtil.m; sourceTree = "<group>"; };
-		CECB55201F2A34C20061227E /* FCFeatures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCFeatures.h; sourceTree = "<group>"; };
-		CECB55211F2A34C20061227E /* FCFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCFeatures.m; sourceTree = "<group>"; };
+		CECB55201F2A34C20061227E /* FCEnabledFeatures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCEnabledFeatures.h; sourceTree = "<group>"; };
+		CECB55211F2A34C20061227E /* FCEnabledFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCEnabledFeatures.m; sourceTree = "<group>"; };
 		CED138461DB4D55200404686 /* HLCSATView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCSATView.h; sourceTree = "<group>"; };
 		CED138471DB4D55200404686 /* HLCSATView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCSATView.m; sourceTree = "<group>"; };
 		CED1384A1DB63FC100404686 /* KonotorModel 23.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 23.xcdatamodel"; sourceTree = "<group>"; };
-		CEF6B9011F3739F000692519 /* FCMiscFeatures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCMiscFeatures.h; sourceTree = "<group>"; };
-		CEF6B9021F3739F000692519 /* FCMiscFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCMiscFeatures.m; sourceTree = "<group>"; };
+		CEF6B9011F3739F000692519 /* FCConversationConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCConversationConfig.h; sourceTree = "<group>"; };
+		CEF6B9021F3739F000692519 /* FCConversationConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCConversationConfig.m; sourceTree = "<group>"; };
 		CEFA05541EE82F2000DC74CF /* FDAudioFragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FDAudioFragment.h; path = MessageFragments/FDAudioFragment.h; sourceTree = "<group>"; };
 		CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDAudioFragment.m; path = MessageFragments/FDAudioFragment.m; sourceTree = "<group>"; };
 		CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FDHtmlFragment.m; path = MessageFragments/FDHtmlFragment.m; sourceTree = "<group>"; };
@@ -531,10 +531,10 @@
 				CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */,
 				CE982B881F2728B900B87A66 /* FCRemoteConfig.h */,
 				CE982B891F2728B900B87A66 /* FCRemoteConfig.m */,
-				CEF6B9011F3739F000692519 /* FCMiscFeatures.h */,
-				CEF6B9021F3739F000692519 /* FCMiscFeatures.m */,
-				CECB55201F2A34C20061227E /* FCFeatures.h */,
-				CECB55211F2A34C20061227E /* FCFeatures.m */,
+				CEF6B9011F3739F000692519 /* FCConversationConfig.h */,
+				CEF6B9021F3739F000692519 /* FCConversationConfig.m */,
+				CECB55201F2A34C20061227E /* FCEnabledFeatures.h */,
+				CECB55211F2A34C20061227E /* FCEnabledFeatures.m */,
 				CE982B8B1F277A5F00B87A66 /* FCRemoteConfigUtil.h */,
 				CE982B811F261F1600B87A66 /* FCRemoteConfigUtil.m */,
 				35B2EEDC1D000E620014867F /* HotlineSDK-Prefix.pch */,
@@ -1048,7 +1048,7 @@
 				C5D4ED9D1E574B5C00E121B4 /* FDLocaleUtil.m in Sources */,
 				35B2EF901D000E620014867F /* Konotor.m in Sources */,
 				CE39CF721DCB694300A46660 /* HLControllerUtils.m in Sources */,
-				CEF6B9031F3739F000692519 /* FCMiscFeatures.m in Sources */,
+				CEF6B9031F3739F000692519 /* FCConversationConfig.m in Sources */,
 				356727E01D216842007ECF89 /* FDLocalNotification.m in Sources */,
 				35D4E8171D118E9000EFFE07 /* HLArticlesController.m in Sources */,
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
@@ -1089,7 +1089,7 @@
 				35B2EFBE1D000E620014867F /* FDSearchBar.m in Sources */,
 				35B2EFB61D000E620014867F /* HotlineAppState.m in Sources */,
 				35D4E8161D118E9000EFFE07 /* HLArticleDetailViewController.m in Sources */,
-				CECB55221F2A34C20061227E /* FCFeatures.m in Sources */,
+				CECB55221F2A34C20061227E /* FCEnabledFeatures.m in Sources */,
 				35B2EFC21D000E620014867F /* FDNotificationBanner.m in Sources */,
 				CE85F5B51E1FAAEA00BAA5A8 /* HLTagManager.m in Sources */,
 				CE0FDB171EF10E4000E686BE /* FragmentData.m in Sources */,

@@ -15,7 +15,7 @@
 
 @property(nonatomic, strong) FCRemoteConfig *remoteConfig;
 
--(void)updateFeaturesConfig:(FCFeatures *)features;
+-(void)updateFeaturesConfig:(FCEnabledFeatures *)features;
 + (BOOL) isAccountActive;
 + (BOOL) isFAQEnabled;
 + (BOOL) isInboxEnabled;

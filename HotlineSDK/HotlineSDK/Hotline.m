@@ -130,7 +130,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     HotlineConfig *processedConfig = [self processConfig:config];
     
     self.config = processedConfig;
-    [self initRemoteConfig];
     if ([self hasUpdatedConfig:processedConfig]) {
         [self cleanUpData:^{
             [self updateConfig:processedConfig andRegisterUser:completion];
@@ -139,16 +138,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     else {
         [self updateConfig:processedConfig andRegisterUser:completion];
     }
-}
-
-- (void) initRemoteConfig {
-    
-    FCRemoteConfigUtil *rc = [[FCRemoteConfigUtil alloc] init];
-    FCFeatures *feature = [[FCFeatures alloc] init];
-    rc.remoteConfig.activeConvFetchBackoffRatio = 1.75;
-    
-        [rc updateFeaturesConfig:feature];
-    
 }
 
 -(HotlineConfig *)processConfig:(HotlineConfig *)config{

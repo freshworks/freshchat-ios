@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FCMiscFeatures : NSObject
+@interface FCConversationConfig : NSObject
 
 @property (nonatomic, assign) BOOL showAgentAvatars;
-@property (nonatomic, assign) BOOL showRealAgentAvatars;
+@property (nonatomic, assign) float activeConvFetchBackoffRatio;
+//@property (nonatomic, assign) BOOL showRealAgentAvatars;
 @property (nonatomic, assign) BOOL launchDeeplinkFromNotification;
 
 -(id) init;

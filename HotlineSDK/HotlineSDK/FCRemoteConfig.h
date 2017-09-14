@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "FCRefreshIntervals.h"
-#import "FCFeatures.h"
+#import "FCEnabledFeatures.h"
 
 @interface FCRemoteConfig : NSObject
 
 @property (nonatomic, assign) BOOL accountActive;
 @property (nonatomic, assign) long sessionDuration;
 @property (nonatomic, assign) long activeConvWindow;
-@property (nonatomic, assign) float activeConvFetchBackoffRatio;
+
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
-@property (nonatomic, strong) FCFeatures *features;
+@property (nonatomic, strong) FCEnabledFeatures *features;
 
 @end

@@ -20,7 +20,7 @@
     return self;
 }
 
--(void)updateFeaturesConfig:(FCFeatures *)features{
+-(void)updateFeaturesConfig:(FCEnabledFeatures *)features{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (features) {
         [store setBoolValue:features.isFAQEnabled forKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
@@ -30,9 +30,8 @@
         [store setBoolValue:features.isUserEventsEnabled forKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
         [store setBoolValue:features.isAOTUserCreateEnabled forKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
         [store setBoolValue:features.showCustomBrandBanner forKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
-        [store setBoolValue:features.miscfeatures.showAgentAvatars forKey:FRESHCHAT_CONFIG_RC_SHOW_AGENT_AVATAR];
-        [store setBoolValue:features.miscfeatures.showRealAgentAvatars forKey:FRESHCHAT_CONFIG_RC_SHOW_REAL_AGENT_AVATAR];
-        [store setBoolValue:features.miscfeatures.launchDeeplinkFromNotification forKey:FRESHCHAT_CONFIG_RC_LAUNCH_DEEPLINK_NOTIFICATION];
+        [store setBoolValue:features.conversationConfig.showAgentAvatars forKey:FRESHCHAT_CONFIG_RC_SHOW_AGENT_AVATAR];
+        [store setBoolValue:features.conversationConfig.launchDeeplinkFromNotification forKey:FRESHCHAT_CONFIG_RC_LAUNCH_DEEPLINK_NOTIFICATION];
     }
 }
 
@@ -99,6 +98,10 @@
 
 + (long) setChannelsFetchIntervalLaidback {
     return ([HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK]);
+}
+
++ (long) setResponseTimeExpectationsFetchInterval{
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]);
 }
 
 + (int) getActiveConvWindow {

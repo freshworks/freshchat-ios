@@ -16,9 +16,10 @@
         self.accountActive = YES;
         self.sessionDuration = 30 * ONE_MINUTE_IN_MS;
         self.activeConvWindow = 3 * ONE_DAY_IN_MS;
-        self.activeConvFetchBackoffRatio = 1.25;
+        
+        
         self.refreshIntervals = [[FCRefreshIntervals alloc] init];
-        self.features = [[FCFeatures alloc] init];
+        self.features = [[FCEnabledFeatures alloc] init];
     }
     return self;
 }
@@ -54,16 +55,7 @@
     [HLUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
 }
 
-- (double) getActiveConvFetchBackoffRatio{
-    
-    return self.activeConvFetchBackoffRatio;
-}
 
-- (void) setActiveConvFetchBackoffRatio:(float)activeConvFetchBackoffRatio{
-    
-    [HLUserDefaults setFloat:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
-    _activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
-}
 
 - (FCRefreshIntervals *) getRefreshIntervals{
     
@@ -74,11 +66,11 @@
     _refreshIntervals = refreshIntervals;
 }
 
-- (void) setFeatures:(FCFeatures *)features{
+- (void) setFeatures:(FCEnabledFeatures *)features{
     _features = features;
 }
 
-- (FCFeatures *) getFeatures {
+- (FCEnabledFeatures *) getFeatures {
     return self.features;
 }
 

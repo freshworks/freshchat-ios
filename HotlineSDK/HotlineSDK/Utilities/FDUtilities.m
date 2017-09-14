@@ -318,6 +318,19 @@ static NSInteger networkIndicator = 0;
     return [noEmptyTags valueForKey:@"lowercaseString"];
 }
 
++(BOOL) canMakeRemoteConfigCall {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    if(![HLUserDefaults getObjectForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]){
+        return  true;
+    }
+//    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]];
+//    FDLog(@"Time interval b/w dates %f", interval);
+//    if(interval > SESSION_UPDATE_INTERVAL){
+//        return true;
+//    }
+    return false;
+}
+
 +(BOOL) containsHTMLContent: (NSString *)content {
     if ((([FDUtilities containsString:content andTarget:@"<b>"]) && ([FDUtilities containsString:content andTarget:@"</b>"]))
     || (([FDUtilities containsString:content andTarget:@"<i>"]) && ([FDUtilities containsString:content andTarget:@"</i>"]))

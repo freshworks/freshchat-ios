@@ -30,6 +30,8 @@
 @property (nonatomic, assign) long channelsFetchIntervalNormal;
 @property (nonatomic, assign) long channelsFetchIntervalLaidback;
 
+@property (nonatomic, assign) long responseTimeExpectationsFetchInterval; //TODO :
+
 - (instancetype)init;
 
 @end

@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FCMiscFeatures.h"
+#import "FCConversationConfig.h"
 
-@interface FCFeatures : NSObject
+@interface FCEnabledFeatures : NSObject
 
 //FAQ, INBOX, AUTO_CAMPAIGNS, MANUAL_CAMPAIGNS, USER_EVENTS, AOT_USER_CREATE, CUSTOM_BRAND_BANNER
 
@@ -20,6 +20,6 @@
 @property (nonatomic, assign) BOOL isUserEventsEnabled;
 @property (nonatomic, assign) BOOL isAOTUserCreateEnabled;
 @property (nonatomic, assign) BOOL showCustomBrandBanner;
-@property (nonatomic, strong) FCMiscFeatures *miscfeatures;
+@property (nonatomic, strong) FCConversationConfig *conversationConfig;
 
 @end

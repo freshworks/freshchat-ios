@@ -6,9 +6,9 @@
 //  Copyright © 2017 Freshdesk. All rights reserved.
 //
 
-#import "FCFeatures.h"
+#import "FCEnabledFeatures.h"
 
-@implementation FCFeatures
+@implementation FCEnabledFeatures
 
 -(instancetype)init{
     self = [super init];
@@ -20,7 +20,7 @@
         self.isUserEventsEnabled = NO;
         self.isAOTUserCreateEnabled = NO;
         self.showCustomBrandBanner = YES;
-        self.miscfeatures = [[FCMiscFeatures alloc] init];
+        self.conversationConfig = [[FCConversationConfig alloc] init];
     }
     return self;
 }
@@ -81,12 +81,12 @@
     return self.showCustomBrandBanner;
 }
 
-- (void) setMiscfeatures:(FCMiscFeatures *)miscfeatures{
-    _miscfeatures = miscfeatures;
+- (void) setConversationConfig:(FCConversationConfig *)conversationConfig{
+    _conversationConfig = conversationConfig;
 }
 
-- (FCMiscFeatures *) getMiscfeatures {
-    return self.miscfeatures;
+- (FCConversationConfig *) getConversationConfig {
+    return self.conversationConfig;
 }
 
 @end

@@ -6,16 +6,17 @@
 //  Copyright © 2017 Freshdesk. All rights reserved.
 //
 
-#import "FCMiscFeatures.h"
+#import "FCConversationConfig.h"
+#import "HLUserDefaults.h"
 
-@implementation FCMiscFeatures
+@implementation FCConversationConfig
 
 -(instancetype)init{
     self = [super init];
     if (self) {
         self.showAgentAvatars = YES;
-        self.showRealAgentAvatars = YES;
         self.launchDeeplinkFromNotification = YES;
+        self.activeConvFetchBackoffRatio = 1.25;
     }
     return self;
 }
@@ -30,14 +31,15 @@
     return self.showAgentAvatars;
 }
 
-- (void) setShowRealAgentAvatars:(BOOL)showRealAgentAvatars {
+- (double) getActiveConvFetchBackoffRatio{
     
-    _showRealAgentAvatars = showRealAgentAvatars;
+    return self.activeConvFetchBackoffRatio;
 }
 
-- (BOOL) getshowRealAgentAvatars {
+- (void) setActiveConvFetchBackoffRatio:(float)activeConvFetchBackoffRatio{
     
-    return self.showRealAgentAvatars;
+    [HLUserDefaults setFloat:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    _activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
 
 - (void) setLaunchDeeplinkFromNotification:(BOOL)launchDeeplinkFromNotification{

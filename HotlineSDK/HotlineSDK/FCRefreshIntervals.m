@@ -28,6 +28,8 @@
         
         self.channelsFetchIntervalNormal = 5 * ONE_MINUTE_IN_MS;
         self.channelsFetchIntervalLaidback = 2 * ONE_DAY_IN_MS;
+        
+        self.responseTimeExpectationsFetchInterval = 5 * ONE_MINUTE_IN_MS;
     }
     return self;
 }
@@ -129,6 +131,16 @@
     
     _channelsFetchIntervalLaidback = channelsFetchIntervalLaidback;
     [HLUserDefaults setObject:[NSNumber numberWithLong:channelsFetchIntervalLaidback] forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];
+}
+
+- (long) getResponseTimeExpectationsFetchInterval : (long) responseTimeExpectationsFetchInterval{
+    return self.responseTimeExpectationsFetchInterval;
+}
+
+- (void) setResponseTimeExpectationsFetchInterval:(long)responseTimeExpectationsFetchInterval{
+    _responseTimeExpectationsFetchInterval = responseTimeExpectationsFetchInterval;
+    [HLUserDefaults setObject:[NSNumber numberWithLong:responseTimeExpectationsFetchInterval] forKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
+    
 }
 
 @end
