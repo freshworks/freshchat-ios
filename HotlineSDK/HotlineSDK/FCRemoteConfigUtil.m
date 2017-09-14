@@ -100,6 +100,10 @@
     return ([HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK]);
 }
 
++ (long) getResponseTimeExpectationsFetchInterval {
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]);
+}
+
 + (long) setResponseTimeExpectationsFetchInterval{
     return ([HLUserDefaults getLongForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]);
 }

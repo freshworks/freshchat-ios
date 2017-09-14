@@ -45,6 +45,8 @@
 +(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
 + (BOOL) canMakeSessionCall;
 + (BOOL) canMakeDAUCall;
++ (BOOL) canMakeRemoteConfigCall;
++ (BOOL) canMakeTypicallyRepliesCall;
 +(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
 
 @end

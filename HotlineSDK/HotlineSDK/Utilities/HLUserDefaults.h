@@ -34,9 +34,13 @@
 #define CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL @"config_rc_msg_fetch_interval_normal"
 
 #define CONFIG_RC_ENABLE_FEATURES @"config_rc_enable_features"
+
 #define CONFIG_RC_API_FETCH_INTERVAL @"config_rc_api_fetch_interval"
+#define CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME @"config_rc_last_api_fetch_interval_time"
 
 #define CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_response_time_expectations_fetch_interval"
+#define CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_last_response_time_expectation_fetch_interval"
+
 
 @interface HLUserDefaults : NSObject
 

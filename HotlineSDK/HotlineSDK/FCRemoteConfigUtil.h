@@ -45,4 +45,6 @@
 
 + (BOOL) isActiveConvAvailable;
 
++ (long) getResponseTimeExpectationsFetchInterval;
+
 @end

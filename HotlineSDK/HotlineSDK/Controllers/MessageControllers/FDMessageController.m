@@ -11,7 +11,7 @@
 #import "HLAgentMessageCell.h"
 #import "HLUserMessageCell.h"
 #import "KonotorImageInput.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "KonotorMessage.h"
 #import "Message.h"
 #import "Konotor.h"
@@ -289,7 +289,13 @@ typedef struct {
         }
     }];
     [self.messagesPoller begin];
-    [self fetchTypicalRepliesIn];
+    if([FDUtilities canMakeTypicallyRepliesCall]){
+        [self fetchTypicalRepliesIn];
+    }
+    else{
+        //[self showTypicalReply:];
+        //save typically replies time here
+    }
 }
 
 -(void)fetchTypicalRepliesIn{
