@@ -31,7 +31,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"taggableID == %@ AND taggableType == %@", tagId, type];
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
-    if(matches.count){
+    if(matches.count > 0){
         for (HLTags *object in matches) {
             [context deleteObject:object];
         }

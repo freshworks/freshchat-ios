@@ -9,6 +9,7 @@
 #import "FDMessagesUpdater.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
+#import "HLUser.h"
 
 @interface FDMessagesUpdater()
 
@@ -26,7 +27,12 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
+    if([HLUser isUserRegistered]){
+        [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
+    }
+    else{
+        completion(nil);
+    }
 }
 
 - (void) resetTime{
