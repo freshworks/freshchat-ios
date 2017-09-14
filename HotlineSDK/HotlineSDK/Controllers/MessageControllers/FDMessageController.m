@@ -207,7 +207,7 @@ typedef struct {
 }
 
 -(void) showTypicalReply:(NSInteger) time {
-    self.typicalReply.text = [NSString stringWithFormat:@"Typically replies in %ld miniutes.", (long)time];
+    self.typicalReply.text = [FDUtilities typicalRepliesMsgForTime:time];
     [UIView animateWithDuration:0.5 animations:^{
         self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
         self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, self.titleHeight/3);

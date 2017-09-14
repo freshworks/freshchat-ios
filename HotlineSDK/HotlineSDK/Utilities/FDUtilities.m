@@ -21,6 +21,7 @@
 #import "FDLocalNotification.h"
 #import "HLUserDefaults.h"
 #import "HLConstants.h"
+#import "HLLocalization.h"
 
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
@@ -218,6 +219,29 @@ static NSInteger networkIndicator = 0;
                           nil];
     [alert show];
     return;
+}
+
++(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec{
+    float minutes = timeInSec/60;
+    if (minutes < 1) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN);
+    }else if (minutes < 55) {
+        int min;
+        if (minutes < 10) {
+            // If < 10 minutes
+            min = (int) ceil(minutes);
+        } else {
+            // If < 55 minutes, round off to factor of 5
+            min = (int) ceil(minutes / 5) * 5;
+        }
+        return [NSString stringWithFormat: @"%@ %d %@",LOC_TYPICALLY_REPLIES_WITHIN_MIN, min,LOC_PLACEHOLDER_MINS];
+    } else if (minutes < 60) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
+    } else if (minutes < 120) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR);
+    } else {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS);
+    }
 }
 
 + (NSString*)convertIntoMD5 :(NSString *) str
