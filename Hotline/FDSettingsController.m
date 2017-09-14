@@ -212,7 +212,7 @@
         case 0:
             [[Hotline sharedInstance]clearUserDataWithCompletion:^{
                 [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
-                //[[Hotline sharedInstance]initWithConfig:config];
+                [[Hotline sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
             break;
@@ -236,11 +236,12 @@
 
 -(void)testNotification:(id)sender{
     [[Hotline sharedInstance] handleRemoteNotification:@{
-                                                                  @"kon_c_ch_id" : @200,
+                                                                  @"channel_id" : @200,
                                                                       @"aps" : @{
-                                                                          @"alert" : @"Sample Test Message"
+                                                                          @"alert" :  @{ @"body" : @"Sample Test Message"
+                                                                                        }
                                                                           },
-                                                                  @"source" : @"konotor"
+                                                                  @"source" : @"freshchat_user"
                                                                   }
                                                     andAppstate:UIApplicationStateActive];
          }

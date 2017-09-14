@@ -32,6 +32,9 @@
     if([FCRemoteConfigUtil isActiveInboxAndAccount] && [HLUser isUserRegistered]){
         [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
     }
+    else{
+        completion(nil);
+    }
 }
 
 - (void) resetTime{

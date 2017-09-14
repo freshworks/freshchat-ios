@@ -104,6 +104,13 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_CUST_SAT_SUBMIT_BUTTON_TEXT @"cust_sat_submit_button_text"
 #define LOC_CUST_SAT_NOT_RESOLVED_PROMPT @"cust_sat_not_resolved_prompt"
 
+#define LOC_TYPICALLY_REPLIES_WITHIN_MIN  @"typically_replies_within_a_minute"
+#define LOC_TYPICALLY_REPLIES_WITHIN_X_MIN @"typically_replies_within_x_minutes"
+#define LOC_TYPICALLY_REPLIES_WITHIN_HOUR @"typically_replies_within_an_hour"
+#define LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR @"typically_replies_within_2_hours"
+#define LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS @"typically_replies_within_few_hours"
+#define LOC_PLACEHOLDER_MINS @"placeholder_minutes"
+
 @interface HLLocalization : NSObject
 
 +(NSString *)localize:(NSString *)key;

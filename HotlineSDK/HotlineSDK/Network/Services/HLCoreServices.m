@@ -266,28 +266,70 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
-    if(![HLUser isUserRegistered]){
-        return nil;
-    }
-    
++(NSURLSessionDataTask *)performDAUCall{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *userAlias = [[FDUtilities currentUserAlias] length] ? [FDUtilities currentUserAlias] : [FDUtilities getUserAliasWithCreate];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_DAU_PATH,appID,userAlias];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
-    [request setRelativePath:path andURLParams:@[appKey]];
+    [request setRelativePath:path andURLParams:@[appKey,@"source=MOBILE"]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"**** DAU call made ****");
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"**** DAU call made ****");
+            }
         }else{
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
-        if(completion){
-            completion(error);
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)performSessionCall{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_SESSION_PATH,appID,userAlias];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"**** Session call made ****");
+            }
+        }else{
+            FDLog(@"Could not make Session call %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
+        }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)performHeartbeatCall{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_HEARTBEAT_PATH,appID,userAlias];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"**** heartbeat call done ****");
+            }
+        }else{
+            FDLog(@"Could not make Session call %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
         }
     }];
     return task;
@@ -419,6 +461,28 @@
         if(completion){
             completion(error);
         }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FDResponseInfo *responseInfo, NSError *error))handler {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_TYPLICAL_REPLY,appID];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if (!error) {
+            if (statusCode == 200) {
+                if (handler) handler(responseInfo,nil);
+            } else{
+                if (handler) handler(responseInfo,[NSError new]);
+            }
+        }
+        if (handler) handler(responseInfo,error);
     }];
     return task;
 }

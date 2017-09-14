@@ -16,7 +16,11 @@
 
 
 +(NSNumber *)getContentLocaleId{
-    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_CONTENT_LOCALEID];
+    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_FAQ_LOCALEID];
+}
+
++(NSNumber *) getConvLocaleId{
+    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_CONV_LOCALEID];
 }
 
 +(NSString *)getUserLocale{
@@ -39,13 +43,32 @@
     return params;
 }
 
++ (NSArray *) channelLocaleParams{
+    NSString *localLocale = [self getLocalLocale];
+    NSMutableArray *params = [[NSMutableArray alloc]init];
+    [params addObject:[NSString stringWithFormat:PARAM_LOCALE,localLocale]];
+    NSNumber *defaultLocaleId = [FDLocaleUtil getConvLocaleId];
+    if(!defaultLocaleId){
+        defaultLocaleId = [NSNumber numberWithInt:0];
+    }
+    [params addObject:[NSString stringWithFormat:PARAM_LAST_LOCALEID,defaultLocaleId]];
+    return params;
+}
+
 +(NSString *)getLocalLocale{
     NSString *locale = [[NSLocale preferredLanguages] objectAtIndex:0]; //Current configured Locale
     return locale;
 }
 
-+(void)updateLocale:(NSString *)locale {
++(void)updateLocaleWith:(NSString *)locale {
     [HLUserDefaults setObject:locale forKey:HOTLINE_DEFAULTS_CONTENT_LOCALE];
+}
+
++ (void)updateLocale{
+    if([self hadLocaleChange]) {
+        NSString *localLocale = [FDLocaleUtil getLocalLocale];
+        [FDLocaleUtil updateLocaleWith:localLocale];
+    }
 }
 
 +(BOOL)hadLocaleChange {

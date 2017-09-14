@@ -44,6 +44,7 @@
 #import "HLMessagePoller.h"
 #import "FCRemoteConfigUtil.h"
 #import "HLUser.h"
+#import "HLCoreServices.h"
 
 typedef struct {
     BOOL isLoading;
@@ -94,6 +95,12 @@ typedef struct {
 @property (nonatomic, strong) UIView *bannerMessageView;
 @property (nonatomic, strong) NSArray *viewVerticalConstraints;
 @property (nonatomic, strong) NSDictionary *views;
+@property (nonatomic, strong) UIView *titleView;
+@property (nonatomic, strong) UILabel *channelName;
+@property (nonatomic, strong) UILabel *typicalReply;
+@property (nonatomic) NSInteger titleWidth;
+@property (nonatomic) NSInteger titleHeight;
+
 
 @end
 
@@ -157,11 +164,64 @@ typedef struct {
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
+    [self setNavigationTitle:parent];
     [self scrollTableViewToLastCell];
     [self.tableView setHidden:true];
     [HLMessageServices fetchChannelsAndMessagesWithFetchType:ScreenLaunchFetch source:ChatScreen andHandler:nil];
     [Message markAllMessagesAsReadForChannel:self.channel];
     [self prepareInputToolbar];
+}
+
+-(void) setNavigationTitle:(UIViewController *)parent {
+    
+    UIBarButtonItem *left = parent.navigationItem.leftBarButtonItem;
+    UIView *view = [left valueForKey:@"view"];
+    UIImage *image = [left valueForKey:@"image"];
+    CGFloat leftBarButtonWidth = 0.0;
+    if(view){
+        leftBarButtonWidth=[view frame].size.width;
+    }
+    
+    if(image) {
+        leftBarButtonWidth= 30;
+    }
+    
+    self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (3 * leftBarButtonWidth);
+    self.titleHeight = parent.navigationController.navigationBar.frame.size.height;
+    
+    self.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.titleWidth, self.titleHeight)];
+    self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, self.titleWidth, self.titleHeight - 2)];
+    self.typicalReply = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0)];
+    self.typicalReply.alpha = 0;
+    self.channelName.textAlignment = UITextAlignmentCenter;
+    self.channelName.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    self.channelName.font = [self.channelName.font fontWithSize:18];
+    self.channelName.text = self.channel.name;
+    [self.titleView addSubview:self.channelName];
+    
+    self.typicalReply.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    self.typicalReply.font = [self.typicalReply.font fontWithSize:12];
+    self.typicalReply.textAlignment = UITextAlignmentCenter;
+    [self.titleView addSubview:self.typicalReply];
+    
+    parent.navigationItem.titleView = self.titleView;
+}
+
+-(void) showTypicalReply:(NSInteger) time {
+    self.typicalReply.text = [FDUtilities typicalRepliesMsgForTime:time];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
+        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, self.titleHeight/3);
+        self.typicalReply.alpha = 1;
+    }];
+}
+
+-(void) hideTypicalReply {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - 2);
+        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0);
+        self.typicalReply.alpha = 1;
+    }];
 }
 
 -(void)prepareInputToolbar{
@@ -229,6 +289,29 @@ typedef struct {
         }
     }];
     [self.messagesPoller begin];
+    [self fetchTypicalRepliesIn];
+}
+
+-(void)fetchTypicalRepliesIn{
+    [HLCoreServices fetchTypicalReply:^(FDResponseInfo *responseInfo, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(!error) {
+                NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
+                if(channelsInfo[@"channelResponseTime"] != nil) {
+                    NSArray *convArr = channelsInfo[@"channelResponseTime"];
+                    for (int i = 0; i < [convArr count]; i++) {
+                        NSDictionary* item = [convArr objectAtIndex:i];
+                        if ([item[@"channelId"] integerValue] == [self.channel.channelID integerValue]) {
+                            [self showTypicalReply:[item[@"responseTime"] integerValue]];
+                            break;
+                        }
+                    }
+                }
+            } else {
+                [self hideTypicalReply];
+            }
+        });
+    }];
 }
 
 

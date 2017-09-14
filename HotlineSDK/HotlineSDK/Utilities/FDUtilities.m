@@ -20,6 +20,9 @@
 #import "HLCoreServices.h"
 #import "FDLocalNotification.h"
 #import "FCRemoteConfigUtil.h"
+#import "HLUserDefaults.h"
+#import "HLConstants.h"
+#import "HLLocalization.h"
 
 #define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
 
@@ -215,6 +218,29 @@ static NSInteger networkIndicator = 0;
     return;
 }
 
++(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec{
+    float minutes = timeInSec/60;
+    if (minutes < 1) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN);
+    }else if (minutes < 55) {
+        int min;
+        if (minutes < 10) {
+            // If < 10 minutes
+            min = (int) ceil(minutes);
+        } else {
+            // If < 55 minutes, round off to factor of 5
+            min = (int) ceil(minutes / 5) * 5;
+        }
+        return [NSString stringWithFormat: @"%@ %d %@",LOC_TYPICALLY_REPLIES_WITHIN_MIN, min,LOC_PLACEHOLDER_MINS];
+    } else if (minutes < 60) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
+    } else if (minutes < 120) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR);
+    } else {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS);
+    }
+}
+
 + (NSString*)convertIntoMD5 :(NSString *) str
 {
     // Create pointer to the string as UTF8
@@ -329,6 +355,35 @@ static NSInteger networkIndicator = 0;
 //        return true;
 //    }
     return false;
+}
+
++(BOOL) canMakeSessionCall {
+    if(![HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
+        return  true;
+    }
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
+    FDLog(@"Time interval b/w dates %f", interval);
+    if(interval > SESSION_UPDATE_INTERVAL){
+        return true;
+    }
+    return false;
+}
+
++(BOOL) canMakeDAUCall {
+    NSDate *currentdate = [NSDate date];
+    NSDate *lastFetchDate = [NSDate dateWithTimeIntervalSince1970:[[[FDSecureStore sharedInstance] objectForKey: HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME] doubleValue]/1000];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
+    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
+    NSComparisonResult result;
+    result = [currentdate compare:lastFetchDate];
+    if(result == NSOrderedDescending){//date comparision, current should be greater than
+        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+            return true;
+        }
+    }
+    return 0;
 }
 
 +(BOOL) containsHTMLContent: (NSString *)content {

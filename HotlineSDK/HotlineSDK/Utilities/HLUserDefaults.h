@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-#define HOTLINE_DEFAULTS_CONTENT_LOCALEID @"hotline_defaults_content_localeid"
+#define HOTLINE_DEFAULTS_FAQ_LOCALEID @"hotline_defaults_faq_localeid"
+#define HOTLINE_DEFAULTS_CONV_LOCALEID @"hotline_defaults_conv_localeid"
 #define HOTLINE_DEFAULTS_CONTENT_LOCALE @"hotline_defaults_content_locale"
 #define HOTLINE_DEFAULTS_IS_USER_DEFERED @"hotline_defaults_is_user_defered"
 #define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"
+#define FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME @"freshchat_defaults_session_updated_time"
 
 #define CONFIG_RC_ACTIVE_CONV_WINDOW @"config_rc_active_conv_window"
 #define CONFIG_RC_SESSION_DURATION_SECS @"config_rc_session_duration_secs"
