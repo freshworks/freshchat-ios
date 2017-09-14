@@ -368,7 +368,7 @@ static NSInteger networkIndicator = 0;
 + (BOOL) canMakeTypicallyRepliesCall {
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1970:( [FCRemoteConfigUtil getResponseTimeExpectationsFetchInterval]/ 1000.0)]];
     
-    if((interval*1000) > [CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL doubleValue]){
+    if(interval > [CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL doubleValue]){
         return true;
     }
     return false;

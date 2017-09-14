@@ -11,7 +11,7 @@
 #import "HLAgentMessageCell.h"
 #import "HLUserMessageCell.h"
 #import "KonotorImageInput.h"
-#import "Freshchat.h"
+#import "Hotline.h"
 #import "KonotorMessage.h"
 #import "Message.h"
 #import "Konotor.h"
@@ -289,12 +289,11 @@ typedef struct {
         }
     }];
     [self.messagesPoller begin];
-    if([FDUtilities canMakeTypicallyRepliesCall]){
+    if([FDUtilities canMakeTypicallyRepliesCall] ){
         [self fetchTypicalRepliesIn];
     }
-    else{
-        //[self showTypicalReply:];
-        //save typically replies time here
+    else if ([HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]){
+        [self showTypicalReply:[HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]];
     }
 }
 
@@ -302,6 +301,7 @@ typedef struct {
     [HLCoreServices fetchTypicalReply:^(FDResponseInfo *responseInfo, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if(!error) {
+                [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
                 NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
                 if(channelsInfo[@"channelResponseTime"] != nil) {
                     NSArray *convArr = channelsInfo[@"channelResponseTime"];
@@ -309,6 +309,7 @@ typedef struct {
                         NSDictionary* item = [convArr objectAtIndex:i];
                         if ([item[@"channelId"] integerValue] == [self.channel.channelID integerValue]) {
                             [self showTypicalReply:[item[@"responseTime"] integerValue]];
+                            [HLUserDefaults setIntegerValue:[item[@"responseTime"] integerValue] forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
                             break;
                         }
                     }

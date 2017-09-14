@@ -433,7 +433,7 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)fetchRemoreConfigWithCompletion:(void (^)(NSError *))completion{
++(NSURLSessionDataTask *)fetchRemoreConfig{
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -457,9 +457,6 @@
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);
-        }
-        if(completion){
-            completion(error);
         }
     }];
     return task;

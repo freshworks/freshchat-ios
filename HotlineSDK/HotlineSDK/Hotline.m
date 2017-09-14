@@ -365,6 +365,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
 }
 
+- (void) updateLastFetchRemoteConfigInterval{
+    [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
+}
+
 -(void) updateLocaleMeta {
     if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
@@ -381,6 +385,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([FDUtilities hasInitConfig]) {
         if([FDUtilities canMakeDAUCall]){
             [HLCoreServices performDAUCall];
+        }
+        if([FDUtilities canMakeRemoteConfigCall]){
+            [HLCoreServices fetchRemoreConfig];
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){

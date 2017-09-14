@@ -26,6 +26,8 @@
 
 +(void)uploadUnuploadedProperties;
 
++(NSURLSessionDataTask *)fetchRemoreConfig;
+
 +(NSURLSessionDataTask *)performHeartbeatCall;
 
 +(void)sendLatestUserActivity:(HLChannel *)channel;

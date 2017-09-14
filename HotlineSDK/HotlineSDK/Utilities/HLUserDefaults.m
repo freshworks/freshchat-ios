@@ -89,6 +89,17 @@
     return [defaults stringForKey:key];
 }
 
++ (void) setIntegerValue : (NSInteger)value forKey : (NSString *) key{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setInteger:value forKey:key];
+    [defaults synchronize];
+}
+
++ (NSInteger) getIntegerForKey : (NSString *) key{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults integerForKey:key];
+}
+
 +(void)clearUserDefaults {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     NSArray * defaultsKey = @[HOTLINE_DEFAULTS_FAQ_LOCALEID, HOTLINE_DEFAULTS_CONTENT_LOCALE, HOTLINE_DEFAULTS_CONV_LOCALEID, FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];

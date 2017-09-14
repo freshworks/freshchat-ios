@@ -40,7 +40,7 @@
 
 #define CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_response_time_expectations_fetch_interval"
 #define CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_last_response_time_expectation_fetch_interval"
-
+#define FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE @"freshchat_response_time_expectation_value"
 
 @interface HLUserDefaults : NSObject
 
@@ -61,6 +61,9 @@
 
 + (void) setLong : (long) value forKey : (NSString *) key;
 + (long) getLongForKey : (NSString *) key;
+
++ (void) setIntegerValue : (NSInteger)value forKey : (NSString *) key;
++ (NSInteger) getIntegerForKey : (NSString *) key;
 
 + (void) setArray : (NSMutableArray *)array forKey : (NSString *)key;
 
