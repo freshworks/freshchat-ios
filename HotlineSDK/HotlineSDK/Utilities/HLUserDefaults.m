@@ -63,7 +63,7 @@
 
 +(void)clearUserDefaults {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    NSArray * defaultsKey = @[HOTLINE_DEFAULTS_FAQ_LOCALEID, HOTLINE_DEFAULTS_CONTENT_LOCALE, HOTLINE_DEFAULTS_CONV_LOCALEID];
+    NSArray * defaultsKey = @[HOTLINE_DEFAULTS_FAQ_LOCALEID, HOTLINE_DEFAULTS_CONTENT_LOCALE, HOTLINE_DEFAULTS_CONV_LOCALEID, FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
     for (NSString* key in defaultsKey) {
         [defaults removeObjectForKey:key];
     }

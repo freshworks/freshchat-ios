@@ -43,7 +43,8 @@
 
 +(BOOL) containsHTMLContent: (NSString *)content;
 +(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
-
++ (BOOL) canMakeSessionCall;
++ (BOOL) canMakeDAUCall;
 +(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
 
 @end
