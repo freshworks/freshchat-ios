@@ -147,19 +147,23 @@
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
         
-        
-        FDWebImageManager *manager = [FDWebImageManager sharedManager];
-        
-        [manager loadImageWithURL:[NSURL URLWithString:@"https://www.atomix.com.au/media/2015/06/atomix_user31.png"] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            
-        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            if(image && finished){
-                profileImageView.image = image;
-            }
-            else{
-                profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
-            }
-        }];
+        if(participant.profilePicURL){
+            FDWebImageManager *manager = [FDWebImageManager sharedManager];
+            if(participant)
+                [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                    
+                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    if(image && finished){
+                        profileImageView.image = image;
+                    }
+                    else{
+                        profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+                    }
+                }];
+        }
+        else{
+            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        }
     }
     
     if(!currentMessage.isWelcomeMessage){
