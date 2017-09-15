@@ -11,7 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define HOTLINE_DEFAULTS_USER_NAME @"hotline_defaults_user_name"
+#define HOTLINE_DEFAULTS_USER_FIRST_NAME @"hotline_defaults_user_first_name"
+#define HOTLINE_DEFAULTS_USER_LAST_NAME @"hotline_defaults_user_last_name"
 #define HOTLINE_DEFAULTS_USER_EMAIL @"hotline_defaults_user_email"
 #define HOTLINE_DEFAULTS_USER_PHONE_NUMBER @"hotline_defaults_user_phone_number"
 #define HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE @"hotline_defaults_user_phone_country_code"

@@ -210,7 +210,7 @@
     newMessage.isRead = [message valueForKey:@"read"];
     [newMessage setCreatedMillis:[message valueForKey:@"createdMillis"]];
     [newMessage setMarketingId:[message valueForKey:@"marketingId"]];
-    
+    [newMessage setMessageUserAlias:[message valueForKey:@"messageUserAlias"]];
     [Fragment createFragments:[message valueForKey:@"messageFragments"] toMessage:newMessage];
     [[KonotorDataManager sharedInstance]save];
     [Message markDirty];
@@ -227,6 +227,7 @@
     message.isMarketingMessage = [self isMarketingMessage];
     message.marketingId = self.marketingId;
     message.isWelcomeMessage = self.isWelcomeMessage;
+    message.messageUserAlias = self.messageUserAlias;
     message.fragments = [Fragment getAllFragments:self];
     return message;
 }

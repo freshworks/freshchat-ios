@@ -28,7 +28,8 @@
 
 -(void)copyValuesFromStore{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    self.name = [store objectForKey:HOTLINE_DEFAULTS_USER_NAME];
+    self.firstName = [store objectForKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];
+    self.lastName = [store objectForKey:HOTLINE_DEFAULTS_USER_LAST_NAME];
     self.email = [store objectForKey:HOTLINE_DEFAULTS_USER_EMAIL];
     self.phoneNumber = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
     self.phoneCountryCode = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
@@ -36,7 +37,8 @@
 }
 
 -(void)clearUserData{
-    self.name = nil;
+    self.firstName = nil;
+    self.lastName = nil;
     self.email = nil;
     self.phoneNumber = nil;
     self.externalID = nil;

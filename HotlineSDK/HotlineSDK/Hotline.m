@@ -45,6 +45,7 @@
 #import "FDConstants.h"
 #import "HLUserDefaults.h"
 #import "HLUser.h"
+#import "FDImageView.h"
 
 @interface Hotline ()
 

@@ -18,6 +18,15 @@
 #import "FDVideoFragment.h"
 #import "FDAudioFragment.h"
 #import "FDFileFragment.h"
+#import "FDAutolayoutHelper.h"
+#import "FDParticipant.h"
+#import "FDImageView.h"
+
+@interface HLAgentMessageCell ()
+
+@property (strong, nonatomic) NSLayoutConstraint *senderLabelHeight;
+
+@end
 
 @implementation HLAgentMessageCell
 
@@ -38,9 +47,12 @@
 
 +(BOOL) showAgentAvatarLabel{
     static BOOL SHOW_AGENT_AVATAR_LABEL;
+    FDParticipant *participant; //= [FDParticipant fetchParticipantForAlias:<#(NSString *)#> :<#(NSManagedObjectContext *)#>
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        SHOW_AGENT_AVATAR_LABEL = [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT];
+        if (participant.firstName || participant.lastName || [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+            SHOW_AGENT_AVATAR_LABEL = TRUE;
+        }
     });
     return SHOW_AGENT_AVATAR_LABEL;
 }
@@ -57,7 +69,7 @@
     self.showsUploadStatus=YES;
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
-    self.senderNameLabel=[[UITextView alloc] initWithFrame:CGRectZero];
+    self.senderNameLabel=[[UILabel alloc] initWithFrame:CGRectZero];
     contentEncloser = [[UIView alloc] init];
     contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
     [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
@@ -68,9 +80,6 @@
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameTextColor];
-    [senderNameLabel setEditable:NO];
-    [senderNameLabel setScrollEnabled:NO];
-    [senderNameLabel setSelectable:NO];
     
     messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
     [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
@@ -115,19 +124,46 @@
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
     [views setObject:self.contentEncloser forKey:@"contentEncloser"];
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
-
+    int senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
+    self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
+    FDParticipant *participant = [FDParticipant fetchParticipantForAlias:currentMessage.messageUserAlias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     if(showsSenderName){
-        senderNameLabel.text=HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-        //[views setObject:senderNameLabel forKey:@"senderNameLabel"]; Constraints not yet set.
+        if(participant.firstName || participant.lastName){
+            senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
+        }
+        else{
+            senderNameLabel.text = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        }
     }
+    self.senderLabelHeight.constant =senderNameHeight;
     [contentEncloser addSubview:chatBubbleImageView];
-    
+    [contentEncloser addSubview:senderNameLabel];
+    [views setObject:self.senderNameLabel forKey:@"senderLabel"];
     
     if(showsProfile){
         profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
+        
+        if(participant.profilePicURL){
+            FDWebImageManager *manager = [FDWebImageManager sharedManager];
+            if(participant)
+                [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                    
+                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    if(image && finished){
+                        profileImageView.image = image;
+                    }
+                    else{
+                        profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+                    }
+                }];
+        }
+        else{
+            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        }
     }
     
     if(!currentMessage.isWelcomeMessage){
@@ -206,7 +242,7 @@
     
     
     
-    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|"];
+    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|-4-[senderLabel]"];
     for(int i=0;i<fragmensViewArr.count;i++) { //Set Constraints here
         NSString *str = fragmensViewArr[i];
         if([str containsString:@"image_"]) {
@@ -234,12 +270,11 @@
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@]",str]];
         }
     }
-    
     if(!currentMessage.isWelcomeMessage) { //Show time for non welcome messages.
         [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(<=20)]"];
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-5-[messageSentTimeLabel]-(>=5)-|" options:0 metrics:nil views:views]];
     }
-    
+    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[senderLabel]-7-|" options:0 metrics:nil views:views]];
     [veriticalConstraint appendString:@"-5-|"];
     //Constraints for details inside contentEncloser is done.
     if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {

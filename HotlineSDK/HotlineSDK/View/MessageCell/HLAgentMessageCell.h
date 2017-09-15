@@ -38,7 +38,7 @@
 @property (nonatomic) UIEdgeInsets agentChatBubbleInsets;
 @property (strong, nonatomic) UIImage *agentChatBubble;
 @property (strong, nonatomic) UIView* contentEncloser;
-@property (strong, nonatomic) UITextView* senderNameLabel;
+@property (strong, nonatomic) UILabel* senderNameLabel;
 @property (strong, nonatomic) UITextView* messageSentTimeLabel;
 @property (strong, nonatomic) UITextView* messageTextView;
 @property (strong, nonatomic) UIImage* sentImage;

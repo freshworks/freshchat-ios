@@ -54,7 +54,7 @@
 @dynamic belongsToConversation;
 @dynamic hasMessageBinary;
 
-NSMutableDictionary *gkMessageIdMessageMap;
+NSMutableDictionary *gkMessageIdMessageMap_old;
 
 static BOOL messageExistsDirty = YES;
 static BOOL messageTimeDirty = YES;
@@ -253,13 +253,13 @@ static BOOL messageTimeDirty = YES;
 }
 
 +(KonotorMessage *)retriveMessageForMessageId: (NSString *)messageId{
-    if(gkMessageIdMessageMap){
-        KonotorMessage *message = [gkMessageIdMessageMap objectForKey:messageId];
+    if(gkMessageIdMessageMap_old){
+        KonotorMessage *message = [gkMessageIdMessageMap_old objectForKey:messageId];
         if(message) return message;
     }
     
-    if(!gkMessageIdMessageMap){
-        gkMessageIdMessageMap = [[ NSMutableDictionary alloc]init];
+    if(!gkMessageIdMessageMap_old){
+        gkMessageIdMessageMap_old = [[ NSMutableDictionary alloc]init];
     }
     
     NSError *pError;
@@ -282,7 +282,7 @@ static BOOL messageTimeDirty = YES;
     }else if([array count]==1){
         KonotorMessage *message = [array objectAtIndex:0];
         if(message){
-            [gkMessageIdMessageMap setObject:message forKey:messageId];
+            [gkMessageIdMessageMap_old setObject:message forKey:messageId];
             return message;
         }
     }

@@ -47,6 +47,8 @@
 + (BOOL) canMakeDAUCall;
 +(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
 
++(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
+
 @end
 
 #endif

@@ -11,6 +11,7 @@
 #import "HLTheme.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
+#import "FDParticipant.h"
 
 #define KONOTOR_VERTICAL_PADDING 2
 #define KONOTOR_AGENT_NAME_MIN_PADDING 8
@@ -59,9 +60,12 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 
 +(BOOL) showAgentAvatarLabel{
     static BOOL SHOW_AGENT_AVATAR_LABEL;
+    FDParticipant *participant; //= [FDParticipant fetchParticipantForAlias:<#(NSString *)#> :<#(NSManagedObjectContext *)#>
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        SHOW_AGENT_AVATAR_LABEL = [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT];
+        if (participant.firstName || participant.lastName || [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+            SHOW_AGENT_AVATAR_LABEL = TRUE;
+        }
     });
     return SHOW_AGENT_AVATAR_LABEL;
 }
@@ -557,7 +561,6 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
             
             if((KONOTOR_SHOW_TIMESTAMP)&&(showSenderName))
             {
-                
                 [timeField setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
             }
             else{

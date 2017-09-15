@@ -29,9 +29,14 @@
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         FDSecureStore *store = [FDSecureStore sharedInstance];
         
-        if (userInfo.name && ![userInfo.name isEqualToString:@""]) {
-            [store setObject:userInfo.name forKey:HOTLINE_DEFAULTS_USER_NAME];
-            [KonotorCustomProperty createNewPropertyForKey:@"name" WithValue:userInfo.name isUserProperty:YES];
+        if (userInfo.firstName && ![userInfo.firstName isEqualToString:@""]) {
+            [store setObject:userInfo.firstName forKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];
+            [KonotorCustomProperty createNewPropertyForKey:@"firstName" WithValue:userInfo.firstName isUserProperty:YES];
+        }
+        
+        if (userInfo.lastName && ![userInfo.lastName isEqualToString:@""]) {
+            [store setObject:userInfo.lastName forKey:HOTLINE_DEFAULTS_USER_LAST_NAME];
+            [KonotorCustomProperty createNewPropertyForKey:@"lastName" WithValue:userInfo.lastName isUserProperty:YES];
         }
         
         if (userInfo.email && [FDStringUtil isValidEmail:userInfo.email]) {

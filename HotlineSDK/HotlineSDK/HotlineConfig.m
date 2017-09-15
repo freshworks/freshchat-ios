@@ -17,7 +17,7 @@
 -(instancetype)initWithAppID:(NSString *)appID andAppKey:(NSString *)appKey{
     self = [super init];
     if (self) {
-        self.domain = @"app.hotline.io";
+        self.domain = @"msdk.freshchat.com";
         self.stringsBundle = DEFAULT_BUNDLE_NAME;
         self.appID = appID;
         self.appKey = appKey;

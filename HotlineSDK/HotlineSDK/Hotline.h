@@ -300,9 +300,13 @@ enum TagFilterType {
 @interface HotlineUser : NSObject
 
 /*
- * User name
+ * User first name
  */
-@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSString *firstName;
+/*
+ * User last name
+ */
+@property (strong, nonatomic) NSString *lastName;
 /*
  * User email
  */
