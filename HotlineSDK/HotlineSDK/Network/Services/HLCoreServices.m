@@ -426,7 +426,7 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)fetchRemoreConfig{
++(NSURLSessionDataTask *)fetchRemoteConfig{
     
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -439,14 +439,10 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
-            NSLog(@"response is - %@", responseInfo.responseAsDictionary);
-            NSDictionary *response = responseInfo.responseAsDictionary;
+            NSDictionary *configDict = responseInfo.responseAsDictionary;
             
             //Init config here
-            FCRemoteConfigUtil *rcUtil = [[FCRemoteConfigUtil alloc] init];
-            [rcUtil updateRemoteConfig:response];
-//            FCRemoteConfig *rc = [[FCRemoteConfig alloc] init];
-//            FCEnabledFeatures *feature = [[FCEnabledFeatures alloc] init];
+            [[FCRemoteConfigUtil sharedInstance] updateRemoteConfig:configDict];
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);

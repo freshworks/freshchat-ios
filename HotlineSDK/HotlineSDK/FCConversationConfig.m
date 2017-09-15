@@ -23,13 +23,13 @@
     return self;
 }
 
-- (void) setShowAgentAvatars:(BOOL)showAgentAvatars {
+- (void) setShowAgentAvatars:(enum AgentAvatarType)showAgentAvatars {
     
     _showAgentAvatars = showAgentAvatars;
     [HLUserDefaults setBool:showAgentAvatars forKey:CONFIG_RC_AGENT_AVATAR_ENABLED];
 }
 
-- (BOOL) getShowAgentAvatars {
+- (enum AgentAvatarType) getShowAgentAvatars {
     
     return self.showAgentAvatars;
 }

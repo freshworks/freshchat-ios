@@ -26,7 +26,7 @@
 
 +(void)uploadUnuploadedProperties;
 
-+(NSURLSessionDataTask *)fetchRemoreConfig;
++(NSURLSessionDataTask *)fetchRemoteConfig;
 
 +(NSURLSessionDataTask *)performHeartbeatCall;
 

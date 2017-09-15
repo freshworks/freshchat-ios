@@ -378,6 +378,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)performPendingTasks{
+    [[FCRemoteConfigUtil sharedInstance] init];
     FDLog(@"Performing pending tasks");
     if ([HLUser canRegisterUser]) {
         [HLUser registerUser:nil];
@@ -387,14 +388,15 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [HLCoreServices performDAUCall];
         }
         if([FDUtilities canMakeRemoteConfigCall]){
-            [HLCoreServices fetchRemoreConfig];
+            [HLCoreServices fetchRemoteConfig];
+            [self updateLastFetchRemoteConfigInterval];
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
                 [HLCoreServices performHeartbeatCall];
                 if([FDUtilities canMakeSessionCall]){
-                    [self updateSessionInterval];
                     [HLCoreServices performSessionCall];
+                    [self updateSessionInterval];
                 }
                 [self registerDeviceToken];
                 [self updateAppVersion];

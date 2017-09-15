@@ -15,6 +15,8 @@
 
 @property(nonatomic, strong) FCRemoteConfig *remoteConfig;
 
++(instancetype)sharedInstance;
+
 - (void) updateRemoteConfig : (NSDictionary *) configDict;
 
 -(void)updateFeaturesConfig:(FCEnabledFeatures *)features;

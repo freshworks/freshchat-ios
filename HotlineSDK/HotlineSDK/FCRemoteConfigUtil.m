@@ -12,7 +12,17 @@
 
 @implementation FCRemoteConfigUtil
 
-- (instancetype)init{
++(instancetype)sharedInstance{
+    static FCRemoteConfigUtil *sharedFCRemoteConfigUtil = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedFCRemoteConfigUtil = [[self alloc] init];
+    });
+    return sharedFCRemoteConfigUtil;
+}
+
+
+- (id)init{
     self = [super init];
     if (self) {
         self.remoteConfig = [[FCRemoteConfig alloc] init];
@@ -24,12 +34,24 @@
 
     self.remoteConfig.accountActive = [[configDict objectForKey:@"accountActive"] boolValue];
     self.remoteConfig.sessionTimeOutInterval = [[configDict objectForKey:@"sessionTimeoutInterval"] longValue];
-    self.remoteConfig.conversationConfig.showAgentAvatars = [configDict objectForKey:@""];
+    
+    NSString* avatarType =  [configDict objectForKey:@"agentAvatars"];
+    enum AgentAvatarType type ;
+    if([avatarType isEqualToString:@"REAL_AGENT_AVATAR"]){
+        type = REAL_AGENT_AVATAR;
+    }
+    else if([avatarType isEqualToString:@"APP_ICON"]){
+        type = APP_ICON;
+    }
+    else{
+        type = NONE;
+    }
+    self.remoteConfig.conversationConfig.showAgentAvatars = type ;
     
     self.remoteConfig.conversationConfig.activeConvFetchBackoffRatio = [[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue];
     self.remoteConfig.conversationConfig.launchDeeplinkFromNotification = [[configDict objectForKey:@"activeConvWindow"] boolValue];
     self.remoteConfig.conversationConfig.activeConvWindow = [[configDict objectForKey:@"activeConvWindow"] longValue];
-    
+
     self.remoteConfig.refreshIntervals.activeConvMaxFetchInterval = [[configDict objectForKey:@"activeConvMaxFetchInterval"] longValue];
     self.remoteConfig.refreshIntervals.activeConvMinFetchInterval = [[configDict objectForKey:@"activeConvMinFetchInterval"] longValue];
     self.remoteConfig.refreshIntervals.channelsFetchIntervalNormal = [[configDict objectForKey:@"channelsFetchIntervalNormal"] longValue];
@@ -40,18 +62,24 @@
     self.remoteConfig.refreshIntervals.msgFetchIntervalLaidback = [[configDict objectForKey:@"msgFetchIntervalLaidback"] longValue];
     self.remoteConfig.refreshIntervals.remoteConfigFetchInterval = [[configDict objectForKey:@"remoteConfigFetchInterval"] longValue];
     self.remoteConfig.refreshIntervals.responseTimeExpectationsFetchInterval = [[configDict objectForKey:@"responseTimeExpectationsFetchInterval"] longValue];
+    
+    [self updateFeaturesConfig:[configDict objectForKey:@"enabledFeatures"]];
+    
 }
 
--(void)updateFeaturesConfig:(FCEnabledFeatures *)features{
+-(void)updateFeaturesConfig:(NSArray *)features{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (features) {
-        [store setBoolValue:features.isFAQEnabled forKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
-        [store setBoolValue:features.isInboxEnabled forKey:FRESHCHAT_CONFIG_RC_INBOX_ENABLED];
-        [store setBoolValue:features.isAutoCampaignsEnabled forKey:FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED];
-        [store setBoolValue:features.isManualCampaignsEnabled forKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED];
-        [store setBoolValue:features.isUserEventsEnabled forKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
-        [store setBoolValue:features.isAOTUserCreateEnabled forKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
-        [store setBoolValue:features.showCustomBrandBanner forKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
+        
+        [store setBoolValue:([features containsObject:@"FAQ"])? true : false forKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
+        [store setBoolValue:([features containsObject:@"INBOX"])? true : false forKey:FRESHCHAT_CONFIG_RC_INBOX_ENABLED];
+        [store setBoolValue:([features containsObject:@"AUTO_CAMPAIGNS"])? true : false forKey:FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED];
+        
+        //No worry now will push in next release
+//        [store setBoolValue:features.isManualCampaignsEnabled forKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED];
+//        [store setBoolValue:features.isUserEventsEnabled forKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
+//        [store setBoolValue:features.isAOTUserCreateEnabled forKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
+//        [store setBoolValue:true forKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
     }
 }
 
