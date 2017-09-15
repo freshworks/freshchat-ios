@@ -8,7 +8,7 @@
 
 #import "FDWebImageCompat.h"
 
-#if SD_UIKIT
+#if FD_UIKIT
 
 #import "FDWebImageManager.h"
 
@@ -24,7 +24,7 @@
  *
  * @param url The url for the image.
  */
-- (void)sd_setHighlightedImageWithURL:(nullable NSURL *)url NS_REFINED_FOR_SWIFT;
+- (void)fd_setHighlightedImageWithURL:(nullable NSURL *)url NS_REFINED_FOR_SWIFT;
 
 /**
  * Set the imageView `highlightedImage` with an `url` and custom options.
@@ -34,8 +34,8 @@
  * @param url     The url for the image.
  * @param options The options to use when downloading the image. @see SDWebImageOptions for the possible values.
  */
-- (void)sd_setHighlightedImageWithURL:(nullable NSURL *)url
-                              options:(SDWebImageOptions)options NS_REFINED_FOR_SWIFT;
+- (void)fd_setHighlightedImageWithURL:(nullable NSURL *)url
+                              options:(FDWebImageOptions)options NS_REFINED_FOR_SWIFT;
 
 /**
  * Set the imageView `highlightedImage` with an `url`.
@@ -49,8 +49,8 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setHighlightedImageWithURL:(nullable NSURL *)url
-                            completed:(nullable SDExternalCompletionBlock)completedBlock NS_REFINED_FOR_SWIFT;
+- (void)fd_setHighlightedImageWithURL:(nullable NSURL *)url
+                            completed:(nullable FDExternalCompletionBlock)completedBlock NS_REFINED_FOR_SWIFT;
 
 /**
  * Set the imageView `highlightedImage` with an `url` and custom options.
@@ -65,9 +65,9 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setHighlightedImageWithURL:(nullable NSURL *)url
-                              options:(SDWebImageOptions)options
-                            completed:(nullable SDExternalCompletionBlock)completedBlock;
+- (void)fd_setHighlightedImageWithURL:(nullable NSURL *)url
+                              options:(FDWebImageOptions)options
+                            completed:(nullable FDExternalCompletionBlock)completedBlock;
 
 /**
  * Set the imageView `highlightedImage` with an `url` and custom options.
@@ -84,10 +84,10 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setHighlightedImageWithURL:(nullable NSURL *)url
-                              options:(SDWebImageOptions)options
-                             progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
-                            completed:(nullable SDExternalCompletionBlock)completedBlock;
+- (void)fd_setHighlightedImageWithURL:(nullable NSURL *)url
+                              options:(FDWebImageOptions)options
+                             progress:(nullable FDWebImageDownloaderProgressBlock)progressBlock
+                            completed:(nullable FDExternalCompletionBlock)completedBlock;
 
 @end
 

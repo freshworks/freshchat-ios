@@ -11,12 +11,12 @@
 #import "FDWebImageCompat.h"
 
 typedef NS_ENUM(NSInteger, FDImageFormat) {
-    SDImageFormatUndefined = -1,
-    SDImageFormatJPEG = 0,
-    SDImageFormatPNG,
-    SDImageFormatGIF,
-    SDImageFormatTIFF,
-    SDImageFormatWebP
+    FDImageFormatUndefined = -1,
+    FDImageFormatJPEG = 0,
+    FDImageFormatPNG,
+    FDImageFormatGIF,
+    FDImageFormatTIFF,
+    FDImageFormatWebP
 };
 
 @interface NSData (ImageContentType)
@@ -28,6 +28,6 @@ typedef NS_ENUM(NSInteger, FDImageFormat) {
  *
  *  @return the image format as `SDImageFormat` (enum)
  */
-+ (FDImageFormat)sd_imageFormatForImageData:(nullable NSData *)data;
++ (FDImageFormat)fd_imageFormatForImageData:(nullable NSData *)data;
 
 @end

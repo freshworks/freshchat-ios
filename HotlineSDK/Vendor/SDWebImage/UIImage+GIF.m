@@ -7,19 +7,19 @@
  * file that was distributed with this source code.
  */
 
-#import "FDUIImage+GIF.h"
+#import "UIImage+GIF.h"
 #import <ImageIO/ImageIO.h>
 #import "objc/runtime.h"
-#import "FDNSImage+WebCache.h"
+#import "NSImage+WebCache.h"
 
 @implementation UIImage (GIF)
 
-+ (UIImage *)sd_animatedGIFWithData:(NSData *)data {
++ (UIImage *)fd_animatedGIFWithData:(NSData *)data {
     if (!data) {
         return nil;
     }
     
-#if SD_MAC
+#if FD_MAC
     return [[UIImage alloc] initWithData:data];
 #else
 
@@ -34,16 +34,16 @@
     } else {
         // we will only retrieve the 1st frame. the full GIF support is available via the FLAnimatedImageView category.
         // this here is only code to allow drawing animated images as static ones
-#if SD_WATCH
+#if FD_WATCH
         CGFloat scale = 1;
         scale = [WKInterfaceDevice currentDevice].screenScale;
-#elif SD_UIKIT
+#elif FD_UIKIT
         CGFloat scale = 1;
         scale = [UIScreen mainScreen].scale;
 #endif
         
         CGImageRef CGImage = CGImageSourceCreateImageAtIndex(source, 0, NULL);
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
         UIImage *frameImage = [UIImage imageWithCGImage:CGImage scale:scale orientation:UIImageOrientationUp];
         staticImage = [UIImage animatedImageWithImages:@[frameImage] duration:0.0f];
 #endif

@@ -11,40 +11,40 @@
 #import "objc/runtime.h"
 
 #if !__has_feature(objc_arc)
-#error SDWebImage is ARC only. Either turn on ARC for the project or use -fobjc-arc flag
+#error FDWebImage is ARC only. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
 
-inline UIImage *SDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullable image) {
+inline UIImage *FDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullable image) {
     if (!image) {
         return nil;
     }
     
-#if SD_MAC
+#if FD_MAC
     return image;
-#elif SD_UIKIT || SD_WATCH
+#elif FD_UIKIT || FD_WATCH
     if ((image.images).count > 0) {
         NSMutableArray<UIImage *> *scaledImages = [NSMutableArray array];
 
         for (UIImage *tempImage in image.images) {
-            [scaledImages addObject:SDScaledImageForKey(key, tempImage)];
+            [scaledImages addObject:FDScaledImageForKey(key, tempImage)];
         }
         
         UIImage *animatedImage = [UIImage animatedImageWithImages:scaledImages duration:image.duration];
-#ifdef SD_WEBP
+#ifdef FD_WEBP
         if (animatedImage) {
-            SEL sd_webpLoopCount = NSSelectorFromString(@"sd_webpLoopCount");
-            NSNumber *value = objc_getAssociatedObject(image, sd_webpLoopCount);
+            SEL fd_webpLoopCount = NSSelectorFromString(@"fd_webpLoopCount");
+            NSNumber *value = objc_getAssociatedObject(image, fd_webpLoopCount);
             NSInteger loopCount = value.integerValue;
             if (loopCount) {
-                objc_setAssociatedObject(animatedImage, sd_webpLoopCount, @(loopCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                objc_setAssociatedObject(animatedImage, fd_webpLoopCount, @(loopCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             }
         }
 #endif
         return animatedImage;
     } else {
-#if SD_WATCH
+#if FD_WATCH
         if ([[WKInterfaceDevice currentDevice] respondsToSelector:@selector(screenScale)]) {
-#elif SD_UIKIT
+#elif FD_UIKIT
         if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
 #endif
             CGFloat scale = 1;
@@ -68,4 +68,4 @@ inline UIImage *SDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullabl
 #endif
 }
 
-NSString *const SDWebImageErrorDomain = @"SDWebImageErrorDomain";
+NSString *const FDWebImageErrorDomain = @"FDWebImageErrorDomain";

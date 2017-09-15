@@ -6,16 +6,16 @@
  * file that was distributed with this source code.
  */
 
-#import "FDUIView+WebCache.h"
+#import "UIView+WebCache.h"
 
-#if SD_UIKIT || SD_MAC
+#if FD_UIKIT || FD_MAC
 
 #import "objc/runtime.h"
-#import "FDUIView+WebCacheOperation.h"
+#import "UIView+WebCacheOperation.h"
 
 static char imageURLKey;
 
-#if SD_UIKIT
+#if FD_UIKIT
 static char TAG_ACTIVITY_INDICATOR;
 static char TAG_ACTIVITY_STYLE;
 #endif
@@ -23,37 +23,37 @@ static char TAG_ACTIVITY_SHOW;
 
 @implementation UIView (WebCache)
 
-- (nullable NSURL *)sd_imageURL {
+- (nullable NSURL *)fd_imageURL {
     return objc_getAssociatedObject(self, &imageURLKey);
 }
 
-- (void)sd_internalSetImageWithURL:(nullable NSURL *)url
+- (void)fd_internalSetImageWithURL:(nullable NSURL *)url
                   placeholderImage:(nullable UIImage *)placeholder
-                           options:(SDWebImageOptions)options
+                           options:(FDWebImageOptions)options
                       operationKey:(nullable NSString *)operationKey
-                     setImageBlock:(nullable SDSetImageBlock)setImageBlock
-                          progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
-                         completed:(nullable SDExternalCompletionBlock)completedBlock {
+                     setImageBlock:(nullable FDSetImageBlock)setImageBlock
+                          progress:(nullable FDWebImageDownloaderProgressBlock)progressBlock
+                         completed:(nullable FDExternalCompletionBlock)completedBlock {
     NSString *validOperationKey = operationKey ?: NSStringFromClass([self class]);
-    [self sd_cancelImageLoadOperationWithKey:validOperationKey];
+    [self fd_cancelImageLoadOperationWithKey:validOperationKey];
     objc_setAssociatedObject(self, &imageURLKey, url, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    if (!(options & SDWebImageDelayPlaceholder)) {
+    if (!(options & FDWebImageDelayPlaceholder)) {
         dispatch_main_async_safe(^{
-            [self sd_setImage:placeholder imageData:nil basedOnClassOrViaCustomSetImageBlock:setImageBlock];
+            [self fd_setImage:placeholder imageData:nil basedOnClassOrViaCustomSetImageBlock:setImageBlock];
         });
     }
     
     if (url) {
         // check if activityView is enabled or not
-        if ([self sd_showActivityIndicatorView]) {
-            [self sd_addActivityIndicator];
+        if ([self fd_showActivityIndicatorView]) {
+            [self fd_addActivityIndicator];
         }
         
         __weak __typeof(self)wself = self;
-        id <SDWebImageOperation> operation = [FDWebImageManager.sharedManager loadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        id <FDWebImageOperation> operation = [FDWebImageManager.sharedManager loadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSData *data, NSError *error, FDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             __strong __typeof (wself) sself = wself;
-            [sself sd_removeActivityIndicator];
+            [sself fd_removeActivityIndicator];
             if (!sself) {
                 return;
             }
@@ -61,16 +61,16 @@ static char TAG_ACTIVITY_SHOW;
                 if (!sself) {
                     return;
                 }
-                if (image && (options & SDWebImageAvoidAutoSetImage) && completedBlock) {
+                if (image && (options & FDWebImageAvoidAutoSetImage) && completedBlock) {
                     completedBlock(image, error, cacheType, url);
                     return;
                 } else if (image) {
-                    [sself sd_setImage:image imageData:data basedOnClassOrViaCustomSetImageBlock:setImageBlock];
-                    [sself sd_setNeedsLayout];
+                    [sself fd_setImage:image imageData:data basedOnClassOrViaCustomSetImageBlock:setImageBlock];
+                    [sself fd_setNeedsLayout];
                 } else {
-                    if ((options & SDWebImageDelayPlaceholder)) {
-                        [sself sd_setImage:placeholder imageData:nil basedOnClassOrViaCustomSetImageBlock:setImageBlock];
-                        [sself sd_setNeedsLayout];
+                    if ((options & FDWebImageDelayPlaceholder)) {
+                        [sself fd_setImage:placeholder imageData:nil basedOnClassOrViaCustomSetImageBlock:setImageBlock];
+                        [sself fd_setNeedsLayout];
                     }
                 }
                 if (completedBlock && finished) {
@@ -78,36 +78,36 @@ static char TAG_ACTIVITY_SHOW;
                 }
             });
         }];
-        [self sd_setImageLoadOperation:operation forKey:validOperationKey];
+        [self fd_setImageLoadOperation:operation forKey:validOperationKey];
     } else {
         dispatch_main_async_safe(^{
-            [self sd_removeActivityIndicator];
+            [self fd_removeActivityIndicator];
             if (completedBlock) {
-                NSError *error = [NSError errorWithDomain:SDWebImageErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey : @"Trying to load a nil url"}];
-                completedBlock(nil, error, SDImageCacheTypeNone, url);
+                NSError *error = [NSError errorWithDomain:FDWebImageErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey : @"Trying to load a nil url"}];
+                completedBlock(nil, error, FDImageCacheTypeNone, url);
             }
         });
     }
 }
 
-- (void)sd_cancelCurrentImageLoad {
-    [self sd_cancelImageLoadOperationWithKey:NSStringFromClass([self class])];
+- (void)fd_cancelCurrentImageLoad {
+    [self fd_cancelImageLoadOperationWithKey:NSStringFromClass([self class])];
 }
 
-- (void)sd_setImage:(UIImage *)image imageData:(NSData *)imageData basedOnClassOrViaCustomSetImageBlock:(SDSetImageBlock)setImageBlock {
+- (void)fd_setImage:(UIImage *)image imageData:(NSData *)imageData basedOnClassOrViaCustomSetImageBlock:(FDSetImageBlock)setImageBlock {
     if (setImageBlock) {
         setImageBlock(image, imageData);
         return;
     }
     
-#if SD_UIKIT || SD_MAC
+#if FD_UIKIT || FD_MAC
     if ([self isKindOfClass:[UIImageView class]]) {
         UIImageView *imageView = (UIImageView *)self;
         imageView.image = image;
     }
 #endif
     
-#if SD_UIKIT
+#if FD_UIKIT
     if ([self isKindOfClass:[UIButton class]]) {
         UIButton *button = (UIButton *)self;
         [button setImage:image forState:UIControlStateNormal];
@@ -115,10 +115,10 @@ static char TAG_ACTIVITY_SHOW;
 #endif
 }
 
-- (void)sd_setNeedsLayout {
-#if SD_UIKIT
+- (void)fd_setNeedsLayout {
+#if FD_UIKIT
     [self setNeedsLayout];
-#elif SD_MAC
+#elif FD_MAC
     [self setNeedsLayout:YES];
 #endif
 }
@@ -126,7 +126,7 @@ static char TAG_ACTIVITY_SHOW;
 #pragma mark - Activity indicator
 
 #pragma mark -
-#if SD_UIKIT
+#if FD_UIKIT
 - (UIActivityIndicatorView *)activityIndicator {
     return (UIActivityIndicatorView *)objc_getAssociatedObject(self, &TAG_ACTIVITY_INDICATOR);
 }
@@ -136,29 +136,29 @@ static char TAG_ACTIVITY_SHOW;
 }
 #endif
 
-- (void)sd_setShowActivityIndicatorView:(BOOL)show {
+- (void)fd_setShowActivityIndicatorView:(BOOL)show {
     objc_setAssociatedObject(self, &TAG_ACTIVITY_SHOW, @(show), OBJC_ASSOCIATION_RETAIN);
 }
 
-- (BOOL)sd_showActivityIndicatorView {
+- (BOOL)fd_showActivityIndicatorView {
     return [objc_getAssociatedObject(self, &TAG_ACTIVITY_SHOW) boolValue];
 }
 
-#if SD_UIKIT
-- (void)sd_setIndicatorStyle:(UIActivityIndicatorViewStyle)style{
+#if FD_UIKIT
+- (void)fd_setIndicatorStyle:(UIActivityIndicatorViewStyle)style{
     objc_setAssociatedObject(self, &TAG_ACTIVITY_STYLE, [NSNumber numberWithInt:style], OBJC_ASSOCIATION_RETAIN);
 }
 
-- (int)sd_getIndicatorStyle{
+- (int)fd_getIndicatorStyle{
     return [objc_getAssociatedObject(self, &TAG_ACTIVITY_STYLE) intValue];
 }
 #endif
 
-- (void)sd_addActivityIndicator {
-#if SD_UIKIT
+- (void)fd_addActivityIndicator {
+#if FD_UIKIT
     dispatch_main_async_safe(^{
         if (!self.activityIndicator) {
-            self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:[self sd_getIndicatorStyle]];
+            self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:[self fd_getIndicatorStyle]];
             self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
         
             [self addSubview:self.activityIndicator];
@@ -183,8 +183,8 @@ static char TAG_ACTIVITY_SHOW;
 #endif
 }
 
-- (void)sd_removeActivityIndicator {
-#if SD_UIKIT
+- (void)fd_removeActivityIndicator {
+#if FD_UIKIT
     dispatch_main_async_safe(^{
         if (self.activityIndicator) {
             [self.activityIndicator removeFromSuperview];

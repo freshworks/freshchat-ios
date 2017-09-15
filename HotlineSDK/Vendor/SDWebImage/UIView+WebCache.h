@@ -8,11 +8,11 @@
 
 #import "FDWebImageCompat.h"
 
-#if SD_UIKIT || SD_MAC
+#if FD_UIKIT || FD_MAC
 
 #import "FDWebImageManager.h"
 
-typedef void(^SDSetImageBlock)(UIImage * _Nullable image, NSData * _Nullable imageData);
+typedef void(^FDSetImageBlock)(UIImage * _Nullable image, NSData * _Nullable imageData);
 
 @interface UIView (WebCache)
 
@@ -22,7 +22,7 @@ typedef void(^SDSetImageBlock)(UIImage * _Nullable image, NSData * _Nullable ima
  * Note that because of the limitations of categories this property can get out of sync
  * if you use setImage: directly.
  */
-- (nullable NSURL *)sd_imageURL;
+- (nullable NSURL *)fd_imageURL;
 
 /**
  * Set the imageView `image` with an `url` and optionally a placeholder image.
@@ -42,38 +42,38 @@ typedef void(^SDSetImageBlock)(UIImage * _Nullable image, NSData * _Nullable ima
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_internalSetImageWithURL:(nullable NSURL *)url
+- (void)fd_internalSetImageWithURL:(nullable NSURL *)url
                   placeholderImage:(nullable UIImage *)placeholder
-                           options:(SDWebImageOptions)options
+                           options:(FDWebImageOptions)options
                       operationKey:(nullable NSString *)operationKey
-                     setImageBlock:(nullable SDSetImageBlock)setImageBlock
-                          progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
-                         completed:(nullable SDExternalCompletionBlock)completedBlock;
+                     setImageBlock:(nullable FDSetImageBlock)setImageBlock
+                          progress:(nullable FDWebImageDownloaderProgressBlock)progressBlock
+                         completed:(nullable FDExternalCompletionBlock)completedBlock;
 
 /**
  * Cancel the current download
  */
-- (void)sd_cancelCurrentImageLoad;
+- (void)fd_cancelCurrentImageLoad;
 
-#if SD_UIKIT
+#if FD_UIKIT
 
 #pragma mark - Activity indicator
 
 /**
  *  Show activity UIActivityIndicatorView
  */
-- (void)sd_setShowActivityIndicatorView:(BOOL)show;
+- (void)fd_setShowActivityIndicatorView:(BOOL)show;
 
 /**
  *  set desired UIActivityIndicatorViewStyle
  *
  *  @param style The style of the UIActivityIndicatorView
  */
-- (void)sd_setIndicatorStyle:(UIActivityIndicatorViewStyle)style;
+- (void)fd_setIndicatorStyle:(UIActivityIndicatorViewStyle)style;
 
-- (BOOL)sd_showActivityIndicatorView;
-- (void)sd_addActivityIndicator;
-- (void)sd_removeActivityIndicator;
+- (BOOL)fd_showActivityIndicatorView;
+- (void)fd_addActivityIndicator;
+- (void)fd_removeActivityIndicator;
 
 #endif
 

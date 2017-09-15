@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-#ifdef SD_WEBP
+#ifdef FD_WEBP
 
 #import "SDWebImageCompat.h"
 
@@ -20,9 +20,9 @@
  * if you create another instance with CGImage or other methods.
  * @return WebP image loop count
  */
-- (NSInteger)sd_webpLoopCount;
+- (NSInteger)fd_webpLoopCount;
 
-+ (nullable UIImage *)sd_imageWithWebPData:(nullable NSData *)data;
++ (nullable UIImage *)fd_imageWithWebPData:(nullable NSData *)data;
 
 @end
 

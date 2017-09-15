@@ -6,37 +6,37 @@
  * file that was distributed with this source code.
  */
 
-#import "FDUIImage+MultiFormat.h"
-#import "FDUIImage+GIF.h"
-#import "FDNSData+ImageContentType.h"
+#import "UIImage+MultiFormat.h"
+#import "UIImage+GIF.h"
+#import "NSData+ImageContentType.h"
 #import <ImageIO/ImageIO.h>
 
-#ifdef SD_WEBP
+#ifdef FD_WEBP
 #import "UIImage+WebP.h"
 #endif
 
 @implementation UIImage (MultiFormat)
 
-+ (nullable UIImage *)sd_imageWithData:(nullable NSData *)data {
++ (nullable UIImage *)fd_imageWithData:(nullable NSData *)data {
     if (!data) {
         return nil;
     }
     
     UIImage *image;
-    FDImageFormat imageFormat = [NSData sd_imageFormatForImageData:data];
-    if (imageFormat == SDImageFormatGIF) {
-        image = [UIImage sd_animatedGIFWithData:data];
+    FDImageFormat imageFormat = [NSData fd_imageFormatForImageData:data];
+    if (imageFormat == FDImageFormatGIF) {
+        image = [UIImage fd_animatedGIFWithData:data];
     }
-#ifdef SD_WEBP
-    else if (imageFormat == SDImageFormatWebP)
+#ifdef FD_WEBP
+    else if (imageFormat == FDImageFormatWebP)
     {
-        image = [UIImage sd_imageWithWebPData:data];
+        image = [UIImage fd_imageWithWebPData:data];
     }
 #endif
     else {
         image = [[UIImage alloc] initWithData:data];
-#if SD_UIKIT || SD_WATCH
-        UIImageOrientation orientation = [self sd_imageOrientationFromImageData:data];
+#if FD_UIKIT || FD_WATCH
+        UIImageOrientation orientation = [self fd_imageOrientationFromImageData:data];
         if (orientation != UIImageOrientationUp) {
             image = [UIImage imageWithCGImage:image.CGImage
                                         scale:image.scale
@@ -49,8 +49,8 @@
     return image;
 }
 
-#if SD_UIKIT || SD_WATCH
-+(UIImageOrientation)sd_imageOrientationFromImageData:(nonnull NSData *)imageData {
+#if FD_UIKIT || FD_WATCH
++(UIImageOrientation)fd_imageOrientationFromImageData:(nonnull NSData *)imageData {
     UIImageOrientation result = UIImageOrientationUp;
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
     if (imageSource) {
@@ -61,7 +61,7 @@
             val = CFDictionaryGetValue(properties, kCGImagePropertyOrientation);
             if (val) {
                 CFNumberGetValue(val, kCFNumberIntType, &exifOrientation);
-                result = [self sd_exifOrientationToiOSOrientation:exifOrientation];
+                result = [self fd_exifOrientationToiOSOrientation:exifOrientation];
             } // else - if it's not set it remains at up
             CFRelease((CFTypeRef) properties);
         } else {
@@ -75,7 +75,7 @@
 #pragma mark EXIF orientation tag converter
 // Convert an EXIF image orientation to an iOS one.
 // reference see here: http://sylvana.net/jpegcrop/exif_orientation.html
-+ (UIImageOrientation) sd_exifOrientationToiOSOrientation:(int)exifOrientation {
++ (UIImageOrientation) fd_exifOrientationToiOSOrientation:(int)exifOrientation {
     UIImageOrientation orientation = UIImageOrientationUp;
     switch (exifOrientation) {
         case 1:
@@ -116,14 +116,14 @@
 }
 #endif
 
-- (nullable NSData *)sd_imageData {
-    return [self sd_imageDataAsFormat:SDImageFormatUndefined];
+- (nullable NSData *)fd_imageData {
+    return [self fd_imageDataAsFormat:FDImageFormatUndefined];
 }
 
-- (nullable NSData *)sd_imageDataAsFormat:(FDImageFormat)imageFormat {
+- (nullable NSData *)fd_imageDataAsFormat:(FDImageFormat)imageFormat {
     NSData *imageData = nil;
     if (self) {
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
         int alphaInfo = CGImageGetAlphaInfo(self.CGImage);
         BOOL hasAlpha = !(alphaInfo == kCGImageAlphaNone ||
                           alphaInfo == kCGImageAlphaNoneSkipFirst ||
@@ -132,8 +132,8 @@
         BOOL usePNG = hasAlpha;
         
         // the imageFormat param has priority here. But if the format is undefined, we relly on the alpha channel
-        if (imageFormat != SDImageFormatUndefined) {
-            usePNG = (imageFormat == SDImageFormatPNG);
+        if (imageFormat != FDImageFormatUndefined) {
+            usePNG = (imageFormat == FDImageFormatPNG);
         }
         
         if (usePNG) {
@@ -143,9 +143,9 @@
         }
 #else
         NSBitmapImageFileType imageFileType = NSJPEGFileType;
-        if (imageFormat == SDImageFormatGIF) {
+        if (imageFormat == FDImageFormatGIF) {
             imageFileType = NSGIFFileType;
-        } else if (imageFormat == SDImageFormatPNG) {
+        } else if (imageFormat == FDImageFormatPNG) {
             imageFileType = NSPNGFileType;
         }
         

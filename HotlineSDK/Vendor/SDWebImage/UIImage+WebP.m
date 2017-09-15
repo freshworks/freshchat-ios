@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-#ifdef SD_WEBP
+#ifdef FD_WEBP
 
 #import "UIImage+WebP.h"
 #import "webp/decode.h"
@@ -23,13 +23,13 @@ static void FreeImageData(void *info, const void *data, size_t size) {
 
 @implementation UIImage (WebP)
 
-- (NSInteger)sd_webpLoopCount
+- (NSInteger)fd_webpLoopCount
 {
-    NSNumber *value = objc_getAssociatedObject(self, @selector(sd_webpLoopCount));
+    NSNumber *value = objc_getAssociatedObject(self, @selector(fd_webpLoopCount));
     return value.integerValue;
 }
 
-+ (nullable UIImage *)sd_imageWithWebPData:(nullable NSData *)data {
++ (nullable UIImage *)fd_imageWithWebPData:(nullable NSData *)data {
     if (!data) {
         return nil;
     }
@@ -46,7 +46,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     uint32_t flags = WebPDemuxGetI(demuxer, WEBP_FF_FORMAT_FLAGS);
     if (!(flags & ANIMATION_FLAG)) {
         // for static single webp image
-        UIImage *staticImage = [self sd_rawWebpImageWithData:webpData];
+        UIImage *staticImage = [self fd_rawWebpImageWithData:webpData];
         WebPDemuxDelete(demuxer);
         return staticImage;
     }
@@ -58,7 +58,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
         return nil;
     }
     
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
     int loopCount = WebPDemuxGetI(demuxer, WEBP_FF_LOOP_COUNT);
     int frameCount = WebPDemuxGetI(demuxer, WEBP_FF_FRAME_COUNT);
 #endif
@@ -70,7 +70,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     } else {
         bitmapInfo = kCGBitmapByteOrder32Big | kCGImageAlphaPremultipliedLast;
     }
-    CGContextRef canvas = CGBitmapContextCreate(NULL, canvasWidth, canvasHeight, 8, 0, SDCGColorSpaceGetDeviceRGB(), bitmapInfo);
+    CGContextRef canvas = CGBitmapContextCreate(NULL, canvasWidth, canvasHeight, 8, 0, FDCGColorSpaceGetDeviceRGB(), bitmapInfo);
     if (!canvas) {
         WebPDemuxReleaseIterator(&iter);
         WebPDemuxDelete(demuxer);
@@ -78,7 +78,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     }
     
     NSMutableArray<UIImage *> *images = [NSMutableArray array];
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
     NSTimeInterval totalDuration = 0;
     int durations[frameCount];
 #endif
@@ -86,9 +86,9 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     do {
         UIImage *image;
         if (iter.blend_method == WEBP_MUX_BLEND) {
-            image = [self sd_blendWebpImageWithCanvas:canvas iterator:iter];
+            image = [self fd_blendWebpImageWithCanvas:canvas iterator:iter];
         } else {
-            image = [self sd_nonblendWebpImageWithCanvas:canvas iterator:iter];
+            image = [self fd_nonblendWebpImageWithCanvas:canvas iterator:iter];
         }
         
         if (!image) {
@@ -97,7 +97,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
         
         [images addObject:image];
         
-#if SD_MAC
+#if FD_MAC
         break;
 #else
         
@@ -118,21 +118,21 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     CGContextRelease(canvas);
     
     UIImage *finalImage = nil;
-#if SD_UIKIT || SD_WATCH
-    NSArray<UIImage *> *animatedImages = [self sd_animatedImagesWithImages:images durations:durations totalDuration:totalDuration];
+#if FD_UIKIT || FD_WATCH
+    NSArray<UIImage *> *animatedImages = [self fd_animatedImagesWithImages:images durations:durations totalDuration:totalDuration];
     finalImage = [UIImage animatedImageWithImages:animatedImages duration:totalDuration / 1000.0];
     if (finalImage) {
-        objc_setAssociatedObject(finalImage, @selector(sd_webpLoopCount), @(loopCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(finalImage, @selector(fd_webpLoopCount), @(loopCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
-#elif SD_MAC
+#elif FD_MAC
     finalImage = images.firstObject;
 #endif
     return finalImage;
 }
 
 
-+ (nullable UIImage *)sd_blendWebpImageWithCanvas:(CGContextRef)canvas iterator:(WebPIterator)iter {
-    UIImage *image = [self sd_rawWebpImageWithData:iter.fragment];
++ (nullable UIImage *)fd_blendWebpImageWithCanvas:(CGContextRef)canvas iterator:(WebPIterator)iter {
+    UIImage *image = [self fd_rawWebpImageWithData:iter.fragment];
     if (!image) {
         return nil;
     }
@@ -147,9 +147,9 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     CGContextDrawImage(canvas, imageRect, image.CGImage);
     CGImageRef newImageRef = CGBitmapContextCreateImage(canvas);
     
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
     image = [UIImage imageWithCGImage:newImageRef];
-#elif SD_MAC
+#elif FD_MAC
     image = [[UIImage alloc] initWithCGImage:newImageRef size:NSZeroSize];
 #endif
     
@@ -162,8 +162,8 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     return image;
 }
 
-+ (nullable UIImage *)sd_nonblendWebpImageWithCanvas:(CGContextRef)canvas iterator:(WebPIterator)iter {
-    UIImage *image = [self sd_rawWebpImageWithData:iter.fragment];
++ (nullable UIImage *)fd_nonblendWebpImageWithCanvas:(CGContextRef)canvas iterator:(WebPIterator)iter {
+    UIImage *image = [self fd_rawWebpImageWithData:iter.fragment];
     if (!image) {
         return nil;
     }
@@ -179,9 +179,9 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     CGContextDrawImage(canvas, imageRect, image.CGImage);
     CGImageRef newImageRef = CGBitmapContextCreateImage(canvas);
     
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
     image = [UIImage imageWithCGImage:newImageRef];
-#elif SD_MAC
+#elif FD_MAC
     image = [[UIImage alloc] initWithCGImage:newImageRef size:NSZeroSize];
 #endif
     
@@ -194,7 +194,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     return image;
 }
 
-+ (nullable UIImage *)sd_rawWebpImageWithData:(WebPData)webpData {
++ (nullable UIImage *)fd_rawWebpImageWithData:(WebPData)webpData {
     WebPDecoderConfig config;
     if (!WebPInitDecoderConfig(&config)) {
         return nil;
@@ -222,7 +222,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     // Construct a UIImage from the decoded RGBA value array
     CGDataProviderRef provider =
     CGDataProviderCreateWithData(NULL, config.output.u.RGBA.rgba, config.output.u.RGBA.size, FreeImageData);
-    CGColorSpaceRef colorSpaceRef = SDCGColorSpaceGetDeviceRGB();
+    CGColorSpaceRef colorSpaceRef = FDCGColorSpaceGetDeviceRGB();
     CGBitmapInfo bitmapInfo = config.input.has_alpha ? kCGBitmapByteOrder32Big | kCGImageAlphaPremultipliedLast : kCGBitmapByteOrder32Big | kCGImageAlphaNoneSkipLast;
     size_t components = config.input.has_alpha ? 4 : 3;
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
@@ -230,7 +230,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
 
     CGDataProviderRelease(provider);
 
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
     UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
 #else
     UIImage *image = [[UIImage alloc] initWithCGImage:imageRef size:NSZeroSize];
@@ -240,7 +240,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     return image;
 }
 
-+ (NSArray<UIImage *> *)sd_animatedImagesWithImages:(NSArray<UIImage *> *)images durations:(int const * const)durations totalDuration:(NSTimeInterval)totalDuration
++ (NSArray<UIImage *> *)fd_animatedImagesWithImages:(NSArray<UIImage *> *)images durations:(int const * const)durations totalDuration:(NSTimeInterval)totalDuration
 {
     // [UIImage animatedImageWithImages:duration:] only use the average duration for per frame
     // divide the total duration to implement per frame duration for animated WebP
@@ -270,7 +270,7 @@ static void FreeImageData(void *info, const void *data, size_t size) {
     return animatedImages;
 }
 
-static CGColorSpaceRef SDCGColorSpaceGetDeviceRGB() {
+static CGColorSpaceRef FDCGColorSpaceGetDeviceRGB() {
     static CGColorSpaceRef space;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

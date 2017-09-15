@@ -20,7 +20,7 @@
 #import "FDFileFragment.h"
 #import "FDAutolayoutHelper.h"
 #import "FDParticipant.h"
-#import "FDUIImageView+WebCache.h"
+#import "FDImageView.h"
 
 @interface HLAgentMessageCell ()
 
@@ -146,18 +146,20 @@
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
-//        FDWebImageManager *manager = [FDWebImageManager sharedManager];
-//        
-//        [manager loadImageWithURL:[NSURL URLWithString:@"https://www.atomix.com.au/media/2015/06/atomix_user31.png"] options:SDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-//            
-//        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-//            if(image && finished){
-//                profileImageView.image = image;
-//            }
-//            else{
-//                profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
-//            }
-//        }];
+        
+        
+        FDWebImageManager *manager = [FDWebImageManager sharedManager];
+        
+        [manager loadImageWithURL:[NSURL URLWithString:@"https://www.atomix.com.au/media/2015/06/atomix_user31.png"] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            
+        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+            if(image && finished){
+                profileImageView.image = image;
+            }
+            else{
+                profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+            }
+        }];
     }
     
     if(!currentMessage.isWelcomeMessage){

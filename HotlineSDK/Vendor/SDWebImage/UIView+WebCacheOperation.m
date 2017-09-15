@@ -6,20 +6,20 @@
  * file that was distributed with this source code.
  */
 
-#import "FDUIView+WebCacheOperation.h"
+#import "UIView+WebCacheOperation.h"
 
-#if SD_UIKIT || SD_MAC
+#if FD_UIKIT || FD_MAC
 
 #import "objc/runtime.h"
 
 static char loadOperationKey;
 
-typedef NSMutableDictionary<NSString *, id> SDOperationsDictionary;
+typedef NSMutableDictionary<NSString *, id> FDOperationsDictionary;
 
 @implementation UIView (WebCacheOperation)
 
-- (SDOperationsDictionary *)operationDictionary {
-    SDOperationsDictionary *operations = objc_getAssociatedObject(self, &loadOperationKey);
+- (FDOperationsDictionary *)operationDictionary {
+    FDOperationsDictionary *operations = objc_getAssociatedObject(self, &loadOperationKey);
     if (operations) {
         return operations;
     }
@@ -28,37 +28,37 @@ typedef NSMutableDictionary<NSString *, id> SDOperationsDictionary;
     return operations;
 }
 
-- (void)sd_setImageLoadOperation:(nullable id)operation forKey:(nullable NSString *)key {
+- (void)fd_setImageLoadOperation:(nullable id)operation forKey:(nullable NSString *)key {
     if (key) {
-        [self sd_cancelImageLoadOperationWithKey:key];
+        [self fd_cancelImageLoadOperationWithKey:key];
         if (operation) {
-            SDOperationsDictionary *operationDictionary = [self operationDictionary];
+            FDOperationsDictionary *operationDictionary = [self operationDictionary];
             operationDictionary[key] = operation;
         }
     }
 }
 
-- (void)sd_cancelImageLoadOperationWithKey:(nullable NSString *)key {
+- (void)fd_cancelImageLoadOperationWithKey:(nullable NSString *)key {
     // Cancel in progress downloader from queue
-    SDOperationsDictionary *operationDictionary = [self operationDictionary];
+    FDOperationsDictionary *operationDictionary = [self operationDictionary];
     id operations = operationDictionary[key];
     if (operations) {
         if ([operations isKindOfClass:[NSArray class]]) {
-            for (id <SDWebImageOperation> operation in operations) {
+            for (id <FDWebImageOperation> operation in operations) {
                 if (operation) {
                     [operation cancel];
                 }
             }
-        } else if ([operations conformsToProtocol:@protocol(SDWebImageOperation)]){
-            [(id<SDWebImageOperation>) operations cancel];
+        } else if ([operations conformsToProtocol:@protocol(FDWebImageOperation)]){
+            [(id<FDWebImageOperation>) operations cancel];
         }
         [operationDictionary removeObjectForKey:key];
     }
 }
 
-- (void)sd_removeImageLoadOperationWithKey:(nullable NSString *)key {
+- (void)fd_removeImageLoadOperationWithKey:(nullable NSString *)key {
     if (key) {
-        SDOperationsDictionary *operationDictionary = [self operationDictionary];
+        FDOperationsDictionary *operationDictionary = [self operationDictionary];
         [operationDictionary removeObjectForKey:key];
     }
 }

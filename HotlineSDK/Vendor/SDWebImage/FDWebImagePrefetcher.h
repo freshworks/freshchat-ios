@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "FDWebImageManager.h"
 
-@class SDWebImagePrefetcher;
+@class FDWebImagePrefetcher;
 
-@protocol SDWebImagePrefetcherDelegate <NSObject>
+@protocol FDWebImagePrefetcherDelegate <NSObject>
 
 @optional
 
@@ -23,7 +23,7 @@
  * @param finishedCount   The total number of images that were prefetched (successful or not)
  * @param totalCount      The total number of images that were to be prefetched
  */
-- (void)imagePrefetcher:(nonnull SDWebImagePrefetcher *)imagePrefetcher didPrefetchURL:(nullable NSURL *)imageURL finishedCount:(NSUInteger)finishedCount totalCount:(NSUInteger)totalCount;
+- (void)imagePrefetcher:(nonnull FDWebImagePrefetcher *)imagePrefetcher didPrefetchURL:(nullable NSURL *)imageURL finishedCount:(NSUInteger)finishedCount totalCount:(NSUInteger)totalCount;
 
 /**
  * Called when all images are prefetched.
@@ -31,12 +31,12 @@
  * @param totalCount      The total number of images that were prefetched (whether successful or not)
  * @param skippedCount    The total number of images that were skipped
  */
-- (void)imagePrefetcher:(nonnull SDWebImagePrefetcher *)imagePrefetcher didFinishWithTotalCount:(NSUInteger)totalCount skippedCount:(NSUInteger)skippedCount;
+- (void)imagePrefetcher:(nonnull FDWebImagePrefetcher *)imagePrefetcher didFinishWithTotalCount:(NSUInteger)totalCount skippedCount:(NSUInteger)skippedCount;
 
 @end
 
-typedef void(^SDWebImagePrefetcherProgressBlock)(NSUInteger noOfFinishedUrls, NSUInteger noOfTotalUrls);
-typedef void(^SDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, NSUInteger noOfSkippedUrls);
+typedef void(^FDWebImagePrefetcherProgressBlock)(NSUInteger noOfFinishedUrls, NSUInteger noOfTotalUrls);
+typedef void(^FDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, NSUInteger noOfSkippedUrls);
 
 /**
  * Prefetch some URLs in the cache for future use. Images are downloaded in low priority.
@@ -56,14 +56,14 @@ typedef void(^SDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, 
 /**
  * SDWebImageOptions for prefetcher. Defaults to SDWebImageLowPriority.
  */
-@property (nonatomic, assign) SDWebImageOptions options;
+@property (nonatomic, assign) FDWebImageOptions options;
 
 /**
  * Queue options for Prefetcher. Defaults to Main Queue.
  */
-@property (SDDispatchQueueSetterSementics, nonatomic, nonnull) dispatch_queue_t prefetcherQueue;
+@property (FDDispatchQueueSetterSementics, nonatomic, nonnull) dispatch_queue_t prefetcherQueue;
 
-@property (weak, nonatomic, nullable) id <SDWebImagePrefetcherDelegate> delegate;
+@property (weak, nonatomic, nullable) id <FDWebImagePrefetcherDelegate> delegate;
 
 /**
  * Return the global image prefetcher instance.
@@ -73,7 +73,7 @@ typedef void(^SDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, 
 /**
  * Allows you to instantiate a prefetcher with any arbitrary image manager.
  */
-- (nonnull instancetype)initWithImageManager:(nonnull SDWebImageManager *)manager NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithImageManager:(nonnull FDWebImageManager *)manager NS_DESIGNATED_INITIALIZER;
 
 /**
  * Assign list of URLs to let SDWebImagePrefetcher to queue the prefetching,
@@ -100,8 +100,8 @@ typedef void(^SDWebImagePrefetcherCompletionBlock)(NSUInteger noOfFinishedUrls, 
  *                        second parameter is the number of skipped requests
  */
 - (void)prefetchURLs:(nullable NSArray<NSURL *> *)urls
-            progress:(nullable SDWebImagePrefetcherProgressBlock)progressBlock
-           completed:(nullable SDWebImagePrefetcherCompletionBlock)completionBlock;
+            progress:(nullable FDWebImagePrefetcherProgressBlock)progressBlock
+           completed:(nullable FDWebImagePrefetcherCompletionBlock)completionBlock;
 
 /**
  * Remove and cancel queued list

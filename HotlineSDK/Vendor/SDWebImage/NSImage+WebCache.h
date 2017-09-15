@@ -8,7 +8,7 @@
 
 #import "FDWebImageCompat.h"
 
-#if SD_MAC
+#if FD_MAC
 
 #import <Cocoa/Cocoa.h>
 

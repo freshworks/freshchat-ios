@@ -16,8 +16,8 @@
 @property (assign, nonatomic) NSUInteger skippedCount;
 @property (assign, nonatomic) NSUInteger finishedCount;
 @property (assign, nonatomic) NSTimeInterval startedTime;
-@property (copy, nonatomic, nullable) SDWebImagePrefetcherCompletionBlock completionBlock;
-@property (copy, nonatomic, nullable) SDWebImagePrefetcherProgressBlock progressBlock;
+@property (copy, nonatomic, nullable) FDWebImagePrefetcherCompletionBlock completionBlock;
+@property (copy, nonatomic, nullable) FDWebImagePrefetcherProgressBlock progressBlock;
 
 @end
 
@@ -36,10 +36,10 @@
     return [self initWithImageManager:[FDWebImageManager new]];
 }
 
-- (nonnull instancetype)initWithImageManager:(SDWebImageManager *)manager {
+- (nonnull instancetype)initWithImageManager:(FDWebImageManager *)manager {
     if ((self = [super init])) {
         _manager = manager;
-        _options = SDWebImageLowPriority;
+        _options = FDWebImageLowPriority;
         _prefetcherQueue = dispatch_get_main_queue();
         self.maxConcurrentDownloads = 3;
     }
@@ -57,7 +57,7 @@
 - (void)startPrefetchingAtIndex:(NSUInteger)index {
     if (index >= self.prefetchURLs.count) return;
     self.requestedCount++;
-    [self.manager loadImageWithURL:self.prefetchURLs[index] options:self.options progress:nil completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [self.manager loadImageWithURL:self.prefetchURLs[index] options:self.options progress:nil completed:^(UIImage *image, NSData *data, NSError *error, FDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (!finished) return;
         self.finishedCount++;
 
@@ -110,8 +110,8 @@
 }
 
 - (void)prefetchURLs:(nullable NSArray<NSURL *> *)urls
-            progress:(nullable SDWebImagePrefetcherProgressBlock)progressBlock
-           completed:(nullable SDWebImagePrefetcherCompletionBlock)completionBlock {
+            progress:(nullable FDWebImagePrefetcherProgressBlock)progressBlock
+           completed:(nullable FDWebImagePrefetcherCompletionBlock)completionBlock {
     [self cancelPrefetching]; // Prevent duplicate prefetch request
     self.startedTime = CFAbsoluteTimeGetCurrent();
     self.prefetchURLs = urls;

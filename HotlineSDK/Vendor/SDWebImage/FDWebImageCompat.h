@@ -10,46 +10,46 @@
 #import <TargetConditionals.h>
 
 #ifdef __OBJC_GC__
-    #error SDWebImage does not support Objective-C Garbage Collection
+    #error FDWebImage does not support Objective-C Garbage Collection
 #endif
 
 // Apple's defines from TargetConditionals.h are a bit weird.
 // Seems like TARGET_OS_MAC is always defined (on all platforms).
 // To determine if we are running on OSX, we can only rely on TARGET_OS_IPHONE=0 and all the other platforms
 #if !TARGET_OS_IPHONE && !TARGET_OS_IOS && !TARGET_OS_TV && !TARGET_OS_WATCH
-    #define SD_MAC 1
+    #define FD_MAC 1
 #else
-    #define SD_MAC 0
+    #define FD_MAC 0
 #endif
 
 // iOS and tvOS are very similar, UIKit exists on both platforms
 // Note: watchOS also has UIKit, but it's very limited
 #if TARGET_OS_IOS || TARGET_OS_TV
-    #define SD_UIKIT 1
+    #define FD_UIKIT 1
 #else
-    #define SD_UIKIT 0
+    #define FD_UIKIT 0
 #endif
 
 #if TARGET_OS_IOS
-    #define SD_IOS 1
+    #define FD_IOS 1
 #else
-    #define SD_IOS 0
+    #define FD_IOS 0
 #endif
 
 #if TARGET_OS_TV
-    #define SD_TV 1
+    #define FD_TV 1
 #else
-    #define SD_TV 0
+    #define FD_TV 0
 #endif
 
 #if TARGET_OS_WATCH
-    #define SD_WATCH 1
+    #define FD_WATCH 1
 #else
-    #define SD_WATCH 0
+    #define FD_WATCH 0
 #endif
 
 
-#if SD_MAC
+#if FD_MAC
     #import <AppKit/AppKit.h>
     #ifndef UIImage
         #define UIImage NSImage
@@ -62,13 +62,13 @@
     #endif
 #else
     #if __IPHONE_OS_VERSION_MIN_REQUIRED != 20000 && __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_5_0
-        #error SDWebImage doesn't support Deployment Target version < 5.0
+        #error FDWebImage doesn't support Deployment Target version < 5.0
     #endif
 
-    #if SD_UIKIT
+    #if FD_UIKIT
         #import <UIKit/UIKit.h>
     #endif
-    #if SD_WATCH
+    #if FD_WATCH
         #import <WatchKit/WatchKit.h>
     #endif
 #endif
@@ -82,22 +82,22 @@
 #endif
 
 #if OS_OBJECT_USE_OBJC
-    #undef SDDispatchQueueRelease
-    #undef SDDispatchQueueSetterSementics
-    #define SDDispatchQueueRelease(q)
-    #define SDDispatchQueueSetterSementics strong
+    #undef FDDispatchQueueRelease
+    #undef FDDispatchQueueSetterSementics
+    #define FDDispatchQueueRelease(q)
+    #define FDDispatchQueueSetterSementics strong
 #else
-    #undef SDDispatchQueueRelease
-    #undef SDDispatchQueueSetterSementics
-    #define SDDispatchQueueRelease(q) (dispatch_release(q))
-    #define SDDispatchQueueSetterSementics assign
+    #undef FDDispatchQueueRelease
+    #undef FDDispatchQueueSetterSementics
+    #define FDDispatchQueueRelease(q) (dispatch_release(q))
+    #define FDDispatchQueueSetterSementics assign
 #endif
 
-FOUNDATION_EXPORT UIImage *SDScaledImageForKey(NSString *key, UIImage *image);
+FOUNDATION_EXPORT UIImage *FDScaledImageForKey(NSString *key, UIImage *image);
 
-typedef void(^SDWebImageNoParamsBlock)();
+typedef void(^FDWebImageNoParamsBlock)();
 
-FOUNDATION_EXPORT NSString *const SDWebImageErrorDomain;
+FOUNDATION_EXPORT NSString *const FDWebImageErrorDomain;
 
 #ifndef dispatch_main_async_safe
 #define dispatch_main_async_safe(block)\

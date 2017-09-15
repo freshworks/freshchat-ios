@@ -10,24 +10,24 @@
 #import "FDWebImageDownloader.h"
 #import "FDWebImageOperation.h"
 
-FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadStartNotification;
-FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadReceiveResponseNotification;
-FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadStopNotification;
-FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadFinishNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const FDWebImageDownloadStartNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const FDWebImageDownloadReceiveResponseNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const FDWebImageDownloadStopNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const FDWebImageDownloadFinishNotification;
 
 
 
 /**
  Describes a downloader operation. If one wants to use a custom downloader op, it needs to inherit from `NSOperation` and conform to this protocol
  */
-@protocol SDWebImageDownloaderOperationInterface<NSObject>
+@protocol FDWebImageDownloaderOperationInterface<NSObject>
 
 - (nonnull instancetype)initWithRequest:(nullable NSURLRequest *)request
                               inSession:(nullable NSURLSession *)session
-                                options:(SDWebImageDownloaderOptions)options;
+                                options:(FDWebImageDownloaderOptions)options;
 
-- (nullable id)addHandlersForProgress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
-                            completed:(nullable SDWebImageDownloaderCompletedBlock)completedBlock;
+- (nullable id)addHandlersForProgress:(nullable FDWebImageDownloaderProgressBlock)progressBlock
+                            completed:(nullable FDWebImageDownloaderCompletedBlock)completedBlock;
 
 - (BOOL)shouldDecompressImages;
 - (void)setShouldDecompressImages:(BOOL)value;
@@ -38,7 +38,7 @@ FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadFinishNotification
 @end
 
 
-@interface SDWebImageDownloaderOperation : NSOperation <SDWebImageDownloaderOperationInterface, SDWebImageOperation, NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
+@interface FDWebImageDownloaderOperation : NSOperation <FDWebImageDownloaderOperationInterface, FDWebImageOperation, NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
 /**
  * The request used by the operation's task.
@@ -69,7 +69,7 @@ FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadFinishNotification
 /**
  * The SDWebImageDownloaderOptions for the receiver.
  */
-@property (assign, nonatomic, readonly) SDWebImageDownloaderOptions options;
+@property (assign, nonatomic, readonly) FDWebImageDownloaderOptions options;
 
 /**
  * The expected size of data.
@@ -94,7 +94,7 @@ FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadFinishNotification
  */
 - (nonnull instancetype)initWithRequest:(nullable NSURLRequest *)request
                               inSession:(nullable NSURLSession *)session
-                                options:(SDWebImageDownloaderOptions)options NS_DESIGNATED_INITIALIZER;
+                                options:(FDWebImageDownloaderOptions)options NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Adds handlers for progress and completion. Returns a tokent that can be passed to -cancel: to cancel this set of
@@ -107,8 +107,8 @@ FOUNDATION_EXPORT NSString * _Nonnull const SDWebImageDownloadFinishNotification
  *
  *  @return the token to use to cancel this set of handlers
  */
-- (nullable id)addHandlersForProgress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
-                            completed:(nullable SDWebImageDownloaderCompletedBlock)completedBlock;
+- (nullable id)addHandlersForProgress:(nullable FDWebImageDownloaderProgressBlock)progressBlock
+                            completed:(nullable FDWebImageDownloaderCompletedBlock)completedBlock;
 
 /**
  *  Cancels a set of callbacks. Once all callbacks are canceled, the operation is cancelled.

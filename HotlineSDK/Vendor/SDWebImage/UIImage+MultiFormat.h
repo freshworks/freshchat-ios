@@ -7,12 +7,12 @@
  */
 
 #import "FDWebImageCompat.h"
-#import "FDNSData+ImageContentType.h"
+#import "NSData+ImageContentType.h"
 
 @interface UIImage (MultiFormat)
 
-+ (nullable UIImage *)sd_imageWithData:(nullable NSData *)data;
-- (nullable NSData *)sd_imageData;
-- (nullable NSData *)sd_imageDataAsFormat:(FDImageFormat)imageFormat;
++ (nullable UIImage *)fd_imageWithData:(nullable NSData *)data;
+- (nullable NSData *)fd_imageData;
+- (nullable NSData *)fd_imageDataAsFormat:(FDImageFormat)imageFormat;
 
 @end

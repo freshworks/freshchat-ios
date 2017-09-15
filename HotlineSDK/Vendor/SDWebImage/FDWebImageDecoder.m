@@ -11,7 +11,7 @@
 
 @implementation UIImage (ForceDecode)
 
-#if SD_UIKIT || SD_WATCH
+#if FD_UIKIT || FD_WATCH
 static const size_t kBytesPerPixel = 4;
 static const size_t kBitsPerComponent = 8;
 
@@ -259,7 +259,7 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     }
     return colorspaceRef;
 }
-#elif SD_MAC
+#elif FD_MAC
 + (nullable UIImage *)decodedImageWithImage:(nullable UIImage *)image {
     return image;
 }

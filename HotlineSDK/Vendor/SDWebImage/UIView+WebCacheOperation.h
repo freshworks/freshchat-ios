@@ -8,7 +8,7 @@
 
 #import "FDWebImageCompat.h"
 
-#if SD_UIKIT || SD_MAC
+#if FD_UIKIT || FD_MAC
 
 #import "FDWebImageManager.h"
 
@@ -20,21 +20,21 @@
  *  @param operation the operation
  *  @param key       key for storing the operation
  */
-- (void)sd_setImageLoadOperation:(nullable id)operation forKey:(nullable NSString *)key;
+- (void)fd_setImageLoadOperation:(nullable id)operation forKey:(nullable NSString *)key;
 
 /**
  *  Cancel all operations for the current UIView and key
  *
  *  @param key key for identifying the operations
  */
-- (void)sd_cancelImageLoadOperationWithKey:(nullable NSString *)key;
+- (void)fd_cancelImageLoadOperationWithKey:(nullable NSString *)key;
 
 /**
  *  Just remove the operations corresponding to the current UIView and key without cancelling them
  *
  *  @param key key for identifying the operations
  */
-- (void)sd_removeImageLoadOperationWithKey:(nullable NSString *)key;
+- (void)fd_removeImageLoadOperationWithKey:(nullable NSString *)key;
 
 @end
 
