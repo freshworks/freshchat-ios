@@ -49,11 +49,12 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         self.delegate = delegate;
         self.theme = [HLTheme sharedInstance];
         self.isFromAttachmentScreen = NO;
-        self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
+        self.backgroundColor = [self.theme inputToolbarBackgroundColor];
         textView=[[UITextView alloc] init];
         [textView setFont:[self.theme inputTextFont]];
-        [textView setTextColor:[UIColor lightGrayColor]];
-        textView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
+        [textView setTextColor:[self.theme inputTextPlaceholderFontColor]];
+        textView.tintColor = [self.theme inputTextCursorColor];
+        textView.layer.borderColor=[[self.theme inputTextBorderColor] CGColor];
         textView.layer.cornerRadius=5.0;
         textView.layer.borderWidth=1.0;
         textView.delegate = self;

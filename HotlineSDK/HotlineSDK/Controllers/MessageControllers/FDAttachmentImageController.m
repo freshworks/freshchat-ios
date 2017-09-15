@@ -122,7 +122,7 @@
 
 
 -(void)setNavigationItem{
-    UIBarButtonItem *backButton = [[FDBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON] style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
     self.navigationItem.leftBarButtonItem = backButton;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [[HLTheme sharedInstance ]navigationBarBackgroundColor];

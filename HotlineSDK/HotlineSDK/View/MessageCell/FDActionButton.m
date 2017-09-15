@@ -60,7 +60,7 @@
    
         [self setAttributedTitle:
          [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
-        [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
+        [self setTitleColor:[theme actionButtonSelectedFontColor] forState:UIControlStateSelected];
     }
     else{
         [self setHidden:YES];

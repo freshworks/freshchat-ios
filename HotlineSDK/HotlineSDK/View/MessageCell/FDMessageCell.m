@@ -96,7 +96,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     
-    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameTextColor];
+    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameFontColor];
     [senderNameLabel setEditable:NO];
     [senderNameLabel setScrollEnabled:NO];
     [senderNameLabel setSelectable:NO];

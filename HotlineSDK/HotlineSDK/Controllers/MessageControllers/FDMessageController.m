@@ -198,8 +198,8 @@ typedef struct {
     self.channelName.text = self.channel.name;
     [self.titleView addSubview:self.channelName];
     
-    self.typicalReply.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
-    self.typicalReply.font = [self.typicalReply.font fontWithSize:12];
+    self.typicalReply.font = [[HLTheme sharedInstance] responseTimeExpectationsFontName];
+    self.typicalReply.textColor = [[HLTheme sharedInstance] responseTimeExpectationsFontColor];
     self.typicalReply.textAlignment = UITextAlignmentCenter;
     [self.titleView addSubview:self.typicalReply];
     
@@ -208,6 +208,7 @@ typedef struct {
 
 -(void) showTypicalReply:(NSInteger) time {
     self.typicalReply.text = [FDUtilities typicalRepliesMsgForTime:time];
+    
     [UIView animateWithDuration:0.5 animations:^{
         self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
         self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, self.titleHeight/3);

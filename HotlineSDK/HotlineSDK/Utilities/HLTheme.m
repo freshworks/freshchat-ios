@@ -467,6 +467,15 @@
     return filename;
 }
 
+-(UIFont *)responseTimeExpectationsFontName{
+    return [self getFontWithKey:@"ConversationsUI.ResponseTimeExpectations" andDefaultSize:12];
+}
+
+-(UIColor *)responseTimeExpectationsFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ResponseTimeExpectationsFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
 -(UIColor *)inputTextFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
@@ -474,6 +483,25 @@
 
 -(UIFont *)inputTextFont{
     return [self getFontWithKey:@"ConversationsUI.InputText" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(UIColor *)inputTextCursorColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextCursorColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLUE];
+}
+
+-(UIColor *)inputToolbarBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputToolbarBackgroundColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
+}
+-(UIColor *)inputTextBorderColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextBorderColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIColor *)inputTextPlaceholderFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextPlaceholderFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIColor *)sendButtonColor{
@@ -486,8 +514,8 @@
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 
--(UIColor *)actionButtonSelectedTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonSelectedTextColor"];
+-(UIColor *)actionButtonSelectedFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonSelectedFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 
@@ -515,21 +543,26 @@
     return [self getFontWithKey:@"ConversationsUI.ChatBubbleTime" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
+-(UIColor *)getChatbubbleTimeFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ChatBubbleTimeFontColor"];
+    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+}
+
 -(NSString *)conversationUIFontName{
     return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
 }
 
 - (UIColor *) agentMessageFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentMessageTextColor"];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentMessageFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 - (UIColor *) userMessageFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageTextColor"];
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 
--(UIColor *)agentNameTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentNameTextColor"];
+-(UIColor *)agentNameFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentNameFontColor"];
     return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
 }
 

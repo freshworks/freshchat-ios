@@ -120,21 +120,28 @@
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;
 -(UIFont *) inputTextFont;
+-(UIColor *)inputTextPlaceholderFontColor;
+-(UIColor *)inputTextCursorColor;
+-(UIColor *)inputToolbarBackgroundColor;
+-(UIColor *)inputTextBorderColor;
 -(UIColor *)sendButtonColor;
 
 -(UIColor *)actionButtonTextColor;
--(UIColor *)actionButtonSelectedTextColor;
+-(UIColor *)actionButtonSelectedFontColor;
 -(UIColor *)actionButtonColor;
 -(UIColor *)actionButtonBorderColor;
 -(UIColor *)hyperlinkColor;
 -(NSString *)conversationUIFontName;
 -(UIFont *)getChatBubbleMessageFont;
 -(UIFont *)getChatbubbleTimeFont;
+-(UIColor *)getChatbubbleTimeFontColor;
 -(UIColor *)agentMessageFontColor;
 -(UIColor *)userMessageFontColor;
--(UIColor *)agentNameTextColor;
+-(UIColor *)agentNameFontColor;
 -(UIFont *)agentNameFont;
 -(UIColor *)messageUIBackgroundColor;
+-(UIFont *)responseTimeExpectationsFontName;
+-(UIColor *)responseTimeExpectationsFontColor;
 
 //Notification
 -(UIColor *)notificationBackgroundColor;

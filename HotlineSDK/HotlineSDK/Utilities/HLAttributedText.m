@@ -41,7 +41,7 @@
 
 -(NSMutableAttributedString *) addAttributedString:(NSString *)string  {
     UIFont *customFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
-    NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family:'%@'; font-size:'%d'\">%@</style>",customFont.fontName,(int)customFont.pointSize,string];
+    NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>",customFont.fontName,(int)customFont.pointSize,string];
     NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUnicodeStringEncoding]
                                                                                                options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
                                                                                     documentAttributes:nil error:nil];

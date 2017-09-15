@@ -234,7 +234,7 @@ static NSInteger networkIndicator = 0;
             // If < 55 minutes, round off to factor of 5
             min = (int) ceil(minutes / 5) * 5;
         }
-        return [NSString stringWithFormat: @"%@ %d %@",LOC_TYPICALLY_REPLIES_WITHIN_MIN, min,LOC_PLACEHOLDER_MINS];
+        return [NSString stringWithFormat: @"%@ %d %@",HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN), min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
     } else if (minutes < 60) {
         return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
     } else if (minutes < 120) {
@@ -367,16 +367,22 @@ static NSInteger networkIndicator = 0;
 }
 
 +(BOOL) containsHTMLContent: (NSString *)content {
-    if ((([FDUtilities containsString:content andTarget:@"<b>"]) && ([FDUtilities containsString:content andTarget:@"</b>"]))
-    || (([FDUtilities containsString:content andTarget:@"<i>"]) && ([FDUtilities containsString:content andTarget:@"</i>"]))
-    || (([FDUtilities containsString:content andTarget:@"<u>"]) && ([FDUtilities containsString:content andTarget:@"</u>"]))
-    || (([FDUtilities containsString:content andTarget:@"<a>"]) && ([FDUtilities containsString:content andTarget:@"</a>"]))
-    || (([FDUtilities containsString:content andTarget:@"<h1>"]) && ([FDUtilities containsString:content andTarget:@"</h1>"]))
-    || (([FDUtilities containsString:content andTarget:@"<h2>"]) && ([FDUtilities containsString:content andTarget:@"</h2>"]))
-    || (([FDUtilities containsString:content andTarget:@"<h3>"]) && ([FDUtilities containsString:content andTarget:@"</h3>"]))
-    || (([FDUtilities containsString:content andTarget:@"<h4>"]) && ([FDUtilities containsString:content andTarget:@"</h4>"]))
-    || (([FDUtilities containsString:content andTarget:@"<h5>"]) && ([FDUtilities containsString:content andTarget:@"</h5>"]))
-    || (([FDUtilities containsString:content andTarget:@"<h6>"]) && ([FDUtilities containsString:content andTarget:@"</h6>"]))) {
+    if (([FDUtilities containsString:content andTarget:@"<b>"])
+        || ([FDUtilities containsString:content andTarget:@"<i>"])
+        || ([FDUtilities containsString:content andTarget:@"<u>"])
+        || ([FDUtilities containsString:content andTarget:@"&lt"])
+        || ([FDUtilities containsString:content andTarget:@"&gt"])
+        || ([FDUtilities containsString:content andTarget:@"&nbsp"])
+        || ([FDUtilities containsString:content andTarget:@"<a href"])
+        || ([FDUtilities containsString:content andTarget:@"https://"])
+        || ([FDUtilities containsString:content andTarget:@"http://"])
+        || ([FDUtilities containsString:content andTarget:@"<a>"])
+        || ([FDUtilities containsString:content andTarget:@"<h1>"])
+        || ([FDUtilities containsString:content andTarget:@"<h2>"])
+        || ([FDUtilities containsString:content andTarget:@"<h3>"])
+        || ([FDUtilities containsString:content andTarget:@"<h4>"])
+        || ([FDUtilities containsString:content andTarget:@"<h5>"])
+        || ([FDUtilities containsString:content andTarget:@"<h6>"])) {
         return true;
     }
     return false;

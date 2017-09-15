@@ -58,12 +58,13 @@
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameTextColor];
+    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameFontColor];
     [senderNameLabel setEditable:NO];
     [senderNameLabel setScrollEnabled:NO];
     [senderNameLabel setSelectable:NO];
     
     messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
+    messageSentTimeLabel.textColor = [[HLTheme sharedInstance] getChatbubbleTimeFontColor];
     [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
@@ -126,6 +127,7 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initWithFragment:fragment];
+            htmlFragment.textColor = [[HLTheme sharedInstance] userMessageFontColor];
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];
@@ -144,7 +146,7 @@
         } else if([fragment.type isEqualToString:@"4"]) {
             //Skip now
             //NSLog(@"Video");
-        } else if([fragment.type isEqualToString:@"5"]) {
+        } else if([fragment.type isEqualToString:@"5"] ) {
             //Skip now
             //NSLog(@"Button");
         } else if([fragment.type isEqualToString:@"6"]) {

@@ -21,6 +21,7 @@
                 
                 if([FDUtilities containsHTMLContent:fragment.content]) {                
                     NSMutableAttributedString *str = [[HLAttributedText sharedInstance] getAttributedString:fragment.content];
+                    
                     if(str == nil) {
                         //NSLog(@"FRAGMENT::Setting un-cached attributedText::::%@",fragment.content);
                         NSMutableAttributedString *content = [[HLAttributedText sharedInstance] addAttributedString:fragment.content];
@@ -28,6 +29,7 @@
                     } else {
                         //NSLog(@"FRAGMENT::Setting cached attributedText::::%@",fragment.content);
                         self.attributedText = str;
+                        
                     }
                 } else {
                     UIFont *customFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
