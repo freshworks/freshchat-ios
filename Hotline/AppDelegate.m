@@ -185,18 +185,7 @@
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     NSLog(@"Push recieved :%@", info);
     if ([[Hotline sharedInstance]isHotlineNotification:info]) {
-        for ( int i=0; i<_channelsController.viewControllers.count ; i++ ) {
-            NSLog(@"-->%@\n",NSStringFromClass(_channelsController.viewControllers[i].class));
-            for( int j=0 ;j<_channelsController.viewControllers[i].childViewControllers.count ;j++ ) {
-                NSLog(@"---->%@\n",NSStringFromClass(_channelsController.viewControllers[i].childViewControllers[j].class));
-                if ( i == 1 && j == 0 ) {
-                    NSLog(@"---->: FDMEssage controller");
-                    UIViewController *vc = _channelsController.viewControllers[i].childViewControllers[j];
-                    [[Hotline sharedInstance] updateConversationBannerMessage:[NSString stringWithFormat:@"%i", arc4random() %(100)-1 ]];
-                    [vc willMoveToParentViewController:vc.parentViewController];
-                }
-            }
-        }
+        [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }
 

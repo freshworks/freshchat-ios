@@ -21,7 +21,6 @@
 #import "FDUtilities.h"
 #import "FDSolutionUpdater.h"
 #import "FDMessagesUpdater.h"
-#import "FDDAUUpdater.h"
 #import "Message.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
@@ -350,10 +349,18 @@
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
+    //save last message session
     [self.messagePoller end];
+    [self updateSessionInterval];
 }
 
--(void) updateLocaleMeta {    
+- (void) updateSessionInterval{
+    if([HLUser isUserRegistered]){
+        [HLUserDefaults setObject:[NSDate date] forKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
+    }
+}
+
+-(void) updateLocaleMeta {
     if([FDLocaleUtil hadLocaleChange]) {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
@@ -367,9 +374,16 @@
         [HLUser registerUser:nil];
     }
     if([FDUtilities hasInitConfig]) {
+        if([FDUtilities canMakeDAUCall]){
+            [HLCoreServices performDAUCall];
+        }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
-                [[[FDDAUUpdater alloc]init] fetch];
+                [HLCoreServices performHeartbeatCall];
+                if([FDUtilities canMakeSessionCall]){
+                    [self updateSessionInterval];
+                    [HLCoreServices performSessionCall];
+                }
                 [self registerDeviceToken];
                 [self updateAppVersion];
                 [self updateAdId];
@@ -549,6 +563,9 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
         if(doInit){
             [self initWithConfig:config completion:completion];
+            if([FDUtilities canMakeDAUCall]){
+                [HLCoreServices performDAUCall];
+            }
         }else{
             if (completion) {
                 completion();
@@ -556,6 +573,9 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         }
         if (deviceToken) {
             [self storeDeviceToken:deviceToken];
+            if (completion) {
+                completion();
+            }
         }
     }];
 }
