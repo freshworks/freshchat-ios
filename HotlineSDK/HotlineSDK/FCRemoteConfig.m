@@ -14,10 +14,8 @@
     self = [super init];
     if (self) {
         self.accountActive = YES;
-        self.sessionDuration = 30 * ONE_MINUTE_IN_MS;
-        self.activeConvWindow = 3 * ONE_DAY_IN_MS;
-        
-        
+        self.sessionTimeOutInterval = 30 * ONE_MINUTE_IN_MS;
+        self.conversationConfig = [[FCConversationConfig alloc] init];
         self.refreshIntervals = [[FCRefreshIntervals alloc] init];
         self.features = [[FCEnabledFeatures alloc] init];
     }
@@ -34,28 +32,15 @@
     _accountActive = accountActive;
 }
 
-- (long) getSessionDuration{
+- (long) getSessionTimeOutInterval{
     
-    return self.sessionDuration;
+    return self.sessionTimeOutInterval;
 }
 
 - (void) setSessionDuration:(long)sessionDuration{
-    _sessionDuration = sessionDuration;
-    [HLUserDefaults setLong:sessionDuration forKey:CONFIG_RC_SESSION_DURATION_SECS];
+    _sessionTimeOutInterval = sessionDuration;
+    [HLUserDefaults setLong:sessionDuration forKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
 }
-
-- (long) getActiveConvWindow{
-    
-    return self.activeConvWindow;
-}
-
-- (void) setActiveConvWindow:(long)activeConvWindow{
-    
-    _activeConvWindow = activeConvWindow;
-    [HLUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
-}
-
-
 
 - (FCRefreshIntervals *) getRefreshIntervals{
     
@@ -66,12 +51,12 @@
     _refreshIntervals = refreshIntervals;
 }
 
-- (void) setFeatures:(FCEnabledFeatures *)features{
-    _features = features;
+- (void) setFeatures:(FCEnabledFeatures *)enabledFeatures{
+    _enabledFeatures = enabledFeatures;
 }
 
-- (FCEnabledFeatures *) getFeatures {
-    return self.features;
+- (FCEnabledFeatures *) getEnabledFeatures {
+    return self.enabledFeatures;
 }
 
 @end

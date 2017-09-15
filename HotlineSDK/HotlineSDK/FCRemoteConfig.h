@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "FCRefreshIntervals.h"
 #import "FCEnabledFeatures.h"
+#import "FCConversationConfig.h"
 
 @interface FCRemoteConfig : NSObject
 
 @property (nonatomic, assign) BOOL accountActive;
-@property (nonatomic, assign) long sessionDuration;
-@property (nonatomic, assign) long activeConvWindow;
-
+@property (nonatomic, assign) long sessionTimeOutInterval;
+@property (nonatomic, strong) FCConversationConfig *conversationConfig;
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
-@property (nonatomic, strong) FCEnabledFeatures *features;
+@property (nonatomic, strong) FCEnabledFeatures *enabledFeatures;
 
 @end

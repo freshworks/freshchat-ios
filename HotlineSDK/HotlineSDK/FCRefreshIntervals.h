@@ -16,6 +16,8 @@
 
 @interface FCRefreshIntervals : NSObject
 
+@property (nonatomic, assign) long responseTimeExpectationsFetchInterval;
+
 @property (nonatomic, assign) long remoteConfigFetchInterval;
 
 @property (nonatomic, assign) long activeConvMinFetchInterval;
@@ -29,8 +31,6 @@
 
 @property (nonatomic, assign) long channelsFetchIntervalNormal;
 @property (nonatomic, assign) long channelsFetchIntervalLaidback;
-
-@property (nonatomic, assign) long responseTimeExpectationsFetchInterval; //TODO :
 
 - (instancetype)init;
 

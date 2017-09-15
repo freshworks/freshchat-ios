@@ -20,6 +20,28 @@
     return self;
 }
 
+- (void) updateRemoteConfig : (NSDictionary *) configDict{
+
+    self.remoteConfig.accountActive = [[configDict objectForKey:@"accountActive"] boolValue];
+    self.remoteConfig.sessionTimeOutInterval = [[configDict objectForKey:@"sessionTimeoutInterval"] longValue];
+    self.remoteConfig.conversationConfig.showAgentAvatars = [configDict objectForKey:@""];
+    
+    self.remoteConfig.conversationConfig.activeConvFetchBackoffRatio = [[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue];
+    self.remoteConfig.conversationConfig.launchDeeplinkFromNotification = [[configDict objectForKey:@"activeConvWindow"] boolValue];
+    self.remoteConfig.conversationConfig.activeConvWindow = [[configDict objectForKey:@"activeConvWindow"] longValue];
+    
+    self.remoteConfig.refreshIntervals.activeConvMaxFetchInterval = [[configDict objectForKey:@"activeConvMaxFetchInterval"] longValue];
+    self.remoteConfig.refreshIntervals.activeConvMinFetchInterval = [[configDict objectForKey:@"activeConvMinFetchInterval"] longValue];
+    self.remoteConfig.refreshIntervals.channelsFetchIntervalNormal = [[configDict objectForKey:@"channelsFetchIntervalNormal"] longValue];
+    self.remoteConfig.refreshIntervals.channelsFetchIntervalLaidback = [[configDict objectForKey:@"channelsFetchIntervalLaidback"] longValue];
+    self.remoteConfig.refreshIntervals.faqFetchIntervalNormal = [[configDict objectForKey:@"faqFetchIntervalNormal"] longValue];
+    self.remoteConfig.refreshIntervals.faqFetchIntervalLaidback = [[configDict objectForKey:@"faqFetchIntervalLaidback"] longValue];
+    self.remoteConfig.refreshIntervals.msgFetchIntervalNormal = [[configDict objectForKey:@"msgFetchIntervalNormal"] longValue];
+    self.remoteConfig.refreshIntervals.msgFetchIntervalLaidback = [[configDict objectForKey:@"msgFetchIntervalLaidback"] longValue];
+    self.remoteConfig.refreshIntervals.remoteConfigFetchInterval = [[configDict objectForKey:@"remoteConfigFetchInterval"] longValue];
+    self.remoteConfig.refreshIntervals.responseTimeExpectationsFetchInterval = [[configDict objectForKey:@"responseTimeExpectationsFetchInterval"] longValue];
+}
+
 -(void)updateFeaturesConfig:(FCEnabledFeatures *)features{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (features) {
@@ -30,8 +52,6 @@
         [store setBoolValue:features.isUserEventsEnabled forKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
         [store setBoolValue:features.isAOTUserCreateEnabled forKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
         [store setBoolValue:features.showCustomBrandBanner forKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
-        [store setBoolValue:features.conversationConfig.showAgentAvatars forKey:FRESHCHAT_CONFIG_RC_SHOW_AGENT_AVATAR];
-        [store setBoolValue:features.conversationConfig.launchDeeplinkFromNotification forKey:FRESHCHAT_CONFIG_RC_LAUNCH_DEEPLINK_NOTIFICATION];
     }
 }
 
@@ -63,7 +83,14 @@
     return ([HLUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO]);
 }
 
-//FC interval call
++ (BOOL) isAgentAvatarEnabled{
+    return ([HLUserDefaults getBoolForKey:CONFIG_RC_AGENT_AVATAR_ENABLED]);
+}
+
++ (BOOL) isDeeplinkFromNotificationEnabled {
+    return ([HLUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED]);
+}
+
 + (long) getRemoteConfigFetchInterval{
     return ([HLUserDefaults getLongForKey:CONFIG_RC_API_FETCH_INTERVAL]);
 }
@@ -88,7 +115,7 @@
     return ([HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL]);
 }
 
-+ (long) setFaqFetchIntervalLaidback {
++ (long) getFaqFetchIntervalLaidback {
     return ([HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK]);
 }
 
@@ -96,7 +123,7 @@
     return ([HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL]);
 }
 
-+ (long) setChannelsFetchIntervalLaidback {
++ (long) getChannelsFetchIntervalLaidback {
     return ([HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK]);
 }
 
@@ -104,17 +131,12 @@
     return ([HLUserDefaults getLongForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]);
 }
 
-+ (long) setResponseTimeExpectationsFetchInterval{
-    return ([HLUserDefaults getLongForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]);
-}
-
 + (int) getActiveConvWindow {
     return ([[HLUserDefaults getNumberForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] intValue]);
 }
-//FC CONFIG_RC_ACTIVE_CONV_WINDOW
 
-+ (long) getSessionDuration{
-    return ([HLUserDefaults getLongForKey:CONFIG_RC_SESSION_DURATION_SECS]);
++ (long) getSessionTimeoutInterval{
+    return ([HLUserDefaults getLongForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL]);
 }
 
 + (BOOL) isActiveConvAvailable{

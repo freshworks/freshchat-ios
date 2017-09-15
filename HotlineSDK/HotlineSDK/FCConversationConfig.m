@@ -8,6 +8,7 @@
 
 #import "FCConversationConfig.h"
 #import "HLUserDefaults.h"
+#import "FCRefreshIntervals.h"
 
 @implementation FCConversationConfig
 
@@ -17,6 +18,7 @@
         self.showAgentAvatars = YES;
         self.launchDeeplinkFromNotification = YES;
         self.activeConvFetchBackoffRatio = 1.25;
+        self.activeConvWindow = 3 * ONE_DAY_IN_MS;
     }
     return self;
 }
@@ -24,6 +26,7 @@
 - (void) setShowAgentAvatars:(BOOL)showAgentAvatars {
     
     _showAgentAvatars = showAgentAvatars;
+    [HLUserDefaults setBool:showAgentAvatars forKey:CONFIG_RC_AGENT_AVATAR_ENABLED];
 }
 
 - (BOOL) getShowAgentAvatars {
@@ -42,13 +45,25 @@
     _activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
 
-- (void) setLaunchDeeplinkFromNotification:(BOOL)launchDeeplinkFromNotification{
-    _launchDeeplinkFromNotification = launchDeeplinkFromNotification;
-}
-
 - (BOOL) getLaunchDeeplinkFromNotification{
     
     return  self.launchDeeplinkFromNotification;
+}
+
+- (void) setLaunchDeeplinkFromNotification:(BOOL)launchDeeplinkFromNotification{
+    _launchDeeplinkFromNotification = launchDeeplinkFromNotification;
+    [HLUserDefaults setBool:launchDeeplinkFromNotification forKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
+}
+
+- (long) getActiveConvWindow{
+    
+    return self.activeConvWindow;
+}
+
+- (void) setActiveConvWindow:(long)activeConvWindow{
+    
+    _activeConvWindow = activeConvWindow;
+    [HLUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
 }
 
 @end

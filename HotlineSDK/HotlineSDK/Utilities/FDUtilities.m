@@ -345,9 +345,11 @@ static NSInteger networkIndicator = 0;
 }
 
 +(BOOL) canMakeRemoteConfigCall {
-    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1970:( [FCRemoteConfigUtil getRemoteConfigFetchInterval]/ 1000.0)]];
-    
-    if((interval*1000) > [CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME doubleValue]){
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME]];
+    if(isnan(interval)){
+        return true;
+    }
+    if(interval > [FCRemoteConfigUtil getRemoteConfigFetchInterval]/ 1000.0){
         return true;
     }
     return false;
@@ -359,16 +361,19 @@ static NSInteger networkIndicator = 0;
     }
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
     FDLog(@"Time interval b/w dates %f", interval);
-    if(interval > SESSION_UPDATE_INTERVAL){
+    if(interval > [FCRemoteConfigUtil getSessionTimeoutInterval]/1000){
         return true;
     }
     return false;
 }
 
 + (BOOL) canMakeTypicallyRepliesCall {
-    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1970:( [FCRemoteConfigUtil getResponseTimeExpectationsFetchInterval]/ 1000.0)]];
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]];
     
-    if(interval > [CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL doubleValue]){
+    if(isnan(interval)){
+        return true;
+    }
+    if(interval > [FCRemoteConfigUtil getResponseTimeExpectationsFetchInterval]/ 1000.0){
         return true;
     }
     return false;

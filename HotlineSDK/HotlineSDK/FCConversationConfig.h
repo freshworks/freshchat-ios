@@ -12,8 +12,8 @@
 
 @property (nonatomic, assign) BOOL showAgentAvatars;
 @property (nonatomic, assign) float activeConvFetchBackoffRatio;
-//@property (nonatomic, assign) BOOL showRealAgentAvatars;
 @property (nonatomic, assign) BOOL launchDeeplinkFromNotification;
+@property (nonatomic, assign) long activeConvWindow;
 
 -(id) init;
 

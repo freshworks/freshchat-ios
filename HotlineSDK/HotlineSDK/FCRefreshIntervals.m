@@ -15,6 +15,8 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        self.responseTimeExpectationsFetchInterval = 5 * ONE_MINUTE_IN_MS;
+        
         self.remoteConfigFetchInterval = ONE_HOUR_IN_MS;
         
         self.activeConvMinFetchInterval = 20 * ONE_SECONDS_IN_MS;
@@ -29,7 +31,6 @@
         self.channelsFetchIntervalNormal = 5 * ONE_MINUTE_IN_MS;
         self.channelsFetchIntervalLaidback = 2 * ONE_DAY_IN_MS;
         
-        self.responseTimeExpectationsFetchInterval = 5 * ONE_MINUTE_IN_MS;
     }
     return self;
 }
@@ -122,12 +123,12 @@
     [HLUserDefaults setLong:channelsFetchIntervalNormal forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL];
 }
 
-- (long) getChannelsFetchIntervalLaidback:(long)channelsFetchIntervalLaidback{
+- (long) getChannelsFetchIntervalLaidback:(long)channelsFetchIntervalLaidback {
     
     return self.channelsFetchIntervalLaidback;
 }
 
-- (void) setChannelsFetchIntervalLaidback:(long)channelsFetchIntervalLaidback{
+- (void) setChannelsFetchIntervalLaidback:(long)channelsFetchIntervalLaidback {
     
     _channelsFetchIntervalLaidback = channelsFetchIntervalLaidback;
     [HLUserDefaults setObject:[NSNumber numberWithLong:channelsFetchIntervalLaidback] forKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];

@@ -20,7 +20,6 @@
         self.isUserEventsEnabled = NO;
         self.isAOTUserCreateEnabled = NO;
         self.showCustomBrandBanner = YES;
-        self.conversationConfig = [[FCConversationConfig alloc] init];
     }
     return self;
 }
@@ -79,14 +78,6 @@
 
 - (BOOL) getShowCustomBrandBanner {
     return self.showCustomBrandBanner;
-}
-
-- (void) setConversationConfig:(FCConversationConfig *)conversationConfig{
-    _conversationConfig = conversationConfig;
-}
-
-- (FCConversationConfig *) getConversationConfig {
-    return self.conversationConfig;
 }
 
 @end

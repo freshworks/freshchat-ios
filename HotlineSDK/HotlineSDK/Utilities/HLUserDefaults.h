@@ -15,8 +15,11 @@
 #define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"
 #define FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME @"freshchat_defaults_session_updated_time"
 
+#define CONFIG_RC_AGENT_AVATAR_ENABLED @"config_rc_agent_avatar_enabled"
+#define CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED @"config_rc_notification_deeplink_enabled"
+
 #define CONFIG_RC_ACTIVE_CONV_WINDOW @"config_rc_active_conv_window"
-#define CONFIG_RC_SESSION_DURATION_SECS @"config_rc_session_duration_secs"
+#define CONFIG_RC_SESSION_TIMEOUT_INTERVAL @"config_rc_session_timeout_interval"
 #define CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO @"config_rc_active_conv_fetch_backoff_ratio"
 
 #define CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL @"config_rc_active_conv_max_fetch_interval"

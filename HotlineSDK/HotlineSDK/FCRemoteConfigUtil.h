@@ -15,6 +15,8 @@
 
 @property(nonatomic, strong) FCRemoteConfig *remoteConfig;
 
+- (void) updateRemoteConfig : (NSDictionary *) configDict;
+
 -(void)updateFeaturesConfig:(FCEnabledFeatures *)features;
 + (BOOL) isAccountActive;
 + (BOOL) isFAQEnabled;
@@ -35,15 +37,19 @@
 + (long) getMsgFetchIntervalLaidback;
 
 + (long) getFaqFetchIntervalNormal;
-+ (long) setFaqFetchIntervalLaidback;
++ (long) getFaqFetchIntervalLaidback;
 
 + (long) getChannelsFetchIntervalNormal;
-+ (long) setChannelsFetchIntervalLaidback;
++ (long) getChannelsFetchIntervalLaidback;
 + (int) getActiveConvWindow;
 
-+ (long) getSessionDuration;
++ (long) getSessionTimeoutInterval;
 
 + (BOOL) isActiveConvAvailable;
+
++ (BOOL) isAgentAvatarEnabled;
+
++ (BOOL) isDeeplinkFromNotificationEnabled;
 
 + (long) getResponseTimeExpectationsFetchInterval;
 

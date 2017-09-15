@@ -135,13 +135,6 @@
     }];
     return task;
 }
-
-- (void) getRemoteAPIInfo{
-    
-    //after response from api
-    FCRemoteConfigUtil *util = [[FCRemoteConfigUtil alloc] init];
-    [util updateFeaturesConfig:util.remoteConfig.features];
-}
  
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
     if (![HLUser isUserRegistered] || !pushToken) return nil;
@@ -450,10 +443,10 @@
             NSDictionary *response = responseInfo.responseAsDictionary;
             
             //Init config here
-            FCRemoteConfigUtil *rc = [[FCRemoteConfigUtil alloc] init];
-            FCEnabledFeatures *feature = [[FCEnabledFeatures alloc] init];
-            
-            [rc updateFeaturesConfig:feature];
+            FCRemoteConfigUtil *rcUtil = [[FCRemoteConfigUtil alloc] init];
+            [rcUtil updateRemoteConfig:response];
+//            FCRemoteConfig *rc = [[FCRemoteConfig alloc] init];
+//            FCEnabledFeatures *feature = [[FCEnabledFeatures alloc] init];
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);
