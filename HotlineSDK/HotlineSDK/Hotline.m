@@ -58,7 +58,7 @@
 
 @interface HotlineUser ()
 
--(void)clearUserData;
+-(void)resetUser;
 
 @end
 
@@ -158,7 +158,7 @@
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
         [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
-        [store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+        //[store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
@@ -178,11 +178,11 @@
     FDPlistManager *plistManager = [[FDPlistManager alloc] init];
     NSMutableString *message = [NSMutableString new];
     
-    if (config.voiceMessagingEnabled) {
-        if (![plistManager micUsageEnabled]) {
-            [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
-        }
-    }
+//    if (config.voiceMessagingEnabled) {
+//        if (![plistManager micUsageEnabled]) {
+//            [message appendString:@"\nAdd key NSMicrophoneUsageDescription : To Enable Voice Message"];
+//        }
+//    }
     
     if (config.pictureMessagingEnabled) {
         if (![plistManager photoLibraryUsageEnabled]) {
@@ -243,7 +243,7 @@
         FDLog(@"All solutions deleted");
         [dataManager deleteAllIndices:^(NSError *error) {
             FDLog(@"Index cleared");
-            [self clearUserDataWithCompletion:completion init:false andOldUser:previousUser];
+            [self resetUserWithCompletion:completion init:false andOldUser:previousUser];
         }];
     }];
 }
@@ -284,13 +284,13 @@
     [FDLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
 }
 
--(void)updateUser:(HotlineUser *)user{
+-(void)setUser:(HotlineUser *)user{
     [KonotorUser storeUserInfo:user];
     [HLCoreServices uploadUnuploadedProperties];
 }
 
 
--(void)updateUserProperties:(NSDictionary*)props{
+-(void)setUserProperties:(NSDictionary*)props{
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         NSDictionary *filteredProps = [FDUtilities filterValidUserPropEntries:props];
         if(filteredProps){
@@ -314,7 +314,7 @@
 
 -(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if (key && value) {
-        [self updateUserProperties:@{ key : value}];
+        [self setUserProperties:@{ key : value}];
     }
     else {
         ALog(@"Null property %@ provided. Not updated", key ? @"value" : @"key" );
@@ -448,7 +448,7 @@
 
 #pragma mark Push notifications
 
--(void)updateDeviceToken:(NSData *)deviceToken {
+-(void)setPushRegistrationToken:(NSData *)deviceToken {
     NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
     if ([self isDeviceTokenUpdated:deviceTokenString]) {
         [self storeDeviceToken:deviceTokenString];
@@ -474,9 +474,9 @@
     }
 }
 
--(BOOL)isHotlineNotification:(NSDictionary *)info{
+-(BOOL)isFreshchatNotification:(NSDictionary *)info{
     @try {
-        return [HLNotificationHandler isHotlineNotification:info];
+        return [HLNotificationHandler isFreshchatNotification:info];
     } @catch (NSException *exception) {
         FDMemLogger *logger = [FDMemLogger new];
         [logger addMessage:exception.debugDescription withMethodName:NSStringFromSelector(_cmd)];
@@ -488,7 +488,7 @@
 
 -(void)handleRemoteNotification:(NSDictionary *)info andAppstate:(UIApplicationState)appState{
     @try {
-        if(![self isHotlineNotification:info]){
+        if(![self isFreshchatNotification:info]){
             return;
         }
         self.notificationHandler = [[HLNotificationHandler alloc]init];
@@ -501,13 +501,13 @@
     }
 }
 
--(void)clearUserData{
-    [self clearUserDataWithCompletion:nil init:true andOldUser:nil];
+-(void)resetUser{
+    [self resetUserWithCompletion:nil init:true andOldUser:nil];
 }
 
 static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
--(void)clearUserDataWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser {
+-(void)resetUserWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser {
     if (CLEAR_DATA_IN_PROGRESS == NO) {
         CLEAR_DATA_IN_PROGRESS = YES;
         [self processClearUserData:^{
@@ -531,7 +531,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     }
     config.agentAvatarEnabled =[store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+    //config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
     config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
@@ -548,7 +548,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
     
-    [[HotlineUser sharedInstance]clearUserData]; // This clear Sercure Store data as well.
+    [[HotlineUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
     
     //Clear secure store
     [[FDSecureStore sharedInstance]clearStoreData];
@@ -580,8 +580,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }];
 }
 
--(void)clearUserDataWithCompletion:(void (^)())completion{
-    [self clearUserDataWithCompletion:completion init:true andOldUser:nil];
+-(void)resetUserWithCompletion:(void (^)())completion{
+    [self resetUserWithCompletion:completion init:true andOldUser:nil];
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{

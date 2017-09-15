@@ -36,7 +36,7 @@
     self.externalID = [store objectForKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
 }
 
--(void)clearUserData{
+-(void)resetUser{
     self.firstName = nil;
     self.lastName = nil;
     self.email = nil;

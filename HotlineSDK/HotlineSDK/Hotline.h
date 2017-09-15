@@ -1,8 +1,8 @@
 //
-//  Hotline.h
-//  Konotor
+//  Freshchat.h
 //
-//  Copyright (c) 2015 Freshdesk. All rights reserved.
+//
+//  Copyright (c) 2017 Freshworks. All rights reserved.
 //
 //  Contact support@hotline.io
 
@@ -36,10 +36,6 @@ enum TagFilterType {
  * Domain for Hotline. Do not change this. Set to "https://app.konotor.com" if you are migrating from Konotor
  */
 @property (strong, nonatomic) NSString *domain;
-/*
- * Enable/disable voice messages. When enabled, users can record and send audio messages to the Agents. Default is set to NO.
- */
-@property (nonatomic, assign) BOOL voiceMessagingEnabled;
 /*
  * Enable/disable picture messages. When enabled, users can send images over chat. Default is set to YES.
  */
@@ -151,14 +147,14 @@ enum TagFilterType {
  */
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options;
 /**
- *  Update user Info
+ *  Set user Info
  *
  *  @discussion Sends user information updates to the server. User properties such as Name, Email, Phone, Country Code and external Identifier.That are set will be synced with the server. External Identifier provided could be any unique value that your App can use to identify the user.
  *
  *  @param user User instance with the values to be updated.
  *
  */
--(void)updateUser:(HotlineUser *) user;
+-(void)setUser:(HotlineUser *) user;
 /**
  *  Clear User Data
  *
@@ -166,7 +162,7 @@ enum TagFilterType {
  *  This will clean up all the data associated with the SDK for the user.
  *
  */
--(void)clearUserData __attribute__((deprecated("Please use clearUserDataWithCompletion: instead")));
+-(void)resetUser __attribute__((deprecated("Please use resetUserWithCompletion: instead")));
 /**
  *  Clear User Data
  *
@@ -177,16 +173,16 @@ enum TagFilterType {
  * @param Completion block to be called when clearData is completed
  *
  */
--(void)clearUserDataWithCompletion:(void (^)())completion;
+-(void)resetUserWithCompletion:(void (^)())completion;
 /**
- *  Update User properties
+ *  Set User properties
  *
  *  @discussion Tag users with custom properties (key-value pairs) . The user properties associated here will be shown on the dashboard for the agent and also be used for segmentation for campaigns
  *
  *  @param props An NSDictionary containing the Properties for the User.
  *
  */
--(void)updateUserProperties:(NSDictionary*)props;
+-(void)setUserProperties:(NSDictionary*)props;
 /**
  *  Update user property
  *
@@ -206,15 +202,15 @@ enum TagFilterType {
  *  @param deviceToken APNS device token
  *
  */
--(void)updateDeviceToken:(NSData *) deviceToken;
+-(void)setPushRegistrationToken:(NSData *) deviceToken;
 /**
- *  Check if a push notification was from Hotline
+ *  Check if a push notification was from Freshchat
  *
  *  @discussion Checks if the push notification received originated from Hotline by examining the payload dictionary. Use this in conjunction with handleRemoteNotification
  *
  *  @param info NSDictionary object in didReceiveRemoteNotification for Push Notification.
  */
--(BOOL)isHotlineNotification:(NSDictionary *)info;
+-(BOOL)isFreshchatNotification:(NSDictionary *)info;
 /**
  *  Handle the Hotline push notifications
  *

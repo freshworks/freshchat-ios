@@ -23,7 +23,6 @@
         self.appKey = appKey;
         self.themeName = FD_DEFAULT_THEME_NAME;
         self.pictureMessagingEnabled = YES;
-        self.voiceMessagingEnabled = NO;
         self.agentAvatarEnabled = YES;
         self.notificationSoundEnabled = YES;
         self.cameraCaptureEnabled = YES;

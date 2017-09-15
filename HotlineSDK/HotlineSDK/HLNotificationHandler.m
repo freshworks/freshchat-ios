@@ -36,7 +36,7 @@
     return self;
 }
 
-+(BOOL)isHotlineNotification:(NSDictionary *)info{
++(BOOL)isFreshchatNotification:(NSDictionary *)info{
     NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
     return ([payload[@"source"] isEqualToString:FRESHCHAT_NOTIFICATION_PAYLOAD_SOURCE_USER]);
 }

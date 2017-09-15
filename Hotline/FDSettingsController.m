@@ -195,7 +195,7 @@
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
-    [[Hotline sharedInstance] updateUser:user];
+    [[Hotline sharedInstance] setUser:user];
 }
 
 - (IBAction)editButtonPressed:(id)sender {
@@ -213,8 +213,8 @@
 
     switch (buttonIndex) {
         case 0:
-            [[Hotline sharedInstance]clearUserDataWithCompletion:^{
-                [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
+            [[Hotline sharedInstance]resetUserWithCompletion:^{
+                [[Hotline sharedInstance] setUser:[AppDelegate createHotlineUser]];
                 [[Hotline sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];

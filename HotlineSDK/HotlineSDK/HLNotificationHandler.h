@@ -18,7 +18,7 @@
 
 @interface HLNotificationHandler : NSObject<FDNotificationBannerDelegate>
 
-+(BOOL)isHotlineNotification:(NSDictionary *)info;
++(BOOL)isFreshchatNotification:(NSDictionary *)info;
 -(void)handleNotification:(NSDictionary *)payload appState:(UIApplicationState)state;
 -(void)showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message;
 +(BOOL)areNotificationsEnabled;
