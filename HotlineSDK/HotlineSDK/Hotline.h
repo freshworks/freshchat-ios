@@ -4,7 +4,7 @@
 //
 //  Copyright (c) 2017 Freshworks. All rights reserved.
 //
-//  Contact support@hotline.io
+//  Contact support@freshchat.com
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -23,17 +23,17 @@ enum TagFilterType {
 @interface HotlineConfig : NSObject
 
 /*
- * App ID of your App. This is used to identify the SDK for your app to hotline.io. 
+ * App ID of your App. This is used to identify the SDK for your app to freshchat.com.
  * Please see API & App under Settings ( https://web.hotline.io/settings/apisdk ) to get your App ID.
  */
 @property (strong, nonatomic) NSString *appID;
 /*
- * App Key of your App. This is used to authenticate the SDK for your app to hotline.io.
+ * App Key of your App. This is used to authenticate the SDK for your app to freshchat.io.
  * Please see API & App under Settings ( https://web.hotline.io/settings/apisdk ) to get your App Key.
  */
 @property (strong, nonatomic) NSString *appKey;
 /*
- * Domain for Hotline. Do not change this. Set to "https://app.konotor.com" if you are migrating from Konotor
+ * Domain for freshchat. Do not change this. Set to "https://app.konotor.com" if you are migrating from Konotor
  */
 @property (strong, nonatomic) NSString *domain;
 /*
@@ -42,7 +42,7 @@ enum TagFilterType {
 @property (nonatomic, assign) BOOL pictureMessagingEnabled;
 /**
  * Option to supply the SDK with your theme file's name. Make sure themeName is the same as the
- * theme plist file's name. Hotline needs this for theming to work.
+ * theme plist file's name. Freshchat needs this for theming to work.
  * The setter throws an exception for an invalid filename
  */
 @property (nonatomic, strong) NSString *themeName;
@@ -72,9 +72,9 @@ enum TagFilterType {
 @property (nonatomic, assign) BOOL pollWhenAppActive;
 
 /**
- *  Initialize Hotline.
+ *  Initialize Freshchat.
  *
- *  @discussion In order to initialize Hotline, you'll need the App ID and App Key. Place the Hotline initialization code in your app delegate, preferably at the top of the application:didFinishLaunchingWithOptions method.
+ *  @discussion In order to initialize Freshchat, you'll need the App ID and App Key. Place the Freshchat initialization code in your app delegate, preferably at the top of the application:didFinishLaunchingWithOptions method.
  *
  *  @param appID  The App ID assigned to your app when it was created on the portal.
  *  @param appKey The App Key assigned to your app when it was created on the portal.
@@ -91,16 +91,16 @@ enum TagFilterType {
 +(NSString *)SDKVersion;
 
 /**
- *  Access the Hotline instance.
+ *  Access the Freshchat instance.
  *
- *  @discussion Using the returned shared instance, you can access all the instance methods available in Hotline.
+ *  @discussion Using the returned shared instance, you can access all the instance methods available in Freshchat.
  */
 +(instancetype) sharedInstance;
 
 /**
  *  Initialize configuration for Config.
  *
- *  @param config Hotline Configuration of type HotlineConfig
+ *  @param config Freshchat Configuration of type FreshchatConfig
  */
 
 -(void)initWithConfig:(HotlineConfig *)config;
@@ -206,15 +206,15 @@ enum TagFilterType {
 /**
  *  Check if a push notification was from Freshchat
  *
- *  @discussion Checks if the push notification received originated from Hotline by examining the payload dictionary. Use this in conjunction with handleRemoteNotification
+ *  @discussion Checks if the push notification received originated from Freshchat by examining the payload dictionary. Use this in conjunction with handleRemoteNotification
  *
  *  @param info NSDictionary object in didReceiveRemoteNotification for Push Notification.
  */
 -(BOOL)isFreshchatNotification:(NSDictionary *)info;
 /**
- *  Handle the Hotline push notifications
+ *  Handle the Freshchat push notifications
  *
- *  @discussion Needs to be called when a push notification is received from Hotline. This will present the conversation if user tapped on a push, or show a drop down notification, or update a currently active conversation screen depending on context.
+ *  @discussion Needs to be called when a push notification is received from Freshchat. This will present the conversation if user tapped on a push, or show a drop down notification, or update a currently active conversation screen depending on context.
  *
  *  @param info Dictionary received in didReceiveRemoteNotification for Push Notification.
  *  
