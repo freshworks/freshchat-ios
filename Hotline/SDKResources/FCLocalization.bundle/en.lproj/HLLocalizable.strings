@@ -80,6 +80,9 @@
 "camera_unavailable_ok_button_text"="OK";
 "camera_permission_denied" ="Enable camera permissions under Settings";
 
+/* Picture attached*/
+"pic_msg_attachment_close_btn"="Back";
+
 /*Image Attachment*/
 "image_attachment_cancel_button_text"="Cancel";
 "image_attachment_select_existing_image"="Attach picture from device";

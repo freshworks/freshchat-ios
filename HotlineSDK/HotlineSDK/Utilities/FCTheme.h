@@ -116,6 +116,9 @@
 //StatusBarStyle
 -(UIStatusBarStyle)statusBarStyle;
 
+//Image message attach
+-(UIFont *)imgAttachBackButtonFont;
+-(UIColor *)imgAttachBackButtonFontColor;
 
 //Messagecell & Conversation UI
 -(UIColor *)inputTextFontColor;

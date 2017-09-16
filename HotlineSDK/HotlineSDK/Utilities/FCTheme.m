@@ -144,7 +144,6 @@
     return UIStatusBarStyleDefault;
 }
 
-
 #pragma mark - Search Bar
 
 -(UIFont *)searchBarFont{
@@ -202,6 +201,17 @@
 
 -(UIColor *)dialogueYesButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBackgroundColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+//Image message attach
+
+-(UIFont *)imgAttachBackButtonFont{
+    return [self getFontWithKey:@"ConversationsUI.ImgAttachBackButton" andDefaultSize:16];
+}
+
+-(UIColor *)imgAttachBackButtonFontColor{
+    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ImgAttachBackButtonFontColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
 }
 

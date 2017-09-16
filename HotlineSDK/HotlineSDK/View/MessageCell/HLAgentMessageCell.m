@@ -21,10 +21,14 @@
 #import "FDAutolayoutHelper.h"
 #import "FDParticipant.h"
 #import "FDImageView.h"
+#import "FCRemoteConfig.h"
+#import "FDSecureStore.h"
 
 @interface HLAgentMessageCell ()
 
 @property (strong, nonatomic) NSLayoutConstraint *senderLabelHeight;
+@property (nonatomic, strong) NSString *agentName;
+@property (nonatomic, assign) BOOL showRealAvatar;
 
 @end
 
@@ -45,15 +49,21 @@
     return self;
 }
 
-+(BOOL) showAgentAvatarLabel{
+-(BOOL) showAgentAvatarLabelWithAlias : (NSString *)alias {
     static BOOL SHOW_AGENT_AVATAR_LABEL;
-    FDParticipant *participant; //= [FDParticipant fetchParticipantForAlias:<#(NSString *)#> :<#(NSManagedObjectContext *)#>
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (participant.firstName || participant.lastName || [HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
-            SHOW_AGENT_AVATAR_LABEL = TRUE;
-        }
-    });
+    FDParticipant *participant = [FDParticipant fetchParticipantForAlias:alias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
+    
+    if(participant.firstName || participant.lastName){
+        self.agentName = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
+        SHOW_AGENT_AVATAR_LABEL = TRUE;
+    }
+    else if ([HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+        self.agentName = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        SHOW_AGENT_AVATAR_LABEL = TRUE;
+    }
+    else{
+        SHOW_AGENT_AVATAR_LABEL = false;
+    }
     return SHOW_AGENT_AVATAR_LABEL;
 }
 
@@ -63,7 +73,7 @@
     self.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20) ;
     self.sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
-    self.showsProfile = YES;
+    self.showsProfile = NO;
     self.showsSenderName= NO;
     self.customFontName=[[FCTheme sharedInstance] conversationUIFontName];
     self.showsUploadStatus=YES;
@@ -104,8 +114,12 @@
     [uploadStatusImageView setImage:sentImage];
     uploadStatusImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    showsProfile = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    showsSenderName = [HLAgentMessageCell showAgentAvatarLabel]; //Buid considering always false
+    BOOL isAgentAvatarEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    if(isAgentAvatarEnabled){
+        int agentAvatarRCVal = [FCRemoteConfig sharedInstance].conversationConfig.agentAvatar;
+        self.showsProfile = (agentAvatarRCVal <= 2);
+        self.showRealAvatar = (agentAvatarRCVal == 1);
+    }
     
     agentChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
     agentChatBubbleInsets= [[FCTheme sharedInstance] getAgentBubbleInsets];
@@ -120,6 +134,7 @@
 - (void) drawMessageViewForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView {
     
     [self clearAllSubviews];
+    showsSenderName = [self showAgentAvatarLabelWithAlias:currentMessage.messageUserAlias];
     
     NSMutableArray *fragmensViewArr = [[NSMutableArray alloc]init];
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
@@ -128,13 +143,8 @@
     int senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
     self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
     FDParticipant *participant = [FDParticipant fetchParticipantForAlias:currentMessage.messageUserAlias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-    if(showsSenderName){
-        if(participant.firstName || participant.lastName){
-            senderNameLabel.text = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
-        }
-        else{
-            senderNameLabel.text = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-        }
+    if(self.agentName.length >0){
+        senderNameLabel.text = self.agentName;
     }
     self.senderLabelHeight.constant =senderNameHeight;
     [contentEncloser addSubview:chatBubbleImageView];
@@ -148,7 +158,7 @@
         [self.contentView addSubview:profileImageView];
         [views setObject:profileImageView forKey:@"profileImageView"];
         
-        if(participant.profilePicURL){
+        if(participant.profilePicURL && self.showRealAvatar){
             FDWebImageManager *manager = [FDWebImageManager sharedManager];
             if(participant)
                 [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {

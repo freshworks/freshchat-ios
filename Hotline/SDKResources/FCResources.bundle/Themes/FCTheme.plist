@@ -58,6 +58,12 @@
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>ResponseTimeExpectationsFontColor</key>
 		<string>1850FB</string>
+		<key>ImgAttachBackButtonFontName</key>
+		<string>SYS_DEFAULT_FONT_NAME</string>
+		<key>ImgAttachBackButtonFontColor</key>
+		<string>000000</string>
+		<key>ImgAttachBackButtonFontSize</key>
+		<string>16.0f</string>
 		<key>Banner</key>
 		<dict>
 			<key>BackgroundColor</key>

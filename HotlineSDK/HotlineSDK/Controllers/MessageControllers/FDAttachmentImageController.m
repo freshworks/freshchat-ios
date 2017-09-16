@@ -122,7 +122,17 @@
 
 
 -(void)setNavigationItem{
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON] style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:HLLocalizedString(LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN) style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
+    
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:
+     @{UITextAttributeTextColor:[[FCTheme sharedInstance] imgAttachBackButtonFontColor],
+       UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+       UITextAttributeTextShadowColor:[UIColor whiteColor],
+       UITextAttributeFont:[[FCTheme sharedInstance] imgAttachBackButtonFont]
+       }
+                                                                                            forState:UIControlStateNormal];
+    
     self.navigationItem.leftBarButtonItem = backButton;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
