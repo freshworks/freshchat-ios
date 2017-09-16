@@ -73,18 +73,26 @@
 
 - (void) updateConvConfig : (NSDictionary *) configDict {
     NSString* avatarType =  [configDict objectForKey:@"agentAvatars"];
-    if([avatarType isEqualToString:@"REAL_AGENT_AVATAR"]){
-        [self updateAgentAvatar:1];
+    if (avatarType != nil) {
+        if([avatarType isEqualToString:@"REAL_AGENT_AVATAR"]){
+            [self updateAgentAvatar:1];
+        }
+        else if([avatarType isEqualToString:@"APP_ICON"]){
+            [self updateAgentAvatar:2];
+        }
+        else {
+            [self updateAgentAvatar:3];
+        }
     }
-    else if([avatarType isEqualToString:@"APP_ICON"]){
-        [self updateAgentAvatar:2];
+    if([configDict objectForKey:@"activeConvWindow"] != nil) {
+        [self updateActiveConvWindow:[[configDict objectForKey:@"activeConvWindow"] longValue]];
     }
-    else {
-        [self updateAgentAvatar:3];
+    if([configDict objectForKey:@"activeConvFetchBackoffRatio"] != nil) {
+        [self updateActiveConvFetchBackOffRatio:[[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue]];
     }
-    [self updateActiveConvWindow:[[configDict objectForKey:@"activeConvWindow"] longValue]];
-    [self updateActiveConvFetchBackOffRatio:[[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue]];
-    [self updateLaunchDeeplinkFromNotification:[[configDict objectForKey:@"launchDeeplinkFromNotification"] boolValue]];
+    if([configDict objectForKey:@"launchDeeplinkFromNotification"] != nil) {
+        [self updateLaunchDeeplinkFromNotification:[[configDict objectForKey:@"launchDeeplinkFromNotification"] boolValue]];
+    }
     
 }
 

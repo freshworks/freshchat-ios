@@ -103,7 +103,7 @@
 }
 
 
--(void) setValue:(long)value type:(enum FCRefreshIntervalType) type {
+-(void) updateValue:(long)value type:(enum FCRefreshIntervalType) type {
     switch (type) {
         case responseTimeExpectationsFetchInterval:
             [HLUserDefaults setLong:value forKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
@@ -149,16 +149,36 @@
 }
 
 - (void) updateRefreshConfig : (NSDictionary *) configDict {
-    [self setValue:[[configDict objectForKey:@"activeConvMaxFetchInterval"] longValue] type:activeConvMaxFetchInterval];
-    [self setValue:[[configDict objectForKey:@"activeConvMinFetchInterval"] longValue] type:activeConvMinFetchInterval];
-    [self setValue:[[configDict objectForKey:@"channelsFetchIntervalNormal"] longValue] type:channelsFetchIntervalNormal];
-    [self setValue:[[configDict objectForKey:@"channelsFetchIntervalLaidback"] longValue] type:channelsFetchIntervalLaidback];
-    [self setValue:[[configDict objectForKey:@"faqFetchIntervalNormal"] longValue] type:faqFetchIntervalNormal];
-    [self setValue:[[configDict objectForKey:@"faqFetchIntervalLaidback"] longValue] type:faqFetchIntervalLaidback];
-    [self setValue:[[configDict objectForKey:@"msgFetchIntervalNormal"] longValue] type:msgFetchIntervalNormal];
-    [self setValue:[[configDict objectForKey:@"msgFetchIntervalLaidback"] longValue] type:msgFetchIntervalLaidback];
-    [self setValue:[[configDict objectForKey:@"remoteConfigFetchInterval"] longValue] type:remoteConfigFetchInterval];
-    [self setValue:[[configDict objectForKey:@"responseTimeExpectationsFetchInterval"] longValue] type:responseTimeExpectationsFetchInterval];
+    if ([configDict objectForKey:@"activeConvMaxFetchInterval"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"activeConvMaxFetchInterval"] longValue] type:activeConvMaxFetchInterval];
+    }
+    if ([configDict objectForKey:@"activeConvMinFetchInterval"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"activeConvMinFetchInterval"] longValue] type:activeConvMinFetchInterval];
+    }
+    if ([configDict objectForKey:@"channelsFetchIntervalNormal"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"channelsFetchIntervalNormal"] longValue] type:channelsFetchIntervalNormal];
+    }
+    if ([configDict objectForKey:@"channelsFetchIntervalLaidback"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"channelsFetchIntervalLaidback"] longValue] type:channelsFetchIntervalLaidback];
+    }
+    if ([configDict objectForKey:@"faqFetchIntervalNormal"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"faqFetchIntervalNormal"] longValue] type:faqFetchIntervalNormal];
+    }
+    if ([configDict objectForKey:@"faqFetchIntervalLaidback"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"faqFetchIntervalLaidback"] longValue] type:faqFetchIntervalLaidback];
+    }
+    if ([configDict objectForKey:@"msgFetchIntervalNormal"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"msgFetchIntervalNormal"] longValue] type:msgFetchIntervalNormal];
+    }
+    if ([configDict objectForKey:@"msgFetchIntervalLaidback"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"msgFetchIntervalLaidback"] longValue] type:msgFetchIntervalLaidback];
+    }
+    if ([configDict objectForKey:@"remoteConfigFetchInterval"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"remoteConfigFetchInterval"] longValue] type:remoteConfigFetchInterval];
+    }
+    if ([configDict objectForKey:@"responseTimeExpectationsFetchInterval"] != nil) {
+        [self updateValue:[[configDict objectForKey:@"responseTimeExpectationsFetchInterval"] longValue] type:responseTimeExpectationsFetchInterval];
+    }
 }
 
 @end

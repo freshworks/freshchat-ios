@@ -109,7 +109,7 @@
 }
 
 - (void) updateConvConfig : (NSArray *) configDict {
-    for(int i=0;i<configDict.count; i++) {
+    for(int i=0; i<configDict.count; i++) {
         [self updateValue:configDict[i]];
     }
 }

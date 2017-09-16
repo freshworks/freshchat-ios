@@ -68,9 +68,15 @@
     [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
     [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
     
-    [self.conversationConfig updateConvConfig:convConfigDict];
-    [self.enabledFeatures updateConvConfig:enabledFeaturesArray];
-    [self.refreshIntervals updateRefreshConfig:refreshIntervalsDict];
+    if (convConfigDict != nil) {
+        [self.conversationConfig updateConvConfig:convConfigDict];
+    }
+    if (enabledFeaturesArray != nil) {
+        [self.enabledFeatures updateConvConfig:enabledFeaturesArray];
+    }
+    if (refreshIntervalsDict != nil) {
+        [self.refreshIntervals updateRefreshConfig:refreshIntervalsDict];
+    }
 }
 
 - (BOOL) isActiveInboxAndAccount {
