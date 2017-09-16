@@ -18,7 +18,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
-    });
+    });t
     return sharedInstance;
 }
 
@@ -28,33 +28,33 @@
     if (self) {
         self.conversationConfig             = [[FCConversationConfig alloc] init];
         self.refreshIntervals               = [[FCRefreshIntervals alloc] init];
-        self.enabledFeatures                     = [[FCEnabledFeatures alloc] init];
-        self.accountActive                  = [self getIsAccountActive];
-        self.sessionTimeOutInterval         = [self getSessionTimeOutInterval];        
+        self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
+        self.accountActive                  = [self getDefaultAccountActive];
+        self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
     }
     return self;
 }
 
--(BOOL) getIsAccountActive {
+-(BOOL) getDefaultAccountActive {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE] != nil) {
         return (BOOL) [HLUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
     }
     return YES;
 }
 
-- (long) getSessionTimeOutInterval {
+- (long) getDefaultSessionTimeOutInterval {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {
         return (long) [HLUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
     }
     return 30 * ONE_MINUTE_IN_MS;
 }
 
-- (void) setIsAccountActive:(BOOL)accountActive {
+- (void) updateAccountActive:(BOOL)accountActive {
     [HLUserDefaults setBool:accountActive forKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
     self.accountActive = accountActive;
 }
 
-- (void) setSessionTimeOutInterval:(long) sessionTimeOutInterval {
+- (void) updateSessionTimeOutInterval:(long) sessionTimeOutInterval {
     [HLUserDefaults setLong:sessionTimeOutInterval forKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
     self.sessionTimeOutInterval = sessionTimeOutInterval;
 }
@@ -65,8 +65,8 @@
     NSDictionary *refreshIntervalsDict  = [configDict objectForKey:@"refreshIntervals"];
     NSDictionary *convConfigDict        = [configDict objectForKey:@"conversationConfig"];
     
-    [self setAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
-    [self setSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
+    [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
+    [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
     
     [self.conversationConfig updateConvConfig:convConfigDict];
     [self.enabledFeatures updateConvConfig:enabledFeaturesArray];

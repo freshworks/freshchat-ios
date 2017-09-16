@@ -15,58 +15,58 @@
 -(instancetype)init{
     self = [super init];
     if (self) {
-        self.agentAvatar                    = [self getAgentAvatar];
-        self.launchDeeplinkFromNotification = [self getLaunchDeeplinkFromNotification];
-        self.activeConvFetchBackoffRatio    = [self getActiveConvFetchBackoffRatio];
-        self.activeConvWindow               = [self getActiveConvWindow];
+        self.agentAvatar                    = [self getDefaultAgentAvatar];
+        self.launchDeeplinkFromNotification = [self getDefaultLaunchDeeplinkFromNotification];
+        self.activeConvFetchBackoffRatio    = [self getDefaultActiveConvFetchBackoffRatio];
+        self.activeConvWindow               = [self getDefaultActiveConvWindow];
     }
     return self;
 }
 
-- (BOOL) getLaunchDeeplinkFromNotification{
+- (BOOL) getDefaultLaunchDeeplinkFromNotification {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED] != nil) {
         return (BOOL) [HLUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
     }
     return YES;
 }
 
-- (int) getAgentAvatar{
+- (int) getDefaultAgentAvatar {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_AGENT_AVATAR_TYPE] != nil) {
         return (BOOL) [HLUserDefaults getObjectForKey:CONFIG_RC_AGENT_AVATAR_TYPE];
     }
     return 1;
 }
 
-- (float) getActiveConvFetchBackoffRatio {
+- (float) getDefaultActiveConvFetchBackoffRatio {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO] != nil) {
         return [HLUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
     }
     return 1.25;
 }
 
-- (float) getActiveConvWindow {
+- (float) getDefaultActiveConvWindow {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] != nil) {
         return (long) [HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
     }
     return 3 * ONE_DAY_IN_MS;
 }
 
-- (void) setLaunchDeeplinkFromNotification :(BOOL) launchDeeplinkFromNotification {
+- (void) updateLaunchDeeplinkFromNotification :(BOOL) launchDeeplinkFromNotification {
     [HLUserDefaults setBool:launchDeeplinkFromNotification forKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
     self.launchDeeplinkFromNotification = launchDeeplinkFromNotification;
 }
 
-- (void) setAgentAvatar: (int) agentAvatar {
+- (void) updateAgentAvatar: (int) agentAvatar {
     [HLUserDefaults setIntegerValue:agentAvatar forKey:CONFIG_RC_AGENT_AVATAR_TYPE];
     self.agentAvatar = agentAvatar;
 }
 
-- (void) setActiveConvWindow:(long) activeConvWindow {
+- (void) updateActiveConvWindow:(long) activeConvWindow {
     [HLUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
     self.activeConvWindow = activeConvWindow;
 }
 
-- (void) setActiveConvFetchBackOffRatio:(float) activeConvFetchBackoffRatio {
+- (void) updateActiveConvFetchBackOffRatio:(float) activeConvFetchBackoffRatio {
     [HLUserDefaults setBool:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
     self.activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
@@ -74,17 +74,17 @@
 - (void) updateConvConfig : (NSDictionary *) configDict {
     NSString* avatarType =  [configDict objectForKey:@"agentAvatars"];
     if([avatarType isEqualToString:@"REAL_AGENT_AVATAR"]){
-        [self setAgentAvatar:1];
+        [self updateAgentAvatar:1];
     }
     else if([avatarType isEqualToString:@"APP_ICON"]){
-        [self setAgentAvatar:2];
+        [self updateAgentAvatar:2];
     }
     else {
-        [self setAgentAvatar:3];
+        [self updateAgentAvatar:3];
     }
-    [self setActiveConvWindow:[[configDict objectForKey:@"activeConvWindow"] longValue]];
-    [self setActiveConvFetchBackOffRatio:[[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue]];
-    [self setLaunchDeeplinkFromNotification:[[configDict objectForKey:@"launchDeeplinkFromNotification"] boolValue]];
+    [self updateActiveConvWindow:[[configDict objectForKey:@"activeConvWindow"] longValue]];
+    [self updateActiveConvFetchBackOffRatio:[[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue]];
+    [self updateLaunchDeeplinkFromNotification:[[configDict objectForKey:@"launchDeeplinkFromNotification"] boolValue]];
     
 }
 

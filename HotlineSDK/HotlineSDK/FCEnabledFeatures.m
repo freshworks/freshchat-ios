@@ -82,7 +82,7 @@
     }
 }
 
--(void) setValue:(NSString *)value {
+-(void) updateValue:(NSString *)value {
     if ([value isEqual: @"FAQ"]) {
         self.faqEnabled = YES;
         [[FDSecureStore sharedInstance] setBoolValue:YES forKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
@@ -110,7 +110,7 @@
 
 - (void) updateConvConfig : (NSArray *) configDict {
     for(int i=0;i<configDict.count; i++) {
-        [self setValue:configDict[i]];
+        [self updateValue:configDict[i]];
     }
 }
 
