@@ -184,7 +184,7 @@ enum TagFilterType {
  */
 -(void)setUserProperties:(NSDictionary*)props;
 /**
- *  Update user property
+ *  Set user property
  *
  *  @discussion Use this method to update a single property for the user. Use updateUserProperties instead where possible.
  *
@@ -193,7 +193,7 @@ enum TagFilterType {
  *  @param value Property value
  *
  */
--(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
+-(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
 /**
  *  Update the APNS device token
  *
@@ -288,7 +288,7 @@ enum TagFilterType {
 /**
  *  Dismiss SDK for deeplink screens
  */
--(void) dismissHotlineViews;
+-(void) dismissFreshchatViews;
 
 @end
 

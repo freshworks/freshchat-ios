@@ -175,7 +175,7 @@
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
-    [[Hotline sharedInstance] updateUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
+    [[Hotline sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
 }
 
 -(void)updateConfigButtonAction:(id)sender{

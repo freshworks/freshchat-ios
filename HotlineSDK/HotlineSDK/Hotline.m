@@ -312,7 +312,7 @@
 
 
 
--(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
+-(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if (key && value) {
         [self setUserProperties:@{ key : value}];
     }
@@ -687,7 +687,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
--(void) dismissHotlineViews {
+-(void) dismissFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [self dismissHotlineViewInController:rootController withCompletion:nil];
 }
