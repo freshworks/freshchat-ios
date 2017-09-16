@@ -18,7 +18,7 @@ enum TagFilterType {
 #define HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshdesk.hotline_play_inapp_audio"
 #define HOTLINE_WILL_PLAY_AUDIO_MESSAGE @"com.freshdesk.hotline_pause_inapp_audio"
 
-@class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions, HotlineMessage;
+@class HotlineConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 
 @interface HotlineConfig : NSObject
 
@@ -154,7 +154,7 @@ enum TagFilterType {
  *  @param user User instance with the values to be updated.
  *
  */
--(void)setUser:(HotlineUser *) user;
+-(void)setUser:(FreshchatUser *) user;
 /**
  *  Clear User Data
  *
@@ -283,7 +283,7 @@ enum TagFilterType {
 /**
  *  Send message to particular channel with specified tag value
  */
--(void) sendMessage:(HotlineMessage *)messageObject;
+-(void) sendMessage:(FreshchatMessage *)messageObject;
 
 /**
  *  Dismiss SDK for deeplink screens
@@ -293,7 +293,7 @@ enum TagFilterType {
 @end
 
 
-@interface HotlineUser : NSObject
+@interface FreshchatUser : NSObject
 
 /*
  * User first name
@@ -438,7 +438,7 @@ enum TagFilterType {
 
 @end
 
-@interface HotlineMessage : NSObject
+@interface FreshchatMessage : NSObject
 
 /**
  *  Message text to be sent

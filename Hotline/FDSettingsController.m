@@ -189,7 +189,7 @@
 
 -(void)updateUserPropertiesButtonAction:(id)sender{
     NSLog(@"updating user info");
-    HotlineUser *user = [HotlineUser sharedInstance];
+    FreshchatUser *user = [FreshchatUser sharedInstance];
     user.firstName = self.userFirstNameField.text;
     user.lastName = self.userLastNameField.text;
     user.email = self.emailField.text;
@@ -214,7 +214,7 @@
     switch (buttonIndex) {
         case 0:
             [[Hotline sharedInstance]resetUserWithCompletion:^{
-                [[Hotline sharedInstance] setUser:[AppDelegate createHotlineUser]];
+                [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
                 [[Hotline sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
@@ -231,11 +231,11 @@
     self.appIDField.text = [Hotline sharedInstance].config.appID;
     self.appKeyField.text = [Hotline sharedInstance].config.appKey;
     
-    self.userFirstNameField.text = [HotlineUser sharedInstance].firstName;
-    self.userLastNameField.text = [HotlineUser sharedInstance].lastName;
-    self.emailField.text = [HotlineUser sharedInstance].email;
-    self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
-    self.externalIDField.text = [HotlineUser sharedInstance].externalID;
+    self.userFirstNameField.text = [FreshchatUser sharedInstance].firstName;
+    self.userLastNameField.text = [FreshchatUser sharedInstance].lastName;
+    self.emailField.text = [FreshchatUser sharedInstance].email;
+    self.phoneNumField.text = [FreshchatUser sharedInstance].phoneNumber;
+    self.externalIDField.text = [FreshchatUser sharedInstance].externalID;
 }
 
 -(void)testNotification:(id)sender{

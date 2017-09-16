@@ -1,5 +1,5 @@
 //
-//  HotlineMessageObject.m
+//  FreshchatMessageObject.m
 //  HotlineSDK
 //
 //  Created by user on 08/12/16.
@@ -9,7 +9,7 @@
 #import "Hotline.h"
 #import <Foundation/Foundation.h>
 
-@implementation HotlineMessage
+@implementation FreshchatMessage
 
 -(instancetype)initWithMessage:(NSString *)message andTag:(NSString *)tag{
     self = [super init];

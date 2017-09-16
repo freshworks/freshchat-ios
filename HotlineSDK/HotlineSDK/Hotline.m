@@ -56,7 +56,7 @@
 
 @end
 
-@interface HotlineUser ()
+@interface FreshchatUser ()
 
 -(void)resetUser;
 
@@ -284,7 +284,7 @@
     [FDLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
 }
 
--(void)setUser:(HotlineUser *)user{
+-(void)setUser:(FreshchatUser *)user{
     [KonotorUser storeUserInfo:user];
     [HLCoreServices uploadUnuploadedProperties];
 }
@@ -548,7 +548,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     
     
-    [[HotlineUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
+    [[FreshchatUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
     
     //Clear secure store
     [[FDSecureStore sharedInstance]clearStoreData];
@@ -620,7 +620,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
--(void) sendMessage:(HotlineMessage *)messageObject{
+-(void) sendMessage:(FreshchatMessage *)messageObject{
     if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
     }

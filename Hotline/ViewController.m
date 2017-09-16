@@ -285,7 +285,7 @@
 }
 
 - (IBAction)sendMessage:(id)sender{
-    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
+    FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
     [[Hotline sharedInstance] sendMessage:userMessage];
 }
 

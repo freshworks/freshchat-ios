@@ -24,7 +24,7 @@
 @dynamic userAlias;
 @dynamic hasProperties;
 
-+(void)storeUserInfo:(HotlineUser *)userInfo{
++(void)storeUserInfo:(FreshchatUser *)userInfo{
     
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         FDSecureStore *store = [FDSecureStore sharedInstance];

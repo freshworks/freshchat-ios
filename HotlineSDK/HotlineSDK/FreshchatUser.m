@@ -1,5 +1,5 @@
 //
-//  HotlineUser.m
+//  FreshchatUser.m
 //  HotlineSDK
 //
 //  Created by Aravinth Chandran on 15/12/15.
@@ -14,16 +14,16 @@
 #import "HLCoreServices.h"
 #import "KonotorCustomProperty.h"
 
-@implementation HotlineUser
+@implementation FreshchatUser
 
 +(instancetype)sharedInstance{
-    static HotlineUser *hotlineUser = nil;
+    static FreshchatUser *freshchatUser = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        hotlineUser = [[self alloc]init];
-        [hotlineUser copyValuesFromStore];
+        freshchatUser = [[self alloc]init];
+        [freshchatUser copyValuesFromStore];
     });
-    return hotlineUser;
+    return freshchatUser;
 }
 
 -(void)copyValuesFromStore{

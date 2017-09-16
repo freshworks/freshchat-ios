@@ -36,7 +36,7 @@
         [self setupRootController];
     }
     /*[[Hotline sharedInstance]resetUserWithCompletion:^{
-        [[Hotline sharedInstance] setUser:[AppDelegate createHotlineUser]];
+        [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }];*/
     if ([[Hotline sharedInstance]isFreshchatNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
@@ -105,8 +105,8 @@
     }
 }
 
-+(HotlineUser *)createHotlineUser{
-    HotlineUser *user = [HotlineUser sharedInstance];
++(FreshchatUser *)createFreshchatUser{
+    FreshchatUser *user = [FreshchatUser sharedInstance];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
@@ -143,8 +143,8 @@
     
     config.pictureMessagingEnabled = YES;
     config.pollWhenAppActive = YES;
-    if(![HotlineUser sharedInstance].firstName){
-        [[Hotline sharedInstance] setUser:[AppDelegate createHotlineUser]];
+    if(![FreshchatUser sharedInstance].firstName){
+        [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }
     
     [[Hotline sharedInstance] setUserProperties:@{ @"SDK Version" : [Hotline SDKVersion] }];
