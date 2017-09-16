@@ -14,9 +14,9 @@ enum TagFilterType {
     CATEGORY = 2
 };
 
-#define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
-#define HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshdesk.hotline_play_inapp_audio"
-#define HOTLINE_WILL_PLAY_AUDIO_MESSAGE @"com.freshdesk.hotline_pause_inapp_audio"
+#define FRESHCHAT_UNREAD_MESSAGE_COUNT @"com.freshworks.freshchat_unread_notification_count"
+#define FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshworks.freshchat_play_inapp_audio"
+#define FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE @"com.freshworks.freshchat_pause_inapp_audio"
 
 @class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 

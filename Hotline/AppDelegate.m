@@ -155,7 +155,7 @@
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];
     
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
         NSLog(@"Unread messages  %@", note.userInfo[@"count"]);
     }];
 }

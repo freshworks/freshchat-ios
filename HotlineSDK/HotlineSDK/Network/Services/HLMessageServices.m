@@ -297,7 +297,7 @@ static HLNotificationHandler *handleUpdateNotification;
 
 +(void)postUnreadCountNotification{
     [FDUtilities unreadCountInternalHandler:^(NSInteger count) {
-        [FDLocalNotification post:HOTLINE_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(count)}];
+        [FDLocalNotification post:FRESHCHAT_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(count)}];
     }];
 }
 
