@@ -128,7 +128,6 @@
 		CE8BF9091DD5FFB700814009 /* HLTags.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8BF9081DD5FFB700814009 /* HLTags.m */; };
 		CE9053521DD47C4E00F52B5F /* HLCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* HLCsat.m */; };
 		CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */; };
-		CE982B821F261F1600B87A66 /* FCRemoteConfigUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B811F261F1600B87A66 /* FCRemoteConfigUtil.m */; };
 		CE982B871F262D5B00B87A66 /* FCRefreshIntervals.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */; };
 		CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B891F2728B900B87A66 /* FCRemoteConfig.m */; };
 		CEA6AC3A1DD94C6D00B60002 /* FDGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */; };
@@ -404,12 +403,10 @@
 		CE9053501DD47C4E00F52B5F /* HLCsat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCsat.h; sourceTree = "<group>"; };
 		CE9053511DD47C4E00F52B5F /* HLCsat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCsat.m; sourceTree = "<group>"; };
 		CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFileFragment.m; sourceTree = "<group>"; };
-		CE982B811F261F1600B87A66 /* FCRemoteConfigUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRemoteConfigUtil.m; sourceTree = "<group>"; };
 		CE982B851F262D5B00B87A66 /* FCRefreshIntervals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRefreshIntervals.h; sourceTree = "<group>"; };
 		CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRefreshIntervals.m; sourceTree = "<group>"; };
 		CE982B881F2728B900B87A66 /* FCRemoteConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRemoteConfig.h; sourceTree = "<group>"; };
 		CE982B891F2728B900B87A66 /* FCRemoteConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRemoteConfig.m; sourceTree = "<group>"; };
-		CE982B8B1F277A5F00B87A66 /* FCRemoteConfigUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCRemoteConfigUtil.h; sourceTree = "<group>"; };
 		CEA6AC381DD94C6D00B60002 /* FDGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDGrowingTextView.h; sourceTree = "<group>"; };
 		CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDGrowingTextView.m; sourceTree = "<group>"; };
 		CEC95A821E0973A5009A1FCD /* ConversationOptionsInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConversationOptionsInterface.h; path = ../FAQControllers/ConversationOptionsInterface.h; sourceTree = "<group>"; };
@@ -532,8 +529,6 @@
 				CEF6B9021F3739F000692519 /* FCConversationConfig.m */,
 				CECB55201F2A34C20061227E /* FCEnabledFeatures.h */,
 				CECB55211F2A34C20061227E /* FCEnabledFeatures.m */,
-				CE982B8B1F277A5F00B87A66 /* FCRemoteConfigUtil.h */,
-				CE982B811F261F1600B87A66 /* FCRemoteConfigUtil.m */,
 				35B2EEDC1D000E620014867F /* HotlineSDK-Prefix.pch */,
 				35B2EEBC1D000E620014867F /* Controllers */,
 				35B2EEE01D000E620014867F /* Model */,
@@ -1072,7 +1067,6 @@
 				35D4E81B1D118E9000EFFE07 /* FDAttachmentImageController.m in Sources */,
 				35B2EFA41D000E620014867F /* HLAPIClient.m in Sources */,
 				35B2EF961D000E620014867F /* KonotorConversation.m in Sources */,
-				CE982B821F261F1600B87A66 /* FCRemoteConfigUtil.m in Sources */,
 				35B2EF951D000E620014867F /* HLChannel.m in Sources */,
 				35B2EFB01D000E620014867F /* FDSecureStore.m in Sources */,
 				35D4E81A1D118E9000EFFE07 /* HLSearchViewController.m in Sources */,

@@ -11,7 +11,7 @@
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 
 @interface HLContainerController ()
 
@@ -52,7 +52,8 @@
     
     //#imclude both changes server check and internal md5 check also :)
     BOOL isPoweredByHidden = [FDUtilities isPoweredByHidden];
-    BOOL isSubscribed = [FCRemoteConfigUtil isSubscribedUser];
+    //BOOL isSubscribed = [[FCRemoteConfig sharedInstance] isSubscribedUser];
+    BOOL isSubscribed = false;
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];

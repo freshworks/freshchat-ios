@@ -8,19 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-enum AgentAvatarType {
-    REAL_AGENT_AVATAR = 1,
-    APP_ICON = 2,
-    NONE = 2
-};
-
 @interface FCConversationConfig : NSObject
 
-@property (nonatomic, assign) enum AgentAvatarType showAgentAvatars;
+/*
+ REAL_AGENT_AVATAR  - 1
+ APP_ICON = 2,
+ NONE = 3
+ */
+
+@property (nonatomic, assign) int agentAvatar;
 @property (nonatomic, assign) float activeConvFetchBackoffRatio;
 @property (nonatomic, assign) BOOL launchDeeplinkFromNotification;
 @property (nonatomic, assign) long activeConvWindow;
 
--(id) init;
+- (void) updateConvConfig : (NSDictionary *) configDict;
 
 @end

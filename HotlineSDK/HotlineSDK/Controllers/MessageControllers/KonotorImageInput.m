@@ -13,7 +13,7 @@
 #import "HLMacros.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate, UIPopoverControllerDelegate>{
@@ -46,7 +46,7 @@
 
 - (void) showInputOptions:(UIViewController*) viewController{
    
-    if(![FCRemoteConfigUtil isActiveInboxAndAccount]){
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
         return;
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];

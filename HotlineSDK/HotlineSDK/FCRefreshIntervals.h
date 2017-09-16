@@ -14,24 +14,34 @@
 #define ONE_MINUTE_IN_MS (60 * 1000)
 #define ONE_DAY_IN_MS (24 * ONE_HOUR_IN_MS)
 
+enum FCRefreshIntervalType {
+    responseTimeExpectationsFetchInterval = 0,
+    remoteConfigFetchInterval,
+    activeConvMinFetchInterval,
+    activeConvMaxFetchInterval,
+    msgFetchIntervalNormal,
+    msgFetchIntervalLaidback,
+    faqFetchIntervalNormal,
+    faqFetchIntervalLaidback,
+    channelsFetchIntervalNormal,
+    channelsFetchIntervalLaidback,
+};
+
 @interface FCRefreshIntervals : NSObject
 
++ (instancetype) sharedInstance ;
+
 @property (nonatomic, assign) long responseTimeExpectationsFetchInterval;
-
 @property (nonatomic, assign) long remoteConfigFetchInterval;
-
 @property (nonatomic, assign) long activeConvMinFetchInterval;
 @property (nonatomic, assign) long activeConvMaxFetchInterval;
-
 @property (nonatomic, assign) long msgFetchIntervalNormal;
 @property (nonatomic, assign) long msgFetchIntervalLaidback;
-
 @property (nonatomic, assign) long faqFetchIntervalNormal;
 @property (nonatomic, assign) long faqFetchIntervalLaidback;
-
 @property (nonatomic, assign) long channelsFetchIntervalNormal;
 @property (nonatomic, assign) long channelsFetchIntervalLaidback;
 
-- (instancetype)init;
+- (void) updateRefreshConfig : (NSDictionary *) configDict;
 
 @end

@@ -15,7 +15,7 @@
 #define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"
 #define FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME @"freshchat_defaults_session_updated_time"
 
-#define CONFIG_RC_AGENT_AVATAR_ENABLED @"config_rc_agent_avatar_enabled"
+#define CONFIG_RC_AGENT_AVATAR_TYPE @"config_rc_agent_avatar_type"
 #define CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED @"config_rc_notification_deeplink_enabled"
 
 #define CONFIG_RC_ACTIVE_CONV_WINDOW @"config_rc_active_conv_window"

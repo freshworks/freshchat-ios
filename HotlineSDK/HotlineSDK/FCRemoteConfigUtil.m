@@ -36,17 +36,15 @@
     self.remoteConfig.sessionTimeOutInterval = [[configDict objectForKey:@"sessionTimeoutInterval"] longValue];
     
     NSString* avatarType =  [configDict objectForKey:@"agentAvatars"];
-    enum AgentAvatarType type ;
     if([avatarType isEqualToString:@"REAL_AGENT_AVATAR"]){
-        type = REAL_AGENT_AVATAR;
+        self.remoteConfig.conversationConfig.agentAvatar = 1;
     }
     else if([avatarType isEqualToString:@"APP_ICON"]){
-        type = APP_ICON;
+        self.remoteConfig.conversationConfig.agentAvatar = 2;
     }
     else{
-        type = NONE;
-    }
-    self.remoteConfig.conversationConfig.showAgentAvatars = type ;
+        self.remoteConfig.conversationConfig.agentAvatar = 3;
+    }self.remoteConfig.conversationConfig.agentAvatar = 1;    
     
     self.remoteConfig.conversationConfig.activeConvFetchBackoffRatio = [[configDict objectForKey:@"activeConvFetchBackoffRatio"] floatValue];
     self.remoteConfig.conversationConfig.launchDeeplinkFromNotification = [[configDict objectForKey:@"activeConvWindow"] boolValue];

@@ -7,56 +7,87 @@
 //
 
 #import "FCRemoteConfig.h"
+#import "FDSecureStore.h"
+#import "Message.h"
+
 
 @implementation FCRemoteConfig
+
++(instancetype)sharedInstance{
+    static FCRemoteConfig *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
+
 
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.accountActive = YES;
-        self.sessionTimeOutInterval = 30 * ONE_MINUTE_IN_MS;
-        self.conversationConfig = [[FCConversationConfig alloc] init];
-        self.refreshIntervals = [[FCRefreshIntervals alloc] init];
-        self.features = [[FCEnabledFeatures alloc] init];
+        self.conversationConfig             = [[FCConversationConfig alloc] init];
+        self.refreshIntervals               = [[FCRefreshIntervals alloc] init];
+        self.enabledFeatures                     = [[FCEnabledFeatures alloc] init];
+        self.accountActive                  = [self getIsAccountActive];
+        self.sessionTimeOutInterval         = [self getSessionTimeOutInterval];        
     }
     return self;
 }
 
-- (BOOL) getAccountActive{
-    
-    return self.accountActive;
+-(BOOL) getIsAccountActive {
+    if ([HLUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE] != nil) {
+        return (BOOL) [HLUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
+    }
+    return YES;
 }
 
-- (void) setAccountActive:(BOOL)accountActive {
+- (long) getSessionTimeOutInterval {
+    if ([HLUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {
+        return (long) [HLUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
+    }
+    return 30 * ONE_MINUTE_IN_MS;
+}
+
+- (void) setIsAccountActive:(BOOL)accountActive {
     [HLUserDefaults setBool:accountActive forKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
-    _accountActive = accountActive;
+    self.accountActive = accountActive;
 }
 
-- (long) getSessionTimeOutInterval{
+- (void) setSessionTimeOutInterval:(long) sessionTimeOutInterval {
+    [HLUserDefaults setLong:sessionTimeOutInterval forKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
+    self.sessionTimeOutInterval = sessionTimeOutInterval;
+}
+
+
+- (void) updateRemoteConfig : (NSDictionary *) configDict {
+    NSArray *enabledFeaturesArray       = [configDict objectForKey:@"enabledFeatures"];
+    NSDictionary *refreshIntervalsDict  = [configDict objectForKey:@"refreshIntervals"];
+    NSDictionary *convConfigDict        = [configDict objectForKey:@"conversationConfig"];
     
-    return self.sessionTimeOutInterval;
-}
-
-- (void) setSessionDuration:(long)sessionDuration{
-    _sessionTimeOutInterval = sessionDuration;
-    [HLUserDefaults setLong:sessionDuration forKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
-}
-
-- (FCRefreshIntervals *) getRefreshIntervals{
+    [self setAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
+    [self setSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
     
-    return self.refreshIntervals;
+    [self.conversationConfig updateConvConfig:convConfigDict];
+    [self.enabledFeatures updateConvConfig:enabledFeaturesArray];
+    [self.refreshIntervals updateRefreshConfig:refreshIntervalsDict];
 }
 
-- (void) setRefreshIntervals:(FCRefreshIntervals *)refreshIntervals{
-    _refreshIntervals = refreshIntervals;
+- (BOOL) isActiveInboxAndAccount {
+    return self.accountActive && self.enabledFeatures.inboxEnabled;
 }
 
-- (void) setFeatures:(FCEnabledFeatures *)enabledFeatures{
-    _enabledFeatures = enabledFeatures;
+- (BOOL) isActiveFAQAndAccount {
+    return self.accountActive && self.enabledFeatures.faqEnabled;
 }
 
-- (FCEnabledFeatures *) getEnabledFeatures {
-    return self.enabledFeatures;
+- (BOOL) isActiveConvAvailable{
+    long days = [Message daysSinceLastMessageInContext: [[KonotorDataManager sharedInstance] mainObjectContext]];
+    if( days * ONE_SECONDS_IN_MS < self.conversationConfig.activeConvWindow ){
+        return true;
+    }
+    return false;
 }
+
 
 @end

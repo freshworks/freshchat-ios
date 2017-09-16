@@ -10,8 +10,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "HLFAQServices.h"
-#import "FCRemoteConfigUtil.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 
 @interface FDVotingManager()
 
@@ -45,7 +44,7 @@
 }
 
 -(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
-    if([FCRemoteConfigUtil isActiveFAQAndAccount]){
+    if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
         ALog(@"Article Downvoted");
         [self storeArticleVote:NO LocallyForArticleID:articleID];
         HLFAQServices *service = [[HLFAQServices alloc]init];
@@ -57,7 +56,7 @@
 }
 
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
-    if([FCRemoteConfigUtil isActiveFAQAndAccount]){
+    if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
         ALog(@"Article Upvoted");
         [self storeArticleVote:YES LocallyForArticleID:articleID];
         HLFAQServices *service = [[HLFAQServices alloc]init];

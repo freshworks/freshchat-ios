@@ -19,7 +19,7 @@
 #import "FDPlistManager.h"
 #import "HLCoreServices.h"
 #import "FDLocalNotification.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 #import "HLUserDefaults.h"
 #import "HLConstants.h"
 #import "HLLocalization.h"
@@ -349,7 +349,7 @@ static NSInteger networkIndicator = 0;
     if(isnan(interval)){
         return true;
     }
-    if(interval > [FCRemoteConfigUtil getRemoteConfigFetchInterval]/ 1000.0){
+    if(interval > [FCRemoteConfig sharedInstance].refreshIntervals.remoteConfigFetchInterval/ 1000.0){
         return true;
     }
     return false;
@@ -361,7 +361,7 @@ static NSInteger networkIndicator = 0;
     }
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
     FDLog(@"Time interval b/w dates %f", interval);
-    if(interval > [FCRemoteConfigUtil getSessionTimeoutInterval]/1000){
+    if(interval > [FCRemoteConfig sharedInstance].sessionTimeOutInterval/1000){
         return true;
     }
     return false;
@@ -373,7 +373,7 @@ static NSInteger networkIndicator = 0;
     if(isnan(interval)){
         return true;
     }
-    if(interval > [FCRemoteConfigUtil getResponseTimeExpectationsFetchInterval]/ 1000.0){
+    if(interval > [FCRemoteConfig sharedInstance].refreshIntervals.responseTimeExpectationsFetchInterval/ 1000.0){
         return true;
     }
     return false;

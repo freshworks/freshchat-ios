@@ -42,7 +42,7 @@
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 #import "HLCoreServices.h"
 
@@ -606,7 +606,7 @@ typedef struct {
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
     
-    if(![FCRemoteConfigUtil isActiveInboxAndAccount]){
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
         return;
     }
     
@@ -638,7 +638,7 @@ typedef struct {
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
     
-    if(![FCRemoteConfigUtil isActiveInboxAndAccount]){
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
         return;
     }
     

@@ -15,7 +15,7 @@
 #import "FDUtilities.h"
 #import "math.h"
 #import "HLNotificationHandler.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 
 #define MAX_POLL_INTERVAL_ON_SCREEN     60 // 1 minute;
@@ -47,8 +47,8 @@
 
 -(void)begin{
     if(self.pollType == OnscreenPollFetch){
-        self.interval = [FCRemoteConfigUtil getActiveConvMinFetchInterval]/ONE_SECONDS_IN_MS;
-        self.backOff = [FCRemoteConfigUtil getActiveConvFetchBackoffRatio];
+        self.interval = [FCRemoteConfig sharedInstance].refreshIntervals.activeConvMinFetchInterval/ONE_SECONDS_IN_MS;
+        self.backOff =[FCRemoteConfig sharedInstance].conversationConfig.activeConvFetchBackoffRatio;
     }
     if(self.pollType == OffScreenPollFetch){
         self.interval = OFF_CHAT_SCREEN_POLLER_INTERVAL;
@@ -75,11 +75,11 @@
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    if([FCRemoteConfigUtil isActiveInboxAndAccount] && [HLUser isUserRegistered] && [FCRemoteConfigUtil isActiveConvAvailable]){
+    if([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount] && [HLUser isUserRegistered] && [[FCRemoteConfig sharedInstance] isActiveConvAvailable]){
         NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
         [mainContext performBlock:^{
             if([Message hasUserMessageInContext:mainContext]){
-                if([Message daysSinceLastMessageInContext:mainContext] <= [FCRemoteConfigUtil getActiveConvWindow]) {
+                if([Message daysSinceLastMessageInContext:mainContext] <= [FCRemoteConfig sharedInstance].conversationConfig.activeConvWindow) {
                     [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
                                   ,[Message daysSinceLastMessageInContext:mainContext]]];
                     enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?
@@ -104,7 +104,7 @@
 -(void)setNext {
     [self.pollingTimer invalidate]; // Not required since poller is not on repeat, but do it anyways
     self.interval =  fmin(self.interval * self.backOff,
-                          self.pollType == OnscreenPollFetch ? [FCRemoteConfigUtil getActiveConvMaxFetchInterval]/ONE_SECONDS_IN_MS : MAX_POLL_INTERVAL_OFF_SCREEN);
+                          self.pollType == OnscreenPollFetch ? [FCRemoteConfig sharedInstance].refreshIntervals.activeConvMaxFetchInterval/ONE_SECONDS_IN_MS : MAX_POLL_INTERVAL_OFF_SCREEN);
     if(!self.ended){
         [self poll];
     }

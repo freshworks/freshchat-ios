@@ -43,7 +43,7 @@
 #import "FDUtilities.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 #import "HLLocalization.h"
 #import "HLUserDefaults.h"
 #import "HLUser.h"
@@ -329,7 +329,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([HLUser isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
-            if([HLUser isUserRegistered] && [FCRemoteConfigUtil isAccountActive]){
+            if([HLUser isUserRegistered] && [FCRemoteConfig sharedInstance].accountActive){
                 NSString *userAlias = [FDUtilities currentUserAlias];
                 NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
                 [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
@@ -378,7 +378,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)performPendingTasks{
-    [[FCRemoteConfigUtil sharedInstance] init];
     FDLog(@"Performing pending tasks");
     if ([HLUser canRegisterUser]) {
         [HLUser registerUser:nil];
@@ -430,7 +429,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)showFAQs:(UIViewController *)controller{
     
-    if([FCRemoteConfigUtil isActiveFAQAndAccount]){
+    if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
         [self showFAQs:controller withOptions:[FAQOptions new]];
     }
     else{
@@ -439,7 +438,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    if([FCRemoteConfigUtil isActiveInboxAndAccount]){
+    if([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
         [self showConversations:controller withOptions:[ConversationOptions new]];
     }
     else{

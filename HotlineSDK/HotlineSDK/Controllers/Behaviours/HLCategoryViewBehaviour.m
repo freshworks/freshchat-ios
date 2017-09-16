@@ -19,7 +19,7 @@
 #import "HLSearchViewController.h"
 #import "HLControllerUtils.h"
 #import "HLConstants.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 
 @interface  HLCategoryViewBehaviour ()
 
@@ -88,7 +88,8 @@
         }
         else {
             //[updater useInterval:SOLUTIONS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
-            [updater useInterval:[FCRemoteConfigUtil getFaqFetchIntervalNormal]];
+            FCRefreshIntervals *remoteIntervals = [FCRemoteConfig sharedInstance].refreshIntervals;
+            [updater useInterval:remoteIntervals.faqFetchIntervalNormal];
         }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {

@@ -19,8 +19,7 @@
 #import "FDMemLogger.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
-#import "FCRemoteConfigUtil.h"
-#import "FCRemoteConfigUtil.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 
 @implementation HLCoreServices
@@ -373,7 +372,7 @@
 }
 
 +(void)sendLatestUserActivity:(HLChannel *)channel{
-    if (!([FCRemoteConfigUtil isAccountActive] && [HLUser isUserRegistered])){
+    if (!([FCRemoteConfig sharedInstance].accountActive && [HLUser isUserRegistered])){
         return;
     }
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
@@ -388,7 +387,7 @@
     Message *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
     if(latestMessage){
         //update read activity
-        if([FCRemoteConfigUtil isActiveInboxAndAccount]){
+        if( [FCRemoteConfig sharedInstance].enabledFeatures.inboxEnabled && [FCRemoteConfig sharedInstance].accountActive ){
             [HLCoreServices registerUserConversationActivity:latestMessage];
         }
     }
@@ -440,9 +439,7 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
             NSDictionary *configDict = responseInfo.responseAsDictionary;
-            
-            //Init config here
-            [[FCRemoteConfigUtil sharedInstance] updateRemoteConfig:configDict];
+            [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);
