@@ -113,6 +113,7 @@
 		CE0C7C6E1D9539A100F545AE /* FDPlistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7C6D1D9539A100F545AE /* FDPlistManager.m */; };
 		CE0FDB171EF10E4000E686BE /* FragmentData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0FDB161EF10E4000E686BE /* FragmentData.m */; };
 		CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = CE16BA231DEDAC4F00EE714C /* HLCSATYesNoPrompt.m */; };
+		CE1739771F6D70EB00950F30 /* FreshchatModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE95B5781F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld */; };
 		CE274D041DB78E5C00733EDB /* HLStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE274D021DB78E5C00733EDB /* HLStarRatingView.m */; };
 		CE2A883E1EF006D900082811 /* MessageData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2A883D1EF006D900082811 /* MessageData.m */; };
 		CE340D2C1F3077610095A50E /* HLAttributedText.m in Sources */ = {isa = PBXBuildFile; fileRef = CE340D2B1F3077610095A50E /* HLAttributedText.m */; };
@@ -146,6 +147,7 @@
 		CE8C7A881F6C216B00E77494 /* UIView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8C7A611F6C216B00E77494 /* UIView+WebCache.m */; };
 		CE8C7A8A1F6C216B00E77494 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8C7A631F6C216B00E77494 /* UIView+WebCacheOperation.m */; };
 		CE9053521DD47C4E00F52B5F /* HLCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* HLCsat.m */; };
+		CE95B57A1F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE95B5781F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld */; };
 		CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */; };
 		CE982B871F262D5B00B87A66 /* FCRefreshIntervals.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */; };
 		CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B891F2728B900B87A66 /* FCRemoteConfig.m */; };
@@ -153,7 +155,6 @@
 		CEC95A851E097B44009A1FCD /* HLConversationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC95A841E097B43009A1FCD /* HLConversationUtil.m */; };
 		CECB55221F2A34C20061227E /* FCEnabledFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB55211F2A34C20061227E /* FCEnabledFeatures.m */; };
 		CED138481DB4D55200404686 /* HLCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* HLCSATView.m */; };
-		CED1384B1DB6401D00404686 /* KonotorModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEF51D000E620014867F /* KonotorModel.xcdatamodeld */; };
 		CEF6B9031F3739F000692519 /* FCConversationConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF6B9021F3739F000692519 /* FCConversationConfig.m */; };
 		CEFA055A1EE82F2000DC74CF /* FDAudioFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */; };
 		CEFA055B1EE82F2000DC74CF /* FDHtmlFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */; };
@@ -179,13 +180,12 @@
 /* Begin PBXFileReference section */
 		354F26C41D0AED2F00DCD158 /* FDKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDKeyChainStore.h; sourceTree = "<group>"; };
 		354F26C51D0AED2F00DCD158 /* FDKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDKeyChainStore.m; sourceTree = "<group>"; };
-		35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHotlineSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		35591AB11B9ED58100BC0B60 /* libFreshchatSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFreshchatSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		35591B741B9EDCCE00BC0B60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		35591B751B9EDCCE00BC0B60 /* KonotorModels-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "KonotorModels-Info.plist"; sourceTree = "<group>"; };
-		35591B761B9EDCCE00BC0B60 /* KonotorModels-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KonotorModels-Prefix.pch"; sourceTree = "<group>"; };
+		35591B751B9EDCCE00BC0B60 /* FreshchatModels-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "FreshchatModels-Info.plist"; sourceTree = "<group>"; };
+		35591B761B9EDCCE00BC0B60 /* FreshchatModels-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FreshchatModels-Prefix.pch"; sourceTree = "<group>"; };
 		356727DF1D216842007ECF89 /* FDLocalNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDLocalNotification.m; sourceTree = "<group>"; };
-		358DD4EE1BB01A2100B36E4E /* KonotorModels.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KonotorModels.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		358DD4F11BB01A2100B36E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		358DD4EE1BB01A2100B36E4E /* FreshchatModels.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FreshchatModels.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		35B2EECD1D000E620014867F /* HLContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLContainerController.h; sourceTree = "<group>"; };
 		35B2EECE1D000E620014867F /* HLContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLContainerController.m; sourceTree = "<group>"; };
 		35B2EECF1D000E620014867F /* HLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLListViewController.h; sourceTree = "<group>"; };
@@ -221,28 +221,6 @@
 		35B2EEF21D000E620014867F /* KonotorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorMessage.m; sourceTree = "<group>"; };
 		35B2EEF31D000E620014867F /* KonotorMessageBinary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorMessageBinary.h; sourceTree = "<group>"; };
 		35B2EEF41D000E620014867F /* KonotorMessageBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorMessageBinary.m; sourceTree = "<group>"; };
-		35B2EEF61D000E620014867F /* KonotorModel 10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 10.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEF71D000E620014867F /* KonotorModel 11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 11.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEF81D000E620014867F /* KonotorModel 12.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 12.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEF91D000E620014867F /* KonotorModel 13.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 13.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEFA1D000E620014867F /* KonotorModel 14.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 14.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEFB1D000E620014867F /* KonotorModel 15.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 15.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEFC1D000E620014867F /* KonotorModel 16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 16.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEFD1D000E620014867F /* KonotorModel 17.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 17.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEFE1D000E620014867F /* KonotorModel 18.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 18.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EEFF1D000E620014867F /* KonotorModel 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 19.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF001D000E620014867F /* KonotorModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 2.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF011D000E620014867F /* KonotorModel 20.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 20.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF021D000E620014867F /* KonotorModel 21.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 21.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF031D000E620014867F /* KonotorModel 22.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 22.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF041D000E620014867F /* KonotorModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 3.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF051D000E620014867F /* KonotorModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 4.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF061D000E620014867F /* KonotorModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 5.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF071D000E620014867F /* KonotorModel 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 6.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF081D000E620014867F /* KonotorModel 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 7.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF091D000E620014867F /* KonotorModel 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 8.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF0A1D000E620014867F /* KonotorModel 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 9.xcdatamodel"; sourceTree = "<group>"; };
-		35B2EF0B1D000E620014867F /* KonotorModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KonotorModel.xcdatamodel; sourceTree = "<group>"; };
 		35B2EF0C1D000E620014867F /* KonotorUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorUser.h; sourceTree = "<group>"; };
 		35B2EF0D1D000E620014867F /* KonotorUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorUser.m; sourceTree = "<group>"; };
 		35B2EF101D000E620014867F /* FDChannelUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDChannelUpdater.h; sourceTree = "<group>"; };
@@ -393,6 +371,7 @@
 		CE1064591BC2779300922494 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE16BA221DEDAC4F00EE714C /* HLCSATYesNoPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCSATYesNoPrompt.h; sourceTree = "<group>"; };
 		CE16BA231DEDAC4F00EE714C /* HLCSATYesNoPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCSATYesNoPrompt.m; sourceTree = "<group>"; };
+		CE1739791F6D725E00950F30 /* FreshchatModel 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FreshchatModel 1.xcdatamodel"; sourceTree = "<group>"; };
 		CE274D011DB78E5C00733EDB /* HLStarRatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLStarRatingView.h; sourceTree = "<group>"; };
 		CE274D021DB78E5C00733EDB /* HLStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLStarRatingView.m; sourceTree = "<group>"; };
 		CE2A883C1EF006D900082811 /* MessageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageData.h; sourceTree = "<group>"; };
@@ -409,7 +388,6 @@
 		CE3EFB541EDFEEEE00470AB1 /* Message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		CE3EFB551EDFF9A000470AB1 /* Fragment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fragment.h; sourceTree = "<group>"; };
 		CE3EFB561EDFF9B000470AB1 /* Fragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fragment.m; sourceTree = "<group>"; };
-		CE410A9A1EE19F4600AAB226 /* KonotorModel 25.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 25.xcdatamodel"; sourceTree = "<group>"; };
 		CE4B29E61DF9A78F00EC6978 /* HLMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLMessage.m; sourceTree = "<group>"; };
 		CE642C1B1F308C1D00264CA0 /* HLAgentMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLAgentMessageCell.m; sourceTree = "<group>"; };
 		CE642C1C1F308C1D00264CA0 /* HLUserMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLUserMessageCell.m; sourceTree = "<group>"; };
@@ -417,7 +395,6 @@
 		CE642C1E1F308C1D00264CA0 /* HLUserMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLUserMessageCell.h; sourceTree = "<group>"; };
 		CE64FEE51F3C37A000291669 /* FDParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDParticipant.h; sourceTree = "<group>"; };
 		CE64FEE61F3C37A000291669 /* FDParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDParticipant.m; sourceTree = "<group>"; };
-		CE662A991E1A448000B94744 /* KonotorModel 24.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 24.xcdatamodel"; sourceTree = "<group>"; };
 		CE85F5B31E1FAAEA00BAA5A8 /* HLTagManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLTagManager.h; sourceTree = "<group>"; };
 		CE85F5B41E1FAAEA00BAA5A8 /* HLTagManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLTagManager.m; sourceTree = "<group>"; };
 		CE8BF9071DD5FFB700814009 /* HLTags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLTags.h; sourceTree = "<group>"; };
@@ -462,6 +439,7 @@
 		CE8C7A8B1F6C21C800E77494 /* FDImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDImageView.h; sourceTree = "<group>"; };
 		CE9053501DD47C4E00F52B5F /* HLCsat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCsat.h; sourceTree = "<group>"; };
 		CE9053511DD47C4E00F52B5F /* HLCsat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCsat.m; sourceTree = "<group>"; };
+		CE95B5791F6D6E5D006EC8AA /* FreshchatModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FreshchatModel.xcdatamodel; sourceTree = "<group>"; };
 		CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFileFragment.m; sourceTree = "<group>"; };
 		CE982B851F262D5B00B87A66 /* FCRefreshIntervals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRefreshIntervals.h; sourceTree = "<group>"; };
 		CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRefreshIntervals.m; sourceTree = "<group>"; };
@@ -476,7 +454,6 @@
 		CECB55211F2A34C20061227E /* FCEnabledFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCEnabledFeatures.m; sourceTree = "<group>"; };
 		CED138461DB4D55200404686 /* HLCSATView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCSATView.h; sourceTree = "<group>"; };
 		CED138471DB4D55200404686 /* HLCSATView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCSATView.m; sourceTree = "<group>"; };
-		CED1384A1DB63FC100404686 /* KonotorModel 23.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "KonotorModel 23.xcdatamodel"; sourceTree = "<group>"; };
 		CEEDD1001F6BFC5A006CCF66 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		CEF6B9011F3739F000692519 /* FCConversationConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCConversationConfig.h; sourceTree = "<group>"; };
 		CEF6B9021F3739F000692519 /* FCConversationConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCConversationConfig.m; sourceTree = "<group>"; };
@@ -523,8 +500,8 @@
 			isa = PBXGroup;
 			children = (
 				35591B731B9EDCCE00BC0B60 /* InfoPlist.strings */,
-				35591B751B9EDCCE00BC0B60 /* KonotorModels-Info.plist */,
-				35591B761B9EDCCE00BC0B60 /* KonotorModels-Prefix.pch */,
+				35591B751B9EDCCE00BC0B60 /* FreshchatModels-Info.plist */,
+				35591B761B9EDCCE00BC0B60 /* FreshchatModels-Prefix.pch */,
 			);
 			path = HotlineModels;
 			sourceTree = "<group>";
@@ -552,22 +529,6 @@
 			isa = PBXGroup;
 			children = (
 				CE1064591BC2779300922494 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		358DD4EF1BB01A2100B36E4E /* KonotorModels */ = {
-			isa = PBXGroup;
-			children = (
-				358DD4F01BB01A2100B36E4E /* Supporting Files */,
-			);
-			path = KonotorModels;
-			sourceTree = "<group>";
-		};
-		358DD4F01BB01A2100B36E4E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				358DD4F11BB01A2100B36E4E /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -622,6 +583,7 @@
 		35B2EEE01D000E620014867F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CE95B5781F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld */,
 				CE9053501DD47C4E00F52B5F /* HLCsat.h */,
 				CE9053511DD47C4E00F52B5F /* HLCsat.m */,
 				35B2EEE11D000E620014867F /* FDArticleContent.h */,
@@ -654,7 +616,6 @@
 				35B2EEF41D000E620014867F /* KonotorMessageBinary.m */,
 				35B2EF0C1D000E620014867F /* KonotorUser.h */,
 				35B2EF0D1D000E620014867F /* KonotorUser.m */,
-				35B2EEF51D000E620014867F /* KonotorModel.xcdatamodeld */,
 				CE2A883C1EF006D900082811 /* MessageData.h */,
 				CE2A883D1EF006D900082811 /* MessageData.m */,
 				CE0FDB151EF10E4000E686BE /* FragmentData.h */,
@@ -932,7 +893,6 @@
 				35591B721B9EDCCE00BC0B60 /* HotlineModels */,
 				35591B791B9EDD0700BC0B60 /* Vendor */,
 				358DD4CC1BB011A200B36E4E /* HotlineDB */,
-				358DD4EF1BB01A2100B36E4E /* KonotorModels */,
 				843DD255178594180053E19E /* Products */,
 				CEEDD0FF1F6BFC5A006CCF66 /* Frameworks */,
 			);
@@ -941,8 +901,8 @@
 		843DD255178594180053E19E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */,
-				358DD4EE1BB01A2100B36E4E /* KonotorModels.bundle */,
+				35591AB11B9ED58100BC0B60 /* libFreshchatSDK.a */,
+				358DD4EE1BB01A2100B36E4E /* FreshchatModels.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1042,9 +1002,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		35591A9B1B9ED58100BC0B60 /* HotlineSDK */ = {
+		35591A9B1B9ED58100BC0B60 /* FreshchatSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 35591AAE1B9ED58100BC0B60 /* Build configuration list for PBXNativeTarget "HotlineSDK" */;
+			buildConfigurationList = 35591AAE1B9ED58100BC0B60 /* Build configuration list for PBXNativeTarget "FreshchatSDK" */;
 			buildPhases = (
 				35591A9C1B9ED58100BC0B60 /* Sources */,
 				35591AA91B9ED58100BC0B60 /* Frameworks */,
@@ -1055,14 +1015,14 @@
 			);
 			dependencies = (
 			);
-			name = HotlineSDK;
+			name = FreshchatSDK;
 			productName = Konotor;
-			productReference = 35591AB11B9ED58100BC0B60 /* libHotlineSDK.a */;
+			productReference = 35591AB11B9ED58100BC0B60 /* libFreshchatSDK.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		358DD4ED1BB01A2100B36E4E /* KonotorModels */ = {
+		358DD4ED1BB01A2100B36E4E /* FreshchatModels */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 358DD4F21BB01A2100B36E4E /* Build configuration list for PBXNativeTarget "KonotorModels" */;
+			buildConfigurationList = 358DD4F21BB01A2100B36E4E /* Build configuration list for PBXNativeTarget "FreshchatModels" */;
 			buildPhases = (
 				358DD4EA1BB01A2100B36E4E /* Sources */,
 				358DD4EB1BB01A2100B36E4E /* Frameworks */,
@@ -1072,9 +1032,9 @@
 			);
 			dependencies = (
 			);
-			name = KonotorModels;
+			name = FreshchatModels;
 			productName = KonotorModels;
-			productReference = 358DD4EE1BB01A2100B36E4E /* KonotorModels.bundle */;
+			productReference = 358DD4EE1BB01A2100B36E4E /* FreshchatModels.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -1106,8 +1066,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				35591A9B1B9ED58100BC0B60 /* HotlineSDK */,
-				358DD4ED1BB01A2100B36E4E /* KonotorModels */,
+				35591A9B1B9ED58100BC0B60 /* FreshchatSDK */,
+				358DD4ED1BB01A2100B36E4E /* FreshchatModels */,
 				35E56EDF1C7CC6420089CEFB /* Documentation */,
 			);
 		};
@@ -1258,6 +1218,7 @@
 				35D4E81D1D118E9000EFFE07 /* FDMessageController.m in Sources */,
 				35B2EFCA1D000E620014867F /* FDPictureMessageView.m in Sources */,
 				35B2EFBC1D000E620014867F /* FDCell.m in Sources */,
+				CE95B57A1F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld in Sources */,
 				35B2EFB21D000E620014867F /* FDUtilities.m in Sources */,
 				CEFA055C1EE82F2000DC74CF /* FDVideoFragment.m in Sources */,
 				35B2EFAB1D000E620014867F /* FDDateUtil.m in Sources */,
@@ -1288,7 +1249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CED1384B1DB6401D00404686 /* KonotorModel.xcdatamodeld in Sources */,
+				CE1739771F6D70EB00950F30 /* FreshchatModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1366,7 +1327,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = KonotorModels/Info.plist;
+				INFOPLIST_FILE = FreshchatModels/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1400,7 +1361,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = KonotorModels/Info.plist;
+				INFOPLIST_FILE = FreshchatModels/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1513,7 +1474,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		35591AAE1B9ED58100BC0B60 /* Build configuration list for PBXNativeTarget "HotlineSDK" */ = {
+		35591AAE1B9ED58100BC0B60 /* Build configuration list for PBXNativeTarget "FreshchatSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				35591AAF1B9ED58100BC0B60 /* Debug */,
@@ -1522,7 +1483,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		358DD4F21BB01A2100B36E4E /* Build configuration list for PBXNativeTarget "KonotorModels" */ = {
+		358DD4F21BB01A2100B36E4E /* Build configuration list for PBXNativeTarget "FreshchatModels" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				358DD4F31BB01A2100B36E4E /* Debug */,
@@ -1552,37 +1513,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		35B2EEF51D000E620014867F /* KonotorModel.xcdatamodeld */ = {
+		CE95B5781F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				CE410A9A1EE19F4600AAB226 /* KonotorModel 25.xcdatamodel */,
-				CE662A991E1A448000B94744 /* KonotorModel 24.xcdatamodel */,
-				CED1384A1DB63FC100404686 /* KonotorModel 23.xcdatamodel */,
-				35B2EEF61D000E620014867F /* KonotorModel 10.xcdatamodel */,
-				35B2EEF71D000E620014867F /* KonotorModel 11.xcdatamodel */,
-				35B2EEF81D000E620014867F /* KonotorModel 12.xcdatamodel */,
-				35B2EEF91D000E620014867F /* KonotorModel 13.xcdatamodel */,
-				35B2EEFA1D000E620014867F /* KonotorModel 14.xcdatamodel */,
-				35B2EEFB1D000E620014867F /* KonotorModel 15.xcdatamodel */,
-				35B2EEFC1D000E620014867F /* KonotorModel 16.xcdatamodel */,
-				35B2EEFD1D000E620014867F /* KonotorModel 17.xcdatamodel */,
-				35B2EEFE1D000E620014867F /* KonotorModel 18.xcdatamodel */,
-				35B2EEFF1D000E620014867F /* KonotorModel 19.xcdatamodel */,
-				35B2EF001D000E620014867F /* KonotorModel 2.xcdatamodel */,
-				35B2EF011D000E620014867F /* KonotorModel 20.xcdatamodel */,
-				35B2EF021D000E620014867F /* KonotorModel 21.xcdatamodel */,
-				35B2EF031D000E620014867F /* KonotorModel 22.xcdatamodel */,
-				35B2EF041D000E620014867F /* KonotorModel 3.xcdatamodel */,
-				35B2EF051D000E620014867F /* KonotorModel 4.xcdatamodel */,
-				35B2EF061D000E620014867F /* KonotorModel 5.xcdatamodel */,
-				35B2EF071D000E620014867F /* KonotorModel 6.xcdatamodel */,
-				35B2EF081D000E620014867F /* KonotorModel 7.xcdatamodel */,
-				35B2EF091D000E620014867F /* KonotorModel 8.xcdatamodel */,
-				35B2EF0A1D000E620014867F /* KonotorModel 9.xcdatamodel */,
-				35B2EF0B1D000E620014867F /* KonotorModel.xcdatamodel */,
+				CE1739791F6D725E00950F30 /* FreshchatModel 1.xcdatamodel */,
+				CE95B5791F6D6E5D006EC8AA /* FreshchatModel.xcdatamodel */,
 			);
-			currentVersion = CE410A9A1EE19F4600AAB226 /* KonotorModel 25.xcdatamodel */;
-			path = KonotorModel.xcdatamodeld;
+			currentVersion = CE1739791F6D725E00950F30 /* FreshchatModel 1.xcdatamodel */;
+			path = FreshchatModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -97,14 +97,14 @@
 }
 
 -(NSManagedObjectModel *)loadKonotorDataModel{
-    NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"KonotorModels" ofType:@"bundle"];
-    NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
+    NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"FreshchatModels" ofType:@"bundle"];
+    NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"FreshchatModel" withExtension:@"momd"];
     NSManagedObjectModel *obj =  [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return obj;
 }
 
 -(NSURL *)konotorSQLiteURL{
-    NSString *storePath = [[self konotorSQLiteDirPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    NSString *storePath = [[self konotorSQLiteDirPath] stringByAppendingPathComponent:@"Freshchat.sqlite"];
     return [NSURL fileURLWithPath:storePath];
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "FDSettingsController.h"
-#import "HotlineSDK/Freshchat.h"
+#import "FreshchatSDK/Freshchat.h"
 #import "AppDelegate.h"
 
 @interface FDSettingsController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>

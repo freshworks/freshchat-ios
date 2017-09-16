@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "HotlineSDK/Freshchat.h"
+#import "FreshchatSDK/Freshchat.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 #define kOFFSET_FOR_KEYBOARD 160.0

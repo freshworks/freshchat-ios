@@ -75,7 +75,7 @@
 }
 
 -(NSBundle *)getHLResourceBundle{
-    NSBundle *hlResourcesBundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"HLResources" withExtension:@"bundle"]];
+    NSBundle *hlResourcesBundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"FCResources" withExtension:@"bundle"]];
     return hlResourcesBundle;
 }
 

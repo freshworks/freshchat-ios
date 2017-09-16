@@ -7,7 +7,7 @@
 //
 
 #import "SampleController.h"
-#import "HotlineSDK/Freshchat.h"
+#import "FreshchatSDK/Freshchat.h"
 
 @interface SampleController ()
 

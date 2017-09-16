@@ -75,7 +75,7 @@ do
 
   printHeader "Building SDK for $SDK with Architecture $ARCH"
 
-  xcodebuild $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target HotlineSDK -sdk $SDK -arch $ARCH -configuration Release clean build
+  xcodebuild $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target FreshchatSDK -sdk $SDK -arch $ARCH -configuration Release clean build
   if [ $? -ne 0 ] 
   then 
     printHeader "build Failed :("
@@ -83,7 +83,7 @@ do
     exit
   fi;
 
-  cp ./HotlineSDK/build/Release-$SDK/libHotlineSDK.a buildtmp/libFreshchatSDK-$SDK-$ARCH.a
+  cp ./HotlineSDK/build/Release-$SDK/libFreshchatSDK.a buildtmp/libFreshchatSDK-$SDK-$ARCH.a
   
 done <<ARCHLIST
 iphonesimulator i386
@@ -104,9 +104,9 @@ RESOURCES_DIR=Hotline/SDKResources
 ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDFreshchatSDK.a
 cp LICENSE $OUTPUTDIR
 cp ./HotlineSDK/HotlineSDK/Freshchat.h $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/KonotorModels.bundle  $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/HLResources.bundle $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/HLLocalization.bundle $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/FreshchatModels.bundle  $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/FCResources.bundle $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/FCLocalization.bundle $OUTPUTDIR
 REL_NOTES=$OUTPUTDIR/ReleaseNotes.txt
 RELEASE_HEADER=$( cat <<RELEASEINFO
 Freshchat iOS SDK - Powered by Freshdesk
