@@ -9,7 +9,8 @@
 #import "FDSessionUpdater.h"
 #import "HLConstants.h"
 #import "HLCoreServices.h"
-
+#import "FCRemoteConfigUtil.h"
+#import "HLUser.h"
 
 @implementation FDSessionUpdater
 
@@ -23,6 +24,7 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
+
    // [HLCoreServices performSessionCall:^(NSError *error) {
 //        if(completion){
 //            completion(error);

@@ -30,6 +30,7 @@
 #import "HLAgentMessageCell.h"
 #import "Message.h"
 #import "Fragment.h"
+#import "FCRemoteConfig.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
 #import "HLUserDefaults.h"
@@ -46,6 +47,14 @@ static HLNotificationHandler *handleUpdateNotification;
                                      source :(enum MessageRequestSource ) requestSource
                                   andHandler:(void (^)(NSError *))handler{
     static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+    
+    if(priority == OffScreenPollFetch){
+        if (!([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]
+              && [HLUser isUserRegistered]
+              && ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED] || [[FCRemoteConfig sharedInstance] isActiveConvAvailable]))){
+            return;
+        }
+    }
     
     if (MESSAGES_DOWNLOAD_IN_PROGRESS) {
         FDLog(@"download message in progress, so skip");
@@ -79,8 +88,10 @@ static HLNotificationHandler *handleUpdateNotification;
             break;
         
         case ScreenLaunchFetch:
-            [messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
-            [channelsUpdater useInterval:CHANNELS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            [messageUpdater useInterval:[FCRemoteConfig sharedInstance].refreshIntervals.msgFetchIntervalNormal];
+            [channelsUpdater useInterval:[FCRemoteConfig sharedInstance].refreshIntervals.channelsFetchIntervalNormal];
+            //[messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            //[channelsUpdater useInterval:CHANNELS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];            
             break;
             
         default:

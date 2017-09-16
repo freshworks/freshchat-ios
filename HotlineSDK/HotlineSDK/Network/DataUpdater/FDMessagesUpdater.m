@@ -9,6 +9,7 @@
 #import "FDMessagesUpdater.h"
 #import "HLConstants.h"
 #import "HLMessageServices.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 
 @interface FDMessagesUpdater()
@@ -20,14 +21,17 @@
 -(id)init{
     self = [super init];
     if (self) {
-        [self useInterval:MESSAGES_FETCH_INTERVAL_DEFAULT];
+        //[self useInterval:MESSAGES_FETCH_INTERVAL_DEFAULT];
+        [self useInterval:[FCRemoteConfig sharedInstance].refreshIntervals.msgFetchIntervalLaidback];
         [self useConfigKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
     }
     return self;
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    if([HLUser isUserRegistered]){
+    if( [FCRemoteConfig sharedInstance].accountActive &&
+        [FCRemoteConfig sharedInstance].enabledFeatures.inboxEnabled &&
+        [HLUser isUserRegistered]) {
         [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
     }
     else{

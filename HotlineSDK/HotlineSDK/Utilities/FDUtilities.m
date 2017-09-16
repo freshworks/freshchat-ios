@@ -19,6 +19,7 @@
 #import "FDPlistManager.h"
 #import "HLCoreServices.h"
 #import "FDLocalNotification.h"
+#import "FCRemoteConfig.h"
 #import "HLUserDefaults.h"
 #import "HLConstants.h"
 #import "HLLocalization.h"
@@ -28,6 +29,8 @@
 @implementation FDUtilities
 
 #pragma mark - General Utitlites
+
+static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
@@ -53,12 +56,6 @@
 
 +(NSString *) getTracker{
     return [NSString stringWithFormat:@"hl_ios_%@",[Hotline SDKVersion]];
-}
-
-+(BOOL)isUserRegistered{
-    NSString *userAlias = [self currentUserAlias];
-    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED] &&
-            (userAlias && userAlias.length > 0));
 }
 
 +(NSString *) getUUIDLookupKey{
@@ -288,6 +285,16 @@ static NSInteger networkIndicator = 0;
     return lastUpdateTime;
 }
 
++(void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText{
+    
+    if(title.length == 0) {
+        return;
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelText otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
 +(BOOL) isValidPropKey: (NSString *) str {
     return str && [str length] <=32 && [FDStringUtil isValidUserPropName:str];
 }
@@ -337,13 +344,36 @@ static NSInteger networkIndicator = 0;
     return [noEmptyTags valueForKey:@"lowercaseString"];
 }
 
++(BOOL) canMakeRemoteConfigCall {
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME]];
+    if(isnan(interval)){
+        return true;
+    }
+    if(interval > [FCRemoteConfig sharedInstance].refreshIntervals.remoteConfigFetchInterval/ 1000.0){
+        return true;
+    }
+    return false;
+}
+
 +(BOOL) canMakeSessionCall {
     if(![HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
         return  true;
     }
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
     FDLog(@"Time interval b/w dates %f", interval);
-    if(interval > SESSION_UPDATE_INTERVAL){
+    if(interval > [FCRemoteConfig sharedInstance].sessionTimeOutInterval/1000){
+        return true;
+    }
+    return false;
+}
+
++ (BOOL) canMakeTypicallyRepliesCall {
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]];
+    
+    if(isnan(interval)){
+        return true;
+    }
+    if(interval > [FCRemoteConfig sharedInstance].refreshIntervals.responseTimeExpectationsFetchInterval/ 1000.0){
         return true;
     }
     return false;

@@ -66,7 +66,7 @@
     self.conversationTags.delegate = self;
     self.message.delegate = self;
     self.sendMessageTag.delegate = self;
-    [[Hotline sharedInstance] updateConversationBannerMessage:@"123"];
+    //[[Hotline sharedInstance] updateConversationBannerMessage:@"123"];
 
     // Construct URL to sound file
     NSString *path = [NSString stringWithFormat:@"%@/youraudio.mp3", [[NSBundle mainBundle] resourcePath]];

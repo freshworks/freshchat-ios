@@ -10,7 +10,7 @@
 #define FreshdeskSDK_FDThemeConstants_h
 
 #define FD_THEMES_DIR @"Themes"
-#define FD_DEFAULT_THEME_NAME @"HLTheme"
+#define FD_DEFAULT_THEME_NAME @"FCTheme"
 #define FD_DEFAULT_ARTICLE_DETAIL_CSS_FILENAME @"normalize"
 #define FD_FONT_SIZE_LARGE [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline].pointSize
 #define FD_FONT_SIZE_MEDIUM [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline].pointSize

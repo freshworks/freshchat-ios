@@ -21,6 +21,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 #define LOC_FAQ_CLOSE_BUTTON_TEXT @"faq_close_button_text"
 #define LOC_FAQ_TITLE_TEXT @"faq_title_text"
+#define LOC_FAQ_FEATURE_DISABLED_TEXT @"faq_feature_not_enabled_text"
 
 #define LOC_SEARCH_PLACEHOLDER_TEXT @"search_placeholder_text"
 #define LOC_SEARCH_EMPTY_RESULT_TEXT @"search_empty_result_text"
@@ -35,6 +36,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 #define LOC_CHANNELS_TITLE_TEXT @"channels_title_text"
 #define LOC_CHANNELS_CLOSE_BUTTON_TEXT @"channels_close_button_text"
+#define LOC_CHANNELS_FEATURE_DISABLED_TEXT @"channels_feature_not_enabled_text"
 
 #define LOC_MESSAGES_CLOSE_BUTTON_TEXT @"messages_close_button_text"
 #define LOC_MESSAGES_AGENT_LABEL_TEXT @"messages_agent_label_text"

@@ -36,6 +36,17 @@
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_OLD_USER_INFO @"hotline_defaults_old_user_info"
 
+#define FRESHCHAT_CONFIG_RC_FAQ_ENABLED @"freshchat_config_rc_faq_enabled"
+#define FRESHCHAT_CONFIG_RC_INBOX_ENABLED @"freshchat_config_rc_inbox_enabled"
+#define FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED @"freshchat_config_rc_auto_campaigns_enabled"
+#define FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED @"freshchat_config_rc_manual_campaigns_enabled"
+#define FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED @"freshchat_config_rc_user_events_enabled"
+#define FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED @"freshchat_config_rc_aot_user_create_enabled"
+#define FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED @"freshchat_config_rc_custom_brand_banner_enabled"
+#define FRESHCHAT_CONFIG_RC_SHOW_AGENT_AVATAR @"freshchat_config_rc_show_agent_avatar"
+#define FRESHCHAT_CONFIG_RC_SHOW_REAL_AGENT_AVATAR @"freshchat_config_rc_show_real_agent_avatar"
+#define FRESHCHAT_CONFIG_RC_LAUNCH_DEEPLINK_NOTIFICATION @"freshchat_config_rc_launch_deeplink_notification"
+
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME @"hotline_defaults_solutions_last_updated_svr_time_v3"
 //v2 - Version for Force reload of data from server for Tag Data
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME @"hotline_defaults_solutions_last_updated_itv_time_v3"

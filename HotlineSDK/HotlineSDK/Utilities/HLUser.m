@@ -48,12 +48,8 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     }
 }
 
-+(BOOL)canDeferUser {
-    NSObject *userDefered = [HLUserDefaults getObjectForKey:HOTLINE_DEFAULTS_IS_USER_DEFERED];
-    if(userDefered != nil) {
-        return (BOOL)userDefered;
-    }
-    return true; //Default
++(BOOL) createUserAOT{
+    return [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
 }
 
 +(BOOL)hasMessageIintiated {
@@ -61,7 +57,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     if(hasUserInitiatedMessage != nil) {
         return (BOOL)hasUserInitiatedMessage;
     }
-    return false; //Default
+    return false;
 }
 
 +(void)setUserMessageInitiated {
@@ -69,7 +65,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)canRegisterUser {
-    return ( ![HLUser canDeferUser] || [HLUser hasMessageIintiated] ) && ![HLUser isUserRegistered];
+    return ( ![HLUser createUserAOT] || [HLUser hasMessageIintiated] ) && ![HLUser isUserRegistered];
 }
 
 +(BOOL)isUserRegistered {

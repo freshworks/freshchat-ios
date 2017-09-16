@@ -42,6 +42,7 @@
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 #import "HLCoreServices.h"
 
@@ -289,13 +290,19 @@ typedef struct {
         }
     }];
     [self.messagesPoller begin];
-    [self fetchTypicalRepliesIn];
+    if([FDUtilities canMakeTypicallyRepliesCall] ){
+        [self fetchTypicalRepliesIn];
+    }
+    else if ([HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]){
+        [self showTypicalReply:[HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]];
+    }
 }
 
 -(void)fetchTypicalRepliesIn{
     [HLCoreServices fetchTypicalReply:^(FDResponseInfo *responseInfo, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if(!error) {
+                [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
                 NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
                 if(channelsInfo[@"channelResponseTime"] != nil) {
                     NSArray *convArr = channelsInfo[@"channelResponseTime"];
@@ -303,6 +310,7 @@ typedef struct {
                         NSDictionary* item = [convArr objectAtIndex:i];
                         if ([item[@"channelId"] integerValue] == [self.channel.channelID integerValue]) {
                             [self showTypicalReply:[item[@"responseTime"] integerValue]];
+                            [HLUserDefaults setIntegerValue:[item[@"responseTime"] integerValue] forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
                             break;
                         }
                     }
@@ -599,6 +607,10 @@ typedef struct {
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
     
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        return;
+    }
+    
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
@@ -626,6 +638,11 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
+    
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        return;
+    }
+    
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     self.inputToolbar.textView.text = @"";

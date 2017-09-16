@@ -26,6 +26,8 @@
 
 +(void)uploadUnuploadedProperties;
 
++(NSURLSessionDataTask *)fetchRemoteConfig;
+
 +(NSURLSessionDataTask *)performHeartbeatCall;
 
 +(void)sendLatestUserActivity:(HLChannel *)channel;

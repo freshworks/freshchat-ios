@@ -40,11 +40,13 @@
 +(void)initiatePendingTasks;
 +(BOOL)hasInitConfig;
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
-
++(void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText;
 +(BOOL) containsHTMLContent: (NSString *)content;
 +(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
 + (BOOL) canMakeSessionCall;
 + (BOOL) canMakeDAUCall;
++ (BOOL) canMakeRemoteConfigCall;
++ (BOOL) canMakeTypicallyRepliesCall;
 +(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
 
 +(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;

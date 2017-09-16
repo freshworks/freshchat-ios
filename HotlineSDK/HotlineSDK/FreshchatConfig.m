@@ -27,7 +27,6 @@
         self.notificationSoundEnabled = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
-        self.pollWhenAppActive = NO;
     }
     return self;
 }

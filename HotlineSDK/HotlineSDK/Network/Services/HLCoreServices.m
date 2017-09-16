@@ -19,6 +19,7 @@
 #import "FDMemLogger.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
+#import "FCRemoteConfig.h"
 #import "HLUser.h"
 
 @implementation HLCoreServices
@@ -133,7 +134,7 @@
     }];
     return task;
 }
-
+ 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
     if (![HLUser isUserRegistered] || !pushToken) return nil;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -372,6 +373,9 @@
 }
 
 +(void)sendLatestUserActivity:(HLChannel *)channel{
+    if (!([FCRemoteConfig sharedInstance].accountActive && [HLUser isUserRegistered])){
+        return;
+    }
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     
@@ -383,7 +387,10 @@
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
     Message *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
     if(latestMessage){
-        [HLCoreServices registerUserConversationActivity:latestMessage];
+        //update read activity
+        if( [FCRemoteConfig sharedInstance].enabledFeatures.inboxEnabled && [FCRemoteConfig sharedInstance].accountActive ){
+            [HLCoreServices registerUserConversationActivity:latestMessage];
+        }
     }
 }
 
@@ -414,6 +421,29 @@
         }
         if(completion){
             completion(error);
+        }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)fetchRemoteConfig{
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_REMORTE_CONFIG_PATH,appID];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if(!error && statusCode == 200) {
+            NSDictionary *configDict = responseInfo.responseAsDictionary;
+            [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
+        }
+        else {
+            FDLog(@"User remote config fetch call failed %@", error);
         }
     }];
     return task;

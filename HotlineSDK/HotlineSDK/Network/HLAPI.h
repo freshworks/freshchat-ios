@@ -48,6 +48,8 @@
 
 #define HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH @"/app/services/app/%@/user/%@/message/marketing/%@/status"
 
+#define FRESHCHAT_API_REMORTE_CONFIG_PATH @"/app/services/app/config/mobile/%@"
+
 #define HOTLINE_API_CSAT_PATH @"/app/services/app/%@/user/%@/conversation/%@/csat/%@/response"
 
 #define HOTLINE_API_UPLOAD_IMAGE @"app/services/app/%@/user/%@/image"

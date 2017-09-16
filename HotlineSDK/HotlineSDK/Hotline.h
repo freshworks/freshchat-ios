@@ -66,10 +66,6 @@ enum TagFilterType {
  * Enable/Disable Notification banner when a support message is received. Defaults to YES
  */
 @property (nonatomic, assign) BOOL showNotificationBanner;
-/*
- * Enable/Disable Polling for messages when the app is Active . Defaults to NO
- */
-@property (nonatomic, assign) BOOL pollWhenAppActive;
 
 /**
  *  Initialize Freshchat.

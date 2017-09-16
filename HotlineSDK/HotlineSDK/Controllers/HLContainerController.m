@@ -11,6 +11,7 @@
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
+#import "FCRemoteConfig.h"
 
 @interface HLContainerController ()
 
@@ -49,7 +50,10 @@
     footerView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:footerView];
     
-    BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    //#imclude both changes server check and internal md5 check also :)
+    BOOL isPoweredByHidden = [FDUtilities isPoweredByHidden];
+    //BOOL isSubscribed = [[FCRemoteConfig sharedInstance] isSubscribedUser];
+    BOOL isSubscribed = false;
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];
@@ -62,7 +66,7 @@
     
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    if(isSubscribed){
+    if(isSubscribed && isPoweredByHidden){
         [footerView removeFromSuperview];
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
     }

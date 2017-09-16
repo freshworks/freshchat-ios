@@ -10,8 +10,8 @@
     
 +(void)registerUser:(void(^)(NSError *error))completion;
 
-+(BOOL)canDeferUser;
 +(BOOL)canRegisterUser;
++(BOOL)createUserAOT;
 +(BOOL)hasMessageIintiated;
 +(BOOL)isUserRegistered;
 +(void)setUserMessageInitiated;

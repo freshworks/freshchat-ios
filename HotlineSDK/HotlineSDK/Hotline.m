@@ -43,9 +43,13 @@
 #import "FDUtilities.h"
 #import "FDLocaleUtil.h"
 #import "FDConstants.h"
+#import "FCRemoteConfig.h"
+#import "HLLocalization.h"
 #import "HLUserDefaults.h"
 #import "HLUser.h"
 #import "FDImageView.h"
+
+static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 @interface Hotline ()
 
@@ -126,7 +130,6 @@
     FreshchatConfig *processedConfig = [self processConfig:config];
     
     self.config = processedConfig;
-    
     if ([self hasUpdatedConfig:processedConfig]) {
         [self cleanUpData:^{
             [self updateConfig:processedConfig andRegisterUser:completion];
@@ -142,7 +145,7 @@
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
     
-    if(config.pollWhenAppActive){
+    if(FC_POLL_WHEN_APP_ACTIVE){
         [self.messagePoller begin];
     }
     
@@ -171,7 +174,6 @@
     if ([HLUser canRegisterUser]) {
         [HLUser registerUser:completion];
     }
-    
 }
 
 -(void)checkMediaPermissions:(FreshchatConfig *)config{
@@ -216,14 +218,16 @@
 }
 
 -(void)updateAppVersion{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
-    NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
-    if (storedValue && ![storedValue isEqualToString:currentValue]) {
-        [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
-        [HLCoreServices uploadUnuploadedProperties];
+    if([HLUser isUserRegistered]){
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
+        NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
+        if (storedValue && ![storedValue isEqualToString:currentValue]) {
+            [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
+            [HLCoreServices uploadUnuploadedProperties];
+        }
+        [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
     }
-    [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
 }
 
 -(void)updateSDKBuildNumber{
@@ -326,9 +330,11 @@
     if([HLUser isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
-            NSString *userAlias = [FDUtilities currentUserAlias];
-            NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-            [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+            if([HLUser isUserRegistered] && [FCRemoteConfig sharedInstance].accountActive){
+                NSString *userAlias = [FDUtilities currentUserAlias];
+                NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
+                [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+            }
         }
     }
     else {
@@ -341,7 +347,7 @@
 
 -(void)newSession:(NSNotification *)notification{
     if([FDUtilities hasInitConfig]) {
-        if(self.config.pollWhenAppActive){
+        if(FC_POLL_WHEN_APP_ACTIVE){
             [self.messagePoller begin];
         }
         [FDUtilities initiatePendingTasks];
@@ -360,8 +366,12 @@
     }
 }
 
+- (void) updateLastFetchRemoteConfigInterval{
+    [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
+}
+
 -(void) updateLocaleMeta {
-    if([FDLocaleUtil hadLocaleChange]) {
+    if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
         [[Hotline sharedInstance] updateUserLocaleProperties:localLocale];
@@ -377,12 +387,16 @@
         if([FDUtilities canMakeDAUCall]){
             [HLCoreServices performDAUCall];
         }
+        if([FDUtilities canMakeRemoteConfigCall]){
+            [HLCoreServices fetchRemoteConfig];
+            [self updateLastFetchRemoteConfigInterval];
+        }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
                 [HLCoreServices performHeartbeatCall];
                 if([FDUtilities canMakeSessionCall]){
-                    [self updateSessionInterval];
                     [HLCoreServices performSessionCall];
+                    [self updateSessionInterval];
                 }
                 [self registerDeviceToken];
                 [self updateAppVersion];
@@ -415,11 +429,22 @@
 #pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
-    [self showFAQs:controller withOptions:[FAQOptions new]];
+    
+    if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
+        [self showFAQs:controller withOptions:[FAQOptions new]];
+    }
+    else{
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_FAQ_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+    }
 }
 
 -(void)showConversations:(UIViewController *)controller{
-    [self showConversations:controller withOptions:[ConversationOptions new]];
+    if([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        [self showConversations:controller withOptions:[ConversationOptions new]];
+    }
+    else{
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_CHANNELS_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+    }
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
@@ -586,6 +611,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
     if (completion) {
+        NSLog(@"Unread Fetch here");
         [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
                                                           source:UnreadCount
                                                       andHandler:^(NSError *error) {
@@ -599,6 +625,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
     __block int count=0;
     if (completion) {
+        NSLog(@"Unread tags Fetch here");
         [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
             if(error) {
                 completion(count);
