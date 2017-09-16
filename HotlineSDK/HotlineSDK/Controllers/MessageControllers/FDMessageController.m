@@ -11,7 +11,7 @@
 #import "HLAgentMessageCell.h"
 #import "HLUserMessageCell.h"
 #import "KonotorImageInput.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "KonotorMessage.h"
 #import "Message.h"
 #import "Konotor.h"

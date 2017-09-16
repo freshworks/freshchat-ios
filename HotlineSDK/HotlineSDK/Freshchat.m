@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "HLContainerController.h"
 #import "HLCategoryListController.h"
 #import "HLCategoryGridViewController.h"
@@ -51,7 +51,7 @@
 
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
-@interface Hotline ()
+@interface Freshchat ()
 
 @property(nonatomic, strong, readwrite) FreshchatConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
@@ -70,15 +70,15 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 @end
 
-@implementation Hotline
+@implementation Freshchat
 
 +(instancetype)sharedInstance{
     
     @try {
-        static Hotline *sharedInstance = nil;
+        static Freshchat *sharedInstance = nil;
         static dispatch_once_t oncetoken;
         dispatch_once(&oncetoken,^{
-            sharedInstance = [[Hotline alloc]init];
+            sharedInstance = [[Freshchat alloc]init];
         });
         if(![sharedInstance checkPersistence]) {
             return nil;
@@ -374,7 +374,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
-        [[Hotline sharedInstance] updateUserLocaleProperties:localLocale];
+        [[Freshchat sharedInstance] updateUserLocaleProperties:localLocale];
     }
 }
 

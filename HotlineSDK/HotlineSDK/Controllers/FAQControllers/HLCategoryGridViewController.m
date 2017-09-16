@@ -19,7 +19,7 @@
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "HLLocalization.h"
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"

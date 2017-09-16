@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "FDSecureStore.h"
 #import "FDUtilities.h"
 #import "KonotorUser.h"

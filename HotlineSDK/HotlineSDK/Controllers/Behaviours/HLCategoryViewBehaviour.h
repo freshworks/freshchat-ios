@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HLCategory.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 
 @protocol HLCategoryViewBehaviourDelegate
 

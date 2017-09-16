@@ -10,7 +10,7 @@
 #define HLLoadingViewBehaviour_h
 
 #import <UIKit/UIKit.h>
-#import "Hotline.h"
+#import "Freshchat.h"
 
 @protocol HLLoadingViewBehaviourDelegate
 

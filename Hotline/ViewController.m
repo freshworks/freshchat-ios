@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "HotlineSDK/Hotline.h"
+#import "HotlineSDK/Freshchat.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 #define kOFFSET_FOR_KEYBOARD 160.0
@@ -66,7 +66,7 @@
     self.conversationTags.delegate = self;
     self.message.delegate = self;
     self.sendMessageTag.delegate = self;
-    //[[Hotline sharedInstance] updateConversationBannerMessage:@"123"];
+    //[[Freshchat sharedInstance] updateConversationBannerMessage:@"123"];
 
     // Construct URL to sound file
     NSString *path = [NSString stringWithFormat:@"%@/youraudio.mp3", [[NSBundle mainBundle] resourcePath]];
@@ -209,7 +209,7 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance] showConversations:self];
+    [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)articleFilter1:(id)sender{
@@ -223,7 +223,7 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)categoryFilter1:(id)sender{
@@ -237,7 +237,7 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 
@@ -252,7 +252,7 @@
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [[Hotline sharedInstance] showConversations:self withOptions:opt];
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
 }
 
 //2
@@ -267,7 +267,7 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField2.text andType: ARTICLE];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)categoryFilter2:(id)sender{
@@ -281,12 +281,12 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField2.text andType: CATEGORY];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)sendMessage:(id)sender{
     FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
-    [[Hotline sharedInstance] sendMessage:userMessage];
+    [[Freshchat sharedInstance] sendMessage:userMessage];
 }
 
 - (IBAction)switchAction:(id)sender {

@@ -13,7 +13,7 @@
 #import "HLMacros.h"
 #import "FCTheme.h"
 #import "FDLocalNotification.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "HLLocalization.h"
 #import "FDReachabilityManager.h"
 #import "FDStringUtil.h"
@@ -372,10 +372,10 @@
     if([HLFAQUtil hasContactUsTags:self.faqOptions]){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self withOptions:options];
+        [[Freshchat sharedInstance] showConversations:self withOptions:options];
     }
     else{
-        [[Hotline sharedInstance] showConversations:self];
+        [[Freshchat sharedInstance] showConversations:self];
     }
 }
 

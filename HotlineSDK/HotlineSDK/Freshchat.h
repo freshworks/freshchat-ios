@@ -80,7 +80,7 @@ enum TagFilterType {
 
 @end
 
-@interface Hotline : NSObject
+@interface Freshchat : NSObject
 
 @property(nonatomic, strong, readonly) FreshchatConfig *config;
 

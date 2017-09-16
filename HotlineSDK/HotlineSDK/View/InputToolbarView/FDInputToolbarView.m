@@ -9,7 +9,7 @@
 #import "FDInputToolbarView.h"
 #import "FCTheme.h"
 #import "HLMacros.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import <AudioToolbox/AudioServices.h>
 #import "TargetConditionals.h"
 #import "HLLocalization.h"

@@ -7,7 +7,7 @@
 //
 
 #import "FDSettingsController.h"
-#import "HotlineSDK/Hotline.h"
+#import "HotlineSDK/Freshchat.h"
 #import "AppDelegate.h"
 
 @interface FDSettingsController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -175,7 +175,7 @@
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
-    [[Hotline sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
+    [[Freshchat sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
 }
 
 -(void)updateConfigButtonAction:(id)sender{
@@ -184,7 +184,7 @@
     FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:self.appIDField.text
                                                        andAppKey:self.appKeyField.text];
     config.domain = self.domainField.text;
-    [[Hotline sharedInstance]initWithConfig:config];
+    [[Freshchat sharedInstance]initWithConfig:config];
 }
 
 -(void)updateUserPropertiesButtonAction:(id)sender{
@@ -195,7 +195,7 @@
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
-    [[Hotline sharedInstance] setUser:user];
+    [[Freshchat sharedInstance] setUser:user];
 }
 
 - (IBAction)editButtonPressed:(id)sender {
@@ -207,15 +207,15 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
-                                                      andAppKey:[Hotline sharedInstance].config.appKey];
-    config.domain = [Hotline sharedInstance].config.domain;
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:[Freshchat sharedInstance].config.appID
+                                                      andAppKey:[Freshchat sharedInstance].config.appKey];
+    config.domain = [Freshchat sharedInstance].config.domain;
 
     switch (buttonIndex) {
         case 0:
-            [[Hotline sharedInstance]resetUserWithCompletion:^{
-                [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
-                [[Hotline sharedInstance]initWithConfig:config];
+            [[Freshchat sharedInstance]resetUserWithCompletion:^{
+                [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+                [[Freshchat sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
             break;
@@ -227,9 +227,9 @@
 }
 
 -(void)updateFields{
-    self.domainField.text = [Hotline sharedInstance].config.domain;
-    self.appIDField.text = [Hotline sharedInstance].config.appID;
-    self.appKeyField.text = [Hotline sharedInstance].config.appKey;
+    self.domainField.text = [Freshchat sharedInstance].config.domain;
+    self.appIDField.text = [Freshchat sharedInstance].config.appID;
+    self.appKeyField.text = [Freshchat sharedInstance].config.appKey;
     
     self.userFirstNameField.text = [FreshchatUser sharedInstance].firstName;
     self.userLastNameField.text = [FreshchatUser sharedInstance].lastName;
@@ -239,7 +239,7 @@
 }
 
 -(void)testNotification:(id)sender{
-    [[Hotline sharedInstance] handleRemoteNotification:@{
+    [[Freshchat sharedInstance] handleRemoteNotification:@{
                                                                   @"channel_id" : @200,
                                                                       @"aps" : @{
                                                                           @"alert" :  @{ @"body" : @"Sample Test Message"

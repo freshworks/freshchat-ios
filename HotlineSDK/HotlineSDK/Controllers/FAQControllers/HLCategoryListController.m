@@ -16,7 +16,7 @@
 #import "HLContainerController.h"
 #import "FCTheme.h"
 #import "HLSearchViewController.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "HLLocalization.h"
 #import "FDUtilities.h"
 #import "FDBarButtonItem.h"

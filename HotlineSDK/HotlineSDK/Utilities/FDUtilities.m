@@ -24,7 +24,7 @@
 #import "HLConstants.h"
 #import "HLLocalization.h"
 
-#define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
+#define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 
 @implementation FDUtilities
 
@@ -55,7 +55,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(NSString *) getTracker{
-    return [NSString stringWithFormat:@"hl_ios_%@",[Hotline SDKVersion]];
+    return [NSString stringWithFormat:@"hl_ios_%@",[Freshchat SDKVersion]];
 }
 
 +(NSString *) getUUIDLookupKey{

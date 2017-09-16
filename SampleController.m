@@ -7,7 +7,7 @@
 //
 
 #import "SampleController.h"
-#import "HotlineSDK/Hotline.h"
+#import "HotlineSDK/Freshchat.h"
 
 @interface SampleController ()
 
@@ -26,11 +26,11 @@
 }
 
 - (IBAction)loadChannels:(id)sender {
-    [[Hotline sharedInstance] showConversations:self];
+    [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)loadFAQs:(id)sender {
-    [[Hotline sharedInstance] showFAQs:self];
+    [[Freshchat sharedInstance] showFAQs:self];
 }
 
 

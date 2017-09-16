@@ -11,7 +11,7 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "HLChannelViewController.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 
 #define CELL_OFFSET 16
 #define MAX_ARTICLE_LINES 3
@@ -69,10 +69,10 @@
     if(self.faqOptions.contactUsTags.count >0){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self withOptions:options];
+        [[Freshchat sharedInstance] showConversations:self withOptions:options];
     }
     else{
-        [[Hotline sharedInstance] showConversations:self];
+        [[Freshchat sharedInstance] showConversations:self];
     }
 }
 

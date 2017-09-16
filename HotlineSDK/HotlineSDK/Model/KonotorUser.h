@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "Hotline.h"
+#import "Freshchat.h"
 
 @class KonotorCustomProperty;
 

@@ -35,11 +35,11 @@
     } else {
         [self setupRootController];
     }
-    /*[[Hotline sharedInstance]resetUserWithCompletion:^{
-        [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+    /*[[Freshchat sharedInstance]resetUserWithCompletion:^{
+        [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }];*/
-    if ([[Hotline sharedInstance]isFreshchatNotification:launchOptions]) {
-        [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
+    if ([[Freshchat sharedInstance]isFreshchatNotification:launchOptions]) {
+        [[Freshchat sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
     [Fabric with:@[[Crashlytics class]]];
     return YES;
@@ -52,13 +52,13 @@
     ViewController *mainController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     [self.window setRootViewController:mainController];
     [self.window makeKeyAndVisible];
-    //[[Hotline sharedInstance] resetUserWithCompletion:nil];
+    //[[Freshchat sharedInstance] resetUserWithCompletion:nil];
 }
 
 -(void)setupRootController{
     
-    Hotline *hotlineSDK = [Hotline sharedInstance];
-    _rootController1 = [hotlineSDK getConversationsControllerForEmbed];
+    Freshchat *freshchatSDK = [Freshchat sharedInstance];
+    _rootController1 = [freshchatSDK getConversationsControllerForEmbed];
     _channelsController = [[UINavigationController alloc]initWithRootViewController:_rootController1];
     
     BOOL isTabViewPreferred = YES;
@@ -73,12 +73,12 @@
         faqOptions.showContactUsOnFaqScreens = YES;
         [faqOptions filterContactUsByTags:contactUsTagsArray withTitle:@"Yoyo ContactUS"];
         [faqOptions filterByTags:arr withTitle:@"Yoyo Articles" andType: ARTICLE];
-        UINavigationController* faqControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Hotline sharedInstance]getFAQsControllerForEmbedWithOptions:faqOptions]];
-        UINavigationController* convControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Hotline sharedInstance]getConversationsControllerForEmbedWithOptions:convOptions]];
+        UINavigationController* faqControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getFAQsControllerForEmbedWithOptions:faqOptions]];
+        UINavigationController* convControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getConversationsControllerForEmbedWithOptions:convOptions]];
         UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
         ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
-                                                 [hotlineSDK getFAQsControllerForEmbed]];
+                                                 [freshchatSDK getFAQsControllerForEmbed]];
         
         mainController.title = @"Hotline";
         _channelsController.title = @"Channels";
@@ -143,14 +143,14 @@
     
     config.pictureMessagingEnabled = YES;
     if(![FreshchatUser sharedInstance].firstName){
-        [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+        [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }
     
-    [[Hotline sharedInstance] setUserProperties:@{ @"SDK Version" : [Hotline SDKVersion] }];
+    [[Freshchat sharedInstance] setUserProperties:@{ @"SDK Version" : [Freshchat SDKVersion] }];
     
-    [[Hotline sharedInstance]initWithConfig:config];
+    [[Freshchat sharedInstance]initWithConfig:config];
 
-    [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
+    [[Freshchat sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];
     
@@ -172,7 +172,7 @@
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
         NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
     }
-    [[Hotline sharedInstance] setPushRegistrationToken:devToken];
+    [[Freshchat sharedInstance] setPushRegistrationToken:devToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -183,13 +183,13 @@
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     NSLog(@"Push recieved :%@", info);
-    if ([[Hotline sharedInstance]isFreshchatNotification:info]) {
-        [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
+    if ([[Freshchat sharedInstance]isFreshchatNotification:info]) {
+        [[Freshchat sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{
-    [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
+    [[Freshchat sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
     }];
 }

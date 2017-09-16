@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HotlineSDK/Hotline.h"
+#import "HotlineSDK/Freshchat.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
