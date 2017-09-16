@@ -17,6 +17,6 @@
 
 @property (nonatomic, strong) id delegate;
 
--(instancetype) initViewControllerWithOptions:(HotlineOptions *) options andIsEmbed:(BOOL) isEmbed;
+-(instancetype) initViewControllerWithOptions:(FreshchatOptions *) options andIsEmbed:(BOOL) isEmbed;
 
 @end

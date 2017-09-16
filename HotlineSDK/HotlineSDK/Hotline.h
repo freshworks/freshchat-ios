@@ -1,10 +1,10 @@
 //
-//  Hotline.h
-//  Konotor
+//  Freshchat.h
 //
-//  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
-//  Contact support@hotline.io
+//  Copyright (c) 2017 Freshworks. All rights reserved.
+//
+//  Contact support@freshchat.com
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -14,39 +14,35 @@ enum TagFilterType {
     CATEGORY = 2
 };
 
-#define HOTLINE_UNREAD_MESSAGE_COUNT @"com.freshdesk.hotline_unread_notification_count"
-#define HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshdesk.hotline_play_inapp_audio"
-#define HOTLINE_WILL_PLAY_AUDIO_MESSAGE @"com.freshdesk.hotline_pause_inapp_audio"
+#define FRESHCHAT_UNREAD_MESSAGE_COUNT @"com.freshworks.freshchat_unread_notification_count"
+#define FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshworks.freshchat_play_inapp_audio"
+#define FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE @"com.freshworks.freshchat_pause_inapp_audio"
 
-@class HotlineConfig, HotlineUser, FAQOptions, ConversationOptions, HotlineMessage;
+@class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 
-@interface HotlineConfig : NSObject
+@interface FreshchatConfig : NSObject
 
 /*
- * App ID of your App. This is used to identify the SDK for your app to hotline.io. 
+ * App ID of your App. This is used to identify the SDK for your app to freshchat.com.
  * Please see API & App under Settings ( https://web.hotline.io/settings/apisdk ) to get your App ID.
  */
 @property (strong, nonatomic) NSString *appID;
 /*
- * App Key of your App. This is used to authenticate the SDK for your app to hotline.io.
+ * App Key of your App. This is used to authenticate the SDK for your app to freshchat.io.
  * Please see API & App under Settings ( https://web.hotline.io/settings/apisdk ) to get your App Key.
  */
 @property (strong, nonatomic) NSString *appKey;
 /*
- * Domain for Hotline. Do not change this. Set to "https://app.konotor.com" if you are migrating from Konotor
+ * Domain for freshchat. Do not change this. Set to "https://app.konotor.com" if you are migrating from Konotor
  */
 @property (strong, nonatomic) NSString *domain;
-/*
- * Enable/disable voice messages. When enabled, users can record and send audio messages to the Agents. Default is set to NO.
- */
-@property (nonatomic, assign) BOOL voiceMessagingEnabled;
 /*
  * Enable/disable picture messages. When enabled, users can send images over chat. Default is set to YES.
  */
 @property (nonatomic, assign) BOOL pictureMessagingEnabled;
 /**
  * Option to supply the SDK with your theme file's name. Make sure themeName is the same as the
- * theme plist file's name. Hotline needs this for theming to work.
+ * theme plist file's name. Freshchat needs this for theming to work.
  * The setter throws an exception for an invalid filename
  */
 @property (nonatomic, strong) NSString *themeName;
@@ -76,9 +72,9 @@ enum TagFilterType {
 @property (nonatomic, assign) BOOL pollWhenAppActive;
 
 /**
- *  Initialize Hotline.
+ *  Initialize Freshchat.
  *
- *  @discussion In order to initialize Hotline, you'll need the App ID and App Key. Place the Hotline initialization code in your app delegate, preferably at the top of the application:didFinishLaunchingWithOptions method.
+ *  @discussion In order to initialize Freshchat, you'll need the App ID and App Key. Place the Freshchat initialization code in your app delegate, preferably at the top of the application:didFinishLaunchingWithOptions method.
  *
  *  @param appID  The App ID assigned to your app when it was created on the portal.
  *  @param appKey The App Key assigned to your app when it was created on the portal.
@@ -90,24 +86,24 @@ enum TagFilterType {
 
 @interface Hotline : NSObject
 
-@property(nonatomic, strong, readonly) HotlineConfig *config;
+@property(nonatomic, strong, readonly) FreshchatConfig *config;
 
 +(NSString *)SDKVersion;
 
 /**
- *  Access the Hotline instance.
+ *  Access the Freshchat instance.
  *
- *  @discussion Using the returned shared instance, you can access all the instance methods available in Hotline.
+ *  @discussion Using the returned shared instance, you can access all the instance methods available in Freshchat.
  */
 +(instancetype) sharedInstance;
 
 /**
  *  Initialize configuration for Config.
  *
- *  @param config Hotline Configuration of type HotlineConfig
+ *  @param config Freshchat Configuration of type FreshchatConfig
  */
 
--(void)initWithConfig:(HotlineConfig *)config;
+-(void)initWithConfig:(FreshchatConfig *)config;
 
 /**
  *  Show the Conversations / Chat to the user.
@@ -151,14 +147,14 @@ enum TagFilterType {
  */
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options;
 /**
- *  Update user Info
+ *  Set user Info
  *
  *  @discussion Sends user information updates to the server. User properties such as Name, Email, Phone, Country Code and external Identifier.That are set will be synced with the server. External Identifier provided could be any unique value that your App can use to identify the user.
  *
  *  @param user User instance with the values to be updated.
  *
  */
--(void)updateUser:(HotlineUser *) user;
+-(void)setUser:(FreshchatUser *) user;
 /**
  *  Clear User Data
  *
@@ -166,7 +162,7 @@ enum TagFilterType {
  *  This will clean up all the data associated with the SDK for the user.
  *
  */
--(void)clearUserData __attribute__((deprecated("Please use clearUserDataWithCompletion: instead")));
+-(void)resetUser __attribute__((deprecated("Please use resetUserWithCompletion: instead")));
 /**
  *  Clear User Data
  *
@@ -177,18 +173,18 @@ enum TagFilterType {
  * @param Completion block to be called when clearData is completed
  *
  */
--(void)clearUserDataWithCompletion:(void (^)())completion;
+-(void)resetUserWithCompletion:(void (^)())completion;
 /**
- *  Update User properties
+ *  Set User properties
  *
  *  @discussion Tag users with custom properties (key-value pairs) . The user properties associated here will be shown on the dashboard for the agent and also be used for segmentation for campaigns
  *
  *  @param props An NSDictionary containing the Properties for the User.
  *
  */
--(void)updateUserProperties:(NSDictionary*)props;
+-(void)setUserProperties:(NSDictionary*)props;
 /**
- *  Update user property
+ *  Set user property
  *
  *  @discussion Use this method to update a single property for the user. Use updateUserProperties instead where possible.
  *
@@ -197,7 +193,7 @@ enum TagFilterType {
  *  @param value Property value
  *
  */
--(void)updateUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
+-(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value;
 /**
  *  Update the APNS device token
  *
@@ -206,19 +202,19 @@ enum TagFilterType {
  *  @param deviceToken APNS device token
  *
  */
--(void)updateDeviceToken:(NSData *) deviceToken;
+-(void)setPushRegistrationToken:(NSData *) deviceToken;
 /**
- *  Check if a push notification was from Hotline
+ *  Check if a push notification was from Freshchat
  *
- *  @discussion Checks if the push notification received originated from Hotline by examining the payload dictionary. Use this in conjunction with handleRemoteNotification
+ *  @discussion Checks if the push notification received originated from Freshchat by examining the payload dictionary. Use this in conjunction with handleRemoteNotification
  *
  *  @param info NSDictionary object in didReceiveRemoteNotification for Push Notification.
  */
--(BOOL)isHotlineNotification:(NSDictionary *)info;
+-(BOOL)isFreshchatNotification:(NSDictionary *)info;
 /**
- *  Handle the Hotline push notifications
+ *  Handle the Freshchat push notifications
  *
- *  @discussion Needs to be called when a push notification is received from Hotline. This will present the conversation if user tapped on a push, or show a drop down notification, or update a currently active conversation screen depending on context.
+ *  @discussion Needs to be called when a push notification is received from Freshchat. This will present the conversation if user tapped on a push, or show a drop down notification, or update a currently active conversation screen depending on context.
  *
  *  @param info Dictionary received in didReceiveRemoteNotification for Push Notification.
  *  
@@ -287,17 +283,17 @@ enum TagFilterType {
 /**
  *  Send message to particular channel with specified tag value
  */
--(void) sendMessage:(HotlineMessage *)messageObject;
+-(void) sendMessage:(FreshchatMessage *)messageObject;
 
 /**
  *  Dismiss SDK for deeplink screens
  */
--(void) dismissHotlineViews;
+-(void) dismissFreshchatViews;
 
 @end
 
 
-@interface HotlineUser : NSObject
+@interface FreshchatUser : NSObject
 
 /*
  * User first name
@@ -332,11 +328,11 @@ enum TagFilterType {
 
 @end
 
-@interface HotlineOptions : NSObject
+@interface FreshchatOptions : NSObject
 
 @end
 
-@interface FAQOptions : HotlineOptions
+@interface FAQOptions : FreshchatOptions
 
 /*
  * Option to Switch between Grid and List view in FAQs. Shows FAQ categories as a list when set to NO.
@@ -416,7 +412,7 @@ enum TagFilterType {
 @end
 
 
-@interface ConversationOptions : HotlineOptions
+@interface ConversationOptions : FreshchatOptions
 
 /**
  *  Show Filtered Channels
@@ -442,7 +438,7 @@ enum TagFilterType {
 
 @end
 
-@interface HotlineMessage : NSObject
+@interface FreshchatMessage : NSObject
 
 /**
  *  Message text to be sent

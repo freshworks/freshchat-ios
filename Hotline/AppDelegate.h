@@ -16,6 +16,6 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UIImage *pickedImage;
 
-+(HotlineUser *)createHotlineUser;
++(FreshchatUser *)createFreshchatUser;
 
 @end

@@ -35,10 +35,10 @@
     } else {
         [self setupRootController];
     }
-    /*[[Hotline sharedInstance]clearUserDataWithCompletion:^{
-        [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
+    /*[[Hotline sharedInstance]resetUserWithCompletion:^{
+        [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }];*/
-    if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
+    if ([[Hotline sharedInstance]isFreshchatNotification:launchOptions]) {
         [[Hotline sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
     [Fabric with:@[[Crashlytics class]]];
@@ -52,7 +52,7 @@
     ViewController *mainController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     [self.window setRootViewController:mainController];
     [self.window makeKeyAndVisible];
-    //[[Hotline sharedInstance] clearUserDataWithCompletion:nil];
+    //[[Hotline sharedInstance] resetUserWithCompletion:nil];
 }
 
 -(void)setupRootController{
@@ -105,8 +105,8 @@
     }
 }
 
-+(HotlineUser *)createHotlineUser{
-    HotlineUser *user = [HotlineUser sharedInstance];
++(FreshchatUser *)createFreshchatUser{
+    FreshchatUser *user = [FreshchatUser sharedInstance];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
@@ -123,12 +123,12 @@
 
 -(void)hotlineIntegration{
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
-
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
+    
     config.appID = HOTLINE_APP_ID;
     config.appKey = HOTLINE_APP_KEY;
     config.domain = HOTLINE_DOMAIN;
-    config.voiceMessagingEnabled = NO;
+    //config.voiceMessagingEnabled = NO;
 //       config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
 //       config.appKey = @"72645c38-b738-491e-94b4-0eb0b9e98e2f";
 //       config.domain = @"mobihelp.ngrok.io";
@@ -143,11 +143,11 @@
     
     config.pictureMessagingEnabled = YES;
     config.pollWhenAppActive = YES;
-    if(![HotlineUser sharedInstance].firstName){
-        [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
+    if(![FreshchatUser sharedInstance].firstName){
+        [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }
     
-    [[Hotline sharedInstance] updateUserProperties:@{ @"SDK Version" : [Hotline SDKVersion] }];
+    [[Hotline sharedInstance] setUserProperties:@{ @"SDK Version" : [Hotline SDKVersion] }];
     
     [[Hotline sharedInstance]initWithConfig:config];
 
@@ -155,7 +155,7 @@
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];
     
-    [[NSNotificationCenter defaultCenter]addObserverForName:HOTLINE_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
         NSLog(@"Unread messages  %@", note.userInfo[@"count"]);
     }];
 }
@@ -173,7 +173,7 @@
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
         NSLog(@"is app registered for notifications :: %d" , [[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
     }
-    [[Hotline sharedInstance] updateDeviceToken:devToken];
+    [[Hotline sharedInstance] setPushRegistrationToken:devToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -184,7 +184,7 @@
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     NSLog(@"Push recieved :%@", info);
-    if ([[Hotline sharedInstance]isHotlineNotification:info]) {
+    if ([[Hotline sharedInstance]isFreshchatNotification:info]) {
         [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }

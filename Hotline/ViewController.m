@@ -78,11 +78,11 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPlayNotification:)
-                                                 name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE
+                                                 name:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPauseNotification:)
-                                                 name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE
+                                                 name:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE
                                                object:nil];
     
 }
@@ -285,7 +285,7 @@
 }
 
 - (IBAction)sendMessage:(id)sender{
-    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
+    FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
     [[Hotline sharedInstance] sendMessage:userMessage];
 }
 

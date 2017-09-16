@@ -175,13 +175,13 @@
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
-    [[Hotline sharedInstance] updateUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
+    [[Hotline sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
 }
 
 -(void)updateConfigButtonAction:(id)sender{
     NSLog(@"Updating config");
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:self.appIDField.text
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:self.appIDField.text
                                                        andAppKey:self.appKeyField.text];
     config.domain = self.domainField.text;
     [[Hotline sharedInstance]initWithConfig:config];
@@ -189,13 +189,13 @@
 
 -(void)updateUserPropertiesButtonAction:(id)sender{
     NSLog(@"updating user info");
-    HotlineUser *user = [HotlineUser sharedInstance];
+    FreshchatUser *user = [FreshchatUser sharedInstance];
     user.firstName = self.userFirstNameField.text;
     user.lastName = self.userLastNameField.text;
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
-    [[Hotline sharedInstance] updateUser:user];
+    [[Hotline sharedInstance] setUser:user];
 }
 
 - (IBAction)editButtonPressed:(id)sender {
@@ -207,14 +207,14 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
                                                       andAppKey:[Hotline sharedInstance].config.appKey];
     config.domain = [Hotline sharedInstance].config.domain;
 
     switch (buttonIndex) {
         case 0:
-            [[Hotline sharedInstance]clearUserDataWithCompletion:^{
-                [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
+            [[Hotline sharedInstance]resetUserWithCompletion:^{
+                [[Hotline sharedInstance] setUser:[AppDelegate createFreshchatUser]];
                 [[Hotline sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
@@ -231,11 +231,11 @@
     self.appIDField.text = [Hotline sharedInstance].config.appID;
     self.appKeyField.text = [Hotline sharedInstance].config.appKey;
     
-    self.userFirstNameField.text = [HotlineUser sharedInstance].firstName;
-    self.userLastNameField.text = [HotlineUser sharedInstance].lastName;
-    self.emailField.text = [HotlineUser sharedInstance].email;
-    self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
-    self.externalIDField.text = [HotlineUser sharedInstance].externalID;
+    self.userFirstNameField.text = [FreshchatUser sharedInstance].firstName;
+    self.userLastNameField.text = [FreshchatUser sharedInstance].lastName;
+    self.emailField.text = [FreshchatUser sharedInstance].email;
+    self.phoneNumField.text = [FreshchatUser sharedInstance].phoneNumber;
+    self.externalIDField.text = [FreshchatUser sharedInstance].externalID;
 }
 
 -(void)testNotification:(id)sender{

@@ -52,13 +52,13 @@ static NSString *beforePlayCategory;
         ALog(@"Failed to set audio %@ session category", beforePlayCategory);
         return NO;
     }
-    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
+    [FDLocalNotification post:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE];
     return YES;
 }
 
 +(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime{
     
-    [FDLocalNotification post:HOTLINE_WILL_PLAY_AUDIO_MESSAGE];
+    [FDLocalNotification post:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE];
     
     NSError *error;
     KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
@@ -286,7 +286,7 @@ static NSString *beforePlayCategory;
     if(error){
         ALog(@"Failed to set audio %@ play session category", beforePlayCategory);
     }
-    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
+    [FDLocalNotification post:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE];
 }
 
 + (double) audioPlayerGetCurrentTime
