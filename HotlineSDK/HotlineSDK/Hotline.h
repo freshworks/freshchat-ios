@@ -328,11 +328,11 @@ enum TagFilterType {
 
 @end
 
-@interface HotlineOptions : NSObject
+@interface FreshchatOptions : NSObject
 
 @end
 
-@interface FAQOptions : HotlineOptions
+@interface FAQOptions : FreshchatOptions
 
 /*
  * Option to Switch between Grid and List view in FAQs. Shows FAQ categories as a list when set to NO.
@@ -412,7 +412,7 @@ enum TagFilterType {
 @end
 
 
-@interface ConversationOptions : HotlineOptions
+@interface ConversationOptions : FreshchatOptions
 
 /**
  *  Show Filtered Channels

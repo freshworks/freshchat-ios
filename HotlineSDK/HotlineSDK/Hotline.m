@@ -62,7 +62,7 @@
 
 @end
 
-@implementation HotlineOptions
+@implementation FreshchatOptions
 
 @end
 

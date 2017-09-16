@@ -24,7 +24,7 @@
 
 @interface HLInterstitialViewController() <HLLoadingViewBehaviourDelegate>
 
-@property (nonatomic, strong) HotlineOptions *options;
+@property (nonatomic, strong) FreshchatOptions *options;
 @property (nonatomic, assign) BOOL isEmbedView;
 @property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
 
@@ -32,7 +32,7 @@
 
 @implementation HLInterstitialViewController
 
--(instancetype) initViewControllerWithOptions:(HotlineOptions *) options andIsEmbed:(BOOL) isEmbed{
+-(instancetype) initViewControllerWithOptions:(FreshchatOptions *) options andIsEmbed:(BOOL) isEmbed{
     self = [super init];
     if (self) {
         self.options = options;
