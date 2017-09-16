@@ -7,14 +7,14 @@
 //
 
 #import "HLContainerController.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
 
 @interface HLContainerController ()
 
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 
 @end
 
@@ -25,7 +25,7 @@
     if (self) {
         self.childController = controller;
         self.childController.embedded = embed;
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }

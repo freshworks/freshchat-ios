@@ -34,7 +34,7 @@
 #define IMAGE_FAQ_ICON @"FAQImage"
 #define IMAGE_EMPTY_SEARCH_ICON @"EmptySearchImage"
 
-@interface HLTheme : NSObject
+@interface FCTheme : NSObject
 
 @property (strong, nonatomic) NSString *themeName;
 

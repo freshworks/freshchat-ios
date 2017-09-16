@@ -8,7 +8,7 @@
 
 #import "HLUserMessageCell.h"
 #import "FDUtilities.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 
@@ -42,9 +42,9 @@
     UIScreen *screen = [UIScreen mainScreen];
     CGRect screenRect = screen.bounds;
     self.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20) ;
-    self.sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
-    self.sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
-    self.customFontName=[[HLTheme sharedInstance] conversationUIFontName];
+    self.sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
+    self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
+    self.customFontName=[[FCTheme sharedInstance] conversationUIFontName];
     self.showsUploadStatus=YES;
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
@@ -54,18 +54,18 @@
     [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
     [self.contentView addSubview:contentEncloser];
     
-    [senderNameLabel setFont:[[HLTheme sharedInstance] agentNameFont]];
+    [senderNameLabel setFont:[[FCTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameFontColor];
+    senderNameLabel.textColor = [[FCTheme sharedInstance] agentNameFontColor];
     [senderNameLabel setEditable:NO];
     [senderNameLabel setScrollEnabled:NO];
     [senderNameLabel setSelectable:NO];
     
     messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-    messageSentTimeLabel.textColor = [[HLTheme sharedInstance] getChatbubbleTimeFontColor];
-    [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
+    messageSentTimeLabel.textColor = [[FCTheme sharedInstance] getChatbubbleTimeFontColor];
+    [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
     [messageSentTimeLabel setEditable:NO];
@@ -89,8 +89,8 @@
     [self setBackgroundColor:[UIColor clearColor]];
     [self.contentView setClipsToBounds:YES];
     
-    userChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
-    userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
+    userChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
+    userChatBubbleInsets= [[FCTheme sharedInstance] getUserBubbleInsets];
     
 }
 
@@ -127,7 +127,7 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initWithFragment:fragment];
-            htmlFragment.textColor = [[HLTheme sharedInstance] userMessageFontColor];
+            htmlFragment.textColor = [[FCTheme sharedInstance] userMessageFontColor];
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];

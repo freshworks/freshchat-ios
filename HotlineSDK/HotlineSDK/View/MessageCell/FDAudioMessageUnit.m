@@ -7,14 +7,14 @@
 //
 
 #import "FDAudioMessageUnit.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "KonotorAudioRecorder.h"
 #import "HLLocalization.h"
 #import "FDLocalNotification.h"
 
 @interface FDAudioMessageUnit ()
 
-@property (nonatomic, strong)HLTheme *theme;
+@property (nonatomic, strong)FCTheme *theme;
 
 @end
 
@@ -25,7 +25,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }

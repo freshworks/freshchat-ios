@@ -10,7 +10,7 @@
 #import "FDInputToolbarView.h"
 #import "Konotor.h"
 #import "FDBarButtonItem.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 
 @interface FDAttachmentImageController ()
@@ -122,10 +122,10 @@
 
 
 -(void)setNavigationItem{
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON] style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON] style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
     self.navigationItem.leftBarButtonItem = backButton;
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = [[HLTheme sharedInstance ]navigationBarBackgroundColor];
+    self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
 }
 
 -(void)sendMessage {

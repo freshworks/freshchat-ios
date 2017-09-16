@@ -23,7 +23,7 @@
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
 #import "HLLocalization.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDUtilities.h"
 #import "FDImagePreviewController.h"
 #import "HLMessageServices.h"
@@ -193,13 +193,13 @@ typedef struct {
     self.typicalReply = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0)];
     self.typicalReply.alpha = 0;
     self.channelName.textAlignment = UITextAlignmentCenter;
-    self.channelName.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    self.channelName.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
     self.channelName.font = [self.channelName.font fontWithSize:18];
     self.channelName.text = self.channel.name;
     [self.titleView addSubview:self.channelName];
     
-    self.typicalReply.font = [[HLTheme sharedInstance] responseTimeExpectationsFontName];
-    self.typicalReply.textColor = [[HLTheme sharedInstance] responseTimeExpectationsFontColor];
+    self.typicalReply.font = [[FCTheme sharedInstance] responseTimeExpectationsFontName];
+    self.typicalReply.textColor = [[FCTheme sharedInstance] responseTimeExpectationsFontColor];
     self.typicalReply.textAlignment = UITextAlignmentCenter;
     [self.titleView addSubview:self.typicalReply];
     
@@ -403,21 +403,21 @@ typedef struct {
     
     self.bannerMessageView = [UIView new];
     self.bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.bannerMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
+    self.bannerMessageView.backgroundColor = [[FCTheme sharedInstance] conversationOverlayBackgroundColor];
     [self.view addSubview:self.bannerMessageView];
 
     self.bannerMesagelabel = [[UILabel alloc] init];
-    self.bannerMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    self.bannerMesagelabel.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
     self.bannerMesagelabel.text = overlayText;
     self.bannerMesagelabel.numberOfLines = 3;
-    self.bannerMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
+    self.bannerMesagelabel.textColor = [[FCTheme sharedInstance] conversationOverlayTextColor];
     self.bannerMesagelabel.textAlignment = UITextAlignmentCenter;
     
     self.bannerMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.bannerMessageView addSubview:self.bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
-    self.tableView.backgroundColor = [[HLTheme sharedInstance]messageUIBackgroundColor];
+    self.tableView.backgroundColor = [[FCTheme sharedInstance]messageUIBackgroundColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;

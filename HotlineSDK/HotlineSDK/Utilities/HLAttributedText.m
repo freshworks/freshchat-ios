@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HLAttributedText.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 @interface HLAttributedText ()
 
@@ -40,7 +40,7 @@
 }
 
 -(NSMutableAttributedString *) addAttributedString:(NSString *)string  {
-    UIFont *customFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
+    UIFont *customFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
     NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>",customFont.fontName,(int)customFont.pointSize,string];
     NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUnicodeStringEncoding]
                                                                                                options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }

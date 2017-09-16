@@ -7,7 +7,7 @@
 //
 
 #import "FDFileFragment.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 
 @implementation FDFileFragment
@@ -15,7 +15,7 @@
     self = [super initWithFrame:CGRectZero];
     if (self) {
         self.fragmentData = fragment;
-        HLTheme *theme = [HLTheme sharedInstance];
+        FCTheme *theme = [FCTheme sharedInstance];
         UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
         float padding = 10;
         self.backgroundColor = [theme actionButtonColor];

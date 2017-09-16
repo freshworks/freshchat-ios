@@ -7,7 +7,7 @@
 //
 
 #import "FDCell.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
 
 #define TITLE_MAX_LINES 2
@@ -19,7 +19,7 @@ static float height = 0;
     if (self) {
         
         self.isChannelCell = isChannel;
-        HLTheme *theme = [HLTheme sharedInstance];
+        FCTheme *theme = [FCTheme sharedInstance];
         self.contentEncloser = [[UIView alloc]init];
         self.contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
         
@@ -76,7 +76,7 @@ static float height = 0;
         [FDAutolayoutHelper centerY:self.imgView onView:self.contentView];
         
         UIImageView *accessoryView = [[UIImageView alloc] init];
-        accessoryView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
+        accessoryView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_TABLEVIEW_ACCESSORY_ICON];
         accessoryView.translatesAutoresizingMaskIntoConstraints=NO;
         [self.contentView addSubview:accessoryView];
         
@@ -134,7 +134,7 @@ static float height = 0;
     }
     UILabel *tempLabel = [[UILabel alloc] init];
     tempLabel.text = @"text";
-    tempLabel.font = [[HLTheme sharedInstance] channelTitleFont];
+    tempLabel.font = [[FCTheme sharedInstance] channelTitleFont];
     CGSize singleSize = [tempLabel sizeThatFits:CGSizeMake(100, 999)];
     height = singleSize.height;
     return height;
@@ -170,7 +170,7 @@ static float height = 0;
 }
 
 -(void)theme{
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     if (self.isChannelCell) {
         self.backgroundColor     = [theme channelListCellBackgroundColor];
         self.titleLabel.textColor = [theme channelTitleFontColor];
@@ -189,7 +189,7 @@ static float height = 0;
 }
 
 +(UIImage *)generateImageForLabel:(NSString *)labelText{
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     NSString *firstLetter = [labelText substringToIndex:1];
     firstLetter = [firstLetter uppercaseString];
@@ -215,7 +215,7 @@ static float height = 0;
     self.layer.borderWidth = 0.6;
     self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
     self.imgView.layer.masksToBounds = YES;
-    self.layer.borderColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
+    self.layer.borderColor = [[FCTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
 }
 
 @end

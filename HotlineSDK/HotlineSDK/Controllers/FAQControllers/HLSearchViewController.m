@@ -11,7 +11,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "FDRanking.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "KonotorDataManager.h"
 #import "FDButton.h"
 #import "FDTableViewCell.h"
@@ -35,7 +35,7 @@
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) UIView *trialView;
 @property (strong, nonatomic) UITapGestureRecognizer *recognizer;
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 @property (strong, nonatomic) UIImageView *emptySearchImgView;
 @property (strong, nonatomic) UILabel *emptyResultLbl;
 @property (nonatomic) CGFloat keyboardHeight;
@@ -78,8 +78,8 @@
     return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
 }
 
--(HLTheme *)theme{
-    if(!_theme) _theme = [HLTheme sharedInstance];
+-(FCTheme *)theme{
+    if(!_theme) _theme = [FCTheme sharedInstance];
     return _theme;
 }
 

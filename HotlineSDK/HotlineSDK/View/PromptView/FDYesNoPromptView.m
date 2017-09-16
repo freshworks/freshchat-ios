@@ -19,7 +19,7 @@
 -(instancetype)initWithDelegate:(id<HLYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
 
         self.promptLabel = [self createPromptLabel:key];
         [self addSubview:self.promptLabel];

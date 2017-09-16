@@ -11,7 +11,7 @@
 
 #import "FDBarButtonItem.h"
 #import "FDButton.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 @interface FDBarButtonItem ()
 
@@ -22,7 +22,7 @@
 -(id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action{
     self = [super initWithTitle:title style:style target:target action:action];
     if (self) {
-        HLTheme *theme = [HLTheme sharedInstance];
+        FCTheme *theme = [FCTheme sharedInstance];
         FDButton *button            = [FDButton buttonWithType:UIButtonTypeSystem];
         UIColor *barButtonColor     = [theme navigationBarButtonColor];
         [button setTitleColor:barButtonColor forState:UIControlStateNormal];
@@ -39,7 +39,7 @@
 -(instancetype)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem target:(id)target action:(SEL)action{
     self = [super initWithBarButtonSystemItem:systemItem target:target action:action];
     if (self) {
-        self.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
+        self.tintColor = [[FCTheme sharedInstance] navigationBarButtonColor];
     }
     return self;
 }

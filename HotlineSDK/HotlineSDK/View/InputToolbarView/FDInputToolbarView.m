@@ -7,7 +7,7 @@
 //
 
 #import "FDInputToolbarView.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLMacros.h"
 #import "Hotline.h"
 #import <AudioToolbox/AudioServices.h>
@@ -25,7 +25,7 @@
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
-@property (nonatomic, strong) HLTheme              *theme;
+@property (nonatomic, strong) FCTheme              *theme;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonYConstraint;
 @property (nonatomic) BOOL canShowAttachButton;
 
@@ -47,7 +47,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     if (self) {
         
         self.delegate = delegate;
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         self.isFromAttachmentScreen = NO;
         self.backgroundColor = [self.theme inputToolbarBackgroundColor];
         textView=[[UITextView alloc] init];
@@ -73,7 +73,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
         micButton.backgroundColor = [UIColor clearColor];
         micButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *micImage = [[HLTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
+        UIImage *micImage = [[FCTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
         [micButton setImage:micImage forState:UIControlStateNormal];
         micButton.backgroundColor = [UIColor clearColor];
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -179,7 +179,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         chatTextView.text = @"";
     }
     [chatTextView setTextColor:[self.theme inputTextFontColor]];
-    chatTextView.textColor = [[HLTheme sharedInstance] inputTextFontColor];
+    chatTextView.textColor = [[FCTheme sharedInstance] inputTextFontColor];
     [chatTextView becomeFirstResponder];
 }
 

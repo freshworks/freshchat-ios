@@ -14,7 +14,7 @@
 #import "HLMacros.h"
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLSearchViewController.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
@@ -33,7 +33,7 @@
 @interface HLCategoryListController () <HLCategoryViewBehaviourDelegate,HLLoadingViewBehaviourDelegate>
 
 @property (nonatomic, strong)NSArray *categories;
-@property (nonatomic, strong)HLTheme *theme;
+@property (nonatomic, strong)FCTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
@@ -81,7 +81,7 @@
 
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    self.theme = [HLTheme sharedInstance];
+    self.theme = [FCTheme sharedInstance];
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
 }

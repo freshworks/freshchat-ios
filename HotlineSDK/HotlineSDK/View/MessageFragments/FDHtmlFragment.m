@@ -7,7 +7,7 @@
 //
 
 #import "FDHtmlFragment.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLAttributedText.h"
 #import "FDUtilities.h"
 
@@ -32,7 +32,7 @@
                         
                     }
                 } else {
-                    UIFont *customFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
+                    UIFont *customFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
                     //NSLog(@"FRAGMENT::Setting normal Text::::%@",fragment.content);
                     self.text = fragment.content;
                     self.font = customFont;

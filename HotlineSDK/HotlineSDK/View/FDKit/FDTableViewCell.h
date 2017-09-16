@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 @interface FDTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 
 -(void)setupTheme;
 

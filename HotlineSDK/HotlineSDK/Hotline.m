@@ -165,7 +165,7 @@
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
         [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
-        [[HLTheme sharedInstance]setThemeName:config.themeName];
+        [[FCTheme sharedInstance]setThemeName:config.themeName];
     }
     
     if ([HLUser canRegisterUser]) {

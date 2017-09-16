@@ -8,7 +8,7 @@
 
 #import "FDMessageCell.h"
 #import "FDUtilities.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 #import "FDParticipant.h"
@@ -79,11 +79,11 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
         txtView=[[UITextView alloc] init];
     }
     
-    sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
-    sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
+    sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
+    sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     showsProfile = YES;
     showsSenderName= NO;
-    customFontName=[[HLTheme sharedInstance] conversationUIFontName];
+    customFontName=[[FCTheme sharedInstance] conversationUIFontName];
     showsUploadStatus=YES;
     showsTimeStamp=YES;
     /* setup callout*/
@@ -92,22 +92,22 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     
     /* setup UserName field*/
     senderNameLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-    [senderNameLabel setFont:[[HLTheme sharedInstance] agentNameFont]];
+    [senderNameLabel setFont:[[FCTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     
-    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameFontColor];
+    senderNameLabel.textColor = [[FCTheme sharedInstance] agentNameFontColor];
     [senderNameLabel setEditable:NO];
     [senderNameLabel setScrollEnabled:NO];
     [senderNameLabel setSelectable:NO];
     [self.contentView addSubview:senderNameLabel];
     
-    self.userNameFieldHeight = [[HLTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]);
+    self.userNameFieldHeight = [[FCTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]);
     
     /* setup SentTime field*/
     if(showsTimeStamp){
         messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-        [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
+        [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
         [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
         [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
         [messageSentTimeLabel setEditable:NO];
@@ -118,7 +118,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     
     /* setup message text field*/
     
-    messageTextFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
+    messageTextFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
     messageTextView=[[UITextView alloc] initWithFrame:CGRectZero];
     [messageTextView setFont:messageTextFont];
     
@@ -180,7 +180,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 }
 
 + (float) getAgentnamePadding{
-    return ( MAX([[HLTheme sharedInstance] agentNameFont].lineHeight/2, KONOTOR_AGENT_NAME_MIN_PADDING));
+    return ( MAX([[FCTheme sharedInstance] agentNameFont].lineHeight/2, KONOTOR_AGENT_NAME_MIN_PADDING));
 }
 
 -(void)imageLongPress:(UILongPressGestureRecognizer*)recognizer
@@ -195,7 +195,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 -(void)tappedOnPicture:(id)gesture{
     UIImage *image=[UIImage imageWithData:[self.messageData picData]];
     if(!image) {
-        image = [[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER];
+        image = [[FCTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER];
     }
     [self.delegate messageCell:self pictureTapped:image];
 }
@@ -230,14 +230,14 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     }
     
     //check if message occupies a single line
-    NSString* customFontName=[[HLTheme sharedInstance] conversationUIFontName];
+    NSString* customFontName=[[FCTheme sharedInstance] conversationUIFontName];
     int numLines = [FDMessageCell getNoOfLines:messageText];
     
     //if message is single line, calculate larger width of the message text and date string
     if (numLines >= 1){
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
         [tempView setText:messageText];
-        [tempView setFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
+        [tempView setFont:[[FCTheme sharedInstance] getChatBubbleMessageFont]];
         CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
@@ -269,9 +269,9 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 
 + (int) getNoOfLines :(NSString *)messageText {
     
-    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]];
+    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[FCTheme sharedInstance] getChatBubbleMessageFont]];
     
-    return ((sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[HLTheme sharedInstance] getChatBubbleMessageFont]]));
+    return ((sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[FCTheme sharedInstance] getChatBubbleMessageFont]]));
 }
 
 
@@ -337,23 +337,23 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     else
         [uploadStatusImageView setImage:sendingImage];
     
-    UIImage *otherChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
-    UIImage *userChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
+    UIImage *otherChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
+    UIImage *userChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
     
-    UIEdgeInsets otherChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
-    UIEdgeInsets userChatBubbleInsets= [[HLTheme sharedInstance] getUserBubbleInsets];
-    messageTextView.tintColor = [[HLTheme sharedInstance] hyperlinkColor];
+    UIEdgeInsets otherChatBubbleInsets= [[FCTheme sharedInstance] getAgentBubbleInsets];
+    UIEdgeInsets userChatBubbleInsets= [[FCTheme sharedInstance] getUserBubbleInsets];
+    messageTextView.tintColor = [[FCTheme sharedInstance] hyperlinkColor];
     UIColor *messageTextColor;
     
     if(isSenderOther){
-        messageTextColor = [[HLTheme sharedInstance] agentMessageFontColor];
+        messageTextColor = [[FCTheme sharedInstance] agentMessageFontColor];
         [uploadStatusImageView setImage:nil];
         [chatCalloutImageView setImage:[otherChatBubble resizableImageWithCapInsets:otherChatBubbleInsets]];
         [messageTextView setTextColor:messageTextColor];
         [messageSentTimeLabel setTextColor:messageTextColor];
     }
     else{
-        messageTextColor = [[HLTheme sharedInstance] userMessageFontColor];
+        messageTextColor = [[FCTheme sharedInstance] userMessageFontColor];
         [chatCalloutImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
         [messageTextView setTextColor:messageTextColor];
         [messageSentTimeLabel setTextColor:messageTextColor];
@@ -455,9 +455,9 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     
     if(showsProfile){
         if(isSenderOther){
-            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+            profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
         }else{
-            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_USER];
+            profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_USER];
         }
         
         profileImageView.frame = CGRectMake(profileX,chatCalloutImageView.frame.origin.y+chatCalloutImageView.frame.size.height-KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION, KONOTOR_PROFILEIMAGE_DIMENSION);
@@ -479,13 +479,13 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     NSInteger messageType = [currentMessage.messageType integerValue];
     BOOL isAgent=[Konotor isUserMe:[currentMessage messageUserId]]?NO:YES;
     BOOL isAgentNameEnabled = [FDMessageCell showAgentAvatarLabel];
-    float heightWithSenderName = KONOTOR_VERTICAL_PADDING+16 + [[HLTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]) +KONOTOR_VERTICAL_PADDING*2 + EXTRA_TIMESTAMP_HEIGHT;
+    float heightWithSenderName = KONOTOR_VERTICAL_PADDING+16 + [[FCTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]) +KONOTOR_VERTICAL_PADDING*2 + EXTRA_TIMESTAMP_HEIGHT;
     float extraHeight = (isAgent && isAgentNameEnabled) ? heightWithSenderName: EXTRA_HEIGHT_WITHOUT_SENDER_NAME;
     float width = [FDMessageCell getWidthForMessage:currentMessage];
     
     float cellHeight=0;
     NSString *simpleString=currentMessage.text; //[messageText string];
-    UIFont *messageFont = [[HLTheme sharedInstance] getChatBubbleMessageFont];
+    UIFont *messageFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)){
         
@@ -500,7 +500,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     }
     else if(messageType == KonotorMessageTypeAudio){
         cellHeight=KONOTOR_AUDIOMESSAGE_HEIGHT+
-        ((isAgent && isAgentNameEnabled)?[[HLTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]):KONOTOR_VERTICAL_PADDING)
+        ((isAgent && isAgentNameEnabled)?[[FCTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]):KONOTOR_VERTICAL_PADDING)
         +(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)
         +((isAgent && isAgentNameEnabled) ?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+
         ((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
@@ -522,7 +522,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
                 txtheight = txtheight + 2*KONOTOR_VERTICAL_PADDING ;
             }
         }
-        cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+((isAgent && isAgentNameEnabled)?[[HLTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]):KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
+        cellHeight= 16+txtheight+height+(KONOTOR_MESSAGE_BACKGROUND_BOTTOM_PADDING_ME?KONOTOR_MESSAGE_BACKGROUND_IMAGE_TOP_PADDING:0)+((isAgent && isAgentNameEnabled)?[[FCTheme sharedInstance] agentNameFont].lineHeight+([FDMessageCell getAgentnamePadding]):KONOTOR_VERTICAL_PADDING)+(KONOTOR_SHOW_TIMESTAMP?KONOTOR_TIMEFIELD_HEIGHT:KONOTOR_VERTICAL_PADDING)+KONOTOR_VERTICAL_PADDING*2+((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?0:KONOTOR_VERTICAL_PADDING))+((isAgent && isAgentNameEnabled)?0:(KONOTOR_SHOW_TIMESTAMP?KONOTOR_VERTICAL_PADDING:0));
     }
     if([FDMessageCell hasButtonForURL:currentMessage.actionURL articleID:currentMessage.articleID])
         cellHeight+= ACTION_URL_HEIGHT;

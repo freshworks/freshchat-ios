@@ -7,7 +7,7 @@
 //
 
 #import "FDBadgeView.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
 
 @interface FDBadgeView ()
@@ -19,7 +19,7 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        HLTheme *theme = [HLTheme sharedInstance];
+        FCTheme *theme = [FCTheme sharedInstance];
         self.countLabel = [FDLabel new];
         self.countLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.countLabel.textColor = [theme badgeButtonTitleColor];

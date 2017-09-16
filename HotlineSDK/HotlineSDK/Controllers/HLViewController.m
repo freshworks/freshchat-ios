@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HLViewController.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLMacros.h"
 #import "FDBarButtonItem.h"
 #import "HLControllerUtils.h"
@@ -21,9 +21,9 @@
         ALog(@"Warning: Use Hotline controllers inside navigation controller");
     }
     else {
-        self.navigationController.navigationBar.barStyle = [[HLTheme sharedInstance]statusBarStyle] == UIStatusBarStyleLightContent ?
+        self.navigationController.navigationBar.barStyle = [[FCTheme sharedInstance]statusBarStyle] == UIStatusBarStyleLightContent ?
                                                                     UIBarStyleBlack : UIBarStyleDefault; // barStyle has a different enum but same values .. so hack to clear the update.
-        self.navigationController.navigationBar.tintColor = [[HLTheme sharedInstance] navigationBarButtonColor];
+        self.navigationController.navigationBar.tintColor = [[FCTheme sharedInstance] navigationBarButtonColor];
     }
 }
 
@@ -41,7 +41,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
-    return [[HLTheme sharedInstance]statusBarStyle];
+    return [[FCTheme sharedInstance]statusBarStyle];
 }
 
 @end

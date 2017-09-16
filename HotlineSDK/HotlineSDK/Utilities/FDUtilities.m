@@ -11,7 +11,7 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -266,7 +266,7 @@ static NSInteger networkIndicator = 0;
 +(BOOL)isPoweredByHidden{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
-    NSString *secretKey = [[HLTheme sharedInstance] getFooterSecretKey];
+    NSString *secretKey = [[FCTheme sharedInstance] getFooterSecretKey];
     if (!secretKey) return NO;
     
     NSString* myString = [NSString stringWithFormat:@"%@%@%@",[store objectForKey:HOTLINE_DEFAULTS_APP_ID],EXTRA_SECURE_STRING,[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];

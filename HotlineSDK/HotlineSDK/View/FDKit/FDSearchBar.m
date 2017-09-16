@@ -9,12 +9,12 @@
 #import "FDSearchBar.h"
 #import <UIKit/UIKit.h>
 #import "FDUtilities.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDBarButtonItem.h"
 
 @interface FDSearchBar ()
 
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 
 @end
 
@@ -23,7 +23,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         self.searchBarStyle = UISearchBarStyleProminent;
 
         self.tintColor = [self.theme searchBarCursorColor];

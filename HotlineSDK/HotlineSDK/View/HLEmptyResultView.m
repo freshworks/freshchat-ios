@@ -7,7 +7,7 @@
 //
 
 #import "HLEmptyResultView.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
 
 @implementation HLEmptyResultView
@@ -16,7 +16,7 @@
     self = [super init];
     if (self) {
         
-        HLTheme *theme = [HLTheme sharedInstance];
+        FCTheme *theme = [FCTheme sharedInstance];
         self.emptyResultImage = [[UIImageView alloc] init];
         self.emptyResultImage.image = image;
         [self.emptyResultImage setTranslatesAutoresizingMaskIntoConstraints:NO];

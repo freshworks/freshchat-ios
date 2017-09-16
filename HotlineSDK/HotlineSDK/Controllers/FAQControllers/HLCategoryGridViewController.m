@@ -15,7 +15,7 @@
 #import "FDRanking.h"
 #import "FDLocalNotification.h"
 #import "HLCategory.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
@@ -38,7 +38,7 @@
 @property (nonatomic, strong) FDSearchBar *searchBar;
 @property (nonatomic, strong) FDMarginalView *footerView;
 @property (nonatomic, strong) UILabel  *noSolutionsLabel;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property (nonatomic, strong) HLCategoryViewBehaviour *categoryViewBehaviour;
 @property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
@@ -84,7 +84,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-    self.theme = [HLTheme sharedInstance];
+    self.theme = [FCTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
     [self setupSubviews];
     [self adjustUIBounds];

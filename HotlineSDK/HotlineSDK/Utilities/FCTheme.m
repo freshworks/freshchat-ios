@@ -6,20 +6,20 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDThemeConstants.h"
 
-@interface HLTheme ()
+@interface FCTheme ()
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
 @property (strong, nonatomic) UIFont *systemFont;
 
 @end
 
-@implementation HLTheme
+@implementation FCTheme
 
 + (instancetype)sharedInstance{
-    static HLTheme *sharedHLTheme = nil;
+    static FCTheme *sharedHLTheme = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedHLTheme = [[self alloc]init];
@@ -87,7 +87,7 @@
 
 -(UIColor *)getColorForKeyPath:(NSString *)path{
     NSString *hexString = [self.themePreferences valueForKeyPath:path];
-    return hexString ? [HLTheme colorWithHex:hexString] : nil;
+    return hexString ? [FCTheme colorWithHex:hexString] : nil;
 }
 
 +(UIColor *)colorWithHex:(NSString *)value{
@@ -111,7 +111,7 @@
 
 - (UIColor *) navigationBarBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"NavigationBar.BackgroundColor"];
-    return color ?color : [HLTheme colorWithHex:FD_NAVIGATION_BAR_BACKGROUND];
+    return color ?color : [FCTheme colorWithHex:FD_NAVIGATION_BAR_BACKGROUND];
 }
 
 -(UIFont *)navigationBarTitleFont{
@@ -120,13 +120,13 @@
 
 -(UIColor *)navigationBarTitleColor{
         UIColor *color = [self getColorForKeyPath:@"NavigationBar.TitleColor"];
-        return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+        return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 
 -(UIColor *)navigationBarButtonColor{
     UIColor *color = [self getColorForKeyPath:@"NavigationBar.ButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 
@@ -153,22 +153,22 @@
 
 -(UIColor *)searchBarFontColor{
     UIColor *color = [self getColorForKeyPath:@"SearchBar.FontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)searchBarInnerBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"SearchBar.InnerBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)searchBarOuterBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"SearchBar.OuterBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_SEARCH_BAR_OUTER_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_SEARCH_BAR_OUTER_BACKGROUND_COLOR];
 }
 
 -(UIColor *)searchBarCancelButtonColor{
     UIColor *color = [self getColorForKeyPath:@"SearchBar.CancelButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 -(UIFont *)searchBarCancelButtonFont{
@@ -177,14 +177,14 @@
 
 -(UIColor *)searchBarCursorColor{
     UIColor *color = [self getColorForKeyPath:@"SearchBar.CursorColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 #pragma mark - Dialogue box
 
 -(UIColor *)dialogueTitleTextColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.LabelFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)dialogueTitleFont{
@@ -193,7 +193,7 @@
 
 -(UIColor *)dialogueYesButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)dialogueYesButtonFont{
@@ -202,19 +202,19 @@
 
 -(UIColor *)dialogueYesButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
 }
 
 //No Button
 
 -(UIColor *)dialogueNoButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
 }
 
 -(UIColor *)dialogueNoButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)dialogueNoButtonFont{
@@ -223,22 +223,22 @@
 
 -(UIColor *)dialogueNoButtonBorderColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)dialogueYesButtonBorderColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)dialogueBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
 -(UIColor *)dialogueButtonColor{
     UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
 }
 
 
@@ -246,7 +246,7 @@
 
 -(UIColor *)custSatDialogueTitleTextColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.LabelFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)custSatDialogueTitleFont{
@@ -255,7 +255,7 @@
 
 -(UIColor *)custSatDialogueYesButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)custSatDialogueYesButtonFont{
@@ -264,19 +264,19 @@
 
 -(UIColor *)custSatDialogueYesButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
 }
 
 //No Button
 
 -(UIColor *)custSatDialogueNoButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
 }
 
 -(UIColor *)custSatDialogueNoButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)custSatDialogueNoButtonFont{
@@ -285,22 +285,22 @@
 
 -(UIColor *)custSatDialogueNoButtonBorderColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)custSatDialogueYesButtonBorderColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)custSatDialogueBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
 -(UIColor *)custSatDialogueButtonColor{
     UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.ButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
 }
 
 
@@ -348,7 +348,7 @@
 
 -(UIColor *)tableViewCellTitleFontColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.TitleFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)tableViewCellDetailFont{
@@ -357,18 +357,18 @@
 
 -(UIColor *)tableViewCellDetailFontColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.DetailFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIColor *)tableViewCellBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 
 -(UIColor *)tableViewCellSeparatorColor{
     UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
-    return color ? color : [HLTheme colorWithHex:@"F2F2F2"];
+    return color ? color : [FCTheme colorWithHex:@"F2F2F2"];
 }
 
 - (int)numberOfChannelListDescriptionLines{
@@ -385,17 +385,17 @@
 
 -(UIColor *)notificationBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Notification.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)notificationTitleTextColor{
     UIColor *color = [self getColorForKeyPath:@"Notification.ChannelTitleFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)notificationMessageTextColor{
     UIColor *color = [self getColorForKeyPath:@"Notification.MessageFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)notificationTitleFont{
@@ -408,12 +408,12 @@
 
 -(UIColor *)notificationChannelIconBorderColor{
     UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)notificationChannelIconBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Article list
@@ -422,7 +422,7 @@
     UIColor *color = [self getColorForKeyPath:@"ArticlesList.TitleFontColor"];
     if(color == nil)
         color = [self tableViewCellTitleFontColor];
-    return color ? color : [HLTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
 }
 
 -(UIFont *)articleListFont{
@@ -437,17 +437,17 @@
 
 -(UIColor *)backgroundColorSDK{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_BACKGROUND_COLOR];
 }
 
 -(UIColor *)talkToUsButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)talkToUsButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_TALK_TO_US_BG_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_TALK_TO_US_BG_COLOR];
 }
 
 -(UIFont *)talkToUsButtonFont{
@@ -456,7 +456,7 @@
 
 -(UIColor *)noItemsFoundMessageColor{
     UIColor *color = [self getColorForKeyPath:@"OverallSettings.NoItemsFoundMessageColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(NSString *)getArticleDetailCSSFileName{
@@ -473,12 +473,12 @@
 
 -(UIColor *)responseTimeExpectationsFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ResponseTimeExpectationsFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)inputTextFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)inputTextFont{
@@ -487,52 +487,52 @@
 
 -(UIColor *)inputTextCursorColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextCursorColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLUE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLUE];
 }
 
 -(UIColor *)inputToolbarBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputToolbarBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 -(UIColor *)inputTextBorderColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)inputTextPlaceholderFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextPlaceholderFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIColor *)sendButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_SEND_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_SEND_BUTTON_COLOR];
 }
 
 -(UIColor *)actionButtonTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 
 -(UIColor *)actionButtonSelectedFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonSelectedFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 
 -(UIColor *)actionButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 
 -(UIColor *)actionButtonBorderColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonBorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 
 
 -(UIColor *)hyperlinkColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];
-    return color ? color : [HLTheme colorWithHex:FD_HYPERLINKCOLOR];
+    return color ? color : [FCTheme colorWithHex:FD_HYPERLINKCOLOR];
 }
 
 -(UIFont *)getChatBubbleMessageFont{
@@ -545,7 +545,7 @@
 
 -(UIColor *)getChatbubbleTimeFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ChatBubbleTimeFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(NSString *)conversationUIFontName{
@@ -554,16 +554,16 @@
 
 - (UIColor *) agentMessageFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentMessageFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 - (UIColor *) userMessageFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)agentNameFontColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentNameFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)agentNameFont{
@@ -572,13 +572,13 @@
 
 -(UIColor *)messageUIBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Grid View
 -(UIColor *)gridViewCellBorderColor{
     UIColor *color = [self getColorForKeyPath:@"GridViewCell.BorderColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 
 
@@ -589,24 +589,24 @@
 
 -(UIColor *)gridViewCellTitleFontColor{
     UIColor *color = [self getColorForKeyPath:@"GridViewCell.TitleFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIColor *)gridViewCellBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"GridViewCell.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)gridViewImageBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Conversation Banner
 
 - (UIColor *) conversationOverlayBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 - (UIFont *) conversationOverlayTextFont{
@@ -615,7 +615,7 @@
 
 - (UIColor *) conversationOverlayTextColor{
     UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.MessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 
@@ -623,7 +623,7 @@
 
 -(UIColor *)channelListCellBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelCellBackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)channelTitleFont{
@@ -632,7 +632,7 @@
 
 -(UIColor *)channelTitleFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelTitleFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)channelDescriptionFont{
@@ -641,7 +641,7 @@
 
 -(UIColor *)channelDescriptionFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelDescriptionFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)channelLastUpdatedFont{
@@ -650,7 +650,7 @@
 
 -(UIColor *)channelLastUpdatedFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedTimeFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)badgeButtonFont{
@@ -659,12 +659,12 @@
 
 -(UIColor *)badgeButtonBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
 }
 
 -(UIColor *)badgeButtonTitleColor{
     UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeTitleColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)channelIconPalceholderImageBackgroundColor{
@@ -683,7 +683,7 @@
 #pragma mark - Empty Result
 -(UIColor *)emptyResultMessageFontColor{
     UIColor *color = [self getColorForKeyPath:@"EmptyResultView.MessageTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)emptyResultMessageFont{
@@ -727,17 +727,17 @@
 
 -(UIColor *)csatPromptBackgroundColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.BackgroundColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)csatPromptRatingBarColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.RatingBarColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_WHITE];    
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];    
 }
 
 -(UIColor *)csatPromptSubmitButtonColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.SubmitButtonColor"];
-    return color ? color : [HLTheme colorWithHex:FD_BUTTON_COLOR];
+    return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 -(UIFont *)csatPromptSubmitButtonTitleFont{
@@ -746,7 +746,7 @@
 
 -(UIColor *)csatPromptInputTextFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.InputTextFontColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)csatPromptInputTextFont{
@@ -755,7 +755,7 @@
 
 -(UIColor *)csatPromptHorizontalLineColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.HorizontalLineColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_GRAY];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIFont *)csatPromptQuestionTextFont{
@@ -764,7 +764,7 @@
 
 -(UIColor *)csatPromptQuestionTextFontColor{
     UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.QuestionTextColor"];
-    return color ? color : [HLTheme colorWithHex:FD_COLOR_BLACK];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 @end

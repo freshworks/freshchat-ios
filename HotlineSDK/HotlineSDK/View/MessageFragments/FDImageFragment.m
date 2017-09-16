@@ -51,7 +51,7 @@
                     }
                 }
                 if (imageToBeDownloaded) {
-                    [self setImage:[[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
+                    [self setImage:[[FCTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
                     //NSLog(@"FRAGMENT::Setting the PLACEHOLDER::::");
                 } else {
                     [self setImage:[UIImage imageWithData:fragment.binaryData2]];
@@ -60,7 +60,7 @@
                 self.imgFrame = CGRectMake(0, 0, thumbnailWidth, thumbnailHeight);
             } else {
                 if (imageToBeDownloaded) {
-                    [self setImage:[[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
+                    [self setImage:[[FCTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
                 } else {
                     //NSLog(@"FRAGMENT::Setting the original image::::");
                     [self setImage:[UIImage imageWithData:fragment.binaryData1]]; //Set the original image

@@ -65,7 +65,7 @@
 		35B2EFB21D000E620014867F /* FDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF401D000E620014867F /* FDUtilities.m */; };
 		35B2EFB31D000E620014867F /* FDVotingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF421D000E620014867F /* FDVotingManager.m */; };
 		35B2EFB41D000E620014867F /* HLLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF451D000E620014867F /* HLLocalization.m */; };
-		35B2EFB51D000E620014867F /* HLTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF481D000E620014867F /* HLTheme.m */; };
+		35B2EFB51D000E620014867F /* FCTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF481D000E620014867F /* FCTheme.m */; };
 		35B2EFB61D000E620014867F /* HotlineAppState.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF4B1D000E620014867F /* HotlineAppState.m */; };
 		35B2EFB71D000E620014867F /* KonotorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF4D1D000E620014867F /* KonotorAudioPlayer.m */; };
 		35B2EFB81D000E620014867F /* KonotorAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EF4F1D000E620014867F /* KonotorAudioRecorder.m */; };
@@ -292,8 +292,8 @@
 		35B2EF441D000E620014867F /* HLLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLLocalization.h; sourceTree = "<group>"; };
 		35B2EF451D000E620014867F /* HLLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLLocalization.m; sourceTree = "<group>"; };
 		35B2EF461D000E620014867F /* HLMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLMacros.h; sourceTree = "<group>"; };
-		35B2EF471D000E620014867F /* HLTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLTheme.h; sourceTree = "<group>"; };
-		35B2EF481D000E620014867F /* HLTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLTheme.m; sourceTree = "<group>"; };
+		35B2EF471D000E620014867F /* FCTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCTheme.h; sourceTree = "<group>"; };
+		35B2EF481D000E620014867F /* FCTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCTheme.m; sourceTree = "<group>"; };
 		35B2EF491D000E620014867F /* HLVersionConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLVersionConstants.h; sourceTree = "<group>"; };
 		35B2EF4A1D000E620014867F /* HotlineAppState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotlineAppState.h; sourceTree = "<group>"; };
 		35B2EF4B1D000E620014867F /* HotlineAppState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotlineAppState.m; sourceTree = "<group>"; };
@@ -727,8 +727,8 @@
 				35B2EF441D000E620014867F /* HLLocalization.h */,
 				35B2EF451D000E620014867F /* HLLocalization.m */,
 				35B2EF461D000E620014867F /* HLMacros.h */,
-				35B2EF471D000E620014867F /* HLTheme.h */,
-				35B2EF481D000E620014867F /* HLTheme.m */,
+				35B2EF471D000E620014867F /* FCTheme.h */,
+				35B2EF481D000E620014867F /* FCTheme.m */,
 				35B2EF491D000E620014867F /* HLVersionConstants.h */,
 				35B2EF4A1D000E620014867F /* HotlineAppState.h */,
 				35B2EF4B1D000E620014867F /* HotlineAppState.m */,
@@ -1165,7 +1165,7 @@
 				3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */,
 				35B2EFC91D000E620014867F /* FDMessageCell.m in Sources */,
 				CE642C1F1F308C1D00264CA0 /* HLAgentMessageCell.m in Sources */,
-				35B2EFB51D000E620014867F /* HLTheme.m in Sources */,
+				35B2EFB51D000E620014867F /* FCTheme.m in Sources */,
 				CE642C201F308C1D00264CA0 /* HLUserMessageCell.m in Sources */,
 				35D4E81C1D118E9000EFFE07 /* FDImagePreviewController.m in Sources */,
 				35B2EFA51D000E620014867F /* HLCoreServices.m in Sources */,

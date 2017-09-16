@@ -7,13 +7,13 @@
 //
 
 #import "HLGridViewCell.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
 
 @interface HLGridViewCell()
 
 @property (nonatomic,strong) UIView *view;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 
 @end
 
@@ -24,7 +24,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc]init];
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         self.imageView.backgroundColor = [self.theme gridViewImageBackgroundColor];
         self.imageView.clipsToBounds = YES;

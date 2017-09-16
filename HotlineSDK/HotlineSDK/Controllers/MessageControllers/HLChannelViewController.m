@@ -8,7 +8,7 @@
 
 #import "HLChannelViewController.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDLocalNotification.h"
 #import "HLContainerController.h"
 #import "FDMessageController.h"
@@ -39,7 +39,7 @@
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FDIconDownloader *iconDownloader;
 @property (nonatomic, strong) ConversationOptions *convOptions;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 @property BOOL isFilteredView;
 @property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
 
@@ -69,7 +69,7 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
-    self.theme = [HLTheme sharedInstance];
+    self.theme = [FCTheme sharedInstance];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [self.theme channelTitleFontColor],
                                                            NSFontAttributeName: [self.theme channelTitleFont]

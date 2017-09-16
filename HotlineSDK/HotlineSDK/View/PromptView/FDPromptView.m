@@ -7,7 +7,7 @@
 //
 
 #import "FDPromptView.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLMacros.h"
 #import "HLLocalization.h"
 
@@ -15,7 +15,7 @@
 
 -(UILabel *)createPromptLabel:(NSString *) key{
     UILabel *promptLabel = [[UILabel alloc] init];
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     self.backgroundColor = [theme dialogueBackgroundColor];
     promptLabel.translatesAutoresizingMaskIntoConstraints = NO;
     promptLabel.textColor = [theme dialogueTitleTextColor];
@@ -30,7 +30,7 @@
 
 -(UIButton *)createPromptButton:(NSString*)buttonName withKey:(NSString *)key{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     button.titleLabel.font = [theme dialogueTitleFont];
     button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     button.titleLabel.numberOfLines = 0;

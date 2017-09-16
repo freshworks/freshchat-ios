@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Hotline.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 #import "FDThemeConstants.h"
 

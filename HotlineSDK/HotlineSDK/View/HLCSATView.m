@@ -9,7 +9,7 @@
 #import "HLCSATView.h"
 #import "HLStarRatingView.h"
 #import "FDAutolayoutHelper.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDGrowingTextView.h"
 #import "HLLocalization.h"
 
@@ -19,7 +19,7 @@
 @property (nonatomic, strong) UIView *CSATPrompt;
 @property (nonatomic, strong) FDGrowingTextView *feedbackView;
 @property (nonatomic) float rating;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 @property (nonatomic, strong) UIButton *submitButton;
 
 
@@ -32,7 +32,7 @@
     if (self) {
         
         self.isResolved = isResolved;
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         
         //Transparent background view
         self.transparentView  = [UIView new];

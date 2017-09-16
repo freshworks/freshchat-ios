@@ -24,7 +24,7 @@
 
 @property (nonatomic, weak) UIViewController <HLCategoryViewBehaviourDelegate> *categoryViewDelegate;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 
 @end
 
@@ -36,7 +36,7 @@
         self.categoryViewDelegate = viewController;
         self.faqOptions = faqOptions;
         self.isFilteredView = [HLFAQUtil hasTags:self.faqOptions];
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }

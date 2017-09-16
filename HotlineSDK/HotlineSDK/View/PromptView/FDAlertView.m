@@ -8,7 +8,7 @@
 
 #import "FDAlertView.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 
 @interface FDAlertView ()
@@ -30,7 +30,7 @@
         [self addSubview:self.promptLabel];
         
         self.Button1 = [self createPromptButton:@"contact_us" withKey:key];
-        [self.Button1 setTitleColor:[[HLTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
+        [self.Button1 setTitleColor:[[FCTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
         [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.Button1];
         [self setBackgroundColor:[UIColor whiteColor]];

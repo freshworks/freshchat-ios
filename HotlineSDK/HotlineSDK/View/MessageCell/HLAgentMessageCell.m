@@ -8,7 +8,7 @@
 
 #import "HLAgentMessageCell.h"
 #import "FDUtilities.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 
@@ -61,11 +61,11 @@
     UIScreen *screen = [UIScreen mainScreen];
     CGRect screenRect = screen.bounds;
     self.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20) ;
-    self.sentImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
-    self.sendingImage=[[HLTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
+    self.sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
+    self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     self.showsProfile = YES;
     self.showsSenderName= NO;
-    self.customFontName=[[HLTheme sharedInstance] conversationUIFontName];
+    self.customFontName=[[FCTheme sharedInstance] conversationUIFontName];
     self.showsUploadStatus=YES;
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
@@ -75,15 +75,15 @@
     [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
     
     
-    [senderNameLabel setFont:[[HLTheme sharedInstance] agentNameFont]];
+    [senderNameLabel setFont:[[FCTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    senderNameLabel.textColor = [[HLTheme sharedInstance] agentNameFontColor];
+    senderNameLabel.textColor = [[FCTheme sharedInstance] agentNameFontColor];
     
     messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-    messageSentTimeLabel.textColor = [[HLTheme sharedInstance] getChatbubbleTimeFontColor];
-    [messageSentTimeLabel setFont:[[HLTheme sharedInstance] getChatbubbleTimeFont]];
+    messageSentTimeLabel.textColor = [[FCTheme sharedInstance] getChatbubbleTimeFontColor];
+    [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
     [messageSentTimeLabel setEditable:NO];
@@ -107,8 +107,8 @@
     showsProfile = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
     showsSenderName = [HLAgentMessageCell showAgentAvatarLabel]; //Buid considering always false
     
-    agentChatBubble = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
-    agentChatBubbleInsets= [[HLTheme sharedInstance] getAgentBubbleInsets];
+    agentChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
+    agentChatBubbleInsets= [[FCTheme sharedInstance] getAgentBubbleInsets];
 
     [chatBubbleImageView setImage:[agentChatBubble resizableImageWithCapInsets:agentChatBubbleInsets]];
     
@@ -142,7 +142,7 @@
     [views setObject:self.senderNameLabel forKey:@"senderLabel"];
     
     if(showsProfile){
-        profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
         
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
@@ -158,12 +158,12 @@
                         profileImageView.image = image;
                     }
                     else{
-                        profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+                        profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
                     }
                 }];
         }
         else{
-            profileImageView.image = [[HLTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+            profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
         }
     }
     
@@ -183,7 +183,7 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initWithFragment:fragment];
-            htmlFragment.textColor = [[HLTheme sharedInstance] agentMessageFontColor];
+            htmlFragment.textColor = [[FCTheme sharedInstance] agentMessageFontColor];
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];

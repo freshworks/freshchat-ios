@@ -11,7 +11,7 @@
 #import "FDVotingManager.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDLocalNotification.h"
 #import "Hotline.h"
 #import "HLLocalization.h"
@@ -98,7 +98,7 @@
 }
 
 -(NSString *)normalizeCssContent{
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     return [theme getCssFileContent:[theme getArticleDetailCSSFileName]];
 }
 #pragma mark - Life cycle methods
@@ -150,7 +150,7 @@
 }
 
 -(void)theming{
-    self.view.backgroundColor = [[HLTheme sharedInstance] backgroundColorSDK];
+    self.view.backgroundColor = [[FCTheme sharedInstance] backgroundColorSDK];
 }
 
 -(void)setNavigationItem{

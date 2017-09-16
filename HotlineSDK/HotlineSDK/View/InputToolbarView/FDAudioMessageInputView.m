@@ -7,7 +7,7 @@
 //
 
 #import "FDAudioMessageInputView.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "Konotor.h"
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
@@ -15,7 +15,7 @@
 @interface FDAudioMessageInputView ()
 
 @property (nonatomic,strong) NSTimer *timer;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 
 @end
 
@@ -28,7 +28,7 @@ int timeMin;
     self = [super init];
     if (self) {
         self.delegate = delegate;
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         self.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
         
         self.dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -50,7 +50,7 @@ int timeMin;
         
         self.timeLabel = [[UILabel alloc] init];
         self.timeLabel.text = @"00:00";
-        self.timeLabel.font = [[HLTheme sharedInstance] voiceRecordingTimeLabelFont];
+        self.timeLabel.font = [[FCTheme sharedInstance] voiceRecordingTimeLabelFont];
         self.timeLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.timeLabel];
         

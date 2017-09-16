@@ -13,9 +13,9 @@
 
 @implementation FDTableViewCell
 
--(HLTheme *)theme{
+-(FCTheme *)theme{
     if(!_theme){
-        _theme = [HLTheme sharedInstance];
+        _theme = [FCTheme sharedInstance];
     }
     return _theme;
 }

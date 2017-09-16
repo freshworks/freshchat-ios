@@ -10,7 +10,7 @@
 #import "Fragment.h"
 #import "HLAgentMessageCell.h"
 #import "HLUserMessageCell.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 @interface FDImageFragment : UIImageView
     -(id) initWithFragment: (FragmentData *) fragment ofMessage:(MessageData*)message;
