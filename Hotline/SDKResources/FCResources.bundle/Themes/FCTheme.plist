@@ -7,7 +7,7 @@
 		<key>ChatBubbleMessageFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>ChatBubbleMessageFontSize</key>
-		<string>14.0f</string>
+		<string>15.0f</string>
 		<key>AgentMessageFontColor</key>
 		<string>000000</string>
 		<key>UserMessageFontColor</key>
@@ -17,7 +17,7 @@
 		<key>ChatBubbleTimeFontSize</key>
 		<string>11.0f</string>
 		<key>ChatBubbleTimeFontColor</key>
-		<string>000000</string>
+		<string>828282</string>
 		<key>ConversationUIFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>ActionButtonTextColor</key>
@@ -31,15 +31,15 @@
 		<key>AgentNameFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>AgentNameFontColor</key>
-		<string>000000</string>
+		<string>727272</string>
 		<key>AgentNameFontSize</key>
-		<string>12.0f</string>
+		<string>13.0f</string>
 		<key>HyperlinkColor</key>
 		<string>2701A0</string>
 		<key>InputToolbarBackgroundColor</key>
-		<string>F2F2F2</string>
+		<string>E8E8E8</string>
 		<key>InputTextCursorColor</key>
-		<string>42E27A</string>
+		<string>808285</string>
 		<key>InputTextBorderColor</key>
 		<string>D7D7D7</string>
 		<key>InputTextFontColor</key>
@@ -57,7 +57,7 @@
 		<key>ResponseTimeExpectationsFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>ResponseTimeExpectationsFontColor</key>
-		<string>1850FB</string>
+		<string>5D657A</string>
 		<key>ImgAttachBackButtonFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>ImgAttachBackButtonFontColor</key>
@@ -139,21 +139,21 @@
 	<key>ChatBubbleInsets</key>
 	<dict>
 		<key>AgentBubbleTop</key>
-		<string>2.5</string>
+		<string>3</string>
 		<key>AgentBubbleLeft</key>
-		<string>4.5</string>
+		<string>7</string>
 		<key>AgentBubbleBottom</key>
 		<string>4</string>
 		<key>AgentBubbleRight</key>
-		<string>3</string>
+		<string>6</string>
 		<key>UserBubbleTop</key>
-		<string>2.5</string>
-		<key>UserBubbleLeft</key>
 		<string>3</string>
+		<key>UserBubbleLeft</key>
+		<string>6</string>
 		<key>UserBubbleBottom</key>
 		<string>4</string>
 		<key>UserBubbleRight</key>
-		<string>4.5</string>
+		<string>7</string>
 	</dict>
 	<key>Dialogues</key>
 	<dict>
@@ -242,7 +242,7 @@
 		<key>ChannelIconPlaceholderBackgroundColor</key>
 		<string>555555</string>
 		<key>ChannelIconPlaceholderTextFontSize</key>
-		<string>20.0f</string>
+		<string>22.0f</string>
 		<key>ChannelIconPlaceholderTextFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 	</dict>
@@ -366,9 +366,9 @@
 		<key>AttachmentUpload</key>
 		<string>FCResources.bundle/Images/hotline_upload</string>
 		<key>BubbleRight</key>
-		<string>FCResources.bundle/Images/hotline_bubble_right</string>
+		<string>FCResources.bundle/Images/freshchat_bubble_right</string>
 		<key>BubbleLeft</key>
-		<string>FCResources.bundle/Images/hotline_bubble_left</string>
+		<string>FCResources.bundle/Images/freshchat_bubble_left</string>
 		<key>AudioToolbarCancel</key>
 		<string>FCResources.bundle/Images/hotline_cancel</string>
 		<key>Mic</key>
@@ -403,6 +403,8 @@
 		<string>FCResources.bundle/Images/hotline_channels_image</string>
 		<key>FAQImage</key>
 		<string>FCResources.bundle/Images/hotline_faq_image</string>
+		<key>ConversationBGImage</key>
+		<string>FCResources.bundle/Images/freshchar_conv_bg</string>
 	</dict>
 </dict>
 </plist>

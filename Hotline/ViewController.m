@@ -219,6 +219,7 @@
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
+    options.showContactUsOnAppBar = true;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
@@ -247,6 +248,8 @@
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:arr withTitle:self.conversationTitle.text];
     FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnAppBar = true;
+    options.showContactUsOnFaqScreens = true;
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     if(contactUsTagsArray.count){

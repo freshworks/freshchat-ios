@@ -193,6 +193,7 @@ typedef struct {
     self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, self.titleWidth, self.titleHeight - 2)];
     self.typicalReply = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0)];
     self.typicalReply.alpha = 0;
+    self.typicalReply.clipsToBounds = true;
     self.channelName.textAlignment = UITextAlignmentCenter;
     self.channelName.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
     self.channelName.font = [self.channelName.font fontWithSize:18];
@@ -212,7 +213,7 @@ typedef struct {
     
     [UIView animateWithDuration:0.5 animations:^{
         self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
-        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, self.titleHeight/3);
+        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
         self.typicalReply.alpha = 1;
     }];
 }
@@ -425,7 +426,14 @@ typedef struct {
     [self.bannerMessageView addSubview:self.bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
-    self.tableView.backgroundColor = [[FCTheme sharedInstance]messageUIBackgroundColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    UIImage *bgImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_CONVERSATION_BACKGROUND];
+    if(bgImage){
+        [self.view setBackgroundColor: [[UIColor alloc] initWithPatternImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_CONVERSATION_BACKGROUND]]];
+    }else{
+        self.tableView.backgroundColor = [[FCTheme sharedInstance]messageUIBackgroundColor];
+    }
+    
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;

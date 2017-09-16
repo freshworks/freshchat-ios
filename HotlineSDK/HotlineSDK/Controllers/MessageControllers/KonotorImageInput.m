@@ -127,7 +127,7 @@
 
 - (void) showAccessDeniedAlert{
     
-    UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_CAMERA_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+    UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_CAMERA_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:HLLocalizedString(LOC_CAMERA_PERMISSION_ALERT_CANCEL) otherButtonTitles:nil, nil];
     [permissionAlert show];
 }
 

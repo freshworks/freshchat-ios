@@ -57,7 +57,7 @@
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];
-    footerLabel.text = @"Powered by freshchat.com";
+    footerLabel.text = @"Powered by Freshchat";
     footerLabel.font = [UIFont systemFontOfSize:11];
     footerLabel.textColor = [UIColor whiteColor];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;

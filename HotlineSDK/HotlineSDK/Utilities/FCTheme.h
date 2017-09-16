@@ -33,6 +33,7 @@
 #define IMAGE_CHANNEL_ICON @"ChannelImage"
 #define IMAGE_FAQ_ICON @"FAQImage"
 #define IMAGE_EMPTY_SEARCH_ICON @"EmptySearchImage"
+#define IMAGE_CONVERSATION_BACKGROUND @"ConversationBGImage"
 
 @interface FCTheme : NSObject
 

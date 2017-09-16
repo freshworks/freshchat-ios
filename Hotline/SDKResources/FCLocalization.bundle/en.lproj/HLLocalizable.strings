@@ -12,12 +12,12 @@
 "faq_feature_not_enabled_text"="FAQ feature is disabled";
 
 /* Article UpVote DownVote */
-"article_vote_prompt_text"="Did we answer your question?";
-"article_vote_prompt_yes_button_text"="Yes!";
+"article_vote_prompt_text"="Did we address your concerns?";
+"article_vote_prompt_yes_button_text"="Yes";
 "article_vote_prompt_no_button_text"="No";
 
 /* Article Vote thank you prompt */
-"thank_you_prompt_text"="Thanks for your feedback";
+"thank_you_prompt_text"="Thanks for your feedback!";
 "thank_you_prompt_contact_us_button_text"="Still looking for help? Talk to us";
 
 /* Article Detail */
@@ -27,12 +27,12 @@
 "offline_internet_message"="Uh-uh. No internet connection";
 
 /*Channels*/
-"channels_title_text"="Talk to us";
+"channels_title_text"="Conversations";
 "channels_close_button_text"="Close";
 "channels_feature_not_enabled_text"="Conversation feature is disabled";
 
 /* Message UI */
-"message_placeholder_text" = "Compose a message";
+"message_placeholder_text" = "Type a message";
 "messages_close_button_text"="Close";
 "send_button_text"="Send";
 "messages_agent_label_text"="Freshchat Support";
@@ -70,7 +70,7 @@
 "search_placeholder_text"="Discover answers to your questions";
 "search_empty_result_text"="Whoops! We couldn't find what you were looking for.";
 "empty_channel_text" = "Oops, no message channels here!";
-"empty_faq_text" = "Sorry.. There are no FAQs here";
+"empty_faq_text" = "Sorry! There are no FAQs available";
 "loading_channel_text" = "Loading Channels";
 "loading_faq_text" = "Loading FAQs";
 
@@ -78,15 +78,16 @@
 "camera_unavailable_title"="Your camera is unavailable";
 "camera_unavailable_description"="Oopsie! Your device doesn't have a camera or the camera is not available for use";
 "camera_unavailable_ok_button_text"="OK";
-"camera_permission_denied" ="Enable camera permissions under Settings";
+"camera_permission_denied" ="Camera permissions is required to capture pictures";
+"camera_permission_alert_cancel" ="Cancel";
 
 /* Picture attached*/
 "pic_msg_attachment_close_btn"="Back";
 
 /*Image Attachment*/
 "image_attachment_cancel_button_text"="Cancel";
-"image_attachment_select_existing_image"="Attach picture from device";
-"image_attachment_select_new_image"="Take new picture";
+"image_attachment_select_existing_image"="Upload from gallery";
+"image_attachment_select_new_image"="Take a picture";
 
 /*days*/
 "day_sunday"="Sunday";

@@ -198,7 +198,7 @@ static float height = 0;
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
     label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
-    label.layer.cornerRadius = label.frame.size.height / 2.0f;
+    label.layer.cornerRadius = label.frame.size.height / 8.0f;
     label.clipsToBounds = YES;
     
     UIGraphicsBeginImageContextWithOptions(label.frame.size, NO, 0.0);
@@ -213,7 +213,7 @@ static float height = 0;
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
     self.layer.borderWidth = 0.6;
-    self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 2;
+    self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 8;
     self.imgView.layer.masksToBounds = YES;
     self.layer.borderColor = [[FCTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
 }
