@@ -18,9 +18,9 @@ enum TagFilterType {
 #define HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshdesk.hotline_play_inapp_audio"
 #define HOTLINE_WILL_PLAY_AUDIO_MESSAGE @"com.freshdesk.hotline_pause_inapp_audio"
 
-@class HotlineConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
+@class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 
-@interface HotlineConfig : NSObject
+@interface FreshchatConfig : NSObject
 
 /*
  * App ID of your App. This is used to identify the SDK for your app to freshchat.com.
@@ -86,7 +86,7 @@ enum TagFilterType {
 
 @interface Hotline : NSObject
 
-@property(nonatomic, strong, readonly) HotlineConfig *config;
+@property(nonatomic, strong, readonly) FreshchatConfig *config;
 
 +(NSString *)SDKVersion;
 
@@ -103,7 +103,7 @@ enum TagFilterType {
  *  @param config Freshchat Configuration of type FreshchatConfig
  */
 
--(void)initWithConfig:(HotlineConfig *)config;
+-(void)initWithConfig:(FreshchatConfig *)config;
 
 /**
  *  Show the Conversations / Chat to the user.

@@ -1,5 +1,5 @@
 //
-//  HotlineConfig.m
+//  FreshchatConfig.m
 //  HotlineSDK
 //
 //  Created by Aravinth Chandran on 12/12/15.
@@ -12,7 +12,7 @@
 #import "HLLocalization.h"
 #import "FDThemeConstants.h"
 
-@implementation HotlineConfig
+@implementation FreshchatConfig
 
 -(instancetype)initWithAppID:(NSString *)appID andAppKey:(NSString *)appKey{
     self = [super init];

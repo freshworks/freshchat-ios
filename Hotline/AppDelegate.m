@@ -123,8 +123,8 @@
 
 -(void)hotlineIntegration{
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
-
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
+    
     config.appID = HOTLINE_APP_ID;
     config.appKey = HOTLINE_APP_KEY;
     config.domain = HOTLINE_DOMAIN;

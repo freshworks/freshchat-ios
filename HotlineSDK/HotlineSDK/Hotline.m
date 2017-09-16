@@ -49,7 +49,7 @@
 
 @interface Hotline ()
 
-@property(nonatomic, strong, readwrite) HotlineConfig *config;
+@property(nonatomic, strong, readwrite) FreshchatConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
 @property (nonatomic, strong) HLNotificationHandler *notificationHandler;
 @property (nonatomic, strong) HLMessagePoller *messagePoller;
@@ -114,7 +114,7 @@
     [FDUtilities initiatePendingTasks];
 }
 
--(void)initWithConfig:(HotlineConfig *)config{
+-(void)initWithConfig:(FreshchatConfig *)config{
     @try {
         [self initWithConfig:config completion:nil];
     } @catch (NSException *exception) {
@@ -122,8 +122,8 @@
     }
 }
 
--(void)initWithConfig:(HotlineConfig *)config completion:(void(^)(NSError *error))completion{
-    HotlineConfig *processedConfig = [self processConfig:config];
+-(void)initWithConfig:(FreshchatConfig *)config completion:(void(^)(NSError *error))completion{
+    FreshchatConfig *processedConfig = [self processConfig:config];
     
     self.config = processedConfig;
     
@@ -137,7 +137,7 @@
     }
 }
 
--(HotlineConfig *)processConfig:(HotlineConfig *)config{
+-(FreshchatConfig *)processConfig:(FreshchatConfig *)config{
     config.appID  = trimString(config.appID);
     config.appKey = trimString(config.appKey);
     config.domain = [self validateDomain: config.domain];
@@ -150,7 +150,7 @@
     return config;
 }
 
--(void)updateConfig:(HotlineConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
+-(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
         [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
@@ -174,7 +174,7 @@
     
 }
 
--(void)checkMediaPermissions:(HotlineConfig *)config{
+-(void)checkMediaPermissions:(FreshchatConfig *)config{
     FDPlistManager *plistManager = [[FDPlistManager alloc] init];
     NSMutableString *message = [NSMutableString new];
     
@@ -265,7 +265,7 @@
     return previousUserInfo;
 }
 
--(BOOL)hasUpdatedConfig:(HotlineConfig *)config{
+-(BOOL)hasUpdatedConfig:(FreshchatConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -525,7 +525,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)processClearUserData:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser{
     FDSecureStore *store = [FDSecureStore sharedInstance];
-    HotlineConfig *config = [[HotlineConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
+    FreshchatConfig *config = [[FreshchatConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                        andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     if([store objectForKey:HOTLINE_DEFAULTS_DOMAIN]){
         config.domain = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];

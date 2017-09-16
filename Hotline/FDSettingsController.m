@@ -181,7 +181,7 @@
 -(void)updateConfigButtonAction:(id)sender{
     NSLog(@"Updating config");
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:self.appIDField.text
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:self.appIDField.text
                                                        andAppKey:self.appKeyField.text];
     config.domain = self.domainField.text;
     [[Hotline sharedInstance]initWithConfig:config];
@@ -207,7 +207,7 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
                                                       andAppKey:[Hotline sharedInstance].config.appKey];
     config.domain = [Hotline sharedInstance].config.domain;
 
