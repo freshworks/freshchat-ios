@@ -87,7 +87,7 @@
 		<key>SubmitButtonTitleFontSize</key>
 		<string>15</string>
 		<key>RatingBarColor</key>
-		<string>FFA500</string>
+		<string>0BA4DB</string>
 		<key>HorizontalLineColor</key>
 		<string>D3D3D3</string>
 		<key>InputTextFontColor</key>
@@ -240,7 +240,7 @@
 		<key>UnreadBadgeFontSize</key>
 		<string>13f</string>
 		<key>ChannelIconPlaceholderBackgroundColor</key>
-		<string>555555</string>
+		<string>3F51B5</string>
 		<key>ChannelIconPlaceholderTextFontSize</key>
 		<string>22.0f</string>
 		<key>ChannelIconPlaceholderTextFontName</key>

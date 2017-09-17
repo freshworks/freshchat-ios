@@ -52,7 +52,7 @@
                                                                      relatedBy:NSLayoutRelationEqual
                                                                         toItem:self.contentView
                                                                      attribute:NSLayoutAttributeWidth
-                                                                    multiplier:0.5
+                                                                    multiplier:0.4
                                                                       constant:0]];
         
         [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
@@ -60,7 +60,7 @@
                                                                      relatedBy:NSLayoutRelationEqual
                                                                         toItem:self.contentView
                                                                      attribute:NSLayoutAttributeHeight
-                                                                    multiplier:0.5
+                                                                    multiplier:0.4
                                                                       constant:0]];
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-|" options:0 metrics:nil views:views]];

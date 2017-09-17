@@ -112,6 +112,7 @@ typedef struct {
 #define YES_NO_PROMPT_HEIGHT 80
 #define KONOTOR_REFRESHINDICATOR_TAG 80
 #define KONOTOR_MESSAGESPERPAGE 25
+#define FRESHCHAT_MESSAGE_BOTTOM_PADDING 10
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -441,6 +442,7 @@ typedef struct {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 100;
+    [self.tableView setContentInset:UIEdgeInsetsMake(0, 0, FRESHCHAT_MESSAGE_BOTTOM_PADDING, 0)];
     self.tableView.rowHeight = UITableViewAutomaticDimension;    
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.view addSubview:self.tableView];
