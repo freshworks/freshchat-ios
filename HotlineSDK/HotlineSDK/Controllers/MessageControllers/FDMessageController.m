@@ -277,7 +277,7 @@ typedef struct {
     [self localNotificationSubscription];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
-    [self processPendingCSAT];    
+    [self processPendingCSAT];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -295,7 +295,7 @@ typedef struct {
     if([FDUtilities canMakeTypicallyRepliesCall] ){
         [self fetchTypicalRepliesIn];
     }
-    else if ([HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]){
+    if ([HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]){
         [self showTypicalReply:[HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]];
     }
 }

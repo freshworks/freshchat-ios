@@ -63,16 +63,12 @@
     [senderNameLabel setScrollEnabled:NO];
     [senderNameLabel setSelectable:NO];
     
-    messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
+    messageSentTimeLabel=[[UILabel alloc] initWithFrame:CGRectZero];
     messageSentTimeLabel.textColor = [[FCTheme sharedInstance] getChatbubbleTimeFontColor];
     [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
-    [messageSentTimeLabel setEditable:NO];
-    [messageSentTimeLabel setSelectable:NO];
-    [messageSentTimeLabel setScrollEnabled:NO];
     messageSentTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    messageSentTimeLabel.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     
     profileImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
     profileImageView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -158,11 +154,11 @@
     //All details are in contentview but no constrains set
     
     
-    NSString *leftPadding = @"(>=10)";
-    NSString *rightPadding = @"10";
+    NSString *leftPadding = @"(>=5)";
+    NSString *rightPadding = @"5";
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[contentEncloser(<=%ld)]-5-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[contentEncloser(>=50)]-2-|" options:0 metrics:nil views:views]];
     //Constraints for profileview and contentEncloser are done.
     
     [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
@@ -197,9 +193,9 @@
     }
     
     if(!currentMessage.isWelcomeMessage) { //Show time for non welcome messages.
-        [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(<=20)]"];
-        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-(>=5)-[messageSentTimeLabel]-1-[uploadStatusImageView(10)]-10-|" options:0 metrics:nil views:views]];
-        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"V:[uploadStatusImageView(10)]-5-|" options:0 metrics:nil views:views]];
+        [veriticalConstraint appendString:@"-5-[messageSentTimeLabel]"];
+        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-(>=10)-[messageSentTimeLabel]-5-[uploadStatusImageView(10)]-10-|" options:0 metrics:nil views:views]];
+        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"V:[uploadStatusImageView(10)]-7-|" options:0 metrics:nil views:views]];
     }
     
     [veriticalConstraint appendString:@"-5-|"];

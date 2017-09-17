@@ -231,7 +231,7 @@ static NSInteger networkIndicator = 0;
             // If < 55 minutes, round off to factor of 5
             min = (int) ceil(minutes / 5) * 5;
         }
-        return [NSString stringWithFormat: @"%@ %d %@",HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN), min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
+        return [NSString stringWithFormat: @"%@ %d %@",HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_X_MIN), min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
     } else if (minutes < 60) {
         return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
     } else if (minutes < 120) {
@@ -354,7 +354,6 @@ static NSInteger networkIndicator = 0;
     }
     return false;
 }
-
 +(BOOL) canMakeSessionCall {
     if(![HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
         return  true;

@@ -38,7 +38,7 @@
 @property (strong, nonatomic) UIImage *userChatBubble;
 @property (strong, nonatomic) UIView* contentEncloser;
 @property (strong, nonatomic) UITextView* senderNameLabel;
-@property (strong, nonatomic) UITextView* messageSentTimeLabel;
+@property (strong, nonatomic) UILabel* messageSentTimeLabel;
 @property (strong, nonatomic) UITextView* messageTextView;
 @property (strong, nonatomic) UIImage* sentImage;
 @property (strong, nonatomic) UIImage* sendingImage;

@@ -25,14 +25,14 @@
 
 - (BOOL) getDefaultLaunchDeeplinkFromNotification {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED] != nil) {
-        return (BOOL) [HLUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
+        return (BOOL) [HLUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
     }
     return YES;
 }
 
 - (int) getDefaultAgentAvatar {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_AGENT_AVATAR_TYPE] != nil) {
-        return (BOOL) [HLUserDefaults getObjectForKey:CONFIG_RC_AGENT_AVATAR_TYPE];
+        return (int)[HLUserDefaults getIntegerForKey:CONFIG_RC_AGENT_AVATAR_TYPE];
     }
     return 1;
 }
@@ -44,9 +44,9 @@
     return 1.25;
 }
 
-- (float) getDefaultActiveConvWindow {
+- (long) getDefaultActiveConvWindow {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] != nil) {
-        return (long) [HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
+        return (long)[HLUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
     }
     return 3 * ONE_DAY_IN_MS;
 }

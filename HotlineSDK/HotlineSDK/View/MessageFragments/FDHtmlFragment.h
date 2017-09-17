@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Fragment.h"
 
-@interface FDHtmlFragment : UILabel
+@interface FDHtmlFragment : UITextView
     -(id) initWithFragment: (FragmentData *) fragment;
 @end

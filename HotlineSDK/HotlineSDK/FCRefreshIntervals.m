@@ -41,61 +41,61 @@
     switch (type) {
         case responseTimeExpectationsFetchInterval:
             if ([HLUserDefaults getObjectForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL] != nil ) {
-                return (long) [HLUserDefaults getObjectForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
+                return (long) [HLUserDefaults getLongForKey:CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
             }
             return 5 * ONE_MINUTE_IN_MS;
             break;
         case remoteConfigFetchInterval:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_API_FETCH_INTERVAL] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_API_FETCH_INTERVAL];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_API_FETCH_INTERVAL];
             }
             return ONE_HOUR_IN_MS;
             break;
         case activeConvMinFetchInterval:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL];
             }
             return 20 * ONE_SECONDS_IN_MS;
             break;
         case activeConvMaxFetchInterval:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL];
             }
             return 60 * ONE_SECONDS_IN_MS;
             break;
         case msgFetchIntervalNormal:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL];
             }
             return 30 * ONE_SECONDS_IN_MS;
             break;
         case msgFetchIntervalLaidback:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK];
             }
             return 60 * ONE_SECONDS_IN_MS;
             break;
         case faqFetchIntervalNormal:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL];
             }
             return 5 * ONE_MINUTE_IN_MS;
             break;
         case faqFetchIntervalLaidback:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK];
             }
             return 2 * ONE_DAY_IN_MS;
             break;
         case channelsFetchIntervalNormal:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL];
             }
             return 5 * ONE_MINUTE_IN_MS;
             break;
         case channelsFetchIntervalLaidback:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK] != nil) {
-                return (long)[HLUserDefaults getObjectForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];
+                return (long)[HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];
             }
             return 2 * ONE_DAY_IN_MS;
             break;
