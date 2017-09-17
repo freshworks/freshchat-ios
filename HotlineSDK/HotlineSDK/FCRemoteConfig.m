@@ -37,14 +37,14 @@
 
 -(BOOL) getDefaultAccountActive {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE] != nil) {
-        return (BOOL) [HLUserDefaults getBoolForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
+        return [HLUserDefaults getBoolForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
     }
     return YES;
 }
 
 - (long) getDefaultSessionTimeOutInterval {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {
-        return (long) [HLUserDefaults getLongForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
+        return [HLUserDefaults getLongForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
     }
     return 30 * ONE_MINUTE_IN_MS;
 }

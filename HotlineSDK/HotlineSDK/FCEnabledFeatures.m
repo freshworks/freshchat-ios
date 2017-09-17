@@ -25,7 +25,7 @@
     self = [super init];
     if (self) {
         self.faqEnabled = [self getDefaultValue:faq];
-        self.inboxEnabled = [self getDefaultValue:autoCampaigns];
+        self.inboxEnabled = [self getDefaultValue:inbox];
         self.autoCampaignsEnabled = [self getDefaultValue:autoCampaigns];
         self.manualCampaignsEnabled = [self getDefaultValue:manualCampaigns];
         self.userEventsEnabled = [self getDefaultValue:userEvents];
@@ -39,43 +39,43 @@
     switch (type) {
         case faq:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_FAQ_ENABLED];
             }
             return YES;
             break;
         case inbox:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_INBOX_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_INBOX_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_INBOX_ENABLED];
             }
             return YES;
             break;
         case autoCampaigns:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_AUTO_CAMPAIGNS_ENABLED];
             }
             return NO;
             break;
         case manualCampaigns:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED];
             }
             return NO;
             break;
         case userEvents:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_USER_EVENTS_ENABLED];
             }
             return NO;
             break;
         case aotUserCreate:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
             }
             return NO;
             break;
         case showCustomBrandBanner:
             if ([[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED] != nil ) {
-                return (BOOL) [[FDSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
+                return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_CUSTOM_BRAND_BANNER_ENABLED];
             }
             return YES;
             break;

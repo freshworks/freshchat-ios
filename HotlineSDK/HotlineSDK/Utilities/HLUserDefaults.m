@@ -13,8 +13,21 @@
 
 +(void)setObject:(id)object forKey:(NSString *)key{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:object forKey:key];
+    [defaults setObject:object forKey:key];
     [defaults synchronize];
+}
+
++ (void) setDictionary : (NSMutableDictionary *)dictionary forKey : (NSString *)key {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:dictionary] forKey:key];
+    [defaults synchronize];
+}
+
++ (NSDictionary *) getDictionary : (NSString *)key {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSData *dictData = [defaults objectForKey:key];
+    NSDictionary *retrievedDictionary = [NSKeyedUnarchiver unarchiveObjectWithData:dictData];
+    return retrievedDictionary;
 }
 
 + (void) setArray : (NSMutableArray *)array forKey : (NSString *)key{
@@ -24,9 +37,10 @@
 }
 
 +(id)getObjectForKey:(NSString *)key{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];    
     return [defaults objectForKey:key];
 }
+
 
 +(void)removeObjectForKey:(NSString *)key{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

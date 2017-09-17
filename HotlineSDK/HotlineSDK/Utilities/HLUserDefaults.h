@@ -70,6 +70,9 @@
 
 + (void) setArray : (NSMutableArray *)array forKey : (NSString *)key;
 
++ (void) setDictionary : (NSMutableDictionary *)dictionary forKey : (NSString *)key;
++ (NSDictionary *) getDictionary:(NSString *)key;
+
 +(void)removeObjectForKey:(NSString *)key;
 
 +(void)clearUserDefaults;

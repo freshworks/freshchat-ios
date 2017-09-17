@@ -25,7 +25,7 @@
 
 - (BOOL) getDefaultLaunchDeeplinkFromNotification {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED] != nil) {
-        return (BOOL) [HLUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
+        return [HLUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
     }
     return YES;
 }
@@ -46,7 +46,7 @@
 
 - (long) getDefaultActiveConvWindow {
     if ([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] != nil) {
-        return (long)[HLUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
+        return [HLUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
     }
     return 3 * ONE_DAY_IN_MS;
 }
@@ -67,7 +67,7 @@
 }
 
 - (void) updateActiveConvFetchBackOffRatio:(float) activeConvFetchBackoffRatio {
-    [HLUserDefaults setBool:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    [HLUserDefaults setFloat:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
     self.activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
 

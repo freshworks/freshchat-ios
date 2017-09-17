@@ -294,9 +294,18 @@ typedef struct {
     [self.messagesPoller begin];
     if([FDUtilities canMakeTypicallyRepliesCall] ){
         [self fetchTypicalRepliesIn];
+    } else {
+        [self updateTypicalReplies];
     }
-    if ([HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]){
-        [self showTypicalReply:[HLUserDefaults getIntegerForKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE]];
+}
+
+-(void) updateTypicalReplies {
+    NSDictionary *typReplyDict = [HLUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+    if (typReplyDict != nil) {
+        NSNumber *currentChannelTime = typReplyDict[self.channel.channelID];
+        if (currentChannelTime != nil) {
+            [self showTypicalReply:[currentChannelTime integerValue]];
+        }
     }
 }
 
@@ -308,14 +317,15 @@ typedef struct {
                 NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
                 if(channelsInfo[@"channelResponseTime"] != nil) {
                     NSArray *convArr = channelsInfo[@"channelResponseTime"];
+                    NSMutableDictionary *typReplyDict = [[NSMutableDictionary alloc]init];
                     for (int i = 0; i < [convArr count]; i++) {
                         NSDictionary* item = [convArr objectAtIndex:i];
-                        if ([item[@"channelId"] integerValue] == [self.channel.channelID integerValue]) {
-                            [self showTypicalReply:[item[@"responseTime"] integerValue]];
-                            [HLUserDefaults setIntegerValue:[item[@"responseTime"] integerValue] forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
-                            break;
-                        }
+                        NSNumber *responseTime = item[@"responseTime"];
+                        NSNumber *channelId = item[@"channelId"];
+                        [typReplyDict setObject:responseTime forKey:channelId];
                     }
+                    [HLUserDefaults setDictionary:typReplyDict forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+                    [self updateTypicalReplies];
                 }
             } else {
                 [self hideTypicalReply];
@@ -323,7 +333,6 @@ typedef struct {
         });
     }];
 }
-
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
