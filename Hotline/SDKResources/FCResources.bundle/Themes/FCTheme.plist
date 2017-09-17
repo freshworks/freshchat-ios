@@ -139,21 +139,21 @@
 	<key>ChatBubbleInsets</key>
 	<dict>
 		<key>AgentBubbleTop</key>
-		<string>15</string>
+		<string>10</string>
 		<key>AgentBubbleLeft</key>
-		<string>20</string>
+		<string>10</string>
 		<key>AgentBubbleBottom</key>
-		<string>20</string>
+		<string>10</string>
 		<key>AgentBubbleRight</key>
-		<string>15</string>
+		<string>10</string>
 		<key>UserBubbleTop</key>
-		<string>15</string>
+		<string>10</string>
 		<key>UserBubbleLeft</key>
-		<string>15</string>
+		<string>10</string>
 		<key>UserBubbleBottom</key>
-		<string>15</string>
+		<string>10</string>
 		<key>UserBubbleRight</key>
-		<string>15</string>
+		<string>10</string>
 	</dict>
 	<key>Dialogues</key>
 	<dict>
