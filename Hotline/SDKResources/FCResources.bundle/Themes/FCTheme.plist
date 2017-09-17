@@ -139,21 +139,21 @@
 	<key>ChatBubbleInsets</key>
 	<dict>
 		<key>AgentBubbleTop</key>
-		<string>3</string>
+		<string>15</string>
 		<key>AgentBubbleLeft</key>
-		<string>7</string>
+		<string>20</string>
 		<key>AgentBubbleBottom</key>
-		<string>4</string>
+		<string>20</string>
 		<key>AgentBubbleRight</key>
-		<string>6</string>
+		<string>15</string>
 		<key>UserBubbleTop</key>
-		<string>3</string>
+		<string>15</string>
 		<key>UserBubbleLeft</key>
-		<string>6</string>
+		<string>15</string>
 		<key>UserBubbleBottom</key>
-		<string>4</string>
+		<string>15</string>
 		<key>UserBubbleRight</key>
-		<string>7</string>
+		<string>15</string>
 	</dict>
 	<key>Dialogues</key>
 	<dict>
@@ -366,9 +366,9 @@
 		<key>AttachmentUpload</key>
 		<string>FCResources.bundle/Images/hotline_upload</string>
 		<key>BubbleRight</key>
-		<string>FCResources.bundle/Images/freshchat_bubble_right</string>
-		<key>BubbleLeft</key>
 		<string>FCResources.bundle/Images/freshchat_bubble_left</string>
+		<key>BubbleLeft</key>
+		<string>FCResources.bundle/Images/freshchat_bubble_right</string>
 		<key>AudioToolbarCancel</key>
 		<string>FCResources.bundle/Images/hotline_cancel</string>
 		<key>Mic</key>

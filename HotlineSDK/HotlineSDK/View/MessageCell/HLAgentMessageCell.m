@@ -140,17 +140,17 @@
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
     [views setObject:self.contentEncloser forKey:@"contentEncloser"];
     [views setObject:self.chatBubbleImageView forKey:@"chatBubbleImageView"];
-    int senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
-    self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
+    //int senderNameHeight = self.senderNameLabel.intrinsicContentSize.height;
+    //self.senderLabelHeight = [FDAutolayoutHelper setHeight:senderNameHeight forView:self.senderNameLabel inView:self.contentEncloser];
     FDParticipant *participant = [FDParticipant fetchParticipantForAlias:currentMessage.messageUserAlias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     if(self.agentName.length >0){
         senderNameLabel.text = self.agentName;
     }
-    self.senderLabelHeight.constant =senderNameHeight;
+    //self.senderLabelHeight.constant =senderNameHeight;
     [contentEncloser addSubview:chatBubbleImageView];
-    [contentEncloser addSubview:senderNameLabel];
     [views setObject:self.senderNameLabel forKey:@"senderLabel"];
-    
+    [self.contentView addSubview:senderNameLabel];
+
     if(showsProfile){
         profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
         
@@ -236,16 +236,27 @@
     
     
     NSString *leftPadding = @"10";
-    NSString *rightPadding = @"(>=5)";
+    NSString *rightPadding = @"(>=10)";
     
     if(showsProfile) {
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImageView(40)]-5-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(==40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
+        if(showsSenderName) {
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(==40)]-5-[senderLabel(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
+        }
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[profileImageView(40)]" options:0 metrics:nil views:views]];
     } else {
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
-   
+        if(showsSenderName) {
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[senderLabel(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
+        }
     }
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+    
+    
+    if(showsSenderName) {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[senderLabel]-5-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+    } else {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+    }
     //Constraints for profileview and contentEncloser are done.
     
     [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
@@ -254,7 +265,7 @@
     
     
     
-    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|-4-[senderLabel]"];
+    NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|"];
     for(int i=0;i<fragmensViewArr.count;i++) { //Set Constraints here
         NSString *str = fragmensViewArr[i];
         if([str containsString:@"image_"]) {
@@ -286,7 +297,6 @@
         [veriticalConstraint appendString:@"-5-[messageSentTimeLabel(<=20)]"];
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-5-[messageSentTimeLabel]-(>=5)-|" options:0 metrics:nil views:views]];
     }
-    [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[senderLabel]-7-|" options:0 metrics:nil views:views]];
     [veriticalConstraint appendString:@"-5-|"];
     //Constraints for details inside contentEncloser is done.
     if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {

@@ -158,7 +158,7 @@
     //All details are in contentview but no constrains set
     
     
-    NSString *leftPadding = @"(>=5)";
+    NSString *leftPadding = @"(>=10)";
     NSString *rightPadding = @"10";
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[contentEncloser(<=%ld)]-5-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];

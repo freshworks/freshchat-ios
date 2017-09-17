@@ -21,7 +21,7 @@
             self.contentMode = UIViewContentModeScaleAspectFit;
             self.translatesAutoresizingMaskIntoConstraints = NO;
             self.clipsToBounds = YES;
-            self.backgroundColor = [UIColor whiteColor];
+            self.backgroundColor = [UIColor clearColor];
             self.userInteractionEnabled = YES;
             NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
