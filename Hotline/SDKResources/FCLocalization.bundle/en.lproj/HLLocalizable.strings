@@ -67,7 +67,7 @@
 "long_audio_alert_post_button_text" = "Send it";
 
 /* Search View Place Holder */
-"search_placeholder_text"="Discover answers to your questions";
+"search_placeholder_text"="Search FAQs";
 "search_empty_result_text"="Whoops! We couldn't find what you were looking for.";
 "empty_channel_text" = "Oops, no message channels here!";
 "empty_faq_text" = "Sorry! There are no FAQs available";

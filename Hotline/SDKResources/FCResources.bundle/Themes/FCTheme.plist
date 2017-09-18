@@ -360,55 +360,55 @@
 	<key>Images</key>
 	<dict>
 		<key>NotificationCancel</key>
-		<string>FCResources.bundle/Images/hotline_notification_cancel</string>
+		<string>FCResources.bundle/Images/freshchat_notification_cancel</string>
 		<key>Search</key>
-		<string>FCResources.bundle/Images/hotline_search</string>
+		<string>FCResources.bundle/Images/freshchat_search</string>
 		<key>ContactUsIcon</key>
-		<string>FCResources.bundle/Images/hotline_contact_us_icon</string>
+		<string>FCResources.bundle/Images/freshchat_contact_us_icon</string>
 		<key>ContactUsLightIcon</key>
-		<string>FCResources.bundle/Images/hotline_contact_us_light_icon</string>
+		<string>FCResources.bundle/Images/freshchat_contact_us_light_icon</string>
 		<key>BackButton</key>
-		<string>FCResources.bundle/Images/hotline_back_button</string>
+		<string>FCResources.bundle/Images/freshchat_back_button</string>
 		<key>AttachmentUpload</key>
-		<string>FCResources.bundle/Images/hotline_upload</string>
+		<string>FCResources.bundle/Images/freshchat_upload</string>
 		<key>BubbleRight</key>
 		<string>FCResources.bundle/Images/freshchat_bubble_right</string>
 		<key>BubbleLeft</key>
 		<string>FCResources.bundle/Images/freshchat_bubble_left</string>
 		<key>AudioToolbarCancel</key>
-		<string>FCResources.bundle/Images/hotline_cancel</string>
+		<string>FCResources.bundle/Images/freshchat_cancel</string>
 		<key>Mic</key>
-		<string>FCResources.bundle/Images/hotline_mic</string>
+		<string>FCResources.bundle/Images/freshchat_mic</string>
 		<key>Send</key>
-		<string>FCResources.bundle/Images/hotline_send</string>
+		<string>FCResources.bundle/Images/freshchat_send</string>
 		<key>MessageSending</key>
-		<string>FCResources.bundle/Images/hotline_sending</string>
+		<string>FCResources.bundle/Images/freshchat_sending</string>
 		<key>MessageSent</key>
-		<string>FCResources.bundle/Images/hotline_sent</string>
+		<string>FCResources.bundle/Images/freshchat_sent</string>
 		<key>ImagePlaceholder</key>
-		<string>FCResources.bundle/Images/hotline_image_placeholder</string>
+		<string>FCResources.bundle/Images/freshchat_image_placeholder</string>
 		<key>UserAvatarImage</key>
-		<string>FCResources.bundle/Images/hotline_avatar_image_user</string>
+		<string>FCResources.bundle/Images/freshchat_avatar_image_user</string>
 		<key>AgentAvatarImage</key>
-		<string>FCResources.bundle/Images/hotline_avatar_image_agent</string>
+		<string>FCResources.bundle/Images/freshchat_avatar_image_agent</string>
 		<key>AudioMessagePlayButton</key>
-		<string>FCResources.bundle/Images/hotline_play</string>
+		<string>FCResources.bundle/Images/freshchat_play</string>
 		<key>AudioMessageStopButton</key>
-		<string>FCResources.bundle/Images/hotline_stop</string>
+		<string>FCResources.bundle/Images/freshchat_stop</string>
 		<key>AudioProgessBarMin</key>
-		<string>FCResources.bundle/Images/hotline_audio_progess_min</string>
+		<string>FCResources.bundle/Images/freshchat_audio_progess_min</string>
 		<key>AudioProgessBarMax</key>
-		<string>FCResources.bundle/Images/hotline_audio_progess_max</string>
+		<string>FCResources.bundle/Images/freshchat_audio_progess_max</string>
 		<key>TableViewAccessoryIcon</key>
-		<string>FCResources.bundle/Images/hotline_right_arrow</string>
+		<string>FCResources.bundle/Images/freshchat_right_arrow</string>
 		<key>EmptySearchImage</key>
-		<string>FCResources.bundle/Images/hotline_empty_search_icon</string>
+		<string>FCResources.bundle/Images/freshchat_empty_search_icon</string>
 		<key>CloseImagePreview</key>
-		<string>FCResources.bundle/Images/hotline_close_image_preview</string>
+		<string>FCResources.bundle/Images/freshchat_close_image_preview</string>
 		<key>ChannelImage</key>
-		<string>FCResources.bundle/Images/hotline_channels_image</string>
+		<string>FCResources.bundle/Images/freshchat_channels_image</string>
 		<key>FAQImage</key>
-		<string>FCResources.bundle/Images/hotline_faq_image</string>
+		<string>FCResources.bundle/Images/freshchat_faq_image</string>
 		<key>ConversationBGImage</key>
 		<string>FCResources.bundle/Images/freshchar_conv_bg</string>
 	</dict>
