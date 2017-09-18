@@ -1,0 +1,1 @@
+../../../FreshchatSDK/FreshchatSDK/Freshchat.h

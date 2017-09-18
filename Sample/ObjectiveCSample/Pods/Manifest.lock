@@ -1,0 +1,22 @@
+PODS:
+  - FreshchatSDK (1.0.0)
+
+DEPENDENCIES:
+  - FreshchatSDK (from `https://github.com/freshdesk/freshchat-ios`, branch `canary`)
+
+EXTERNAL SOURCES:
+  FreshchatSDK:
+    :branch: canary
+    :git: https://github.com/freshdesk/freshchat-ios
+
+CHECKOUT OPTIONS:
+  FreshchatSDK:
+    :commit: e8de97c0823a9d4c4f8bdc7e626e88112af6448e
+    :git: https://github.com/freshdesk/freshchat-ios
+
+SPEC CHECKSUMS:
+  FreshchatSDK: bd332383736c19bc5b14b6751ecad2e2f8552702
+
+PODFILE CHECKSUM: 377616cd2dd46b396ded89c6596f75e98ff5ee6f
+
+COCOAPODS: 1.2.1

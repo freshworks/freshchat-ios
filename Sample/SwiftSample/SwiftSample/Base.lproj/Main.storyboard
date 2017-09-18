@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SwiftSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="freschat_name" translatesAutoresizingMaskIntoConstraints="NO" id="Qb9-6P-16i">
+                                <rect key="frame" x="87.5" y="70" width="200" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="NJH-dE-Xn2"/>
+                                    <constraint firstAttribute="width" constant="200" id="NeO-Km-akc"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hIu-1C-e18">
+                                <rect key="frame" x="112.5" y="207" width="150" height="70"/>
+                                <color key="backgroundColor" red="0.27476364374160767" green="0.64286965131759644" blue="0.92501121759414673" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="Hlk-mC-5bp"/>
+                                    <constraint firstAttribute="width" constant="150" id="fSm-rZ-gzK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Show FAQs">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" red="0.36470588240000001" green="0.39607843139999999" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="showFAQs:" destination="BYZ-38-t0r" eventType="touchDown" id="4Ts-Rt-ncg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t0C-oS-jNM">
+                                <rect key="frame" x="87" y="350" width="200" height="70"/>
+                                <color key="backgroundColor" red="0.2747636437" green="0.64286965129999996" blue="0.92501121760000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="UJQ-Dv-BaE"/>
+                                    <constraint firstAttribute="height" constant="70" id="hhC-ig-abo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Show Conversations">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" red="0.36470588240000001" green="0.39607843139999999" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="showConversations:" destination="BYZ-38-t0r" eventType="touchDown" id="UtA-YW-F9O"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="hIu-1C-e18" firstAttribute="top" secondItem="Qb9-6P-16i" secondAttribute="bottom" constant="87" id="CIx-V5-mkK"/>
+                            <constraint firstItem="Qb9-6P-16i" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GwV-5s-v61"/>
+                            <constraint firstItem="Qb9-6P-16i" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="LmV-2v-C97"/>
+                            <constraint firstItem="t0C-oS-jNM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="eLs-BM-XQc"/>
+                            <constraint firstItem="hIu-1C-e18" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ety-qK-2G4"/>
+                            <constraint firstItem="t0C-oS-jNM" firstAttribute="top" secondItem="hIu-1C-e18" secondAttribute="bottom" constant="73" id="gUJ-N3-hO4"/>
+                            <constraint firstItem="Qb9-6P-16i" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="z4y-cg-wCa"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="LmV-2v-C97"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="freschat_name" width="708" height="160"/>
+    </resources>
+</document>
