@@ -188,7 +188,7 @@ static float height = 0;
     }
 }
 
-+(UIImage *)generateImageForLabel:(NSString *)labelText{
++(UIImage *)generateImageForLabel:(NSString *)labelText withColor :(UIColor *)color{
     FCTheme *theme = [FCTheme sharedInstance];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     NSString *firstLetter = [labelText substringToIndex:1];
@@ -197,7 +197,7 @@ static float height = 0;
     label.font = [theme channelIconPlaceholderImageCharFont];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [theme channelIconPalceholderImageBackgroundColor];
+    label.backgroundColor = color;
     label.layer.cornerRadius = label.frame.size.height / 8.0f;
     label.clipsToBounds = YES;
     

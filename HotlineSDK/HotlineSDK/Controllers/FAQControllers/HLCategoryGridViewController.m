@@ -221,7 +221,7 @@
         cell.layer.borderColor=[self.theme gridViewCellBorderColor].CGColor;
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
-            cell.imageView.image = [FDCell generateImageForLabel:category.title];
+            cell.imageView.image = [FDCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
         }

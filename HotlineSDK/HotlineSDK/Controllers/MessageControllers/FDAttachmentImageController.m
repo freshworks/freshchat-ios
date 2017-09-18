@@ -12,6 +12,8 @@
 #import "FDBarButtonItem.h"
 #import "FCTheme.h"
 #import "HLLocalization.h"
+#import "FDAutolayoutHelper.h"
+#import "FDLocalNotification.h"
 
 @interface FDAttachmentImageController ()
 
@@ -35,6 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNavigationItem];
+    self.navigationItem.title = HLLocalizedString(LOC_PIC_MSG_ATTACHMENT_TITLE_TEXT);
     self.view.backgroundColor = [UIColor whiteColor];
     self.imageView = [[UIImageView alloc]initWithImage:self.image];
     self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -122,6 +125,11 @@
 
 
 -(void)setNavigationItem{
+    
+    self.navigationController.navigationBar.titleTextAttributes = @{
+                                                                    NSForegroundColorAttributeName: [[FCTheme sharedInstance] navigationBarTitleColor],
+                                                                    NSFontAttributeName: [[FCTheme sharedInstance] navigationBarTitleFont]
+                                                                    };
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:HLLocalizedString(LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN) style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
     

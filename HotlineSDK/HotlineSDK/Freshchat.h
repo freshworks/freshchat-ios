@@ -24,16 +24,16 @@ enum TagFilterType {
 
 /*
  * App ID of your App. This is used to identify the SDK for your app to freshchat.com.
- * Please see API & App under Settings ( https://web.hotline.io/settings/apisdk ) to get your App ID.
+ * Please see API & App under Settings ( https://web.freshchat.com/settings/apisdk ) to get your App ID.
  */
 @property (strong, nonatomic) NSString *appID;
 /*
  * App Key of your App. This is used to authenticate the SDK for your app to freshchat.io.
- * Please see API & App under Settings ( https://web.hotline.io/settings/apisdk ) to get your App Key.
+ * Please see API & App under Settings ( https://web.freshchat.com/settings/apisdk ) to get your App Key.
  */
 @property (strong, nonatomic) NSString *appKey;
 /*
- * Domain for freshchat. Do not change this. Set to "https://app.konotor.com" if you are migrating from Konotor
+ * Domain for freshchat. Do not change this.
  */
 @property (strong, nonatomic) NSString *domain;
 /*
@@ -154,14 +154,6 @@ enum TagFilterType {
 /**
  *  Clear User Data
  *
- *  @discussion Use this function when your user needs to log out of the app . 
- *  This will clean up all the data associated with the SDK for the user.
- *
- */
--(void)resetUser __attribute__((deprecated("Please use resetUserWithCompletion: instead")));
-/**
- *  Clear User Data
- *
  *  @discussion Use this function when your user needs to log out of the app .
  *  This will clean up all the data associated with the SDK for the user.
  *  Please use the completion block if you are updating user information or subsequently calling init 
@@ -277,11 +269,6 @@ enum TagFilterType {
 -(void)updateConversationBannerMessage:(NSString *)message;
 
 /**
- *  Send message to particular channel with specified tag value
- */
--(void) sendMessage:(FreshchatMessage *)messageObject;
-
-/**
  *  Dismiss SDK for deeplink screens
  */
 -(void) dismissFreshchatViews;
@@ -345,19 +332,6 @@ enum TagFilterType {
  * Default set to NO which hides "contact us" button on the navigation bar
  */
 @property (nonatomic) BOOL showContactUsOnAppBar;
-
-/**
- *  Show Filtered articles list
- *
- *  @discussion This method lets you to launch and present a controller with the list of articles filtered by the tags supplied
- *
- *  @param List of tags that are configured already the portal
- *
- *  @param Controller's navigation bar title
- *
- */
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title __attribute__((deprecated("Please use filterByTags:withTitle:andType: with TagFilterType.ARTICLE for same result")));
-
 /**
  *  @discussion This method lets you to filter the list of Categories or Articles by tags
  *

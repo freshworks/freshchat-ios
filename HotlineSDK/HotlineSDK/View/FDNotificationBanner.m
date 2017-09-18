@@ -168,7 +168,7 @@
     if (channel.icon) {
         self.imgView.image = [UIImage imageWithData:channel.icon];
     }else{
-        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
+        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPalceholderImageBackgroundColor]];
         self.imgView.image = placeholderImage;
     }
     

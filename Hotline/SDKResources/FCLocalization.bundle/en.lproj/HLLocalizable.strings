@@ -83,6 +83,7 @@
 
 /* Picture attached*/
 "pic_msg_attachment_close_btn"="Back";
+"pic_msg_attachment_title_text"="Picture";
 
 /*Image Attachment*/
 "image_attachment_cancel_button_text"="Cancel";

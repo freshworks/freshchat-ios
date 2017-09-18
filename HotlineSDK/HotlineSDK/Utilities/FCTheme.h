@@ -162,6 +162,10 @@
 -(UIColor *)gridViewCellBackgroundColor;
 -(UIColor *)gridViewImageBackgroundColor;
 -(UIColor *) gridViewCellBorderColor;
+-(UIColor *) faqPlaceholderIconBackgroundColor;
+-(UIFont *) faqPlaceholderIconFontName;
+-(UIColor *)faqListViewTitleFontColor;
+-(UIFont *)faqListViewTitleFont;
 
 //Conversation List View
 -(UIColor *)channelListCellBackgroundColor;

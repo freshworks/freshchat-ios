@@ -130,7 +130,7 @@
         cell.layer.borderWidth = 0.5f;
         cell.layer.borderColor = [self.theme tableViewCellSeparatorColor].CGColor;
         if(!category.icon){
-            cell.imgView.image = [FDCell generateImageForLabel:category.title];
+            cell.imgView.image = [FDCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
         }
         else{
             cell.imgView.image = [UIImage imageWithData:category.icon];

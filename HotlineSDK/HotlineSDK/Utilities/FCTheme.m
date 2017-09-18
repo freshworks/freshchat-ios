@@ -587,29 +587,45 @@
 
 #pragma mark - Grid View
 -(UIColor *)gridViewCellBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.BorderColor"];
+    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewBorderColor"];
     return color ? color : [FCTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
 }
 
 
 #pragma mark - Grid View Cell
 -(UIFont *)gridViewCellTitleFont{
-    return [self getFontWithKey:@"GridViewCell.Title" andDefaultSize:14];
+    return [self getFontWithKey:@"FAQUI.GridViewTitle" andDefaultSize:14];
 }
 
 -(UIColor *)gridViewCellTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.TitleFontColor"];
+    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewTitleFontColor"];
     return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIColor *)gridViewCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.BackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewBackgroundColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)gridViewImageBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"GridViewCell.ImageViewBackgroundColor"];
+    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewImageViewBackgroundColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *) faqPlaceholderIconBackgroundColor{
+    UIColor *color = [self getColorForKeyPath:@"FAQUI.PlaceholderIconBackgroundColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLUE];
+}
+-(UIFont *) faqPlaceholderIconFont{
+    return [self getFontWithKey:@"FAQUI.PlaceholderIconFont" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)faqListViewTitleFontColor{
+    UIColor *color = [self getColorForKeyPath:@"FAQUI.ListViewTitleFontColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLUE];
+}
+-(UIFont *)faqListViewTitleFont{
+    return [self getFontWithKey:@"FAQUI.PlaceholderIconFont" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 #pragma mark - Conversation Banner
@@ -719,7 +735,7 @@
 #pragma mark - Voice Recording Prompt
 
 -(UIFont *)voiceRecordingTimeLabelFont{
-    return [self getFontWithKey:@"GridViewCell.CategoryTitle" andDefaultSize:13];
+    return [self getFontWithKey:@"FAQUI.GridViewCategoryTitle" andDefaultSize:13];
 }
 
 -(NSString *)getCssFileContent:(NSString *)key{

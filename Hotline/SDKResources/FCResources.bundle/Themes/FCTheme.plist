@@ -238,7 +238,7 @@
 		<key>UnreadBadgeFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>UnreadBadgeFontSize</key>
-		<string>13f</string>
+		<string>13.0f</string>
 		<key>ChannelIconPlaceholderBackgroundColor</key>
 		<string>3F51B5</string>
 		<key>ChannelIconPlaceholderTextFontSize</key>
@@ -336,20 +336,26 @@
 		<key>TitleFontSize</key>
 		<string>14.0f</string>
 	</dict>
-	<key>GridViewCell</key>
+	<key>FAQUI</key>
 	<dict>
-		<key>TitleFontColor</key>
+		<key>GridViewTitleFontColor</key>
 		<string>222222</string>
-		<key>TitleFontName</key>
+		<key>GridViewTitleFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
-		<key>TitleFontSize</key>
+		<key>GridViewTitleFontSize</key>
 		<string>14.0f</string>
-		<key>ImageViewBackgroundColor</key>
+		<key>GridViewImageViewBackgroundColor</key>
 		<string>FFFFFF</string>
-		<key>BorderColor</key>
+		<key>GridViewBorderColor</key>
 		<string>F2F2F2</string>
-		<key>BackgroundColor</key>
+		<key>GridViewBackgroundColor</key>
 		<string>FFFFFF</string>
+		<key>PlaceholderIconBackgroundColor</key>
+		<string>535353</string>
+		<key>PlaceholderIconFontSize</key>
+		<string>22.0f</string>
+		<key>PlaceholderIconFontName</key>
+		<string>SYS_DEFAULT_FONT_NAME</string>
 	</dict>
 	<key>Images</key>
 	<dict>
@@ -366,9 +372,9 @@
 		<key>AttachmentUpload</key>
 		<string>FCResources.bundle/Images/hotline_upload</string>
 		<key>BubbleRight</key>
-		<string>FCResources.bundle/Images/freshchat_bubble_left</string>
-		<key>BubbleLeft</key>
 		<string>FCResources.bundle/Images/freshchat_bubble_right</string>
+		<key>BubbleLeft</key>
+		<string>FCResources.bundle/Images/freshchat_bubble_left</string>
 		<key>AudioToolbarCancel</key>
 		<string>FCResources.bundle/Images/hotline_cancel</string>
 		<key>Mic</key>

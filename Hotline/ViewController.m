@@ -289,7 +289,7 @@
 
 - (IBAction)sendMessage:(id)sender{
     FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
-    [[Freshchat sharedInstance] sendMessage:userMessage];
+    //[[Freshchat sharedInstance] sendMessage:userMessage]; //api is hidden currently
 }
 
 - (IBAction)switchAction:(id)sender {

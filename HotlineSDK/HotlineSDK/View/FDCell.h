@@ -26,7 +26,7 @@
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier isChannelCell:(BOOL)isChannelCell;
 
-+(UIImage *)generateImageForLabel:(NSString *)labelText;
++(UIImage *)generateImageForLabel:(NSString *)labelText withColor :(UIColor *)color;
 
 -(void)adjustPadding;
 

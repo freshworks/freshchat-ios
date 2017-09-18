@@ -285,7 +285,7 @@
                 cell.imgView.image = [UIImage imageWithData:channel.icon];
             }
             else{
-                UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
+                UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPalceholderImageBackgroundColor]];
                 NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
                 if(iconURL){
                     if (cell.tag == indexPath.row) {
