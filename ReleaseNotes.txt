@@ -1,0 +1,9 @@
+
+Ver 1.0.0 
+__________________________
+"Modern messaging software that your sales and customer engagement teams will love"
+Features :
+- Offline FAQs.
+- Message Channels.
+- Campaign Messages.
+- Customer Satisfaction Survey for Channels.
