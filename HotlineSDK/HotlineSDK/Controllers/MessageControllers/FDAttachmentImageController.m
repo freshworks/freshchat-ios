@@ -56,7 +56,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[inputToolbar]-0-|" options:0 metrics:nil views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(<=100)]-0-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(>=43)]-0-|" options:0 metrics:nil views:views]];
     [self localNotificationSubscription];
     
 }
@@ -76,7 +76,7 @@
 }
 
 -(void)setHeightForTextView:(UITextView *)textView{
-    CGFloat NUM_OF_LINES = 5;
+    CGFloat NUM_OF_LINES = 2;
     CGFloat MAX_HEIGHT = textView.font.lineHeight * NUM_OF_LINES;    
     CGFloat preferredTextViewHeight = 0;
     CGFloat messageHeight = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, CGFLOAT_MAX)].height;
