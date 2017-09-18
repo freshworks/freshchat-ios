@@ -38,7 +38,7 @@
     participant.firstName      = [participantInfo valueForKey: @"firstName"];
     participant.lastName       = [participantInfo valueForKey: @"lastName"];
     participant.alias          = [participantInfo valueForKey: @"alias"] ? [participantInfo valueForKey: @"alias"] :@"";
-    participant.profilePicURL  = [participantInfo valueForKey: @"profilePicURL"];
+    participant.profilePicURL  = [participantInfo valueForKey: @"profilePicUrl"];
     return participant;
 }
 
