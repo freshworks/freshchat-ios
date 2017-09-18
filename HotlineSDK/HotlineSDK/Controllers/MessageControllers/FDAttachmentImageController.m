@@ -59,7 +59,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[inputToolbar]-0-|" options:0 metrics:nil views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(>=43)]-0-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(43)]-0-|" options:0 metrics:nil views:views]];
     [self localNotificationSubscription];
     
 }

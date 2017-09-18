@@ -577,7 +577,7 @@ static HLNotificationHandler *handleUpdateNotification;
     NSMutableDictionary *data1 = [pMessage convertMessageToDictionary];
     data1[@"conversationId"] = conversation.conversationAlias;
     data1[@"channelId"] = channel.channelID;
-    data1[@"src"] = @2;
+    data1[@"source"] = @2;
     
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     NSData *userData = [NSJSONSerialization dataWithJSONObject:data1 options:NSJSONWritingPrettyPrinted error:nil];

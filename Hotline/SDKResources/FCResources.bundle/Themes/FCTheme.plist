@@ -23,11 +23,11 @@
 		<key>ActionButtonTextColor</key>
 		<string>000000</string>
 		<key>ActionButtonSelectedFontColor</key>
-		<string>000000</string>
+		<string>A9A9A9</string>
 		<key>ActionButtonColor</key>
-		<string>F5F5F5</string>
+		<string>FFFFFF</string>
 		<key>ActionButtonBorderColor</key>
-		<string>F1F1F1</string>
+		<string>A9A9A9</string>
 		<key>AgentNameFontName</key>
 		<string>SYS_DEFAULT_FONT_NAME</string>
 		<key>AgentNameFontColor</key>

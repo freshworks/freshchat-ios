@@ -88,6 +88,7 @@
     [senderNameLabel setFont:[[FCTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
     [senderNameLabel setTextAlignment:NSTextAlignmentLeft];
+    senderNameLabel.numberOfLines = 1;
     senderNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     senderNameLabel.textColor = [[FCTheme sharedInstance] agentNameFontColor];
     
@@ -233,9 +234,9 @@
     NSString *rightPadding = @"(>=5)";
     
     if(showsProfile) {
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(==40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
         if(showsSenderName) {
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(==40)]-5-[senderLabel]-(<=%ld)-|",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[senderLabel(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[senderLabel]-2-[profileImageView(40)]" options:0 metrics:nil views:views]];
         } else {
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[profileImageView(40)]" options:0 metrics:nil views:views]];
@@ -259,7 +260,7 @@
     [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
     //Constraints for chatbubble are done.
     
-    
+    BOOL welcomeTextMsg = (currentMessage.isWelcomeMessage && fragmensViewArr.count == 1);
     
     NSMutableString *veriticalConstraint = [[NSMutableString alloc]initWithString:@"V:|"];
     for(int i=0;i<fragmensViewArr.count;i++) { //Set Constraints here
@@ -280,11 +281,27 @@
             [contentEncloser addConstraint:centerConstraint];
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(<=%@)]",str,imageHeight]];
         } else if([str containsString:@"text_"]) {
-            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
-            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
-            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+            if(welcomeTextMsg) { //If it has only text message in welcome message
+                FDHtmlFragment *textFragment = views[str];
+                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
+                [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+                NSLayoutConstraint *centerConstraint = [NSLayoutConstraint constraintWithItem:textFragment
+                                                                                    attribute:NSLayoutAttributeCenterY
+                                                                                    relatedBy:NSLayoutRelationEqual
+                                                                                       toItem:contentEncloser
+                                                                                    attribute:NSLayoutAttributeCenterY
+                                                                                   multiplier:1
+                                                                                     constant:0];
+                [contentEncloser addConstraint:centerConstraint];
+                [veriticalConstraint appendString:[NSString stringWithFormat:@"-(>=5)-[%@(>=0)]",str]];
+            } else {
+                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
+                [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+                [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+            }
         } else if([str containsString:@"button_"]) {
-            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(>=50)]-%@-|",leftPadding,str,rightPadding];
+            
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(>=75)]-%@-|",@"10",str,@"(>=10)"];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@]",str]];
         }
@@ -293,7 +310,11 @@
         [veriticalConstraint appendString:@"-5-[messageSentTimeLabel]"];
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[messageSentTimeLabel]-(>=10)-|" options:0 metrics:nil views:views]];
     }
-    [veriticalConstraint appendString:@"-5-|"];
+    if(welcomeTextMsg) {
+        [veriticalConstraint appendString:@"-(>=5)-|"];
+    } else {
+        [veriticalConstraint appendString:@"-5-|"];
+    }
     //Constraints for details inside contentEncloser is done.
     if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : veriticalConstraint options:0 metrics:nil views:views]];
