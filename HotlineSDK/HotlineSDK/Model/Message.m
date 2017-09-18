@@ -99,17 +99,19 @@
         NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         [request setEntity:entityDescription];
-        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isMarkedForUpload == YES AND uploadStatus == 0"];
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isMarkedForUpload == 1 AND uploadStatus == 0"];
         [request setPredicate:predicate];
         NSArray *array = [context executeFetchRequest:request error:&pError];
-        if([array count]==0){
+        NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
+        NSArray *sortedArr = [array sortedArrayUsingDescriptors:[NSArray arrayWithObject:desc]];
+        if([sortedArr count]==0){
             return;
         }else{
             FDLog(@"There are %d unuploaded messages", (int)array.count);
-            for(int i=0;i<[array count];i++){
+            for(int i=0;i<[sortedArr count];i++){
                 Message *message = array[i];
                 KonotorConversation *convo = message.belongsToConversation;
-                [HLMessageServices uploadMessage:message toConversation:convo onChannel:message.belongsToChannel];
+                [HLMessageServices uploadNewMessage:message toConversation:convo onChannel:message.belongsToChannel];
             }
         }
     }];
