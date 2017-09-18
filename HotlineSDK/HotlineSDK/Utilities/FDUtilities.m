@@ -380,7 +380,10 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL) canMakeDAUCall {
     NSDate *currentdate = [NSDate date];
-    NSDate *lastFetchDate = [NSDate dateWithTimeIntervalSince1970:[[[FDSecureStore sharedInstance] objectForKey: HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME] doubleValue]/1000];
+    NSDate *lastFetchDate = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
+    if(!lastFetchDate){
+        return true;
+    }
     NSCalendar* calendar = [NSCalendar currentCalendar];
     unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
     NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
@@ -392,7 +395,7 @@ static NSInteger networkIndicator = 0;
             return true;
         }
     }
-    return 0;
+    return false;
 }
 
 +(BOOL) containsHTMLContent: (NSString *)content {
