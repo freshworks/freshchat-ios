@@ -12,7 +12,7 @@
 
 static NSString *DEFAULT_LANG = @"en";
 static NSString *DEFAULT_BUNDLE_NAME = @"FCLocalization";
-static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
+static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 
 #define HLLocalizedString(name) [HLLocalization localize:name]
 
