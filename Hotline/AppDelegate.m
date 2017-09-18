@@ -65,22 +65,23 @@
     
     if (isTabViewPreferred) {
         ConversationOptions *convOptions = [[ConversationOptions alloc] init];
-        [convOptions filterByTags:@[@"sanjith"] withTitle:@"Sanjith Conversatios"];
-        NSArray *arr = @[@"yoyo"];
-        NSArray *contactUsTagsArray = @[@"yoyo"];
+        [convOptions filterByTags:@[@"wow"] withTitle:@"Wow Conversations"];
+        NSArray *arr = @[@"wow"];
+        NSArray *contactUsTagsArray = @[@"wow"];
         FAQOptions *faqOptions = [FAQOptions new];
         faqOptions.showFaqCategoriesAsGrid = NO;
         faqOptions.showContactUsOnFaqScreens = YES;
-        [faqOptions filterContactUsByTags:contactUsTagsArray withTitle:@"Yoyo ContactUS"];
-        [faqOptions filterByTags:arr withTitle:@"Yoyo Articles" andType: ARTICLE];
+        [faqOptions filterContactUsByTags:contactUsTagsArray withTitle:@"Wow ContactUS"];
+        [faqOptions filterByTags:arr withTitle:@"Wow Articles" andType: ARTICLE];
         UINavigationController* faqControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getFAQsControllerForEmbedWithOptions:faqOptions]];
         UINavigationController* convControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getConversationsControllerForEmbedWithOptions:convOptions]];
         UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
+        
         ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
                                                  [freshchatSDK getFAQsControllerForEmbed]];
         
-        mainController.title = @"Hotline";
+        mainController.title = @"Freshchat";
         _channelsController.title = @"Channels";
         FAQController.title = @"FAQs";
         faqControllerOption.title = @"FQAsWithOptions";

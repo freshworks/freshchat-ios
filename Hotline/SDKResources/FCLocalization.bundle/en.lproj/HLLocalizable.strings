@@ -35,7 +35,7 @@
 "message_placeholder_text" = "Type a message";
 "messages_close_button_text"="Close";
 "send_button_text"="Send";
-"messages_agent_label_text"="Freshchat Support";
+"messages_agent_label_text"="Support";
 "default_action_button_text"="View";
 "default_video_button_text"="Watch Video";
 "default_file_button_text"="Open File";
