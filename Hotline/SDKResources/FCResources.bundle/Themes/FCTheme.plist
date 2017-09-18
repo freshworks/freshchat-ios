@@ -410,7 +410,7 @@
 		<key>FAQImage</key>
 		<string>FCResources.bundle/Images/freshchat_faq_image</string>
 		<key>ConversationBGImage</key>
-		<string>FCResources.bundle/Images/freshchar_conv_bg</string>
+		<string>FCResources.bundle/Images/freshchat_conv_bg</string>
 	</dict>
 </dict>
 </plist>
