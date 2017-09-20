@@ -11,7 +11,7 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -19,44 +19,18 @@
 #import "FDPlistManager.h"
 #import "HLCoreServices.h"
 #import "FDLocalNotification.h"
+#import "FCRemoteConfig.h"
+#import "HLUserDefaults.h"
+#import "HLConstants.h"
+#import "HLLocalization.h"
 
-#define EXTRA_SECURE_STRING @"fd206a6b-7363-4a20-9fa9-62deca85b6cd"
+#define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 
 @implementation FDUtilities
 
 #pragma mark - General Utitlites
 
 static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
-
-+(void)registerUser:(void(^)(NSError *error))completion{
-    @synchronized ([FDUtilities class]) {
-
-        if (IS_USER_REGISTRATION_IN_PROGRESS == NO) {
-            
-            IS_USER_REGISTRATION_IN_PROGRESS = YES;
-            
-            BOOL isUserRegistered = [FDUtilities isUserRegistered];
-            if (!isUserRegistered) {
-                [[[HLCoreServices alloc]init] registerUser:^(NSError *error) {
-                    if (!error) {
-                        [FDUtilities initiatePendingTasks];
-                    }
-                    dispatch_async(dispatch_get_main_queue(), ^ {
-                        IS_USER_REGISTRATION_IN_PROGRESS = NO;
-                        if (completion) {
-                            completion(error);
-                        }
-                    });
-                }];
-            }else{
-                IS_USER_REGISTRATION_IN_PROGRESS = NO;
-                if (completion) {
-                    completion(nil);
-                }
-            }
-        }
-    }
-}
 
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
@@ -81,13 +55,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(NSString *) getTracker{
-    return [NSString stringWithFormat:@"hl_ios_%@",[Hotline SDKVersion]];
-}
-
-+(BOOL)isUserRegistered{
-    NSString *userAlias = [self currentUserAlias];
-    return ([[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED] &&
-            (userAlias && userAlias.length > 0));
+    return [NSString stringWithFormat:@"hl_ios_%@",[Freshchat SDKVersion]];
 }
 
 +(NSString *) getUUIDLookupKey{
@@ -250,6 +218,29 @@ static NSInteger networkIndicator = 0;
     return;
 }
 
++(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec{
+    float minutes = timeInSec/60;
+    if (minutes < 1) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN);
+    }else if (minutes < 55) {
+        int min;
+        if (minutes < 10) {
+            // If < 10 minutes
+            min = (int) ceil(minutes);
+        } else {
+            // If < 55 minutes, round off to factor of 5
+            min = (int) ceil(minutes / 5) * 5;
+        }
+        return [NSString stringWithFormat: @"%@ %d %@",HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_X_MIN), min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
+    } else if (minutes < 60) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
+    } else if (minutes < 120) {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR);
+    } else {
+        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS);
+    }
+}
+
 + (NSString*)convertIntoMD5 :(NSString *) str
 {
     // Create pointer to the string as UTF8
@@ -272,7 +263,7 @@ static NSInteger networkIndicator = 0;
 +(BOOL)isPoweredByHidden{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     
-    NSString *secretKey = [[HLTheme sharedInstance] getFooterSecretKey];
+    NSString *secretKey = [[FCTheme sharedInstance] getFooterSecretKey];
     if (!secretKey) return NO;
     
     NSString* myString = [NSString stringWithFormat:@"%@%@%@",[store objectForKey:HOTLINE_DEFAULTS_APP_ID],EXTRA_SECURE_STRING,[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
@@ -292,6 +283,16 @@ static NSInteger networkIndicator = 0;
     NSNumber *lastUpdateTime = [[FDSecureStore sharedInstance] objectForKey:key];
     if (lastUpdateTime == nil) lastUpdateTime = @0;
     return lastUpdateTime;
+}
+
++(void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText{
+    
+    if(title.length == 0) {
+        return;
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelText otherButtonTitles:nil, nil];
+    [alertView show];
 }
 
 +(BOOL) isValidPropKey: (NSString *) str {
@@ -341,6 +342,94 @@ static NSInteger networkIndicator = 0;
     NSArray *noEmptyTags = [tags filteredArrayUsingPredicate:
                                [NSPredicate predicateWithFormat:@"length > 0"]];
     return [noEmptyTags valueForKey:@"lowercaseString"];
+}
+
++(BOOL) canMakeRemoteConfigCall {
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME]];
+    if(isnan(interval)){
+        return true;
+    }
+    if(interval > [FCRemoteConfig sharedInstance].refreshIntervals.remoteConfigFetchInterval/ 1000.0){
+        return true;
+    }
+    return false;
+}
++(BOOL) canMakeSessionCall {
+    if(![HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
+        return  true;
+    }
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]];
+    FDLog(@"Time interval b/w dates %f", interval);
+    if(interval > [FCRemoteConfig sharedInstance].sessionTimeOutInterval/1000){
+        return true;
+    }
+    return false;
+}
+
++ (BOOL) canMakeTypicallyRepliesCall {
+    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[HLUserDefaults getObjectForKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL]];
+    
+    if(isnan(interval)){
+        return true;
+    }
+    if(interval > [FCRemoteConfig sharedInstance].refreshIntervals.responseTimeExpectationsFetchInterval/ 1000.0){
+        return true;
+    }
+    return false;
+}
+
++(BOOL) canMakeDAUCall {
+    NSDate *currentdate = [NSDate date];
+    NSDate *lastFetchDate = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
+    if(!lastFetchDate){
+        return true;
+    }
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
+    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
+    NSComparisonResult result;
+    result = [currentdate compare:lastFetchDate];
+    if(result == NSOrderedDescending){//date comparision, current should be greater than
+        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+            return true;
+        }
+    }
+    return false;
+}
+
++(BOOL) containsHTMLContent: (NSString *)content {
+    if (([FDUtilities containsString:content andTarget:@"<b>"])
+        || ([FDUtilities containsString:content andTarget:@"<i>"])
+        || ([FDUtilities containsString:content andTarget:@"<u>"])
+        || ([FDUtilities containsString:content andTarget:@"&lt"])
+        || ([FDUtilities containsString:content andTarget:@"&gt"])
+        || ([FDUtilities containsString:content andTarget:@"&nbsp"])
+        || ([FDUtilities containsString:content andTarget:@"<a href"])
+        || ([FDUtilities containsString:content andTarget:@"https://"])
+        || ([FDUtilities containsString:content andTarget:@"http://"])
+        || ([FDUtilities containsString:content andTarget:@"<a>"])
+        || ([FDUtilities containsString:content andTarget:@"<h1>"])
+        || ([FDUtilities containsString:content andTarget:@"<h2>"])
+        || ([FDUtilities containsString:content andTarget:@"<h3>"])
+        || ([FDUtilities containsString:content andTarget:@"<h4>"])
+        || ([FDUtilities containsString:content andTarget:@"<h5>"])
+        || ([FDUtilities containsString:content andTarget:@"<h6>"])) {
+        return true;
+    }
+    return false;
+}
+
++(BOOL) containsString: (NSString *)original andTarget:(NSString *)target {
+    if([original rangeOfString:target].location == NSNotFound) {
+        return false;
+    }
+    return true;
+}
+
++(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName{
+    
+    return ([@[firstName, @" ", lastName] componentsJoinedByString:@""]);
 }
 
 +(NSString*)deviceModelName{

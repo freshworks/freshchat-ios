@@ -137,4 +137,31 @@
     });
 }
 
+-(void)deleteTagWithTaggableType: (NSArray *)tagTypes
+                handler:(void(^)(NSError *error))handler
+                inContext:(NSManagedObjectContext *) context{
+    [context performBlock:^{
+    @try {
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"taggableType IN %@",
+                                  tagTypes];
+        NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+        for (int i=0; i<matches.count; i++) {
+            NSManagedObject *object = matches[i];
+            [context deleteObject:object];
+        }
+        [context save:nil];
+        FDLog(@"Deleting tags of type %@ entries from table : %@ ", tagTypes, HOTLINE_TAGS_ENTITY);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (handler) handler(nil);
+        });
+    }
+     @catch(NSException *exception) {
+         FDLog(@"Error in deleting tags of type %@ entries from table : %@ ", tagTypes, HOTLINE_TAGS_ENTITY);
+     }
+    }];
+}
+     
+
+
 @end

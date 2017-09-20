@@ -19,12 +19,13 @@
 #import "HLSearchViewController.h"
 #import "HLControllerUtils.h"
 #import "HLConstants.h"
+#import "FCRemoteConfig.h"
 
 @interface  HLCategoryViewBehaviour ()
 
 @property (nonatomic, weak) UIViewController <HLCategoryViewBehaviourDelegate> *categoryViewDelegate;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 
 @end
 
@@ -36,7 +37,7 @@
         self.categoryViewDelegate = viewController;
         self.faqOptions = faqOptions;
         self.isFilteredView = [HLFAQUtil hasTags:self.faqOptions];
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }
@@ -86,7 +87,9 @@
             [updater resetTime];
         }
         else {
-            [updater useInterval:SOLUTIONS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            //[updater useInterval:SOLUTIONS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
+            FCRefreshIntervals *remoteIntervals = [FCRemoteConfig sharedInstance].refreshIntervals;
+            [updater useInterval:remoteIntervals.faqFetchIntervalNormal];
         }
         ShowNetworkActivityIndicator();
         [updater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
@@ -114,10 +117,10 @@
     if([HLFAQUtil hasContactUsTags:self.faqOptions]){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self.categoryViewDelegate withOptions:options];
+        [[Freshchat sharedInstance] showConversations:self.categoryViewDelegate withOptions:options];
     }
     else{
-        [[Hotline sharedInstance] showConversations:self.categoryViewDelegate];
+        [[Freshchat sharedInstance] showConversations:self.categoryViewDelegate];
     }
 }
 

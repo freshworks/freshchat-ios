@@ -10,6 +10,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "HLFAQServices.h"
+#import "FCRemoteConfig.h"
 
 @interface FDVotingManager()
 
@@ -43,22 +44,26 @@
 }
 
 -(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
-    ALog(@"Article Downvoted");
-    [self storeArticleVote:NO LocallyForArticleID:articleID];
-    HLFAQServices *service = [[HLFAQServices alloc]init];
-    [service vote:NO forArticleID:articleID inCategoryID:categoryID];
-    if(completion){
-        completion(nil);
+    if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
+        ALog(@"Article Downvoted");
+        [self storeArticleVote:NO LocallyForArticleID:articleID];
+        HLFAQServices *service = [[HLFAQServices alloc]init];
+        [service vote:NO forArticleID:articleID inCategoryID:categoryID];
+        if(completion){
+            completion(nil);
+        }
     }
 }
 
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion{
-    ALog(@"Article Upvoted");
-    [self storeArticleVote:YES LocallyForArticleID:articleID];
-    HLFAQServices *service = [[HLFAQServices alloc]init];
-    [service vote:YES forArticleID:articleID inCategoryID:categoryID];
-    if(completion){
-        completion(nil);
+    if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
+        ALog(@"Article Upvoted");
+        [self storeArticleVote:YES LocallyForArticleID:articleID];
+        HLFAQServices *service = [[HLFAQServices alloc]init];
+        [service vote:YES forArticleID:articleID inCategoryID:categoryID];
+        if(completion){
+            completion(nil);
+        }
     }
 }
 

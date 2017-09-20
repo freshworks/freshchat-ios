@@ -24,17 +24,21 @@
 
 #define HOTLINE_API_DAU_PATH @"/app/services/app/%@/user/%@/activity"
 
+#define HOTLINE_API_SESSION_PATH @"/app/services/app/%@/user/%@/session"
+
+#define HOTLINE_API_HEARTBEAT_PATH @"/app/services/app/%@/user/%@/heartbeat"
+
 #define HOTLINE_API_UNINSTALLED_PATH @"/app/services/app/%@/user/%@/uninstalled"
 
 #define HOTLINE_API_USER_PROPERTIES_PATH @"/app/services/app/%@/user/%@"
 
-#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/category"
+#define HOTLINE_API_CATEGORIES_PATH @"/app/services/app/%@/sdk/faq/v2/category"
 
 #define HOTLINE_API_ARTICLES_PATH @"/app/services/app/%@/sdk/faq/category/%@/article"
 
-#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/category/%@/article/%@"
+#define HOTLINE_API_ARTICLE_VOTE_PATH @"/app/services/app/%@/sdk/faq/v2/category/%@/article/%@"
 
-#define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel"
+#define HOTLINE_API_CHANNELS_PATH @"/app/services/app/%@/channel/v2"
 
 #define HOTLINE_API_USER_CONVERSATION_ACTIVITY @"app/services/app/%@/user/%@/conversation/read"
 
@@ -44,4 +48,10 @@
 
 #define HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH @"/app/services/app/%@/user/%@/message/marketing/%@/status"
 
+#define FRESHCHAT_API_REMORTE_CONFIG_PATH @"/app/services/app/config/mobile/%@"
+
 #define HOTLINE_API_CSAT_PATH @"/app/services/app/%@/user/%@/conversation/%@/csat/%@/response"
+
+#define HOTLINE_API_UPLOAD_IMAGE @"app/services/app/%@/user/%@/image"
+
+#define HOTLINE_API_TYPLICAL_REPLY @"app/services/app/%@/channels/response_time"

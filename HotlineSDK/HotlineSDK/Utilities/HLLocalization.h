@@ -11,8 +11,8 @@
 #define HLLocalization_h
 
 static NSString *DEFAULT_LANG = @"en";
-static NSString *DEFAULT_BUNDLE_NAME = @"HLLocalization";
-static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
+static NSString *DEFAULT_BUNDLE_NAME = @"FCLocalization";
+static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 
 #define HLLocalizedString(name) [HLLocalization localize:name]
 
@@ -21,6 +21,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 #define LOC_FAQ_CLOSE_BUTTON_TEXT @"faq_close_button_text"
 #define LOC_FAQ_TITLE_TEXT @"faq_title_text"
+#define LOC_FAQ_FEATURE_DISABLED_TEXT @"faq_feature_not_enabled_text"
 
 #define LOC_SEARCH_PLACEHOLDER_TEXT @"search_placeholder_text"
 #define LOC_SEARCH_EMPTY_RESULT_TEXT @"search_empty_result_text"
@@ -35,10 +36,16 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 
 #define LOC_CHANNELS_TITLE_TEXT @"channels_title_text"
 #define LOC_CHANNELS_CLOSE_BUTTON_TEXT @"channels_close_button_text"
+#define LOC_CHANNELS_FEATURE_DISABLED_TEXT @"channels_feature_not_enabled_text"
+
+#define LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN @"pic_msg_attachment_close_btn"
+#define LOC_PIC_MSG_ATTACHMENT_TITLE_TEXT @"pic_msg_attachment_title_text"
 
 #define LOC_MESSAGES_CLOSE_BUTTON_TEXT @"messages_close_button_text"
 #define LOC_MESSAGES_AGENT_LABEL_TEXT @"messages_agent_label_text"
 #define LOC_DEFAULT_ACTION_BUTTON_TEXT @"default_action_button_text"
+#define LOC_DEFAULT_VIDEO_BUTTON_TEXT @"default_video_button_text"
+#define LOC_DEFAULT_FILE_BUTTON_TEXT @"default_file_button_text"
 
 #define LOC_EMPTY_MSG_TITLE @"empty_message_title"
 #define LOC_EMPTY_MSG_INFO_TEXT @"empty_message_info_text"
@@ -70,6 +77,7 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_CAMERA_UNAVAILABLE_DESCRIPTION @"camera_unavailable_description"
 #define LOC_CAMERA_UNAVAILABLE_OK_BUTTON @"camera_unavailable_ok_button_text"
 #define LOC_CAMERA_PERMISSION_DENIED_TEXT @"camera_permission_denied"
+#define LOC_CAMERA_PERMISSION_ALERT_CANCEL @"camera_permission_alert_cancel"
 
 #define LOC_AUDIO_RECORDING_CANCEL_MESSAGE @"cancel_audio_recording_alert"
 
@@ -99,6 +107,13 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"HLLocalizable";
 #define LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER @"cust_sat_user_comments_placeholder"
 #define LOC_CUST_SAT_SUBMIT_BUTTON_TEXT @"cust_sat_submit_button_text"
 #define LOC_CUST_SAT_NOT_RESOLVED_PROMPT @"cust_sat_not_resolved_prompt"
+
+#define LOC_TYPICALLY_REPLIES_WITHIN_MIN  @"typically_replies_within_a_minute"
+#define LOC_TYPICALLY_REPLIES_WITHIN_X_MIN @"typically_replies_within_x_minutes"
+#define LOC_TYPICALLY_REPLIES_WITHIN_HOUR @"typically_replies_within_an_hour"
+#define LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR @"typically_replies_within_2_hours"
+#define LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS @"typically_replies_within_few_hours"
+#define LOC_PLACEHOLDER_MINS @"placeholder_minutes"
 
 @interface HLLocalization : NSObject
 

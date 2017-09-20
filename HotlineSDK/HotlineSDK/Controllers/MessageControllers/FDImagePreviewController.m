@@ -6,8 +6,8 @@
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
 
+#import "FCTheme.h"
 #import "FDImagePreviewController.h"
-#import "HLTheme.h"
 
 @interface FDImagePreviewController (){
     CGFloat beginX, beginY;
@@ -76,7 +76,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
      forControlEvents:UIControlEventTouchUpInside];
     
     closeButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [closeButton setImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_CLOSE_PREVIEW] forState:UIControlStateNormal];
+    [closeButton setImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_CLOSE_PREVIEW] forState:UIControlStateNormal];
     closeButton.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
     [self.view addSubview:closeButton];
     

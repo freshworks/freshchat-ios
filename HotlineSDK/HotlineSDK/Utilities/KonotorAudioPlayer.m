@@ -27,7 +27,7 @@ static NSString *beforePlayCategory;
     return [KonotorAudioPlayer PlayMessage:messageID atTime:0];
 }
 
-+(BOOL) StopMessage 
++(BOOL) StopMessage
 {
     
     if(gkIsAudioAlreadyPlaying)
@@ -52,14 +52,14 @@ static NSString *beforePlayCategory;
         ALog(@"Failed to set audio %@ session category", beforePlayCategory);
         return NO;
     }
-    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
+    [FDLocalNotification post:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE];
     return YES;
 }
 
 +(BOOL) PlayMessage : (NSString *)messageID atTime : (double) seektime{
     
-    [FDLocalNotification post:HOTLINE_WILL_PLAY_AUDIO_MESSAGE];
-
+    [FDLocalNotification post:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE];
+    
     NSError *error;
     KonotorMessage *messageObject = [KonotorMessage retriveMessageForMessageId:messageID];
     if(!messageObject)
@@ -67,7 +67,7 @@ static NSString *beforePlayCategory;
     
     AVAudioSession * audioSession = [AVAudioSession sharedInstance];
     beforePlayCategory = audioSession.category;
-
+    
     //TODO: set audio session back to the original state when dismissing msg controller
     
     UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
@@ -137,7 +137,7 @@ static NSString *beforePlayCategory;
     if([messageObject isDownloading])
         return;
     NSURL *pURL = [NSURL URLWithString:[messageObject audioURL]];
-   
+    
     NSString *messageDownloadStartedNotif = [NSString stringWithFormat:HOTLINE_AUDIO_MESSAGE_STARTED,[messageObject messageAlias]];
     [FDLocalNotification post:messageDownloadStartedNotif];
     
@@ -203,50 +203,50 @@ static NSString *beforePlayCategory;
     __block id downloadstartedbserver;
     __block id successobserver = [[NSNotificationCenter defaultCenter] addObserverForName:successNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
         
-              NSError *pError;
-              
-              KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
-              [messageBinary setBinaryAudio:[note object]];
-              
-              [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];
-              [messageObject setIsDownloading:NO];
-              
-              [context save:&pError];
-              
-              if(messageObject == gCurrentlyPlaying) // in the meanwhile the user could have clicked on another message, thats why check if this the last messaged to be asked to be played.
-              {
-                  [KonotorAudioPlayer currentPlaying:[gCurrentlyPlaying messageAlias] set:YES];
-
-                  BOOL playing=[KonotorAudioPlayer InitAndPlayWithSoundData:[note object]];
-                  if(!playing)
-                      [KonotorAudioPlayer currentPlaying:nil set:YES];
-
-              }
-              
-              [[NSNotificationCenter defaultCenter] removeObserver:successobserver];
-              [[NSNotificationCenter defaultCenter] removeObserver:failobserver];
-          }];
-
-        failobserver = [[NSNotificationCenter defaultCenter] addObserverForName:failedNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
-            NSError *pError;
-
-            [messageObject setIsDownloading:NO];
-            [context save:&pError];
-
-            //Have to notify kottayan that download has failed.
-            [[NSNotificationCenter defaultCenter] removeObserver:successobserver];
-            [[NSNotificationCenter defaultCenter] removeObserver:failobserver];
-
-
-        }];
-
-        downloadstartedbserver = [[NSNotificationCenter defaultCenter] addObserverForName:downloadstarted object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
-          NSError *pError;
-          
-          [messageObject setIsDownloading:YES];
-          [context save:&pError];
-          [[NSNotificationCenter defaultCenter] removeObserver:downloadstartedbserver];
-        }];
+        NSError *pError;
+        
+        KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
+        [messageBinary setBinaryAudio:[note object]];
+        
+        [messageObject setValue:messageBinary forKey:@"hasMessageBinary"];
+        [messageObject setIsDownloading:NO];
+        
+        [context save:&pError];
+        
+        if(messageObject == gCurrentlyPlaying) // in the meanwhile the user could have clicked on another message, thats why check if this the last messaged to be asked to be played.
+        {
+            [KonotorAudioPlayer currentPlaying:[gCurrentlyPlaying messageAlias] set:YES];
+            
+            BOOL playing=[KonotorAudioPlayer InitAndPlayWithSoundData:[note object]];
+            if(!playing)
+                [KonotorAudioPlayer currentPlaying:nil set:YES];
+            
+        }
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:successobserver];
+        [[NSNotificationCenter defaultCenter] removeObserver:failobserver];
+    }];
+    
+    failobserver = [[NSNotificationCenter defaultCenter] addObserverForName:failedNotifString object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
+        NSError *pError;
+        
+        [messageObject setIsDownloading:NO];
+        [context save:&pError];
+        
+        //Have to notify kottayan that download has failed.
+        [[NSNotificationCenter defaultCenter] removeObserver:successobserver];
+        [[NSNotificationCenter defaultCenter] removeObserver:failobserver];
+        
+        
+    }];
+    
+    downloadstartedbserver = [[NSNotificationCenter defaultCenter] addObserverForName:downloadstarted object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
+        NSError *pError;
+        
+        [messageObject setIsDownloading:YES];
+        [context save:&pError];
+        [[NSNotificationCenter defaultCenter] removeObserver:downloadstartedbserver];
+    }];
     
     return YES;
 }
@@ -286,7 +286,7 @@ static NSString *beforePlayCategory;
     if(error){
         ALog(@"Failed to set audio %@ play session category", beforePlayCategory);
     }
-    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
+    [FDLocalNotification post:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE];
 }
 
 + (double) audioPlayerGetCurrentTime
@@ -331,7 +331,7 @@ static NSString *beforePlayCategory;
     {
         [KonotorAudioPlayer StopMessage:gCurrentlyPlaying];
     }
-   
+    
     
 }
 
@@ -359,3 +359,4 @@ static NSString *beforePlayCategory;
 #endif // TARGET_OS_IPHONE
 
 @end
+

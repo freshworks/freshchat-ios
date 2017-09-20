@@ -13,10 +13,10 @@
 #import "HLMacros.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
-
+#import "FCRemoteConfig.h"
+#import "HLUser.h"
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate, UIPopoverControllerDelegate>{
-    
     BOOL isCameraCaptureEnabled;
 }
 
@@ -46,6 +46,9 @@
 
 - (void) showInputOptions:(UIViewController*) viewController{
    
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        return;
+    }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     isCameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     NSArray *actionButtons;
@@ -124,7 +127,7 @@
 
 - (void) showAccessDeniedAlert{
     
-    UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_CAMERA_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+    UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_CAMERA_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:HLLocalizedString(LOC_CAMERA_PERMISSION_ALERT_CANCEL) otherButtonTitles:nil, nil];
     [permissionAlert show];
 }
 
@@ -173,8 +176,17 @@
     [self.sourceViewController presentViewController:navcontroller animated:YES completion:nil];
 }
 
--(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image{
-    [Konotor uploadImage:self.imagePicked onConversation:self.conversation onChannel:self.channel];
+-(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image withCaption:(NSString *)caption {
+    [HLUser setUserMessageInitiated];
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:^(NSError *error) {
+            if (!error) {
+                [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
+            }
+        }];
+    } else {
+        [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
+    }
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Hotline.h"
+#import "Freshchat.h"
 
 @protocol FAQOptionsInterface <NSObject>
 

@@ -12,6 +12,7 @@
 #import "FDMemLogger.h"
 #import "HLChannel.h"
 #import "HLCategory.h"
+#import "HLTagManager.h"
 
 #define logInfo(dict) [self.logger addErrorInfo:dict withMethodName:NSStringFromSelector(_cmd)];
 #define logMsg(str) [self.logger addMessage:str withMethodName:NSStringFromSelector(_cmd)];
@@ -96,13 +97,14 @@
 }
 
 -(NSManagedObjectModel *)loadKonotorDataModel{
-    NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"KonotorModels" ofType:@"bundle"];
-    NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"KonotorModel" withExtension:@"momd"];
-    return [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"FreshchatModels" ofType:@"bundle"];
+    NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"FreshchatModel" withExtension:@"momd"];
+    NSManagedObjectModel *obj =  [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return obj;
 }
 
 -(NSURL *)konotorSQLiteURL{
-    NSString *storePath = [[self konotorSQLiteDirPath] stringByAppendingPathComponent:@"Konotor.sqlite"];
+    NSString *storePath = [[self konotorSQLiteDirPath] stringByAppendingPathComponent:@"Freshchat.sqlite"];
     return [NSURL fileURLWithPath:storePath];
 }
 
@@ -361,9 +363,20 @@
     [self deleteAllEntriesOfEntity:HOTLINE_INDEX_ENTITY handler:handler inContext:self.backgroundContext];
 }
 
+-(void)deleteAllFAQ:(void(^)(NSError *error))handler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CATEGORY_ENTITY handler:^(NSError *error) {
+        [self deleteAllEntriesOfEntity:HOTLINE_INDEX_ENTITY handler:^(NSError *error) {
+            [[HLTagManager sharedInstance] deleteTagWithTaggableType:@[@1,@2] handler:handler inContext:self.backgroundContext];
+        } inContext:self.backgroundContext];
+    } inContext:self.backgroundContext];
+}
+
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
         @try {
+            if ([entity isEqualToString:HOTLINE_MESSAGE_ENTITY]) {
+                NSLog(@"hello");
+            }
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
             NSArray *results = [context executeFetchRequest:request error:nil];
             for (int i=0; i<results.count; i++) {

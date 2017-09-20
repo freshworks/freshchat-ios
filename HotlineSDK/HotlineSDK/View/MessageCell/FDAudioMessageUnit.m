@@ -7,14 +7,14 @@
 //
 
 #import "FDAudioMessageUnit.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "KonotorAudioRecorder.h"
 #import "HLLocalization.h"
 #import "FDLocalNotification.h"
 
 @interface FDAudioMessageUnit ()
 
-@property (nonatomic, strong)HLTheme *theme;
+@property (nonatomic, strong)FCTheme *theme;
 
 @end
 
@@ -25,7 +25,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }
@@ -126,16 +126,16 @@
 
 - (void) displayMessage:(KonotorMessageData*) currentMessage
 {
-    [self.audioPlayButton setHidden:NO];
+    /*[self.audioPlayButton setHidden:NO];
     [self.mediaProgressBar setHidden:NO];
     
-    self.messageID=[currentMessage messageId];
+    self.messageID=[currentMessage messageID];
     self.message=(FDMessage*)currentMessage;
     
     [self.mediaProgressBar setValue:0.0 animated:NO];
     [self.mediaProgressBar setMaximumValue:currentMessage.durationInSecs.floatValue];
     if([[Konotor getCurrentPlayingMessageID] isEqualToString:[currentMessage messageId]])
-        [self startAnimating];
+        [self startAnimating];*/
 }
 
 

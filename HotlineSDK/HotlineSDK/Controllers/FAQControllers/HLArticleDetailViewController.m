@@ -11,9 +11,9 @@
 #import "FDVotingManager.h"
 #import "FDSecureStore.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDLocalNotification.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "HLLocalization.h"
 #import "FDReachabilityManager.h"
 #import "FDStringUtil.h"
@@ -98,7 +98,7 @@
 }
 
 -(NSString *)normalizeCssContent{
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     return [theme getCssFileContent:[theme getArticleDetailCSSFileName]];
 }
 #pragma mark - Life cycle methods
@@ -150,7 +150,7 @@
 }
 
 -(void)theming{
-    self.view.backgroundColor = [[HLTheme sharedInstance] backgroundColorSDK];
+    self.view.backgroundColor = [[FCTheme sharedInstance] backgroundColorSDK];
 }
 
 -(void)setNavigationItem{
@@ -372,10 +372,10 @@
     if([HLFAQUtil hasContactUsTags:self.faqOptions]){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self withOptions:options];
+        [[Freshchat sharedInstance] showConversations:self withOptions:options];
     }
     else{
-        [[Hotline sharedInstance] showConversations:self];
+        [[Freshchat sharedInstance] showConversations:self];
     }
 }
 

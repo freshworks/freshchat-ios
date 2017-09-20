@@ -10,7 +10,7 @@
 #import "HLFAQServices.h"
 #import "HLArticle.h"
 #import "HLMacros.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLSearchViewController.h"
 #import "HLContainerController.h"
 #import "KonotorDataManager.h"
@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong)HLCategory *category;
 @property (nonatomic, strong)NSArray *articles;
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 @property (nonatomic,strong) FAQOptions *faqOptions;
 @property BOOL isFilteredView;
 
@@ -45,14 +45,14 @@
     self = [super init];
     if (self) {
         self.faqOptions = [FAQOptions new];
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    self.tableView.separatorColor = [[HLTheme sharedInstance] tableViewCellSeparatorColor];
+    self.tableView.separatorColor = [[FCTheme sharedInstance] tableViewCellSeparatorColor];
     [self setNavigationItem];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;

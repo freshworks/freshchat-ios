@@ -15,7 +15,7 @@
 -(instancetype)initWithDelegate:(id<HLYesNoPromptViewDelegate>) delegate andKey:(NSString *)key{
     self = [super init];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         
         self.promptLabel = [self createCSATPromptLabel:key];
         [self addSubview:self.promptLabel];
@@ -45,7 +45,7 @@
 
 -(UILabel *)createCSATPromptLabel:(NSString *) key{
     UILabel *promptLabel = [[UILabel alloc] init];
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     self.backgroundColor = [theme custSatDialogueBackgroundColor];
     promptLabel.translatesAutoresizingMaskIntoConstraints = NO;
     promptLabel.textColor = [theme custSatDialogueTitleTextColor];

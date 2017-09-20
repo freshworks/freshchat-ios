@@ -20,7 +20,7 @@
 - (void) resetTimeTo:(NSNumber *) value;
 - (BOOL) hasTimedOut;
 - (void) noUpdate;
-- (void) useInterval:(int) interval;
+- (void) useInterval:(long) interval;
 - (void) useConfigKey:(NSString *) configKey;
 
 @end

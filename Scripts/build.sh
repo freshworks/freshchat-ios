@@ -75,7 +75,7 @@ do
 
   printHeader "Building SDK for $SDK with Architecture $ARCH"
 
-  xcodebuild $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target HotlineSDK -sdk $SDK -arch $ARCH -configuration Release clean build
+  xcodebuild $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target FreshchatSDK -sdk $SDK -arch $ARCH -configuration Release clean build
   if [ $? -ne 0 ] 
   then 
     printHeader "build Failed :("
@@ -83,7 +83,7 @@ do
     exit
   fi;
 
-  cp ./HotlineSDK/build/Release-$SDK/libHotlineSDK.a buildtmp/libHotlineSDK-$SDK-$ARCH.a
+  cp ./HotlineSDK/build/Release-$SDK/libFreshchatSDK.a buildtmp/libFreshchatSDK-$SDK-$ARCH.a
   
 done <<ARCHLIST
 iphonesimulator i386
@@ -95,24 +95,24 @@ ARCHLIST
 
 # Now Lets Package it 
 printHeader "Packing SDK for Version $VERSION"
-REL_NAME=hotline_ios_v${VERSION}
+REL_NAME=freshchat_ios_v${VERSION}
 OUTPUTDIR=dist/$REL_NAME
 rm -rf dist
 mkdir -p $OUTPUTDIR
 
 RESOURCES_DIR=Hotline/SDKResources
-ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDHotlineSDK.a
+ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDFreshchatSDK.a
 cp LICENSE $OUTPUTDIR
-cp ./HotlineSDK/HotlineSDK/Hotline.h $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/KonotorModels.bundle  $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/HLResources.bundle $OUTPUTDIR
-cp -R ${RESOURCES_DIR}/HLLocalization.bundle $OUTPUTDIR
+cp ./HotlineSDK/HotlineSDK/Freshchat.h $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/FreshchatModels.bundle  $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/FCResources.bundle $OUTPUTDIR
+cp -R ${RESOURCES_DIR}/FCLocalization.bundle $OUTPUTDIR
 REL_NOTES=$OUTPUTDIR/ReleaseNotes.txt
 RELEASE_HEADER=$( cat <<RELEASEINFO
-Hotline iOS SDK - Powered by Freshdesk
+Freshchat iOS SDK - Powered by Freshdesk
 
-Documentation   : https://support.hotline.io/support/solutions
-Support Email   : support@hotline.io 
+Documentation   : https://support.freshchat.com
+Support Email   : support@freshchat.com
 Version         : $VERSION
 
 RELEASEINFO
@@ -158,7 +158,7 @@ cat ReleaseNotes.txt >> $REL_NOTES
 
 cd dist 
 zip -rv ${REL_NAME}.zip *
-cp ${REL_NAME}.zip hotline_sdk_ios.zip 
+cp ${REL_NAME}.zip freshchat_sdk_ios.zip 
 cd ..
 
 if [ "$IS_RELEASE" == "YES" ] 
@@ -175,8 +175,8 @@ else
   rm ${CONSTANTS_FILE}.old
   mv ReleaseNotes_v.txt ReleaseNotes.txt
 fi;
-printHeader "Version [$VERSION] Package Size[`ls -lh dist/hotline_sdk_ios.zip | awk '{print $5}'`] Build[${BUILD_NUMBER}] Commit[`git log --pretty=format:'%h' -n 1`]"
-osascript -e 'display notification "Hotline iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
+printHeader "Version [$VERSION] Package Size[`ls -lh dist/freshchat_sdk_ios.zip | awk '{print $5}'`] Build[${BUILD_NUMBER}] Commit[`git log --pretty=format:'%h' -n 1`]"
+osascript -e 'display notification "Freshchat iOS SDK build '$BUILD_NUMBER' is ready" with title "Build succeeded"'
 
 if [ "$IS_RELEASE" == "YES" ] 
 then 

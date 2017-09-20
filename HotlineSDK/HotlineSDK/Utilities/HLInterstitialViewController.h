@@ -11,12 +11,12 @@
 #import "ConversationOptionsInterface.h"
 #import "HLConversationUtil.h"
 #import "HLViewController.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 
 @interface HLInterstitialViewController : UIViewController
 
 @property (nonatomic, strong) id delegate;
 
--(instancetype) initViewControllerWithOptions:(HotlineOptions *) options andIsEmbed:(BOOL) isEmbed;
+-(instancetype) initViewControllerWithOptions:(FreshchatOptions *) options andIsEmbed:(BOOL) isEmbed;
 
 @end

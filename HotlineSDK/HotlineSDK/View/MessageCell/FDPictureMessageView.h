@@ -18,3 +18,4 @@
 + (CGSize) getSizeForImageFromMessage:(KonotorMessageData*) message;
 
 @end
+

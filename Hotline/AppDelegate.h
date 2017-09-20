@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HotlineSDK/Hotline.h"
+#import "FreshchatSDK/Freshchat.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -16,6 +16,6 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UIImage *pickedImage;
 
-+(HotlineUser *)createHotlineUser;
++(FreshchatUser *)createFreshchatUser;
 
 @end

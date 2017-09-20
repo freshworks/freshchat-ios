@@ -9,14 +9,14 @@
 #import "FDActionButton.h"
 #import "FDMessageCell.h"
 #import "HLLocalization.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 @implementation FDActionButton
 
 @synthesize actionUrlString,articleID;
 
 - (void) setUpStyle{
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     float padding = 10;
     [self setFrame:CGRectZero];
     [self setContentEdgeInsets:UIEdgeInsetsMake(padding/8, padding/2, padding/8, padding/2)];
@@ -35,7 +35,7 @@
     float horizontalPadding=KONOTOR_HORIZONTAL_PADDING*3;
     float padding = 10;
     float maxButtonWidth =messageFrameWidth-horizontalPadding*2;
-    HLTheme *theme = [HLTheme sharedInstance];
+    FCTheme *theme = [FCTheme sharedInstance];
     UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
     
     if([actionLabel isEqualToString:@""]||(actionLabel==nil))
@@ -60,7 +60,7 @@
    
         [self setAttributedTitle:
          [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
-        [self setTitleColor:[theme actionButtonSelectedTextColor] forState:UIControlStateSelected];
+        [self setTitleColor:[theme actionButtonSelectedFontColor] forState:UIControlStateSelected];
     }
     else{
         [self setHidden:YES];

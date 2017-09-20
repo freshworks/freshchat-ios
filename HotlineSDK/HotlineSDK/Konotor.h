@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIImage.h>
 #import "KonotorConversation.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 
 //TODO: Remove this class
 
@@ -36,6 +36,7 @@
 +(BOOL) setBinaryImage:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) setBinaryImageThumbnail:(NSData *)imageData forMessageId:(NSString *)messageId;
 +(BOOL) isUserMe:(NSString *) userId;
++(BOOL) isCurrentUser:(NSNumber *) userId;
 +(NSString*) stopRecording;
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation;
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording;
@@ -50,6 +51,10 @@
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+
++(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
+
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 + (BOOL) showNotificationDisabledAlert;
 + (void) setDisabledNotificationAlertShown:(BOOL) shown;

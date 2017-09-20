@@ -7,7 +7,7 @@
 //
 
 #import "FDSettingsController.h"
-#import "HotlineSDK/Hotline.h"
+#import "FreshchatSDK/Freshchat.h"
 #import "AppDelegate.h"
 
 @interface FDSettingsController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -19,7 +19,8 @@
 @property (strong, nonatomic) UITextField *appKeyField;
 @property (strong, nonatomic) UIButton *updateConfigButton;
 
-@property (strong, nonatomic) UITextField *userNameField;
+@property (strong, nonatomic) UITextField *userFirstNameField;
+@property (strong, nonatomic) UITextField *userLastNameField;
 @property (strong, nonatomic) UITextField *emailField;
 @property (strong, nonatomic) UITextField *phoneNumField;
 @property (strong, nonatomic) UITextField *externalIDField;
@@ -57,7 +58,8 @@
     self.appKeyField = [self getTextFieldWithPlaceHolder:@"App Key"];
     self.updateConfigButton = [self getCustomAutoLayoutButtonWithTitle:@"Update config" withAction:@selector(updateConfigButtonAction:)];
     
-    self.userNameField = [self getTextFieldWithPlaceHolder:@"User name"];
+    self.userFirstNameField = [self getTextFieldWithPlaceHolder:@"First Name"];
+    self.userLastNameField = [self getTextFieldWithPlaceHolder:@"Last Name"];
     
     self.emailField = [self getTextFieldWithPlaceHolder:@"Email address"];
     self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -87,7 +89,7 @@
     [self.containerView addSubview:self.selectImageButton];
     [self.containerView addSubview:self.testNotificationButton];
     
-    NSDictionary *configFields = @{ @"domainField":self.domainField, @"appIDField":self.appIDField, @"appKeyField":self.appKeyField, @"userNameField":self.userNameField, @"emailField":self.emailField, @"phoneNumField":self.phoneNumField, @"externalIDField":self.externalIDField, @"selectImageButton": self.selectImageButton};
+    NSDictionary *configFields = @{ @"domainField":self.domainField, @"appIDField":self.appIDField, @"appKeyField":self.appKeyField, @"userFirstNameField":self.userFirstNameField, @"userLastNameField":self.userLastNameField, @"emailField":self.emailField, @"phoneNumField":self.phoneNumField, @"externalIDField":self.externalIDField, @"selectImageButton": self.selectImageButton};
     
     NSMutableDictionary *views = [NSMutableDictionary new];
     [views addEntriesFromDictionary:configFields];
@@ -106,7 +108,7 @@
     
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[updateUserPropertiesButton(contentWidth)]-10-|" options:0 metrics:metrics views:views]];
     
-    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[domainField]-[appIDField]-[appKeyField]-[updateConfigButton]-20-[userNameField]-[emailField]-[phoneNumField]-[externalIDField]-[updateUserPropertiesButton]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
+    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[domainField]-[appIDField]-[appKeyField]-[updateConfigButton]-20-[userFirstNameField]-[userLastNameField]-[emailField]-[phoneNumField]-[externalIDField]-[updateUserPropertiesButton]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
     
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[updateUserPropertiesButton]-20-[keyField]" options:0 metrics:nil views:views]];
     
@@ -173,26 +175,27 @@
 }
 
 -(void)updateCustomPropertiesButtonAction:(id)sender{
-    [[Hotline sharedInstance] updateUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
+    [[Freshchat sharedInstance] setUserPropertyforKey:self.keyField.text withValue:self.valueField.text];
 }
 
 -(void)updateConfigButtonAction:(id)sender{
     NSLog(@"Updating config");
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:self.appIDField.text
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:self.appIDField.text
                                                        andAppKey:self.appKeyField.text];
     config.domain = self.domainField.text;
-    [[Hotline sharedInstance]initWithConfig:config];
+    [[Freshchat sharedInstance]initWithConfig:config];
 }
 
 -(void)updateUserPropertiesButtonAction:(id)sender{
     NSLog(@"updating user info");
-    HotlineUser *user = [HotlineUser sharedInstance];
-    user.name = self.userNameField.text;
+    FreshchatUser *user = [FreshchatUser sharedInstance];
+    user.firstName = self.userFirstNameField.text;
+    user.lastName = self.userLastNameField.text;
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
     user.externalID = self.externalIDField.text;
-    [[Hotline sharedInstance] updateUser:user];
+    [[Freshchat sharedInstance] setUser:user];
 }
 
 - (IBAction)editButtonPressed:(id)sender {
@@ -204,15 +207,15 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:[Hotline sharedInstance].config.appID
-                                                      andAppKey:[Hotline sharedInstance].config.appKey];
-    config.domain = [Hotline sharedInstance].config.domain;
+    FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:[Freshchat sharedInstance].config.appID
+                                                      andAppKey:[Freshchat sharedInstance].config.appKey];
+    config.domain = [Freshchat sharedInstance].config.domain;
 
     switch (buttonIndex) {
         case 0:
-            [[Hotline sharedInstance]clearUserDataWithCompletion:^{
-                [[Hotline sharedInstance] updateUser:[AppDelegate createHotlineUser]];
-                //[[Hotline sharedInstance]initWithConfig:config];
+            [[Freshchat sharedInstance]resetUserWithCompletion:^{
+                [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+                [[Freshchat sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
             break;
@@ -224,23 +227,25 @@
 }
 
 -(void)updateFields{
-    self.domainField.text = [Hotline sharedInstance].config.domain;
-    self.appIDField.text = [Hotline sharedInstance].config.appID;
-    self.appKeyField.text = [Hotline sharedInstance].config.appKey;
+    self.domainField.text = [Freshchat sharedInstance].config.domain;
+    self.appIDField.text = [Freshchat sharedInstance].config.appID;
+    self.appKeyField.text = [Freshchat sharedInstance].config.appKey;
     
-    self.userNameField.text = [HotlineUser sharedInstance].name;
-    self.emailField.text = [HotlineUser sharedInstance].email;
-    self.phoneNumField.text = [HotlineUser sharedInstance].phoneNumber;
-    self.externalIDField.text = [HotlineUser sharedInstance].externalID;
+    self.userFirstNameField.text = [FreshchatUser sharedInstance].firstName;
+    self.userLastNameField.text = [FreshchatUser sharedInstance].lastName;
+    self.emailField.text = [FreshchatUser sharedInstance].email;
+    self.phoneNumField.text = [FreshchatUser sharedInstance].phoneNumber;
+    self.externalIDField.text = [FreshchatUser sharedInstance].externalID;
 }
 
 -(void)testNotification:(id)sender{
-    [[Hotline sharedInstance] handleRemoteNotification:@{
-                                                                  @"kon_c_ch_id" : @200,
+    [[Freshchat sharedInstance] handleRemoteNotification:@{
+                                                                  @"channel_id" : @200,
                                                                       @"aps" : @{
-                                                                          @"alert" : @"Sample Test Message"
+                                                                          @"alert" :  @{ @"body" : @"Sample Test Message"
+                                                                                        }
                                                                           },
-                                                                  @"source" : @"konotor"
+                                                                  @"source" : @"freshchat_user"
                                                                   }
                                                     andAppstate:UIApplicationStateActive];
          }

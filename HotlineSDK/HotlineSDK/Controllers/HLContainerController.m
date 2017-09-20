@@ -7,14 +7,15 @@
 //
 
 #import "HLContainerController.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
+#import "FCRemoteConfig.h"
 
 @interface HLContainerController ()
 
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 
 @end
 
@@ -25,7 +26,7 @@
     if (self) {
         self.childController = controller;
         self.childController.embedded = embed;
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
     }
     return self;
 }
@@ -49,11 +50,14 @@
     footerView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:footerView];
     
-    BOOL isSubscribed = [FDUtilities isPoweredByHidden];
+    //#imclude both changes server check and internal md5 check also :)
+    BOOL isPoweredByHidden = [FDUtilities isPoweredByHidden];
+    //BOOL isSubscribed = [[FCRemoteConfig sharedInstance] isSubscribedUser];
+    BOOL isSubscribed = false;
     
     //Footerview label
     UILabel *footerLabel = [UILabel new];
-    footerLabel.text = @"Powered by hotline.io";
+    footerLabel.text = @"Powered by Freshchat";
     footerLabel.font = [UIFont systemFontOfSize:11];
     footerLabel.textColor = [UIColor whiteColor];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -62,7 +66,7 @@
     
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    if(isSubscribed){
+    if(isSubscribed && isPoweredByHidden){
         [footerView removeFromSuperview];
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
     }

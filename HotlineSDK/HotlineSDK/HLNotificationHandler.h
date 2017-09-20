@@ -10,12 +10,15 @@
 #import <UIKit/UIKit.h>
 #import "FDNotificationBanner.h"
 
-#define HOTLINE_NOTIFICATION_PAYLOAD_CHANNEL_ID @"kon_c_ch_id"
-#define HOTLINE_NOTIFICATION_PAYLOAD_MARKETING_ID @"kon_message_marketingid"
+#define FRESHCHAT_NOTIFICATION_PAYLOAD_CHANNEL_ID @"channel_id"
+#define FRESHCHAT_NOTIFICATION_PAYLOAD_CONV_ID @"conv_id"
+#define FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID @"marketing_id"
+#define FRESHCHAT_NOTIFICATION_PAYLOAD_SOURCE_USER @"freshchat_user"
+#define FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS @"target_user_alias"
 
 @interface HLNotificationHandler : NSObject<FDNotificationBannerDelegate>
 
-+(BOOL)isHotlineNotification:(NSDictionary *)info;
++(BOOL)isFreshchatNotification:(NSDictionary *)info;
 -(void)handleNotification:(NSDictionary *)payload appState:(UIApplicationState)state;
 -(void)showActiveStateNotificationBanner :(HLChannel *)channel withMessage:(NSString *)message;
 +(BOOL)areNotificationsEnabled;

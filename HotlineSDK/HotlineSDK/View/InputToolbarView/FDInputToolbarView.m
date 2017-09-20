@@ -7,9 +7,9 @@
 //
 
 #import "FDInputToolbarView.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLMacros.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import <AudioToolbox/AudioServices.h>
 #import "TargetConditionals.h"
 #import "HLLocalization.h"
@@ -25,7 +25,7 @@
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
-@property (nonatomic, strong) HLTheme              *theme;
+@property (nonatomic, strong) FCTheme              *theme;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonYConstraint;
 @property (nonatomic) BOOL canShowAttachButton;
 
@@ -47,13 +47,14 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     if (self) {
         
         self.delegate = delegate;
-        self.theme = [HLTheme sharedInstance];
-        
-        self.backgroundColor=[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0];
+        self.theme = [FCTheme sharedInstance];
+        self.isFromAttachmentScreen = NO;
+        self.backgroundColor = [self.theme inputToolbarBackgroundColor];
         textView=[[UITextView alloc] init];
         [textView setFont:[self.theme inputTextFont]];
-        [textView setTextColor:[UIColor lightGrayColor]];
-        textView.layer.borderColor=[[UIColor lightGrayColor] CGColor];
+        [textView setTextColor:[self.theme inputTextPlaceholderFontColor]];
+        textView.tintColor = [self.theme inputTextCursorColor];
+        textView.layer.borderColor=[[self.theme inputTextBorderColor] CGColor];
         textView.layer.cornerRadius=5.0;
         textView.layer.borderWidth=1.0;
         textView.delegate = self;
@@ -61,7 +62,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
         textView.text = placeHolderText;
         textView.delegate = self;
-
+        
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
         UIImage *attachmentImage = [self.theme getImageWithKey:IMAGE_ATTACH_ICON];
@@ -72,7 +73,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
         micButton.backgroundColor = [UIColor clearColor];
         micButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *micImage = [[HLTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
+        UIImage *micImage = [[FCTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
         [micButton setImage:micImage forState:UIControlStateNormal];
         micButton.backgroundColor = [UIColor clearColor];
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -130,9 +131,9 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 
     BOOL isPictureMessageEnabled = [plistManager isPictureMessageEnabled];
 
-    attachButtonWidthConstraint.constant = (isPictureMessageEnabled) ? 24.0 : 0;
+    attachButtonWidthConstraint.constant = (!self.isFromAttachmentScreen && isPictureMessageEnabled) ? 24.0 : 0;
     
-    self.isVoiceMessageEnabled = [plistManager isVoiceMessageEnabled];
+    self.isVoiceMessageEnabled = [plistManager isVoiceMessageEnabled] && !self.isFromAttachmentScreen;
 
     [self updateActionButtons:textView];
     
@@ -178,7 +179,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         chatTextView.text = @"";
     }
     [chatTextView setTextColor:[self.theme inputTextFontColor]];
-    chatTextView.textColor = [[HLTheme sharedInstance] inputTextFontColor];
+    chatTextView.textColor = [[FCTheme sharedInstance] inputTextFontColor];
     [chatTextView becomeFirstResponder];
 }
 
@@ -190,8 +191,10 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     }
 }
 
+//TODO: Replace once support for audio is enabled
 -(void)updateActionButtons:(UITextView *)inputTextView{
-    if(!self.isVoiceMessageEnabled){
+    //if(!self.isVoiceMessageEnabled){
+    if(true) {
         [self showMicButton:NO];
     }else{
         BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);

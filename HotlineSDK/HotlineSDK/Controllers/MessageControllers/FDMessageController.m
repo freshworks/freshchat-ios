@@ -8,10 +8,12 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import "FDMessageController.h"
-#import "FDMessageCell.h"
+#import "HLAgentMessageCell.h"
+#import "HLUserMessageCell.h"
 #import "KonotorImageInput.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "KonotorMessage.h"
+#import "Message.h"
 #import "Konotor.h"
 #import "HLMacros.h"
 #import "FDLocalNotification.h"
@@ -21,7 +23,7 @@
 #import "HLArticlesController.h"
 #import "HLContainerController.h"
 #import "HLLocalization.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDUtilities.h"
 #import "FDImagePreviewController.h"
 #import "HLMessageServices.h"
@@ -40,6 +42,9 @@
 #import "HLConversationUtil.h"
 #import "HLControllerUtils.h"
 #import "HLMessagePoller.h"
+#import "FCRemoteConfig.h"
+#import "HLUser.h"
+#import "HLCoreServices.h"
 
 typedef struct {
     BOOL isLoading;
@@ -50,9 +55,10 @@ typedef struct {
 } FDMessageControllerFlags;
 
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, FDMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLUserMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingView;
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDInputToolbarView *inputToolbar;
@@ -83,11 +89,18 @@ typedef struct {
 @property (nonatomic) BOOL isOneWayChannel;
 @property (nonatomic, strong) ConversationOptions *convOptions;
 @property (nonatomic) BOOL fromNotification;
+@property (nonatomic) BOOL initalLoading;
 
 @property (nonatomic, strong) UILabel *bannerMesagelabel;
 @property (nonatomic, strong) UIView *bannerMessageView;
 @property (nonatomic, strong) NSArray *viewVerticalConstraints;
 @property (nonatomic, strong) NSDictionary *views;
+@property (nonatomic, strong) UIView *titleView;
+@property (nonatomic, strong) UILabel *channelName;
+@property (nonatomic, strong) UILabel *typicalReply;
+@property (nonatomic) NSInteger titleWidth;
+@property (nonatomic) NSInteger titleHeight;
+
 
 @end
 
@@ -99,6 +112,7 @@ typedef struct {
 #define YES_NO_PROMPT_HEIGHT 80
 #define KONOTOR_REFRESHINDICATOR_TAG 80
 #define KONOTOR_MESSAGESPERPAGE 25
+#define FRESHCHAT_MESSAGE_BOTTOM_PADDING 10
 
 -(instancetype)initWithChannelID:(NSNumber *)channelID andPresentModally:(BOOL)isModal{
     self = [super init];
@@ -111,7 +125,7 @@ typedef struct {
         self.fromNotification = fromNotification;
         self.messageHeightMap = [[NSMutableDictionary alloc]init];
         self.messageWidthMap = [[NSMutableDictionary alloc]init];
-        
+        self.initalLoading = true;
         _flags.isFirstWordOnLine = YES;
         _flags.isModalPresentationPreferred = isModal;
 
@@ -146,14 +160,71 @@ typedef struct {
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = self.channel.name;
     self.messagesDisplayedCount = 20;
+    self.initalLoading = true;
     self.view.backgroundColor = [UIColor whiteColor];
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
+    [self setNavigationTitle:parent];
     [self scrollTableViewToLastCell];
+    [self.tableView setHidden:true];
     [HLMessageServices fetchChannelsAndMessagesWithFetchType:ScreenLaunchFetch source:ChatScreen andHandler:nil];
-    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [Message markAllMessagesAsReadForChannel:self.channel];
     [self prepareInputToolbar];
+}
+
+-(void) setNavigationTitle:(UIViewController *)parent {
+    
+    UIBarButtonItem *left = parent.navigationItem.leftBarButtonItem;
+    UIView *view = [left valueForKey:@"view"];
+    UIImage *image = [left valueForKey:@"image"];
+    CGFloat leftBarButtonWidth = 0.0;
+    if(view){
+        leftBarButtonWidth=[view frame].size.width;
+    }
+    
+    if(image) {
+        leftBarButtonWidth= 30;
+    }
+    
+    self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (3 * leftBarButtonWidth);
+    self.titleHeight = parent.navigationController.navigationBar.frame.size.height;
+    
+    self.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.titleWidth, self.titleHeight)];
+    self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, self.titleWidth, self.titleHeight - 2)];
+    self.typicalReply = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0)];
+    self.typicalReply.alpha = 0;
+    self.typicalReply.clipsToBounds = true;
+    self.channelName.textAlignment = UITextAlignmentCenter;
+    self.channelName.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
+    self.channelName.font = [self.channelName.font fontWithSize:18];
+    self.channelName.text = self.channel.name;
+    [self.titleView addSubview:self.channelName];
+    
+    self.typicalReply.font = [[FCTheme sharedInstance] responseTimeExpectationsFontName];
+    self.typicalReply.textColor = [[FCTheme sharedInstance] responseTimeExpectationsFontColor];
+    self.typicalReply.textAlignment = UITextAlignmentCenter;
+    [self.titleView addSubview:self.typicalReply];
+    
+    parent.navigationItem.titleView = self.titleView;
+}
+
+-(void) showTypicalReply:(NSInteger) time {
+    self.typicalReply.text = [FDUtilities typicalRepliesMsgForTime:time];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
+        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
+        self.typicalReply.alpha = 1;
+    }];
+}
+
+-(void) hideTypicalReply {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - 2);
+        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0);
+        self.typicalReply.alpha = 1;
+    }];
 }
 
 -(void)prepareInputToolbar{
@@ -170,16 +241,35 @@ typedef struct {
 - (void)tableViewTapped:(UITapGestureRecognizer *)tapObj {
     CGPoint touchLoc = [tapObj locationInView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoc];
-    FDMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if ( messageCell ) {
-        touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
-        if (! CGRectContainsPoint(messageCell.messageTextView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
-            [self dismissKeyboard];
+    if (indexPath.row < self.messages.count) {
+        MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
+        BOOL isAgentMessage = [Konotor isCurrentUser:[message messageUserType]]?NO:YES; //Changed
+        if(isAgentMessage) {
+            HLAgentMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if ( messageCell ) {
+                touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
+                if (! CGRectContainsPoint(messageCell.chatBubbleImageView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
+                    [self dismissKeyboard];
+                }
+            }
+            else  {
+                [self dismissKeyboard];
+            }
+        } else {
+            HLUserMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if ( messageCell ) {
+                touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
+                if (! CGRectContainsPoint(messageCell.chatBubbleImageView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
+                    [self dismissKeyboard];
+                }
+            }
+            else  {
+                [self dismissKeyboard];
+            }
         }
+        
     }
-    else  {
-        [self dismissKeyboard];
-    }
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -202,8 +292,47 @@ typedef struct {
         }
     }];
     [self.messagesPoller begin];
+    if([FDUtilities canMakeTypicallyRepliesCall] ){
+        [self fetchTypicalRepliesIn];
+    } else {
+        [self updateTypicalReplies];
+    }
 }
 
+-(void) updateTypicalReplies {
+    NSDictionary *typReplyDict = [HLUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+    if (typReplyDict != nil) {
+        NSNumber *currentChannelTime = typReplyDict[self.channel.channelID];
+        if (currentChannelTime != nil) {
+            [self showTypicalReply:[currentChannelTime integerValue]];
+        }
+    }
+}
+
+-(void)fetchTypicalRepliesIn{
+    [HLCoreServices fetchTypicalReply:^(FDResponseInfo *responseInfo, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(!error) {
+                [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
+                NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
+                if(channelsInfo[@"channelResponseTime"] != nil) {
+                    NSArray *convArr = channelsInfo[@"channelResponseTime"];
+                    NSMutableDictionary *typReplyDict = [[NSMutableDictionary alloc]init];
+                    for (int i = 0; i < [convArr count]; i++) {
+                        NSDictionary* item = [convArr objectAtIndex:i];
+                        NSNumber *responseTime = item[@"responseTime"];
+                        NSNumber *channelId = item[@"channelId"];
+                        [typReplyDict setObject:responseTime forKey:channelId];
+                    }
+                    [HLUserDefaults setDictionary:typReplyDict forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+                    [self updateTypicalReplies];
+                }
+            } else {
+                [self hideTypicalReply];
+            }
+        });
+    }];
+}
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -293,27 +422,37 @@ typedef struct {
     
     self.bannerMessageView = [UIView new];
     self.bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.bannerMessageView.backgroundColor = [[HLTheme sharedInstance] conversationOverlayBackgroundColor];
+    self.bannerMessageView.backgroundColor = [[FCTheme sharedInstance] conversationOverlayBackgroundColor];
     [self.view addSubview:self.bannerMessageView];
 
     self.bannerMesagelabel = [[UILabel alloc] init];
-    self.bannerMesagelabel.font = [[HLTheme sharedInstance] conversationOverlayTextFont];
+    self.bannerMesagelabel.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
     self.bannerMesagelabel.text = overlayText;
     self.bannerMesagelabel.numberOfLines = 3;
-    self.bannerMesagelabel.textColor = [[HLTheme sharedInstance] conversationOverlayTextColor];
+    self.bannerMesagelabel.textColor = [[FCTheme sharedInstance] conversationOverlayTextColor];
     self.bannerMesagelabel.textAlignment = UITextAlignmentCenter;
     
     self.bannerMesagelabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.bannerMessageView addSubview:self.bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
-    self.tableView.backgroundColor = [[HLTheme sharedInstance]messageUIBackgroundColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    UIImage *bgImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_CONVERSATION_BACKGROUND];
+    if(bgImage){
+        [self.view setBackgroundColor: [[UIColor alloc] initWithPatternImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_CONVERSATION_BACKGROUND]]];
+    }else{
+        self.tableView.backgroundColor = [[FCTheme sharedInstance]messageUIBackgroundColor];
+    }
+    
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = 100;
+    [self.tableView setContentInset:UIEdgeInsetsMake(0, 0, FRESHCHAT_MESSAGE_BOTTOM_PADDING, 0)];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;    
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.view addSubview:self.tableView];
     
@@ -321,6 +460,16 @@ typedef struct {
     self.bottomView = [[UIView alloc]init];
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
+    
+    //LoadingActivityIndicator
+    self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.loadingView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[loadingView]-|" options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"loadingView":self.loadingView}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[loadingView]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"loadingView":self.loadingView}]];
+    
     
     self.bottomViewHeightConstraint = [FDAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
     self.bottomViewBottomConstraint = [FDAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
@@ -384,20 +533,51 @@ typedef struct {
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = @"FDMessageCell";
-    FDMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[FDMessageCell alloc] initWithReuseIdentifier:cellIdentifier andDelegate:self];
-    }
+    NSString *userCellIdentifier = @"HLUserMessageCell";
+    NSString *agentCellIdentifier = @"HLAgentMessageCell";
+    HLAgentMessageCell *agentCell;
+    HLUserMessageCell *userCell;
+    BOOL isAgentMessage = true;
+    
     if (indexPath.row < self.messages.count) {
-        KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
-        cell.messageData = message;
-        [cell drawMessageViewForMessage:message parentView:self.view withWidth:[self getWidthForMessage:message]];
+        MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
+        isAgentMessage = [Konotor isCurrentUser:[message messageUserType]]?NO:YES; //Changed
+        
+        if(isAgentMessage) {
+            agentCell = [tableView dequeueReusableCellWithIdentifier:agentCellIdentifier];
+            if (!agentCell) {
+                agentCell = [[HLAgentMessageCell alloc] initWithReuseIdentifier:agentCellIdentifier andDelegate:self];
+            }
+            agentCell.messageData = message;
+            [agentCell drawMessageViewForMessage:message parentView:self.view];
+        } else {
+            userCell = [tableView dequeueReusableCellWithIdentifier:userCellIdentifier];
+            if (!userCell) {
+                userCell = [[HLUserMessageCell alloc] initWithReuseIdentifier:userCellIdentifier andDelegate:self];
+            }
+            userCell.messageData = message;
+            [userCell drawMessageViewForMessage:message parentView:self.view];
+        }
     }
     
+    UITableViewCell* refreshCell = [self showRefreshCellIfRequired:indexPath];
+    if(refreshCell!=nil) {
+        return refreshCell;
+    }
     
-    if(indexPath.row==0 && self.messagesDisplayedCount<self.messages.count){
-        UITableViewCell* cell=[self getRefreshStatusCell];
+    if(isAgentMessage && agentCell) {
+        return agentCell;
+    } else if (userCell) {
+        return userCell;
+    }
+    
+    return [[UITableViewCell alloc]init];
+}
+
+-(UITableViewCell *) showRefreshCellIfRequired: (NSIndexPath *)index {
+    
+    if(index.row == 0 && [[self.tableView indexPathsForVisibleRows] containsObject:index] && self.messagesDisplayedCount < self.messages.count && !self.initalLoading){
+        UITableViewCell* cell =[self getRefreshStatusCell];
         NSInteger oldnumber = self.messagesDisplayedCount;
         self.messagesDisplayedCount += self.loadmoreCount;
         if(self.messagesDisplayedCount > self.messageCount){
@@ -406,7 +586,7 @@ typedef struct {
         [self performSelector:@selector(refreshView:) withObject:@(oldnumber) afterDelay:0];
         return cell;
     }
-    return cell;
+    return nil;
 }
 
 - (UITableViewCell*) getRefreshStatusCell
@@ -435,44 +615,7 @@ typedef struct {
     return self.messagesDisplayedCount;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    KonotorMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
-    float height;
-    NSString *key = [self getIdentityForMessage:message];
-    if(key){
-        if(self.messageHeightMap[key]){
-            height = [self.messageHeightMap[key] floatValue];
-        }
-        else {
-            height = [FDMessageCell getHeightForMessage:message parentView:self.view];
-            self.messageHeightMap[key] = @(height);
-        }
-    }else{
-        height = 0;
-    }
-    return height+CELL_HORIZONTAL_PADDING;
-}
-
-
--(CGFloat)getWidthForMessage:(KonotorMessageData *) message{
-    float width;
-    NSString *key = [self getIdentityForMessage:message];
-    if(key){
-        if(self.messageWidthMap[key]){
-            width = [self.messageWidthMap[key] floatValue];
-        }
-        else {
-            width = [FDMessageCell getWidthForMessage:message];
-            self.messageWidthMap[key] = @(width);
-        }
-    }else{
-        width = 0;
-    }
-    return width;
-}
-
-
--(NSString *)getIdentityForMessage:(KonotorMessageData *)message{
+-(NSString *)getIdentityForMessage:(MessageData *)message{
     return ((message.messageId==nil)?[NSString stringWithFormat:@"%ul",message.createdMillis.intValue]:message.messageId);
 }
 
@@ -482,6 +625,10 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar micButtonPressed:(id)sender{
+    
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        return;
+    }
     
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
@@ -510,16 +657,36 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar sendButtonPressed:(id)sender{
+    
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        return;
+    }
+    
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
+    self.inputToolbar.textView.text = @"";
     if(([toSend isEqualToString:@""]) || ([toSend isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)])){
         [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
         
     }else{
         
-        [Konotor uploadTextFeedback:toSend onConversation:self.conversation onChannel:self.channel];
+        NSDictionary *textFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @1, @"fragmentType",
+                                                                                        @"text/html",@"contentType",
+                                                                                        toSend,@"content",
+                                                                                        @0,@"position",nil];
+        
+        NSArray *fragmentInfo = [[NSArray alloc] initWithObjects:textFragmentInfo, nil];
+        [HLUser setUserMessageInitiated];
+        if ([HLUser canRegisterUser]) {
+            [HLUser registerUser:^(NSError *error) {
+                if (!error) {
+                    [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
+                }
+            }];
+        } else {
+            [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
+        }
         [self checkPushNotificationState];
-        self.inputToolbar.textView.text = @"";
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     }
     [self refreshView];
@@ -684,7 +851,7 @@ typedef struct {
 }
 
 -(void)networkReachable{
-    [KonotorMessage uploadAllUnuploadedMessages];
+    [Message uploadAllUnuploadedMessages];
 }
 
 -(void)localNotificationUnSubscription{
@@ -694,8 +861,8 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_BANNER_MESSAGE_UPDATED object:nil];
 }
@@ -773,7 +940,6 @@ typedef struct {
 }
 
 -(void)scrollTableViewToLastCell{
-
      NSInteger lastSpot = _flags.isLoading ? self.messagesDisplayedCount : (self.messagesDisplayedCount-1);
     
     if(lastSpot<0) return;
@@ -793,7 +959,6 @@ typedef struct {
 }
 
 -(void)scrollTableViewToCell:(int)lastSpot{
-    
     if(lastSpot<0) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:(self.messagesDisplayedCount-lastSpot) inSection:0];
     @try {
@@ -898,22 +1063,29 @@ typedef struct {
        ((self.messageCount - self.messagesDisplayedCount)<3)){
         self.messagesDisplayedCount = self.messageCount;
     }
-
     [self.tableView reloadData];
-    [KonotorMessage markAllMessagesAsReadForChannel:self.channel];
+    [Message markAllMessagesAsReadForChannel:self.channel];
     if(obj==nil)
         [self scrollTableViewToLastCell];
     else{
         [self scrollTableViewToCell:((NSNumber*)obj).intValue];
     }
+    if(self.initalLoading) {
+        [self.loadingView stopAnimating];
+        [self.tableView setHidden:false];
+        self.initalLoading = false;
+    }
 }
 
 -(NSArray *)fetchMessages{
     NSSortDescriptor* desc=[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[KonotorMessage getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
-    KonotorMessageData *firstMessage = messages.firstObject;
-    if (firstMessage.isWelcomeMessage && !firstMessage.text.length) {
-        [messages removeObject:firstMessage];
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:[[Message getAllMesssageForChannel:self.channel] sortedArrayUsingDescriptors:@[desc]]];
+    MessageData *firstMessage = messages.firstObject;
+    if (firstMessage.isWelcomeMessage && (firstMessage.fragments.count > 0) ) {
+        Fragment *lastfragment  = firstMessage.fragments.lastObject;
+        if(lastfragment && !lastfragment.content.length) {
+            [messages removeObject:firstMessage];
+        }
     }
     return messages;
 }
@@ -941,42 +1113,62 @@ typedef struct {
 
 #pragma mark - Message cell delegates
 
--(void)messageCell:(FDMessageCell *)cell pictureTapped:(UIImage *)image{
-    FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:image];
-    [imageController presentOnController:self];
-    FDLog(@"Picture message tapped");
+-(void)agentCellPerfomAction:(FragmentData *)fragment {
+    NSNumber *fragmentType = @([fragment.type intValue]);
+    if ([fragmentType isEqualToValue:@2]) {
+        FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:[UIImage imageWithData:fragment.binaryData1]];
+        [imageController presentOnController:self];
+    } else if ([fragmentType isEqualToValue:@5]) {
+        NSURL *url = [[NSURL alloc]initWithString:fragment.content];
+        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];        
+        NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
+        for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+            if (queryItem.value == nil) {
+                continue;
+            }
+            if ([queryItem.name isEqualToString:@"article_id"]) {
+                articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
+                break;
+            }
+        }
+        
+        if(articleID.integerValue != -1) {
+            @try{
+                FAQOptions *option = [FAQOptions new];
+                if([HLConversationUtil hasTags:self.convOptions]){
+                    [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
+                }
+                [HLFAQUtil launchArticleID:articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
+            }
+            @catch(NSException* e){
+                ALog(@"%@",e);
+            }
+        }
+        else {
+            @try{
+                NSURL * actionUrl=[NSURL URLWithString:fragment.content];
+                if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[UIApplication sharedApplication] openURL:actionUrl];
+                    });
+                }
+            }
+            @catch(NSException* e){
+                ALog(@"%@",e);
+            }
+        }
+    }
+}
+
+-(void)userCellPerfomAction:(FragmentData *)fragment {
+    NSNumber *fragmentType = @([fragment.type intValue]);
+    if ([fragmentType isEqualToValue:@2]) {
+        FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:[UIImage imageWithData:fragment.binaryData1]];
+        [imageController presentOnController:self];
+    }
 }
 
 //TODO: Needs refractor
--(void)messageCell:(FDMessageCell *)cell openActionUrl:(id)sender{
-    FDActionButton* button=(FDActionButton*)sender;
-    if(button.articleID!=nil && button.articleID.integerValue > 0){
-        @try{
-            FAQOptions *option = [FAQOptions new];
-            if([HLConversationUtil hasTags:self.convOptions]){
-                [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
-            }
-            [HLFAQUtil launchArticleID:button.articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
-        }
-        @catch(NSException* e){
-            ALog(@"%@",e);
-        }
-    }
-    else if(button.actionUrlString!=nil){
-        @try{
-            NSURL * actionUrl=[NSURL URLWithString:button.actionUrlString];
-            if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[UIApplication sharedApplication] openURL:actionUrl];
-                });
-            }
-        }
-        @catch(NSException* e){
-            ALog(@"%@",e);
-        }
-    }
-}
-
 #pragma mark - Audio toolbar delegates
 
 -(void)audioMessageInput:(FDAudioMessageInputView *)toolbar dismissButtonPressed:(id)sender{
@@ -994,7 +1186,8 @@ typedef struct {
     if(self.currentRecordingMessageId!=nil){
         
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
-        float audioMsgDuration = [[[KonotorMessage retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
+        float audioMsgDuration = 0.0f;
+        //[[[Message retriveMessageForMessageId:self.currentRecordingMessageId] durationInSecs] floatValue];
         
         if(audioMsgDuration <= 1){
             

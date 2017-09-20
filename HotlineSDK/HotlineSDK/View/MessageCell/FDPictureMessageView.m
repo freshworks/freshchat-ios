@@ -8,7 +8,7 @@
 
 #import "FDPictureMessageView.h"
 #import "FDMessageCell.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 #define KONOTOR_PICTURE_TAG 89
 #define KONOTOR_IMAGE_MAXHEIGHT 300
@@ -61,7 +61,7 @@
         else{
             [self setFrame:CGRectMake((messageWidth-height*110/100)/2-KONOTOR_MESSAGE_BACKGROUND_IMAGE_LEFT_INSET/2, 8, height*110/100, height)];
         }
-        [self setImage:[[HLTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
+        [self setImage:[[FCTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];
         
         dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(q, ^{
@@ -115,3 +115,4 @@
 }
 
 @end
+

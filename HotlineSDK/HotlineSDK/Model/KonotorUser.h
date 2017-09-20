@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "Hotline.h"
+#import "Freshchat.h"
 
 @class KonotorCustomProperty;
 
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *userAlias;
 @property (nullable, nonatomic, retain) KonotorCustomProperty *hasProperties;
 
-+(void)storeUserInfo:(HotlineUser *)userInfo;
++(void)storeUserInfo:(FreshchatUser *)userInfo;
 +(KonotorUser *)getUser;
 
 @end

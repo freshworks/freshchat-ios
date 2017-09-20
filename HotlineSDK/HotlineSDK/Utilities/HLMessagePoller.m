@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "HLMessagePoller.h"
 #import "KonotorDataManager.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "HLConstants.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
 #import "math.h"
 #import "HLNotificationHandler.h"
+#import "FCRemoteConfig.h"
+#import "HLUser.h"
 
 #define MAX_POLL_INTERVAL_ON_SCREEN     60 // 1 minute;
 #define MAX_POLL_INTERVAL_OFF_SCREEN    120 // 2 minutes;
@@ -45,8 +47,8 @@
 
 -(void)begin{
     if(self.pollType == OnscreenPollFetch){
-        self.interval = ON_CHAT_SCREEN_POLLER_INTERVAL * ([HLNotificationHandler areNotificationsEnabled]?2:1);
-        self.backOff = 1.5;
+        self.interval = [FCRemoteConfig sharedInstance].refreshIntervals.activeConvMinFetchInterval/ONE_SECONDS_IN_MS;
+        self.backOff =[FCRemoteConfig sharedInstance].conversationConfig.activeConvFetchBackoffRatio;
     }
     if(self.pollType == OffScreenPollFetch){
         self.interval = OFF_CHAT_SCREEN_POLLER_INTERVAL;
@@ -73,34 +75,36 @@
 }
 
 -(void)pollMessages:(NSTimer *)timer{
-    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
-    [mainContext performBlock:^{
-        if([KonotorMessage hasUserMessageInContext:mainContext]){
-            if([KonotorMessage daysSinceLastMessageInContext:mainContext] <= MAX_DAYS_SINCE_LAST_MESSAGE_FOR_POLL) {
-                [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
-                              ,[KonotorMessage daysSinceLastMessageInContext:mainContext]]];
-                enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?
-                        ([HLNotificationHandler areNotificationsEnabled]?OnScreenPollWithToken:OnScreenPollWithoutToken)
-                        :OffScreenPoll;
-                [HLMessageServices fetchChannelsAndMessagesWithFetchType:self.pollType
-                                                                  source:source
-                                                              andHandler:^(NSError *error) {}];
+    if([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount] && [HLUser isUserRegistered] && [[FCRemoteConfig sharedInstance] isActiveConvAvailable]){
+        NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
+        [mainContext performBlock:^{
+            if([Message hasUserMessageInContext:mainContext]){
+                if([Message daysSinceLastMessageInContext:mainContext] <= [FCRemoteConfig sharedInstance].conversationConfig.activeConvWindow) {
+                    [self logMsg:[NSString stringWithFormat:@"Polling server now. Days since last Message %ld"
+                                  ,[Message daysSinceLastMessageInContext:mainContext]]];
+                    enum MessageRequestSource source = self.pollType == OnscreenPollFetch ?
+                    ([HLNotificationHandler areNotificationsEnabled]?OnScreenPollWithToken:OnScreenPollWithoutToken)
+                    :OffScreenPoll;
+                    [HLMessageServices fetchChannelsAndMessagesWithFetchType:self.pollType
+                                                                      source:source
+                                                                  andHandler:^(NSError *error) {}];
+                }
+                else {
+                    [self logMsg:@"It has been long time since last message.not polling server"];
+                }
             }
             else {
-                [self logMsg:@"It has been long time since last message.not polling server"];
+                [self logMsg:@"No user Messages. Skipping Fetch"];
             }
-        }
-        else {
-            [self logMsg:@"No user Messages. Skipping Fetch"];
-        }
-    }];
-    [self setNext];
+        }];
+        [self setNext];
+    }
 }
 
 -(void)setNext {
     [self.pollingTimer invalidate]; // Not required since poller is not on repeat, but do it anyways
     self.interval =  fmin(self.interval * self.backOff,
-                          self.pollType == OnscreenPollFetch ? MAX_POLL_INTERVAL_ON_SCREEN : MAX_POLL_INTERVAL_OFF_SCREEN);
+                          self.pollType == OnscreenPollFetch ? [FCRemoteConfig sharedInstance].refreshIntervals.activeConvMaxFetchInterval/ONE_SECONDS_IN_MS : MAX_POLL_INTERVAL_OFF_SCREEN);
     if(!self.ended){
         [self poll];
     }

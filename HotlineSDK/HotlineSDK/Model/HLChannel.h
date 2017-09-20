@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class KonotorConversation, KonotorMessage;
+@class KonotorConversation, KonotorMessage, Message;
 
 #define CHANNEL_TYPE_AGENT_ONLY @"AGENT_ONLY"
 #define CHANNEL_TYPE_USER_ONLY @"USER_ONLY"
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSNumber *position;
 @property (nullable, nonatomic, retain) NSSet<KonotorConversation *> *conversations;
-@property (nullable, nonatomic, retain) NSSet<KonotorMessage *> *messages;
+@property (nullable, nonatomic, retain) NSSet<Message *> *messages;
 
 +(HLChannel *)getWithID:(NSNumber *)channelID inContext:(NSManagedObjectContext *)context;
 +(HLChannel *)getWithName:(NSString *)name inContext:(NSManagedObjectContext *)context;
@@ -49,10 +49,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addConversations:(NSSet<KonotorConversation *> *)values;
 - (void)removeConversations:(NSSet<KonotorConversation *> *)values;
 
-- (void)addMessagesObject:(KonotorMessage *)value;
-- (void)removeMessagesObject:(KonotorMessage *)value;
-- (void)addMessages:(NSSet<KonotorMessage *> *)values;
-- (void)removeMessages:(NSSet<KonotorMessage *> *)values;
+- (void)addMessagesObject:(Message *)value;
+- (void)removeMessagesObject:(Message *)value;
+- (void)addMessages:(NSSet<Message *> *)values;
+- (void)removeMessages:(NSSet<Message *> *)values;
 - (KonotorConversation*) primaryConversation;
 - (BOOL) isActiveChannel;
 - (BOOL)hasAtleastATag:(NSArray *) tags;

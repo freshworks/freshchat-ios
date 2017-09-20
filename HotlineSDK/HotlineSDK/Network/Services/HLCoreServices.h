@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KonotorMessage.h"
+#import "Message.h"
+#import "FDResponseInfo.h"
 
 @interface HLCoreServices : NSObject
 
@@ -15,16 +16,24 @@
 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler;
 
-+(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion;
++(NSURLSessionDataTask *)performDAUCall;
+
++(NSURLSessionDataTask *)performSessionCall;
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 
-+(NSURLSessionDataTask *)registerUserConversationActivity :(KonotorMessage *)message;
++(NSURLSessionDataTask *)registerUserConversationActivity :(Message *)message;
 
 +(void)uploadUnuploadedProperties;
+
++(NSURLSessionDataTask *)fetchRemoteConfig;
+
++(NSURLSessionDataTask *)performHeartbeatCall;
 
 +(void)sendLatestUserActivity:(HLChannel *)channel;
 
 +(NSURLSessionDataTask *)trackUninstallForUser:(NSDictionary *) userAlias withCompletion:(void (^)(NSError *))completion;
+
++(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FDResponseInfo *responseInfo, NSError *error))handler;
 
 @end

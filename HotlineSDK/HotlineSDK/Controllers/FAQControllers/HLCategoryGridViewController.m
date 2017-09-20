@@ -15,11 +15,11 @@
 #import "FDRanking.h"
 #import "FDLocalNotification.h"
 #import "HLCategory.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLSearchViewController.h"
 #import "FDSearchBar.h"
 #import "FDUtilities.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 #import "HLLocalization.h"
 #import "FDBarButtonItem.h"
 #import "HLEmptyResultView.h"
@@ -38,7 +38,7 @@
 @property (nonatomic, strong) FDSearchBar *searchBar;
 @property (nonatomic, strong) FDMarginalView *footerView;
 @property (nonatomic, strong) UILabel  *noSolutionsLabel;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property (nonatomic, strong) HLCategoryViewBehaviour *categoryViewBehaviour;
 @property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
@@ -84,7 +84,7 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
-    self.theme = [HLTheme sharedInstance];
+    self.theme = [FCTheme sharedInstance];
     self.view.backgroundColor = [UIColor whiteColor];
     [self setupSubviews];
     [self adjustUIBounds];
@@ -178,7 +178,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
     if([self canDisplayFooterView]){
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(40)]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(44)]|" options:0 metrics:nil views:views]];
     }
     else {
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(0)]|" options:0 metrics:nil views:views]];
@@ -221,7 +221,7 @@
         cell.layer.borderColor=[self.theme gridViewCellBorderColor].CGColor;
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
-            cell.imageView.image = [FDCell generateImageForLabel:category.title];
+            cell.imageView.image = [FDCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
         }else{
             cell.imageView.image = [UIImage imageWithData:category.icon];
         }

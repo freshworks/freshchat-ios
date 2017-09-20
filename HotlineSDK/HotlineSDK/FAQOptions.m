@@ -6,7 +6,7 @@
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "Hotline.h"
+#import "Freshchat.h"
 
 #import <Foundation/Foundation.h>
 #import "FDUtilities.h"

@@ -10,7 +10,7 @@
 #define FreshdeskSDK_FDThemeConstants_h
 
 #define FD_THEMES_DIR @"Themes"
-#define FD_DEFAULT_THEME_NAME @"HLTheme"
+#define FD_DEFAULT_THEME_NAME @"FCTheme"
 #define FD_DEFAULT_ARTICLE_DETAIL_CSS_FILENAME @"normalize"
 #define FD_FONT_SIZE_LARGE [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline].pointSize
 #define FD_FONT_SIZE_MEDIUM [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline].pointSize
@@ -20,6 +20,7 @@
 #define FD_COLOR_WHITE @"FFFFFF"
 #define FD_COLOR_BLACK @"000000"
 #define FD_COLOR_RED @"FF0000"
+#define FD_COLOR_BLUE @"1850FB"
 #define FD_COLOR_GRAY @"D3D3D3"
 #define FD_BUTTON_COLOR @"0079FF"
 #define FD_NAVIGATION_BAR_BACKGROUND @"F8F8F8"

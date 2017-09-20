@@ -8,7 +8,7 @@
 
 #import "HLChannel.h"
 #import "KonotorConversation.h"
-#import "KonotorMessage.h"
+#import "Message.h"
 #import "HLMacros.h"
 #import "HotlineAppState.h"
 #import "HLTags.h" 
@@ -91,16 +91,18 @@
         channel.isRestricted = @NO;
     }
     
-    KonotorMessage *welcomeMessage = [KonotorMessage getWelcomeMessageForChannel:channel];
-    NSString *updatedMessage = trimString(channelInfo[@"welcomeMessage"][@"text"]); //set welcome message here
+    Message *welcomeMessage = [Message getWelcomeMessageForChannel:channel];
+    NSDictionary *welcomeMsgData = channelInfo[@"welcomeMessage"];
     if (welcomeMessage) {
-        welcomeMessage.text = updatedMessage;
+        //welcomeMessage.text = updatedMessage;
+        //fragment here
     }else{
-        welcomeMessage = [KonotorMessage createNewMessage:channelInfo[@"welcomeMessage"]];
-        welcomeMessage.text = updatedMessage;
+        //welcomeMessage.text = updatedMessage;
+        //fragment here
+        welcomeMessage = [Message createNewMessage:channelInfo[@"welcomeMessage"] toChannelID:channel.channelID];        
         welcomeMessage.createdMillis = @0;
         welcomeMessage.isWelcomeMessage = YES;
-        welcomeMessage.messageRead = YES;
+        welcomeMessage.isRead = YES;
         [channel addMessagesObject:welcomeMessage];
     }
     
@@ -149,7 +151,7 @@
 //assumes this method is called from whichever thread invokes this.
 -(NSInteger)unreadCount{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"messageRead == NO AND belongsToChannel == %@",self];
+    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@",self];
     request.predicate = predicate;
     NSArray *messages = [self.managedObjectContext executeFetchRequest:request error:nil];
     NSInteger pendingCSATCount =  [self.primaryConversation isCSATResponsePending] ? 1 : 0;

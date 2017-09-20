@@ -14,7 +14,12 @@
 #import "HLMessageServices.h"
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
+#import <ImageIO/ImageIO.h>
+#import "HLUser.h"
 
+#import "Message.h"
+
+#define KONOTOR_IMG_COMPRESSION YES
 
 @implementation Konotor
 
@@ -72,6 +77,96 @@ __weak static id <KonotorDelegate> _delegate;
     return [KonotorAudioPlayer currentPlaying:nil set:NO ];
 }
 
++(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
+    [channel addMessagesObject:message];
+    [[KonotorDataManager sharedInstance]save];
+    [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];    
+    [[Konotor delegate] didStartUploadingNewMessage];
+    
+}
+
++(void) uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    //Upload the image with caption first then upload the message
+    NSData *imageData, *thumbnailData;
+    float imageWidth,imageHeight,imageThumbHeight,imageThumbWidth;
+    
+    imageData = UIImageJPEGRepresentation(image, 0.5);
+    CGImageSourceRef src = CGImageSourceCreateWithData( (__bridge CFDataRef)(imageData), NULL);
+    NSDictionary *osptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:300], kCGImageSourceThumbnailMaxPixelSize, nil];
+#if KONOTOR_IMG_COMPRESSION
+    NSDictionary *compressionOptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:1000], kCGImageSourceThumbnailMaxPixelSize, nil];
+#endif
+    
+    CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, (__bridge CFDictionaryRef)osptions); // Create scaled image
+    
+#if KONOTOR_IMG_COMPRESSION
+    CGImageRef compressedImage = CGImageSourceCreateThumbnailAtIndex(src, 0, (__bridge CFDictionaryRef)compressionOptions);
+#endif
+    
+    UIImage *imgthumb = [[UIImage alloc] initWithCGImage:thumbnail];
+    
+#if KONOTOR_IMG_COMPRESSION
+    UIImage *imgCompressed = [[UIImage alloc] initWithCGImage:compressedImage];
+#endif
+    
+    thumbnailData = UIImageJPEGRepresentation(imgthumb,0.5);
+    
+#if KONOTOR_IMG_COMPRESSION
+    imageData=UIImageJPEGRepresentation(imgCompressed, 0.5);
+    imageWidth = imgCompressed.size.width;
+    imageHeight = imgCompressed.size.height;
+#else
+    imageWidth = image.size.width;
+    imageHeight = image.size.height;
+#endif
+    imageThumbHeight = imgthumb.size.height;
+    imageThumbWidth = imgthumb.size.width;
+    
+    CFRelease(src);
+    CFRelease(thumbnail);
+
+    NSDictionary *thumbnailInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                   @"image/png",@"contentType",
+                                   @"",@"content",
+                                   [NSNumber numberWithFloat:imageThumbWidth],@"width",
+                                   [NSNumber numberWithFloat:imageThumbHeight],@"height",
+                                   nil];
+    
+    NSDictionary *imageFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @2, @"fragmentType",
+                                      @"image/png",@"contentType",
+                                      @"",@"content", //Populate with empty url
+                                      [NSNumber numberWithFloat:imageWidth],@"width",
+                                      [NSNumber numberWithFloat:imageHeight],@"height",
+                                      imageData, @"binaryData1",
+                                      thumbnailData, @"binaryData2",
+                                      @0,@"position",
+                                      thumbnailInfo, @"thumbnail",nil];
+    
+    NSMutableArray *fragmentsInfo = [[NSMutableArray alloc] initWithObjects: imageFragmentInfo, nil];
+    
+    if(![caption isEqualToString:@""]) {
+        
+        NSDictionary *textFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @1, @"fragmentType",
+                                          @"text/html",@"contentType",
+                                          caption,@"content",
+                                          @1,@"position",nil];
+        
+        [fragmentsInfo insertObject:textFragmentInfo atIndex:0];
+    }
+    
+    
+    
+    Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
+    [channel addMessagesObject:message];
+    [[KonotorDataManager sharedInstance]save];
+    [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
+    [HLMessageServices uploadPictureMessage:message toConversation:conversation onChannel:channel withCompletion:^{
+        [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
+        [[Konotor delegate] didStartUploadingNewMessage];
+    }];
+}
+
 +(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
     
     KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
@@ -124,13 +219,16 @@ __weak static id <KonotorDelegate> _delegate;
     return NO;
 }
 
++(BOOL)isCurrentUser:(NSNumber *)userId{
+    return [userId  isEqual: USER_TYPE_MOBILE];
+}
+
 +(void) conversationsDownloaded
 {
     if([Konotor delegate])
     {
         if([[Konotor delegate] respondsToSelector:@selector(didFinishDownloadingMessages) ])
         {
-    
             [[Konotor delegate] didFinishDownloadingMessages];
         }
     }
@@ -150,11 +248,9 @@ __weak static id <KonotorDelegate> _delegate;
     {
         if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileUploading:) ])
         {
-            
             [[Konotor delegate] didEncounterErrorWhileUploading:messageID];
         }
     }
-    
 }
 
 +(void)NotifyServerError
@@ -174,7 +270,6 @@ __weak static id <KonotorDelegate> _delegate;
     {
         if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileDownloading:) ])
         {
-            
             [[Konotor delegate] didEncounterErrorWhileDownloading:messageID];
         }
     }
@@ -184,9 +279,8 @@ __weak static id <KonotorDelegate> _delegate;
 {
     if([Konotor delegate])
     {
-        if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileDownloadingConversations) ])
+        if([[Konotor delegate] respondsToSelector:@selector(didEncounterErrorWhileDownloadingConversations)])
         {
-            
             [[Konotor delegate] didEncounterErrorWhileDownloadingConversations];
         }
     }

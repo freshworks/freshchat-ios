@@ -17,11 +17,15 @@
 #import "FDResponseInfo.h"
 #import "KonotorCustomProperty.h"
 #import "FDMemLogger.h"
+#import "FDLocaleUtil.h"
+#import "FDConstants.h"
+#import "FCRemoteConfig.h"
+#import "HLUser.h"
 
 @implementation HLCoreServices
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion{
-    if(![FDUtilities isUserRegistered]){
+    if(![HLUser isUserRegistered]){
         return nil;
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];
@@ -130,9 +134,9 @@
     }];
     return task;
 }
-
+ 
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
-    if (![FDUtilities isUserRegistered] || !pushToken) return nil;
+    if (![HLUser isUserRegistered] || !pushToken) return nil;
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     FDSecureStore *store = [FDSecureStore sharedInstance];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
@@ -162,7 +166,7 @@
         return;
     }
     
-    if (![FDUtilities isUserRegistered]) {
+    if (![HLUser isUserRegistered]) {
         return; // this is required outside and inside the block
         // double entrant lock
     }
@@ -171,7 +175,7 @@
     
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
         
-        if (![FDUtilities isUserRegistered]) {
+        if (![HLUser isUserRegistered]) {
             IN_PROGRESS = NO;
             return;
         }
@@ -192,6 +196,7 @@
                     }
                 }
             }
+            userInfo[@"alias"] = [FDUtilities currentUserAlias];
             userInfo[@"meta"] = metaInfo;
             info[@"user"] = userInfo;
         }else{
@@ -227,7 +232,7 @@
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
-    if(![FDUtilities isUserRegistered]){
+    if(![HLUser isUserRegistered]){
         return nil; // This should never happen .. just a safety check
     }
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -254,33 +259,77 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)DAUCall:(void (^)(NSError *))completion{
-    if(![FDUtilities isUserRegistered]){
-        return nil;
-    }
++(NSURLSessionDataTask *)performDAUCall{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *userAlias = [[FDUtilities currentUserAlias] length] ? [FDUtilities currentUserAlias] : [FDUtilities getUserAliasWithCreate];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_DAU_PATH,appID,userAlias];
     HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
-    [request setRelativePath:path andURLParams:@[appKey]];
+    [request setRelativePath:path andURLParams:@[appKey,@"source=MOBILE"]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"**** DAU call made ****");
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
+                FDLog(@"**** DAU call made ****");
+            }
         }else{
             FDLog(@"Could not make DAU call %@", error);
             FDLog(@"Response : %@", responseInfo.response);
-        }
-        if(completion){
-            completion(error);
         }
     }];
     return task;
 }
 
-+(NSURLSessionDataTask *)registerUserConversationActivity :(KonotorMessage *)message{
++(NSURLSessionDataTask *)performSessionCall{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_SESSION_PATH,appID,userAlias];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"**** Session call made ****");
+            }
+        }else{
+            FDLog(@"Could not make Session call %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
+        }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)performHeartbeatCall{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FDUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_HEARTBEAT_PATH,appID,userAlias];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        if (!error) {
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"**** heartbeat call done ****");
+            }
+        }else{
+            FDLog(@"Could not make Session call %@", error);
+            FDLog(@"Response : %@", responseInfo.response);
+        }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)registerUserConversationActivity :(Message *)message{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *userAlias = [FDUtilities currentUserAlias];
@@ -325,18 +374,24 @@
 }
 
 +(void)sendLatestUserActivity:(HLChannel *)channel{
+    if (!([FCRemoteConfig sharedInstance].accountActive && [HLUser isUserRegistered])){
+        return;
+    }
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
     
-    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"messageRead == 1 AND belongsToChannel == %@", channel];
-    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserId != %@", USER_TYPE_MOBILE];
+    NSPredicate *queryChannelAndRead = [NSPredicate predicateWithFormat:@"isRead == 1 AND belongsToChannel == %@", channel];
+    NSPredicate *queryType = [NSPredicate predicateWithFormat:@"isWelcomeMessage == 0 AND messageUserAlias != %@", USER_TYPE_MOBILE];
     request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[queryChannelAndRead, queryType]];
     NSArray *messages = [context executeFetchRequest:request error:nil];
     
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
-    KonotorMessage *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
+    Message *latestMessage = [messages sortedArrayUsingDescriptors:@[sortDesc]].firstObject;
     if(latestMessage){
-        [HLCoreServices registerUserConversationActivity:latestMessage];
+        //update read activity
+        if( [FCRemoteConfig sharedInstance].enabledFeatures.inboxEnabled && [FCRemoteConfig sharedInstance].accountActive ){
+            [HLCoreServices registerUserConversationActivity:latestMessage];
+        }
     }
 }
 
@@ -368,6 +423,51 @@
         if(completion){
             completion(error);
         }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)fetchRemoteConfig{
+    
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_REMORTE_CONFIG_PATH,appID];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if(!error && statusCode == 200) {
+            NSDictionary *configDict = responseInfo.responseAsDictionary;
+            [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
+        }
+        else {
+            FDLog(@"User remote config fetch call failed %@", error);
+        }
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FDResponseInfo *responseInfo, NSError *error))handler {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:HOTLINE_API_TYPLICAL_REPLY,appID];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if (!error) {
+            if (statusCode == 200) {
+                if (handler) handler(responseInfo,nil);
+            } else{
+                if (handler) handler(responseInfo,[NSError new]);
+            }
+        }
+        if (handler) handler(responseInfo,error);
     }];
     return task;
 }

@@ -41,9 +41,9 @@
 
 +(void) configureBackButtonForController:(UIViewController *) controller
                             withEmbedded:(BOOL) isEmbedded{
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
+    BOOL isBackButtonImageExist = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     if (isBackButtonImageExist && !isEmbedded) {
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[HLTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_BACK_BUTTON]
                                                                        style:UIBarButtonItemStylePlain
                                                                       target:controller.navigationController
                                                                       action:@selector(popViewControllerAnimated:)];
@@ -72,7 +72,7 @@
                    forController:(UIViewController *) controller
                     withEmbedded:(BOOL) isEmbedded{
     
-    BOOL isBackButtonImageExist = [[HLTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
+    BOOL isBackButtonImageExist = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     UINavigationController *naviController = (controller.parentViewController) ? controller.parentViewController.navigationController : controller.navigationController;
     if (isBackButtonImageExist && !isEmbedded) {
         if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)] && gestureDelegate){

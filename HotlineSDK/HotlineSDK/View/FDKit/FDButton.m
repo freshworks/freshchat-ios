@@ -7,11 +7,11 @@
 //
 
 #import "FDButton.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 
 @interface FDButton ()
 
-@property (nonatomic,strong) HLTheme *theme;
+@property (nonatomic,strong) FCTheme *theme;
 
 @end
 
@@ -22,7 +22,7 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         self.backgroundColor      = [self.theme backgroundColorSDK];
         self.titleLabel.tintColor = nil;
         self.tintColor            = nil;

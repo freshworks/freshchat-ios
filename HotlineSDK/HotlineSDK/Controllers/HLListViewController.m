@@ -11,7 +11,7 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "HLChannelViewController.h"
-#import "Hotline.h"
+#import "Freshchat.h"
 
 #define CELL_OFFSET 16
 #define MAX_ARTICLE_LINES 3
@@ -39,7 +39,7 @@
     self.tableView.tableFooterView = [UIView new];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView setBackgroundColor:[[HLTheme sharedInstance] backgroundColorSDK]];
+    [self.tableView setBackgroundColor:[[FCTheme sharedInstance] backgroundColorSDK]];
     self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
     
     [self.view addSubview:self.footerView];
@@ -50,7 +50,7 @@
     
     if ([self canDisplayFooterView]) {
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][footerView(40)]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView][footerView(44)]|" options:0 metrics:nil views:views]];
     }else{
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|" options:0 metrics:nil views:views]];
     }
@@ -69,10 +69,10 @@
     if(self.faqOptions.contactUsTags.count >0){
         ConversationOptions *options = [ConversationOptions new];
         [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
-        [[Hotline sharedInstance] showConversations:self withOptions:options];
+        [[Freshchat sharedInstance] showConversations:self withOptions:options];
     }
     else{
-        [[Hotline sharedInstance] showConversations:self];
+        [[Freshchat sharedInstance] showConversations:self];
     }
 }
 

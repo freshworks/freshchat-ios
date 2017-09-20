@@ -12,7 +12,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "FDSecureStore.h"
 #import "HLLocalization.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
 
 #define systemSoundID 1315
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *messageLabel;
 @property (strong, nonatomic) UIView *contentEncloser;
-@property (nonatomic, strong) HLTheme *theme;
+@property (nonatomic, strong) FCTheme *theme;
 @property (nonatomic, strong) NSLayoutConstraint *bannerTopConstraint;
 @property (nonatomic, strong, readwrite) HLChannel *currentChannel;
 @property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
@@ -44,7 +44,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         [self setSubViews];
     }
     return self;
@@ -168,7 +168,7 @@
     if (channel.icon) {
         self.imgView.image = [UIImage imageWithData:channel.icon];
     }else{
-        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name];
+        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPalceholderImageBackgroundColor]];
         self.imgView.image = placeholderImage;
     }
     

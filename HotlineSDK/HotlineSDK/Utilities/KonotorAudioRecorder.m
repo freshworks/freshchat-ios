@@ -17,7 +17,7 @@
 
 @implementation KonotorAlertView
 
-@end 
+@end
 
 KonotorAudioRecorder *gkAudioRecorder;
 NSURL *pFileToUpload;
@@ -30,7 +30,7 @@ static NSString *beforeRecordCategory;
 +(BOOL)startRecording{
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted){
-            [FDLocalNotification post:HOTLINE_WILL_PLAY_AUDIO_MESSAGE];
+            [FDLocalNotification post:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [KonotorAudioRecorder startRecordingA];
             });
@@ -130,11 +130,11 @@ static NSString *beforeRecordCategory;
             
         }
     }
-   
+    
     
     
     return YES;
-
+    
 }
 
 +(BOOL) retrySetupForRecording
@@ -172,7 +172,7 @@ static NSString *beforeRecordCategory;
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
     NSString *intervalString = [NSString stringWithFormat:@"%.0f", today];
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-       NSString *recordFile = [documentsDirectory stringByAppendingPathComponent: intervalString];
+    NSString *recordFile = [documentsDirectory stringByAppendingPathComponent: intervalString];
     
     
     NSURL *recordedTmpFile = [NSURL fileURLWithPath:[recordFile stringByAppendingString:@".m4a"]];
@@ -202,7 +202,7 @@ static NSString *beforeRecordCategory;
     if(err == NO)
     {
         //ALog(@"%@", @"Retry of Audio recorder set up failed");
-
+        
         return NO;
     }
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: YES ];
@@ -213,7 +213,7 @@ static NSString *beforeRecordCategory;
         if(![gkAudioRecorder record])
         {
             //ALog(@"%@", @"Retry of Audio recorder set up failed");
-
+            
             [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
             
             return NO;
@@ -236,7 +236,7 @@ static NSString *beforeRecordCategory;
     NSString *messageID = nil;
     if(gkAudioRecorder)
     {
-         messageID = [KonotorMessage generateMessageID];
+        messageID = [KonotorMessage generateMessageID];
         gkAudioRecorder.messageID = messageID;
         
         [gkAudioRecorder stop];
@@ -251,7 +251,7 @@ static NSString *beforeRecordCategory;
     [[ UIApplication sharedApplication ] setIdleTimerDisabled: NO ];
     
     return messageID;
-
+    
 }
 
 +(NSString *) stopRecordingOnConversation:(KonotorConversation*)conversation
@@ -310,7 +310,7 @@ static NSString *beforeRecordCategory;
         ALog(@"Failed to set audio session category");
         return NO;
     }
-    [FDLocalNotification post:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE];
+    [FDLocalNotification post:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE];
     return YES;
 }
 +(BOOL) SendRecordingWithMessageID:(NSString *)messageID
@@ -325,7 +325,7 @@ static NSString *beforeRecordCategory;
     KonotorMessage *message = [KonotorMessage retriveMessageForMessageId:messageID];
     
     if(conversationID)
-       conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+        conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
     
     if(!message)
         return NO;
@@ -336,11 +336,11 @@ static NSString *beforeRecordCategory;
     {
         
         KonotorAlertView *alert = [[KonotorAlertView alloc]
-                              initWithTitle: @"Message too short"
-                              message: @"The message you are trying to send is less than half a second, Are you sure you want to send?"
-                              delegate: nil
-                              cancelButtonTitle:@"No"
-                              otherButtonTitles:@"Send it",nil];
+                                   initWithTitle: @"Message too short"
+                                   message: @"The message you are trying to send is less than half a second, Are you sure you want to send?"
+                                   delegate: nil
+                                   cancelButtonTitle:@"No"
+                                   otherButtonTitles:@"Send it",nil];
         alert.messageToBeSent = message;
         alert.conversation = conversation;
         
@@ -356,11 +356,11 @@ static NSString *beforeRecordCategory;
     {
         
         KonotorAlertView *alert = [[KonotorAlertView alloc]
-                              initWithTitle: @"Was it intentional?"
-                              message: @"The message you are trying to send is more than 2 minutes, Are you sure you want to send?"
-                              delegate: nil
-                              cancelButtonTitle:@"No"
-                              otherButtonTitles:@"Send it",nil];
+                                   initWithTitle: @"Was it intentional?"
+                                   message: @"The message you are trying to send is more than 2 minutes, Are you sure you want to send?"
+                                   delegate: nil
+                                   cancelButtonTitle:@"No"
+                                   otherButtonTitles:@"Send it",nil];
         
         alert.messageToBeSent = message;
         alert.conversation = conversation;
@@ -397,7 +397,7 @@ static NSString *beforeRecordCategory;
         return NO;
     
     [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
-        return YES;
+    return YES;
     
 }
 
@@ -422,7 +422,7 @@ static NSString *beforeRecordCategory;
     {
         [HLMessageServices uploadMessage:[alertView messageToBeSent] toConversation:[alertView conversation] onChannel:[alertView channel]];
         gkAudioRecorder = nil;
-
+        
     }
     pAlert = nil;
 }
@@ -448,19 +448,19 @@ float gKonoDecibels;
     [message setMessageType:[NSNumber numberWithInt:2]];
     [message setMessageRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
-
+    
     
     KonotorMessageBinary *messageBinary = (KonotorMessageBinary *)[NSEntityDescription insertNewObjectForEntityForName:HOTLINE_MESSAGE_BINARY_ENTITY inManagedObjectContext:context];
-
+    
     NSString *path = [pRec.pFileDest path];
     NSData *data = [NSData dataWithContentsOfFile:path];
-
+    
     AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:pRec.pFileDest options:nil];
     
     CMTime audioDuration = audioAsset.duration;
     float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
     [message setDurationInSecs:[NSNumber numberWithFloat:audioDurationSeconds]];
-
+    
     
     [messageBinary setBinaryAudio:data];
     [messageBinary setValue:message forKey:@"belongsToMessage"];
@@ -468,12 +468,12 @@ float gKonoDecibels;
     
     
     [message setValue:messageBinary forKey:@"hasMessageBinary"];
-
+    
     
     [datamanager save];
     
     return;
-
+    
 }
 
 +(void) SaveAudioMessageInCoreData:(KonotorAudioRecorder *)pRec onConversation:(KonotorConversation*)conversation
@@ -519,3 +519,4 @@ float gKonoDecibels;
 
 
 @end
+

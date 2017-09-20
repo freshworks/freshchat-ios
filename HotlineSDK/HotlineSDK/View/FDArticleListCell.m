@@ -7,13 +7,13 @@
 //
 
 #import "FDArticleListCell.h"
-#import "HLTheme.h"
+#import "FCTheme.h"
 #import "HLMacros.h"
 #import "FDAutolayoutHelper.h"
 
 @interface FDArticleListCell ()
 
-@property (strong, nonatomic) HLTheme *theme;
+@property (strong, nonatomic) FCTheme *theme;
 
 @end
 
@@ -22,7 +22,7 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.theme = [HLTheme sharedInstance];
+        self.theme = [FCTheme sharedInstance];
         
         self.articleText = [[UILabel alloc] init];
         [self.articleText setNumberOfLines:3];

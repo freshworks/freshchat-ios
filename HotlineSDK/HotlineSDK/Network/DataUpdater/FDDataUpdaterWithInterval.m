@@ -12,7 +12,8 @@
 
 @interface FDDataUpdaterWithInterval()
 
-@property (nonatomic        ) NSTimeInterval    intervalInSecs;
+//@property (nonatomic        ) NSTimeInterval    intervalInSecs;
+@property (nonatomic) NSTimeInterval intervalInMS;
 @property (nonatomic,strong ) NSString          *intervalConfigKey;
 @property (strong, nonatomic) FDSecureStore     *secureStore;
 @property (nonatomic)         NSTimeInterval    currentPollRequestTime;
@@ -31,8 +32,9 @@
     return self;
 }
 
-- (void) useInterval:(int) interval{
-    self.intervalInSecs = interval;
+- (void) useInterval:(long) interval{
+    //self.intervalInSecs = interval;
+    self.intervalInMS = interval;
 }
 
 - (void) useConfigKey:(NSString *) configKey{
@@ -49,8 +51,8 @@
     self.currentPollRequestTime = ceil(([[NSDate date] timeIntervalSince1970]) * 1000);
     if (!lastUpdatedTime) return YES;
     
-    FDLog(@"diff [%f] interval[%f]", (self.currentPollRequestTime-lastUpdatedTime) , self.intervalInSecs * 1000);
-    if (ceil(self.currentPollRequestTime-lastUpdatedTime+1000)>=self.intervalInSecs * 1000) { // allow for a 1 second swing - 1000
+    FDLog(@"diff [%f] interval[%f]", (self.currentPollRequestTime-lastUpdatedTime) , self.intervalInMS);
+    if (ceil(self.currentPollRequestTime-lastUpdatedTime+1000)>=self.intervalInMS) { // allow for a 1 second swing - 1000
         return YES;
     }else{
         return NO;

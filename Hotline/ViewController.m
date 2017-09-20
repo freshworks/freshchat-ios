@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "HotlineSDK/Hotline.h"
+#import "FreshchatSDK/Freshchat.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 #define kOFFSET_FOR_KEYBOARD 160.0
@@ -66,7 +66,7 @@
     self.conversationTags.delegate = self;
     self.message.delegate = self;
     self.sendMessageTag.delegate = self;
-    [[Hotline sharedInstance] updateConversationBannerMessage:@"123"];
+    //[[Freshchat sharedInstance] updateConversationBannerMessage:@"123"];
 
     // Construct URL to sound file
     NSString *path = [NSString stringWithFormat:@"%@/youraudio.mp3", [[NSBundle mainBundle] resourcePath]];
@@ -78,11 +78,11 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPlayNotification:)
-                                                 name:HOTLINE_DID_FINISH_PLAYING_AUDIO_MESSAGE
+                                                 name:FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveHLPauseNotification:)
-                                                 name:HOTLINE_WILL_PLAY_AUDIO_MESSAGE
+                                                 name:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE
                                                object:nil];
     
 }
@@ -209,7 +209,7 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Hotline sharedInstance] showConversations:self];
+    [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)articleFilter1:(id)sender{
@@ -219,11 +219,12 @@
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
+    options.showContactUsOnAppBar = true;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)categoryFilter1:(id)sender{
@@ -237,7 +238,7 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 
@@ -247,12 +248,14 @@
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:arr withTitle:self.conversationTitle.text];
     FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnAppBar = true;
+    options.showContactUsOnFaqScreens = true;
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [[Hotline sharedInstance] showConversations:self withOptions:opt];
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
 }
 
 //2
@@ -267,7 +270,7 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField2.text andType: ARTICLE];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)categoryFilter2:(id)sender{
@@ -281,12 +284,12 @@
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField2.text andType: CATEGORY];
-    [[Hotline sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
 - (IBAction)sendMessage:(id)sender{
-    HotlineMessage *userMessage = [[HotlineMessage alloc] initWithMessage:self.message.text andTag:self.sendMessageTag.text];
-    [[Hotline sharedInstance] sendMessage:userMessage];
+    FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
+    //[[Freshchat sharedInstance] sendMessage:userMessage]; //api is hidden currently
 }
 
 - (IBAction)switchAction:(id)sender {

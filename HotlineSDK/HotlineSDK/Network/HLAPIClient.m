@@ -40,6 +40,7 @@
 -(NSURLSessionDataTask *)request:(HLServiceRequest *)request withHandler:(HLNetworkCallback)handler{
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
+        
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
         if (statusCode >= 400) {
             [self logRequest:request response:responseInfo];

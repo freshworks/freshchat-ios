@@ -24,7 +24,7 @@
 -(id)initWithDelegate:(id <FDMarginalViewDelegate>)delegate{
     self = [super init];
     if (self) {
-        HLTheme *theme = [HLTheme sharedInstance];
+        FCTheme *theme = [FCTheme sharedInstance];
 
         self.delegate = delegate;
         self.userInteractionEnabled = YES;
