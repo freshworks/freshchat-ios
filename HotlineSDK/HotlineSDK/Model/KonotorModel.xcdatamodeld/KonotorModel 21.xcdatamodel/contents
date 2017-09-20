@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="KonotorApp" representedClassName="KonotorApp" syncable="YES">
+        <attribute name="appID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="appKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="appVersion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="audioPermissionGiven" optional="YES" attributeType="Integer 16" defaultValueString="2" syncable="YES"/>
+        <attribute name="deviceToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deviceTokenUpdatedOnServer" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="hasWelcomeMessageDisplayed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isConversationsDownloading" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="lastUpdatedConversation" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="sdkVersion" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="KonotorConversation" representedClassName="KonotorConversation" syncable="YES">
+        <attribute name="conversationAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationHostUserAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationHostUserId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="unreadMessagesCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="updatedMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="hasMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="KonotorMessage" inverseName="belongsToConversation" inverseEntity="KonotorMessage" syncable="YES"/>
+    </entity>
+    <entity name="KonotorCustomProperty" representedClassName="KonotorCustomProperty" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serializedData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="KonotorMessage" representedClassName="KonotorMessage" syncable="YES">
+        <attribute name="actionLabel" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="actionURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="audioURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bytes" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="createdMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="durationInSecs" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="isDownloading" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isMarkedForUpload" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="marketingId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageRead" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageUserId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="picCaption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="picHeight" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="picThumbHeight" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="picThumbUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="picThumbWidth" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="picUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="picWidth" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="read" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="belongsToConversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorConversation" inverseName="hasMessages" inverseEntity="KonotorConversation" syncable="YES"/>
+        <relationship name="hasMessageBinary" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorMessageBinary" inverseName="belongsToMessage" inverseEntity="KonotorMessageBinary" syncable="YES"/>
+    </entity>
+    <entity name="KonotorMessageBinary" representedClassName="KonotorMessageBinary" syncable="YES">
+        <attribute name="binaryAudio" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="binaryImage" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="binaryThumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
+        <relationship name="belongsToMessage" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorMessage" inverseName="hasMessageBinary" inverseEntity="KonotorMessage" syncable="YES"/>
+    </entity>
+    <entity name="KonotorShareMessageEvent" representedClassName="KonotorShareMessageEvent" syncable="YES">
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shareType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="KonotorUser" representedClassName="KonotorUser" syncable="YES">
+        <attribute name="appSpecificIdentifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isUserCreatedOnServer" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="defaultConversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorConversation" syncable="YES"/>
+        <relationship name="hasConversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="KonotorConversation" syncable="YES"/>
+        <relationship name="hasProperties" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="KonotorCustomProperty" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="KonotorApp" positionX="160" positionY="192" width="128" height="195"/>
+        <element name="KonotorConversation" positionX="160" positionY="192" width="128" height="165"/>
+        <element name="KonotorCustomProperty" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="KonotorMessage" positionX="160" positionY="192" width="128" height="420"/>
+        <element name="KonotorMessageBinary" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="KonotorShareMessageEvent" positionX="180" positionY="351" width="128" height="88"/>
+        <element name="KonotorUser" positionX="160" positionY="192" width="128" height="165"/>
+    </elements>
+</model>
