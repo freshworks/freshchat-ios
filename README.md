@@ -1,2 +1,0 @@
-# Hotline iOS SDK
-
