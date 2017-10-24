@@ -73,6 +73,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
     self.view.backgroundColor = [UIColor whiteColor];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self prepareController];
@@ -85,9 +86,11 @@
 
 -(void)prepareController{
     if([self.options isKindOfClass:[FAQOptions class]]){
+        self.view.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
         [self handleFAQs:self withOptions:(FAQOptions *)self.options andEmbed:self.isEmbedView];
     }
     else if([self.options isKindOfClass:[ConversationOptions class]]){
+        self.view.backgroundColor = [[FCTheme sharedInstance] channelListBackgroundColor];
         if([HLConversationUtil hasTags:(ConversationOptions *)self.options]){
             [self handleConversations:self withOptions:(ConversationOptions *)self.options andEmbed:self.isEmbedView];
         }

@@ -52,7 +52,8 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    self.tableView.separatorColor = [[FCTheme sharedInstance] tableViewCellSeparatorColor];
+    self.tableView.separatorColor = [[FCTheme sharedInstance] articleListCellSeperatorColor];
+    self.tableView.backgroundColor = [[FCTheme sharedInstance] articleListBackgroundColor];
     [self setNavigationItem];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
@@ -182,6 +183,10 @@
     {
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
+    
+    UIView *view = [[UIView alloc] init];
+    [view setBackgroundColor:[self.theme faqListCellSelectedColor]];
+    [cell setSelectedBackgroundView:view];
 }
 
 -(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{

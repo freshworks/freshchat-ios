@@ -180,11 +180,11 @@ static float height = 0;
         self.lastUpdatedLabel.font = [theme channelLastUpdatedFont];
         self.lastUpdatedLabel.textColor = [theme channelLastUpdatedFontColor];
     }else{
-        self.backgroundColor = [theme tableViewCellBackgroundColor];
-        self.titleLabel.textColor = [theme tableViewCellTitleFontColor];
-        self.titleLabel.font      = [theme tableViewCellTitleFont];
-        self.detailLabel.font = [theme tableViewCellDetailFont];
-        self.detailLabel.textColor = [theme tableViewCellDetailFontColor];
+        self.backgroundColor = [theme faqListViewCellBackgroundColor];
+        self.titleLabel.textColor = [theme faqCategoryTitleFontColor];
+        self.titleLabel.font      = [theme faqCategoryTitleFont];
+        self.detailLabel.font = [theme faqCategoryDetailFont];
+        self.detailLabel.textColor = [theme faqCategoryDetailFontColor];
     }
 }
 
@@ -212,10 +212,10 @@ static float height = 0;
 
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
-    self.layer.borderWidth = 0.6;
+   // self.layer.borderWidth = 0.9;
     self.imgView.layer.cornerRadius = self.imgView.frame.size.width / 8;
     self.imgView.layer.masksToBounds = YES;
-    self.layer.borderColor = [[FCTheme sharedInstance] tableViewCellSeparatorColor].CGColor;
+   //self.layer.borderColor = [[FCTheme sharedInstance] channelListCellSeparatorColor].CGColor;
 }
 
 @end

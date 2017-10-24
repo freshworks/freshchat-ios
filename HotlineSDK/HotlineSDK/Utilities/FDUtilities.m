@@ -380,7 +380,7 @@ static NSInteger networkIndicator = 0;
 
 +(BOOL) canMakeDAUCall {
     NSDate *currentdate = [NSDate date];
-    NSDate *lastFetchDate = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
+    NSDate *lastFetchDate = [[FDSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
     if(!lastFetchDate){
         return true;
     }
@@ -401,6 +401,9 @@ static NSInteger networkIndicator = 0;
 +(BOOL) containsHTMLContent: (NSString *)content {
     if (([FDUtilities containsString:content andTarget:@"<b>"])
         || ([FDUtilities containsString:content andTarget:@"<i>"])
+        || ([FDUtilities containsString:content andTarget:@"<span>"])
+        || ([FDUtilities containsString:content andTarget:@"<p>"])
+        || ([FDUtilities containsString:content andTarget:@"<div>"])
         || ([FDUtilities containsString:content andTarget:@"<u>"])
         || ([FDUtilities containsString:content andTarget:@"&lt"])
         || ([FDUtilities containsString:content andTarget:@"&gt"])

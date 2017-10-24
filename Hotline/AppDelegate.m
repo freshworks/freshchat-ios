@@ -71,6 +71,7 @@
         FAQOptions *faqOptions = [FAQOptions new];
         faqOptions.showFaqCategoriesAsGrid = NO;
         faqOptions.showContactUsOnFaqScreens = YES;
+        
         [faqOptions filterContactUsByTags:contactUsTagsArray withTitle:@"Wow ContactUS"];
         [faqOptions filterByTags:arr withTitle:@"Wow Articles" andType: ARTICLE];
         UINavigationController* faqControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getFAQsControllerForEmbedWithOptions:faqOptions]];
@@ -141,8 +142,9 @@
 //    config.domain = @"mr.white.konotor.com";
 //    config.appID = @"92124c8f-bd1a-4362-a390-72e76ef7125c";
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
-    
-    config.pictureMessagingEnabled = YES;
+    config.agentAvatarEnabled = YES;
+    //config.pictureMessagingEnabled = YES;
+    config.cameraCaptureEnabled = YES;
     if(![FreshchatUser sharedInstance].firstName){
         [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }

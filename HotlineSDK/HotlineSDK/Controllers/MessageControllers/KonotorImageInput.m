@@ -15,9 +15,11 @@
 #import "FDSecureStore.h"
 #import "FCRemoteConfig.h"
 #import "HLUser.h"
+#import "Photos/Photos.h"
 
 @interface KonotorImageInput () <FDAttachmentImageControllerDelegate, UIPopoverControllerDelegate>{
     BOOL isCameraCaptureEnabled;
+    BOOL isGallerySelectionEnabled;
 }
 
 @property (strong, nonatomic) UIView* sourceView;
@@ -51,19 +53,25 @@
     }
     FDSecureStore *store = [FDSecureStore sharedInstance];
     isCameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+    isGallerySelectionEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
     NSArray *actionButtons;
-    if(isCameraCaptureEnabled){
-        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT)];
-    }
-    else{
-        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT)];
-    }
-    
     UIActionSheet *inputOptions = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:nil];
+                                                              delegate:self
+                                                     cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:nil];
+    if(isCameraCaptureEnabled && isGallerySelectionEnabled){
+        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT)];
+        inputOptions.tag = 0;
+    }
+    else if(isCameraCaptureEnabled){
+        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT)];
+        inputOptions.tag = 2;
+    }
+    else if(isGallerySelectionEnabled){
+        actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT)];
+        inputOptions.tag = 1;
+    }
     
     for (NSString *actionTitle in actionButtons) {
         [inputOptions addButtonWithTitle:actionTitle];
@@ -76,9 +84,10 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    switch (buttonIndex) {
+    NSInteger actionInput = (actionSheet.tag > 0 && buttonIndex) ? actionSheet.tag : buttonIndex;
+    switch (actionInput) {
         case 1:
-            [self showImagePicker];
+            [self checkLibraryAccessPermission];
             break;
         case 2:
             [self checkCameraCapturePermission];
@@ -125,9 +134,41 @@
     }
 }
 
+- (void)checkLibraryAccessPermission{
+    
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    
+    if (status == PHAuthorizationStatusAuthorized) {
+        [self showImagePicker];
+    }
+    
+    else if (status == PHAuthorizationStatusDenied) {
+        [self showLibAccessDeniedAlert];
+    }
+    
+    else if (status == PHAuthorizationStatusNotDetermined) {
+        
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self checkLibraryAccessPermission];
+            });
+        }];
+    }
+    
+    else if (status == PHAuthorizationStatusRestricted) {
+        // Restricted access - normally won't happen.
+        [self showLibAccessDeniedAlert];
+    }
+}
+
 - (void) showAccessDeniedAlert{
     
     UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_CAMERA_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:HLLocalizedString(LOC_CAMERA_PERMISSION_ALERT_CANCEL) otherButtonTitles:nil, nil];
+    [permissionAlert show];
+}
+
+- (void) showLibAccessDeniedAlert{
+    UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_PHOTO_LIBRARY_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:HLLocalizedString(LOC_PHOTO_LIBRARY_PERMISSION_ALERT_CANCEL) otherButtonTitles:nil, nil];
     [permissionAlert show];
 }
 
@@ -177,16 +218,8 @@
 }
 
 -(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image withCaption:(NSString *)caption {
-    [HLUser setUserMessageInitiated];
-    if ([HLUser canRegisterUser]) {
-        [HLUser registerUser:^(NSError *error) {
-            if (!error) {
-                [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
-            }
-        }];
-    } else {
-        [Konotor uploadNewImage:self.imagePicked withCaption:caption onConversation:self.conversation onChannel:self.channel];
-    }
+    
+    [Konotor uploadMessageWithImage:self.imagePicked textFeed:caption onConversation:self.conversation andChannel:self.channel];
 }
 
 @end

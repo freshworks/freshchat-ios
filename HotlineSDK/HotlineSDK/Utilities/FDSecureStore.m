@@ -10,6 +10,7 @@
 #import "FDKeyChainStore.h"
 #import "HLMacros.h"
 
+#define FRESHCHAT_SERVICE_NAME @"com.freshworks.freshchat.%@"
 #define HOTLINE_SERVICE_NAME @"com.freshdesk.hotline.%@"
 
 @interface FDSecureStore ()
@@ -45,7 +46,7 @@
     if (self) {
         FDKeyChainStore *store = nil;
         NSString *appID = [[NSBundle bundleForClass:[self class]] infoDictionary][@"CFBundleIdentifier"];
-        NSString *serviceName = [NSMutableString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
+        NSString *serviceName = [NSMutableString stringWithFormat:FRESHCHAT_SERVICE_NAME,appID];
         NSString *persistedStoreServiceName = [NSString stringWithFormat:@"%@%@",serviceName,@"-persistedStore"];
         
         if (isPreferred) {
@@ -57,8 +58,23 @@
             }
         }
         self.secureStore = store;
+        [self clearHotlineKeys];
     }
     return self;
+}
+
+-(void) clearHotlineKeys {
+    NSString *appID = [[NSBundle bundleForClass:[self class]] infoDictionary][@"CFBundleIdentifier"];
+    NSString *serviceName = [NSMutableString stringWithFormat:HOTLINE_SERVICE_NAME,appID];
+    NSString *persistedStoreServiceName = [NSString stringWithFormat:@"%@%@",serviceName,@"-persistedStore"];
+    FDKeyChainStore *persistentStore = [FDKeyChainStore keyChainStoreWithService:persistedStoreServiceName];
+    FDKeyChainStore *store = [FDKeyChainStore keyChainStoreWithService:persistedStoreServiceName];
+    if(persistentStore) {
+        [persistentStore removeAllItems];
+    }
+    if(store) {
+        [store removeAllItems];
+    }
 }
 
 +(BOOL)isFirstLaunch{

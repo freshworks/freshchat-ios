@@ -35,7 +35,6 @@
 
         [self.contentView addSubview:accessoryView];
         [self.contentView addSubview:self.articleText];
-        
         NSDictionary *views = @{@"title" : self.articleText, @"accessoryView":accessoryView};
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[title]|" options:0 metrics:nil views:views]];
@@ -52,7 +51,7 @@
 
 -(void)setupTheme{
     if (self) {
-        self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
+        self.backgroundColor     = [self.theme articleListCellBackgroundColor];
         self.articleText.textColor = [self.theme articleListFontColor];
         self.articleText.font = [self.theme articleListFont];
     }

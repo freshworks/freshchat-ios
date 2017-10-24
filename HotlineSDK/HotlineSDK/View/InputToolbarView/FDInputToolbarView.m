@@ -58,6 +58,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         textView.layer.cornerRadius=5.0;
         textView.layer.borderWidth=1.0;
         textView.delegate = self;
+        textView.backgroundColor = [self.theme inputTextfieldBackgroundColor];
         [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
         placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
         textView.text = placeHolderText;
@@ -65,7 +66,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *attachmentImage = [self.theme getImageWithKey:IMAGE_ATTACH_ICON];
+        UIImage *attachmentImage = [self.theme getImageValueWithKey:IMAGE_ATTACH_ICON];
         [attachButton setImage:attachmentImage forState:UIControlStateNormal];
         attachButton.backgroundColor = [UIColor clearColor];
         [attachButton addTarget:self action:@selector(attachmentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -73,15 +74,22 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
         micButton.backgroundColor = [UIColor clearColor];
         micButton.translatesAutoresizingMaskIntoConstraints = NO;
-        UIImage *micImage = [[FCTheme sharedInstance]getImageWithKey:IMAGE_INPUT_TOOLBAR_MIC];
+        UIImage *micImage = [[FCTheme sharedInstance]getImageValueWithKey:IMAGE_INPUT_TOOLBAR_MIC];
         [micButton setImage:micImage forState:UIControlStateNormal];
         micButton.backgroundColor = [UIColor clearColor];
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
         sendButton.backgroundColor = [UIColor clearColor];
-        [sendButton setTitle:HLLocalizedString(LOC_SEND_BUTTON_TEXT) forState:UIControlStateNormal];
-        [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
+        UIImage *sendImage = [self.theme getImageValueWithKey:IMAGE_SEND_ICON];
+        if(sendImage != nil){
+            [sendButton setBackgroundImage:sendImage forState:UIControlStateNormal];
+        }
+        else{
+            [sendButton setTitle:HLLocalizedString(LOC_SEND_BUTTON_TEXT) forState:UIControlStateNormal];
+            [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
+        }
+        
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -129,7 +137,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     
     FDPlistManager *plistManager = [FDPlistManager new];
 
-    BOOL isPictureMessageEnabled = [plistManager isPictureMessageEnabled];
+    BOOL isPictureMessageEnabled = ([plistManager isGallerySelectionEnabled] || [plistManager isCameraCaptureEnabled]) ? YES : NO;
 
     attachButtonWidthConstraint.constant = (!self.isFromAttachmentScreen && isPictureMessageEnabled) ? 24.0 : 0;
     
@@ -187,7 +195,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     NSString *currentText = trimString(chatTextView.text);
     if ([currentText isEqualToString:@""]) {
         chatTextView.text = placeHolderText;
-        chatTextView.textColor = [UIColor lightGrayColor]; //optional
+        chatTextView.textColor = [self.theme inputTextPlaceholderFontColor]; //optional
     }
 }
 

@@ -161,7 +161,7 @@ typedef struct {
     parent.navigationItem.title = self.channel.name;
     self.messagesDisplayedCount = 20;
     self.initalLoading = true;
-    self.view.backgroundColor = [UIColor whiteColor];
+    [self setBackgroundForView:self.view];
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
@@ -196,8 +196,8 @@ typedef struct {
     self.typicalReply.alpha = 0;
     self.typicalReply.clipsToBounds = true;
     self.channelName.textAlignment = UITextAlignmentCenter;
-    self.channelName.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
-    self.channelName.font = [self.channelName.font fontWithSize:18];
+    self.channelName.font = [[FCTheme sharedInstance] navigationBarTitleFont];
+    self.channelName.textColor = [[FCTheme sharedInstance] navigationBarTitleColor];
     self.channelName.text = self.channel.name;
     [self.titleView addSubview:self.channelName];
     
@@ -436,14 +436,7 @@ typedef struct {
     [self.bannerMessageView addSubview:self.bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    UIImage *bgImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_CONVERSATION_BACKGROUND];
-    if(bgImage){
-        [self.view setBackgroundColor: [[UIColor alloc] initWithPatternImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_CONVERSATION_BACKGROUND]]];
-    }else{
-        self.tableView.backgroundColor = [[FCTheme sharedInstance]messageUIBackgroundColor];
-    }
-    
+    [self setBackgroundForView:self.tableView];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
@@ -464,6 +457,7 @@ typedef struct {
     //LoadingActivityIndicator
     self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.loadingView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.loadingView.color = [[FCTheme sharedInstance] progressBarColor];
     [self.loadingView startAnimating];
     [self.view addSubview:self.loadingView];
     
@@ -507,6 +501,20 @@ typedef struct {
     
     if([self.channel.type isEqualToString:CHANNEL_TYPE_AGENT_ONLY]){
         self.isOneWayChannel = YES;
+    }
+}
+
+- (void) setBackgroundForView : (UIView *)view{
+    
+    id component = [[FCTheme sharedInstance] getMessageDetailBackgroundComponent];
+    if([component isKindOfClass:[UIColor class]]){
+        view.backgroundColor = component;
+    }
+    else if([component isKindOfClass:[UIImage class]]){
+        [view setBackgroundColor: [[UIColor alloc] initWithPatternImage:component]];
+    }
+    else{
+        [view setBackgroundColor: [UIColor whiteColor]];
     }
 }
 
@@ -669,23 +677,7 @@ typedef struct {
         [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
         
     }else{
-        
-        NSDictionary *textFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @1, @"fragmentType",
-                                                                                        @"text/html",@"contentType",
-                                                                                        toSend,@"content",
-                                                                                        @0,@"position",nil];
-        
-        NSArray *fragmentInfo = [[NSArray alloc] initWithObjects:textFragmentInfo, nil];
-        [HLUser setUserMessageInitiated];
-        if ([HLUser canRegisterUser]) {
-            [HLUser registerUser:^(NSError *error) {
-                if (!error) {
-                    [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
-                }
-            }];
-        } else {
-            [Konotor uploadNewMessage:fragmentInfo onConversation:self.conversation onChannel:self.channel];
-        }
+        [Konotor uploadMessageWithImage:nil textFeed:toSend onConversation:self.conversation andChannel:self.channel];
         [self checkPushNotificationState];
         [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     }

@@ -85,7 +85,7 @@
     self.imgView.contentMode = UIViewContentModeScaleAspectFit;
     
     UIButton *closeButton = [[UIButton alloc] init];
-    [closeButton setBackgroundImage:[self.theme getImageWithKey:IMAGE_NOTIFICATION_CANCEL_ICON] forState:UIControlStateNormal];
+    [closeButton setBackgroundImage:[self.theme getImageValueWithKey:IMAGE_NOTIFICATION_CANCEL_ICON] forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(dismissBanner:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -168,7 +168,7 @@
     if (channel.icon) {
         self.imgView.image = [UIImage imageWithData:channel.icon];
     }else{
-        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPalceholderImageBackgroundColor]];
+        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
         self.imgView.image = placeholderImage;
     }
     

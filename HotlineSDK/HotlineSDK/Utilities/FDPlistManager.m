@@ -56,10 +56,14 @@
             && [self micUsageEnabled]);
 }
 
--(BOOL)isPictureMessageEnabled{
-    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED]
-            && [self cameraUsageEnabled]
+-(BOOL)isGallerySelectionEnabled{
+    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED]
             && [self photoLibraryUsageEnabled]);
+}
+
+-(BOOL)isCameraCaptureEnabled{
+    return ([self.secStore boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED]
+            && [self cameraUsageEnabled]);
 }
 
 @end

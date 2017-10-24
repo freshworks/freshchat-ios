@@ -12,30 +12,36 @@
 #import "FDUtilities.h"
 
 @implementation FDHtmlFragment
-    -(id) initWithFragment: (FragmentData *) fragment {
+-(id) initFragment: (FragmentData *) fragment withFont :(UIFont *)font andType:(enum ConvMessageType) type{
         @synchronized(self) {
             self = [self initWithFrame:CGRectZero];
             if(self) {
                 self.translatesAutoresizingMaskIntoConstraints = false;
                 [self setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
                 [self setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+                self.dataDetectorTypes = UIDataDetectorTypeAll;
                 [self setEditable:NO];
+                self.dataDetectorTypes = UIDataDetectorTypeAll;
                 [self setTextAlignment:NSTextAlignmentLeft];
-                [self setTintColor:[[FCTheme sharedInstance] hyperlinkColor]];
+                if(type == AGENT){
+                    [self setTintColor:[[FCTheme sharedInstance] agentHyperlinkColor]];
+                }
+                else{
+                    [self setTintColor:[[FCTheme sharedInstance] userHyperlinkColor]];
+                }
                 [self setBackgroundColor:UIColor.clearColor];                
                 [self setScrollEnabled:NO];
+                self.font = font;
                 if([FDUtilities containsHTMLContent:fragment.content]) {
                     NSMutableAttributedString *str = [[HLAttributedText sharedInstance] getAttributedString:fragment.content];
                     if(str == nil) {
-                        NSMutableAttributedString *content = [[HLAttributedText sharedInstance] addAttributedString:fragment.content];
+                        NSMutableAttributedString *content = [[HLAttributedText sharedInstance] addAttributedString:fragment.content withFont:self.font];
                         self.attributedText = content;
                     } else {
                         self.attributedText = str;                        
                     }
                 } else {
-                    UIFont *customFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
                     self.text = fragment.content;
-                    self.font = customFont;
                 }
             }
             return self;

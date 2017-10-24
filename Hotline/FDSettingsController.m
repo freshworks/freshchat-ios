@@ -215,7 +215,6 @@
         case 0:
             [[Freshchat sharedInstance]resetUserWithCompletion:^{
                 [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
-                [[Freshchat sharedInstance]initWithConfig:config];
                 [self updateFields];
             }];
             break;

@@ -39,9 +39,8 @@
     return self.data[string];
 }
 
--(NSMutableAttributedString *) addAttributedString:(NSString *)string  {
-    UIFont *customFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
-    NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>",customFont.fontName,(int)customFont.pointSize,string];
+-(NSMutableAttributedString *) addAttributedString:(NSString *)string withFont:(UIFont*) font   {
+    NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>",font.fontName,(int)font.pointSize,string];
     NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUnicodeStringEncoding]
                                                                                                options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
                                                                                     documentAttributes:nil error:nil];

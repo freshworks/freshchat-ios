@@ -126,11 +126,18 @@
 -(void)setupSubviews{
     self.searchBar = [[FDSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SEARCH_BAR_HEIGHT)];
     self.searchBar.hidden = NO;
+    
     self.searchBar.delegate = self;
     self.searchBar.placeholder = HLLocalizedString(LOC_SEARCH_PLACEHOLDER_TEXT);
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchBar becomeFirstResponder];
+    
+    UITextField *txtSearchField = [self.searchBar valueForKey:@"_searchField"];
+    [txtSearchField setBorderStyle:UITextBorderStyleRoundedRect];
+    txtSearchField.layer.cornerRadius = 4;
+    txtSearchField.layer.borderWidth = 1.0f;
+    txtSearchField.layer.borderColor = [self.theme searchBarTextViewBorderColor].CGColor;
     
     UIView *mainSubView = [self.searchBar.subviews lastObject];
     for (id subview in mainSubView.subviews) {
@@ -142,7 +149,7 @@
     
     self.tableView = [[UITableView alloc] init];
     self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
-    self.tableView.separatorColor = [self.theme tableViewCellSeparatorColor];
+    self.tableView.separatorColor = [self.theme articleListCellSeperatorColor];
     self.tableView.translatesAutoresizingMaskIntoConstraints=NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -170,7 +177,7 @@
 }
 
 - (void) setEmptySearchResultView{
-    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_EMPTY_SEARCH_ICON] andText:HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT)];
+    self.emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_EMPTY_SEARCH_ICON] withType:1  andText:HLLocalizedString(LOC_SEARCH_EMPTY_RESULT_TEXT)];
     self.emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.emptyResultView];
     [FDAutolayoutHelper centerX:self.emptyResultView onView:self.view];
@@ -330,7 +337,7 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     searchText = trimString(searchText);
     if (searchText.length!=0) {
-        [self.tableView setBackgroundColor:[self.theme backgroundColorSDK]];
+        [self.tableView setBackgroundColor:[self.theme articleListBackgroundColor]];
         [self filterArticlesForSearchTerm:searchText];
         [self.view removeGestureRecognizer:self.recognizer];
     }else{

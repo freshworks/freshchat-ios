@@ -8,6 +8,7 @@
 
 #import "FCTheme.h"
 #import "FDThemeConstants.h"
+#define SDK_THEME_VERSION @"1.0"
 
 @interface FCTheme ()
 
@@ -31,14 +32,14 @@
     self = [super init];
     if (self) {
         self.themeName = FD_DEFAULT_THEME_NAME;
-        self.systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        self.systemFont = [self sdkFont];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSystemFont:) name:UIContentSizeCategoryDidChangeNotification object:nil];
     }
     return self;
 }
 
 -(void)refreshSystemFont:(NSNotification *)notification{
-    self.systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.systemFont = [self sdkFont];
 }
 
 -(void)setThemeName:(NSString *)themeName{
@@ -85,18 +86,63 @@
     return image;
 }
 
+/*
+ User message padding
+ */
+
+-(NSString *)userMessageLeftPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageLeft"];
+}
+
+-(NSString *)userMessageRightPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageRight"];
+}
+
+-(NSString *)userMessageTopPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageTop"];
+}
+
+-(NSString *)userMessageBottomPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageBottom"];
+}
+
+/*
+ Agent message padding
+ */
+
+-(NSString *)agentMessageLeftPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageLeft"];
+}
+
+-(NSString *)agentMessageRightPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageRight"];
+}
+
+-(NSString *)agentMessageTopPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageTop"];
+}
+
+-(NSString *)agentMessageBottomPadding {
+    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageBottom"];
+}
+
+-(UIImage *)getImageValueWithKey:(NSString *)key{
+    NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"%@",key]];
+    UIImage *image = [UIImage imageNamed:imageName];
+    return image;
+}
+
+
 -(UIColor *)getColorForKeyPath:(NSString *)path{
     NSString *hexString = [self.themePreferences valueForKeyPath:path];
     return hexString ? [FCTheme colorWithHex:hexString] : nil;
 }
-
 +(UIColor *)colorWithHex:(NSString *)value{
     unsigned hexNum;
     NSScanner *scanner = [NSScanner scannerWithString:value];
     if (![scanner scanHexInt: &hexNum]) return nil;
     return [self colorWithRGBHex:hexNum];
 }
-
 +(UIColor *)colorWithRGBHex:(uint32_t)hex{
     int r = (hex >> 16) & 0xFF;
     int g = (hex >> 8) & 0xFF;
@@ -106,148 +152,175 @@
                             blue:b / 255.0f
                            alpha:1.0f];
 }
+-(UIColor *)getColorValueForKeyPath:(NSString *)path{
+    NSString *hexString = [self.themePreferences valueForKeyPath:path];
+    return hexString ? [FCTheme colorValueWithHex:hexString] : nil;
+}
++(UIColor *)colorValueWithHex:(NSString *)value{
+    if(value.length == 0){
+        return nil;
+    }
+    unsigned hexNum;
+    NSScanner *scanner = [NSScanner scannerWithString:value];
+    [scanner setScanLocation:1];
+    if (![scanner scanHexInt: &hexNum]) return nil;
+    return [self colorWithRGBHex:hexNum];
+    
+}
+
 
 #pragma mark - Navigation Bar
 
 - (UIColor *) navigationBarBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"NavigationBar.BackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"NavigationBar.NavigationBarStyle.background"];
     return color ?color : [FCTheme colorWithHex:FD_NAVIGATION_BAR_BACKGROUND];
 }
 
 -(UIFont *)navigationBarTitleFont{
-    return [self getFontWithKey:@"NavigationBar.Title" andDefaultSize:17];
+    return [self getFontValueWithKey:@"NavigationBar.TitleTextStyle" andDefaultSize:17];
 }
 
 -(UIColor *)navigationBarTitleColor{
-        UIColor *color = [self getColorForKeyPath:@"NavigationBar.TitleColor"];
+        UIColor *color = [self getColorValueForKeyPath:@"NavigationBar.TitleTextStyle.textColor"];
         return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 
 -(UIColor *)navigationBarButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"NavigationBar.ButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"NavigationBar.ActionButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
-
 -(UIFont *)navigationBarButtonFont{
-    return [self getFontWithKey:@"NavigationBar.Button" andDefaultSize:17];
+    return [self getFontValueWithKey:@"NavigationBar.ActionButtonStyle" andDefaultSize:17];
 }
 
 #pragma mark - Status Bar
 
 -(UIStatusBarStyle)statusBarStyle{
-    NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"OverallSettings.StatusBarStyle"];
+    NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"Miscellaneous.StatusBarStyle.StatusBarBackground"];
     if([statusBarStyle isEqualToString:@"UIStatusBarStyleLightContent"]){
         return UIStatusBarStyleLightContent;
     }
     return UIStatusBarStyleDefault;
 }
 
+#pragma mark - progress bar
+
+- (UIColor *) progressBarColor{
+    UIColor *color = [self getColorValueForKeyPath:@"Miscellaneous.ProgressBarStyle.progressBarColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
+}
+
 #pragma mark - Search Bar
 
 -(UIFont *)searchBarFont{
-    return [self getFontWithKey:@"SearchBar." andDefaultSize:FD_FONT_SIZE_NORMAL];
+    return [self getFontValueWithKey:@"SearchBar.SearchQueryTextStyle" andDefaultSize:FD_FONT_SIZE_NORMAL];
 }
 
 -(UIColor *)searchBarFontColor{
-    UIColor *color = [self getColorForKeyPath:@"SearchBar.FontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.SearchQueryTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
+-(UIColor *)searchBarTextViewBorderColor{
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.SearchQueryTextStyle.borderColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 -(UIColor *)searchBarInnerBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"SearchBar.InnerBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.SearchQueryTextStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)searchBarOuterBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"SearchBar.OuterBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.SearchBarStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_SEARCH_BAR_OUTER_BACKGROUND_COLOR];
 }
 
 -(UIColor *)searchBarCancelButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"SearchBar.CancelButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.CancelButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 -(UIFont *)searchBarCancelButtonFont{
-    return [self getFontWithKey:@"SearchBar.CancelButton" andDefaultSize:FD_FONT_SIZE_NORMAL];
+    return [self getFontValueWithKey:@"SearchBar.CancelButtonStyle" andDefaultSize:FD_FONT_SIZE_NORMAL];
 }
 
 -(UIColor *)searchBarCursorColor{
-    UIColor *color = [self getColorForKeyPath:@"SearchBar.CursorColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.SearchQueryTextStyle.textCursorColor"];
     return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 #pragma mark - Dialogue box
 
 -(UIColor *)dialogueTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.LabelFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQVotingPromptTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)dialogueTitleFont{
-    return [self getFontWithKey:@"Dialogues.Label" andDefaultSize:14];
+    return [self getFontValueWithKey:@"FAQDetail.FAQVotingPromptTextStyle" andDefaultSize:14];
 }
 
 -(UIColor *)dialogueYesButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQUpvoteButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)dialogueYesButtonFont{
-    return [self getFontWithKey:@"Dialogues.YesButton" andDefaultSize:14];
+    return [self getFontValueWithKey:@"FAQDetail.FAQUpvoteButtonStyle" andDefaultSize:14];
 }
 
 -(UIColor *)dialogueYesButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQUpvoteButtonStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 //Image message attach
 
 -(UIFont *)imgAttachBackButtonFont{
-    return [self getFontWithKey:@"ConversationsUI.ImgAttachBackButton" andDefaultSize:16];
+    return [self getFontValueWithKey:@"ConversationDetail.BackButtonStyle" andDefaultSize:16];
 }
 
 -(UIColor *)imgAttachBackButtonFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ImgAttachBackButtonFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.BackButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
 }
 
 //No Button
 
 -(UIColor *)dialogueNoButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQDownvoteButtonStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
 }
 
 -(UIColor *)dialogueNoButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQDownvoteButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)dialogueNoButtonFont{
-    return [self getFontWithKey:@"Dialogues.NoButton" andDefaultSize:14];
+    return [self getFontValueWithKey:@"FAQDetail.FAQDownvoteButtonStyle" andDefaultSize:14];
 }
 
 -(UIColor *)dialogueNoButtonBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.NoButtonBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQDownvoteButtonStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)dialogueYesButtonBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.YesButtonBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQUpvoteButtonStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)dialogueBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.BackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQDetail.FAQVotingPromptViewStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
 -(UIColor *)dialogueButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"Dialogues.ButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Miscellaneous.ContactUsTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
 }
 
@@ -255,61 +328,61 @@
 #pragma mark Cust Sat dialogue
 
 -(UIColor *)custSatDialogueTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.LabelFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionPromptTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)custSatDialogueTitleFont{
-    return [self getFontWithKey:@"CustSatDialogue.Label" andDefaultSize:14];
+    return [self getFontValueWithKey:@"ConversationDetail.ChatResolutionPromptTextStyle" andDefaultSize:14];
 }
 
 -(UIColor *)custSatDialogueYesButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionPositiveButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)custSatDialogueYesButtonFont{
-    return [self getFontWithKey:@"CustSatDialogue.YesButton" andDefaultSize:14];
+    return [self getFontValueWithKey:@"ConversationDetail.ChatResolutionPositiveButtonStyle" andDefaultSize:14];
 }
 
 -(UIColor *)custSatDialogueYesButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionPositiveButtonStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BACKGROUND_COLOR];
 }
 
 //No Button
 
 -(UIColor *)custSatDialogueNoButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionNegativeButtonStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BACKGROUND_COLOR];
 }
 
 -(UIColor *)custSatDialogueNoButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionNegativeButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_FONT_COLOR];
 }
 
 -(UIFont *)custSatDialogueNoButtonFont{
-    return [self getFontWithKey:@"CustSatDialogue.NoButton" andDefaultSize:14];
+    return [self getFontValueWithKey:@"ConversationDetail.ChatResolutionNegativeButtonStyle" andDefaultSize:14];
 }
 
 -(UIColor *)custSatDialogueNoButtonBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.NoButtonBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionNegativeButtonStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_NO_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)custSatDialogueYesButtonBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.YesButtonBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionPositiveButtonStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_YES_BUTTON_BORDER_COLOR];
 }
 
 -(UIColor *)custSatDialogueBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.BackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionPromptViewStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUES_BACKGROUND_COLOR];
 }
 
 -(UIColor *)custSatDialogueButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"CustSatDialogue.ButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"CustSatDialogue.ButtonColor"];
     return color ? color : [FCTheme colorWithHex:FD_DIALOGUE_BUTTON_COLOR];
 }
 
@@ -334,7 +407,38 @@
             preferredFontSize = defaultSize;
         }
     }
-    return [UIFont fontWithName:preferredFontName size:preferredFontSize];
+    UIFont *font = [UIFont fontWithName:preferredFontName size:preferredFontSize];
+    if(font != nil) {
+        return font;
+    }
+    return [UIFont fontWithName:self.systemFont.fontName size:preferredFontSize];
+}
+
+-(UIFont *)getFontValueWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
+    NSString *preferredFontName; CGFloat preferredFontSize;
+    NSString *fontNameValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@".fontName"]];
+    NSString *fontSizeValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@".textSize"]];
+    
+    if (([fontNameValue caseInsensitiveCompare:@"SYS_DEFAULT_FONT_NAME"] == NSOrderedSame) || (fontNameValue == nil) ){
+        preferredFontName = self.systemFont.familyName;
+    }else{
+        preferredFontName = fontNameValue;
+    }
+    
+    if ([fontSizeValue caseInsensitiveCompare:@"DEFAULT_FONT_SIZE"] == NSOrderedSame ) {
+        preferredFontSize = defaultSize;
+    }else{
+        if (fontSizeValue) {
+            preferredFontSize = [fontSizeValue floatValue];
+        }else{
+            preferredFontSize = defaultSize;
+        }
+    }
+    UIFont *font = [UIFont fontWithName:preferredFontName size:preferredFontSize];
+    if(font != nil) {
+        return font;
+    }
+    return [UIFont fontWithName:self.systemFont.fontName size:preferredFontSize];
 }
 
 - (UIEdgeInsets) getInsetWithKey :(NSString *)chatOwner{
@@ -352,196 +456,201 @@
 
 #pragma mark - Table View
 
--(UIFont *)tableViewCellTitleFont{
-    return [self getFontWithKey:@"TableView.Title" andDefaultSize:14];
-}
-
--(UIColor *)tableViewCellTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.TitleFontColor"];
-    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
-
--(UIFont *)tableViewCellDetailFont{
-    return [self getFontWithKey:@"TableView.Detail" andDefaultSize:14];
-}
-
--(UIColor *)tableViewCellDetailFontColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.DetailFontColor"];
-    return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
-}
-
--(UIColor *)tableViewCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.CellBackgroundColor"];
-    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
-}
-
-
--(UIColor *)tableViewCellSeparatorColor{
-    UIColor *color = [self getColorForKeyPath:@"TableView.CellSeparatorColor"];
-    return color ? color : [FCTheme colorWithHex:@"F2F2F2"];
-}
-
 - (int)numberOfChannelListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NumChannelListDescriptionLines"] intValue];
+    int linesNo = [[self.themePreferences valueForKeyPath:@"ChannelList.ChannelListItemStyle.NumChannelListDescriptionLines"] intValue];
     return MIN(linesNo, 2);
 }
 
 - (int)numberOfCategoryListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"TableView.NumFAQListDescriptionLines"] intValue];
+    int linesNo = [[self.themePreferences valueForKeyPath:@"FAQCategoryList.NumFAQListDescriptionLines"] intValue];
     return MIN(linesNo, 2);
 }
 
 #pragma mark - Notifictaion
 
 -(UIColor *)notificationBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Notification.BackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Notification.NotificationStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)notificationTitleTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelTitleFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Notification.TitleTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)notificationMessageTextColor{
-    UIColor *color = [self getColorForKeyPath:@"Notification.MessageFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Notification.BodyTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)notificationTitleFont{
-    return [self getFontWithKey:@"Notification.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"Notification.TitleTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIFont *)notificationMessageFont{
-    return [self getFontWithKey:@"Notification.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"Notification.BodyTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)notificationChannelIconBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Notification.IconStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)notificationChannelIconBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"Notification.ChannelIconBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Notification.IconStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ArticlesList.TitleFontColor"];
-    if(color == nil)
-        color = [self tableViewCellTitleFontColor];
-    return color ? color : [FCTheme colorWithHex:FD_ARTICLE_LIST_FONT_COLOR];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQList.FAQTitleTextStyle.textColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)articleListFont{
-    NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ArticlesList.Title"];
-    if(fontNameValue == nil){
-        return [self tableViewCellTitleFont];
-    }
-    return [self getFontWithKey:@"ArticlesList.Title" andDefaultSize:14];
+    return [self getFontValueWithKey:@"FAQList.FAQTitleTextStyle" andDefaultSize:14];
+}
+
+-(UIColor *)articleListBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQList.FAQListStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)articleListCellSeperatorColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQList.FAQListItemStyle.dividerColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
+}
+
+-(UIColor *)articleListCellBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQList.FAQListItemStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Overall SDK
 
--(UIColor *)backgroundColorSDK{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.BackgroundColor"];
-    return color ? color : [FCTheme colorWithHex:FD_BACKGROUND_COLOR];
-}
-
 -(UIColor *)talkToUsButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Miscellaneous.ContactUsTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)talkToUsButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.TalkToUsButtonBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Miscellaneous.ContactUsTextStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_TALK_TO_US_BG_COLOR];
 }
 
 -(UIFont *)talkToUsButtonFont{
-    return [self getFontWithKey:@"OverallSettings.TalkToUsButton" andDefaultSize:FD_FONT_SIZE_LARGE];
+    return [self getFontValueWithKey:@"Miscellaneous.ContactUsTextStyle" andDefaultSize:FD_FONT_SIZE_LARGE];
 }
 
 -(UIColor *)noItemsFoundMessageColor{
-    UIColor *color = [self getColorForKeyPath:@"OverallSettings.NoItemsFoundMessageColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"Miscellaneous.NoItemsFoundMessageColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(NSString *)getArticleDetailCSSFileName{
-    NSString *filename = [self.themePreferences valueForKeyPath:@"OverallSettings.ArticleDetailCSSFileName"];
+    NSString *filename = [self.themePreferences valueForKeyPath:@"Miscellaneous.ArticleDetailCSSFileName"];
     if (!filename) {
         filename = FD_DEFAULT_ARTICLE_DETAIL_CSS_FILENAME;
     }
     return filename;
 }
 
+-(UIColor *) imagePreviewScreenBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"Miscellaneous.ImagePreviewStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *) sdkFont {
+    NSString *sdkFontString = [self.themePreferences valueForKeyPath:@"Miscellaneous.DefaultGlobalFont"];
+    UIFont *sysFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    UIFont *sdkFont = [UIFont fontWithName:sdkFontString size:sysFont.pointSize];
+    if(sdkFont) {
+        return sdkFont;
+    }
+    return sysFont;
+}
+
+
 -(UIFont *)responseTimeExpectationsFontName{
-    return [self getFontWithKey:@"ConversationsUI.ResponseTimeExpectations" andDefaultSize:12];
+    return [self getFontValueWithKey:@"NavigationBar.SubTitleTextStyle" andDefaultSize:12];
 }
 
 -(UIColor *)responseTimeExpectationsFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ResponseTimeExpectationsFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"NavigationBar.SubTitleTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)inputTextFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)inputTextFont{
-    return [self getFontWithKey:@"ConversationsUI.InputText" andDefaultSize:FD_FONT_SIZE_SMALL];
+    return [self getFontValueWithKey:@"ConversationDetail.MessageReplyInputViewStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(UIColor *) inputTextfieldBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)inputTextCursorColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextCursorColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.textCursorColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLUE];
 }
 
 -(UIColor *)inputToolbarBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputToolbarBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyViewStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 -(UIColor *)inputTextBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)inputTextPlaceholderFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.InputTextPlaceholderFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.textColorHint"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIColor *)sendButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.SendButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.buttonColor"];
     return color ? color : [FCTheme colorWithHex:FD_SEND_BUTTON_COLOR];
 }
 
 -(UIColor *)actionButtonTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonTextColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageButtonStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 
--(UIColor *)actionButtonSelectedFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonSelectedFontColor"];
+-(UIFont *) actionButtonFont{
+    return [self getFontValueWithKey:@"ConversationDetail.MessageButtonStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(UIColor *)actionButtonSelectedColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageButtonStyle.selectedColor"];
     return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_TEXT_COLOR];
 }
 
 -(UIColor *)actionButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageButtonStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 
 -(UIColor *)actionButtonBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ActionButtonBorderColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageButtonStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_ACTION_BUTTON_COLOR];
 }
 
 
--(UIColor *)hyperlinkColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.HyperlinkColor"];
+-(UIColor *)agentHyperlinkColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.TeamMemberMessageTextStyle.textColorLink"];
+    return color ? color : [FCTheme colorWithHex:FD_HYPERLINKCOLOR];
+}
+
+-(UIColor *)userHyperlinkColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.UserMessageTextStyle.textColorLink"];
     return color ? color : [FCTheme colorWithHex:FD_HYPERLINKCOLOR];
 }
 
@@ -549,171 +658,219 @@
     return [self getFontWithKey:@"ConversationsUI.ChatBubbleMessage" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
--(UIFont *)getChatbubbleTimeFont{
-    return [self getFontWithKey:@"ConversationsUI.ChatBubbleTime" andDefaultSize:FD_FONT_SIZE_SMALL];
+-(UIFont *)agentMessageFont{
+    return [self getFontValueWithKey:@"ConversationDetail.TeamMemberMessageTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
--(UIColor *)getChatbubbleTimeFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.ChatBubbleTimeFontColor"];
+-(UIFont *)userMessageFont{
+    return [self getFontValueWithKey:@"ConversationDetail.UserMessageTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIFont *)agentMessageTimeFont{
+    return [self getFontValueWithKey:@"ConversationDetail.TeamMemberMessageTimeTextStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(UIFont *)getUserMessageTimeFont{
+    return [self getFontValueWithKey:@"ConversationDetail.UserMessageTimeTextStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(UIColor *)agentMessageTimeFontColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.TeamMemberMessageTimeTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
-
--(NSString *)conversationUIFontName{
-    return [self.themePreferences valueForKeyPath:@"ConversationsUI.ConversationUIFontName"];
+-(UIColor *)getUserMessageTimeFontColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.UserMessageTimeTextStyle.textColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 - (UIColor *) agentMessageFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentMessageFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.TeamMemberMessageTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 - (UIColor *) userMessageFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.UserMessageFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.UserMessageTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIColor *)agentNameFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.AgentNameFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.TeamMemberNameTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)agentNameFont{
-    return [self getFontWithKey:@"ConversationsUI.AgentName" andDefaultSize:FD_FONT_SIZE_SMALL];
+    return [self getFontValueWithKey:@"ConversationDetail.TeamMemberNameTextStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
--(UIColor *)messageUIBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.BackgroundColor"];
-    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+-(id) getMessageDetailBackgroundComponent{
+    NSString *bgComponent = [self.themePreferences valueForKeyPath:@"ConversationDetail.MessageListStyle.background"];
+    if(([bgComponent hasPrefix:@"#"]) && (bgComponent.length == 7)){
+        UIColor *color = [FCTheme colorValueWithHex:bgComponent];
+        return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+    }
+    else{
+        return [UIImage imageNamed:bgComponent];;
+    }
+    return nil;
 }
-
-#pragma mark - Grid View
--(UIColor *)gridViewCellBorderColor{
-    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewBorderColor"];
-    return color ? color : [FCTheme colorWithHex:FD_FAQS_ITEM_SEPARATOR_COLOR];
-}
-
 
 #pragma mark - Grid View Cell
--(UIFont *)gridViewCellTitleFont{
-    return [self getFontWithKey:@"FAQUI.GridViewTitle" andDefaultSize:14];
+-(UIFont *)faqCategoryTitleFont{
+    return [self getFontValueWithKey:@"FAQCategoryList.FAQCategoryNameTextStyle" andDefaultSize:14];
 }
 
--(UIColor *)gridViewCellTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewTitleFontColor"];
+-(UIColor *)faqCategoryTitleFontColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryNameTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
--(UIColor *)gridViewCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewBackgroundColor"];
+-(UIColor *)faqCategoryBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryListStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
--(UIColor *)gridViewImageBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"FAQUI.GridViewImageViewBackgroundColor"];
+-(UIColor *)gridViewCardBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryListItemStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *) gridViewCardShadowColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryListItemStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *) faqPlaceholderIconBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"FAQUI.PlaceholderIconBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryAltIconStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLUE];
 }
 -(UIFont *) faqPlaceholderIconFont{
-    return [self getFontWithKey:@"FAQUI.PlaceholderIconFont" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"FAQCategoryList.FAQCategoryAltIconStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
--(UIColor *)faqListViewTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"FAQUI.ListViewTitleFontColor"];
-    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLUE];
+-(UIColor *)faqListCellSeparatorColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryListItemStyle.dividerColor"];
+    return color ? color : [FCTheme colorWithHex:@"F2F2F2"];
 }
--(UIFont *)faqListViewTitleFont{
-    return [self getFontWithKey:@"FAQUI.PlaceholderIconFont" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+
+-(UIColor *)faqListCellSelectedColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryListItemStyle.backgroundSelected"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIFont *)faqCategoryDetailFont{
+    return [self getFontValueWithKey:@"FAQCategoryList.FAQCategoryDescriptionTextStyle" andDefaultSize:13];
+}
+
+-(UIColor *)faqCategoryDetailFontColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryDescriptionTextStyle.textColor"];
+    return color ? color : [FCTheme colorWithHex:@"F2F2F2"];
 }
 
 #pragma mark - Conversation Banner
 
 - (UIColor *) conversationOverlayBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.BackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ConversationBannerMessageStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 - (UIFont *) conversationOverlayTextFont{
-    return [self getFontWithKey:@"ConversationsUI.Banner.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"ConversationDetail.ConversationBannerMessageStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 - (UIColor *) conversationOverlayTextColor{
-    UIColor *color = [self getColorForKeyPath:@"ConversationsUI.Banner.MessageTextColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ConversationBannerMessageStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 
 #pragma mark - Channel List View
 
+-(UIColor *)channelListCellSeparatorColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelListStyle.dividerColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 -(UIColor *)channelListCellBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelCellBackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelListItemStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIFont *)channelTitleFont{
-    return [self getFontWithKey:@"ChannelListView.ChannelTitle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"ChannelList.ChannelNameTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)channelTitleFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelTitleFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelNameTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)channelDescriptionFont{
-    return [self getFontWithKey:@"ChannelListView.ChannelDescription" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"ChannelList.ChannelDescriptionTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)channelDescriptionFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelDescriptionFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelDescriptionTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)channelLastUpdatedFont{
-    return [self getFontWithKey:@"ChannelListView.LastUpdatedTime" andDefaultSize:FD_FONT_SIZE_SMALL];
+    return [self getFontValueWithKey:@"ChannelList.ChannelLastUpdatedAtTextStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
 }
 
 -(UIColor *)channelLastUpdatedFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.LastUpdatedTimeFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelLastUpdatedAtTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_FEEDBACK_FONT_COLOR];
 }
 
 -(UIFont *)badgeButtonFont{
-    return [self getFontWithKey:@"ChannelListView.UnreadBadge" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+    return [self getFontValueWithKey:@"ChannelList.ChannelUnreadCountTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 -(UIColor *)badgeButtonBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelUnreadCountTextStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_BADGE_BUTTON_BACKGROUND_COLOR];
 }
 
 -(UIColor *)badgeButtonTitleColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.UnreadBadgeTitleColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelUnreadCountTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
--(UIColor *)channelIconPalceholderImageBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChannelListView.ChannelIconPlaceholderBackgroundColor"];
+-(UIColor *)channelIconPlaceholderImageBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelAltIconStyle.background"];
     return color ? color : [UIColor darkGrayColor];
 }
 
 -(UIFont *)channelIconPlaceholderImageCharFont{
-    NSString *fontNameValue = [self.themePreferences valueForKeyPath:@"ChannelListView.ChannelIconPlaceholderTextFontName"];
-    if(fontNameValue == nil){
-        return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderChar" andDefaultSize:FD_FONT_SIZE_LARGE];
-    }
-    return [self getFontWithKey:@"ChannelListView.ChannelIconPlaceholderText" andDefaultSize:FD_FONT_SIZE_LARGE];
+    return [self getFontValueWithKey:@"ChannelList.ChannelAltIconStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)channelListBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelListStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(UIColor *)channelCellSelectedColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelListItemStyle.backgroundSelected"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 #pragma mark - Empty Result
--(UIColor *)emptyResultMessageFontColor{
-    UIColor *color = [self getColorForKeyPath:@"EmptyResultView.MessageTextColor"];
+-(UIColor *)faqEmptyResultMessageFontColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQList.FAQListEmptyTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
--(UIFont *)emptyResultMessageFont{
-    return [self getFontWithKey:@"EmptyResultView.Message" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+-(UIFont *)faqEmptyResultMessageFont{
+    return [self getFontValueWithKey:@"FAQList.FAQListEmptyTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *)channelEmptyResultMessageFontColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ChannelList.ChannelListEmptyTextStyle.textColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIFont *)channelEmptyResultMessageFont{
+    return [self getFontValueWithKey:@"ChannelList.ChannelListEmptyTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
 }
 
 #pragma mark - Footer Settings
@@ -725,17 +882,17 @@
 #pragma mark chat bubble inset
 
 - (UIEdgeInsets) getAgentBubbleInsets{
-    return [self getInsetWithKey:@"ChatBubbleInsets.AgentBubble"];
+    return [self getInsetWithKey:@"ConversationDetail.ChatBubbleInsets.AgentBubble"];
 }
 
 - (UIEdgeInsets) getUserBubbleInsets{
-    return [self getInsetWithKey:@"ChatBubbleInsets.UserBubble"];
+    return [self getInsetWithKey:@"ConversationDetail.ChatBubbleInsets.UserBubble"];
 }
 
 #pragma mark - Voice Recording Prompt
 
 -(UIFont *)voiceRecordingTimeLabelFont{
-    return [self getFontWithKey:@"FAQUI.GridViewCategoryTitle" andDefaultSize:13];
+    return [self getFontWithKey:@"FAQCategoryList.GridViewCategoryTitle" andDefaultSize:13];
 }
 
 -(NSString *)getCssFileContent:(NSString *)key{
@@ -749,47 +906,62 @@
     return [[NSString alloc]initWithData:cssContent encoding:NSUTF8StringEncoding];
 }
 
+-(UIColor *) faqListViewCellBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"FAQCategoryList.FAQCategoryListItemStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 #pragma mark CSAT Prompt
 
 -(UIColor *)csatPromptBackgroundColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.BackgroundColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.ChatResolutionPromptViewStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
 -(UIColor *)csatPromptRatingBarColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.RatingBarColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveyRatingBarStyle.foreground"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];    
 }
 
 -(UIColor *)csatPromptSubmitButtonColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.SubmitButtonColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveySubmitButtonTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 -(UIFont *)csatPromptSubmitButtonTitleFont{
-    return [self getFontWithKey:@"ChatResolutionPrompt.SubmitButtonTitle" andDefaultSize:15];
+    return [self getFontValueWithKey:@"ConversationDetail.CustomerSurveySubmitButtonTextStyle" andDefaultSize:15];
+}
+
+-(UIColor *) csatPromptSubmitButtonBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveySubmitButtonTextStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
 -(UIColor *)csatPromptInputTextFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.InputTextFontColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveyCommentsInputViewStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
 -(UIFont *)csatPromptInputTextFont{
-    return [self getFontWithKey:@"ChatResolutionPrompt.InputText" andDefaultSize:FD_FONT_SIZE_SMALL];
+    return [self getFontValueWithKey:@"ConversationDetail.CustomerSurveyCommentsInputViewStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(UIColor *)csatPromptInputTextBorderColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveyCommentsInputViewStyle.borderColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIColor *)csatPromptHorizontalLineColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.HorizontalLineColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveyDialogStyle.dividerColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 
 -(UIFont *)csatPromptQuestionTextFont{
-    return [self getFontWithKey:@"ChatResolutionPrompt.QuestionText" andDefaultSize:15];
+    return [self getFontValueWithKey:@"ConversationDetail.CustomerSurveyQuestionTextStyle" andDefaultSize:15];
 }
 
 -(UIColor *)csatPromptQuestionTextFontColor{
-    UIColor *color = [self getColorForKeyPath:@"ChatResolutionPrompt.QuestionTextColor"];
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveyQuestionTextStyle.textColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 

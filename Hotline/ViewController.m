@@ -288,8 +288,9 @@
 }
 
 - (IBAction)sendMessage:(id)sender{
-    FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:@"sampleMessage" andTag:@"tagName"];
-    //[[Freshchat sharedInstance] sendMessage:userMessage]; //api is hidden currently
+    NSString * tag =  [[self.sendMessageTag.text componentsSeparatedByString:@","] firstObject];
+    FreshchatMessage *userMessage = [[FreshchatMessage alloc] initWithMessage:self.message.text andTag:tag];
+    [[Freshchat sharedInstance] sendMessage:userMessage];
 }
 
 - (IBAction)switchAction:(id)sender {

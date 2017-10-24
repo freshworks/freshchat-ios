@@ -18,6 +18,8 @@
 
 -(BOOL)isVoiceMessageEnabled;
 
--(BOOL)isPictureMessageEnabled;
+-(BOOL)isGallerySelectionEnabled;
+
+-(BOOL)isCameraCaptureEnabled;
 
 @end

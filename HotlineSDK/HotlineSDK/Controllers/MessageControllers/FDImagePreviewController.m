@@ -42,7 +42,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     [super viewDidLoad];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
-    self.scrollView.backgroundColor = [UIColor clearColor];
+    self.scrollView.backgroundColor = [[FCTheme sharedInstance] imagePreviewScreenBackgroundColor];
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.scrollView];
     

@@ -38,7 +38,7 @@
 
 -(void)setupTheme{
      if (self) {
-         self.backgroundColor     = [self.theme tableViewCellBackgroundColor];
+         self.backgroundColor     = [self.theme faqCategoryBackgroundColor];
      }
 }
 

@@ -12,7 +12,7 @@
 
 @implementation HLEmptyResultView
 
--(id)initWithImage:(UIImage *)image andText:(NSString *)text {
+-(id)initWithImage:(UIImage *)image withType:(enum SupportType)solType andText:(NSString *)text {
     self = [super init];
     if (self) {
         
@@ -24,8 +24,14 @@
         
         self.emptyResultLabel = [[UILabel alloc]init];
         self.emptyResultLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        self.emptyResultLabel.textColor = [theme emptyResultMessageFontColor];
-        self.emptyResultLabel.font = [theme emptyResultMessageFont];
+        if(solType == SOLUTIONS){
+            self.emptyResultLabel.textColor = [theme faqEmptyResultMessageFontColor];
+            self.emptyResultLabel.font = [theme faqEmptyResultMessageFont];
+        }
+        else{
+            self.emptyResultLabel.textColor = [theme channelEmptyResultMessageFontColor];
+            self.emptyResultLabel.font = [theme channelEmptyResultMessageFont];
+        }
         self.emptyResultLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.emptyResultLabel.numberOfLines = 3;
         self.emptyResultLabel.textAlignment= NSTextAlignmentCenter;

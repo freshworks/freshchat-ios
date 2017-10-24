@@ -73,6 +73,7 @@
         self.submitButton.translatesAutoresizingMaskIntoConstraints = NO;
         [self.submitButton setTitle:HLLocalizedString(LOC_CUST_SAT_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
         [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
+        self.submitButton.backgroundColor = [self.theme csatPromptSubmitButtonBackgroundColor];
         [self.submitButton.titleLabel setFont:[self.theme csatPromptSubmitButtonTitleFont]];
         #if DEBUG
         self.submitButton.accessibilityIdentifier = @"btnFeedbackSubmit";
@@ -87,7 +88,7 @@
         self.feedbackView.font = self.theme.csatPromptInputTextFont;
         self.feedbackView.textColor = self.theme.csatPromptInputTextFontColor;
         self.feedbackView.layer.borderWidth = 0.5;
-        self.feedbackView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        self.feedbackView.layer.borderColor =  self.theme.csatPromptInputTextBorderColor.CGColor;
         self.feedbackView.translatesAutoresizingMaskIntoConstraints = NO;
         #if DEBUG
         self.feedbackView.accessibilityIdentifier = @"txtFeedback";

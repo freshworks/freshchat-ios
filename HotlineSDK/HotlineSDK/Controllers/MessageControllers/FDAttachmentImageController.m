@@ -135,7 +135,6 @@
     
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:
      @{UITextAttributeTextColor:[[FCTheme sharedInstance] imgAttachBackButtonFontColor],
-       UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
        UITextAttributeTextShadowColor:[UIColor whiteColor],
        UITextAttributeFont:[[FCTheme sharedInstance] imgAttachBackButtonFont]
        }

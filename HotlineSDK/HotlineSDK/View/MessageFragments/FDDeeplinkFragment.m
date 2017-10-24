@@ -16,11 +16,12 @@
         if (self) {
             self.fragmentData = fragment;
             FCTheme *theme = [FCTheme sharedInstance];
-            UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
-            float padding = 10;
+            UIFont *actionLabelFont=[theme agentMessageFont];
+            float padding = 10;            
             self.backgroundColor = [theme actionButtonColor];
             self.contentEdgeInsets = UIEdgeInsetsMake(padding, padding, padding, padding);
             self.backgroundColor = [theme actionButtonColor];
+            self.titleLabel.font = [theme actionButtonFont];
             self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
             self.layer.borderWidth=0.5;
             self.layer.cornerRadius=5.0;
@@ -37,7 +38,7 @@
              [[NSAttributedString alloc] initWithString:actionLabel
                                         attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]]
                                         forState:UIControlStateNormal];
-            [self setTitleColor:[theme actionButtonSelectedFontColor] forState:UIControlStateSelected];
+            [self setBackgroundImage:[FDUtilities imageWithColor:[theme actionButtonSelectedColor]] forState: UIControlStateSelected];
             self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
             self.translatesAutoresizingMaskIntoConstraints = NO;
             self.userInteractionEnabled = true;

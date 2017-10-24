@@ -25,9 +25,17 @@
     if (self) {
         self.theme = [FCTheme sharedInstance];
         self.searchBarStyle = UISearchBarStyleProminent;
-
         self.tintColor = [self.theme searchBarCursorColor];
-
+        UIImage *searchClearIcon = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_SEARCH_BAR_CLEAR_ICON];
+        if(searchClearIcon){
+            [self setImage:searchClearIcon forSearchBarIcon:UISearchBarIconClear state:UIControlStateNormal];
+        }
+        UIImage *searchIcon = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_SEARCH_BAR_SEARCH_ICON];
+        if(searchIcon){
+            [self setImage:searchIcon
+           forSearchBarIcon:UISearchBarIconSearch
+                      state:UIControlStateNormal];
+        }
         //Search bar outer background color
         [self setBackgroundImage:[FDUtilities imageWithColor:[self.theme searchBarOuterBackgroundColor]] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 
@@ -41,6 +49,7 @@
         NSDictionary *textAttrDict = @{NSFontAttributeName:[self.theme searchBarFont],
                                        NSForegroundColorAttributeName:[self.theme searchBarFontColor]};
         UITextField *textItemProxy = [UITextField appearanceWhenContainedIn:[FDSearchBar class], nil];
+        
         [textItemProxy setDefaultTextAttributes:textAttrDict];
     }
     return self;

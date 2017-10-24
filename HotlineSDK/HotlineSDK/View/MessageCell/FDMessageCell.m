@@ -83,7 +83,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     showsProfile = YES;
     showsSenderName= NO;
-    customFontName=[[FCTheme sharedInstance] conversationUIFontName];
+    //customFontName=[[FCTheme sharedInstance] agentMessageFont];
     showsUploadStatus=YES;
     showsTimeStamp=YES;
     /* setup callout*/
@@ -107,7 +107,6 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     /* setup SentTime field*/
     if(showsTimeStamp){
         messageSentTimeLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-        [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
         [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
         [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
         [messageSentTimeLabel setEditable:NO];
@@ -118,7 +117,6 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     
     /* setup message text field*/
     
-    messageTextFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
     messageTextView=[[UITextView alloc] initWithFrame:CGRectZero];
     [messageTextView setFont:messageTextFont];
     
@@ -230,14 +228,14 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     }
     
     //check if message occupies a single line
-    NSString* customFontName=[[FCTheme sharedInstance] conversationUIFontName];
+    NSString* customFontName=[[FCTheme sharedInstance] agentMessageFont];
     int numLines = [FDMessageCell getNoOfLines:messageText];
     
     //if message is single line, calculate larger width of the message text and date string
     if (numLines >= 1){
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
         [tempView setText:messageText];
-        [tempView setFont:[[FCTheme sharedInstance] getChatBubbleMessageFont]];
+        
         CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
@@ -269,9 +267,9 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
 
 + (int) getNoOfLines :(NSString *)messageText {
     
-    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[FCTheme sharedInstance] getChatBubbleMessageFont]];
+    CGSize sizer = [FDMessageCell getSizeOfTextViewWidth:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:nil];
     
-    return ((sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:[[FCTheme sharedInstance] getChatBubbleMessageFont]]));
+    return ((sizer.height-10) / ([FDMessageCell getTextViewLineHeight:(KONOTOR_TEXTMESSAGE_MAXWIDTH-KONOTOR_MESSAGE_BACKGROUND_IMAGE_SIDE_PADDING) text:messageText withFont:nil]));
 }
 
 
@@ -337,12 +335,12 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     else
         [uploadStatusImageView setImage:sendingImage];
     
-    UIImage *otherChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
-    UIImage *userChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
+    UIImage *otherChatBubble = [[FCTheme sharedInstance]getImageValueWithKey:IMAGE_BUBBLE_CELL_LEFT];
+    UIImage *userChatBubble = [[FCTheme sharedInstance]getImageValueWithKey:IMAGE_BUBBLE_CELL_RIGHT];
     
     UIEdgeInsets otherChatBubbleInsets= [[FCTheme sharedInstance] getAgentBubbleInsets];
     UIEdgeInsets userChatBubbleInsets= [[FCTheme sharedInstance] getUserBubbleInsets];
-    messageTextView.tintColor = [[FCTheme sharedInstance] hyperlinkColor];
+    messageTextView.tintColor = [[FCTheme sharedInstance] agentHyperlinkColor];
     UIColor *messageTextColor;
     
     if(isSenderOther){
@@ -485,7 +483,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
     
     float cellHeight=0;
     NSString *simpleString=currentMessage.text; //[messageText string];
-    UIFont *messageFont = [[FCTheme sharedInstance] getChatBubbleMessageFont];
+    UIFont *messageFont = nil;
     
     if((messageType == KonotorMessageTypeText)||(messageType == KonotorMessageTypeHTML)){
         

@@ -79,7 +79,9 @@
 "camera_unavailable_description"="Oopsie! Your device doesn't have a camera or the camera is not available for use";
 "camera_unavailable_ok_button_text"="OK";
 "camera_permission_denied" ="Camera permissions is required to capture pictures";
+"photo_library_permission_denied" ="Photo library permission is required access photos";
 "camera_permission_alert_cancel" ="Cancel";
+"photo_library_permission_alert_cancel" ="Cancel";
 
 /* Picture attached*/
 "pic_msg_attachment_close_btn"="Back";

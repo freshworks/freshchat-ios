@@ -48,12 +48,12 @@
 +(double) getCurrentPlayingAudioTime;
 +(NSString *)getCurrentPlayingMessageID;
 
-+(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation andChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 +(void)uploadImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 
 +(void)uploadNewMessage:(NSArray *)fragmentsInfo onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
-+(void)uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
++(void)uploadNewMsgWithImage:(UIImage *)image textFeed:(NSString *)caption onConversation:(KonotorConversation *)conversation andChannel:(HLChannel *)channel;
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
 + (BOOL) showNotificationDisabledAlert;

@@ -70,10 +70,7 @@
     [super willMoveToParentViewController:parent];
     parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     self.theme = [FCTheme sharedInstance];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [self.theme channelTitleFontColor],
-                                                           NSFontAttributeName: [self.theme channelTitleFont]
-                                                           }];
+    self.tableView.backgroundColor = [self.theme channelListBackgroundColor];
     self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     self.navigationController.navigationBar.titleTextAttributes = @{
                                                                     NSForegroundColorAttributeName: [self.theme navigationBarTitleColor],
@@ -244,7 +241,7 @@
         HLChannelInfo *channel =  self.channels[indexPath.row];
 
         Message *lastMessage = [self getLastMessageInChannel:channel.channelID];
-        
+        cell.separatorInset = UIEdgeInsetsZero;
         cell.titleLabel.text  = channel.name;
         
         cell.tag = indexPath.row;
@@ -285,7 +282,7 @@
                 cell.imgView.image = [UIImage imageWithData:channel.icon];
             }
             else{
-                UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPalceholderImageBackgroundColor]];
+                UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
                 NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
                 if(iconURL){
                     if (cell.tag == indexPath.row) {
@@ -340,6 +337,13 @@
 
 -(NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)sectionIndex{
     return self.channels.count;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIView *view = [[UIView alloc] init];
+    [view setBackgroundColor:[self.theme channelCellSelectedColor]];
+    [cell setSelectedBackgroundView:view];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

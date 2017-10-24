@@ -39,7 +39,6 @@
     self.tableView.tableFooterView = [UIView new];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView setBackgroundColor:[[FCTheme sharedInstance] backgroundColorSDK]];
     self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
     
     [self.view addSubview:self.footerView];

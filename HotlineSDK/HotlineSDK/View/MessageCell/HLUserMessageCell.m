@@ -44,7 +44,7 @@
     self.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20) ;
     self.sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
-    self.customFontName=[[FCTheme sharedInstance] conversationUIFontName];
+    //self.customFontName=[[FCTheme sharedInstance] userMessageFont];
     self.showsUploadStatus=YES;
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
@@ -64,8 +64,8 @@
     [senderNameLabel setSelectable:NO];
     
     messageSentTimeLabel=[[UILabel alloc] initWithFrame:CGRectZero];
-    messageSentTimeLabel.textColor = [[FCTheme sharedInstance] getChatbubbleTimeFontColor];
-    [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
+    messageSentTimeLabel.textColor = [[FCTheme sharedInstance] getUserMessageTimeFontColor];
+    [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getUserMessageTimeFont]];
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
     messageSentTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -85,7 +85,7 @@
     [self setBackgroundColor:[UIColor clearColor]];
     [self.contentView setClipsToBounds:YES];
     
-    userChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_RIGHT];
+    userChatBubble = [[FCTheme sharedInstance]getImageValueWithKey:IMAGE_BUBBLE_CELL_RIGHT];
     userChatBubbleInsets= [[FCTheme sharedInstance] getUserBubbleInsets];
     
 }
@@ -94,6 +94,12 @@
 - (void) drawMessageViewForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView {
     
     [self clearAllSubviews];
+    FCTheme *theme = [FCTheme sharedInstance];
+    NSString *topPadding = [theme userMessageTopPadding] ? [theme userMessageTopPadding] : @"10";
+    NSString *bottomPadding = [theme userMessageBottomPadding] ? [theme userMessageBottomPadding] : @"10";
+    NSString *leftPadding = [theme userMessageLeftPadding] ? [theme userMessageLeftPadding] : @"10";
+    NSString *rightPadding = [theme userMessageRightPadding] ? [theme userMessageRightPadding] : @"10";
+    NSString *internalPadding = @"5";
     
     NSMutableArray *fragmensViewArr = [[NSMutableArray alloc]init];
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
@@ -122,7 +128,8 @@
         FragmentData *fragment = currentMessage.fragments[i];
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
-            FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initWithFragment:fragment];
+            FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initFragment:fragment withFont:[[FCTheme sharedInstance] userMessageFont] andType:2];
+            [htmlFragment setTextAlignment:NSTextAlignmentRight];
             htmlFragment.textColor = [[FCTheme sharedInstance] userMessageFontColor];
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
@@ -154,10 +161,8 @@
     //All details are in contentview but no constrains set
     
     
-    NSString *leftPadding = @"(>=5)";
-    NSString *rightPadding = @"5";
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[contentEncloser(<=%ld)]-5-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[contentEncloser(<=%ld)]-8-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[contentEncloser(>=50)]-2-|" options:0 metrics:nil views:views]];
     //Constraints for profileview and contentEncloser are done.
     
@@ -173,7 +178,7 @@
             FDImageFragment *imageFragment = views[str];
             NSString *imageHeight = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.height];
             NSString *imageWidth = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.width];
-                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=5)-[%@(%@)]-(>=10)-|",str,imageWidth];
+                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(%@)-[%@(%@)]-(%@)-|",leftPadding,str,imageWidth,rightPadding];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             NSLayoutConstraint *centerConstraint = [NSLayoutConstraint constraintWithItem:imageFragment
                                                                                 attribute:NSLayoutAttributeCenterX
@@ -184,26 +189,33 @@
                                                                                  constant:0];
             [contentEncloser addConstraint:centerConstraint];
             
-            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(<=%@)]",str,imageHeight]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-(%@)-[%@(<=%@)]",[self isTopFragment:fragmensViewArr currentIndex:i] ? topPadding : internalPadding,str,imageHeight]];
         } else if([str containsString:@"text_"]) {
             NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
-            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-(%@)-[%@(>=0)]",[self isTopFragment:fragmensViewArr currentIndex:i] ? topPadding : internalPadding,str]];
         }
     }
     
     if(!currentMessage.isWelcomeMessage) { //Show time for non welcome messages.
-        [veriticalConstraint appendString:@"-5-[messageSentTimeLabel]"];
-        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-(>=10)-[messageSentTimeLabel]-5-[uploadStatusImageView(10)]-10-|" options:0 metrics:nil views:views]];
-        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"V:[uploadStatusImageView(10)]-7-|" options:0 metrics:nil views:views]];
+        [veriticalConstraint appendString:[NSString stringWithFormat:@"-(%@)-[messageSentTimeLabel]",internalPadding]];
+        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : [NSString stringWithFormat:@"H:|-(>=%@)-[messageSentTimeLabel]-5-[uploadStatusImageView(10)]-(%@)-|",leftPadding,rightPadding] options:0 metrics:nil views:views]];
+        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : [NSString stringWithFormat:@"V:[uploadStatusImageView(10)]-(%@)-|",bottomPadding] options:0 metrics:nil views:views]];
     }
     
-    [veriticalConstraint appendString:@"-5-|"];
+    [veriticalConstraint appendString:[NSString stringWithFormat:@"-(%@)-|",bottomPadding]];
     //Constraints for details inside contentEncloser is done.
-    if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {
+    if(![veriticalConstraint isEqualToString:[NSString stringWithFormat:@"v:|-(%@)-|",bottomPadding]]) {
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : veriticalConstraint options:0 metrics:nil views:views]];
     }
     self.tag=[currentMessage.messageId hash];
+}
+
+-(BOOL) isTopFragment :(NSArray *)array currentIndex:(int)currentIndex {
+    if (array.count > 0) {
+        return (int)currentIndex == 0;
+    }
+    return false;
 }
 
 -(void) clearAllSubviews {

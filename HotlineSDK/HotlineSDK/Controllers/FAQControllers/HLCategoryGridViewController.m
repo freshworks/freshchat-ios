@@ -85,7 +85,6 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     self.theme = [FCTheme sharedInstance];
-    self.view.backgroundColor = [UIColor whiteColor];
     [self setupSubviews];
     [self adjustUIBounds];
     [self theming];
@@ -118,7 +117,7 @@
 }
 
 -(void)theming{
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[self.theme backgroundColorSDK]];
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[self.theme faqCategoryBackgroundColor]];
 }
 
 -(void)setupSearchBar{
@@ -167,7 +166,10 @@
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.collectionView.backgroundColor = [UIColor whiteColor];
+    self.collectionView.contentInset = UIEdgeInsetsMake(5, 5, 5, 5);
+    
+    self.view.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
+    self.collectionView.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
     
     self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
     
@@ -178,7 +180,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
     if([self canDisplayFooterView]){
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(44)]|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[collectionView][footerView(44)]|" options:0 metrics:nil views:views]];
     }
     else {
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView][footerView(0)]|" options:0 metrics:nil views:views]];
@@ -186,7 +188,6 @@
     
     //Collection view subclass
     [self.collectionView registerClass:[HLGridViewCell class] forCellWithReuseIdentifier:@"FAQ_GRID_CELL"];
-    [self.collectionView setBackgroundColor:[self.theme backgroundColorSDK]];
 }
 
 -(void)marginalView:(FDMarginalView *)marginalView handleTap:(id)sender{
@@ -207,6 +208,10 @@
     return (self.categories) ? self.categories.count : 0;
 }
 
+- (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(0, 0, 0, 0); // top, left, bottom, right
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     HLGridViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"FAQ_GRID_CELL" forIndexPath:indexPath];
     if (!cell) {
@@ -216,9 +221,8 @@
     if (indexPath.row < self.categories.count){
         HLCategory *category = self.categories[indexPath.row];
         cell.label.text = category.title;
-        cell.backgroundColor = [self.theme gridViewCellBackgroundColor];
-        cell.layer.borderWidth=0.3f;
-        cell.layer.borderColor=[self.theme gridViewCellBorderColor].CGColor;
+        cell.backgroundColor = [self.theme faqCategoryBackgroundColor];
+        cell.cardView.backgroundColor = [[FCTheme sharedInstance] gridViewCardBackgroundColor];
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         if (!category.icon){
             cell.imageView.image = [FDCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
@@ -231,12 +235,12 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (IS_IPAD) {
-        return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/3), ([UIScreen mainScreen].bounds.size.width/4));
+        return CGSizeMake( (([UIScreen mainScreen].bounds.size.width-10)/3), (([UIScreen mainScreen].bounds.size.width-10)/3));
     }
     if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/3), ([UIScreen mainScreen].bounds.size.height/2));
+        return CGSizeMake( (([UIScreen mainScreen].bounds.size.width-10)/3), (([UIScreen mainScreen].bounds.size.width-10)/3));
     }
-    return CGSizeMake( ([UIScreen mainScreen].bounds.size.width/2), ([UIScreen mainScreen].bounds.size.height/4));
+    return CGSizeMake( (([UIScreen mainScreen].bounds.size.width-10)/2), (([UIScreen mainScreen].bounds.size.width-10)/2));
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -257,11 +261,6 @@
     return 0.0f;
 }
 
-// Layout: Set Edges
-- (UIEdgeInsets)collectionView:
-(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(0,0,0,0);  // top, left, bottom, right
-}
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self.categoryViewBehaviour setNavigationItem];

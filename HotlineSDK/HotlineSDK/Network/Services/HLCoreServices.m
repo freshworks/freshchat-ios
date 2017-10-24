@@ -272,7 +272,7 @@
         if (!error) {
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 200){
-                [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_INTERVAL_TIME];
+                [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
                 FDLog(@"**** DAU call made ****");
             }
         }else{

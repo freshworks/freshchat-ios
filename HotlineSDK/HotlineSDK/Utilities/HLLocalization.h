@@ -77,7 +77,9 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_CAMERA_UNAVAILABLE_DESCRIPTION @"camera_unavailable_description"
 #define LOC_CAMERA_UNAVAILABLE_OK_BUTTON @"camera_unavailable_ok_button_text"
 #define LOC_CAMERA_PERMISSION_DENIED_TEXT @"camera_permission_denied"
+#define LOC_PHOTO_LIBRARY_PERMISSION_DENIED_TEXT @"photo_library_permission_denied"
 #define LOC_CAMERA_PERMISSION_ALERT_CANCEL @"camera_permission_alert_cancel"
+#define LOC_PHOTO_LIBRARY_PERMISSION_ALERT_CANCEL @"photo_library_permission_alert_cancel"
 
 #define LOC_AUDIO_RECORDING_CANCEL_MESSAGE @"cancel_audio_recording_alert"
 

@@ -39,7 +39,7 @@ enum TagFilterType {
 /*
  * Enable/disable picture messages. When enabled, users can send images over chat. Default is set to YES.
  */
-@property (nonatomic, assign) BOOL pictureMessagingEnabled;
+@property (nonatomic, assign) BOOL gallerySelectionEnabled;
 /**
  * Option to supply the SDK with your theme file's name. Make sure themeName is the same as the
  * theme plist file's name. Freshchat needs this for theming to work.
@@ -266,7 +266,15 @@ enum TagFilterType {
  */
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion;
 
+/**
+ *  Show custom banner for users in message screen
+ */
 -(void)updateConversationBannerMessage:(NSString *)message;
+
+/**
+ *  Send message to particular channel with specified tag value
+ */
+-(void) sendMessage:(FreshchatMessage *)messageObject;
 
 /**
  *  Dismiss SDK for deeplink screens

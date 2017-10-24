@@ -62,6 +62,7 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicator.translatesAutoresizingMaskIntoConstraints = false;
     [view insertSubview:self.activityIndicator aboveSubview:[self.loadingViewDelegate contentDisplayView]];
+    self.activityIndicator.color = [[FCTheme sharedInstance] progressBarColor];
     [self.activityIndicator startAnimating];
     [FDAutolayoutHelper centerX:self.activityIndicator onView:view M:1 C:0];
     [FDAutolayoutHelper centerY:self.activityIndicator onView:view M:1.5 C:0];
@@ -70,7 +71,7 @@
 -(HLEmptyResultView *)emptyResultView
 {
     if (!_emptyResultView) {
-        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] andText:@""];
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] withType:2 andText:@""];
         _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _emptyResultView;

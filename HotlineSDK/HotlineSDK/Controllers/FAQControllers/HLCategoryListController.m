@@ -83,6 +83,8 @@
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [FCTheme sharedInstance];
     [super willMoveToParentViewController:parent];
+    self.tableView.separatorColor = [[FCTheme sharedInstance] faqListCellSeparatorColor];
+    self.tableView.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
 }
 
@@ -117,6 +119,13 @@
     [self.tableView reloadData];
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIView *view = [[UIView alloc] init];
+    [view setBackgroundColor:[self.theme faqListCellSelectedColor]];
+    [cell setSelectedBackgroundView:view];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"HLCategoriesCell";
     FDCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -127,8 +136,7 @@
         HLCategory *category =  self.categories[indexPath.row];
         cell.titleLabel.text  = category.title;
         cell.detailLabel.text = category.categoryDescription;
-        cell.layer.borderWidth = 0.5f;
-        cell.layer.borderColor = [self.theme tableViewCellSeparatorColor].CGColor;
+        cell.separatorInset = UIEdgeInsetsZero;
         if(!category.icon){
             cell.imgView.image = [FDCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
         }

@@ -11,7 +11,7 @@
 		350D9E221CFDBD48004091C8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 350D9E201CFDBD48004091C8 /* Fabric.framework */; };
 		3513FF801CDCC3A3009A7034 /* FCLocalization.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF7F1CDCC3A3009A7034 /* FCLocalization.bundle */; };
 		3518351B1D273997000EB496 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 3518351A1D273997000EB496 /* background.png */; };
-		354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */; };
+		354D0D271C48D143004D2AA1 /* libFreshchatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 354D0D1E1C48D10F004D2AA1 /* libFreshchatSDK.a */; };
 		354D0D631C48D504004D2AA1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5C1C48D504004D2AA1 /* LaunchScreen.xib */; };
 		354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D5E1C48D504004D2AA1 /* Main.storyboard */; };
 		354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D601C48D504004D2AA1 /* Images.xcassets */; };
@@ -31,11 +31,12 @@
 		35D3ADAC1CEB59CD0010BA56 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 35D3ADAB1CEB59CD0010BA56 /* chat.png */; };
 		35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707151BE2498B0035FD74 /* FDSettingsController.m */; };
 		35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D707321BE2C1AE0035FD74 /* PSPDFUIKitMainThreadGuard.m */; };
-		3C1159FD1DF1EA5800800A6C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1159FC1DF1EA5800800A6C /* Security.framework */; };
 		3C314F0C1C97DFCA00A255D4 /* FCResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 354D0D6C1C48D6D8004D2AA1 /* FCResources.bundle */; };
 		CE130DCC1EF188F00028CEE7 /* SampleController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */; };
 		CE130DD11EF189090028CEE7 /* SampleController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE130DD01EF189090028CEE7 /* SampleController.m */; };
 		CE1739761F6D703700950F30 /* FreshchatModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE1739751F6D703700950F30 /* FreshchatModels.bundle */; };
+		CE6054681F87967500326E5A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1159FC1DF1EA5800800A6C /* Security.framework */; };
+		CE60546A1F8797EF00326E5A /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE6054691F8797EF00326E5A /* Photos.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,8 @@
 		CE130DCF1EF189090028CEE7 /* SampleController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SampleController.h; path = ../SampleController.h; sourceTree = "<group>"; };
 		CE130DD01EF189090028CEE7 /* SampleController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SampleController.m; path = ../SampleController.m; sourceTree = "<group>"; };
 		CE1739751F6D703700950F30 /* FreshchatModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FreshchatModels.bundle; sourceTree = "<group>"; };
+		CE6054691F8797EF00326E5A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		CE60546B1F8797F600326E5A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		CEDFEEC71E4CD825002DCB4B /* HotlineConfigStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotlineConfigStrings.h; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -120,8 +123,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C1159FD1DF1EA5800800A6C /* Security.framework in Frameworks */,
-				354D0D271C48D143004D2AA1 /* libHotlineSDK.a in Frameworks */,
+				CE60546A1F8797EF00326E5A /* Photos.framework in Frameworks */,
+				CE6054681F87967500326E5A /* Security.framework in Frameworks */,
+				354D0D271C48D143004D2AA1 /* libFreshchatSDK.a in Frameworks */,
 				356F1C141B9DD23B002F1E2A /* CoreMedia.framework in Frameworks */,
 				356F1C121B9DD223002F1E2A /* AudioToolbox.framework in Frameworks */,
 				356F1A1F1B9DC4BB002F1E2A /* Foundation.framework in Frameworks */,
@@ -147,7 +151,7 @@
 		354D0D171C48D10F004D2AA1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */,
+				354D0D1E1C48D10F004D2AA1 /* libFreshchatSDK.a */,
 				354D0D241C48D10F004D2AA1 /* FreshchatModels.bundle */,
 			);
 			name = Products;
@@ -193,6 +197,7 @@
 				356F19E91B9DBF14002F1E2A /* Hotline */,
 				356F1A031B9DBF14002F1E2A /* HotlineTests */,
 				356F19E81B9DBF14002F1E2A /* Products */,
+				CE6054671F87967500326E5A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -260,6 +265,7 @@
 				356F1A161B9DC49C002F1E2A /* SystemConfiguration.framework */,
 				356F1A141B9DC497002F1E2A /* ImageIO.framework */,
 				356F1A101B9DC48B002F1E2A /* CoreData.framework */,
+				CE60546B1F8797F600326E5A /* Photos.framework */,
 			);
 			name = Framework;
 			path = ..;
@@ -273,6 +279,14 @@
 				350D9E201CFDBD48004091C8 /* Fabric.framework */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		CE6054671F87967500326E5A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE6054691F8797EF00326E5A /* Photos.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -371,10 +385,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		354D0D1E1C48D10F004D2AA1 /* libHotlineSDK.a */ = {
+		354D0D1E1C48D10F004D2AA1 /* libFreshchatSDK.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libHotlineSDK.a;
+			path = libFreshchatSDK.a;
 			remoteRef = 354D0D1D1C48D10F004D2AA1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

@@ -15,10 +15,10 @@
 #import "NSImage+WebCache.h"
 
 // See https://github.com/rs/SDWebImage/pull/1141 for discussion
-@interface AutoPurgeCache : NSCache
+@interface FDAutoPurgeCache : NSCache
 @end
 
-@implementation AutoPurgeCache
+@implementation FDAutoPurgeCache
 
 - (nonnull instancetype)init {
     self = [super init];
@@ -93,7 +93,7 @@ FOUNDATION_STATIC_INLINE NSUInteger FDCacheCostForImage(UIImage *image) {
         _config = [[FDImageCacheConfig alloc] init];
         
         // Init the memory cache
-        _memCache = [[AutoPurgeCache alloc] init];
+        _memCache = [[FDAutoPurgeCache alloc] init];
         _memCache.name = fullNamespace;
 
         // Init the disk cache

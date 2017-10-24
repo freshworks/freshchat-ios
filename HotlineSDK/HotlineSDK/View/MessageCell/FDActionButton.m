@@ -10,6 +10,7 @@
 #import "FDMessageCell.h"
 #import "HLLocalization.h"
 #import "FCTheme.h"
+#import "FDUtilities.h"
 
 @implementation FDActionButton
 
@@ -21,6 +22,7 @@
     [self setFrame:CGRectZero];
     [self setContentEdgeInsets:UIEdgeInsetsMake(padding/8, padding/2, padding/8, padding/2)];
     [self setBackgroundColor:[theme actionButtonColor]];
+    self.titleLabel.font = [theme actionButtonFont];
     self.layer.borderColor=[[theme actionButtonBorderColor] CGColor];
     self.layer.borderWidth=0.5;
     self.layer.cornerRadius=5.0;
@@ -36,7 +38,7 @@
     float padding = 10;
     float maxButtonWidth =messageFrameWidth-horizontalPadding*2;
     FCTheme *theme = [FCTheme sharedInstance];
-    UIFont *actionLabelFont=[theme getChatBubbleMessageFont];
+    UIFont *actionLabelFont=[theme agentMessageFont];
     
     if([actionLabel isEqualToString:@""]||(actionLabel==nil))
         actionLabel=HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
@@ -60,7 +62,7 @@
    
         [self setAttributedTitle:
          [[NSAttributedString alloc] initWithString:actionLabel attributes:[NSDictionary dictionaryWithObjectsAndKeys:actionLabelFont,NSFontAttributeName,[theme actionButtonTextColor],NSForegroundColorAttributeName,nil]] forState:UIControlStateNormal];
-        [self setTitleColor:[theme actionButtonSelectedFontColor] forState:UIControlStateSelected];
+        [self setBackgroundImage:[FDUtilities imageWithColor:[theme actionButtonSelectedColor]] forState: UIControlStateSelected];
     }
     else{
         [self setHidden:YES];

@@ -150,7 +150,7 @@
 }
 
 -(void)theming{
-    self.view.backgroundColor = [[FCTheme sharedInstance] backgroundColorSDK];
+    self.view.backgroundColor = [[FCTheme sharedInstance] articleListBackgroundColor];
 }
 
 -(void)setNavigationItem{

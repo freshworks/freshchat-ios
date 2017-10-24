@@ -148,7 +148,6 @@
 		CE8C7A8A1F6C216B00E77494 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8C7A631F6C216B00E77494 /* UIView+WebCacheOperation.m */; };
 		CE9053521DD47C4E00F52B5F /* HLCsat.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9053511DD47C4E00F52B5F /* HLCsat.m */; };
 		CE95B57A1F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE95B5781F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld */; };
-		CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */; };
 		CE982B871F262D5B00B87A66 /* FCRefreshIntervals.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */; };
 		CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CE982B891F2728B900B87A66 /* FCRemoteConfig.m */; };
 		CEA6AC3A1DD94C6D00B60002 /* FDGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */; };
@@ -440,7 +439,6 @@
 		CE9053501DD47C4E00F52B5F /* HLCsat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCsat.h; sourceTree = "<group>"; };
 		CE9053511DD47C4E00F52B5F /* HLCsat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCsat.m; sourceTree = "<group>"; };
 		CE95B5791F6D6E5D006EC8AA /* FreshchatModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FreshchatModel.xcdatamodel; sourceTree = "<group>"; };
-		CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDFileFragment.m; sourceTree = "<group>"; };
 		CE982B851F262D5B00B87A66 /* FCRefreshIntervals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRefreshIntervals.h; sourceTree = "<group>"; };
 		CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCRefreshIntervals.m; sourceTree = "<group>"; };
 		CE982B881F2728B900B87A66 /* FCRemoteConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCRemoteConfig.h; sourceTree = "<group>"; };
@@ -974,7 +972,6 @@
 			children = (
 				CEFA05631EE82F7400DC74CF /* FDFileFragment.h */,
 				CEFA05641EE82F7400DC74CF /* FDFileFragment.m */,
-				CE96CB7F1F31F88200A683A3 /* FDFileFragment.m */,
 				CEFA05541EE82F2000DC74CF /* FDAudioFragment.h */,
 				CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */,
 				CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */,
@@ -1190,7 +1187,6 @@
 				CE8C7A881F6C216B00E77494 /* UIView+WebCache.m in Sources */,
 				35B2EFAE1D000E620014867F /* FDRanking.m in Sources */,
 				35B2EFB31D000E620014867F /* FDVotingManager.m in Sources */,
-				CE96CB801F31F88200A683A3 /* FDFileFragment.m in Sources */,
 				35D4E8191D118E9000EFFE07 /* HLCategoryGridViewController.m in Sources */,
 				CE8C7A651F6C216B00E77494 /* FDImageCache.m in Sources */,
 				C5D4ED991E57036100E121B4 /* HLUserDefaults.m in Sources */,

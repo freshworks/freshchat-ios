@@ -14,6 +14,6 @@
     + (instancetype)sharedInstance;
 
     -(NSMutableAttributedString *) getAttributedString:(NSString *)string ;
-    -(NSMutableAttributedString *) addAttributedString:(NSString *)string ;
+    -(NSMutableAttributedString *) addAttributedString:(NSString *)string withFont:(UIFont*) font;
 
 @end

@@ -75,7 +75,7 @@
     self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     self.showsProfile = NO;
     self.showsSenderName= NO;
-    self.customFontName=[[FCTheme sharedInstance] conversationUIFontName];
+    //self.customFontName=[[FCTheme sharedInstance] agentMessageFont];
     self.showsUploadStatus=YES;
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
@@ -94,14 +94,15 @@
     
     messageSentTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     messageSentTimeLabel.numberOfLines = 0;
-    messageSentTimeLabel.textColor = [[FCTheme sharedInstance] getChatbubbleTimeFontColor];
-    [messageSentTimeLabel setFont:[[FCTheme sharedInstance] getChatbubbleTimeFont]];
+    messageSentTimeLabel.textColor = [[FCTheme sharedInstance] agentMessageTimeFontColor];
+    [messageSentTimeLabel setFont:[[FCTheme sharedInstance] agentMessageTimeFont]];
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
     messageSentTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
     
     profileImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
     profileImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    profileImageView.backgroundColor = [UIColor clearColor];
     profileImageView.clipsToBounds = YES;
     profileImageView.contentMode = UIViewContentModeScaleAspectFit;
     profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
@@ -120,7 +121,7 @@
         self.showRealAvatar = (agentAvatarRCVal == 1);
     }
     
-    agentChatBubble = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BUBBLE_CELL_LEFT];
+    agentChatBubble = [[FCTheme sharedInstance]getImageValueWithKey:IMAGE_BUBBLE_CELL_LEFT];
     agentChatBubbleInsets= [[FCTheme sharedInstance] getAgentBubbleInsets];
 
     [chatBubbleImageView setImage:[agentChatBubble resizableImageWithCapInsets:agentChatBubbleInsets]];
@@ -133,8 +134,14 @@
 - (void) drawMessageViewForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView {
     
     [self clearAllSubviews];
+    FCTheme *theme = [FCTheme sharedInstance];
+    NSString *topPadding = [theme agentMessageTopPadding] ? [theme agentMessageTopPadding] : @"10";
+    NSString *bottomPadding = [theme agentMessageBottomPadding] ? [theme agentMessageBottomPadding] : @"10";
+    NSString *leftPadding = [theme agentMessageLeftPadding] ? [theme agentMessageLeftPadding] : @"10";
+    NSString *rightPadding = [theme agentMessageRightPadding] ? [theme agentMessageRightPadding] : @"10";
+    NSString *internalPadding = @"5";
+    
     showsSenderName = [self showAgentAvatarLabelWithAlias:currentMessage.messageUserAlias];
-    self.showsProfile = true;
     self.showRealAvatar = true;
     
     NSMutableArray *fragmensViewArr = [[NSMutableArray alloc]init];
@@ -148,7 +155,7 @@
     [self.contentView addSubview:senderNameLabel];
 
     if(showsProfile){
-        profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+        profileImageView.image = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_AVATAR_AGENT];
         
         profileImageView.frame = CGRectMake(0, 0, 40, 40);
         [self.contentView addSubview:profileImageView];
@@ -164,12 +171,12 @@
                         profileImageView.image = image;
                     }
                     else{
-                        profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+                        profileImageView.image = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_AVATAR_AGENT];
                     }
                 }];
         }
         else{
-            profileImageView.image = [[FCTheme sharedInstance] getImageWithKey:IMAGE_AVATAR_AGENT];
+            profileImageView.image = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_AVATAR_AGENT];
         }
     }
     
@@ -187,7 +194,7 @@
         FragmentData *fragment = currentMessage.fragments[i];
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
-            FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initWithFragment:fragment];
+            FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initFragment:fragment withFont:[[FCTheme sharedInstance] agentMessageFont] andType:1];
             htmlFragment.textColor = [[FCTheme sharedInstance] agentMessageFontColor];
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
@@ -230,9 +237,6 @@
     //All details are in contentview but no constrains set
     
     
-    NSString *leftPadding = @"5";
-    NSString *rightPadding = @"(>=5)";
-    
     if(showsProfile) {
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
         if(showsSenderName) {
@@ -242,9 +246,9 @@
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[profileImageView(40)]" options:0 metrics:nil views:views]];
         }
     } else {
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-8-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
         if(showsSenderName) {
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[senderLabel]-(<=%ld)-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-8-[senderLabel]-(<=%ld)-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
         }
     }
     
@@ -269,7 +273,7 @@
             FDImageFragment *imageFragment = views[str];
             NSString *imageHeight = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.height];
             NSString *imageWidth = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.width];
-            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=10)-[%@(%@)]-(>=5)-|",str,imageWidth];
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=%@)-[%@(%@)]-(>=%@)-|",leftPadding,str,imageWidth,rightPadding];
                 [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             NSLayoutConstraint *centerConstraint = [NSLayoutConstraint constraintWithItem:imageFragment
                                                                                 attribute:NSLayoutAttributeCenterX
@@ -279,7 +283,7 @@
                                                                                multiplier:1
                                                                                  constant:0];
             [contentEncloser addConstraint:centerConstraint];
-            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(<=%@)]",str,imageHeight]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-[%@(<=%@)]",[self isTopFragment:fragmensViewArr currentIndex:i]? topPadding : internalPadding,str,imageHeight]];
         } else if([str containsString:@"text_"]) {
             if(welcomeTextMsg) { //If it has only text message in welcome message
                 FDHtmlFragment *textFragment = views[str];
@@ -293,33 +297,45 @@
                                                                                    multiplier:1
                                                                                      constant:0];
                 [contentEncloser addConstraint:centerConstraint];
-                [veriticalConstraint appendString:[NSString stringWithFormat:@"-(>=5)-[%@(>=0)]",str]];
+                [veriticalConstraint appendString:[NSString stringWithFormat:@"-(>=%@)-[%@(>=0)]",[self isTopFragment:fragmensViewArr currentIndex:i]? topPadding : internalPadding,str]];
             } else {
                 NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
                 [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
-                [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@(>=0)]",str]];
+                [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-[%@(>=0)]",[self isTopFragment:fragmensViewArr currentIndex:i]? topPadding : internalPadding,str]];
             }
         } else if([str containsString:@"button_"]) {
-            
-            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(>=75)]-%@-|",@"10",str,@"(>=10)"];
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(>=75)]-(>=%@)-|",leftPadding,str,rightPadding];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
-            [veriticalConstraint appendString:[NSString stringWithFormat:@"-5-[%@]",str]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-[%@]",[self isTopFragment:fragmensViewArr currentIndex:i]? topPadding : internalPadding, str]];
         }
     }
     if(!currentMessage.isWelcomeMessage) { //Show time for non welcome messages.
-        [veriticalConstraint appendString:@"-5-[messageSentTimeLabel]"];
-        [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : @"H:|-10-[messageSentTimeLabel]-(>=10)-|" options:0 metrics:nil views:views]];
+        [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-[messageSentTimeLabel]",internalPadding]];
+        NSNumber  *adjustedPadding = [NSNumber numberWithInteger: [leftPadding integerValue]];
+        if(adjustedPadding != nil) {
+            adjustedPadding = @([adjustedPadding intValue] + 5);
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : [NSString stringWithFormat:@"H:|-%@-[messageSentTimeLabel]-(>=%@)-|",[adjustedPadding stringValue],rightPadding] options:0 metrics:nil views:views]];
+        } else {
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : [NSString stringWithFormat:@"H:|-%@-[messageSentTimeLabel]-(>=%@)-|",leftPadding,rightPadding] options:0 metrics:nil views:views]];
+        }
     }
     if(welcomeTextMsg) {
-        [veriticalConstraint appendString:@"-(>=5)-|"];
+        [veriticalConstraint appendString:[NSString stringWithFormat:@"-(>=%@)-|",bottomPadding]];
     } else {
-        [veriticalConstraint appendString:@"-5-|"];
+        [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-|",bottomPadding]];
     }
     //Constraints for details inside contentEncloser is done.
-    if(![veriticalConstraint isEqualToString:@"V:|-5-|"]) {
+    if(![veriticalConstraint isEqualToString:[NSString stringWithFormat:@"V:|-%@-|",bottomPadding]]) {
         [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : veriticalConstraint options:0 metrics:nil views:views]];
     }
     self.tag=[currentMessage.messageId hash];
+}
+
+-(BOOL) isTopFragment :(NSArray *)array currentIndex:(int)currentIndex {
+    if (array.count > 0) {
+        return (int)currentIndex == 0;
+    }
+    return false;
 }
 
 -(void) clearAllSubviews {

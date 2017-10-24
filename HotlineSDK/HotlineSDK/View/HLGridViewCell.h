@@ -12,5 +12,5 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *label;
-
+@property (nonatomic, strong) UIView *cardView;
 @end

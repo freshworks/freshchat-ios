@@ -86,94 +86,103 @@ __weak static id <KonotorDelegate> _delegate;
     
 }
 
-+(void) uploadNewImage:(UIImage *)image withCaption:(NSString *)caption onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
++(void)uploadNewMsgWithImage:(UIImage *)image textFeed:(NSString *)caption onConversation:(KonotorConversation *)conversation andChannel:(HLChannel *)channel{
     //Upload the image with caption first then upload the message
-    NSData *imageData, *thumbnailData;
-    float imageWidth,imageHeight,imageThumbHeight,imageThumbWidth;
-    
-    imageData = UIImageJPEGRepresentation(image, 0.5);
-    CGImageSourceRef src = CGImageSourceCreateWithData( (__bridge CFDataRef)(imageData), NULL);
-    NSDictionary *osptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:300], kCGImageSourceThumbnailMaxPixelSize, nil];
+    NSMutableArray *fragmentsInfo = [[NSMutableArray alloc] init];
+    if(image){
+        NSData *imageData, *thumbnailData;
+        float imageWidth,imageHeight,imageThumbHeight,imageThumbWidth;
+        
+        imageData = UIImageJPEGRepresentation(image, 0.5);
+        CGImageSourceRef src = CGImageSourceCreateWithData( (__bridge CFDataRef)(imageData), NULL);
+        NSDictionary *osptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:300], kCGImageSourceThumbnailMaxPixelSize, nil];
 #if KONOTOR_IMG_COMPRESSION
-    NSDictionary *compressionOptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:1000], kCGImageSourceThumbnailMaxPixelSize, nil];
+        NSDictionary *compressionOptions = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, kCGImageSourceCreateThumbnailWithTransform, kCFBooleanTrue, kCGImageSourceCreateThumbnailFromImageAlways, [NSNumber numberWithDouble:1000], kCGImageSourceThumbnailMaxPixelSize, nil];
 #endif
-    
-    CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, (__bridge CFDictionaryRef)osptions); // Create scaled image
-    
+        
+        CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, (__bridge CFDictionaryRef)osptions); // Create scaled image
+        
 #if KONOTOR_IMG_COMPRESSION
-    CGImageRef compressedImage = CGImageSourceCreateThumbnailAtIndex(src, 0, (__bridge CFDictionaryRef)compressionOptions);
+        CGImageRef compressedImage = CGImageSourceCreateThumbnailAtIndex(src, 0, (__bridge CFDictionaryRef)compressionOptions);
 #endif
-    
-    UIImage *imgthumb = [[UIImage alloc] initWithCGImage:thumbnail];
-    
+        
+        UIImage *imgthumb = [[UIImage alloc] initWithCGImage:thumbnail];
+        
 #if KONOTOR_IMG_COMPRESSION
-    UIImage *imgCompressed = [[UIImage alloc] initWithCGImage:compressedImage];
+        UIImage *imgCompressed = [[UIImage alloc] initWithCGImage:compressedImage];
 #endif
-    
-    thumbnailData = UIImageJPEGRepresentation(imgthumb,0.5);
-    
+        
+        thumbnailData = UIImageJPEGRepresentation(imgthumb,0.5);
+        
 #if KONOTOR_IMG_COMPRESSION
-    imageData=UIImageJPEGRepresentation(imgCompressed, 0.5);
-    imageWidth = imgCompressed.size.width;
-    imageHeight = imgCompressed.size.height;
+        imageData=UIImageJPEGRepresentation(imgCompressed, 0.5);
+        imageWidth = imgCompressed.size.width;
+        imageHeight = imgCompressed.size.height;
 #else
-    imageWidth = image.size.width;
-    imageHeight = image.size.height;
+        imageWidth = image.size.width;
+        imageHeight = image.size.height;
 #endif
-    imageThumbHeight = imgthumb.size.height;
-    imageThumbWidth = imgthumb.size.width;
-    
-    CFRelease(src);
-    CFRelease(thumbnail);
-
-    NSDictionary *thumbnailInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                   @"image/png",@"contentType",
-                                   @"",@"content",
-                                   [NSNumber numberWithFloat:imageThumbWidth],@"width",
-                                   [NSNumber numberWithFloat:imageThumbHeight],@"height",
-                                   nil];
-    
-    NSDictionary *imageFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @2, @"fragmentType",
-                                      @"image/png",@"contentType",
-                                      @"",@"content", //Populate with empty url
-                                      [NSNumber numberWithFloat:imageWidth],@"width",
-                                      [NSNumber numberWithFloat:imageHeight],@"height",
-                                      imageData, @"binaryData1",
-                                      thumbnailData, @"binaryData2",
-                                      @0,@"position",
-                                      thumbnailInfo, @"thumbnail",nil];
-    
-    NSMutableArray *fragmentsInfo = [[NSMutableArray alloc] initWithObjects: imageFragmentInfo, nil];
+        imageThumbHeight = imgthumb.size.height;
+        imageThumbWidth = imgthumb.size.width;
+        
+        CFRelease(src);
+        CFRelease(thumbnail);
+        
+        NSDictionary *thumbnailInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                       @"image/png",@"contentType",
+                                       @"",@"content",
+                                       [NSNumber numberWithFloat:imageThumbWidth],@"width",
+                                       [NSNumber numberWithFloat:imageThumbHeight],@"height",
+                                       nil];
+        
+        NSDictionary *imageFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @2, @"fragmentType",
+                                           @"image/png",@"contentType",
+                                           @"",@"content", //Populate with empty url
+                                           [NSNumber numberWithFloat:imageWidth],@"width",
+                                           [NSNumber numberWithFloat:imageHeight],@"height",
+                                           imageData, @"binaryData1",
+                                           thumbnailData, @"binaryData2",
+                                           @0,@"position",
+                                           thumbnailInfo, @"thumbnail",nil];
+        
+        [fragmentsInfo addObject: imageFragmentInfo];
+    }
     
     if(![caption isEqualToString:@""]) {
-        
         NSDictionary *textFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @1, @"fragmentType",
                                           @"text/html",@"contentType",
                                           caption,@"content",
-                                          @1,@"position",nil];
-        
+                                          @0,@"position",nil];
         [fragmentsInfo insertObject:textFragmentInfo atIndex:0];
     }
-    
-    
     
     Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
-    [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
-    [HLMessageServices uploadPictureMessage:message toConversation:conversation onChannel:channel withCompletion:^{
+    if(image){
+        [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
+        [HLMessageServices uploadPictureMessage:message toConversation:conversation onChannel:channel withCompletion:^{
+            [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
+            [[Konotor delegate] didStartUploadingNewMessage];
+        }];
+    }
+    else{
         [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
         [[Konotor delegate] didStartUploadingNewMessage];
-    }];
+    }
 }
 
-+(void)uploadTextFeedback:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
-    
-    KonotorMessage *message = [KonotorMessage saveTextMessageInCoreData:textFeedback onConversation:conversation];
-    [channel addMessagesObject:message];
-    [[KonotorDataManager sharedInstance]save];
-    [HLMessageServices uploadMessage:message toConversation:conversation onChannel:channel];
-    [[Konotor delegate] didStartUploadingNewMessage];
++(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation andChannel:(HLChannel *)channel{
+    [HLUser setUserMessageInitiated];
+    if ([HLUser canRegisterUser]) {
+        [HLUser registerUser:^(NSError *error) {
+            if (!error) {
+                [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
+            }
+        }];
+    } else {
+        [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
+    }
 }
 
 +(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{

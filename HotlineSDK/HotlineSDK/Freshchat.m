@@ -160,7 +160,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
         [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
-        [store setBoolValue:config.pictureMessagingEnabled forKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+        [store setBoolValue:config.gallerySelectionEnabled forKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
         //[store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
         [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
         [store setBoolValue:config.agentAvatarEnabled forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
@@ -186,11 +186,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 //        }
 //    }
     
-    if (config.pictureMessagingEnabled) {
+    if (config.gallerySelectionEnabled) {
         if (![plistManager photoLibraryUsageEnabled]) {
             [message appendString:@"\nAdd key NSPhotoLibraryUsageDescription : To Enable access to Photo Library"];
         }
-        
+    }
+    if (config.cameraCaptureEnabled) {
         if (![plistManager cameraUsageEnabled]) {
             [message appendString:@"\nAdd key NSCameraUsageDescription : To take Images from Camera"];
         }
@@ -557,7 +558,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     config.agentAvatarEnabled =[store boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
     //config.voiceMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
-    config.pictureMessagingEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_PICTURE_MESSAGE_ENABLED];
+    config.gallerySelectionEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     if([store objectForKey:HOTLINE_DEFAULTS_THEME_NAME]){
@@ -648,7 +649,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void) sendMessage:(FreshchatMessage *)messageObject{
-    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
+     if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
@@ -667,7 +668,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                [Konotor uploadTextFeedback:messageObject.message onConversation:conversation onChannel:channel];
+                [Konotor uploadMessageWithImage:nil textFeed:messageObject.message onConversation:conversation andChannel:channel];
             }
         }];
     }];

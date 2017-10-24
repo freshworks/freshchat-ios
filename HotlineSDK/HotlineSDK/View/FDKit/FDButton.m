@@ -23,7 +23,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.theme = [FCTheme sharedInstance];
-        self.backgroundColor      = [self.theme backgroundColorSDK];
         self.titleLabel.tintColor = nil;
         self.tintColor            = nil;
         [self setTitleColor:nil forState:UIControlStateNormal];
