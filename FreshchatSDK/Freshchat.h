@@ -36,10 +36,6 @@ enum TagFilterType {
  * Domain for freshchat. Do not change this.
  */
 @property (strong, nonatomic) NSString *domain;
-/*
- * Enable/disable picture messages. When enabled, users can send images over chat. Default is set to YES.
- */
-@property (nonatomic, assign) BOOL pictureMessagingEnabled;
 /**
  * Option to supply the SDK with your theme file's name. Make sure themeName is the same as the
  * theme plist file's name. Freshchat needs this for theming to work.
@@ -50,6 +46,10 @@ enum TagFilterType {
  * Option to supply the SDK with a strings bundle for localization
  */
 @property (nonatomic, strong) NSString *stringsBundle;
+/*
+ * Allow the user to attach images using the gallery. Defaults to YES.
+ */
+@property (nonatomic, assign) BOOL gallerySelectionEnabled;
 /*
  * Allow the user to attach images using the camera. Defaults to YES.
  */
@@ -266,7 +266,15 @@ enum TagFilterType {
  */
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion;
 
+/**
+ *  Show custom banner for users in message screen
+ */
 -(void)updateConversationBannerMessage:(NSString *)message;
+
+/**
+ *  Send message to particular channel with specified tag value
+ */
+-(void) sendMessage:(FreshchatMessage *)messageObject;
 
 /**
  *  Dismiss SDK for deeplink screens
