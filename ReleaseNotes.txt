@@ -1,4 +1,10 @@
 
+Ver 1.1.0 
+__________________________
+- Changes for SDK theming.
+- Added Send message api.
+- Minor bug fixes.
+
 Ver 1.0.0 
 __________________________
 "Modern messaging software that your sales and customer engagement teams will love"
