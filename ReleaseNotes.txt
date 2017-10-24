@@ -1,9 +1,17 @@
 
 Ver 1.1.0 
 __________________________
-- Changes for SDK theming.
+- Changes for SDK Theming.
 - Added Send message api.
-- Minor bug fixes.
+- Minor bug fixes
+
+Ver 1.0.2
+__________________________
+Fix for potential issues when migrating from Hotline.
+
+Ver 1.0.1 
+__________________________
+Minor bug fixes
 
 Ver 1.0.0 
 __________________________
