@@ -15,7 +15,7 @@
     self = [super init];
     if (self) {
         self.message = message;
-        self.tag = tag;
+        self.tag = tag.lowercaseString;
     }
     return self;
 }
