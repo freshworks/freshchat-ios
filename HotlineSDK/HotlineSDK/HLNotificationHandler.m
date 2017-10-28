@@ -46,10 +46,6 @@
         @try {
             
             NSDictionary *payload = [HLNotificationHandler getPayloadFromNotificationInfo:info];
-            // Check if current user alias and payload user alias are same
-            if(![payload[FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS] isEqualToString:[FDUtilities currentUserAlias]]){
-                return;
-            }
             NSNumber *channelID = nil;
             
             if ([payload objectForKey:FRESHCHAT_NOTIFICATION_PAYLOAD_CHANNEL_ID]) {
@@ -58,8 +54,9 @@
                 return;
             }
             
-            if ([payload objectForKey:FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID]) {
-                self.marketingID = @([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
+            self.marketingID = @([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
+            if (!self.marketingID && !([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS] isEqualToString:[FDUtilities currentUserAlias]])) {
+                return;
             }
             
             NSString *message = [payload valueForKeyPath:@"aps.alert.body"];
