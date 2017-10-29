@@ -184,7 +184,7 @@ typedef struct {
     }
     
     if(image) {
-        leftBarButtonWidth= 30;
+        leftBarButtonWidth= 45;
     }
     
     self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (3 * leftBarButtonWidth);
