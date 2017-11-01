@@ -52,6 +52,7 @@
     
     [self.view addSubview:self.inputToolbar];
     [self.view addSubview:self.imageView];
+    CGFloat messageHeight = [self.inputToolbar.textView sizeThatFits:CGSizeMake(self.inputToolbar.textView.frame.size.width, CGFLOAT_MAX)].height;
     
     NSDictionary *views = @{ @"imageView"        : self.imageView,
                              @"inputToolbar"         : self.inputToolbar };
@@ -59,7 +60,8 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[inputToolbar]-0-|" options:0 metrics:nil views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(43)]-0-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(==%d)]-0-|",(int)messageHeight + 10]  options:0 metrics:nil views:views]];
+    
     [self localNotificationSubscription];
     
 }
@@ -75,12 +77,12 @@
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{
-    [self setHeightForTextView:textView];
+    //[self setHeightForTextView:textView];
 }
 
 -(void)setHeightForTextView:(UITextView *)textView{
-    CGFloat NUM_OF_LINES = 2;
-    CGFloat MAX_HEIGHT = textView.font.lineHeight * NUM_OF_LINES;    
+    CGFloat NUM_OF_LINES = 1;
+    CGFloat MAX_HEIGHT = textView.font.lineHeight * NUM_OF_LINES;
     CGFloat preferredTextViewHeight = 0;
     CGFloat messageHeight = [textView sizeThatFits:CGSizeMake(textView.frame.size.width, CGFLOAT_MAX)].height;
     if(messageHeight > MAX_HEIGHT)
@@ -92,6 +94,7 @@
         preferredTextViewHeight = messageHeight;
         textView.scrollEnabled=NO;
     }
+    self.inputToolbar.textViewHt = messageHeight;
     textView.frame=CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, preferredTextViewHeight);
 }
 
@@ -191,3 +194,4 @@
 
 
 @end
+

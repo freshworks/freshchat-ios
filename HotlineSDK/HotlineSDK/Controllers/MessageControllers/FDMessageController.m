@@ -174,20 +174,9 @@ typedef struct {
 }
 
 -(void) setNavigationTitle:(UIViewController *)parent {
-    
-    UIBarButtonItem *left = parent.navigationItem.leftBarButtonItem;
-    UIView *view = [left valueForKey:@"view"];
-    UIImage *image = [left valueForKey:@"image"];
-    CGFloat leftBarButtonWidth = 0.0;
-    if(view){
-        leftBarButtonWidth=[view frame].size.width;
-    }
-    
-    if(image) {
-        leftBarButtonWidth= 45;
-    }
-    
-    self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (3 * leftBarButtonWidth);
+        
+    CGFloat leftBarButtonWidth = 45;
+    self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (2.5 * leftBarButtonWidth) ;
     self.titleHeight = parent.navigationController.navigationBar.frame.size.height;
     
     self.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.titleWidth, self.titleHeight)];
@@ -205,7 +194,6 @@ typedef struct {
     self.typicalReply.textColor = [[FCTheme sharedInstance] responseTimeExpectationsFontColor];
     self.typicalReply.textAlignment = UITextAlignmentCenter;
     [self.titleView addSubview:self.typicalReply];
-    
     parent.navigationItem.titleView = self.titleView;
 }
 
