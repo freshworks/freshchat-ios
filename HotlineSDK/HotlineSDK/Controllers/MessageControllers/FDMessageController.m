@@ -195,6 +195,7 @@ typedef struct {
     self.typicalReply.textAlignment = UITextAlignmentCenter;
     [self.titleView addSubview:self.typicalReply];
     parent.navigationItem.titleView = self.titleView;
+    
 }
 
 -(void) showTypicalReply:(NSInteger) time {
@@ -1088,6 +1089,7 @@ typedef struct {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
     [self setNavigationTitle:self.parentViewController];
+    [self fetchTypicalRepliesIn];
     [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];
 }
