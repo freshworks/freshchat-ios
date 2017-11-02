@@ -1087,6 +1087,7 @@ typedef struct {
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
+    [self setNavigationTitle:self.parentViewController];
     [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];
 }

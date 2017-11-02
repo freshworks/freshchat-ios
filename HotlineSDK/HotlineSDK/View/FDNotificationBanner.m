@@ -14,6 +14,8 @@
 #import "HLLocalization.h"
 #import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
+#import "FDUtilities.h"
+#import "HLAttributedText.h"
 
 #define systemSoundID 1315
 
@@ -52,7 +54,17 @@
 
 -(void)setMessage:(NSString *)message{
     if (message && ![message isKindOfClass:[NSNull class]]) {
-        self.messageLabel.text = message;
+        if([FDUtilities containsHTMLContent:message]) {
+            NSMutableAttributedString *str = [[HLAttributedText sharedInstance] getAttributedString:message];
+            if(str == nil) {
+                NSMutableAttributedString *content = [[HLAttributedText sharedInstance] addAttributedString:message withFont:[self.theme notificationTitleFont]];
+                self.messageLabel.text = content.string;
+            } else {
+                self.messageLabel.text = str.string;
+            }
+        } else {
+            self.messageLabel.text = message;
+        }
     }else{
         self.messageLabel.text = HLLocalizedString(LOC_DEFAULT_NOTIFICATION_MESSAGE);
     }
