@@ -1,4 +1,8 @@
 
+Ver 1.1.1 
+__________________________
+Minor UI fixes
+
 Ver 1.1.0 
 __________________________
 - Changes for SDK Theming.
