@@ -21,7 +21,7 @@
 @interface FDInputToolbarView () <UITextViewDelegate>{
     NSString *placeHolderText;
 }
-@property (strong, nonatomic) UIView               *accessoryViewContainer;
+@property (strong, nonatomic) UIView   *accessoryViewContainer;
 @property (strong, nonatomic) UIImageView          *innerImageView;
 @property (strong, nonatomic) UIImageView          *outerImageView;
 @property (nonatomic, strong) NSLayoutConstraint   *attachButtonWidthConstraint;
@@ -149,7 +149,8 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     CGFloat attachButtonYpos = (self.frame.size.height - self.attachButton.frame.size.height)/2.0;
     attachButtonYConstraint.constant = - attachButtonYpos;
     
-    CGFloat accessoryViewYpos = (self.frame.size.height - self.accessoryViewContainer.frame.size.height)/2.0;
+    CGFloat ht = self.isFromAttachmentScreen ? self.textViewHt + 10 : self.frame.size.height;
+    CGFloat accessoryViewYpos = ( ht - self.accessoryViewContainer.frame.size.height)/2.0;
     accessoryViewYConstraint.constant = - accessoryViewYpos;
 }
 

@@ -21,7 +21,7 @@
 @end
 
 @interface FDInputToolbarView : UIView<UITextViewDelegate>
-
+@property (nonatomic) CGFloat  textViewHt;
 @property (strong, nonatomic) FDButton *micButton;
 @property (strong, nonatomic) FDButton *sendButton;
 @property (strong, nonatomic) FDButton *attachButton;

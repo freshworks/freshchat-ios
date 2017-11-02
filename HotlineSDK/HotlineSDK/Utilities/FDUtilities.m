@@ -401,7 +401,7 @@ static NSInteger networkIndicator = 0;
 +(BOOL) containsHTMLContent: (NSString *)content {
     if (([FDUtilities containsString:content andTarget:@"<b>"])
         || ([FDUtilities containsString:content andTarget:@"<i>"])
-        || ([FDUtilities containsString:content andTarget:@"<span>"])
+        || ([FDUtilities containsString:content andTarget:@"<span"])
         || ([FDUtilities containsString:content andTarget:@"<p>"])
         || ([FDUtilities containsString:content andTarget:@"<div>"])
         || ([FDUtilities containsString:content andTarget:@"<u>"])
