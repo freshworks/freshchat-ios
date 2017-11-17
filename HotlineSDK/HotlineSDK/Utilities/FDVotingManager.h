@@ -10,6 +10,8 @@
 
 @interface FDVotingManager : NSObject
 
+@property (strong,nonatomic) NSMutableDictionary *votedArticlesDictionary;
+
 +(instancetype)sharedInstance;
 -(void)downVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion;
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion;

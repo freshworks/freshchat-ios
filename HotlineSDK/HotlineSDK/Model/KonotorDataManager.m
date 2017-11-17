@@ -490,8 +490,14 @@
 
 -(void)cleanUpUser:(void (^)(NSError *))mainHandler{
     [self deleteAllEntriesOfEntity:HOTLINE_TAGS_ENTITY handler:^(NSError *error){
-        [self deleteAllEntriesOfEntity:HOTLINE_CSAT_ENTITY handler:^(NSError *error){
-            [self deleteAllEntriesOfEntity:HOTLINE_MESSAGE_ENTITY handler:^(NSError *error){
+        [self clearUserExceptTags:mainHandler];
+ } inContext:self.mainObjectContext];
+}
+
+-(void)clearUserExceptTags:(void (^)(NSError *))mainHandler{
+    [self deleteAllEntriesOfEntity:HOTLINE_CSAT_ENTITY handler:^(NSError *error){
+        [self deleteAllEntriesOfEntity:HOTLINE_MESSAGE_ENTITY handler:^(NSError *error){
+            [self deleteAllEntriesOfEntity:HOTLINE_FRAGMENT_ENTITY handler:^(NSError *error){
                 [self deleteAllEntriesOfEntity:HOTLINE_CHANNEL_ENTITY handler:^(NSError *error){
                     [self deleteAllEntriesOfEntity:HOTLINE_CUSTOM_PROPERTY_ENTITY handler:^(NSError *error){
                         mainHandler(error);
@@ -501,6 +507,8 @@
         } inContext:self.mainObjectContext];
     } inContext:self.mainObjectContext];
 }
+
+
 
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler{
     NSManagedObjectContext *context = self.mainObjectContext;

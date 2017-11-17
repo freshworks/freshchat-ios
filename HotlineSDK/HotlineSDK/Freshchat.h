@@ -17,6 +17,7 @@ enum TagFilterType {
 #define FRESHCHAT_UNREAD_MESSAGE_COUNT @"com.freshworks.freshchat_unread_notification_count"
 #define FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshworks.freshchat_play_inapp_audio"
 #define FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE @"com.freshworks.freshchat_pause_inapp_audio"
+#define FRESHCHAT_USER_RESTORE_ID_GENERATED @"com.freshworks.freshchat_user_restore_id_generated"
 
 @class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 
@@ -61,7 +62,7 @@ enum TagFilterType {
 /*
  * Show/Hide Agent Avatar on the Chat. It is enabled by default. Default YES
  */
-@property (nonatomic, assign) BOOL agentAvatarEnabled;
+@property (nonatomic, assign) BOOL teamMemberInfoVisible;
 /*
  * Enable/Disable Notification banner when a support message is received. Defaults to YES
  */
@@ -152,12 +153,24 @@ enum TagFilterType {
  */
 -(void)setUser:(FreshchatUser *) user;
 /**
+*  Restore User
+*
+ *  @discussion To identify an user in Freshchat with an unique identifier from your system and restore an
+ * user across devices/sessions/platforms based on an external identifier and restore id
+*
+*  @param externalID Set an identifier that your app can use to uniquely identify the user
+*
+*  @param restoreID Set the restore id for the user, to lookup and restore the user across devices/sessions/platforms
+*
+*/
+-(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID;
+/**
  *  Clear User Data
  *
  *  @discussion Use this function when your user needs to log out of the app .
  *  This will clean up all the data associated with the SDK for the user.
- *  Please use the completion block if you are updating user information or subsequently calling init 
- *  
+ *  Please use the completion block if you are updating user information or subsequently calling init
+ *
  * @param Completion block to be called when clearData is completed
  *
  */
@@ -309,8 +322,11 @@ enum TagFilterType {
 /*
  * Unique identifier for the user.
  */
-@property (strong, nonatomic) NSString *externalID;
-
+@property (strong, nonatomic, readonly) NSString *externalID;
+/*
+ * Restore id for user
+ */
+@property (strong, nonatomic, readonly) NSString *restoreID;
 
 /*
  * Access the user info. If update user was called earlier, the instance would contain the persisted values.

@@ -15,6 +15,8 @@
 #define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"
 #define FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME @"freshchat_defaults_session_updated_time"
 
+#define FRESHCHAT_DEFAULTS_ISUSER_RESTORE_CALLED @"freshchat_defaults_isuser_restore_called"
+
 #define CONFIG_RC_AGENT_AVATAR_TYPE @"config_rc_agent_avatar_type"
 #define CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED @"config_rc_notification_deeplink_enabled"
 
@@ -44,6 +46,8 @@
 #define CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_response_time_expectations_fetch_interval"
 #define CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_last_response_time_expectation_fetch_interval"
 #define FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE @"freshchat_response_time_expectation_value"
+
+#define FRESHCHAT_DEFAULTS_USER_IOS_VERSION @"freshchat_defaults_user_ios_version"
 
 @interface HLUserDefaults : NSObject
 

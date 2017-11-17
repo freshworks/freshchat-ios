@@ -47,5 +47,6 @@
 -(void)deleteAllCSATEntries:(void(^)(NSError *error))handler;
 -(void)areChannelsEmpty:(void(^)(BOOL isEmpty))handler;
 -(void)cleanUpUser:(void (^)(NSError *))mainHandler;
+-(void)clearUserExceptTags:(void (^)(NSError *))mainHandler;
 
 @end

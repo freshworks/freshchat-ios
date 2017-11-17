@@ -17,6 +17,7 @@
 #define HOTLINE_DEFAULTS_USER_PHONE_NUMBER @"hotline_defaults_user_phone_number"
 #define HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE @"hotline_defaults_user_phone_country_code"
 #define HOTLINE_DEFAULTS_USER_EXTERNAL_ID @"hotline_defaults_user_external_id"
+#define HOTLINE_DEFAULTS_USER_RESTORE_ID @"hotline_defaults_user_restore_id"
 #define HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED @"hotline_defaults_is_device_token_registered"
 #define HOTLINE_DEFAULTS_IS_USER_REGISTERED @"hotline_defaults_is_user_registered"
 #define HOTLINE_DEFAULTS_APP_VERSION @"hotline_defaults_app_version"

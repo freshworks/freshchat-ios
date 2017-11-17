@@ -44,11 +44,6 @@
             [KonotorCustomProperty createNewPropertyForKey:@"email" WithValue:userInfo.email isUserProperty:YES];
         }
         
-        if (userInfo.externalID && ![userInfo.externalID isEqualToString:@""]) {
-            [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
-            [KonotorCustomProperty createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
-        }
-        
         if (userInfo.phoneNumber && ![userInfo.phoneNumber isEqualToString:@""]) {
             [store setObject:userInfo.phoneNumber forKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
             [KonotorCustomProperty createNewPropertyForKey:@"phone" WithValue:userInfo.phoneNumber isUserProperty:YES];
@@ -59,9 +54,31 @@
             [KonotorCustomProperty createNewPropertyForKey:@"phoneCountry" WithValue:userInfo.phoneCountryCode isUserProperty:YES];
         }
         
+        [store setObject:userInfo.restoreID forKey:HOTLINE_DEFAULTS_USER_RESTORE_ID];
+        [KonotorCustomProperty createNewPropertyForKey:@"restoreId" WithValue:userInfo.restoreID isUserProperty:YES];
+        [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+        [KonotorCustomProperty createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
+        
         [[KonotorDataManager sharedInstance]save];
     }];
-    
+}
+
++(void) removeUserInfo {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_LAST_NAME];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_EMAIL];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_RESTORE_ID];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+    [FreshchatUser sharedInstance].firstName = nil;
+    [FreshchatUser sharedInstance].lastName = nil;
+    [FreshchatUser sharedInstance].email = nil;
+    [FreshchatUser sharedInstance].phoneNumber = nil;
+    [FreshchatUser sharedInstance].phoneCountryCode = nil;
+    [FreshchatUser sharedInstance].restoreID = nil;
+    [FreshchatUser sharedInstance].externalID = nil;
 }
 
 +(KonotorUser *)getUser{

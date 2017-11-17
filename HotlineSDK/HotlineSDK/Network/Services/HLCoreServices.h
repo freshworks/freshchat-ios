@@ -26,6 +26,8 @@
 
 +(void)uploadUnuploadedProperties;
 
++(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate;
+
 +(NSURLSessionDataTask *)fetchRemoteConfig;
 
 +(NSURLSessionDataTask *)performHeartbeatCall;
@@ -35,5 +37,9 @@
 +(NSURLSessionDataTask *)trackUninstallForUser:(NSDictionary *) userAlias withCompletion:(void (^)(NSError *))completion;
 
 +(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FDResponseInfo *responseInfo, NSError *error))handler;
+
++(NSURLSessionDataTask *)restoreUserWithExtId:(NSString *)extId restoreId:(NSString *)restoreIdVal withCompletion:(void (^)(NSError *))completion;
+
++(void) resetUserData:(void (^)())completion;
 
 @end

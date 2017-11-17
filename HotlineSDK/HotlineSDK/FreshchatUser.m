@@ -26,7 +26,7 @@
     return freshchatUser;
 }
 
--(void)copyValuesFromStore{
+-(void)copyValuesFromStore {
     FDSecureStore *store = [FDSecureStore sharedInstance];
     self.firstName = [store objectForKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];
     self.lastName = [store objectForKey:HOTLINE_DEFAULTS_USER_LAST_NAME];
@@ -34,6 +34,7 @@
     self.phoneNumber = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_NUMBER];
     self.phoneCountryCode = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
     self.externalID = [store objectForKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+    self.restoreID = [store objectForKey:HOTLINE_DEFAULTS_USER_RESTORE_ID];
 }
 
 -(void)resetUser{
@@ -43,6 +44,8 @@
     self.phoneNumber = nil;
     self.externalID = nil;
     self.phoneCountryCode = nil;
+    self.externalID = nil;
+    self.restoreID = nil;
 }
 
 @end

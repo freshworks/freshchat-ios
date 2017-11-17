@@ -457,12 +457,12 @@
 #pragma mark - Table View
 
 - (int)numberOfChannelListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"ChannelList.ChannelListItemStyle.NumChannelListDescriptionLines"] intValue];
+    int linesNo = [[self.themePreferences valueForKeyPath:@"ChannelList.ChannelDescriptionTextStyle.maxLines"] intValue];
     return MIN(linesNo, 2);
 }
 
 - (int)numberOfCategoryListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"FAQCategoryList.NumFAQListDescriptionLines"] intValue];
+    int linesNo = [[self.themePreferences valueForKeyPath:@"FAQCategoryList.FAQCategoryDescriptionTextStyle.maxLines"] intValue];
     return MIN(linesNo, 2);
 }
 

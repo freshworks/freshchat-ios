@@ -12,11 +12,23 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "FDStringUtil.h"
+#import "Freshchat.h"
+
+@interface FreshchatUser()
+    @property (strong, nonatomic, readwrite) NSString *externalID;
+    @property (strong, nonatomic, readwrite) NSString *restoreID;
+@end
+
 
 @interface FDUtilities : NSObject
 
 +(NSString *)currentUserAlias;
++(void) removeUUIDWithAppID:(NSString *)appID;
++(void) removeUUID;
++(void) resetAlias;
 +(NSString *)getUserAliasWithCreate;
++(NSString *)generateUserAlias;
++(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion;
 
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *) getKeyForObject:(NSObject *) object;
@@ -37,19 +49,22 @@
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
 +(BOOL)isiOS10;
 
-+(void)initiatePendingTasks;
-+(BOOL)hasInitConfig;
-+(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
-+(void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText;
-+(BOOL) containsHTMLContent: (NSString *)content;
-+(BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
++ (void)initiatePendingTasks;
++ (BOOL)hasInitConfig;
++ (void)unreadCountInternalHandler:(void (^)(NSInteger count))completion;
++ (void) showAlertViewWithTitle : (NSString *)title message : (NSString *)message andCancelText : (NSString *) cancelText;
++ (BOOL) containsHTMLContent: (NSString *)content;
++ (BOOL) containsString: (NSString *)original andTarget:(NSString *)target;
 + (BOOL) canMakeSessionCall;
 + (BOOL) canMakeDAUCall;
 + (BOOL) canMakeRemoteConfigCall;
 + (BOOL) canMakeTypicallyRepliesCall;
-+(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
-
-+(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
++ (NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
++ (void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID;
++ (void)postUnreadCountNotification;
++ (void) updateUserWithData : (NSDictionary*) userDict;
++ (void) updateUserAlias: (NSString *) userAlias;
++ (NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
 
 @end
 

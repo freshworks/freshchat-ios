@@ -23,7 +23,7 @@
         self.appKey = appKey;
         self.themeName = FD_DEFAULT_THEME_NAME;
         self.gallerySelectionEnabled = YES;
-        self.agentAvatarEnabled = YES;
+        self.teamMemberInfoVisible = YES;
         self.notificationSoundEnabled = YES;
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;

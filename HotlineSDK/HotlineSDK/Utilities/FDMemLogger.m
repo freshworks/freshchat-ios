@@ -89,7 +89,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
                                      @"Time stamp" : [NSDate date],
                                      @"SDK Version" : HOTLINE_SDK_VERSION,
                                      @"App Name" : [FDUtilities appName],
-                                     @"Device Info" : [FDUtilities deviceInfoProperties],
+                                     @"deviceIosMeta" : [FDUtilities deviceInfoProperties],
                                      @"Is user registered" : isUserRegistered ? @"YES" : @"NO",
                                      @"SessionID" : sessionID ? sessionID : @"NIL"
                                      };

@@ -194,7 +194,6 @@
     user.lastName = self.userLastNameField.text;
     user.email = self.emailField.text;
     user.phoneNumber = self.phoneNumField.text;
-    user.externalID = self.externalIDField.text;
     [[Freshchat sharedInstance] setUser:user];
 }
 
@@ -214,8 +213,8 @@
     switch (buttonIndex) {
         case 0:
             [[Freshchat sharedInstance]resetUserWithCompletion:^{
-                [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
-                [self updateFields];
+                //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+                //[self updateFields];
             }];
             break;
     }
@@ -235,6 +234,7 @@
     self.emailField.text = [FreshchatUser sharedInstance].email;
     self.phoneNumField.text = [FreshchatUser sharedInstance].phoneNumber;
     self.externalIDField.text = [FreshchatUser sharedInstance].externalID;
+    
 }
 
 -(void)testNotification:(id)sender{

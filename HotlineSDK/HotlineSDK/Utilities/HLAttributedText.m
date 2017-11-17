@@ -40,7 +40,7 @@
 }
 
 -(NSMutableAttributedString *) addAttributedString:(NSString *)string withFont:(UIFont*) font   {
-    NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>",font.fontName,(int)font.pointSize,string];
+    NSString *HTML = [NSString stringWithFormat:@"<span style=\"font-family:'%@'; font-size:%i\">%@</span>",font.fontName,(int)font.pointSize,string];
     NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUnicodeStringEncoding]
                                                                                                options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
                                                                                     documentAttributes:nil error:nil];

@@ -10,7 +10,9 @@
 #import "FreshchatSDK/Freshchat.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
+#import "SampleController.h"
 #define kOFFSET_FOR_KEYBOARD 160.0
+#define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
 
 @interface ViewController ()<UITextFieldDelegate>
 
@@ -53,6 +55,9 @@
     
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
+    NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
+    NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
+    
     
     self.faqTagsField1.delegate = self;
     self.faqTagsField2.delegate = self;
@@ -209,7 +214,9 @@
 }
 
 - (IBAction)chatButtonPressed:(id)sender {
-    [[Freshchat sharedInstance] showConversations:self];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
+    SampleController *sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];    
+    [self presentViewController:sampleController animated:YES completion:nil];
 }
 
 - (IBAction)articleFilter1:(id)sender{

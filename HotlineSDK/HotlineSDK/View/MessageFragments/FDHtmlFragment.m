@@ -38,7 +38,7 @@
                         NSMutableAttributedString *content = [[HLAttributedText sharedInstance] addAttributedString:fragment.content withFont:self.font];
                         self.attributedText = content;
                     } else {
-                        self.attributedText = str;                        
+                        self.attributedText = str;
                     }
                 } else {
                     self.text = fragment.content;

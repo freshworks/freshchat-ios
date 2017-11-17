@@ -14,7 +14,6 @@
 
 @interface FDVotingManager()
 
-@property (strong,nonatomic) NSMutableDictionary *votedArticlesDictionary;
 
 @end
 

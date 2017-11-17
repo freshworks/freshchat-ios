@@ -101,8 +101,6 @@
         //fragment here
         welcomeMessage = [Message createNewMessage:channelInfo[@"welcomeMessage"] toChannelID:channel.channelID];        
         welcomeMessage.createdMillis = @0;
-        welcomeMessage.isWelcomeMessage = YES;
-        welcomeMessage.isRead = YES;
         [channel addMessagesObject:welcomeMessage];
     }
     

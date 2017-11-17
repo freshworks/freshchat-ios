@@ -12,6 +12,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "FCTheme.h"
+#import "Freshchat.h"
 #import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -65,6 +66,28 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     return uuIdLookupKey;
 }
 
++(void) removeUUIDWithAppID:(NSString *)appID {    
+    FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
+    if(appID) {
+        NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", appID ,HOTLINE_DEFAULTS_DEVICE_UUID ];
+        if(uuIdLookupKey) {
+            [persistedStore removeObjectWithKey:uuIdLookupKey];
+        }
+    }
+}
+
++(void) removeUUID {
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    if(appID) {
+        NSString *uuIdLookupKey = [NSString stringWithFormat:@"%@-%@", appID ,HOTLINE_DEFAULTS_DEVICE_UUID ];
+        if(uuIdLookupKey) {
+            [persistedStore removeObjectWithKey:uuIdLookupKey];
+        }
+    }
+}
+
 /* This function gets the user-alias from persisted secure store for new customers (Hotline),
  it also migrates the key from [Konotor SDK to Hotline SDK] if exists */
 +(NSString *)currentUserAlias{
@@ -87,6 +110,12 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
         }
     }
     return userAlias;
+}
+
++(void) updateUserAlias: (NSString *) userAlias {
+    if(userAlias){
+        [[FDSecureStore sharedInstance] setObject:userAlias forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    }
 }
 
 +(UIViewController*) topMostController {
@@ -121,6 +150,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     userAlias = [persistedStore objectForKey:uuIdLookupKey];
     return userAlias;
 }
+
 
 +(void)storeUserAlias:(NSString *)alias{
     FDSecureStore *persistedStore = [FDSecureStore persistedStoreInstance];
@@ -176,17 +206,11 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     UIDevice *device = [UIDevice currentDevice];
     
     [properties setValue:[[[NSBundle bundleForClass:[self class]] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"app_version"];
-    [properties setValue:@"Apple" forKey:@"brand"];
-    
-    [properties setValue:@"Apple" forKey:@"manufacturer"];
-    [properties setValue:@"iPhone OS" forKey:@"os"];
+    [properties setValue:@"iOS" forKey:@"os"];
     [properties setValue:[device systemVersion] forKey:@"os_version"];
     [properties setValue:[FDUtilities deviceModelName] forKey:@"model"];
-    
-    CGSize size = [UIScreen mainScreen].bounds.size;
-    [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"screen_height"];
-    [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"screen_width"];
-    
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"app_version_code"];
+    [properties setValue:HOTLINE_SDK_VERSION forKey:@"sdk_version_code"];
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 
@@ -466,7 +490,12 @@ static NSInteger networkIndicator = 0;
       @"iPhone9,3":    @"iPhone 7",
       @"iPhone9,2":    @"iPhone 7 Plus",
       @"iPhone9,4":    @"iPhone 7 Plus",
-      
+      @"iPhone10,1":   @"iPhone 8",
+      @"iPhone10,4":   @"iPhone 8",
+      @"iPhone10,2":   @"iPhone 8 Plus",
+      @"iPhone10,5":   @"iPhone 8 Plus",
+      @"iPhone10,3":   @"iPhone X",
+      @"iPhone10,6":   @"iPhone X",
       
       @"iPad1,1":  @"iPad",
       @"iPad2,1":  @"iPad 2(WiFi)",
@@ -499,6 +528,10 @@ static NSInteger networkIndicator = 0;
       @"iPad6,8":  @"iPad Pro (12.9 inch)",
       @"iPad6,3":  @"iPad Pro (9.7 inch)",
       @"iPad6,4":  @"iPad Pro (9.7 inch)",
+      @"iPad7,1":  @"iPad Pro 12.9 Inch 2. Generation",
+      @"iPad7,2":  @"iPad Pro 12.9 Inch 2. Generation",
+      @"iPad7,3":  @"iPad Pro 10.5 Inch",
+      @"iPad7,4":  @"iPad Pro 10.5 Inch",
       
       @"iPod1,1":  @"iPod 1st Gen",
       @"iPod2,1":  @"iPod 2nd Gen",
@@ -527,6 +560,66 @@ static NSInteger networkIndicator = 0;
     return [store checkItemWithKey:HOTLINE_DEFAULTS_APP_ID] && [store checkItemWithKey:HOTLINE_DEFAULTS_APP_KEY] && ctx != nil;
 }
 
++(void) resetAlias {
+    [FDUtilities removeUUID];
+    NSString *newAlias = [FDUtilities generateUserAlias];
+    [[FDSecureStore sharedInstance] setObject:newAlias forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
+    FDLog(@"Created new alias: %@",newAlias);
+}
+
+
++(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion {
+    [HLCoreServices resetUserData:^{
+        [[FDSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+        [HLUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];        
+        FreshchatUser* oldUser = [FreshchatUser sharedInstance];
+        oldUser.externalID = externalID;
+        oldUser.restoreID = restoreID;
+        [KonotorUser storeUserInfo:oldUser];
+        [HLCoreServices restoreUserWithExtId:externalID restoreId:restoreID withCompletion:nil];
+        if(completion) {
+            completion();
+        }
+    }];
+}
+
++(void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID {
+    if (restoreID && externalID) {
+        if ( restoreID != [FreshchatUser sharedInstance].restoreID || externalID != [FreshchatUser sharedInstance].externalID ) {
+            FreshchatUser *currentUser = [FreshchatUser sharedInstance];
+            if(currentUser != nil) {
+                currentUser.restoreID = restoreID;
+                currentUser.externalID = externalID;
+                [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
+                [KonotorUser storeUserInfo:currentUser];
+            }
+        }
+    }
+}
+
+
++ (void) updateUserWithData : (NSDictionary*) userDict{
+    FreshchatUser *user = [FreshchatUser sharedInstance];
+    user.firstName = userDict[@"firstName"];
+    user.lastName = userDict[@"lastName"];
+    user.email = userDict[@"email"];
+    user.phoneNumber = userDict[@"phone"];
+    user.phoneCountryCode = userDict[@"phoneCountry"];
+    user.externalID = userDict[@"identifier"];
+    user.restoreID = userDict[@"restoreId"];
+    [[Freshchat sharedInstance]setUser:user];
+    [self updateUserAlias: userDict[@"alias"]];
+}
+
++(void)postUnreadCountNotification{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [FDUtilities unreadCountInternalHandler:^(NSInteger count) {
+            [FDLocalNotification post:FRESHCHAT_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(count)}];
+        }];
+    });
+}
+
+
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
         NSInteger result = 0;
@@ -538,3 +631,4 @@ static NSInteger networkIndicator = 0;
 }
 
 @end
+

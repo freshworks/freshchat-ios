@@ -10,6 +10,7 @@
 #import "HLAPIClient.h"
 #import "HLServiceRequest.h"
 #import "FDSecureStore.h"
+#import "KonotorUser.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"
 #import "KonotorDataManager.h"
@@ -21,6 +22,24 @@
 #import "FDConstants.h"
 #import "FCRemoteConfig.h"
 #import "HLUser.h"
+#import "FDLocalNotification.h"
+#import "FDVotingManager.h"
+
+@interface Freshchat ()
+
+-(void)performPendingTasks;
+-(void)registerDeviceToken;
+-(NSDictionary *) getPreviousUserInfo;
+-(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore;
+
+@end
+
+@interface KonotorUser ()
+
++(void) removeUserInfo;
+
+@end
+
 
 @implementation HLCoreServices
 
@@ -70,7 +89,7 @@
     }
 
     if (deviceProps) {
-        userInfo[@"meta"] = deviceProps;
+        userInfo[@"deviceIosMeta"] = deviceProps;
     }
     
     if (adId && adId.length > 0) {
@@ -158,7 +177,11 @@
     return task;
 }
 
-+(void)uploadUnuploadedProperties{
++(void)uploadUnuploadedProperties {
+    [HLCoreServices uploadUnuploadedPropertiesWithForceUpdate:false];
+}
+
++(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
     
     static BOOL IN_PROGRESS = NO;
     
@@ -174,8 +197,7 @@
     IN_PROGRESS = YES ;
     
     [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-        
-        if (![HLUser isUserRegistered]) {
+        if (![HLUser isUserRegistered] ) { //If the user 
             IN_PROGRESS = NO;
             return;
         }
@@ -184,7 +206,8 @@
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         
         NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
-        if (unuploadedProperties.count > 0) {
+        
+        if (unuploadedProperties.count > 0 || forceUpdate) {
             NSMutableDictionary *metaInfo = [NSMutableDictionary new];
             for (int i=0; i<unuploadedProperties.count; i++) {
                 KonotorCustomProperty *property = unuploadedProperties[i];
@@ -198,8 +221,19 @@
             }
             userInfo[@"alias"] = [FDUtilities currentUserAlias];
             userInfo[@"meta"] = metaInfo;
+            NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
+            if (deviceProps) {
+                userInfo[@"deviceIosMeta"] = deviceProps;
+            }
+            if([FreshchatUser sharedInstance].externalID != nil) {
+                userInfo[@"identifier"] = [FreshchatUser sharedInstance].externalID;
+            }
             info[@"user"] = userInfo;
         }else{
+            IN_PROGRESS = NO;
+        }
+        
+        if ([info count] == 0) {
             IN_PROGRESS = NO;
             return;
         }
@@ -216,7 +250,7 @@
                         }
                     }
                     [[KonotorDataManager sharedInstance]save];
-               
+                    
                     IN_PROGRESS = NO;
                     NSArray *remaining = [KonotorCustomProperty getUnuploadedProperties];
                     if (remaining.count > 0) {
@@ -232,7 +266,7 @@
 }
 
 +(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
-    if(![HLUser isUserRegistered]){
+    if(![HLUser isUserRegistered]) {
         return nil; // This should never happen .. just a safety check
     }
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
@@ -248,8 +282,13 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         if (!error) {
-            FDLog(@"Pushed properties to server %@", info);
-            if (handler) handler(nil);
+            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+            if(statusCode == 200){
+                FDLog(@"Pushed properties to server %@", info);
+                NSDictionary *response = responseInfo.responseAsDictionary;
+                [FDUtilities updateUserWithExternalID:[response objectForKey:@"identifier"] withRestoreID:[response objectForKey:@"restoreId"]];
+                if (handler) handler(nil);
+            }
         }else{
             if (handler) handler(error);
             FDLog(@"Could not update user properties %@", error);
@@ -260,27 +299,38 @@
 }
 
 +(NSURLSessionDataTask *)performDAUCall{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *userAlias = [[FDUtilities currentUserAlias] length] ? [FDUtilities currentUserAlias] : [FDUtilities getUserAliasWithCreate];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:HOTLINE_API_DAU_PATH,appID,userAlias];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
-    [request setRelativePath:path andURLParams:@[appKey,@"source=MOBILE"]];
-    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
-        if (!error) {
-            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
-            if(statusCode == 200){
-                [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
-                FDLog(@"**** DAU call made ****");
-            }
-        }else{
-            FDLog(@"Could not make DAU call %@", error);
-            FDLog(@"Response : %@", responseInfo.response);
+    if([FDUtilities canMakeDAUCall]){
+        [[FDSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+        NSString *userAlias = [[FDUtilities currentUserAlias] length] ? [FDUtilities currentUserAlias] : [FDUtilities getUserAliasWithCreate];
+        NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+        NSString *path = [NSString stringWithFormat:HOTLINE_API_DAU_PATH,appID,userAlias];
+        HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
+        [request setRelativePath:path andURLParams:@[appKey,@"source=MOBILE"]];
+        HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+        @try {
+            NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+                if (!error) {
+                    NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+                    if(statusCode == 200){
+                        FDLog(@"**** DAU call made ****");
+                    }
+                }else{
+                    FDLog(@"Could not make DAU call %@", error);
+                    FDLog(@"Response : %@", responseInfo.response);
+                    [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
+                }
+            }];
+            
+            return task;
         }
-    }];
-    return task;
+        @catch (NSException *exception) {
+            [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
+            FDLog(@"Activity request failed due to an error %@", exception.description);
+        }
+    }
+    return nil;
 }
 
 +(NSURLSessionDataTask *)performSessionCall{
@@ -432,8 +482,11 @@
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_REMORTE_CONFIG_PATH,appID];
-    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_REMOTE_CONFIG_PATH,appID];
+    
+    NSURL *configBaseUrl = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[NSString stringWithFormat:FRESHCHAT_API_REMOTE_CONFIG_PREFIX,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithBaseURL:configBaseUrl andMethod:HTTP_METHOD_GET];
+    
     [request setRelativePath:path andURLParams:@[appKey]];
     HLAPIClient *apiClient = [HLAPIClient sharedInstance];
     
@@ -470,6 +523,86 @@
         if (handler) handler(responseInfo,error);
     }];
     return task;
+}
+
++(NSURLSessionDataTask *)restoreUserWithExtId:(NSString *)extId restoreId:(NSString *)restoreIdVal withCompletion:(void (^)(NSError *))completion{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSMutableArray *params = [[NSMutableArray alloc] init];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    [params addObject:[NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]]];
+    if(extId.length >0){
+        [params addObject:[NSString stringWithFormat:@"externalId=%@", [FDStringUtil base64EncodedStringFromString:extId]]];
+    } else {
+        return nil;
+    }
+    if(restoreIdVal.length > 0){
+        [params addObject:[NSString stringWithFormat:@"restoreId=%@",restoreIdVal]];
+    } else {
+        return nil;
+    }
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_USER_RESTORE_PATH,appID];
+    HLAPIClient *apiClient = [HLAPIClient sharedInstance];
+    HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
+    [request setRelativePath:path andURLParams:params];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        NSDictionary *response = responseInfo.responseAsDictionary;
+        if (statusCode == 200) { //If the user is found
+            if(response[@"restoreId"] && response[@"identifier"]) {
+                if (![[FDUtilities currentUserAlias] isEqual:response[@"alias"]]) {
+                    [FDUtilities updateUserWithData:response];
+                    [HLUser setUserMessageInitiated];
+                    [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                    [FDUtilities updateUserWithExternalID:response[@"identifier"] withRestoreID:response[@"restoreId"]];
+                    [[Freshchat sharedInstance] registerDeviceToken];
+                    [[Freshchat sharedInstance] performPendingTasks];
+                }
+            }
+        } else { //If the user is not found
+            FreshchatUser* oldUser = [FreshchatUser sharedInstance];
+            oldUser.externalID = extId;
+            oldUser.restoreID = nil;
+            [[Freshchat sharedInstance] setUser:oldUser];
+            [FDUtilities resetAlias];
+            [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
+            [[Freshchat sharedInstance] performPendingTasks];
+        }
+        
+        if(completion){
+            completion(error);
+        }
+    }];
+    return task;
+}
+
++(void) resetUserData:(void (^)())completion {
+    [[KonotorDataManager sharedInstance] clearUserExceptTags:^(NSError *error) {
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        // Store the user again to send uninstall api again
+        NSDictionary *previousUser = [[Freshchat sharedInstance] getPreviousUserInfo];
+        BOOL isUserRegistered = [HLUser isUserRegistered];
+        if(previousUser && isUserRegistered) {
+            [[Freshchat sharedInstance] storePreviousUser:previousUser inStore:store];
+        } else {
+            [[Freshchat sharedInstance] storePreviousUser:nil inStore:store];
+        }
+        // Clear the Channel & Coversation call to fetch again.
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];        
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
+        
+        // Clear the token again to register again
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
+        [store removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
+        [HLUserDefaults removeObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
+        [[FDVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
+        [KonotorUser removeUserInfo];
+        if(completion){
+            completion(error);
+        }
+    }];
 }
 
 @end

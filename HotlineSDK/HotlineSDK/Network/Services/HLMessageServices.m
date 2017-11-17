@@ -93,7 +93,6 @@ static HLNotificationHandler *handleUpdateNotification;
             //[messageUpdater useInterval:MESSAGES_FETCH_INTERVAL_ON_SCREEN_LAUNCH];
             //[channelsUpdater useInterval:CHANNELS_FETCH_INTERVAL_ON_SCREEN_LAUNCH];            
             break;
-            
         default:
             break;
     }
@@ -196,9 +195,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
                 if(handler) handler(error);
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self postUnreadCountNotification];
-            });
+            [FDUtilities postUnreadCountNotification];
         });
     }];
 }
@@ -213,12 +210,18 @@ static HLNotificationHandler *handleUpdateNotification;
         NSDictionary *conversationInfo = conversations[i];
         channelId = conversationInfo[@"channelId"];
         HLChannel *channel = [HLChannel getWithID:channelId inContext:[KonotorDataManager sharedInstance].mainObjectContext];
-        
         NSString *conversationID = [conversationInfo[@"conversationId"] stringValue];
-        
         KonotorConversation *conversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
         
-        [self processCSATForConversation:conversation withInfo:conversationInfo];
+        if(!conversation) { //Create new conversation
+            conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+        }
+        
+        if(conversation) {
+            [self processCSATForConversation:conversation withInfo:conversationInfo isRestore:isRestore];
+        } else {
+            return false;
+        }
         
         NSArray *messages = conversationInfo[@"messages"];
         for (int j=0; j<messages.count; j++) {
@@ -226,27 +229,25 @@ static HLNotificationHandler *handleUpdateNotification;
             Message *message = [Message retriveMessageForMessageId:messageInfo[@"alias"]];
             lastUpdateTime = [FDDateUtil maxDateOfNumber:lastUpdateTime andStr:messageInfo[@"createdMillis"]];
             if (!message) {
-                Message *newMessage = [Message createNewMessage:messageInfo toChannelID:channel.channelID];
-                newMessage.uploadStatus = @2;
-                
+                Message *newMessage = [Message createNewMessage:messageInfo toChannelID:channel.channelID];                
                 if (channel) {
                     newMessage.belongsToChannel = channel;
                 }
                 
-                if (!conversation) {
-                    conversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                }
+                newMessage.uploadStatus = @2;
+                newMessage.belongsToConversation = conversation;
+                newMessage.isRead = [messageInfo[@"readByUser"] boolValue];
                 
-                if(conversation){
-                    newMessage.belongsToConversation = conversation;
-                }
-                
-                //Do not mark restored messages as unread
                 if (isRestore) {
-                    newMessage.isRead = YES;
+                    if([messageInfo[@"marketingId"] integerValue] != 0 ) { //Set mark as read for marketing messages
+                        newMessage.isRead = YES;
+                    }
                 }else {
-                    newMessage.isRead = NO;
                     messageText = [newMessage getDetailDescriptionForMessage];
+                }
+                
+                if([newMessage.messageUserType integerValue] == 0) { //Set user messages from other devices/os
+                     newMessage.isRead = YES;
                 }
             }
         }
@@ -255,7 +256,7 @@ static HLNotificationHandler *handleUpdateNotification;
             handleUpdateNotification = [[HLNotificationHandler alloc] init];
             [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
         }
-        
+        [FDUtilities postUnreadCountNotification];
     }
     
     [[KonotorDataManager sharedInstance]save];
@@ -274,7 +275,7 @@ static HLNotificationHandler *handleUpdateNotification;
     return true;
 }
 
-+(void)processCSATForConversation:(KonotorConversation *)conversation withInfo:(NSDictionary *)conversationInfo{
++(void)processCSATForConversation:(KonotorConversation *)conversation withInfo:(NSDictionary *)conversationInfo isRestore:(BOOL) isRestore{
     if ([conversationInfo objectForKey:@"hasPendingCsat"]) {
         conversation.hasPendingCsat = @([conversationInfo[@"hasPendingCsat"] boolValue]);
         if ([conversationInfo objectForKey:@"csat"]) {
@@ -292,7 +293,7 @@ static HLNotificationHandler *handleUpdateNotification;
             if (!csat) {
                 csat = [HLCsat createWithInfo:conversationInfo inContext:context];
                 FDLog(@"Added a new CSAT entry\n %@", conversationInfo[@"csat"]);
-                if(![HLNotificationHandler areNotificationsEnabled]) {
+                if(![HLNotificationHandler areNotificationsEnabled] && !isRestore) {
                     handleUpdateNotification = [[HLNotificationHandler alloc] init];
                     HLChannel *channel = [HLChannel getWithID:conversationInfo[@"channelId"] inContext:[KonotorDataManager sharedInstance].mainObjectContext];
                     [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:[conversationInfo valueForKeyPath:@"csat.question"]];
@@ -306,11 +307,6 @@ static HLNotificationHandler *handleUpdateNotification;
     }
 }
 
-+(void)postUnreadCountNotification{
-    [FDUtilities unreadCountInternalHandler:^(NSInteger count) {
-        [FDLocalNotification post:FRESHCHAT_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(count)}];
-    }];
-}
 
 /* fetches channel list, updates existing channels including hidden channels */
 +(NSURLSessionDataTask *)fetchAllChannels:(void (^)(NSArray<HLChannel *> *channels, NSError *error))handler{

@@ -45,12 +45,13 @@
         UIDevice *device = [UIDevice currentDevice];
         NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
         
-        NSString *userAgent = [NSString stringWithFormat:@"HL-iOS(%@)(%@)(%@)(%@)",
+        NSString *userAgent = [NSString stringWithFormat:@"FC-iOS(%@)(%@)(%@)(%@)",
                                device.systemVersion, HOTLINE_SDK_VERSION, device.model, bundleIdentifier];
         [self setValue:userAgent forHTTPHeaderField:@"User-Agent"];
         [self setValue:HOTLINE_SDK_BUILD_NUMBER forHTTPHeaderField:@"X-SDK-Version-Code"];
         [self setValue:bundleIdentifier forHTTPHeaderField:@"X-App-Package-Name"];
         [self addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        [self setValue:@"iOS" forHTTPHeaderField:@"X-FC-Platform"];
         
         self.HTTPMethod = httpMethod;
         if ([httpMethod isEqualToString:HTTP_METHOD_POST] || [httpMethod isEqualToString:HTTP_METHOD_PUT]) {

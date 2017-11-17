@@ -1297,6 +1297,7 @@ typedef struct {
         
         [HLMessageServices postCSATWithID:csat.objectID completion:^(NSError *error) {
             [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
+            [FDUtilities postUnreadCountNotification];
         }];
     }];
 }

@@ -55,7 +55,7 @@
             }
             
             self.marketingID = @([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_MARKETING_ID] integerValue]);
-            if (!self.marketingID && !([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS] isEqualToString:[FDUtilities currentUserAlias]])) {
+            if (![self.marketingID isEqual:0] && !([payload[FRESHCHAT_NOTIFICATION_PAYLOAD_TARGET_USER_ALIAS] isEqualToString:[FDUtilities currentUserAlias]])) {
                 return;
             }
             

@@ -53,11 +53,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)hasMessageIintiated {
-    NSObject *hasUserInitiatedMessage = [HLUserDefaults getObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
-    if(hasUserInitiatedMessage != nil) {
-        return (BOOL)hasUserInitiatedMessage;
-    }
-    return false;
+    return [HLUserDefaults getBoolForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
 }
 
 +(void)setUserMessageInitiated {
@@ -65,7 +61,7 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)canRegisterUser {
-    return ( ![HLUser createUserAOT] || [HLUser hasMessageIintiated] ) && ![HLUser isUserRegistered];
+    return ( [HLUser createUserAOT] || [HLUser hasMessageIintiated] ) && ![HLUser isUserRegistered];
 }
 
 +(BOOL)isUserRegistered {

@@ -25,7 +25,6 @@
     @dynamic uploadStatus;
     @dynamic isDownloading;
 
-    NSMutableDictionary *gkMessageIdMessageMap;
     static BOOL messageExistsDirty = YES;
     static BOOL messageTimeDirty = YES;
 
@@ -88,6 +87,7 @@
             }
             [HLCoreServices sendLatestUserActivity:channel];
         }
+        [FDUtilities postUnreadCountNotification];
         [context save:nil];
     }];
 }
@@ -118,15 +118,7 @@
 }
 
 +(Message *)retriveMessageForMessageId: (NSString *)messageId{
-    if(gkMessageIdMessageMap){
-        Message *message = [gkMessageIdMessageMap objectForKey:messageId];
-        if(message) return message;
-    }
-    
-    if(!gkMessageIdMessageMap){
-        gkMessageIdMessageMap = [[ NSMutableDictionary alloc]init];
-    }
-    
+
     NSError *pError;
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:HOTLINE_MESSAGE_ENTITY inManagedObjectContext:context];
@@ -147,7 +139,6 @@
     }else if([array count]==1){
         Message *message = [array objectAtIndex:0];
         if(message){
-            [gkMessageIdMessageMap setObject:message forKey:messageId];
             return message;
         }
     }
@@ -203,18 +194,23 @@
         newMessage.isWelcomeMessage = NO;
         newMessage.messageAlias = [message valueForKey:@"alias"];
         [newMessage setMessageUserType:USER_TYPE_AGENT];
+        if([message[@"readByUser"] boolValue]) {
+            newMessage.isRead = YES;
+        } else {
+            newMessage.isRead = NO;
+        }
     } else {
         newMessage.isWelcomeMessage = YES;
         newMessage.messageAlias = [NSString stringWithFormat:@"%d_welcomemessage",[channelId intValue]];
-        
+        newMessage.isRead = YES;
     }
     [newMessage setMessageUserType:[message valueForKey:@"messageUserType"]];
-    newMessage.isRead = [message valueForKey:@"read"];
     [newMessage setCreatedMillis:[message valueForKey:@"createdMillis"]];
     [newMessage setMarketingId:[message valueForKey:@"marketingId"]];
     [newMessage setMessageUserAlias:[message valueForKey:@"messageUserAlias"]];
     [Fragment createFragments:[message valueForKey:@"messageFragments"] toMessage:newMessage];
     [[KonotorDataManager sharedInstance]save];
+    
     [Message markDirty];
     return newMessage;
 }

@@ -114,10 +114,24 @@
     dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
     user.firstName = [@"User - " stringByAppendingString:dateString];
-    user.lastName = @"Ohsumi";
-    user.email = @"user@freshdesk.com";
+    user.lastName = @"Ohsumi1234";
+    user.firstName = @"Muthu";
+    user.lastName = @"K";
+    user.email = @"muthu@freshdesk.com";
     user.phoneNumber = @"9898989898";
     user.phoneCountryCode = @"+91";
+    /*
+    user.externalID = @"SanjithNew11";
+    user.restoreID = @"4c03d5f2-6c87-435d-a63f-fa8a040fe832";
+     */
+    /*
+    user.externalID = @"SanjithNew10";
+    user.restoreID = @"ab64445d-fca2-455c-ac4f-1406565ea322";
+    */
+    /*
+     user.externalID = @"SanjithNew10";
+     user.restoreID = @"0b3af9c5-f1c6-4225-adcf-e7c99fbdbab7";
+    */
     return user;
     
 }
@@ -126,9 +140,6 @@
 -(void)hotlineIntegration{
     
     FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:HOTLINE_APP_ID andAppKey:HOTLINE_APP_KEY];
-    
-    config.appID = HOTLINE_APP_ID;
-    config.appKey = HOTLINE_APP_KEY;
     config.domain = HOTLINE_DOMAIN;
     //config.voiceMessagingEnabled = NO;
 //       config.appID = @"7baba8ff-d18e-4e20-a096-3ea5be53ba67";
@@ -140,29 +151,47 @@
 //      config.appKey = @"be346b63-59d7-4cbc-9a47-f3a01e35f093";
     
 //    config.domain = @"mr.white.konotor.com";
-//    config.appID = @"92124c8f-bd1a-4362-a390-72e76ef7125c";
+//    config.appID = @"92124c8f-bd1a-4362-a390-72e76b8c55644-f128-4389-888f-716b3f628f67ef7125c";
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
-    config.agentAvatarEnabled = YES;
+
+    config.teamMemberInfoVisible = YES;
     //config.pictureMessagingEnabled = YES;
     config.cameraCaptureEnabled = YES;
     if(![FreshchatUser sharedInstance].firstName){
-        [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+        //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }
-    
-    [[Freshchat sharedInstance] setUserProperties:@{ @"SDK Version" : [Freshchat SDKVersion] }];
-    
+    config.cameraCaptureEnabled = YES;
+    config.gallerySelectionEnabled = YES;
+    NSLog(@"Current User :Name  %@ %@", [FreshchatUser sharedInstance].firstName,[FreshchatUser sharedInstance].lastName);
+    NSLog(@"Current User :Identifier  %@ restoreID: %@", [FreshchatUser sharedInstance].externalID, [FreshchatUser sharedInstance].restoreID);
     [[Freshchat sharedInstance]initWithConfig:config];
+    
+    //if(![FreshchatUser sharedInstance].restoreID)
+    //{
+        //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
+    //}
+    
+    //[[Freshchat sharedInstance] setUserProperties:@{ @"SDK Version" : [Freshchat SDKVersion] }];
+    
+    
 
     [[Freshchat sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
         NSLog(@"Unread count (Async) : %d", (int)count);
     }];
     
-    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
-        NSLog(@"Unread messages  %@", note.userInfo[@"count"]);
+    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSLog(@"Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
+        NSLog(@"Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
+        /*
+         Sanjith.kanagavel+web@freshworks.com/kangavel
+         Working Combination : 79bc06ed-e3f8-4b18-a03d-a92a178d0d48 / NewUser123
+         Working Combination : b8c55644-f128-4389-888f-716b3f628f67 / NewUser123
+         Wrong Combination : 79bc06ed-e3f8-4b18-a03d-a92a178d0d41 / NewUser123
+         */
     }];
 }
 
--(void)registerAppForNotifications{
+-(void)registerAppForNotifications {
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -193,7 +222,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{
     [[Freshchat sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
+        NSLog(@"Unread count  %ld", (long)count);
     }];
 }
 

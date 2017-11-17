@@ -22,9 +22,12 @@
     NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
     if (matches.count == 0) {
         HLTags *tag = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_TAGS_ENTITY inManagedObjectContext:context];
+        FDLog(@"New tag created : %@",tagInfo);
         [self addTag:tag withInfo:tagInfo];
     }
 }
+
+
 
 +(void)removeTagsForTaggableId:(NSNumber *)tagId andType : (NSNumber*)type inContext:(NSManagedObjectContext *)context{
     

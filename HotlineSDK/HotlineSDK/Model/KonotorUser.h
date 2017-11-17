@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(void)storeUserInfo:(FreshchatUser *)userInfo;
 +(KonotorUser *)getUser;
++(void) removeUserInfo;
 
 @end
 

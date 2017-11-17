@@ -53,10 +53,12 @@
             store = [FDKeyChainStore keyChainStoreWithService:persistedStoreServiceName];
         }else{
             store = [FDKeyChainStore keyChainStoreWithService:serviceName];
-            if ([FDSecureStore isFirstLaunch]){
+            if ([self isFirstLaunch]){
                 [store removeAllItems];
+                FDLog(@"Clearing keys for %d",isPreferred);
             }
         }
+        
         self.secureStore = store;
         [self clearHotlineKeys];
     }
@@ -77,7 +79,7 @@
     }
 }
 
-+(BOOL)isFirstLaunch{
+-(BOOL)isFirstLaunch{
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"FD_HOTLINE_IS_FIRST_LAUNCH"]) {
         return NO;
     }else{

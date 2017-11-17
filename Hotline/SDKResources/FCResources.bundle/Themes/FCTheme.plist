@@ -32,7 +32,7 @@
 			<key>textColorLink</key>
 			<string>#2701A0</string>
 			<key>fontName</key>
-			<string>SYS_DEFAULT_FONT_NAME</string>
+			<string>Arial</string>
 			<key>textSize</key>
 			<string>15.0f</string>
 			<key>textColor</key>
@@ -52,7 +52,7 @@
 			<key>textColorLink</key>
 			<string>#2701A0</string>
 			<key>fontName</key>
-			<string>SYS_DEFAULT_FONT_NAME</string>
+			<string>Arial</string>
 			<key>textSize</key>
 			<string>15.0f</string>
 			<key>textColor</key>
@@ -272,6 +272,8 @@
 			<string>14.0f</string>
 			<key>textColor</key>
 			<string>#ABABAB</string>
+			<key>maxLines</key>
+			<string>1</string>
 		</dict>
 		<key>ChannelLastUpdatedAtTextStyle</key>
 		<dict>
@@ -558,6 +560,8 @@
 			<string>14.0f</string>
 			<key>textColor</key>
 			<string>#808285</string>
+			<key>maxLines</key>
+			<string>1</string>
 		</dict>
 		<key>FAQCategoryListStyle</key>
 		<dict>
