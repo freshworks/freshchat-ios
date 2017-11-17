@@ -49,7 +49,7 @@
             if([HLUserDefaults getObjectForKey:CONFIG_RC_API_FETCH_INTERVAL] != nil) {
                 return [HLUserDefaults getLongForKey:CONFIG_RC_API_FETCH_INTERVAL];
             }
-            return ONE_HOUR_IN_MS;
+            return ONE_DAY_IN_MS;
             break;
         case activeConvMinFetchInterval:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL] != nil) {
@@ -85,7 +85,7 @@
             if([HLUserDefaults getObjectForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK] != nil) {
                 return [HLUserDefaults getLongForKey:CONFIG_RC_FAQ_FETCH_INTERVAL_LAIDBACK];
             }
-            return 2 * ONE_DAY_IN_MS;
+            return 7 * ONE_DAY_IN_MS;
             break;
         case channelsFetchIntervalNormal:
             if([HLUserDefaults getObjectForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_NORMAL] != nil) {
@@ -97,7 +97,7 @@
             if([HLUserDefaults getObjectForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK] != nil) {
                 return [HLUserDefaults getLongForKey:CONFIG_RC_CHANNELS_FETCH_INTERVAL_LAIDBACK];
             }
-            return 2 * ONE_DAY_IN_MS;
+            return 7 * ONE_DAY_IN_MS;
             break;
     }
 }
