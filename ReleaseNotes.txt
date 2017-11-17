@@ -1,4 +1,8 @@
 
+Ver 1.2.1 
+__________________________
+Update refresh intervals
+
 Ver 1.2.0 
 __________________________
 User restore functionality
