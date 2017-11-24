@@ -30,13 +30,15 @@
 		<key>TeamMemberMessageTextStyle</key>
 		<dict>
 			<key>textColorLink</key>
-			<string>#2701A0</string>
+			<string>#2283F6</string>
 			<key>fontName</key>
 			<string>Arial</string>
 			<key>textSize</key>
 			<string>15.0f</string>
 			<key>textColor</key>
 			<string>#000000</string>
+			<key>textAlignment</key>
+			<string>Left</string>
 		</dict>
 		<key>TeamMemberMessageTimeTextStyle</key>
 		<dict>
@@ -50,13 +52,15 @@
 		<key>UserMessageTextStyle</key>
 		<dict>
 			<key>textColorLink</key>
-			<string>#2701A0</string>
+			<string>#2283F6</string>
 			<key>fontName</key>
 			<string>Arial</string>
 			<key>textSize</key>
 			<string>15.0f</string>
 			<key>textColor</key>
 			<string>#000000</string>
+			<key>textAlignment</key>
+			<string>Left</string>
 		</dict>
 		<key>UserMessageTimeTextStyle</key>
 		<dict>
