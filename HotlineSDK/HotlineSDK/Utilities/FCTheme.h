@@ -143,6 +143,8 @@
 -(UIColor *)userHyperlinkColor;
 
 -(UIFont *)agentMessageFont;
+-(NSTextAlignment) userMessageTextAlignment;
+-(NSTextAlignment) agentMessageTextAlignment;
 -(UIFont *)userMessageFont;
 
 -(UIFont *)agentMessageTimeFont;

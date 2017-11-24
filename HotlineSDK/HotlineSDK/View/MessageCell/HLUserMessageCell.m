@@ -129,8 +129,6 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initFragment:fragment withFont:[[FCTheme sharedInstance] userMessageFont] andType:2];
-            [htmlFragment setTextAlignment:NSTextAlignmentRight];
-            htmlFragment.textColor = [[FCTheme sharedInstance] userMessageFontColor];
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];

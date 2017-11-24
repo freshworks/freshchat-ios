@@ -21,13 +21,16 @@
                 [self setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
                 self.dataDetectorTypes = UIDataDetectorTypeAll;
                 [self setEditable:NO];
-                self.dataDetectorTypes = UIDataDetectorTypeAll;
-                [self setTextAlignment:NSTextAlignmentLeft];
+                
                 if(type == AGENT){
                     [self setTintColor:[[FCTheme sharedInstance] agentHyperlinkColor]];
+                    self.textColor = [[FCTheme sharedInstance] agentMessageFontColor];
+                    [self setTextAlignment:[[FCTheme sharedInstance] agentMessageTextAlignment]];
                 }
                 else{
                     [self setTintColor:[[FCTheme sharedInstance] userHyperlinkColor]];
+                    self.textColor = [[FCTheme sharedInstance] userMessageFontColor];
+                    [self setTextAlignment:[[FCTheme sharedInstance] userMessageTextAlignment]];
                 }
                 [self setBackgroundColor:UIColor.clearColor];                
                 [self setScrollEnabled:NO];

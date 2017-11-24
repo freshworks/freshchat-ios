@@ -9,6 +9,7 @@
 #import "FCTheme.h"
 #import "FDThemeConstants.h"
 #define SDK_THEME_VERSION @"1.0"
+#import "HLMacros.h"
 
 @interface FCTheme ()
 
@@ -63,6 +64,16 @@
     if (immutablePlistInfo) {
         self.themePreferences = [NSMutableDictionary dictionaryWithDictionary:immutablePlistInfo];
     }
+}
+
+- (NSTextAlignment) getTextAlignmentForKey:(NSString *) value{
+    if([[value lowercaseString] isEqualToString:@"right"] || [value isEqualToString:@"NSTextAlignmentRight"]){
+        return NSTextAlignmentRight;
+    }
+    else if([[value lowercaseString] isEqualToString:@"center"] || [value isEqualToString:@"NSTextAlignmentCenter"]){
+        return NSTextAlignmentCenter;
+    }
+    return NSTextAlignmentLeft;
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
@@ -699,6 +710,14 @@
 
 -(UIFont *)agentNameFont{
     return [self getFontValueWithKey:@"ConversationDetail.TeamMemberNameTextStyle" andDefaultSize:FD_FONT_SIZE_SMALL];
+}
+
+-(NSTextAlignment) userMessageTextAlignment{
+    return [self getTextAlignmentForKey:trimString([self.themePreferences valueForKeyPath:@"ConversationDetail.UserMessageTextStyle.textAlignment"])];
+}
+
+-(NSTextAlignment) agentMessageTextAlignment{
+    return [self getTextAlignmentForKey:trimString([self.themePreferences valueForKeyPath:@"ConversationDetail.TeamMemberMessageTextStyle.textAlignment"])];
 }
 
 -(id) getMessageDetailBackgroundComponent{

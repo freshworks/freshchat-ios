@@ -199,8 +199,13 @@
         HLViewController *preferedController = nil;
         if([channels count] == 0 ){
             HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
-            preferedController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
+            if(defaultChannel != nil ){
+                preferedController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
                                                              andPresentModally:YES];
+            }
+            else{
+                preferedController = [[HLChannelViewController alloc]init];
+            }
         }
         else if (channels.count == 1) {
             preferedController = [[FDMessageController alloc]initWithChannelID:[channels firstObject].channelID

@@ -195,7 +195,7 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initFragment:fragment withFont:[[FCTheme sharedInstance] agentMessageFont] andType:1];
-            htmlFragment.textColor = [[FCTheme sharedInstance] agentMessageFontColor];
+            
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];

@@ -143,9 +143,17 @@
     
     if(self.isFilteredView && channelInfo.count == 0 ){
         HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
-        channelInfo = @[defaultChannel];
+        if(defaultChannel != nil) {
+            channelInfo = @[defaultChannel];
+        } else {
+            if ( ![[FDReachabilityManager sharedInstance] isReachable]) {
+                [self.loadingViewBehaviour updateResultsView:NO andCount:channelInfo.count];
+                channelInfo = @[];
+            } else {
+                return;
+            }
+        }
     }
-
     if (channelInfo.count == 1) {
         BOOL isEmbedded = (self.tabBarController != nil) ? YES : NO;
         self.navigationController.viewControllers = @[[HLControllerUtils getConvController:isEmbedded
