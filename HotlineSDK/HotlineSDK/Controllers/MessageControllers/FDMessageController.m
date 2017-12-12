@@ -18,6 +18,7 @@
 #import "HLMacros.h"
 #import "FDLocalNotification.h"
 #import "FDAudioMessageInputView.h"
+#import "HLInterstitialViewController.h"
 #import "HLConstants.h"
 #import "HLArticle.h"
 #import "HLArticlesController.h"
@@ -198,6 +199,13 @@ typedef struct {
     
 }
 
+-(void) setFooterView {
+    HLContainerController *containerCntrl = (HLContainerController *) self.parentViewController;
+    if(containerCntrl != nil) {
+       [containerCntrl.footerView setViewColor: [[FCTheme sharedInstance] inputToolbarBackgroundColor]];
+    }
+}
+
 -(void) showTypicalReply:(NSInteger) time {
     self.typicalReply.text = [FDUtilities typicalRepliesMsgForTime:time];
     
@@ -264,22 +272,26 @@ typedef struct {
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self localNotificationSubscription];
+    [self setFooterView];
     self.tableView.tableHeaderView = [self tableHeaderView];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self processPendingCSAT];
+    [self checkRestoreStateChanged];
+}
+
+//TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
+
+-(void) checkRestoreStateChanged {
+    if([FreshchatUser sharedInstance].isRestoring) {
+        HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:self.convOptions andIsEmbed:self.tabBarController != nil ? true : false];
+        [FDUtilities resetNavigationStackWithController:interstitialController currentController:self];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self registerAppAudioCategory];
-    [self checkChannel:^(BOOL isChannelValid){
-        if(isChannelValid) {
-            if(!self.channel.managedObjectContext) {
-                [self rebuildMessages];
-            }
-            [self refreshView];
-        }
-    }];
+    [self checkChannel];
     [self.messagesPoller begin];
     if([FDUtilities canMakeTypicallyRepliesCall] ){
         [self fetchTypicalRepliesIn];
@@ -674,9 +686,17 @@ typedef struct {
     [self.messagesPoller reset];
 }
 
--(void) channelsUpdated
+-(void) checkChannel
 {
-    [self checkChannel:nil];
+    [self checkChannel:^(BOOL isChannelValid){
+        if(isChannelValid) {
+            if(!self.channel.managedObjectContext || self.channel.isFault || self.conversation.isFault ) {
+                [self updateBottomViewAfterCSATSubmisssion];
+                [self rebuildMessages];
+            }
+            [self refreshView];
+        }
+    }];
 }
 
 -(void) checkChannel : (void(^)(BOOL)) completion
@@ -821,23 +841,18 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDismissMessageInputView)
                                                  name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachable)
-                                                 name:HOTLINE_NETWORK_REACHABLE object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(channelsUpdated)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkChannel)
                                                 name:HOTLINE_CHANNELS_UPDATED object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bannerMessageUpdated)
                                                  name:HOTLINE_BANNER_MESSAGE_UPDATED object:nil];
-}
-
--(void)networkReachable{
-    [Message uploadAllUnuploadedMessages];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreStateChanged:)
+                                                 name:FRESHCHAT_USER_RESTORE_STATE object:nil];
 }
 
 -(void)localNotificationUnSubscription{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_AUDIO_RECORDING_CLOSE object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_NETWORK_REACHABLE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -846,7 +861,15 @@ typedef struct {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_BANNER_MESSAGE_UPDATED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_USER_RESTORE_STATE object:nil];
 }
+
+-(void)restoreStateChanged:(NSNotification *)notification {
+    if([notification.userInfo[@"state"] intValue] == 0) {
+        [self checkRestoreStateChanged];
+    }
+}
+
 
 -(void)handleBecameActive:(NSNotification *)notification{
     [self.messagesPoller begin];
@@ -1056,6 +1079,7 @@ typedef struct {
         [self.tableView setHidden:false];
         self.initalLoading = false;
     }
+    [self processPendingCSAT];
 }
 
 -(NSArray *)fetchMessages{
@@ -1089,7 +1113,11 @@ typedef struct {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
     [self setNavigationTitle:self.parentViewController];
-    [self fetchTypicalRepliesIn];
+    if([FDUtilities canMakeTypicallyRepliesCall] ){
+        [self fetchTypicalRepliesIn];
+    } else {
+        [self updateTypicalReplies];
+    }
     [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];
 }
@@ -1210,7 +1238,6 @@ typedef struct {
         if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
             [self.view layoutIfNeeded];
-            [self scrollTableViewToLastCell];
         }
     });
 }

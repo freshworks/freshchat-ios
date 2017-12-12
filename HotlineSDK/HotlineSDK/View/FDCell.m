@@ -11,6 +11,7 @@
 #import "FDAutolayoutHelper.h"
 
 #define TITLE_MAX_LINES 2
+#define LAST_UPDATED_WIDTH 55
 static float height = 0;
 @implementation FDCell
 
@@ -102,7 +103,7 @@ static float height = 0;
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subtitle]" options:0 metrics:nil views:views]];
             
-            self.lastUpdatedTimeWidthConstraint = [FDAutolayoutHelper setWidth:55 forView:self.lastUpdatedLabel inView:self.contentView];
+            self.lastUpdatedTimeWidthConstraint = [FDAutolayoutHelper setWidth:LAST_UPDATED_WIDTH forView:self.lastUpdatedLabel inView:self.contentView];
             
             self.detailLableRightConstraint = [NSLayoutConstraint constraintWithItem:self.detailLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.contentEncloser attribute:NSLayoutAttributeTrailing multiplier:1 constant:0];
             
@@ -144,8 +145,8 @@ static float height = 0;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setNeedsLayout];
         [self layoutIfNeeded];
-
-        float size = (self.lastUpdatedLabel.frame.origin.x-self.titleLabel.frame.origin.x);
+        float size = (self.lastUpdatedLabel.frame.size.width) ? (self.lastUpdatedLabel.frame.origin.x-self.titleLabel.frame.origin.x) : ((self.lastUpdatedLabel.frame.origin.x - LAST_UPDATED_WIDTH)-self.titleLabel.frame.origin.x);
+        
         CGRect textRect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(size,9999)
                                              options:NSStringDrawingUsesLineFragmentOrigin
                                           attributes:@{NSFontAttributeName:self.titleLabel.font}

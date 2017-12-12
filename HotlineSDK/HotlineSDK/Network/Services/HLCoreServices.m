@@ -25,6 +25,7 @@
 #import "FDLocalNotification.h"
 #import "FDVotingManager.h"
 
+
 @interface Freshchat ()
 
 -(void)performPendingTasks;
@@ -494,6 +495,7 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
             NSDictionary *configDict = responseInfo.responseAsDictionary;
+            [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
             [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
         }
         else {
@@ -554,7 +556,6 @@
                     [HLUser setUserMessageInitiated];
                     [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                     [FDUtilities updateUserWithExternalID:response[@"identifier"] withRestoreID:response[@"restoreId"]];
-                    [[Freshchat sharedInstance] registerDeviceToken];
                     [[Freshchat sharedInstance] performPendingTasks];
                 }
             }
@@ -575,7 +576,9 @@
     return task;
 }
 
-+(void) resetUserData:(void (^)())completion {
++(void) resetUserData:(void (^)())completion {    
+    [FreshchatUser sharedInstance].isRestoring = true;
+    [FDLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@0}];
     [[KonotorDataManager sharedInstance] clearUserExceptTags:^(NSError *error) {
         FDSecureStore *store = [FDSecureStore sharedInstance];
         // Store the user again to send uninstall api again

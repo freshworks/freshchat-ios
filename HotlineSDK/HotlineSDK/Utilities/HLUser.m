@@ -1,4 +1,4 @@
-//
+ //
 //  HLUser.m
 //  HotlineSDK
 //
@@ -49,7 +49,10 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL) createUserAOT{
-    return [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+    if([[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED]){
+        return [[FDSecureStore sharedInstance] boolValueForKey:FRESHCHAT_CONFIG_RC_AOT_USER_CREATE_ENABLED];
+    }
+    return false;
 }
 
 +(BOOL)hasMessageIintiated {
@@ -61,7 +64,8 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 +(BOOL)canRegisterUser {
-    return ( [HLUser createUserAOT] || [HLUser hasMessageIintiated] ) && ![HLUser isUserRegistered];
+    return ([HLUser createUserAOT] || [HLUser hasMessageIintiated]) && ![HLUser isUserRegistered];
+    
 }
 
 +(BOOL)isUserRegistered {

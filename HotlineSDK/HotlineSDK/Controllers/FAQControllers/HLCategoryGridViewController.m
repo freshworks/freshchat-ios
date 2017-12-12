@@ -170,6 +170,8 @@
     
     self.view.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
     self.collectionView.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
+    HLContainerController * containerCtr =  (HLContainerController*)self.parentViewController;
+    [containerCtr.footerView setViewColor:self.collectionView.backgroundColor];
     
     self.footerView = [[FDMarginalView alloc] initWithDelegate:self];
     

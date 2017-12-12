@@ -124,6 +124,7 @@
 -(UIColor *)imgAttachBackButtonFontColor;
 
 //Messagecell & Conversation UI
+-(UIColor *) inputToolbarDividerColor;
 -(UIColor *)inputTextFontColor;
 -(UIFont *) inputTextFont;
 -(UIColor *) inputTextfieldBackgroundColor;

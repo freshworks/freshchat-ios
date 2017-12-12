@@ -47,10 +47,13 @@ enum MessageRequestSource {
 
 +(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 
-+(void)uploadPictureMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel withCompletion:(void (^)())completion;
++(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel withCompletion:(void(^)(NSError *error))completion;
+
++(void)uploadPictureMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation withCompletion:(void (^)())completion;
                                                                
 +(void)markMarketingMessageAsClicked:(NSNumber *)marketingId;
-                                                               
+
++(void)uploadAllUnuploadedMessages:(NSArray *)messages index:(NSInteger)currentIndex;
 
 +(void)markMarketingMessageAsRead:(Message *)message context:(NSManagedObjectContext *)context;
 

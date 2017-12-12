@@ -108,11 +108,7 @@
             return;
         }else{
             FDLog(@"There are %d unuploaded messages", (int)array.count);
-            for(int i=0;i<[sortedArr count];i++){
-                Message *message = array[i];
-                KonotorConversation *convo = message.belongsToConversation;
-                [HLMessageServices uploadNewMessage:message toConversation:convo onChannel:message.belongsToChannel];
-            }
+            [HLMessageServices uploadAllUnuploadedMessages:sortedArr index:0];
         }
     }];
 }

@@ -18,14 +18,19 @@
 #import "HLArticlesController.h"
 #import "HLFAQUtil.h"
 #import "HLConversationUtil.h"
+#import "FDBarButtonItem.h"
 #import "HLControllerUtils.h"
 #import "HLLoadingViewBehaviour.h"
 #import "HLLocalization.h"
+#import "FDUtilities.h"
 
-@interface HLInterstitialViewController() <HLLoadingViewBehaviourDelegate>
+@interface HLInterstitialViewController() <HLLoadingViewBehaviourDelegate>{
+    int footerViewHeight;
+}
 
 @property (nonatomic, strong) FreshchatOptions *options;
 @property (nonatomic, assign) BOOL isEmbedView;
+@property (nonatomic) BOOL restoring;
 @property (nonatomic, strong) HLLoadingViewBehaviour *loadingViewBehaviour;
 
 @end
@@ -37,6 +42,7 @@
     if (self) {
         self.options = options;
         self.isEmbedView = isEmbed;
+        self.restoring = [self.options isKindOfClass:[ConversationOptions class]] ? [FreshchatUser sharedInstance].isRestoring : false;
     }
     return self;
 }
@@ -57,7 +63,10 @@
 }
 
 -(NSString *)loadingText{
-    if([self.options isKindOfClass:[FAQOptions class]]){
+    if(self.restoring) {
+        return HLLocalizedString(LOC_RESTORING_CHANNEL_TEXT);
+    }
+    else if([self.options isKindOfClass:[FAQOptions class]]){
         return HLLocalizedString(LOC_LOADING_FAQ_TEXT);
     }
     else if([self.options isKindOfClass:[ConversationOptions class]]){
@@ -66,22 +75,66 @@
     return 0;
 }
 
+-(void)localNotificationSubscription{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreStateChanged:)
+                                                 name:FRESHCHAT_USER_RESTORE_STATE object:nil];
+}
+
+
+-(void)restoreStateChanged:(NSNotification *)notification {
+    if(self.restoring && [notification.userInfo[@"state"] intValue] == 1) {
+        [self checkRestoreStateChanged];
+    }
+}
+
+-(void)localNotificationUnSubscription{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_USER_RESTORE_STATE object:nil];
+}
+
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.loadingViewBehaviour load:0];
+    [self localNotificationSubscription];
+    [self checkRestoreStateChanged];
+}
+
+-(void) checkRestoreStateChanged {
+    self.restoring = [self.options isKindOfClass:[ConversationOptions class]] ? [FreshchatUser sharedInstance].isRestoring : false;
+    if(!self.restoring) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self prepareController];
+        });
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
     self.view.backgroundColor = [UIColor whiteColor];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self prepareController];
-    });
+    [self setNavigationItem];
+    [self setFooterView];
+}
+
+-(void)setFooterView {
+    FCFooterView *footerView = [[FCFooterView alloc] initFooterViewWithEmbedded:self.isEmbedView];
+    footerView.translatesAutoresizingMaskIntoConstraints = false;
+    [self.view addSubview:footerView];
+    [footerView setViewColor:self.view.backgroundColor];
+    footerViewHeight = 20;
+    if([FDUtilities isIPhoneXView] && !self.isEmbedView){
+        footerViewHeight = 33;
+    }
+    if([FDUtilities isPoweredByFooterViewHidden] && ![FDUtilities isIPhoneXView]){
+        footerViewHeight = 0;
+    }
+    NSDictionary *views = @{@"footerView" : footerView};    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[footerView(%d)]|",footerViewHeight]  options:0 metrics:nil views:views]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [self.loadingViewBehaviour unload];
+    [self localNotificationUnSubscription];
 }
 
 -(void)prepareController{
@@ -105,7 +158,6 @@
         HLContainerController *containerController = [[HLContainerController alloc]initWithController:preferredController andEmbed:isEmbed];
         [self resetNavigationStackWithController:containerController];
     }];
-    
 }
 
 -(void) selectFAQController:(FAQOptions *)options withCompletion : (void (^)(HLViewController *))completion{
@@ -171,8 +223,9 @@
             }
         }
         //default with or without error
-        if(!preferredController){
+        if(!preferredController) {
             HLChannelViewController *channelViewController = [[HLChannelViewController alloc]init];
+            [channelViewController setConversationOptions:self.options];
             preferredController = [[HLContainerController alloc]initWithController:channelViewController andEmbed:isEmbed];
         }
         
@@ -197,7 +250,7 @@
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
     [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
         HLViewController *preferedController = nil;
-        if([channels count] == 0 ){
+        if([channels count] == 0 ) {
             HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
             if(defaultChannel != nil ){
                 preferedController = [[FDMessageController alloc]initWithChannelID:defaultChannel.channelID
@@ -226,5 +279,17 @@
     [self.loadingViewBehaviour unload];
     [self.navigationController setViewControllers:viewControllers animated:NO];
 }
+
+-(void)setNavigationItem {
+    UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_RESTORE_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    if (!self.isEmbedView) {
+        self.navigationItem.leftBarButtonItem = closeButton;
+    }
+}
+
+-(void)closeButton:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

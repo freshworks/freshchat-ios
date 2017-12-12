@@ -15,6 +15,7 @@
 #import "Freshchat.h"
 
 @interface FreshchatUser()
+    @property (nonatomic) BOOL isRestoring;
     @property (strong, nonatomic, readwrite) NSString *externalID;
     @property (strong, nonatomic, readwrite) NSString *restoreID;
 @end
@@ -29,6 +30,7 @@
 +(NSString *)getUserAliasWithCreate;
 +(NSString *)generateUserAlias;
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion;
++ (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController;
 
 +(UIImage *)imageWithColor:(UIColor *)color;
 +(NSString *) getKeyForObject:(NSObject *) object;
@@ -39,7 +41,7 @@
 +(UIViewController*) topMostController;
 
 +(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule;
-+(BOOL) isPoweredByHidden;
++ (BOOL) isPoweredByFooterViewHidden;
 +(NSNumber *)getLastUpdatedTimeForKey:(NSString *)key;
 +(NSString *)appName;
 +(NSString*)deviceModelName;
@@ -47,6 +49,7 @@
 +(NSString *) returnLibraryPathForDir : (NSString *) directory;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
++ (BOOL) isIPhoneXView;
 +(BOOL)isiOS10;
 
 + (void)initiatePendingTasks;
@@ -65,6 +68,7 @@
 + (void) updateUserWithData : (NSDictionary*) userDict;
 + (void) updateUserAlias: (NSString *) userAlias;
 + (NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
++ (UIColor *) invertColor :(UIColor *)color;
 
 @end
 

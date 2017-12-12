@@ -1,4 +1,4 @@
-    
+
 //  Hotline.m
 //  Konotor
 //
@@ -10,6 +10,7 @@
 #import "HLContainerController.h"
 #import "HLCategoryListController.h"
 #import "HLCategoryGridViewController.h"
+#import "FDAttachmentImageController.h"
 #import "FDReachabilityManager.h"
 #import "HLChannelViewController.h"
 #import "KonotorDataManager.h"
@@ -446,10 +447,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
 }
 
-- (void) updateLastFetchRemoteConfigInterval{
-    [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
-}
-
 -(void) updateLocaleMeta {
     if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
         [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
@@ -466,8 +463,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([FDUtilities hasInitConfig]) {
         [HLCoreServices performDAUCall];
         if([FDUtilities canMakeRemoteConfigCall]){
-            [HLCoreServices fetchRemoteConfig];
-            [self updateLastFetchRemoteConfigInterval];
+            [HLCoreServices fetchRemoteConfig];            
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([HLUser isUserRegistered]){
@@ -774,16 +770,28 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)dismissHotlineViewInController:(UIViewController *) controller
+                         channelsOnly:(BOOL)channelsOnly
                        withCompletion: (void(^)())completion  {
     void (^clearHLControllers)() = ^void() {
         for(UIViewController *tempVC in controller.childViewControllers){
             if([tempVC isKindOfClass:[HLContainerController class]]){
+                if(channelsOnly) {
+                    UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
+                    if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
+                       [firstViewController isKindOfClass:[FDMessageController class]] ) {
+                        [tempVC dismissViewControllerAnimated:NO completion:completion];
+                    }
+                } else {
+                    [tempVC dismissViewControllerAnimated:NO completion:completion];
+                }
+            } else if(channelsOnly && [tempVC isKindOfClass:[FDAttachmentImageController class]]) {
                 [tempVC dismissViewControllerAnimated:NO completion:completion];
             }
         }
     };
     if(controller.presentedViewController){
         [self dismissHotlineViewInController:controller.presentedViewController
+                                channelsOnly:channelsOnly
                               withCompletion:clearHLControllers];
     }
     else {
@@ -793,7 +801,13 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void) dismissFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [self dismissHotlineViewInController:rootController withCompletion:nil];
+    [self dismissHotlineViewInController:rootController channelsOnly:false withCompletion:nil];
+}
+
+
+-(void) dismissChannelScreens {
+    UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [self dismissHotlineViewInController:rootController channelsOnly:true withCompletion:nil];
 }
 
 @end

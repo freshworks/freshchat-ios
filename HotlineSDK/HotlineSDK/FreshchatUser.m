@@ -14,6 +14,7 @@
 #import "HLCoreServices.h"
 #import "KonotorCustomProperty.h"
 
+
 @implementation FreshchatUser
 
 +(instancetype)sharedInstance{

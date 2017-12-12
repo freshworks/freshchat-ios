@@ -99,7 +99,7 @@
 			<key>textCursorColor</key>
 			<string>#808285</string>
 			<key>borderColor</key>
-			<string>#D7D7D7</string>
+			<string>#FFFFFF</string>
 			<key>background</key>
 			<string>#FFFFFF</string>
 			<key>buttonColor</key>
@@ -108,7 +108,9 @@
 		<key>MessageReplyViewStyle</key>
 		<dict>
 			<key>background</key>
-			<string>#E8E8E8</string>
+			<string>#FFFFFF</string>
+			<key>dividerColor</key>
+			<string>#B3B3B3</string>
 		</dict>
 		<key>CustomerSurveyDialogStyle</key>
 		<dict>
@@ -216,7 +218,7 @@
 		<key>MessagePadding</key>
 		<dict>
 			<key>UserMessageLeft</key>
-			<string>8</string>
+			<string>10</string>
 			<key>UserMessageRight</key>
 			<string>8</string>
 			<key>UserMessageTop</key>

@@ -615,6 +615,13 @@
     UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyViewStyle.background"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
+
+-(UIColor *) inputToolbarDividerColor{
+    
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyViewStyle.dividerColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
 -(UIColor *)inputTextBorderColor{
     UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.MessageReplyInputViewStyle.borderColor"];
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
@@ -895,7 +902,7 @@
 #pragma mark - Footer Settings
 
 - (NSString *) getFooterSecretKey{
-    return [self.themePreferences valueForKeyPath:@"FooterView.HotlineDisableFrame"];
+    return [self.themePreferences valueForKeyPath:@"FooterView.FreshchatDisableFrame"];
 }
 
 #pragma mark chat bubble inset

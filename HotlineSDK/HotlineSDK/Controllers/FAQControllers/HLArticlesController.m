@@ -54,6 +54,8 @@
     [super willMoveToParentViewController:parent];
     self.tableView.separatorColor = [[FCTheme sharedInstance] articleListCellSeperatorColor];
     self.tableView.backgroundColor = [[FCTheme sharedInstance] articleListBackgroundColor];
+    HLContainerController *containerCtr =  (HLContainerController*)self.parentViewController;
+    [containerCtr.footerView setViewColor:self.tableView.backgroundColor];
     [self setNavigationItem];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;

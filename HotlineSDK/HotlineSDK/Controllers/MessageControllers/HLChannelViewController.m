@@ -15,6 +15,7 @@
 #import "Message.h"
 #import "KonotorMessage.h"
 #import "KonotorConversation.h"
+#import "HLInterstitialViewController.h"
 #import "FDDateUtil.h"
 #import "FDUtilities.h"
 #import "HLLocalization.h"
@@ -71,6 +72,8 @@
     parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     self.theme = [FCTheme sharedInstance];
     self.tableView.backgroundColor = [self.theme channelListBackgroundColor];
+    HLContainerController * containerCtr =  (HLContainerController*)self.parentViewController;
+    [containerCtr.footerView setViewColor:self.tableView.backgroundColor];
     self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
     self.navigationController.navigationBar.titleTextAttributes = @{
                                                                     NSForegroundColorAttributeName: [self.theme navigationBarTitleColor],
@@ -97,6 +100,7 @@
     [super viewWillAppear:animated];
     [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
+    [self checkRestoreStateChanged];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -222,11 +226,28 @@
                                                  name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadChannels)
                                                  name:HOTLINE_CHANNELS_UPDATED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreStateChanged:)
+                                                 name:FRESHCHAT_USER_RESTORE_STATE object:nil];
 }
 
 -(void)localNotificationUnSubscription{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_MESSAGES_DOWNLOADED object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HOTLINE_CHANNELS_UPDATED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_USER_RESTORE_STATE object:nil];
+}
+
+-(void)restoreStateChanged:(NSNotification *)notification {
+    if([notification.userInfo[@"state"] intValue] == 0) {
+        [self checkRestoreStateChanged];
+    }
+}
+
+-(void) checkRestoreStateChanged {
+    if([FreshchatUser sharedInstance].isRestoring) {
+        HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:self.convOptions andIsEmbed:self.embedded];
+        [FDUtilities resetNavigationStackWithController:interstitialController currentController:self];
+        [self localNotificationUnSubscription];
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated{

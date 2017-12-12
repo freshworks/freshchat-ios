@@ -11,7 +11,6 @@
 #import "HotlineAppState.h"
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
-#import "FCRemoteConfig.h"
 
 @interface HLContainerController ()
 
@@ -44,35 +43,23 @@
     self.containerView = [UIView new];
     self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.containerView];
-    
-    UIView *footerView = [UIView new];
-    footerView.translatesAutoresizingMaskIntoConstraints = NO;
-    footerView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:footerView];
-    
-    //#imclude both changes server check and internal md5 check also :)
-    BOOL isPoweredByHidden = [FDUtilities isPoweredByHidden];
-    //BOOL isSubscribed = [[FCRemoteConfig sharedInstance] isSubscribedUser];
-    BOOL isSubscribed = false;
-    
-    //Footerview label
-    UILabel *footerLabel = [UILabel new];
-    footerLabel.text = @"Powered by Freshchat";
-    footerLabel.font = [UIFont systemFontOfSize:11];
-    footerLabel.textColor = [UIColor whiteColor];
-    footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [footerView addSubview:footerLabel];
-    [FDAutolayoutHelper center:footerLabel onView:footerView];
-    
-    NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : footerView, @"childControllerView" : self.childController.view};
+    BOOL isembedView = (self.tabBarController != nil) ? TRUE : FALSE;
+    self.footerView = [[FCFooterView alloc] initFooterViewWithEmbedded:isembedView];
+    self.footerView.translatesAutoresizingMaskIntoConstraints = false;
+    [self.view addSubview:self.footerView];
+    NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : self.footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    if(isSubscribed && isPoweredByHidden){
-        [footerView removeFromSuperview];
+    if([FDUtilities isPoweredByFooterViewHidden] &&(![FDUtilities isIPhoneXView] || isembedView)){
+        [self.footerView removeFromSuperview];
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
     }
     else{
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
-        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView][footerView(20)]|" options:0 metrics:nil views:views]];
+        int footerViewHeight = 20;
+        if([FDUtilities isIPhoneXView] && !isembedView) {
+            footerViewHeight = 33;
+        }
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|[containerView][footerView(%d)]|", footerViewHeight] options:0 metrics:nil views:views]];
     }
     
     self.childController.view.translatesAutoresizingMaskIntoConstraints = NO;

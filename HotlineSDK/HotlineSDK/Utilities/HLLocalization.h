@@ -33,10 +33,13 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 
 #define LOC_LOADING_CHANNEL_TEXT @"loading_channel_text"
 #define LOC_LOADING_FAQ_TEXT @"loading_faq_text"
+#define LOC_RESTORING_CHANNEL_TEXT @"restoring_channel_text"
 
 #define LOC_CHANNELS_TITLE_TEXT @"channels_title_text"
 #define LOC_CHANNELS_CLOSE_BUTTON_TEXT @"channels_close_button_text"
 #define LOC_CHANNELS_FEATURE_DISABLED_TEXT @"channels_feature_not_enabled_text"
+
+#define LOC_RESTORE_CLOSE_BUTTON_TEXT @"restore_close_button_text"
 
 #define LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN @"pic_msg_attachment_close_btn"
 #define LOC_PIC_MSG_ATTACHMENT_TITLE_TEXT @"pic_msg_attachment_title_text"

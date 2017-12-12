@@ -85,6 +85,8 @@
     [super willMoveToParentViewController:parent];
     self.tableView.separatorColor = [[FCTheme sharedInstance] faqListCellSeparatorColor];
     self.tableView.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
+    HLContainerController * containerCtr =  (HLContainerController*)self.parentViewController;
+    [containerCtr.footerView setViewColor:self.tableView.backgroundColor];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
 }
 

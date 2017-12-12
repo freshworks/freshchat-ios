@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "FDDataUpdaterWithInterval.h"
 #import "HLMacros.h"
-
+#import "FCRemoteConfig.h"
+#import "HLUser.h"
 @interface FDDataUpdaterWithInterval()
 
 //@property (nonatomic        ) NSTimeInterval    intervalInSecs;
@@ -70,7 +71,6 @@
                 // On slow network , the fetch can take about 3-4 secs.
                 // use the time when the fetch started ( self.currentTime) instead of the completion time to avoid the time drift
                 NSNumber *lastUpdatedTime = [NSNumber numberWithDouble:self.currentPollRequestTime];
-                
                 [self.secureStore setObject:lastUpdatedTime forKey:self.intervalConfigKey];
                 FDLog("%@ Completed Update", [[self class] debugDescription]);
             }

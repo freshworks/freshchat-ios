@@ -154,6 +154,8 @@
 		CEC95A851E097B44009A1FCD /* HLConversationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC95A841E097B43009A1FCD /* HLConversationUtil.m */; };
 		CECB55221F2A34C20061227E /* FCEnabledFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = CECB55211F2A34C20061227E /* FCEnabledFeatures.m */; };
 		CED138481DB4D55200404686 /* HLCSATView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED138471DB4D55200404686 /* HLCSATView.m */; };
+		CEDCBC041FD55E700054CFCE /* FCFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = CEDCBC021FD55E700054CFCE /* FCFooterView.h */; };
+		CEDCBC051FD55E700054CFCE /* FCFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDCBC031FD55E700054CFCE /* FCFooterView.m */; };
 		CEF6B9031F3739F000692519 /* FCConversationConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF6B9021F3739F000692519 /* FCConversationConfig.m */; };
 		CEFA055A1EE82F2000DC74CF /* FDAudioFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05551EE82F2000DC74CF /* FDAudioFragment.m */; };
 		CEFA055B1EE82F2000DC74CF /* FDHtmlFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05561EE82F2000DC74CF /* FDHtmlFragment.m */; };
@@ -452,6 +454,8 @@
 		CECB55211F2A34C20061227E /* FCEnabledFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCEnabledFeatures.m; sourceTree = "<group>"; };
 		CED138461DB4D55200404686 /* HLCSATView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLCSATView.h; sourceTree = "<group>"; };
 		CED138471DB4D55200404686 /* HLCSATView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLCSATView.m; sourceTree = "<group>"; };
+		CEDCBC021FD55E700054CFCE /* FCFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCFooterView.h; sourceTree = "<group>"; };
+		CEDCBC031FD55E700054CFCE /* FCFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCFooterView.m; sourceTree = "<group>"; };
 		CEEDD1001F6BFC5A006CCF66 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		CEF6B9011F3739F000692519 /* FCConversationConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCConversationConfig.h; sourceTree = "<group>"; };
 		CEF6B9021F3739F000692519 /* FCConversationConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCConversationConfig.m; sourceTree = "<group>"; };
@@ -763,6 +767,8 @@
 				CEA6AC391DD94C6D00B60002 /* FDGrowingTextView.m */,
 				CED138461DB4D55200404686 /* HLCSATView.h */,
 				CED138471DB4D55200404686 /* HLCSATView.m */,
+				CEDCBC021FD55E700054CFCE /* FCFooterView.h */,
+				CEDCBC031FD55E700054CFCE /* FCFooterView.m */,
 				35B2EF6A1D000E620014867F /* InputToolbarView */,
 				35B2EF6F1D000E620014867F /* MessageCell */,
 				35B2EF781D000E620014867F /* PromptView */,
@@ -993,6 +999,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEDCBC041FD55E700054CFCE /* FCFooterView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1137,6 +1144,7 @@
 				35B2EFAD1D000E620014867F /* FDMemLogger.m in Sources */,
 				CE340D2C1F3077610095A50E /* HLAttributedText.m in Sources */,
 				CE64FEE71F3C37A000291669 /* FDParticipant.m in Sources */,
+				CEDCBC051FD55E700054CFCE /* FCFooterView.m in Sources */,
 				CEFA05621EE82F5400DC74CF /* FDImageFragment.m in Sources */,
 				CE16BA241DEDAC4F00EE714C /* HLCSATYesNoPrompt.m in Sources */,
 				CEFA055A1EE82F2000DC74CF /* FDAudioFragment.m in Sources */,

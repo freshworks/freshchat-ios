@@ -212,10 +212,12 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 }
-
+SampleController *sampleController;
 - (IBAction)chatButtonPressed:(id)sender {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
-    SampleController *sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];    
+    if(sampleController == nil) {
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
+        sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
+    }
     [self presentViewController:sampleController animated:YES completion:nil];
 }
 

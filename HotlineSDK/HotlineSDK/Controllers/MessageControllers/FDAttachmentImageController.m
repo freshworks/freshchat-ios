@@ -14,8 +14,12 @@
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
 #import "FDLocalNotification.h"
+#import "FDUtilities.h"
+#import "FCFooterView.h"
 
-@interface FDAttachmentImageController ()
+@interface FDAttachmentImageController (){
+    int footerViewHeight;
+}
 
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -50,20 +54,36 @@
     [self setHeightForTextView:self.inputToolbar.textView];
     [self.inputToolbar prepareView];
     
+    FCFooterView *footerView = [[FCFooterView alloc] initFooterViewWithEmbedded:false];
+    footerView.translatesAutoresizingMaskIntoConstraints = false;
+    
+    [footerView setViewColor: [[FCTheme sharedInstance] inputToolbarBackgroundColor]];
+    
     [self.view addSubview:self.inputToolbar];
     [self.view addSubview:self.imageView];
+    [self.view addSubview:footerView];
     CGFloat messageHeight = [self.inputToolbar.textView sizeThatFits:CGSizeMake(self.inputToolbar.textView.frame.size.width, CGFLOAT_MAX)].height;
     
     NSDictionary *views = @{ @"imageView"        : self.imageView,
-                             @"inputToolbar"         : self.inputToolbar };
+                             @"inputToolbar"     : self.inputToolbar,
+                             @"footerView"       : footerView
+                             };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[imageView]-10-|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[inputToolbar]-0-|" options:0 metrics:nil views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(==%d)]-0-|",(int)messageHeight + 10]  options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[footerView]-0-|" options:0 metrics:nil views:views]];
+    footerViewHeight = 20;
+    if([FDUtilities isIPhoneXView]){
+        footerViewHeight = 33;
+    }
+    if([FDUtilities isPoweredByFooterViewHidden] && ![FDUtilities isIPhoneXView]){
+        footerViewHeight = 0;
+    }
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-10-[imageView(>=0)]-10-[inputToolbar(==%d)][footerView(%d)]-0-|",(int)messageHeight + 10, footerViewHeight]  options:0 metrics:nil views:views]];
     
     [self localNotificationSubscription];
-    
 }
 
 -(void)inputToolbar:(FDInputToolbarView *)toolbar attachmentButtonPressed:(id)sender {
@@ -180,7 +200,7 @@
     CGRect keyboardFrame = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
     self.keyboardHeight = keyboardRect.size.height;
-    self.view.frame = CGRectMake(self.view.frame.origin.x , (self.viewFrame.origin.y - self.keyboardHeight), self.view.frame.size.width, self.view.frame.size.height);
+    self.view.frame = CGRectMake(self.view.frame.origin.x , (self.viewFrame.origin.y - self.keyboardHeight)+footerViewHeight, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 -(void) keyboardWillHide:(NSNotification *)notification {

@@ -179,6 +179,9 @@
 }
 
 -(void)updateConfigButtonAction:(id)sender{
+    [self testPush];
+    return;
+    
     NSLog(@"Updating config");
     
     FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:self.appIDField.text
@@ -237,15 +240,26 @@
     
 }
 
--(void)testNotification:(id)sender{
+-(void)testPush {
     [[Freshchat sharedInstance] handleRemoteNotification:@{
-                                                                  @"channel_id" : @200,
-                                                                      @"aps" : @{
-                                                                          @"alert" :  @{ @"body" : @"Sample Test Message"
-                                                                                        }
-                                                                          },
-                                                                  @"source" : @"freshchat_user"
-                                                                  }
-                                                    andAppstate:UIApplicationStateActive];
-         }
+                                                           @"aps": @{
+                                                                   @"alert" : @{
+                                                                           @"body" : @"test"
+                                                                           },
+                                                                   @"badge": @1,
+                                                                   @"mutable-content" : @1,
+                                                                   @"sound" : @"default"
+                                                                   },
+                                                           @"channel_id": @103,
+                                                           @"conv_id" : @40459674075150,
+                                                           @"source" : @"freshchat_user",
+                                                           @"target_user_alias" : @"B9F08067-429A-48F9-95A9-4449A14D8157",
+                                                           }
+                                             andAppstate:UIApplicationStateActive];
+}
+
+-(void)testNotification:(id)sender{
+    [self testPush];
+}
+
 @end

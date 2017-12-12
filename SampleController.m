@@ -18,15 +18,25 @@
 @property (weak, nonatomic) IBOutlet UITextField *nRestoreID;
 @property (weak, nonatomic) IBOutlet UITextField *unreadCount;
 @property (weak, nonatomic) IBOutlet UILabel *userDetails;
-
+@property (strong, nonatomic) NSTimer *timer;
+@property (weak, nonatomic) IBOutlet UISwitch *timerState;
+@property (weak, nonatomic) IBOutlet UITextField *timeoutDuration;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *value;
+@property (weak, nonatomic) IBOutlet UISwitch *state;
+@property (nonatomic) BOOL kill;
+@property (nonatomic) int itemCount;
 @end
 
 @implementation SampleController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.currentRestoreID.text = [FreshchatUser sharedInstance].restoreID;
-    self.currentExternalID.text = [FreshchatUser sharedInstance].externalID;
+    self.kill = true;
+    self.itemCount = 0;
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.view addGestureRecognizer:singleFingerTap];
     [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         self.currentRestoreID.text = [FreshchatUser sharedInstance].restoreID;
         self.currentExternalID.text = [FreshchatUser sharedInstance].externalID;
@@ -49,28 +59,100 @@
         
         self.userDetails.text = userContent;
     }];
-    UITapGestureRecognizer *singleFingerTap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(handleSingleTap:)];
-    [self.view addGestureRecognizer:singleFingerTap];
     [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
         self.unreadCount.text = (note.userInfo[@"count"] != nil) ? [NSString stringWithFormat:@"%@ unread messages", note.userInfo[@"count"]] : @"0 unread messages";
-        
         NSLog(@"Unread count  %@", note.userInfo[@"count"]);
     }];
-    
+}
+
+-(float)getTimeoutDuration {
+    if([self.timeoutDuration.text isEqualToString:@""]) {
+        return 10.0f;
+    } else {
+        if([self.timeoutDuration.text floatValue] > 0) {
+            return [self.timeoutDuration.text floatValue];
+        } else {
+           return 10.0f;
+        }
+    }
+}
+
+-(void)getData {
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"nRestoreID"] != nil && [[NSUserDefaults standardUserDefaults] objectForKey:@"nRestoreID"] != nil ) {
+        self.nRestoreID.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"nRestoreID"];
+        self.nExternalID.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"nExternalID"];
+    } else {
+        self.nRestoreID.text = @"10b61cc6-6faf-45fa-b95a-d2cf90fff29e,d9ef6b37-5447-4ee4-ba04-752eb1736481,9da10947-a891-468b-a6a6-e02a32e1b488,clear";
+        self.nExternalID.text = @"john.doe1987,john.doe1987,new user,clear";
+    }
+}
+
+- (IBAction)saveData:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setObject:self.nRestoreID.text forKey:@"nRestoreID"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.nExternalID.text forKey:@"nExternalID"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)timerState:(id)sender {
+    if(self.timerState.isOn) {
+        if(self.timer.isValid) {
+            [self.timer invalidate];
+        }
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:[self getTimeoutDuration] target:self selector:@selector(accountSwapper) userInfo:nil repeats:YES];
+    } else {
+        [self.timer invalidate];
+    }
+}
+
+- (IBAction)valueChanged:(id)sender {
+    self.kill = self.value.selectedSegmentIndex == 0 ? true : false;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.currentRestoreID.text = [FreshchatUser sharedInstance].restoreID;
+    self.currentExternalID.text = [FreshchatUser sharedInstance].externalID;
+    [self getData];
+}
+
+-(void)accountSwapper {
+    NSArray *externalIds = [self.nExternalID.text componentsSeparatedByString:@","];
+    NSArray *restoreIds = [self.nRestoreID.text componentsSeparatedByString:@","];
+    //int random = rand() % externalIds.count;
+    self.itemCount = self.itemCount%[restoreIds count];
+    int random = self.itemCount;
+    NSString *externalID = externalIds[random];
+    NSString *restorelID = restoreIds[random];
+    self.itemCount++;
+    if([externalID isEqualToString:@"clear"] || [restorelID isEqualToString:@"clear"] ) {
+        [[Freshchat sharedInstance] resetUserWithCompletion:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dhoom damaka" message:@"Trashing and rebooting SDK." delegate:self cancelButtonTitle:@"Blaah" otherButtonTitles:nil];
+        //[alert show];
+    } else if(externalID == nil || restorelID == nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dummel" message:[NSString stringWithFormat:@"Dude. Give correct count index and values",externalID,restorelID] delegate:self cancelButtonTitle:@"Blaah" otherButtonTitles:nil];
+        //[alert show];
+    } else {
+        [[Freshchat sharedInstance] identifyUserWithExternalID:externalID restoreID:restorelID];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Dhoom damaka" message:[NSString stringWithFormat:@"Account Switched - %@ - %@",externalID,restorelID] delegate:self cancelButtonTitle:@"Blaah" otherButtonTitles:nil];
+        //[alert show];
+    }
+    NSLog(@"ExternalId-RestoreId: %@ -- %@",externalID,restorelID);
 }
 
 -(void)viewDidUnload {
     [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_USER_RESTORE_ID_GENERATED];
-    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_UNREAD_MESSAGE_COUNT];
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     [self.view endEditing:YES];
 }
 - (IBAction)closeView:(id)sender {
+    if(self.kill) {
+        [self.timer invalidate];
+        [self.timerState setOn:false];
+    }
+    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_USER_RESTORE_ID_GENERATED];
+    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_UNREAD_MESSAGE_COUNT];
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
@@ -95,7 +177,7 @@
     }];
 }
 - (IBAction)identifyUser:(id)sender {
-    [[Freshchat sharedInstance] identifyUserWithExternalID:self.nExternalID.text restoreID:self.nRestoreID.text];
+    [self accountSwapper];
 }
 
 

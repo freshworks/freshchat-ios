@@ -55,7 +55,7 @@
 }
 
 -(void)addLoadingIndicator{
-    if(self.activityIndicator){
+    if(self.activityIndicator || self.loadingViewDelegate == nil){
         return;
     }
     UIView *view = self.loadingViewDelegate.view;

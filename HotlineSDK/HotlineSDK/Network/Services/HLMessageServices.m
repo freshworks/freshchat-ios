@@ -37,7 +37,7 @@
 #import "HLUser.h"
 #import "FDParticipant.h"
 
-#define ERROR_CODE_USER_NOT_CREATED -1
+#define ERROR_CODE_USER_NOT_CREATED 1
 
 static HLNotificationHandler *handleUpdateNotification;
 
@@ -46,7 +46,7 @@ static HLNotificationHandler *handleUpdateNotification;
 +(void)fetchChannelsAndMessagesWithFetchType:(enum MessageFetchType) priority
                                      source :(enum MessageRequestSource ) requestSource
                                   andHandler:(void (^)(NSError *))handler{
-    static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+    static BOOL MESSAGES_DOWNLOAD_IN_PROGRESS = NO;    
     
     if(priority == OffScreenPollFetch){
         if (!([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]
@@ -100,16 +100,22 @@ static HLNotificationHandler *handleUpdateNotification;
     messageUpdater.requestSource = requestSource;
     
     [channelsUpdater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-        if (!error) {
-            [messageUpdater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
-                if(handler) handler(error);
-                HideNetworkActivityIndicator();
-                MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
-            }];
-        }else{
+        if( [FCRemoteConfig sharedInstance].accountActive
+           && [FCRemoteConfig sharedInstance].enabledFeatures.inboxEnabled
+           && [HLUser isUserRegistered] && !error) {
+                [messageUpdater fetchWithCompletion:^(BOOL isFetchPerformed, NSError *error) {
+                    if(handler) handler(error);
+                    HideNetworkActivityIndicator();
+                    MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+                    [FreshchatUser sharedInstance].isRestoring = false;
+                    [FDLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
+                }];
+        } else {
             if (handler) handler(error);
             HideNetworkActivityIndicator();
             MESSAGES_DOWNLOAD_IN_PROGRESS = NO;
+            [FreshchatUser sharedInstance].isRestoring = false;
+            [FDLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
         }
     }];
     
@@ -194,7 +200,7 @@ static HLNotificationHandler *handleUpdateNotification;
             }else{
                 [Konotor performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
                 if(handler) handler(error);
-            }
+            }            
             [FDUtilities postUnreadCountNotification];
         });
     }];
@@ -288,7 +294,6 @@ static HLNotificationHandler *handleUpdateNotification;
             NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
             HLCsat *csat = [HLCsat getWithID:conversationID inContext:context];
             
-            FDLog(@"Conversation : %@", conversationInfo);
             
             if (!csat) {
                 csat = [HLCsat createWithInfo:conversationInfo inContext:context];
@@ -354,9 +359,13 @@ static HLNotificationHandler *handleUpdateNotification;
             if (handler) handler(nil, error);
         }else{
             if (handler) handler(nil, error);
+            NSNumber *messageLastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+            if (error.code == -1009 && [messageLastUpdatedTime intValue] == 0) {
+                [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
+            }
             FDLog(@"channel fetch failed :%@ \n response : %@",error, responseInfo.response);
         }
-    }];
+    }]; 
     return task;
 }
 
@@ -547,8 +556,7 @@ static HLNotificationHandler *handleUpdateNotification;
 }
 
 
-+(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
-    
++(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel withCompletion:(void(^)(NSError *error))completion {
     if(![pMessage isMarkedForUpload]){
         pMessage.isMarkedForUpload = YES;
         [[KonotorDataManager sharedInstance]save];
@@ -563,6 +571,9 @@ static HLNotificationHandler *handleUpdateNotification;
     __block NSString *messageAlias = pMessage.messageAlias;
     
     if([[pMessage uploadStatus]intValue] == MESSAGE_UPLOADED || [[pMessage uploadStatus]intValue] == MESSAGE_UPLOADING){
+        if(completion) {
+            completion(nil);
+        }
         return;
     } else{
         pMessage.uploadStatus = @(MESSAGE_UPLOADING);
@@ -592,7 +603,11 @@ static HLNotificationHandler *handleUpdateNotification;
             if (!error && statusCode == 201) {
                 
                 ALog(@"Message sent");
-                
+                //If the channel becomes fault since the user called identify user function meanwhile while sending message.
+                if(channel.isFault) {
+                    return ;
+                }
+
                 NSString *conversationID = [messageInfo[@"conversationId"] stringValue];
                 if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
                     KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
@@ -626,16 +641,43 @@ static HLNotificationHandler *handleUpdateNotification;
             }
             [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
             HideNetworkActivityIndicator();
-            
+            if(completion) {
+                completion(error);
+            }
         }];
     }];
 }
 
++(void)uploadAllUnuploadedMessages:(NSArray *)messages index:(NSInteger)currentIndex {
+    if ( currentIndex < messages.count ) {
+        Message *message = messages[currentIndex];
+        if(message != nil) {
+            KonotorConversation *conversation = message.belongsToConversation;
+            [HLMessageServices uploadPictureMessage:message toConversation:conversation withCompletion:^{
+                [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:message.belongsToChannel withCompletion:^(NSError *error) {
+                    if (error == nil) {
+                        [self uploadAllUnuploadedMessages:messages index:currentIndex+1];
+                    } else {
+                        FDLog(@"Sequence message not sent properly. Pending messages: %u",(int)(messages.count-currentIndex));
+                    }
+                }];
+            }];
+        }
+    }
+}
 
-+(void)uploadPictureMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel withCompletion:(void (^)())completion {
++(void)uploadNewMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{
+    [self uploadNewMessage:pMessage toConversation:conversation onChannel:channel withCompletion:nil];
+}
+
+
++(void)uploadPictureMessage:(Message *)pMessage toConversation:(KonotorConversation *)conversation withCompletion:(void (^)())completion {
     
     Fragment *fragment = [Fragment getImageFragment:pMessage];
-    if(!fragment) {
+    if(!fragment) { //If the fragment doesn't have picture message
+        if(completion) {
+            completion();
+        }
         return;
     }
     

@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "HLViewController.h"
-
+#import "FCFooterView.h"
 
 @interface HLContainerController : UIViewController
 
 @property (nonatomic,strong)UIView *containerView;
 @property (nonatomic, strong) HLViewController *childController;
+@property (nonatomic, strong) FCFooterView  *footerView;
 
--(instancetype)initWithController:(HLViewController *)controller andEmbed:(BOOL) embed;
+- (instancetype)initWithController:(HLViewController *)controller andEmbed:(BOOL) embed;
 
 @end

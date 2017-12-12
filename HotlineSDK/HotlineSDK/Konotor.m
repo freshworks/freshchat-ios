@@ -1,3 +1,4 @@
+
 //
 //  Konotor.m
 //  Konotor
@@ -152,8 +153,8 @@ __weak static id <KonotorDelegate> _delegate;
         NSDictionary *textFragmentInfo = [[NSDictionary alloc] initWithObjectsAndKeys:  @1, @"fragmentType",
                                           @"text/html",@"contentType",
                                           caption,@"content",
-                                          @0,@"position",nil];
-        [fragmentsInfo insertObject:textFragmentInfo atIndex:0];
+                                          (image != nil) ? @1 : @0 ,@"position",nil];
+        [fragmentsInfo addObject:textFragmentInfo];
     }
     
     Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
@@ -161,28 +162,22 @@ __weak static id <KonotorDelegate> _delegate;
     [[KonotorDataManager sharedInstance]save];
     if(image){
         [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
-        [HLMessageServices uploadPictureMessage:message toConversation:conversation onChannel:channel withCompletion:^{
+        [HLMessageServices uploadPictureMessage:message toConversation:conversation withCompletion:^{
             [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
             [[Konotor delegate] didStartUploadingNewMessage];
         }];
     }
     else{
+        [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
         [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
         [[Konotor delegate] didStartUploadingNewMessage];
     }
 }
 
+
 +(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(KonotorConversation *)conversation andChannel:(HLChannel *)channel{
     [HLUser setUserMessageInitiated];
-    if ([HLUser canRegisterUser]) {
-        [HLUser registerUser:^(NSError *error) {
-            if (!error) {
-                [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
-            }
-        }];
-    } else {
-        [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
-    }
+    [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
 }
 
 +(void)uploadImage:(UIImage *)image onConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel{

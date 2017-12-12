@@ -24,6 +24,7 @@
 #import "HLFAQUtil.h"
 #import "HLTagManager.h"
 #import "HLControllerUtils.h"
+#import "HLContainerController.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -118,6 +119,8 @@
     [self setNavigationItem];
     [self registerAppAudioCategory];
     [self theming];
+    HLContainerController *containerCtr =  (HLContainerController*)self.parentViewController;
+    [containerCtr.footerView setViewColor:[FCTheme sharedInstance].dialogueBackgroundColor];
     [self setSubviews];
     [self fixAudioPlayback];
     [self handleArticleVoteAfterSometime];
@@ -151,6 +154,7 @@
 
 -(void)theming{
     self.view.backgroundColor = [[FCTheme sharedInstance] articleListBackgroundColor];
+    
 }
 
 -(void)setNavigationItem{

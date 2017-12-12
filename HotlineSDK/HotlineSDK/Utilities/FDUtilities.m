@@ -24,8 +24,14 @@
 #import "HLUserDefaults.h"
 #import "HLConstants.h"
 #import "HLLocalization.h"
+#import "FDAutolayoutHelper.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
+
+@interface Freshchat ()
+    -(void)dismissChannelScreens;
+@end
+
 
 @implementation FDUtilities
 
@@ -43,6 +49,14 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     });
     return frameworkBundle;
 }
+
++ (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController {
+    NSMutableArray<UIViewController *> *viewControllers = [currentController.navigationController.viewControllers mutableCopy];
+    [viewControllers removeAllObjects];
+    [viewControllers addObject:controller];
+    [currentController.navigationController setViewControllers:viewControllers animated:NO];
+}
+
 
 +(UIImage *)imageWithColor:(UIColor *)color{
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
@@ -225,8 +239,9 @@ static NSInteger networkIndicator = 0;
             networkIndicator--;
         }
     }
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(networkIndicator > 0)];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(networkIndicator > 0)];
+    });
 }
 
 +(void) AlertView:(NSString *)alertviewstring FromModule:(NSString *)pModule{
@@ -619,6 +634,24 @@ static NSInteger networkIndicator = 0;
     });
 }
 
++ (BOOL) isPoweredByFooterViewHidden{
+    //#include both changes server check and internal md5 check also :)
+    //TODO: Add remote config for footer banner
+    /*BOOL showFreshchatBrandBanner = [[[FCRemoteConfig sharedInstance] enabledFeatures] showCustomBrandBanner];
+    return (!showFreshchatBrandBanner && [self isPoweredByHidden]);*/
+    
+    return [self isPoweredByHidden];
+}
+
++ (BOOL) isIPhoneXView{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        if ((!UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && screenSize.height == 812.0f) || (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && screenSize.width == 812.0f)){
+            return true;
+        }
+    }
+    return false;
+}
 
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
@@ -628,6 +661,14 @@ static NSInteger networkIndicator = 0;
         }
         completion(result);
     }];
+}
+
++(UIColor *) invertColor :(UIColor *)color {
+    const CGFloat *componentColors = CGColorGetComponents(color.CGColor);
+    return [[UIColor alloc] initWithRed:(1.0 - componentColors[0])
+                                               green:(1.0 - componentColors[1])
+                                                blue:(1.0 - componentColors[2])
+                                               alpha:componentColors[3]];
 }
 
 @end

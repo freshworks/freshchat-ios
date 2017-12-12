@@ -26,6 +26,7 @@
 @property (strong, nonatomic) FDButton *sendButton;
 @property (strong, nonatomic) FDButton *attachButton;
 @property (strong, nonatomic) UITextView *textView;
+@property (nonatomic, strong) UIView *dividerView;
 @property (nonatomic) BOOL isFromAttachmentScreen;
 @property (weak, nonatomic) id <FDInputToolbarViewDelegate> delegate;
 

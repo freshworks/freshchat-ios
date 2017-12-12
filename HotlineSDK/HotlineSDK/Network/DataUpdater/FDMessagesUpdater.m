@@ -29,14 +29,7 @@
 }
 
 -(void)doFetch:(void(^)(NSError *error))completion{
-    if( [FCRemoteConfig sharedInstance].accountActive &&
-        [FCRemoteConfig sharedInstance].enabledFeatures.inboxEnabled &&
-        [HLUser isUserRegistered]) {
-        [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
-    }
-    else{
-        completion(nil);
-    }
+    [HLMessageServices fetchMessagesForSrc:self.requestSource andCompletion:completion];
 }
 
 - (void) resetTime{

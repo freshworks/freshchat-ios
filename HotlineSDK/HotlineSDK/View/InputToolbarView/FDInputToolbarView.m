@@ -40,7 +40,7 @@
 @implementation FDInputToolbarView
 
 @synthesize innerImageView, outerImageView,textView, sendButton, attachButton, attachButtonWidthConstraint,
-micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewContainer, accessoryViewHeightConstraint, accessoryViewWidthConstraint;
+micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewContainer, accessoryViewHeightConstraint, accessoryViewWidthConstraint, dividerView;
 
 -(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate{
     self = [super init];
@@ -50,6 +50,9 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         self.theme = [FCTheme sharedInstance];
         self.isFromAttachmentScreen = NO;
         self.backgroundColor = [self.theme inputToolbarBackgroundColor];
+        dividerView = [[UIView alloc] init];
+        dividerView.translatesAutoresizingMaskIntoConstraints = NO;
+        dividerView.backgroundColor = [[FCTheme sharedInstance] inputToolbarDividerColor];
         textView=[[UITextView alloc] init];
         [textView setFont:[self.theme inputTextFont]];
         [textView setTextColor:[self.theme inputTextPlaceholderFontColor]];
@@ -95,7 +98,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         
         accessoryViewContainer = [UIView new];
         accessoryViewContainer.translatesAutoresizingMaskIntoConstraints = NO;
-        
+        [self addSubview:dividerView];
         [self addSubview:textView];
         [self addSubview:accessoryViewContainer];
         [self addSubview:attachButton];
@@ -103,10 +106,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         [accessoryViewContainer addSubview:micButton];
         [accessoryViewContainer addSubview:sendButton];
         
-        NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(attachButton,textView,
+        NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(dividerView,attachButton,textView,
                                                                                                                   sendButton, micButton, accessoryViewContainer)];
         
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[textView]-5-|" options:0 metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[dividerView]|" options:0 metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[dividerView(1)]-4-[textView]-5-|" options:0 metrics:nil views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton]-5-[textView]-5-[accessoryViewContainer]-5-|" options:0 metrics:nil views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(24)]" options:0 metrics:nil views:views]];
 
