@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "FDStringUtil.h"
 #import "Freshchat.h"
+#define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
 @interface FreshchatUser()
     @property (nonatomic) BOOL isRestoring;
