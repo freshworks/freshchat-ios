@@ -1,4 +1,9 @@
 
+Ver 1.2.2
+__________________________
+Fixes for on-demand init when showing conversations with tags.
+Fixes for text alignment in message bubble.
+
 Ver 1.2.1 
 __________________________
 Update refresh intervals
