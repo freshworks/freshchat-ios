@@ -1,4 +1,9 @@
 
+Ver 1.2.3 
+__________________________
+UI improvements for iPhoneX devices.
+Minor bugs fixes.
+
 Ver 1.2.2
 __________________________
 Fixes for on-demand init when showing conversations with tags.
