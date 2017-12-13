@@ -25,12 +25,7 @@
     if (self) {
         self.footerLabel = [UILabel new];
         self.footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        if([FDUtilities isPoweredByFooterViewHidden]){
-            self.footerLabel.text = @"";
-        }
-        else{
-            self.footerLabel.text = @"Powered by Freshchat";
-        }
+        
         self.footerLabel.font = [UIFont systemFontOfSize:11];
         [self addSubview:self.footerLabel];
         if([FDUtilities isIPhoneXView] && !isEmbed){
@@ -39,6 +34,12 @@
         }
         else{
             [FDAutolayoutHelper center:self.footerLabel onView:self];
+        }
+        if([FDUtilities isPoweredByFooterViewHidden]){
+            self.footerLabel.text = @"";
+        }
+        else{
+            self.footerLabel.text = @"Powered by Freshchat";
         }
     }
     return self;

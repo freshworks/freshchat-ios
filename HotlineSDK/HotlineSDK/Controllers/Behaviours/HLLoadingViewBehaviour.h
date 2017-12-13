@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Freshchat.h"
+#import "HLEmptyResultView.h"
 
 @protocol HLLoadingViewBehaviourDelegate
 
@@ -23,7 +24,7 @@
 @interface HLLoadingViewBehaviour : NSObject
 
 
--(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController;
+-(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType;
 
 -(void) load:(long)currentCount;
 -(void) unload;

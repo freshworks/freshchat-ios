@@ -23,6 +23,7 @@
 #import "HLLoadingViewBehaviour.h"
 #import "HLLocalization.h"
 #import "FDUtilities.h"
+#import "FDAutolayoutHelper.h"
 
 @interface HLInterstitialViewController() <HLLoadingViewBehaviourDelegate>{
     int footerViewHeight;
@@ -49,7 +50,8 @@
 
 -(HLLoadingViewBehaviour*)loadingViewBehaviour {
     if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self];
+        enum SupportType type = [self.options isKindOfClass:[ConversationOptions class]] ? 2 : 1;
+        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self withType:type];
     }
     return _loadingViewBehaviour;
 }
@@ -111,9 +113,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = ([self.options isKindOfClass:[ConversationOptions class]]) ? [[FCTheme sharedInstance] channelListBackgroundColor] : [[FCTheme sharedInstance] faqCategoryBackgroundColor] ;
     [self setNavigationItem];
-    [self setFooterView];
 }
 
 -(void)setFooterView {
@@ -130,6 +131,7 @@
     }
     NSDictionary *views = @{@"footerView" : footerView};    
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[footerView(%d)]|",footerViewHeight]  options:0 metrics:nil views:views]];
+    [FDAutolayoutHelper centerX:footerView onView:self.view];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -151,6 +153,7 @@
             [self handleConversations:self andEmbed:self.isEmbedView];
         }
     }
+    //[self setFooterView];
 }
 
 -(void) handleFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options andEmbed : (BOOL)isEmbed {

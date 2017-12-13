@@ -50,7 +50,7 @@
 
 -(HLLoadingViewBehaviour*)loadingViewBehaviour {
     if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self];
+        _loadingViewBehaviour = [[HLLoadingViewBehaviour alloc] initWithViewController:self withType:2];
     }
     return _loadingViewBehaviour;
 }

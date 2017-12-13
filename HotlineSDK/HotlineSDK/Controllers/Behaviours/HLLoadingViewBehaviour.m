@@ -21,22 +21,25 @@
 #import "FDAutolayoutHelper.h"
 #import "FDReachabilityManager.h"
 
+
 @interface  HLLoadingViewBehaviour ()
 
 @property (nonatomic, weak) UIViewController <HLLoadingViewBehaviourDelegate> *loadingViewDelegate;
 @property (nonatomic, strong) FCTheme *theme;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) HLEmptyResultView *emptyResultView;
+@property (nonatomic) enum SupportType solType;
 
 @end
 
 @implementation HLLoadingViewBehaviour
 
--(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController{
+-(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType{
     self = [super init];
     if(self){
         self.loadingViewDelegate = viewController;
         self.theme = [FCTheme sharedInstance];
+        self.solType = solType;
     }
     return self;
 }
@@ -71,7 +74,7 @@
 -(HLEmptyResultView *)emptyResultView
 {
     if (!_emptyResultView) {
-        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] withType:2 andText:@""];
+        _emptyResultView = [[HLEmptyResultView alloc]initWithImage:[self.theme getImageWithKey:IMAGE_FAQ_ICON] withType:self.solType andText:@""];
         _emptyResultView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _emptyResultView;

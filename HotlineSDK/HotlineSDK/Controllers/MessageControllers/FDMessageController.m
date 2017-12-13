@@ -176,8 +176,15 @@ typedef struct {
 
 -(void) setNavigationTitle:(UIViewController *)parent {
         
-    CGFloat leftBarButtonWidth = 45;
-    self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (2.5 * leftBarButtonWidth) ;
+    UIBarButtonItem *left = parent.navigationItem.leftBarButtonItem;
+    UIView *view = [left valueForKey:@"view"];
+    CGFloat leftBarButtonWidth = 44; //Default image width
+    
+    if(view) { //If its a text it will take from here
+        leftBarButtonWidth=[view frame].size.width;
+    }
+    
+    self.titleWidth = parent.navigationController.navigationBar.frame.size.width - (3 * leftBarButtonWidth) ;
     self.titleHeight = parent.navigationController.navigationBar.frame.size.height;
     
     self.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.titleWidth, self.titleHeight)];
