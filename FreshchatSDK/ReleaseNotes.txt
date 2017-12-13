@@ -2,9 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 1.2.2
+Version         : 1.2.3
 
-Ver 1.2.2 
+Ver 1.2.3 
+__________________________
+UI improvements for iPhoneX devices.
+Minor bugs fixes.
+
+Ver 1.2.2
 __________________________
 Fixes for on-demand init when showing conversations with tags.
 Fixes for text alignment in message bubble.
