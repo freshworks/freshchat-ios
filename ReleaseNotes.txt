@@ -1,4 +1,8 @@
 
+Ver 1.2.4 
+__________________________
+Remove unused microphone permission
+
 Ver 1.2.3 
 __________________________
 UI improvements for iPhoneX devices.
