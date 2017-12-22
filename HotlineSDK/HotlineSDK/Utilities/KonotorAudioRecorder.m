@@ -39,6 +39,7 @@ static NSString *beforeRecordCategory;
     return YES;
 }
 
+/*
 +(BOOL) startRecordingA{
     
     NSError *error;
@@ -221,7 +222,7 @@ static NSString *beforeRecordCategory;
         }
     }
     return YES;
-}
+}*/
 
 + (NSTimeInterval) getTimeElapsedSinceStartOfRecording
 {
