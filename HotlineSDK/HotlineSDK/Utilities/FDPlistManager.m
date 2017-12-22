@@ -31,7 +31,8 @@
 }
 
 -(BOOL)micUsageEnabled{
-    return [self checkPermissionKeyForiOS10:@"NSMicrophoneUsageDescription"];
+    //return [self checkPermissionKeyForiOS10:@"NSMicrophoneUsageDescription"];
+    return false;
 }
 
 -(BOOL)photoLibraryUsageEnabled{

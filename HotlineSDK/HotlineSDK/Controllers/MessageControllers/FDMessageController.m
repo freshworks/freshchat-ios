@@ -650,20 +650,20 @@ typedef struct {
         [Konotor StopPlayback];
     }
     
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (granted) {
-                BOOL recording = [KonotorAudioRecorder startRecording];
-                if(recording){
-                    [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
-                }
-            }
-            else {
-                UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
-                [permissionAlert show];
-            }
-        });
-    }];
+//    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (granted) {
+//                BOOL recording = [KonotorAudioRecorder startRecording];
+//                if(recording){
+//                    [self updateBottomViewWith:self.audioMessageInputView andHeight:INPUT_TOOLBAR_HEIGHT];
+//                }
+//            }
+//            else {
+//                UIAlertView *permissionAlert = [[UIAlertView alloc] initWithTitle:nil message:HLLocalizedString(LOC_AUDIO_RECORDING_PERMISSION_DENIED_TEXT) delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+//                [permissionAlert show];
+//            }
+//        });
+//    }];
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{

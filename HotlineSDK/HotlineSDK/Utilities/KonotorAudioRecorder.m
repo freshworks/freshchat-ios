@@ -28,14 +28,14 @@ static NSString *beforeRecordCategory;
 @implementation KonotorAudioRecorder
 
 +(BOOL)startRecording{
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        if (granted){
-            [FDLocalNotification post:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [KonotorAudioRecorder startRecordingA];
-            });
-        }
-    }];
+//    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+//        if (granted){
+//            [FDLocalNotification post:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [KonotorAudioRecorder startRecordingA];
+//            });
+//        }
+//    }];
     return YES;
 }
 
