@@ -2,7 +2,11 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 1.2.3
+Version         : 1.2.4
+
+Ver 1.2.4 
+__________________________
+Remove unused microphone permission
 
 Ver 1.2.3 
 __________________________
