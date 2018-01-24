@@ -1,4 +1,12 @@
 
+Ver 1.2.5 
+__________________________
+Fixes for Swift project crashes.
+
+Ver 1.2.5 
+__________________________
+Fixes for CoreData crash in Swift Project.
+
 Ver 1.2.4 
 __________________________
 Remove unused microphone permission

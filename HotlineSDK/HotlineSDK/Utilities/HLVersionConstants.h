@@ -9,7 +9,7 @@
 #ifndef HLVersionConstants_h
 #define HLVersionConstants_h
 
-#define HOTLINE_SDK_VERSION @"1.2.4"
-#define HOTLINE_SDK_BUILD_NUMBER @"24"
+#define HOTLINE_SDK_VERSION @"1.2.5"
+#define HOTLINE_SDK_BUILD_NUMBER @"26"
 
 #endif /* HLVersionConstants_h */

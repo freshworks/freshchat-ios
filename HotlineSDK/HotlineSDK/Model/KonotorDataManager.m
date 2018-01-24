@@ -99,6 +99,7 @@
 -(NSManagedObjectModel *)loadKonotorDataModel{
     NSString *bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"FreshchatModels" ofType:@"bundle"];
     NSURL *modelURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"FreshchatModel" withExtension:@"momd"];
+    modelURL = [modelURL URLByAppendingPathComponent:@"FreshchatModel.mom"];
     NSManagedObjectModel *obj =  [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return obj;
 }

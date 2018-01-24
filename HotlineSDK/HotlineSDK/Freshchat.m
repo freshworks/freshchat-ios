@@ -78,21 +78,16 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 +(instancetype)sharedInstance{
     
-    @try {
-        static Freshchat *sharedInstance = nil;
-        static dispatch_once_t oncetoken;
-        dispatch_once(&oncetoken,^{
-            sharedInstance = [[Freshchat alloc]init];
-        });
-        if(![sharedInstance checkPersistence]) {
-            return nil;
-        }
-        return sharedInstance;
-        
-    } @catch (NSException *exception) {
-        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
-        return nil; // Return a valid value to avoid inconsistency
+    static Freshchat *sharedInstance = nil;
+    static dispatch_once_t oncetoken;
+    dispatch_once(&oncetoken,^{
+        sharedInstance = [[Freshchat alloc]init];
+    });
+    if(![sharedInstance checkPersistence]) { //Log on loggly
+        [FDMemLogger sendMessage:@"COREDATA_EXCEPTION: Persistence not linked to Freshchat's SharedInstance" fromMethod:NSStringFromSelector(_cmd)];
     }
+    return sharedInstance;
+    
 }
 
 +(NSString *)SDKVersion{

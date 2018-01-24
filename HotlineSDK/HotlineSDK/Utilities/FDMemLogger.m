@@ -62,11 +62,8 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
 -(NSString *)toString {
     
     NSString *pushNotifState = ([HLNotificationHandler areNotificationsEnabled]) ? @"Yes" : @"No";
-    
     NSString *appState = nil;
-
     UIApplicationState state = [[UIApplication sharedApplication] applicationState];
-
     if (state == UIApplicationStateActive){
         appState = @"Active";
     }else if(state == UIApplicationStateInactive){
@@ -110,7 +107,10 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     NSURL *url = [NSURL URLWithString:LOGGER_API];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *log = [self toString];
+    __block NSString *log = @"";
+    dispatch_async(dispatch_get_main_queue(), ^{
+        log = [self toString];
+    });
     FDLog(@"***Memlogger*** Going to upload: \n %@" , log);
     request.HTTPMethod = HTTP_METHOD_POST;
     request.HTTPBody = [log dataUsingEncoding:NSUTF8StringEncoding];
