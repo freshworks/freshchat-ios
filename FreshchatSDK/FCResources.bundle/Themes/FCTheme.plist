@@ -38,7 +38,7 @@
 			<key>textColor</key>
 			<string>#000000</string>
 			<key>textAlignment</key>
-			<string>Left</string>
+			<string></string>
 		</dict>
 		<key>TeamMemberMessageTimeTextStyle</key>
 		<dict>
@@ -60,7 +60,7 @@
 			<key>textColor</key>
 			<string>#000000</string>
 			<key>textAlignment</key>
-			<string>Left</string>
+			<string></string>
 		</dict>
 		<key>UserMessageTimeTextStyle</key>
 		<dict>
