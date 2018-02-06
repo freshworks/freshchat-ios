@@ -37,7 +37,6 @@
 /* Begin PBXFileReference section */
 		0CD20E6C304056A509E9E5B2 /* Pods-SwiftSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftSample/Pods-SwiftSample.debug.xcconfig"; sourceTree = "<group>"; };
 		0EA68094E36C2BE4FEC47AFB /* Pods_SwiftSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE28680C1F6FC3B50099DB91 /* SwiftSample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftSample-Bridging-Header.h"; sourceTree = "<group>"; };
 		CE28680F1F6FC5BD0099DB91 /* SwiftSample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftSample-Bridging-Header.h"; sourceTree = "<group>"; };
 		CE684E4F1F6FC20A0047DA52 /* SwiftSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE684E521F6FC20A0047DA52 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -129,7 +128,6 @@
 				CE684E591F6FC20A0047DA52 /* Assets.xcassets */,
 				CE684E5B1F6FC20A0047DA52 /* LaunchScreen.storyboard */,
 				CE684E5E1F6FC20A0047DA52 /* Info.plist */,
-				CE28680C1F6FC3B50099DB91 /* SwiftSample-Bridging-Header.h */,
 				CE28680F1F6FC5BD0099DB91 /* SwiftSample-Bridging-Header.h */,
 			);
 			path = SwiftSample;
@@ -501,6 +499,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = PKUQ4ZWJH3;
 				INFOPLIST_FILE = SwiftSample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sample.SwiftSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -518,6 +517,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = PKUQ4ZWJH3;
 				INFOPLIST_FILE = SwiftSample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sample.SwiftSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";

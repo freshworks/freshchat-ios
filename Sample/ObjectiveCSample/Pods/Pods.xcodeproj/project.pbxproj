@@ -12,21 +12,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3564BE1563B44B5E9284169EC76CDF4B /* FCLocalization.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FCLocalization.bundle; path = FreshchatSDK/FCLocalization.bundle; sourceTree = "<group>"; };
+		5449C442F419EFD1057E3C8F0CB6D54F /* FreshchatSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FreshchatSDK.h; path = FreshchatSDK/FreshchatSDK.h; sourceTree = "<group>"; };
+		612004F6BD2EDEA75DA5C5B52FE01758 /* FreshchatModels.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FreshchatModels.bundle; path = FreshchatSDK/FreshchatModels.bundle; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		66BBA410D4A74603B6A25353C14915DF /* libPods-ObjectiveCSample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-ObjectiveCSample.a"; path = "libPods-ObjectiveCSample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		67228B31B217AA2DA377C84D330D532D /* libFDFreshchatSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libFDFreshchatSDK.a; path = FreshchatSDK/libFDFreshchatSDK.a; sourceTree = "<group>"; };
 		6D0505464C1B669A4FDACFF20A4C8CF5 /* Pods-ObjectiveCSample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ObjectiveCSample-dummy.m"; sourceTree = "<group>"; };
+		75C0B4D1C4695071238890956A8CB28C /* FCResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FCResources.bundle; path = FreshchatSDK/FCResources.bundle; sourceTree = "<group>"; };
 		7769FDF97380D72C5CF604C1634E9B05 /* Pods-ObjectiveCSample-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ObjectiveCSample-resources.sh"; sourceTree = "<group>"; };
 		88112C52728C14286BDFEFBCB0E7A7F8 /* Pods-ObjectiveCSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ObjectiveCSample.debug.xcconfig"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		944E1EFFC74CAD6106ABE2EB179005D1 /* FCResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FCResources.bundle; path = FreshchatSDK/FCResources.bundle; sourceTree = "<group>"; };
-		98BECD4989D474C3DF2DBFBEC26041A2 /* Freshchat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Freshchat.h; path = FreshchatSDK/Freshchat.h; sourceTree = "<group>"; };
+		AD05D2506FD19EDC7110D381B0F01621 /* FCLocalization.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FCLocalization.bundle; path = FreshchatSDK/FCLocalization.bundle; sourceTree = "<group>"; };
 		ADD8E5DAABF207376D26157156D0CA38 /* Pods-ObjectiveCSample-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ObjectiveCSample-frameworks.sh"; sourceTree = "<group>"; };
 		B4BAAF7322CF2E4415D9229E915EC3D0 /* Pods-ObjectiveCSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ObjectiveCSample.release.xcconfig"; sourceTree = "<group>"; };
 		BAC87F8629AE7CA3EFEBD3491259DE88 /* Pods-ObjectiveCSample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ObjectiveCSample-acknowledgements.markdown"; sourceTree = "<group>"; };
 		DE4467088ED3566E070DD1D492CA10A6 /* Pods-ObjectiveCSample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ObjectiveCSample-acknowledgements.plist"; sourceTree = "<group>"; };
-		EA37A1F49B63E6CC9B33A13277B5F934 /* FreshchatModels.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FreshchatModels.bundle; path = FreshchatSDK/FreshchatModels.bundle; sourceTree = "<group>"; };
-		F0189702AFDAE9A394DC0A2F7F5ADF42 /* libFDFreshchatSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libFDFreshchatSDK.a; path = FreshchatSDK/libFDFreshchatSDK.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,24 +57,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		18B337861632A1109B8991F49E7C0520 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F0189702AFDAE9A394DC0A2F7F5ADF42 /* libFDFreshchatSDK.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		1D0EDE605E121C19358A6EAD9FA1AE18 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				3564BE1563B44B5E9284169EC76CDF4B /* FCLocalization.bundle */,
-				944E1EFFC74CAD6106ABE2EB179005D1 /* FCResources.bundle */,
-				EA37A1F49B63E6CC9B33A13277B5F934 /* FreshchatModels.bundle */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
@@ -101,12 +83,30 @@
 			path = "Target Support Files/Pods-ObjectiveCSample";
 			sourceTree = "<group>";
 		};
-		9317E54855FF22CF2D9C12E45334E518 /* FreshchatSDK */ = {
+		893058A048A4ED7EACB1C46A622D8119 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				98BECD4989D474C3DF2DBFBEC26041A2 /* Freshchat.h */,
-				18B337861632A1109B8991F49E7C0520 /* Frameworks */,
-				1D0EDE605E121C19358A6EAD9FA1AE18 /* Resources */,
+				67228B31B217AA2DA377C84D330D532D /* libFDFreshchatSDK.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9B83D206DFB55CF557617445EE686191 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AD05D2506FD19EDC7110D381B0F01621 /* FCLocalization.bundle */,
+				75C0B4D1C4695071238890956A8CB28C /* FCResources.bundle */,
+				612004F6BD2EDEA75DA5C5B52FE01758 /* FreshchatModels.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		B21B1808A64A50C031B61F17EAF6872E /* FreshchatSDK */ = {
+			isa = PBXGroup;
+			children = (
+				5449C442F419EFD1057E3C8F0CB6D54F /* FreshchatSDK.h */,
+				893058A048A4ED7EACB1C46A622D8119 /* Frameworks */,
+				9B83D206DFB55CF557617445EE686191 /* Resources */,
 			);
 			name = FreshchatSDK;
 			path = FreshchatSDK;
@@ -131,7 +131,7 @@
 		E03247D16EF7C303C17A550FD64F75AC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9317E54855FF22CF2D9C12E45334E518 /* FreshchatSDK */,
+				B21B1808A64A50C031B61F17EAF6872E /* FreshchatSDK */,
 			);
 			name = Pods;
 			sourceTree = "<group>";

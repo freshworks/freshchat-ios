@@ -3,4 +3,4 @@
 //
 
 
-#import "FreshchatSDK/Freshchat.h"
+#import "FreshchatSDK/FreshchatSDK.h"
