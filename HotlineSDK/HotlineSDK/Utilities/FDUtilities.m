@@ -12,7 +12,7 @@
 #import "FDSecureStore.h"
 #import "HLMacros.h"
 #import "FCTheme.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -27,6 +27,8 @@
 #import "FDAutolayoutHelper.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
+
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
 @interface Freshchat ()
     -(void)dismissChannelScreens;
@@ -649,6 +651,13 @@ static NSInteger networkIndicator = 0;
         if ((!UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && screenSize.height == 812.0f) || (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && screenSize.width == 812.0f)){
             return true;
         }
+    }
+    return false;
+}
+
++ (BOOL)isDeviceLanguageRTL {
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")){
+        return ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft);
     }
     return false;
 }

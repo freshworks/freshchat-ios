@@ -1,4 +1,19 @@
 
+Ver 1.3.0 
+__________________________
+SDK header file name updated :to FreshchatSDK.h for naming consistency.
+Better rendering support for RTL content.
+
+Ver 1.3.0 
+__________________________
+SDK header file name updated to FreshchatSDK.h for naming consistency.
+Better rendering support for RTL content.
+
+Ver 1.3.0 
+__________________________
+SDK header file name updated to FreshchatSDK.h from Freshchat.h for naming consistentcy
+Better rendering support for RTL content
+
 Ver 1.2.5 
 __________________________
 Fixes for Swift project crashes.

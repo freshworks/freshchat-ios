@@ -13,7 +13,7 @@
 #import "HLMacros.h"
 #import "FCTheme.h"
 #import "FDLocalNotification.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "HLLocalization.h"
 #import "FDReachabilityManager.h"
 #import "FDStringUtil.h"
@@ -25,6 +25,7 @@
 #import "HLTagManager.h"
 #import "HLControllerUtils.h"
 #import "HLContainerController.h"
+#import "FDUtilities.h"
 
 @interface HLArticleDetailViewController () <UIGestureRecognizerDelegate>
 
@@ -67,6 +68,7 @@
             "<style type=\"text/css\">"
             "%@" // CSS Content
             "</style>"
+            "<bdi>" //For bidirection text
             "<body>"
             "<div class='article-title'><h3>"
             "%@" // Article Title
@@ -76,6 +78,7 @@
             "%@" // Article Content
             "</div>"
             "</body>"
+            "</bdi>"
             "</html>", [self normalizeCssContent],self.articleTitle, [self offLineMessageForContent:article],article];
 }
 
@@ -209,7 +212,7 @@
     self.articleVotePromptView = [[FDYesNoPromptView alloc] initWithDelegate:self andKey:LOC_ARTICLE_VOTE_PROMPT_PARTIAL];
     self.articleVotePromptView.delegate = self;
     self.articleVotePromptView.translatesAutoresizingMaskIntoConstraints = NO;
-    
+
     //Thank you prompt view
     self.thankYouPromptView = [[FDAlertView alloc] initWithDelegate:self andKey:LOC_THANK_YOU_PROMPT_PARTIAL];
     self.thankYouPromptView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -239,8 +242,6 @@
     }
     return YES;
 }
-
-
 
 -(void)webViewDidStartLoad:(UIWebView *)webView{
     [self.activityIndicator startAnimating];

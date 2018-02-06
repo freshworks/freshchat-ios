@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "FreshchatSDK/Freshchat.h"
+#import "FreshchatSDK/FreshchatSDK.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 #import "SampleController.h"

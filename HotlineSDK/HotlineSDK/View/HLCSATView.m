@@ -12,6 +12,7 @@
 #import "FCTheme.h"
 #import "FDGrowingTextView.h"
 #import "HLLocalization.h"
+#import "FDUtilities.h"
 
 @interface HLCSATView() <UIGestureRecognizerDelegate>
 
@@ -21,7 +22,6 @@
 @property (nonatomic) float rating;
 @property (nonatomic, strong) FCTheme *theme;
 @property (nonatomic, strong) UIButton *submitButton;
-
 
 @end
 
@@ -83,6 +83,7 @@
         //Feedback textview
         self.feedbackView = [FDGrowingTextView new];
         self.feedbackView.placeholder = HLLocalizedString(LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER);
+        self.feedbackView.textAlignment = NSTextAlignmentNatural;
         self.feedbackView.opaque = NO;
         self.feedbackView.alpha = 0.7;
         self.feedbackView.font = self.theme.csatPromptInputTextFont;
@@ -163,7 +164,6 @@
     }else{
         [self.submitButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     }
-
 }
 
 -(UIView *)createStarRatingView{
@@ -193,7 +193,9 @@
         HLCsatHolder *csatHolder = [[HLCsatHolder alloc]init];
         
         csatHolder.isIssueResolved = self.isResolved;
-        
+        if([FDUtilities isDeviceLanguageRTL]){
+            self.rating = ceilf (5 - self.rating);
+        }
         if (self.rating > 0) {
             csatHolder.userRatingCount = self.rating;
         }

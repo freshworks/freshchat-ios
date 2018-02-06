@@ -1,0 +1,81 @@
+
+/* Class = "UITextField"; placeholder = "SendMessage tag"; ObjectID = "2NX-Cc-icV"; */
+"2NX-Cc-icV.placeholder" = "SendMessage tag";
+
+/* Class = "UITextField"; placeholder = "ContactUs Title"; ObjectID = "76B-hc-t5x"; */
+"76B-hc-t5x.placeholder" = "ContactUs Title";
+
+/* Class = "UITextField"; placeholder = "Contact Us Title1"; ObjectID = "Amd-wv-unf"; */
+"Amd-wv-unf.placeholder" = "Contact Us Title1";
+
+/* Class = "UITextField"; placeholder = "Title"; ObjectID = "BNf-Bw-oY1"; */
+"BNf-Bw-oY1.placeholder" = "Title";
+
+/* Class = "UITextField"; placeholder = "Contact Us tag2"; ObjectID = "COe-Ai-wtg"; */
+"COe-Ai-wtg.placeholder" = "Contact Us tag2";
+
+/* Class = "UIButton"; normalTitle = "Show Conversation"; ObjectID = "E9O-AL-c7N"; */
+"E9O-AL-c7N.normalTitle" = "Show Conversation";
+
+/* Class = "UITextField"; placeholder = "Title"; ObjectID = "H0x-v6-fUJ"; */
+"H0x-v6-fUJ.placeholder" = "Title";
+
+/* Class = "UIButton"; normalTitle = "Article1"; ObjectID = "H6u-Nb-psj"; */
+"H6u-Nb-psj.normalTitle" = "Article1";
+
+/* Class = "UIBarButtonItem"; title = "Close"; ObjectID = "I9R-ao-svz"; */
+"I9R-ao-svz.title" = "Close";
+
+/* Class = "UIButton"; normalTitle = "Article2"; ObjectID = "SEa-zO-e9J"; */
+"SEa-zO-e9J.normalTitle" = "Article2";
+
+/* Class = "UILabel"; text = "contactus FAQ"; ObjectID = "SbT-UN-Q0R"; */
+"SbT-UN-Q0R.text" = "contactus FAQ";
+
+/* Class = "UIButton"; normalTitle = "Send Message"; ObjectID = "UfM-61-ZDl"; */
+"UfM-61-ZDl.normalTitle" = "Send Message";
+
+/* Class = "UIButton"; normalTitle = "Category2"; ObjectID = "Xhd-ru-pag"; */
+"Xhd-ru-pag.normalTitle" = "Category2";
+
+/* Class = "UITextField"; placeholder = "Send Message"; ObjectID = "ZIn-zO-eWh"; */
+"ZIn-zO-eWh.placeholder" = "Send Message";
+
+/* Class = "UILabel"; text = "FAQ Options"; ObjectID = "ZXU-9Z-Pij"; */
+"ZXU-9Z-Pij.text" = "FAQ Options";
+
+/* Class = "UITextField"; placeholder = "ContactUs Tags"; ObjectID = "Ztz-Gx-OpG"; */
+"Ztz-Gx-OpG.placeholder" = "ContactUs Tags";
+
+/* Class = "UIButton"; normalTitle = "Category1"; ObjectID = "dr5-9e-4lq"; */
+"dr5-9e-4lq.normalTitle" = "Category1";
+
+/* Class = "UITextField"; placeholder = "Contact Us tag1"; ObjectID = "eHB-8x-7aF"; */
+"eHB-8x-7aF.placeholder" = "Contact Us tag1";
+
+/* Class = "UITextField"; placeholder = "Title"; ObjectID = "fvj-MH-NJ0"; */
+"fvj-MH-NJ0.placeholder" = "Title";
+
+/* Class = "UILabel"; text = "Grid"; ObjectID = "g6Y-Bv-rEC"; */
+"g6Y-Bv-rEC.text" = "Grid";
+
+/* Class = "UITextField"; placeholder = "Contact Us Title2"; ObjectID = "hkQ-Ye-IkM"; */
+"hkQ-Ye-IkM.placeholder" = "Contact Us Title2";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "if9-r8-zNa"; */
+"if9-r8-zNa.title" = "Settings";
+
+/* Class = "UITextField"; placeholder = "tags 1"; ObjectID = "k2Q-6y-c57"; */
+"k2Q-6y-c57.placeholder" = "tags 1";
+
+/* Class = "UITextField"; placeholder = "Tags"; ObjectID = "vvd-O5-Z8Q"; */
+"vvd-O5-Z8Q.placeholder" = "Tags";
+
+/* Class = "UITextField"; placeholder = "tags2"; ObjectID = "w4p-GQ-AzA"; */
+"w4p-GQ-AzA.placeholder" = "tags2";
+
+/* Class = "UILabel"; text = "Conversation Options"; ObjectID = "wPs-cd-dxH"; */
+"wPs-cd-dxH.text" = "Conversation Options";
+
+/* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "zae-PK-OBj"; */
+"zae-PK-OBj.title" = "Edit";

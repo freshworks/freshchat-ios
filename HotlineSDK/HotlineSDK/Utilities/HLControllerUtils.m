@@ -18,6 +18,7 @@
 #import "HLCategoryGridViewController.h"
 #import "HLCategoryListController.h"
 #import "HLFAQUtil.h"
+#import "FDUtilities.h"
 
 @implementation HLControllerUtils
 
@@ -74,6 +75,11 @@
     
     BOOL isBackButtonImageExist = [[FCTheme sharedInstance]getImageWithKey:IMAGE_BACK_BUTTON] ? YES : NO;
     UINavigationController *naviController = (controller.parentViewController) ? controller.parentViewController.navigationController : controller.navigationController;
+    
+    if([FDUtilities isDeviceLanguageRTL]){
+        [naviController.view setSemanticContentAttribute:UISemanticContentAttributeForceRightToLeft];
+        [naviController.navigationBar setSemanticContentAttribute:UISemanticContentAttributeForceRightToLeft];
+    }
     if (isBackButtonImageExist && !isEmbedded) {
         if([controller conformsToProtocol:@protocol(UIGestureRecognizerDelegate)] && gestureDelegate){
             [naviController.interactivePopGestureRecognizer setEnabled:YES];

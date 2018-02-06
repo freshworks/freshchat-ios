@@ -10,7 +10,7 @@
 #define HLLoadingViewBehaviour_h
 
 #import <UIKit/UIKit.h>
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "HLEmptyResultView.h"
 
 @protocol HLLoadingViewBehaviourDelegate

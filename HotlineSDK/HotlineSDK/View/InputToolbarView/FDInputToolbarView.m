@@ -9,13 +9,12 @@
 #import "FDInputToolbarView.h"
 #import "FCTheme.h"
 #import "HLMacros.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import <AudioToolbox/AudioServices.h>
 #import "TargetConditionals.h"
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 #import "FDAutolayoutHelper.h"
-#import "FDUtilities.h"
 #import "FDPlistManager.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>{
@@ -45,7 +44,6 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 -(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate{
     self = [super init];
     if (self) {
-        
         self.delegate = delegate;
         self.theme = [FCTheme sharedInstance];
         self.isFromAttachmentScreen = NO;
@@ -188,6 +186,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)chatTextView{
+    textView.textAlignment = NSTextAlignmentNatural;
     if ([chatTextView.text isEqualToString:placeHolderText]){
         chatTextView.text = @"";
     }

@@ -27,7 +27,7 @@
 		35B2EF881D000E620014867F /* HLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EED01D000E620014867F /* HLListViewController.m */; };
 		35B2EF8A1D000E620014867F /* HLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EED41D000E620014867F /* HLViewController.m */; };
 		35B2EF8C1D000E620014867F /* HLNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EED81D000E620014867F /* HLNotificationHandler.m */; };
-		35B2EF8D1D000E620014867F /* Freshchat.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEDA1D000E620014867F /* Freshchat.m */; };
+		35B2EF8D1D000E620014867F /* FreshchatSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEDA1D000E620014867F /* FreshchatSDK.m */; };
 		35B2EF8E1D000E620014867F /* FreshchatConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEDB1D000E620014867F /* FreshchatConfig.m */; };
 		35B2EF8F1D000E620014867F /* FreshchatUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEDD1D000E620014867F /* FreshchatUser.m */; };
 		35B2EF901D000E620014867F /* Konotor.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EEDF1D000E620014867F /* Konotor.m */; };
@@ -103,7 +103,7 @@
 		35D4E81E1D118E9000EFFE07 /* HLChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D4E8131D118E9000EFFE07 /* HLChannelViewController.m */; };
 		35D4E81F1D118E9000EFFE07 /* KonotorImageInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D4E8151D118E9000EFFE07 /* KonotorImageInput.m */; };
 		3C0651041E38C8A100F8B190 /* HLMessagePoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0651031E38C8A100F8B190 /* HLMessagePoller.m */; };
-		3C160B021D00F46A000440D4 /* Freshchat.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* Freshchat.h */; };
+		3C160B021D00F46A000440D4 /* FreshchatSDK.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 35B2EED91D000E620014867F /* FreshchatSDK.h */; };
 		3C160B061D05A59C000440D4 /* HLFAQUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* HLFAQUtil.m */; };
 		3CADFA301E25B20D00829E7F /* HLCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */; };
 		3CADFA311E25B20D00829E7F /* HLLoadingViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */; };
@@ -171,7 +171,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				3C160B021D00F46A000440D4 /* Freshchat.h in Copy Files */,
+				3C160B021D00F46A000440D4 /* FreshchatSDK.h in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,8 +195,8 @@
 		35B2EED41D000E620014867F /* HLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLViewController.m; sourceTree = "<group>"; };
 		35B2EED71D000E620014867F /* HLNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLNotificationHandler.h; path = ../HLNotificationHandler.h; sourceTree = "<group>"; };
 		35B2EED81D000E620014867F /* HLNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLNotificationHandler.m; path = ../HLNotificationHandler.m; sourceTree = "<group>"; };
-		35B2EED91D000E620014867F /* Freshchat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Freshchat.h; sourceTree = "<group>"; };
-		35B2EEDA1D000E620014867F /* Freshchat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Freshchat.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		35B2EED91D000E620014867F /* FreshchatSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreshchatSDK.h; sourceTree = "<group>"; };
+		35B2EEDA1D000E620014867F /* FreshchatSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FreshchatSDK.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		35B2EEDB1D000E620014867F /* FreshchatConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreshchatConfig.m; sourceTree = "<group>"; };
 		35B2EEDC1D000E620014867F /* HotlineSDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HotlineSDK-Prefix.pch"; sourceTree = "<group>"; };
 		35B2EEDD1D000E620014867F /* FreshchatUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreshchatUser.m; sourceTree = "<group>"; };
@@ -538,8 +538,8 @@
 		35B2EEBB1D000E620014867F /* HotlineSDK */ = {
 			isa = PBXGroup;
 			children = (
-				35B2EED91D000E620014867F /* Freshchat.h */,
-				35B2EEDA1D000E620014867F /* Freshchat.m */,
+				35B2EED91D000E620014867F /* FreshchatSDK.h */,
+				35B2EEDA1D000E620014867F /* FreshchatSDK.m */,
 				35B2EEDE1D000E620014867F /* Konotor.h */,
 				35B2EEDF1D000E620014867F /* Konotor.m */,
 				35B2EEDD1D000E620014867F /* FreshchatUser.m */,
@@ -1064,6 +1064,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ar,
 			);
 			mainGroup = 843DD249178594180053E19E;
 			productRefGroup = 843DD255178594180053E19E /* Products */;
@@ -1239,7 +1240,7 @@
 				3C160B061D05A59C000440D4 /* HLFAQUtil.m in Sources */,
 				3C0651041E38C8A100F8B190 /* HLMessagePoller.m in Sources */,
 				35B2EF9D1D000E620014867F /* FDChannelUpdater.m in Sources */,
-				35B2EF8D1D000E620014867F /* Freshchat.m in Sources */,
+				35B2EF8D1D000E620014867F /* FreshchatSDK.m in Sources */,
 				35D4E81E1D118E9000EFFE07 /* HLChannelViewController.m in Sources */,
 				CE3EFB531EDFEEE000470AB1 /* Message.m in Sources */,
 				CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */,

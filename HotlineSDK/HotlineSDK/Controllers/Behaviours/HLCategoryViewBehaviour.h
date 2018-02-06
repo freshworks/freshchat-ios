@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HLCategory.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 
 @protocol HLCategoryViewBehaviourDelegate
 

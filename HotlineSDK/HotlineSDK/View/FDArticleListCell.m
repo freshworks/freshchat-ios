@@ -10,6 +10,7 @@
 #import "FCTheme.h"
 #import "HLMacros.h"
 #import "FDAutolayoutHelper.h"
+#import "FDUtilities.h"
 
 @interface FDArticleListCell ()
 

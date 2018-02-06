@@ -11,7 +11,7 @@
 #import "HLContainerController.h"
 #import "FDMessageController.h"
 #import "HLChannelViewController.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 
 #define CELL_OFFSET 16
 #define MAX_ARTICLE_LINES 3

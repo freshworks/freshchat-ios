@@ -4,6 +4,7 @@
 //
 
 #import "HLStarRatingView.h"
+#import "FDUtilities.h"
 
 @interface HLStarRatingView ()
 @property (nonatomic, readonly) BOOL shouldUseImages;
@@ -89,6 +90,9 @@
 }
 
 - (CGFloat)value {
+    if([FDUtilities isDeviceLanguageRTL]){
+        return (5.0f -  MIN(MAX(_value, _minimumValue), _maximumValue));
+    }
     return MIN(MAX(_value, _minimumValue), _maximumValue);
 }
 
@@ -246,7 +250,8 @@
     CGFloat cellWidth = (availableWidth / _maximumValue);
     CGFloat starSide = (cellWidth <= rect.size.height) ? cellWidth : rect.size.height;
     for (int idx = 0; idx < _maximumValue; idx++) {
-        CGPoint center = CGPointMake(cellWidth*idx + cellWidth/2 + _spacing*idx + 1, rect.size.height/2);
+        int rateConst = [FDUtilities isDeviceLanguageRTL] ? 4 : 0;
+        CGPoint center = CGPointMake(cellWidth*(abs(rateConst-idx)) + cellWidth/2 + _spacing*(abs(rateConst-idx)) + 1, rect.size.height/2);
         CGRect frame = CGRectMake(center.x - starSide/2, center.y - starSide/2, starSide, starSide);
         BOOL highlighted = (idx+1 <= ceilf(_value));
         if (_allowsHalfStars && highlighted && (idx+1 > _value)) {
@@ -335,6 +340,9 @@
         }
     } else {
         value = ceilf(value);
+    }
+    if([FDUtilities isDeviceLanguageRTL]){
+        value = 5.1 -value;
     }
     [self setValue:value sendValueChangedAction:_continuous];
 }

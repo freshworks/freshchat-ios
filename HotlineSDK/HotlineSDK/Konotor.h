@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIImage.h>
 #import "KonotorConversation.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 
 //TODO: Remove this class
 

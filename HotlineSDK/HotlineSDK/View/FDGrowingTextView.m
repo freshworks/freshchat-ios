@@ -46,18 +46,24 @@
 - (void)drawRect:(CGRect)rect{
     if( [[self placeholder] length] > 0 ){
         if (_placeHolderLabel == nil ){
-            _placeHolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,5,self.bounds.size.width - 16,0)];
+            _placeHolderLabel = [[UILabel alloc] init];
+            _placeHolderLabel.translatesAutoresizingMaskIntoConstraints = NO;
+            NSMutableDictionary *views = [NSMutableDictionary
+                                          dictionaryWithDictionary:@{@"placeHolderView" : _placeHolderLabel}];
             _placeHolderLabel.font = [UIFont systemFontOfSize:14];
             _placeHolderLabel.lineBreakMode = NSLineBreakByWordWrapping;
             _placeHolderLabel.numberOfLines = 0;
             _placeHolderLabel.backgroundColor = [UIColor clearColor];
             _placeHolderLabel.textColor = self.placeholderColor;
             _placeHolderLabel.alpha = 0;
+        
             [self addSubview:_placeHolderLabel];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[placeHolderView(==%f)]-5-|",(self.frame.size.width-10)]  options:0 metrics:nil views:views]];
+            
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[placeHolderView]" options:0 metrics:nil views:views]];
         }
         
         _placeHolderLabel.text = self.placeholder;
-        [_placeHolderLabel sizeToFit];
         [self sendSubviewToBack:_placeHolderLabel];
     }
     

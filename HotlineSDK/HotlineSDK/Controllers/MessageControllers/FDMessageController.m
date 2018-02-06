@@ -11,7 +11,7 @@
 #import "HLAgentMessageCell.h"
 #import "HLUserMessageCell.h"
 #import "KonotorImageInput.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "KonotorMessage.h"
 #import "Message.h"
 #import "Konotor.h"
@@ -802,6 +802,7 @@ typedef struct {
     self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     self.conversation = [self.channel primaryConversation];
     self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
+    
 }
 
 -(void)checkPushNotificationState{

@@ -10,6 +10,7 @@
 #import "FDThemeConstants.h"
 #define SDK_THEME_VERSION @"1.0"
 #import "HLMacros.h"
+#import "FDUtilities.h"
 
 @interface FCTheme ()
 
@@ -70,10 +71,13 @@
     if([[value lowercaseString] isEqualToString:@"right"] || [value isEqualToString:@"NSTextAlignmentRight"]){
         return NSTextAlignmentRight;
     }
+    else if([[value lowercaseString] isEqualToString:@"left"] || [value isEqualToString:@"NSTextAlignmentLeft"]){
+        return NSTextAlignmentLeft;
+    }
     else if([[value lowercaseString] isEqualToString:@"center"] || [value isEqualToString:@"NSTextAlignmentCenter"]){
         return NSTextAlignmentCenter;
     }
-    return NSTextAlignmentLeft;
+    return NSTextAlignmentNatural;
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
@@ -94,6 +98,9 @@
 -(UIImage *)getImageWithKey:(NSString *)key{
     NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
+    if([FDUtilities isDeviceLanguageRTL] && ([key isEqualToString:IMAGE_SEND_ICON] || [key isEqualToString:IMAGE_BACK_BUTTON] || [key isEqualToString:IMAGE_TABLEVIEW_ACCESSORY_ICON])){
+        image =  [image imageFlippedForRightToLeftLayoutDirection];
+    }
     return image;
 }
 
@@ -140,6 +147,9 @@
 -(UIImage *)getImageValueWithKey:(NSString *)key{
     NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
+    if([FDUtilities isDeviceLanguageRTL] && ![key isEqualToString:IMAGE_SEARCH_ICON]){
+       image =  [image imageFlippedForRightToLeftLayoutDirection];
+    }
     return image;
 }
 

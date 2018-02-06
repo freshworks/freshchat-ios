@@ -7,7 +7,7 @@
 //
 
 #import "FDSettingsController.h"
-#import "FreshchatSDK/Freshchat.h"
+#import "FreshchatSDK/FreshchatSDK.h"
 #import "AppDelegate.h"
 
 @interface FDSettingsController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -251,9 +251,9 @@
                                                                    @"sound" : @"default"
                                                                    },
                                                            @"channel_id": @103,
-                                                           @"conv_id" : @40459674075150,
+                                                           @"conv_id" : @40499728879621,
                                                            @"source" : @"freshchat_user",
-                                                           @"target_user_alias" : @"B9F08067-429A-48F9-95A9-4449A14D8157",
+                                                           @"target_user_alias" : @"6D28735A-9E38-4E26-BEF3-B8FAA0114899",
                                                            }
                                              andAppstate:UIApplicationStateActive];
 }

@@ -215,6 +215,9 @@
 
 - (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
     NSLog(@"Push recieved :%@", info);
+    
+
+    
     if ([[Freshchat sharedInstance]isFreshchatNotification:info]) {
         [[Freshchat sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }

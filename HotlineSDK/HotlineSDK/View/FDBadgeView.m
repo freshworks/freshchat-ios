@@ -9,6 +9,7 @@
 #import "FDBadgeView.h"
 #import "FCTheme.h"
 #import "FDAutolayoutHelper.h"
+#import "FDUtilities.h"
 
 @interface FDBadgeView ()
 
@@ -21,6 +22,7 @@
     if (self) {
         FCTheme *theme = [FCTheme sharedInstance];
         self.countLabel = [FDLabel new];
+        self.countLabel.textAlignment = NSTextAlignmentNatural;
         self.countLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.countLabel.textColor = [theme badgeButtonTitleColor];
         self.backgroundColor = [theme badgeButtonBackgroundColor];
@@ -38,9 +40,18 @@
 
 -(void)updateBadgeCount:(NSInteger)count{
     if (count) {
-        NSString *countString = [NSString stringWithFormat:@"%ld",(long)count];
-        if (count > 99) countString = [NSString stringWithFormat:@"99+"];
-        self.countLabel.text = countString;
+        NSString *andMoreStr = @"";//Empty
+        if(count >99){
+            andMoreStr = @"+";
+            count = 99;
+        }
+        NSNumber *countNumber = [NSNumber numberWithInteger:count];
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        NSLocale *curAppLocale = [NSLocale localeWithLocaleIdentifier:[[NSBundle mainBundle] preferredLocalizations].firstObject];
+        //Get language that app is using and get locale object from that- https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/InternationalizingLocaleData/InternationalizingLocaleData.html
+        [formatter setLocale:curAppLocale];
+        self.countLabel.text = [FDUtilities isDeviceLanguageRTL] ? [andMoreStr stringByAppendingString:[formatter stringFromNumber:countNumber]] :
+        [[formatter stringFromNumber:countNumber] stringByAppendingString:andMoreStr]; ;
         self.hidden = NO;
     }else{
         self.hidden = YES;

@@ -11,7 +11,7 @@
 #import "ConversationOptionsInterface.h"
 #import "HLConversationUtil.h"
 #import "HLViewController.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 
 @interface HLInterstitialViewController : UIViewController
 

@@ -16,9 +16,8 @@
 #import "HLContainerController.h"
 #import "FCTheme.h"
 #import "HLSearchViewController.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "HLLocalization.h"
-#import "FDUtilities.h"
 #import "FDBarButtonItem.h"
 #import "FDCell.h"
 #import "HLEmptyResultView.h"
@@ -78,7 +77,6 @@
 -(NSString *)loadingText{
     return HLLocalizedString(LOC_LOADING_FAQ_TEXT);
 }
-
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     self.theme = [FCTheme sharedInstance];

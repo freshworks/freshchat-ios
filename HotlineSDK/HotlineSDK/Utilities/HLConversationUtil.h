@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "HLViewController.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 
 
 @interface HLConversationUtil : NSObject

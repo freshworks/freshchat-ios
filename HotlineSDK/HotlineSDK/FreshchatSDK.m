@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "HLContainerController.h"
 #import "HLCategoryListController.h"
 #import "HLCategoryGridViewController.h"

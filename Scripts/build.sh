@@ -103,7 +103,7 @@ mkdir -p $OUTPUTDIR
 RESOURCES_DIR=Hotline/SDKResources
 ls buildtmp/*.a | xargs lipo -create -output $OUTPUTDIR/libFDFreshchatSDK.a
 cp LICENSE $OUTPUTDIR
-cp ./HotlineSDK/HotlineSDK/Freshchat.h $OUTPUTDIR
+cp ./HotlineSDK/HotlineSDK/FreshchatSDK.h $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/FreshchatModels.bundle  $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/FCResources.bundle $OUTPUTDIR
 cp -R ${RESOURCES_DIR}/FCLocalization.bundle $OUTPUTDIR

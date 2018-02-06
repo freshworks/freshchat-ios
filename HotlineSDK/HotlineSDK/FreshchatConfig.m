@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "FCTheme.h"
 #import "HLLocalization.h"
 #import "FDThemeConstants.h"

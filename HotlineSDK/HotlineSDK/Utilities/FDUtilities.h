@@ -12,7 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "FDStringUtil.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
 @interface FreshchatUser()
@@ -52,6 +52,7 @@
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
 + (BOOL) isIPhoneXView;
 +(BOOL)isiOS10;
++ (BOOL)isDeviceLanguageRTL;
 
 + (void)initiatePendingTasks;
 + (BOOL)hasInitConfig;

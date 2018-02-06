@@ -19,7 +19,7 @@
 #import "FDSearchBar.h"
 #import "HLContainerController.h"
 #import "HLListViewController.h"
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "HLLocalization.h"
 #import "FDBarButtonItem.h"
 #import "FDArticleListCell.h"

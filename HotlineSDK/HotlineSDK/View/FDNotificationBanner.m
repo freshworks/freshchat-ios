@@ -118,6 +118,7 @@
     [self.imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [closeButton setTranslatesAutoresizingMaskIntoConstraints:NO];
     
+    
     [self.contentView addSubview:self.imgView];
     [self.contentView addSubview:closeButton];
     self.contentView.backgroundColor = [[FCTheme sharedInstance] notificationBackgroundColor];
@@ -206,6 +207,7 @@
     CGFloat titleHeight  = self.titleLabel.intrinsicContentSize.height;
     CGFloat messageHeight = self.messageLabel.intrinsicContentSize.height;
     self.encloserHeightConstraint = [FDAutolayoutHelper setHeight:(messageHeight+titleHeight) forView:self.contentEncloser inView:self.contentView];
+
 }
 
 -(void)drawRect:(CGRect)rect{

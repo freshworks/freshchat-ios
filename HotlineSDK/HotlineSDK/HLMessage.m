@@ -6,7 +6,7 @@
 //  Copyright © 2016 Freshdesk. All rights reserved.
 //
 
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import <Foundation/Foundation.h>
 
 @implementation FreshchatMessage

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Freshdesk. All rights reserved.
 //
 
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 #import "HLChannel.h"
 #import "HLMacros.h"
 #import "FDUtilities.h"

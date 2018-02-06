@@ -113,9 +113,7 @@ static float height = 0;
             
             [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lastUpdated(15)]-5-[badgeView(20)]" options:0 metrics:nil views:views]];
             
-            [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lastUpdatedLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:accessoryView attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
-            
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-2-[lastUpdated]" options:0 metrics:nil views:views]];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[contentEncloser]-2-[lastUpdated]-10-|" options:0 metrics:nil views:views]];
 
         }else{
             [self.contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[title]|" options:0 metrics:nil views:views]];

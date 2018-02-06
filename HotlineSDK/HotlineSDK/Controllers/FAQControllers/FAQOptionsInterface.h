@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Freshchat.h"
+#import "FreshchatSDK.h"
 
 @protocol FAQOptionsInterface <NSObject>
 
