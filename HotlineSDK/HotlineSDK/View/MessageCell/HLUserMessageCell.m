@@ -39,9 +39,6 @@
 }
 
 - (void) initCell{
-    UIScreen *screen = [UIScreen mainScreen];
-    CGRect screenRect = screen.bounds;
-    self.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20) ;
     self.sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     //self.customFontName=[[FCTheme sharedInstance] userMessageFont];
@@ -49,10 +46,6 @@
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 1, 1)];
     self.senderNameLabel=[[UITextView alloc] initWithFrame:CGRectZero];
-    contentEncloser = [[UIView alloc] init];
-    contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
-    [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
-    [self.contentView addSubview:contentEncloser];
     
     [senderNameLabel setFont:[[FCTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
@@ -94,6 +87,10 @@
 - (void) drawMessageViewForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView {
     
     [self clearAllSubviews];
+    contentEncloser = [[UIView alloc] init];
+    contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
+    [self.contentView addSubview:contentEncloser];
     FCTheme *theme = [FCTheme sharedInstance];
     NSString *topPadding = [theme userMessageTopPadding] ? [theme userMessageTopPadding] : @"10";
     NSString *bottomPadding = [theme userMessageBottomPadding] ? [theme userMessageBottomPadding] : @"10";
@@ -158,8 +155,6 @@
     
     //All details are in contentview but no constrains set
     
-    
-    
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[contentEncloser(<=%ld)]-8-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[contentEncloser(>=50)]-2-|" options:0 metrics:nil views:views]];
     //Constraints for profileview and contentEncloser are done.
@@ -217,11 +212,10 @@
 }
 
 -(void) clearAllSubviews {
-    NSArray *subViewArr = [self.contentEncloser subviews];
-    for (int i=0; i<[subViewArr count]; i++) {
-        [subViewArr[i] removeFromSuperview];
+    NSArray *subViewArr = [self.contentView subviews];
+    for (UIView *subUIView in subViewArr) {
+        [subUIView removeFromSuperview];
     }
-    
 }
 
 @end
