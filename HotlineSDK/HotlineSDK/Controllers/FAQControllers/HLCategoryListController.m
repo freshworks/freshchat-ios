@@ -83,6 +83,10 @@
     [super willMoveToParentViewController:parent];
     self.tableView.separatorColor = [[FCTheme sharedInstance] faqListCellSeparatorColor];
     self.tableView.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
+    {
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     HLContainerController * containerCtr =  (HLContainerController*)self.parentViewController;
     [containerCtr.footerView setViewColor:self.tableView.backgroundColor];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
@@ -124,6 +128,21 @@
     UIView *view = [[UIView alloc] init];
     [view setBackgroundColor:[self.theme faqListCellSelectedColor]];
     [cell setSelectedBackgroundView:view];
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([tableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

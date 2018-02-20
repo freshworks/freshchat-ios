@@ -138,6 +138,7 @@
     txtSearchField.layer.cornerRadius = 4;
     txtSearchField.layer.borderWidth = 1.0f;
     txtSearchField.layer.borderColor = [self.theme searchBarTextViewBorderColor].CGColor;
+    [txtSearchField setValue:[self.theme SearchBarTextPlaceholderColor] forKeyPath:@"_placeholderLabel.textColor"];
     
     UIView *mainSubView = [self.searchBar.subviews lastObject];
     for (id subview in mainSubView.subviews) {
