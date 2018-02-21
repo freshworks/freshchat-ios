@@ -29,6 +29,7 @@
 @property (strong, nonatomic) NSLayoutConstraint *senderLabelHeight;
 @property (nonatomic, strong) NSString *agentName;
 @property (nonatomic, assign) BOOL showRealAvatar;
+@property (nonatomic, assign) BOOL isAgentAvatarEnabled;
 
 @end
 
@@ -50,21 +51,20 @@
 }
 
 -(BOOL) showAgentAvatarLabelWithAlias : (NSString *)alias {
-    static BOOL SHOW_AGENT_AVATAR_LABEL;
     FDParticipant *participant = [FDParticipant fetchParticipantForAlias:alias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     
-    if(participant.firstName || participant.lastName){
-        self.agentName = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
-        SHOW_AGENT_AVATAR_LABEL = TRUE;
+    if(self.isAgentAvatarEnabled){
+        if(participant.firstName || participant.lastName){
+            self.agentName = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
+        }
+        else if ([HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+            self.agentName = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        }
+        else{
+            self.agentName = @"";
+        }
     }
-    else if ([HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
-        self.agentName = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-        SHOW_AGENT_AVATAR_LABEL = TRUE;
-    }
-    else{
-        SHOW_AGENT_AVATAR_LABEL = false;
-    }
-    return SHOW_AGENT_AVATAR_LABEL;
+    return self.isAgentAvatarEnabled;
 }
 
 - (void) initCell{
@@ -107,8 +107,8 @@
     [uploadStatusImageView setImage:sentImage];
     uploadStatusImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    BOOL isAgentAvatarEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    if(isAgentAvatarEnabled){
+    self.isAgentAvatarEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    if(self.isAgentAvatarEnabled){
         int agentAvatarRCVal = [FCRemoteConfig sharedInstance].conversationConfig.agentAvatar;
         self.showsProfile = (agentAvatarRCVal <= 2);
         self.showRealAvatar = (agentAvatarRCVal == 1);
