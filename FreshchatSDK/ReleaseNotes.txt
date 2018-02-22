@@ -2,11 +2,17 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 1.3.0
+Version         : 1.3.1
+
+Ver 1.3.1 
+__________________________
+Team Member info now controlled by a unified flag (teamMemberInfoVisible)
+Message cell rendering fixes for orientation changes
+Miscellaneous fixes
 
 Ver 1.3.0 
 __________________________
-SDK header file name updated to FreshchatSDK.h for naming consistency.
+SDK header file name updated :to FreshchatSDK.h for naming consistency.
 Better rendering support for RTL content.
 
 Ver 1.2.5 
@@ -30,11 +36,6 @@ Fixes for text alignment in message bubble.
 Ver 1.2.1 
 __________________________
 Update refresh intervals
-
-Ver 1.2.0 
-__________________________
-User restore functionality
-Minor bug fixes and improvements
 
 Ver 1.2.0 
 __________________________
