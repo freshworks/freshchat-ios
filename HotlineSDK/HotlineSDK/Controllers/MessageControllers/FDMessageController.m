@@ -422,8 +422,6 @@ typedef struct {
     return headerView;
 }
 
-
-
 -(void)setSubviews{
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
@@ -554,6 +552,7 @@ typedef struct {
     HLAgentMessageCell *agentCell;
     HLUserMessageCell *userCell;
     BOOL isAgentMessage = true;
+    CGRect screenRect = self.view.bounds;
     
     if (indexPath.row < self.messages.count) {
         MessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
@@ -564,6 +563,7 @@ typedef struct {
             if (!agentCell) {
                 agentCell = [[HLAgentMessageCell alloc] initWithReuseIdentifier:agentCellIdentifier andDelegate:self];
             }
+            agentCell.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20);
             agentCell.messageData = message;
             [agentCell drawMessageViewForMessage:message parentView:self.view];
         } else {
@@ -571,6 +571,7 @@ typedef struct {
             if (!userCell) {
                 userCell = [[HLUserMessageCell alloc] initWithReuseIdentifier:userCellIdentifier andDelegate:self];
             }
+            userCell.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20);
             userCell.messageData = message;
             [userCell drawMessageViewForMessage:message parentView:self.view];
         }

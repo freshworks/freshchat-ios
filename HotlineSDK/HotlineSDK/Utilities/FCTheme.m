@@ -273,6 +273,11 @@
     return color ? color : [FCTheme colorWithHex:FD_BUTTON_COLOR];
 }
 
+-(UIColor *)SearchBarTextPlaceholderColor{
+    UIColor *color = [self getColorValueForKeyPath:@"SearchBar.SearchQueryTextStyle.textColorHint"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
+}
+
 #pragma mark - Dialogue box
 
 -(UIColor *)dialogueTitleTextColor{

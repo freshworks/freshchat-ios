@@ -72,6 +72,10 @@
     parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     self.theme = [FCTheme sharedInstance];
     self.tableView.backgroundColor = [self.theme channelListBackgroundColor];
+    if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
+    {
+        self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
+    }
     HLContainerController * containerCtr =  (HLContainerController*)self.parentViewController;
     [containerCtr.footerView setViewColor:self.tableView.backgroundColor];
     self.navigationController.navigationBar.barTintColor = [self.theme navigationBarBackgroundColor];
@@ -373,6 +377,21 @@
     UIView *view = [[UIView alloc] init];
     [view setBackgroundColor:[self.theme channelCellSelectedColor]];
     [cell setSelectedBackgroundView:view];
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([tableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

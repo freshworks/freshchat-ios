@@ -472,8 +472,13 @@ static NSInteger networkIndicator = 0;
 }
 
 +(NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName{
-    
-    return ([@[firstName, @" ", lastName] componentsJoinedByString:@""]);
+    NSString *spaceStr = @"";
+    if ((firstName.length) && (lastName.length)){
+        spaceStr = @" ";
+    }
+    NSString* fName = firstName ? firstName : @"";
+    NSString* lName = lastName ? lastName : @"";
+    return ([@[fName, spaceStr, lName] componentsJoinedByString:@""]);
 }
 
 +(NSString*)deviceModelName{

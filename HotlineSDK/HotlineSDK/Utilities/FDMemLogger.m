@@ -59,17 +59,35 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     [self addMessage:[NSString stringWithFormat:@"Error Info : %@", dict]];
 }
 
--(NSString *)toString {
-    
-    NSString *pushNotifState = ([HLNotificationHandler areNotificationsEnabled]) ? @"Yes" : @"No";
-    NSString *appState = nil;
+-(NSString *)getApplicationState {
     UIApplicationState state = [[UIApplication sharedApplication] applicationState];
     if (state == UIApplicationStateActive){
-        appState = @"Active";
+        return @"Active";
     }else if(state == UIApplicationStateInactive){
-        appState = @"Inactive";
+        return @"Inactive";
     }else{
-        appState = @"Background";
+        return @"Background";
+    }
+    return @"";
+}
+
+-(NSString *)toString {
+    
+    NSString *pushNotifState = @"";
+    NSString *appState = @"";
+    
+    if([NSThread isMainThread]) {
+        appState = [self getApplicationState];
+        pushNotifState = ([HLNotificationHandler areNotificationsEnabled]) ? @"Yes" : @"No";
+    } else {
+        __block NSString *temp_appState = @"";
+        __block NSString *temp_pushNotifState = @"";
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            temp_appState = [self getApplicationState];
+            temp_pushNotifState = ([HLNotificationHandler areNotificationsEnabled]) ? @"Yes" : @"No";
+        });
+        appState = temp_appState;
+        pushNotifState = temp_pushNotifState;
     }
     
     NSString *userAlias = [FDUtilities currentUserAlias];
@@ -107,10 +125,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     NSURL *url = [NSURL URLWithString:LOGGER_API];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    __block NSString *log = @"";
-    dispatch_async(dispatch_get_main_queue(), ^{
-        log = [self toString];
-    });
+    NSString *log = [self toString];
     FDLog(@"***Memlogger*** Going to upload: \n %@" , log);
     request.HTTPMethod = HTTP_METHOD_POST;
     request.HTTPBody = [log dataUsingEncoding:NSUTF8StringEncoding];

@@ -29,6 +29,7 @@
 @property (strong, nonatomic) NSLayoutConstraint *senderLabelHeight;
 @property (nonatomic, strong) NSString *agentName;
 @property (nonatomic, assign) BOOL showRealAvatar;
+@property (nonatomic, assign) BOOL isAgentAvatarEnabled;
 
 @end
 
@@ -50,27 +51,23 @@
 }
 
 -(BOOL) showAgentAvatarLabelWithAlias : (NSString *)alias {
-    static BOOL SHOW_AGENT_AVATAR_LABEL;
     FDParticipant *participant = [FDParticipant fetchParticipantForAlias:alias inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     
-    if(participant.firstName || participant.lastName){
-        self.agentName = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
-        SHOW_AGENT_AVATAR_LABEL = TRUE;
+    if(self.isAgentAvatarEnabled){
+        if(participant.firstName || participant.lastName){
+            self.agentName = [FDUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
+        }
+        else if ([HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+            self.agentName = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+        }
+        else{
+            self.agentName = @"";
+        }
     }
-    else if ([HLLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
-        self.agentName = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-        SHOW_AGENT_AVATAR_LABEL = TRUE;
-    }
-    else{
-        SHOW_AGENT_AVATAR_LABEL = false;
-    }
-    return SHOW_AGENT_AVATAR_LABEL;
+    return self.isAgentAvatarEnabled;
 }
 
 - (void) initCell{
-    UIScreen *screen = [UIScreen mainScreen];
-    CGRect screenRect = screen.bounds;
-    self.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20) ;
     self.sentImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENT_ICON];
     self.sendingImage=[[FCTheme sharedInstance] getImageWithKey:IMAGE_MESSAGE_SENDING_ICON];
     self.showsProfile = NO;
@@ -80,10 +77,6 @@
     self.showsTimeStamp=YES;
     self.chatBubbleImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.senderNameLabel=[[UILabel alloc] initWithFrame:CGRectZero];
-    contentEncloser = [[UIView alloc] init];
-    contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
-    [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
-    
     
     [senderNameLabel setFont:[[FCTheme sharedInstance] agentNameFont]];
     [senderNameLabel setBackgroundColor:[UIColor clearColor]];
@@ -114,8 +107,8 @@
     [uploadStatusImageView setImage:sentImage];
     uploadStatusImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    BOOL isAgentAvatarEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    if(isAgentAvatarEnabled){
+    self.isAgentAvatarEnabled = [[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    if(self.isAgentAvatarEnabled){
         int agentAvatarRCVal = [FCRemoteConfig sharedInstance].conversationConfig.agentAvatar;
         self.showsProfile = (agentAvatarRCVal <= 2);
         self.showRealAvatar = (agentAvatarRCVal == 1);
@@ -130,10 +123,12 @@
     [self.contentView setClipsToBounds:YES];
 }
 
-
 - (void) drawMessageViewForMessage:(MessageData*)currentMessage parentView:(UIView*)parentView {
     
     [self clearAllSubviews];
+    contentEncloser = [[UIView alloc] init];
+    contentEncloser.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentEncloser setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
     FCTheme *theme = [FCTheme sharedInstance];
     NSString *topPadding = [theme agentMessageTopPadding] ? [theme agentMessageTopPadding] : @"10";
     NSString *bottomPadding = [theme agentMessageBottomPadding] ? [theme agentMessageBottomPadding] : @"10";
@@ -235,7 +230,6 @@
     }
     
     //All details are in contentview but no constrains set
-    
     
     if(showsProfile) {
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
@@ -339,15 +333,10 @@
 }
 
 -(void) clearAllSubviews {
-    NSArray *contentEnclosersubViewArr = [self.contentEncloser subviews];
-    for (int i=0; i<[contentEnclosersubViewArr count]; i++) {
-        [contentEnclosersubViewArr[i] removeFromSuperview];
-    }
     NSArray *subViewArr = [self.contentView subviews];
-    for (int i=0; i<[subViewArr count]; i++) {
-        [subViewArr[i] removeFromSuperview];
+    for (UIView *subUIView in subViewArr) {
+        [subUIView removeFromSuperview];
     }
-    
 }
 
 @end

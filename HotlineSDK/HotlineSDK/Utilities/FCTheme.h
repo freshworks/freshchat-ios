@@ -54,6 +54,7 @@
 -(UIColor *)searchBarCancelButtonColor;
 -(UIColor *)searchBarCursorColor;
 -(UIColor *)searchBarTextViewBorderColor;
+-(UIColor *)SearchBarTextPlaceholderColor;
 
 - (int)numberOfChannelListDescriptionLines;
 - (int)numberOfCategoryListDescriptionLines;
