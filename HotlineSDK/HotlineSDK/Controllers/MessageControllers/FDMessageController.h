@@ -14,6 +14,11 @@
 #import "HLCSATView.h"
 #import "ConversationOptionsInterface.h"
 
+enum ResponseTimeType {
+    CURRENT_AVG  = 1,
+    LAST_WEEK_AVG = 2
+};
+
 @interface FDMessageController : HLViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, HLYesNoPromptViewDelegate, HLCSATViewDelegate, ConversationOptionsInterface>
 
 -(BOOL)isModal;

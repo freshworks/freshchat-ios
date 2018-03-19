@@ -59,7 +59,7 @@
         [self.contentView addSubview:self.cardView];
         
         UILongPressGestureRecognizer *tapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleViewTap:)];
-        tapRecognizer.minimumPressDuration = 0.01;//To add minimun interval in touch gesture
+        tapRecognizer.minimumPressDuration = 0.1;//To add minimun interval in touch gesture
         tapRecognizer.cancelsTouchesInView = NO;
         [self.cardView addGestureRecognizer:tapRecognizer];
         

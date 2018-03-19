@@ -126,4 +126,13 @@
 "typically_replies_within_an_hour"="Typically replies within an hour";
 "typically_replies_within_2_hours"="Typically replies within 2 hours";
 "typically_replies_within_few_hours"="Typically replies within few hours";
+
 "placeholder_minutes"="minutes";
+
+/*Average replies */
+"currently_replying_in_a_minute" = "Currently replying in a minute";
+"currently_replying_in_x_minutes"="Currently replying in";
+"currently_replying_in_an_hour"="Currently replying in an hour";
+"currently_replying_in_2_hours"="Currently replying in 2 hours";
+"currently_replying_in_few_hours"="Currently replying in few hours";
+

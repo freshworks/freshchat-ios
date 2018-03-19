@@ -116,9 +116,15 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_TYPICALLY_REPLIES_WITHIN_MIN  @"typically_replies_within_a_minute"
 #define LOC_TYPICALLY_REPLIES_WITHIN_X_MIN @"typically_replies_within_x_minutes"
 #define LOC_TYPICALLY_REPLIES_WITHIN_HOUR @"typically_replies_within_an_hour"
-#define LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR @"typically_replies_within_2_hours"
+#define LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOURS @"typically_replies_within_2_hours"
 #define LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS @"typically_replies_within_few_hours"
 #define LOC_PLACEHOLDER_MINS @"placeholder_minutes"
+
+#define LOC_CURRENTLY_REPLYING_IN_MINUTE @"currently_replying_in_a_minute"
+#define LOC_CURRENTLY_REPLYING_IN_X_MIN @"currently_replying_in_x_minutes"
+#define LOC_CURRENTLY_REPLYING_IN_HOUR @"currently_replying_in_an_hour"
+#define LOC_CURRENTLY_REPLYING_IN_TWO_HOURS @"currently_replying_in_2_hours"
+#define LOC_CURRENTLY_REPLYING_IN_FEW_HOURS @"currently_replying_in_few_hours"
 
 @interface HLLocalization : NSObject
 
