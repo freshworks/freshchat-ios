@@ -260,7 +260,7 @@ static NSInteger networkIndicator = 0;
 }
 
 +(NSString *) getReplyResponseForTime :(NSInteger)timeInSec andType: (enum ResponseTimeType) type {
-    float minutes = timeInSec/60;
+    float minutes = timeInSec/60.0;
     NSString *messageStr;
     if (minutes <= 1) {
         messageStr = (type == CURRENT_AVG) ? HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_MINUTE) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN);
