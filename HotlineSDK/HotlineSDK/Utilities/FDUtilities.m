@@ -259,10 +259,11 @@ static NSInteger networkIndicator = 0;
     return;
 }
 
-+(NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec{
-    float minutes = timeInSec/60;
-    if (minutes < 1) {
-        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN);
++(NSString *) getReplyResponseForTime :(NSInteger)timeInSec andType: (enum ResponseTimeType) type {
+    float minutes = timeInSec/60.0;
+    NSString *messageStr;
+    if (minutes <= 1) {
+        messageStr = (type == CURRENT_AVG) ? HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_MINUTE) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_MIN);
     }else if (minutes < 55) {
         int min;
         if (minutes < 10) {
@@ -272,14 +273,16 @@ static NSInteger networkIndicator = 0;
             // If < 55 minutes, round off to factor of 5
             min = (int) ceil(minutes / 5) * 5;
         }
-        return [NSString stringWithFormat: @"%@ %d %@",HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_X_MIN), min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
-    } else if (minutes < 60) {
-        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
-    } else if (minutes < 120) {
-        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOUR);
+        messageStr = (type == CURRENT_AVG) ?  HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_X_MIN) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_X_MIN);
+        return [NSString stringWithFormat: @"%@ %d %@",messageStr, min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
+    } else if (minutes <= 60) {
+        messageStr = (type == CURRENT_AVG) ? HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_HOUR) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
+    } else if (minutes <= 120) {
+        messageStr = (type == CURRENT_AVG) ? HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_TWO_HOURS) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_TWO_HOURS);
     } else {
-        return HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS);
+        messageStr = (type == CURRENT_AVG) ? HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_FEW_HOURS) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_FEW_HOURS);
     }
+    return messageStr;
 }
 
 + (NSString*)convertIntoMD5 :(NSString *) str

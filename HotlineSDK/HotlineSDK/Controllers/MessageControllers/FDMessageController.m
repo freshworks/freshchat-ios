@@ -102,7 +102,6 @@ typedef struct {
 @property (nonatomic) NSInteger titleWidth;
 @property (nonatomic) NSInteger titleHeight;
 
-
 @end
 
 @implementation FDMessageController
@@ -213,8 +212,8 @@ typedef struct {
     }
 }
 
--(void) showTypicalReply:(NSInteger) time {
-    self.typicalReply.text = [FDUtilities typicalRepliesMsgForTime:time];
+-(void) showReplyResponseTime:(NSInteger) time withType :(enum ResponseTimeType) type {
+    self.typicalReply.text = [FDUtilities getReplyResponseForTime:time andType:type];
     
     [UIView animateWithDuration:0.5 animations:^{
         self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
@@ -223,7 +222,7 @@ typedef struct {
     }];
 }
 
--(void) hideTypicalReply {
+-(void) hideReplyResponseTime {
     [UIView animateWithDuration:0.5 animations:^{
         self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - 2);
         self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 2, self.titleWidth, 0);
@@ -301,45 +300,59 @@ typedef struct {
     [self checkChannel];
     [self.messagesPoller begin];
     if([FDUtilities canMakeTypicallyRepliesCall] ){
-        [self fetchTypicalRepliesIn];
+        [self fetchReplyResonseTime];
     } else {
-        [self updateTypicalReplies];
+        [self updateReplyResponseTime];
     }
 }
 
--(void) updateTypicalReplies {
-    NSDictionary *typReplyDict = [HLUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
-    if (typReplyDict != nil) {
-        NSNumber *currentChannelTime = typReplyDict[self.channel.channelID];
+-(void) updateReplyResponseTime {
+    NSDictionary *currentlyReplyDict = [HLUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+    NSDictionary *avgReplyDict = [HLUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE];
+    if (currentlyReplyDict != nil) {
+        NSNumber *currentChannelTime = currentlyReplyDict[self.channel.channelID];
         if (currentChannelTime != nil) {
-            [self showTypicalReply:[currentChannelTime integerValue]];
+            [self showReplyResponseTime:[currentChannelTime integerValue] withType:CURRENT_AVG];
+        }
+    }
+    else if (avgReplyDict != nil) {
+        NSNumber *currentChannelTime = avgReplyDict[self.channel.channelID];
+        if (currentChannelTime != nil) {
+            [self showReplyResponseTime:[currentChannelTime integerValue] withType:LAST_WEEK_AVG];
         }
     }
 }
 
--(void)fetchTypicalRepliesIn{
+-(void)fetchReplyResonseTime{
     [HLCoreServices fetchTypicalReply:^(FDResponseInfo *responseInfo, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if(!error) {
                 [HLUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
                 NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
-                if(channelsInfo[@"channelResponseTime"] != nil) {
-                    NSArray *convArr = channelsInfo[@"channelResponseTime"];
-                    NSMutableDictionary *typReplyDict = [[NSMutableDictionary alloc]init];
-                    for (int i = 0; i < [convArr count]; i++) {
-                        NSDictionary* item = [convArr objectAtIndex:i];
-                        NSNumber *responseTime = item[@"responseTime"];
-                        NSNumber *channelId = item[@"channelId"];
-                        [typReplyDict setObject:responseTime forKey:channelId];
-                    }
-                    [HLUserDefaults setDictionary:typReplyDict forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
-                    [self updateTypicalReplies];
+                if(!([channelsInfo[@"channelResponseTime"] count] == 0)) { //If the array is nil, it will be 0 as well, as nil maps to 0; therefore checking whether the array exists is unnecessary
+                    [HLUserDefaults setDictionary:[self getChannelReplyTimeForResponse:channelsInfo[@"channelResponseTime"]] forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+                    
                 }
+                if(!([channelsInfo[@"channelResponseTimesFor7Days"] count] == 0)) {
+                    [HLUserDefaults setDictionary:[self getChannelReplyTimeForResponse:channelsInfo[@"channelResponseTimesFor7Days"]] forKey:FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE];
+                }
+                [self updateReplyResponseTime];
             } else {
-                [self hideTypicalReply];
+                [self hideReplyResponseTime];
             }
         });
     }];
+}
+
+- (NSMutableDictionary *) getChannelReplyTimeForResponse : (NSArray *)convArr{
+    NSMutableDictionary *replyResponseDict = [[NSMutableDictionary alloc]init];
+    for (int i = 0; i < [convArr count]; i++) {
+        NSDictionary* item = [convArr objectAtIndex:i];
+        NSNumber *responseTime = item[@"responseTime"];
+        NSNumber *channelId = item[@"channelId"];
+        [replyResponseDict setObject:responseTime forKey:channelId];
+    }
+    return replyResponseDict;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -1123,9 +1136,9 @@ typedef struct {
     [self.tableView reloadData];
     [self setNavigationTitle:self.parentViewController];
     if([FDUtilities canMakeTypicallyRepliesCall] ){
-        [self fetchTypicalRepliesIn];
+        [self fetchReplyResonseTime];
     } else {
-        [self updateTypicalReplies];
+        [self updateReplyResponseTime];
     }
     [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];

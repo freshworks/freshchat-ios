@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "FDStringUtil.h"
 #import "FreshchatSDK.h"
+#import "FDMessageController.h"
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
 @interface FreshchatUser()
@@ -64,7 +65,7 @@
 + (BOOL) canMakeDAUCall;
 + (BOOL) canMakeRemoteConfigCall;
 + (BOOL) canMakeTypicallyRepliesCall;
-+ (NSString *) typicalRepliesMsgForTime :(NSInteger)timeInSec;
++(NSString *) getReplyResponseForTime :(NSInteger)timeInSec andType: (enum ResponseTimeType) type;
 + (void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID;
 + (void)postUnreadCountNotification;
 + (void) updateUserWithData : (NSDictionary*) userDict;

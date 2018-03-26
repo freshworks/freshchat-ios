@@ -46,6 +46,7 @@
 #define CONFIG_RC_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_response_time_expectations_fetch_interval"
 #define CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_last_response_time_expectation_fetch_interval"
 #define FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE @"freshchat_response_time_expectation_value"
+#define FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE @"freshchat_response_time_7_days_value"
 
 #define FRESHCHAT_DEFAULTS_USER_IOS_VERSION @"freshchat_defaults_user_ios_version"
 
