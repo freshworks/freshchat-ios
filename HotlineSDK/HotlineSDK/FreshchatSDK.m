@@ -155,10 +155,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
-        if((config.appKey.length == 0)|| (config.appID.length == 0)){
-            [self addInvalidAppIDKeyException];
-        }
-        if(![FDUtilities isValidUUIDForKey:config.appID] || ![FDUtilities isValidUUIDForKey:config.appKey]){
+        if(![FDUtilities isValidUUIDForKey:config.appID] || ![FDUtilities isValidUUIDForKey:config.appKey] || ([config.appID isEqualToString: config.appKey])){
             [self addInvalidAppIDKeyException];
         }
         [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
@@ -182,7 +179,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (void) addInvalidAppIDKeyException{
-    @throw [NSException exceptionWithName:@"InvalidArgumentsExceptions" reason:@"Initialization failed : FreshchatSDK initialized with invalid AppId and AppKey" userInfo:nil];
+    @throw [NSException exceptionWithName:@"InvalidArgumentExceptions" reason:@"Initialization failed : FreshchatSDK initialized with invalid AppId or AppKey" userInfo:nil];
 }
 
 -(void)checkMediaPermissions:(FreshchatConfig *)config{
