@@ -72,6 +72,7 @@
 + (void) updateUserAlias: (NSString *) userAlias;
 + (NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
 + (UIColor *) invertColor :(UIColor *)color;
++ (BOOL)isValidUUIDForKey : (NSString *)key;
 
 @end
 

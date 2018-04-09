@@ -122,6 +122,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [self initWithConfig:config completion:nil];
     } @catch (NSException *exception) {
         [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
+        if([exception.name isEqualToString: @"FreshchatInvalidArgumentException"]){
+            @throw ([NSException exceptionWithName:exception.name reason:exception.description userInfo:nil]);
+        }
     }
 }
 
@@ -155,6 +158,16 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
+        
+        if([config.appID isEqualToString: config.appKey] || (![FDUtilities isValidUUIDForKey:config.appID] && ![FDUtilities isValidUUIDForKey:config.appKey])){
+            [self addInvalidAppIDKeyExceptionString:@"AppId or AppKey!"];
+        }
+        else if([FDUtilities isValidUUIDForKey:config.appID] && ![FDUtilities isValidUUIDForKey:config.appKey]){
+            [self addInvalidAppIDKeyExceptionString:@"AppKey!"];
+        }
+        else if(![FDUtilities isValidUUIDForKey:config.appID] && [FDUtilities isValidUUIDForKey:config.appKey]){
+            [self addInvalidAppIDKeyExceptionString:@"AppId!"];
+        }
         [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
@@ -173,6 +186,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([HLUser isUserRegistered]) {
         [FDUtilities postUnreadCountNotification];
     }
+}
+
+- (void) addInvalidAppIDKeyExceptionString :(NSString *) string{
+    [NSException raise:@"FreshchatInvalidArgumentException" format:@"Initialization failed : FreshchatSDK initialized with invalid %@", string];
 }
 
 -(void)checkMediaPermissions:(FreshchatConfig *)config{

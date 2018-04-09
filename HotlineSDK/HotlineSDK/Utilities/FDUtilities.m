@@ -670,6 +670,11 @@ static NSInteger networkIndicator = 0;
     return false;
 }
 
++(BOOL)isValidUUIDForKey : (NSString *)key
+{
+    return (bool)[[NSUUID alloc] initWithUUIDString:key];
+}
+
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
         NSInteger result = 0;
