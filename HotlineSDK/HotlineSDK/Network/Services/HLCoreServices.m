@@ -69,7 +69,7 @@
     return task;
 }
 
--(NSDictionary *)getUserInfo:(NSString *) userAlias{
+-(NSMutableDictionary *)getUserInfo:(NSString *) userAlias{
     NSMutableDictionary *userInfo = [NSMutableDictionary new];
     NSString *adId = [FDUtilities getAdID];
     NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
@@ -88,7 +88,7 @@
         }
         return nil;
     }
-
+    
     if (deviceProps) {
         userInfo[@"deviceIosMeta"] = deviceProps;
     }
@@ -97,7 +97,7 @@
         userInfo[@"adId"] = adId;
     }
     
-    return  @{ @"user" : userInfo };
+    return userInfo;
 }
 
 -(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
@@ -106,14 +106,15 @@
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
     
-    NSDictionary *userInfo = [self getUserInfo:[FDUtilities getUserAliasWithCreate]];
+    NSMutableDictionary *userInfo = [self getUserInfo:[FDUtilities getUserAliasWithCreate]];
+    NSArray *userProperties = [HLCoreServices updatePropertiesTo:userInfo];
     
     if (!userInfo) {
         return nil;
     }
     
     NSError *error = nil;
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
     
     if (error) {
         FDLog(@"Error while serializing user information");
@@ -138,7 +139,7 @@
                 ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
                 
                 [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-                
+                [HLCoreServices setAsUploadedTo:userProperties withCompletion:nil];
                 if (handler) handler(nil);
                 
             }else{
@@ -153,6 +154,42 @@
         }
     }];
     return task;
+}
+
++ (NSArray *) updatePropertiesTo: (NSMutableDictionary *) userInfo {
+    NSArray *propertiesToUpload = [KonotorCustomProperty getUnuploadedProperties];
+    if (propertiesToUpload.count > 0) {
+        NSMutableDictionary *metaInfo = [NSMutableDictionary new];
+        for (int i=0; i<propertiesToUpload.count; i++) {
+            KonotorCustomProperty *property = propertiesToUpload[i];
+            if (property.key) {
+                if (property.isUserProperty) {
+                    userInfo[property.key] = property.value;
+                }else{
+                    metaInfo[property.key] = property.value;
+                }
+            }
+        }
+        userInfo[@"meta"] = metaInfo;
+    }
+    return propertiesToUpload;
+}
+
++(void) setAsUploadedTo:(NSArray *) properties withCompletion:(void (^)())completion {
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        for (int i=0; i<properties.count; i++) {
+            KonotorCustomProperty *property = properties[i];
+            if (property.managedObjectContext != nil) {
+                property.uploadStatus = @1;
+            } else {
+                FDLog(@"Trying to access deleted meta object - Ignoring");
+            }
+        }
+        [[KonotorDataManager sharedInstance]save];
+        if(completion){
+            completion();
+        }
+    }];
 }
  
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
@@ -206,22 +243,10 @@
         NSMutableDictionary *info = [NSMutableDictionary new];
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         
-        NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
         
-        if (unuploadedProperties.count > 0 || forceUpdate) {
-            NSMutableDictionary *metaInfo = [NSMutableDictionary new];
-            for (int i=0; i<unuploadedProperties.count; i++) {
-                KonotorCustomProperty *property = unuploadedProperties[i];
-                if (property.key) {
-                    if (property.isUserProperty) {
-                        userInfo[property.key] = property.value;
-                    }else{
-                        metaInfo[property.key] = property.value;
-                    }
-                }
-            }
+        NSArray *userProperties = [HLCoreServices updatePropertiesTo:userInfo];
+        if (userProperties.count > 0 || forceUpdate) {
             userInfo[@"alias"] = [FDUtilities currentUserAlias];
-            userInfo[@"meta"] = metaInfo;
             NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
             if (deviceProps) {
                 userInfo[@"deviceIosMeta"] = deviceProps;
@@ -241,17 +266,7 @@
         
         [self updateUserProperties:info handler:^(NSError *error) {
             if (!error) {
-                [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-                    for (int i=0; i<unuploadedProperties.count; i++) {
-                        KonotorCustomProperty *property = unuploadedProperties[i];
-                        if (property.managedObjectContext != nil) {
-                            property.uploadStatus = @1;
-                        }else{
-                            FDLog(@"Trying to access deleted meta object - Ignoring");
-                        }
-                    }
-                    [[KonotorDataManager sharedInstance]save];
-                    
+                [HLCoreServices setAsUploadedTo:userProperties withCompletion:^{
                     IN_PROGRESS = NO;
                     NSArray *remaining = [KonotorCustomProperty getUnuploadedProperties];
                     if (remaining.count > 0) {
