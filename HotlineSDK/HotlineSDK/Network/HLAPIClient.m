@@ -8,6 +8,7 @@
 
 #import "HLAPIClient.h"
 #import "FDMemLogger.h"
+#import "FreshchatSDK.h"
 
 @interface HLAPIClient ()
 
@@ -46,7 +47,15 @@
             [self logRequest:request response:responseInfo];
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
-        }else{
+        }
+        else if(statusCode == 410){//For GDPR compliance
+            [[Freshchat sharedInstance] resetUserWithCompletion:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[Freshchat sharedInstance] dismissFreshchatViews];
+                });
+            }];
+        }
+        else{
             if (!error) {
                 if (handler) handler(responseInfo,nil);
             }else{
