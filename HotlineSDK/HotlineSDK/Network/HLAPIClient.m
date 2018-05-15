@@ -8,7 +8,6 @@
 
 #import "HLAPIClient.h"
 #import "FDMemLogger.h"
-#import "FreshchatSDK.h"
 #import "FDUtilities.h"
 
 @interface HLAPIClient ()
