@@ -49,8 +49,9 @@
         if (statusCode >= 400) {
             if(statusCode == 410){//For GDPR compliance
                 [FDUtilities handleGDPRForResponse:responseInfo];
+            }else{//Do not add failed logs for deleted user or account into loggly
+                [self logRequest:request response:responseInfo];
             }
-            [self logRequest:request response:responseInfo];
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
         }
