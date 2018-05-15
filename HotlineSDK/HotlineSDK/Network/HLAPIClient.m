@@ -9,6 +9,7 @@
 #import "HLAPIClient.h"
 #import "FDMemLogger.h"
 #import "FreshchatSDK.h"
+#import "FDUtilities.h"
 
 @interface HLAPIClient ()
 
@@ -39,22 +40,22 @@
 }
 
 -(NSURLSessionDataTask *)request:(HLServiceRequest *)request withHandler:(HLNetworkCallback)handler{
+    if([FDUtilities isAccountDeleted]){
+        return 0;
+    }
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
         if (statusCode >= 400) {
+            if(statusCode == 410){//For GDPR compliance
+                [FDUtilities handleGDPRForResponse:responseInfo];
+            }
             [self logRequest:request response:responseInfo];
             NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
             if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
         }
-        else if(statusCode == 410){//For GDPR compliance
-            [[Freshchat sharedInstance] resetUserWithCompletion:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[Freshchat sharedInstance] dismissFreshchatViews];
-                });
-            }];
-        }
+        
         else{
             if (!error) {
                 if (handler) handler(responseInfo,nil);

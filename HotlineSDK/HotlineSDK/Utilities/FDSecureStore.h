@@ -62,6 +62,8 @@
 #define HOTLINE_DEFAULTS_VOTED_ARTICLES @"hotline_defaults_voted_articles"
 #define HOTLINE_DEFAULTS_STRINGS_BUNDLE @"hotline_defaults_strings_bundle"
 
+#define FCRESHCHAT_IS_ACCOUNT_DELETED @"freshchat_defaults_is_account_deleted"
+
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
 

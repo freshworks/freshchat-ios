@@ -27,6 +27,8 @@
 #import "FDAutolayoutHelper.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
+#define ERROR_CODE_USER_DELETED 19
+#define ERROR_CODE_ACCOUNT_DELETED 20
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
@@ -668,6 +670,23 @@ static NSInteger networkIndicator = 0;
         return ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft);
     }
     return false;
+}
+
++ (BOOL) isAccountDeleted{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    return (BOOL)[store boolValueForKey:FCRESHCHAT_IS_ACCOUNT_DELETED];
+}
+
++ (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
+    if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
+        FDSecureStore *store = [FDSecureStore sharedInstance];
+        [store setBoolValue:TRUE forKey:FCRESHCHAT_IS_ACCOUNT_DELETED];
+    }
+    [[Freshchat sharedInstance] resetUserWithCompletion:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[Freshchat sharedInstance] dismissFreshchatViews];
+        });
+    }];
 }
 
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
