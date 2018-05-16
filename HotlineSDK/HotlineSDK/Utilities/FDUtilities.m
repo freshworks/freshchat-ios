@@ -678,6 +678,7 @@ static NSInteger networkIndicator = 0;
 }
 
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
+    FC_GDPR_DELETE_USER_OR_ACCOUNT = YES;
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         FDSecureStore *store = [FDSecureStore sharedInstance];
         [store setBoolValue:TRUE forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];

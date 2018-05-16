@@ -11,6 +11,11 @@
 #import "FDResponseInfo.h"
 #import "HLServiceRequest.h"
 
+typedef enum {
+    BADREQUEST = 400,
+    GONE = 410
+} FCHTTPRESPONSE;
+
 @interface HLAPIClient : NSObject
 
 typedef void(^HLNetworkCallback)(FDResponseInfo *responseInfo, NSError *error);

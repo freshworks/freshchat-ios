@@ -40,22 +40,23 @@
 
 -(NSURLSessionDataTask *)request:(HLServiceRequest *)request withHandler:(HLNetworkCallback)handler{
     if([FDUtilities isAccountDeleted]){
-        return 0;
+        return Nil;
     }
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
-        if (statusCode >= 400) {
-            if(statusCode == 410){//For GDPR compliance
+        if (statusCode >= BADREQUEST) {
+            if(statusCode == GONE){//For GDPR compliance
                 [FDUtilities handleGDPRForResponse:responseInfo];
-            }else{//Do not add failed logs for deleted user or account into loggly
-                [self logRequest:request response:responseInfo];
+                if (handler) handler(responseInfo,nil);
             }
-            NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
-            if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
+            else{
+                [self logRequest:request response:responseInfo];
+                NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
+                if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
+            }
         }
-        
         else{
             if (!error) {
                 if (handler) handler(responseInfo,nil);

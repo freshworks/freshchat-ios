@@ -604,6 +604,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)resetUserWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser {
+    doInit = [FDUtilities isAccountDeleted] ? NO : doInit;
     if (CLEAR_DATA_IN_PROGRESS == NO) {
         CLEAR_DATA_IN_PROGRESS = YES;
         [self processClearUserData:^{
@@ -753,7 +754,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
-    if(previousUserInfo && !inProgress){
+    if(previousUserInfo && !inProgress && !FC_GDPR_DELETE_USER_OR_ACCOUNT){
         inProgress = true;
         [HLCoreServices trackUninstallForUser:previousUserInfo withCompletion:^(NSError *error) {
             if(!error){
