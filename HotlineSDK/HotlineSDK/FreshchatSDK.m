@@ -500,7 +500,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
-    
     if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
         [self showFAQs:controller withOptions:[FAQOptions new]];
     }
@@ -519,10 +518,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    if([FDUtilities isAccountDeleted]) return;
     [HLControllerUtils presentOn:controller option:options];
 }
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
+    if([FDUtilities isAccountDeleted]) return;
     [HLControllerUtils presentOn:controller option:options];
 }
 
@@ -643,7 +644,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     BOOL isUserRegistered = [HLUser isUserRegistered];
-    
+    BOOL isAccountDeleted = [FDUtilities isAccountDeleted];
     [[FreshchatUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
     
     //Clear secure store
@@ -651,15 +652,16 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[FDVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
     [HLUserDefaults clearUserDefaults];
-    
-    if(previousUser && isUserRegistered) {
-        [self storePreviousUser:previousUser inStore:store];
-    } else {
-        [self storePreviousUser:nil inStore:store];
+    [store setBoolValue:isAccountDeleted forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
+    if(![FDUtilities isAccountDeleted]){
+        if(previousUser && isUserRegistered) {
+            [self storePreviousUser:previousUser inStore:store];
+        } else {
+            [self storePreviousUser:nil inStore:store];
+        }
     }
     [self markPreviousUserUninstalledIfPresent];
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
-        
         if(![FDUtilities isAccountDeleted]){
             if(doInit){
                 [self initWithConfig:config completion:completion];
