@@ -11,10 +11,10 @@
 #import "FDResponseInfo.h"
 #import "HLServiceRequest.h"
 
-typedef enum {
-    BADREQUEST = 400,
-    GONE = 410
-} FCHTTPRESPONSE;
+enum FCHTTPResponse {
+    BadRequest = 400,
+    Gone = 410
+};
 
 @interface HLAPIClient : NSObject
 

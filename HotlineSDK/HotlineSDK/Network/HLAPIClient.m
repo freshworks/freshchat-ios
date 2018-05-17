@@ -46,8 +46,8 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
-        if (statusCode >= BADREQUEST) {
-            if(statusCode == GONE){//For GDPR compliance
+        if (statusCode >= BadRequest) {
+            if(statusCode == Gone){//For GDPR compliance
                 [FDUtilities handleGDPRForResponse:responseInfo];
                 if (handler) handler(responseInfo,nil);
             }
