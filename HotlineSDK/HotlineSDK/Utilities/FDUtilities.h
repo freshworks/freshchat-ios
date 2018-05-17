@@ -18,7 +18,7 @@
 
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
-static BOOL FC_GDPR_DELETE_USER_OR_ACCOUNT = NO;
+static BOOL FC_GDPR_DELETED_USER_OR_ACCOUNT = NO;
 
 @interface FreshchatUser()
     @property (nonatomic) BOOL isRestoring;
@@ -77,6 +77,7 @@ static BOOL FC_GDPR_DELETE_USER_OR_ACCOUNT = NO;
 + (NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
 + (UIColor *) invertColor :(UIColor *)color;
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo;
++ (void) updateAccountDeletedStatusAs :(BOOL) state;
 + (BOOL) isAccountDeleted;
 
 @end

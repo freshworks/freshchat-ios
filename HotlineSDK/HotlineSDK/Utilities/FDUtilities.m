@@ -672,16 +672,21 @@ static NSInteger networkIndicator = 0;
     return false;
 }
 
+//Update account state, Caution : use "Yes" carefully
++ (void) updateAccountDeletedStatusAs :(BOOL) state{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setBoolValue:state forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
+}
+
 + (BOOL) isAccountDeleted{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     return (BOOL)[store boolValueForKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
 }
 
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
-    FC_GDPR_DELETE_USER_OR_ACCOUNT = YES;
+    FC_GDPR_DELETED_USER_OR_ACCOUNT = YES;
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
-        FDSecureStore *store = [FDSecureStore sharedInstance];
-        [store setBoolValue:TRUE forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
+        [self updateAccountDeletedStatusAs:TRUE];
     }
     [[Freshchat sharedInstance] resetUserWithCompletion:^{
         dispatch_async(dispatch_get_main_queue(), ^{

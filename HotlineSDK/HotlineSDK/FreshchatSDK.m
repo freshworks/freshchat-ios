@@ -130,6 +130,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     self.config = processedConfig;
     if ([self hasUpdatedConfig:processedConfig]) {
+        [FDUtilities updateAccountDeletedStatusAs:FALSE];
         [self cleanUpData:^{
             [self updateConfig:processedConfig andRegisterUser:completion];
         }];
@@ -755,7 +756,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
-    if(!FC_GDPR_DELETE_USER_OR_ACCOUNT) return;
+    if(!FC_GDPR_DELETED_USER_OR_ACCOUNT) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];

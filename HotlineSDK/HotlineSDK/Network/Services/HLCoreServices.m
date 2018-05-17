@@ -549,6 +549,7 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         NSDictionary *response = responseInfo.responseAsDictionary;
+        FC_GDPR_DELETED_USER_OR_ACCOUNT = NO;
         if (statusCode == 200) { //If the user is found
             if(response[@"restoreId"] && response[@"identifier"]) {
                 if (![[FDUtilities currentUserAlias] isEqual:response[@"alias"]]) {
