@@ -100,7 +100,11 @@
         }
         if(count == 0) {
             NSString *message;
-            if(isLoading){
+            if([FDUtilities isAccountDeleted]){
+                [self removeLoadingIndicator];
+                message = [self.loadingViewDelegate emptyText];
+            }
+            else if(isLoading){
                 message = [self.loadingViewDelegate loadingText];
             }
             else if(![[FDReachabilityManager sharedInstance] isReachable]){
