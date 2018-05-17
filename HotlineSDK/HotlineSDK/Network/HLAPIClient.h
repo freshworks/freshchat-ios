@@ -11,7 +11,7 @@
 #import "FDResponseInfo.h"
 #import "HLServiceRequest.h"
 
-enum FCHTTPResponse {
+enum FCHTTPResponseCode {
     BadRequest = 400,
     Gone = 410
 };

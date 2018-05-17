@@ -58,11 +58,7 @@
             }
         }
         else{
-            if (!error) {
-                if (handler) handler(responseInfo,nil);
-            }else{
-                if (handler) handler(responseInfo,error);
-            }
+            if (handler) handler(responseInfo, error ? error : nil);
         }
     }];
     [task resume];
