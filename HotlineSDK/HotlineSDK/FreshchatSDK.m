@@ -604,7 +604,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)resetUserWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser {
-    doInit = [FDUtilities isAccountDeleted] ? NO : doInit;
     if (CLEAR_DATA_IN_PROGRESS == NO) {
         CLEAR_DATA_IN_PROGRESS = YES;
         [self processClearUserData:^{
@@ -660,18 +659,21 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     [self markPreviousUserUninstalledIfPresent];
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
-        if(doInit){
-            [self initWithConfig:config completion:completion];
-        }
-        if (deviceToken) {
-            [self storeDeviceToken:deviceToken];
+        
+        if(![FDUtilities isAccountDeleted]){
+            if(doInit){
+                [self initWithConfig:config completion:completion];
+            }
+            if (deviceToken) {
+                [self storeDeviceToken:deviceToken];
+            }
+            [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
+            [FDUtilities initiatePendingTasks];
         }
         if (completion) {
             completion();
         }
-        [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
         [FDUtilities postUnreadCountNotification];
-        [FDUtilities initiatePendingTasks];
     }];
 }
 
@@ -751,10 +753,11 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
+    if(!FC_GDPR_DELETE_USER_OR_ACCOUNT) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
-    if(previousUserInfo && !inProgress && !FC_GDPR_DELETE_USER_OR_ACCOUNT){
+    if(previousUserInfo && !inProgress){
         inProgress = true;
         [HLCoreServices trackUninstallForUser:previousUserInfo withCompletion:^(NSError *error) {
             if(!error){
