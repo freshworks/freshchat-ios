@@ -58,6 +58,9 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_MESSAGE_UNSENT_INFO_TEXT @"message_unsent_info_text"
 #define LOC_SERVER_ERROR_INFO_TEXT @"server_error_info_text"
 
+#define LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE @"account_delete_option_not_avail_alert_title"
+#define LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_ALERT_CANCEL @"account_delete_option_not_avail_cancel"
+
 #define LOC_AUDIO_MSG_TITLE @"audio_message_title"
 #define LOC_PICTURE_MSG_TITLE @"picture_message_title"
 #define LOC_PICTURE_MSG_UPLOAD_ERROR @"picture_message_upload_error"

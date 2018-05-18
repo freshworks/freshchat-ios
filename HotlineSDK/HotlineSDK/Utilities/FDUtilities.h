@@ -18,7 +18,7 @@
 
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
-static BOOL FC_GDPR_DELETED_USER_OR_ACCOUNT = NO;
+static BOOL FC_IS_USER_OR_ACCOUNT_DELETED = NO;
 
 @interface FreshchatUser()
     @property (nonatomic) BOOL isRestoring;

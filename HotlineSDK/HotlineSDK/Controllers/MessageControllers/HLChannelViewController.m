@@ -148,7 +148,6 @@
  }
 
 - (void) updateChannelWithInfo :(NSArray *) channelInfo{
-    
     if(self.isFilteredView && channelInfo.count == 0 ){
         HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];
         if(defaultChannel != nil) {

@@ -102,7 +102,7 @@
             NSString *message;
             if([FDUtilities isAccountDeleted]){
                 [self removeLoadingIndicator];
-                message = [self.loadingViewDelegate emptyText];
+                message = HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE);
             }
             else if(isLoading){
                 message = [self.loadingViewDelegate loadingText];

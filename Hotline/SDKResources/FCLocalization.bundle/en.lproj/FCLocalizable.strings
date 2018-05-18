@@ -62,6 +62,10 @@
 "message_unsent_info_text"="We were unable to send your message(s) at this time. Check internet or try again later";
 "server_error_info_text"="Problem sending message. Please try again later.";
 
+/* Account delete messages for actions*/
+"account_delete_option_not_avail_alert_title" = "Support option no longer available";
+"account_delete_option_not_avail_cancel" = "Cancel";
+
 /* Posting audio message alerts */
 "short_audio_alert_title" = "Your message is too short.";
 "short_audio_alert_description_text" = "The audio recording is too short. Please try again";

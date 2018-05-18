@@ -519,12 +519,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
-    if([FDUtilities isAccountDeleted]) return;
+    if([FDUtilities isAccountDeleted]){
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE) message:nil andCancelText:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_ALERT_CANCEL)];
+        return;
+    }
     [HLControllerUtils presentOn:controller option:options];
 }
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
-    if([FDUtilities isAccountDeleted]) return;
+    if([FDUtilities isAccountDeleted]){
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE) message:nil andCancelText:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_ALERT_CANCEL)];
+        return;
+    }
     [HLControllerUtils presentOn:controller option:options];
 }
 
@@ -756,7 +762,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
-    if(!FC_GDPR_DELETED_USER_OR_ACCOUNT) return;
+    if(!FC_IS_USER_OR_ACCOUNT_DELETED) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];

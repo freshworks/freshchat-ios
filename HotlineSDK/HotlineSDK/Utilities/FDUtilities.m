@@ -684,7 +684,7 @@ static NSInteger networkIndicator = 0;
 }
 
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
-    FC_GDPR_DELETED_USER_OR_ACCOUNT = YES;
+    FC_IS_USER_OR_ACCOUNT_DELETED = YES;
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];
     }
