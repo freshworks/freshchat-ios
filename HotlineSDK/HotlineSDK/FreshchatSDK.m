@@ -762,7 +762,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
-    if(!FC_IS_USER_OR_ACCOUNT_DELETED) return;
+    HLAPIClient *client = [HLAPIClient sharedInstance];
+    if(!client.FC_IS_USER_OR_ACCOUNT_DELETED) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];

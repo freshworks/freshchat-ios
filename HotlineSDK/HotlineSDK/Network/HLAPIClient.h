@@ -18,6 +18,8 @@ enum FCHTTPResponseCode {
 
 @interface HLAPIClient : NSObject
 
+@property(nonatomic, assign) BOOL FC_IS_USER_OR_ACCOUNT_DELETED;
+
 typedef void(^HLNetworkCallback)(FDResponseInfo *responseInfo, NSError *error);
 
 +(id)sharedInstance;

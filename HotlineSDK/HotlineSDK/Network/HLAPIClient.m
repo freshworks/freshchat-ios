@@ -34,6 +34,7 @@
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         self.session = [NSURLSession sessionWithConfiguration:configuration];
         self.loggedAPICalls = [[NSMutableArray alloc]init];
+        self.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
     }
     return self;
 }
@@ -48,6 +49,7 @@
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
         if (statusCode >= BadRequest) {
             if(statusCode == Gone){//For GDPR compliance
+                self.FC_IS_USER_OR_ACCOUNT_DELETED = YES;
                 [FDUtilities handleGDPRForResponse:responseInfo];
                 if (handler) handler(responseInfo,nil);
             }

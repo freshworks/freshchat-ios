@@ -95,13 +95,12 @@
             return;
         }
         
-        if(!isLoading){
+        if(!isLoading || [FDUtilities isAccountDeleted]){
             [self removeLoadingIndicator];
         }
         if(count == 0) {
             NSString *message;
             if([FDUtilities isAccountDeleted]){
-                [self removeLoadingIndicator];
                 message = HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE);
             }
             else if(isLoading){
