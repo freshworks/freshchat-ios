@@ -779,28 +779,23 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)dismissHotlineViewInController:(UIViewController *) controller
-                         channelsOnly:(BOOL)channelsOnly
                        withCompletion: (void(^)())completion  {
     void (^clearHLControllers)() = ^void() {
         for(UIViewController *tempVC in controller.childViewControllers){
             if([tempVC isKindOfClass:[HLContainerController class]]){
-                if(channelsOnly) {
-                    UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
-                    if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
-                       [firstViewController isKindOfClass:[FDMessageController class]] ) {
-                        [tempVC dismissViewControllerAnimated:NO completion:completion];
-                    }
-                } else {
+                UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
+                if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
+                   [firstViewController isKindOfClass:[FDMessageController class]] ) {
                     [tempVC dismissViewControllerAnimated:NO completion:completion];
                 }
-            } else if(channelsOnly && [tempVC isKindOfClass:[FDAttachmentImageController class]]) {
+                
+            } else if([tempVC isKindOfClass:[FDAttachmentImageController class]]) {
                 [tempVC dismissViewControllerAnimated:NO completion:completion];
             }
         }
     };
     if(controller.presentedViewController){
         [self dismissHotlineViewInController:controller.presentedViewController
-                                channelsOnly:channelsOnly
                               withCompletion:clearHLControllers];
     }
     else {
@@ -810,13 +805,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void) dismissFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [self dismissHotlineViewInController:rootController channelsOnly:false withCompletion:nil];
-}
-
-
--(void) dismissChannelScreens {
-    UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [self dismissHotlineViewInController:rootController channelsOnly:true withCompletion:nil];
+    [self dismissHotlineViewInController:rootController withCompletion:nil];
 }
 
 @end

@@ -32,11 +32,6 @@
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
-@interface Freshchat ()
-    -(void)dismissChannelScreens;
-@end
-
-
 @implementation FDUtilities
 
 #pragma mark - General Utitlites
