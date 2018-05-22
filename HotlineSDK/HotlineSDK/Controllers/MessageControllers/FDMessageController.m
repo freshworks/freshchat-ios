@@ -358,7 +358,7 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.messagesPoller end];
-    
+    [self.imageInput dismissAttachmentActionSheet];
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }

@@ -14,5 +14,6 @@
 
 - (instancetype) initWithConversation:(KonotorConversation *)conversation onChannel:(HLChannel *)channel;
 - (void) showInputOptions:(UIViewController*) viewController;
+- (void) dismissAttachmentActionSheet;
 
 @end
