@@ -25,12 +25,19 @@
 #import "HLConstants.h"
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
+#import "HLContainerController.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
 #define ERROR_CODE_ACCOUNT_DELETED 20
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+
+@interface Freshchat ()
+
+-(void)customDismissFreshchatViews;
+
+@end
 
 @implementation FDUtilities
 
@@ -50,10 +57,20 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 + (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController {
-    NSMutableArray<UIViewController *> *viewControllers = [currentController.navigationController.viewControllers mutableCopy];
-    [viewControllers removeAllObjects];
-    [viewControllers addObject:controller];
-    [currentController.navigationController setViewControllers:viewControllers animated:NO];
+    if(currentController.navigationController != nil) {
+        NSMutableArray<UIViewController *> *viewControllers;
+        viewControllers = [currentController.navigationController.viewControllers mutableCopy];
+        [viewControllers removeAllObjects];
+        [viewControllers addObject:controller];
+        [currentController.navigationController setViewControllers:viewControllers animated:NO];
+    } else if ([currentController isKindOfClass:[UINavigationController class]])  {
+        NSMutableArray<UIViewController *> *viewControllers;
+        UINavigationController *navigationController = (UINavigationController *)currentController;
+        viewControllers = [navigationController.viewControllers mutableCopy];
+        [viewControllers removeAllObjects];
+        [viewControllers addObject:controller];
+        [navigationController setViewControllers:viewControllers animated:NO];
+    }
 }
 
 
@@ -682,12 +699,18 @@ static NSInteger networkIndicator = 0;
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];
     }
+    [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_STATE];
+}
+
++ (void) customDismissFView {
     [[Freshchat sharedInstance] resetUserWithCompletion:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[Freshchat sharedInstance] dismissFreshchatViews];
+            [[Freshchat sharedInstance] customDismissFreshchatViews];
         });
     }];
 }
+
+
 
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {

@@ -56,6 +56,7 @@
 + (BOOL) isIPhoneXView;
 +(BOOL)isiOS10;
 + (BOOL)isDeviceLanguageRTL;
++ (void) customDismissFView;
 
 + (void)initiatePendingTasks;
 + (BOOL)hasInitConfig;

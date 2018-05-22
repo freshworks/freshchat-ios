@@ -806,6 +806,19 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
+-(void) customDismissFreshchatViews {
+    UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [self dismissHotlineViewInController:rootController withCompletion:nil];
+    if(!rootController.isBeingPresented) {
+        UITabBarController *tabBar = (UITabBarController*) rootController;
+        if(tabBar!= nil) {
+            UIViewController *selectedVC = tabBar.selectedViewController;
+            HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:nil andIsEmbed:YES];
+            [FDUtilities resetNavigationStackWithController:interstitialController currentController:selectedVC];
+        }
+    }
+}
+
 -(void) dismissFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [self dismissHotlineViewInController:rootController withCompletion:nil];

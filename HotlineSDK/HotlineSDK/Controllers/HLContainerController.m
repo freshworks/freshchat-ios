@@ -12,6 +12,8 @@
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
 
+
+
 @interface HLContainerController ()
 
 @property (strong, nonatomic) FCTheme *theme;
@@ -92,14 +94,27 @@
                                                                       }];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = self.childController;
+    if(self.childController.embedded){
+        if([FDUtilities isAccountDeleted]) {
+            [self handleAccountDeletedState];
+        }
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAccountDeletedState)
+                                                     name:FRESHCHAT_ACCOUNT_DELETED_STATE object:nil];
+    }
+}
+- (void) handleAccountDeletedState{
+    [FDUtilities customDismissFView];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
+    if(self.childController.embedded){
+        [[NSNotificationCenter defaultCenter] removeObserver:FRESHCHAT_ACCOUNT_DELETED_STATE];
+    }
 }
 
 @end
