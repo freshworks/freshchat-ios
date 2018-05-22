@@ -280,7 +280,6 @@ typedef struct {
     [self localNotificationSubscription];
     [self setFooterView];
     self.tableView.tableHeaderView = [self tableHeaderView];
-    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self processPendingCSAT];
     [self checkRestoreStateChanged];
 }
@@ -298,6 +297,7 @@ typedef struct {
     [super viewDidAppear:animated];
     [self registerAppAudioCategory];
     [self checkChannel];
+    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self.messagesPoller begin];
     if([FDUtilities canMakeTypicallyRepliesCall] ){
         [self fetchReplyResonseTime];
@@ -816,7 +816,7 @@ typedef struct {
     self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     self.conversation = [self.channel primaryConversation];
     self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
-    
+    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;    
 }
 
 -(void)checkPushNotificationState{
