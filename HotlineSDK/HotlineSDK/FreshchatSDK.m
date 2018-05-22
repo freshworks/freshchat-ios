@@ -728,8 +728,11 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void) sendMessage:(FreshchatMessage *)messageObject{
-     if(messageObject.message.length == 0 || messageObject.tag.length == 0){
+    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
+    }
+    if([FDUtilities isAccountDeleted]){
+        NSLog(@"%@", HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE));
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
