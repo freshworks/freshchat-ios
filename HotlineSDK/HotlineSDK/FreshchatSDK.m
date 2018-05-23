@@ -733,6 +733,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     if([FDUtilities isAccountDeleted]){
         NSLog(@"%@", HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE));
+        return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
