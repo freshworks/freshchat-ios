@@ -12,11 +12,15 @@
 #import "FDUtilities.h"
 #import "FDAutolayoutHelper.h"
 
-
-
 @interface HLContainerController ()
 
 @property (strong, nonatomic) FCTheme *theme;
+
+@end
+
+@interface Freshchat ()
+
+-(void)customDismissFreshchatViews;
 
 @end
 
@@ -97,24 +101,24 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = self.childController;
-    if(self.childController.embedded){
-        if([FDUtilities isAccountDeleted]) {
-            [self handleAccountDeletedState];
-        }
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAccountDeletedState)
-                                                     name:FRESHCHAT_ACCOUNT_DELETED_EVENT object:nil];
+    if([FDUtilities isAccountDeleted]) {
+        [self handleAccountDeletedState];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAccountDeletedState)
+                                                 name:FRESHCHAT_ACCOUNT_DELETED_EVENT object:nil];
 }
 - (void) handleAccountDeletedState{
-    [FDUtilities customDismissFView];
+    [[Freshchat sharedInstance] resetUserWithCompletion:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[Freshchat sharedInstance] customDismissFreshchatViews];
+        });
+    }];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
-    if(self.childController.embedded){
-        [[NSNotificationCenter defaultCenter] removeObserver:FRESHCHAT_ACCOUNT_DELETED_EVENT];
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:FRESHCHAT_ACCOUNT_DELETED_EVENT];
 }
 
 @end

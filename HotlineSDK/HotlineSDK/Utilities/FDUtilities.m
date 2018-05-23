@@ -33,12 +33,6 @@
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
-@interface Freshchat ()
-
--(void)customDismissFreshchatViews;
-
-@end
-
 @implementation FDUtilities
 
 #pragma mark - General Utitlites
@@ -688,19 +682,15 @@ static NSInteger networkIndicator = 0;
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];
+        [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_EVENT];
+    } else {
+        [[Freshchat sharedInstance] resetUserWithCompletion:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[Freshchat sharedInstance] dismissFreshchatViews];
+            });
+        }];
     }
-    [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_EVENT];
 }
-
-+ (void) customDismissFView {
-    [[Freshchat sharedInstance] resetUserWithCompletion:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[Freshchat sharedInstance] customDismissFreshchatViews];
-        });
-    }];
-}
-
-
 
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{
     [[KonotorDataManager sharedInstance]fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
