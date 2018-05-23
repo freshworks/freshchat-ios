@@ -102,7 +102,7 @@
             [self handleAccountDeletedState];
         }
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAccountDeletedState)
-                                                     name:FRESHCHAT_ACCOUNT_DELETED_STATE object:nil];
+                                                     name:FRESHCHAT_ACCOUNT_DELETED_EVENT object:nil];
     }
 }
 - (void) handleAccountDeletedState{
@@ -113,7 +113,7 @@
     [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
     if(self.childController.embedded){
-        [[NSNotificationCenter defaultCenter] removeObserver:FRESHCHAT_ACCOUNT_DELETED_STATE];
+        [[NSNotificationCenter defaultCenter] removeObserver:FRESHCHAT_ACCOUNT_DELETED_EVENT];
     }
 }
 

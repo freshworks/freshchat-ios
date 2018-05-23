@@ -689,7 +689,7 @@ static NSInteger networkIndicator = 0;
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];
     }
-    [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_STATE];
+    [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_EVENT];
 }
 
 + (void) customDismissFView {
