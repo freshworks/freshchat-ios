@@ -57,20 +57,10 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 }
 
 + (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController {
-    if(currentController.navigationController != nil) {
-        NSMutableArray<UIViewController *> *viewControllers;
-        viewControllers = [currentController.navigationController.viewControllers mutableCopy];
-        [viewControllers removeAllObjects];
-        [viewControllers addObject:controller];
-        [currentController.navigationController setViewControllers:viewControllers animated:NO];
-    } else if ([currentController isKindOfClass:[UINavigationController class]])  {
-        NSMutableArray<UIViewController *> *viewControllers;
-        UINavigationController *navigationController = (UINavigationController *)currentController;
-        viewControllers = [navigationController.viewControllers mutableCopy];
-        [viewControllers removeAllObjects];
-        [viewControllers addObject:controller];
-        [navigationController setViewControllers:viewControllers animated:NO];
-    }
+    NSMutableArray<UIViewController *> *viewControllers = [currentController.navigationController.viewControllers mutableCopy];
+    [viewControllers removeAllObjects];
+    [viewControllers addObject:controller];
+    [currentController.navigationController setViewControllers:viewControllers animated:NO];
 }
 
 
