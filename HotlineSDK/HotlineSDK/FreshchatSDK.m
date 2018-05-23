@@ -287,9 +287,15 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(BOOL)hasUpdatedConfig:(FreshchatConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSDictionary *oldUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *existingAppKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    if(!existingDomainName && !existingAppID && !existingAppKey && oldUserInfo){
+        existingDomainName = oldUserInfo[@"domain"];
+        existingAppID      = oldUserInfo[@"appId"];
+        existingAppKey     = oldUserInfo[@"appKey"];
+    }
     if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])&&(existingAppKey && ![existingAppKey isEqualToString:@""])) {
         return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID] || ![existingAppKey isEqualToString:config.appKey]) ? YES : NO;
     }else{
@@ -661,12 +667,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[FDVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
     [HLUserDefaults clearUserDefaults];
     [store setBoolValue:isAccountDeleted forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
-    if(![FDUtilities isAccountDeleted]){
-        if(previousUser && isUserRegistered) {
-            [self storePreviousUser:previousUser inStore:store];
-        } else {
-            [self storePreviousUser:nil inStore:store];
-        }
+    if(previousUser && isUserRegistered) {
+        [self storePreviousUser:previousUser inStore:store];
+    } else {
+        [self storePreviousUser:nil inStore:store];
     }
     [self markPreviousUserUninstalledIfPresent];
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
@@ -768,7 +772,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)markPreviousUserUninstalledIfPresent{
     HLAPIClient *client = [HLAPIClient sharedInstance];
-    if(!client.FC_IS_USER_OR_ACCOUNT_DELETED) return;
+    if(client.FC_IS_USER_OR_ACCOUNT_DELETED) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
