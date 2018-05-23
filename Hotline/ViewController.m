@@ -264,7 +264,11 @@ SampleController *sampleController;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    //[[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
+    [self.navigationController pushViewController:viewController animated:true];
+    
+    
 }
 
 //2

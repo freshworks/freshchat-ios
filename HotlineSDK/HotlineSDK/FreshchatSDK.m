@@ -809,12 +809,26 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 -(void) customDismissFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [self dismissHotlineViewInController:rootController withCompletion:nil];
-    if(!rootController.isBeingPresented) {
+    if(!rootController.isBeingPresented) { // Embeded case
         UITabBarController *tabBar = (UITabBarController*) rootController;
-        if(tabBar!= nil) {
+        if(tabBar!= nil) { //Tab bar case
             UIViewController *selectedVC = tabBar.selectedViewController;
-            HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:nil andIsEmbed:YES];
-            [FDUtilities resetNavigationStackWithController:interstitialController currentController:selectedVC];
+            if(selectedVC!= nil) {
+                NSMutableArray<UIViewController *> *viewControllers = [[NSMutableArray alloc]init];
+                for(UIViewController *tempVC in selectedVC.childViewControllers) {
+                    if([tempVC isKindOfClass:[HLContainerController class]]) { // Check for our Freshchat SDK screen
+                        HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:nil andIsEmbed:YES];                        
+                        UINavigationController *navigationController = (UINavigationController *)selectedVC;
+                        if (interstitialController != nil && navigationController != nil) {
+                            [viewControllers addObject:interstitialController];
+                            [navigationController setViewControllers:viewControllers animated:NO];
+                        }
+                        break; //Set the top most custom screens if any with the current not supported support section
+                    } else {
+                        [viewControllers addObject:tempVC]; //Insert all the top most custom screens
+                    }
+                }
+            }
         }
     }
 }

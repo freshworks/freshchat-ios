@@ -79,6 +79,7 @@
         UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
         
         ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
+        UINavigationController *mainNavigationController = [[UINavigationController alloc] initWithRootViewController:mainController];
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
                                                  [freshchatSDK getFAQsControllerForEmbed]];
         
@@ -89,7 +90,7 @@
         convControllerOption.title = @"ConvWithOptions";
 
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
-        [tabBarController setViewControllers:@[mainController, FAQController,faqControllerOption, _channelsController,convControllerOption]];
+        [tabBarController setViewControllers:@[mainNavigationController, FAQController,faqControllerOption, _channelsController,convControllerOption]];
         [tabBarController.tabBar setClipsToBounds:NO];
         [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];
