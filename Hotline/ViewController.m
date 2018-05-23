@@ -271,6 +271,21 @@ SampleController *sampleController;
     
 }
 
+- (IBAction)channelFilter2:(id)sender{
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.conversationTitle.text];
+    FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnAppBar = true;
+    options.showContactUsOnFaqScreens = true;
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
+    }
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+}
+
 //2
 - (IBAction)articleFilter2:(id)sender{
     NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];

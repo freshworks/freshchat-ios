@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -184,12 +184,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E9O-AL-c7N">
-                                <rect key="frame" x="107" y="439" width="140" height="30"/>
+                                <rect key="frame" x="28" y="439" width="122" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Qnm-Gk-ykP"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Show Conversation"/>
+                                <state key="normal" title="Conv - Nav Push"/>
                                 <connections>
                                     <action selector="channelFilter1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rX4-Rc-d6f"/>
                                 </connections>
@@ -240,6 +240,16 @@
                                     <segue destination="w1A-2B-cIV" kind="presentation" id="SXk-V7-3eX"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uzT-qf-t8G">
+                                <rect key="frame" x="216" y="440" width="133" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="9z3-nh-etG"/>
+                                </constraints>
+                                <state key="normal" title="Conversations"/>
+                                <connections>
+                                    <action selector="channelFilter2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dhj-4H-F3z"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -267,6 +277,7 @@
                             <constraint firstItem="eHB-8x-7aF" firstAttribute="leading" secondItem="Amd-wv-unf" secondAttribute="leading" id="Gwj-AM-9HH"/>
                             <constraint firstItem="wPs-cd-dxH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="70" id="HJ4-LC-cGa"/>
                             <constraint firstItem="2NX-Cc-icV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="56" id="HdF-Ru-Vih"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="uzT-qf-t8G" secondAttribute="trailing" constant="10" id="J7M-PV-Eog"/>
                             <constraint firstItem="vvd-O5-Z8Q" firstAttribute="trailing" secondItem="wPs-cd-dxH" secondAttribute="trailing" constant="-98" id="KS0-YW-cXy"/>
                             <constraint firstItem="Amd-wv-unf" firstAttribute="top" secondItem="eHB-8x-7aF" secondAttribute="bottom" constant="8" symbolic="YES" id="KnS-ss-fSI"/>
                             <constraint firstItem="Ztz-Gx-OpG" firstAttribute="leading" secondItem="vvd-O5-Z8Q" secondAttribute="leading" id="Ktu-pa-Lys"/>
@@ -280,10 +291,11 @@
                             <constraint firstItem="H0x-v6-fUJ" firstAttribute="trailing" secondItem="eHB-8x-7aF" secondAttribute="trailing" id="Wzb-mK-0pe"/>
                             <constraint firstItem="SEa-zO-e9J" firstAttribute="leading" secondItem="Xhd-ru-pag" secondAttribute="leading" id="Xau-Te-psp"/>
                             <constraint firstItem="BNf-Bw-oY1" firstAttribute="top" secondItem="vvd-O5-Z8Q" secondAttribute="bottom" constant="-30" id="YBA-1q-gSC"/>
+                            <constraint firstItem="uzT-qf-t8G" firstAttribute="leading" secondItem="E9O-AL-c7N" secondAttribute="trailing" constant="66" id="ZF8-WA-Te3"/>
                             <constraint firstItem="E9O-AL-c7N" firstAttribute="top" secondItem="BNf-Bw-oY1" secondAttribute="bottom" constant="46" id="ZhN-KB-6xc"/>
                             <constraint firstItem="vvd-O5-Z8Q" firstAttribute="leading" secondItem="ZXU-9Z-Pij" secondAttribute="leading" constant="-130" id="a2D-fx-KoB"/>
                             <constraint firstItem="O2s-Q2-4ac" firstAttribute="bottom" secondItem="7TW-UG-4UY" secondAttribute="bottom" constant="1" id="aet-G6-3pa"/>
-                            <constraint firstItem="E9O-AL-c7N" firstAttribute="centerX" secondItem="2NX-Cc-icV" secondAttribute="centerX" id="bYf-eT-e29"/>
+                            <constraint firstItem="E9O-AL-c7N" firstAttribute="centerX" secondItem="2NX-Cc-icV" secondAttribute="centerX" constant="-88.5" id="bYf-eT-e29"/>
                             <constraint firstItem="2NX-Cc-icV" firstAttribute="top" secondItem="E9O-AL-c7N" secondAttribute="bottom" constant="9" id="bsD-4G-fbN"/>
                             <constraint firstItem="BNf-Bw-oY1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="175" id="cVh-IU-hLT"/>
                             <constraint firstItem="dr5-9e-4lq" firstAttribute="baseline" secondItem="Xhd-ru-pag" secondAttribute="firstBaseline" id="dL9-em-AtZ"/>
@@ -302,6 +314,7 @@
                             <constraint firstItem="k2Q-6y-c57" firstAttribute="top" secondItem="O2s-Q2-4ac" secondAttribute="bottom" constant="37" id="izj-5U-Ket"/>
                             <constraint firstItem="w4p-GQ-AzA" firstAttribute="trailing" secondItem="fvj-MH-NJ0" secondAttribute="trailing" id="jAU-u5-QEO"/>
                             <constraint firstItem="O2s-Q2-4ac" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="15" id="kWm-Yx-RqS"/>
+                            <constraint firstItem="2NX-Cc-icV" firstAttribute="top" secondItem="uzT-qf-t8G" secondAttribute="bottom" constant="8" symbolic="YES" id="lir-EZ-t8r"/>
                             <constraint firstItem="ZIn-zO-eWh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="29" id="lnz-JB-jY7"/>
                             <constraint firstItem="COe-Ai-wtg" firstAttribute="leading" secondItem="hkQ-Ye-IkM" secondAttribute="leading" id="njs-kp-Tfc"/>
                             <constraint firstItem="Amd-wv-unf" firstAttribute="baseline" secondItem="hkQ-Ye-IkM" secondAttribute="baseline" id="oW5-ah-gSy"/>
