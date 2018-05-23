@@ -54,7 +54,7 @@
                 if (handler) handler(responseInfo,nil);
             }
             else{
-                [self logRequest:request response:responseInfo];
+                [self logRequest:request];
                 NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
                 if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
             }
@@ -67,13 +67,13 @@
     return task;
 }
 
--(void)logRequest:(HLServiceRequest *)request response:(FDResponseInfo *)response{
+-(void)logRequest:(HLServiceRequest *)request {
     NSString *path = request.URL.path;
     if (path) {
         if (![self.loggedAPICalls containsObject:path]) {
             [self.loggedAPICalls addObject:path];
             FDMemLogger *logger = [FDMemLogger new];
-            [logger addErrorInfo:@{ @"request" : request.toString, @"response" : response.toString}];
+            [logger addErrorInfo:@{ @"request" : request.toString}];
             [logger upload];
         }
     }

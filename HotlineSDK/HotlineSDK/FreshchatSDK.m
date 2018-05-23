@@ -289,8 +289,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])) {
-        return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+    NSString *existingAppKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])&&(existingAppKey && ![existingAppKey isEqualToString:@""])) {
+        return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID] || ![existingAppKey isEqualToString:config.appKey]) ? YES : NO;
     }else{
         //This is first launch, do not treat this as config update.
         [FDUtilities removeUUIDWithAppID:config.appID];

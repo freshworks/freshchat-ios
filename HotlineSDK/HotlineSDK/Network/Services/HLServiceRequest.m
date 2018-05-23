@@ -11,6 +11,8 @@
 #import <UIKit/UIKit.h>
 #import "FDSecureStore.h"
 #import "HLVersionConstants.h"
+#import "FDStringUtil.h"
+#define REGEX_USER_KEY @"t=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 
 @interface HLServiceRequest ()
 
@@ -155,7 +157,8 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
 
 -(NSString *)toString{
     NSString *body = [[[NSString alloc]initWithData:self.formData encoding:self.preferredEncoding] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    return [NSString stringWithFormat:@"HEADERS : %@ REQUEST: %@ HTTP-BODY:%@", [self allHTTPHeaderFields] , self, body];
+    NSString *request = [FDStringUtil replaceInString:[NSString stringWithFormat:@"%@", self] usingRegex:REGEX_USER_KEY replaceWith:@"t=XXXXXXXXXXX"];
+    return [NSString stringWithFormat:@"HEADERS : %@ REQUEST: %@ HTTP-BODY:%@", [self allHTTPHeaderFields] , request, body];
 }
 
 @end
