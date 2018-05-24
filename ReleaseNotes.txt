@@ -2,6 +2,10 @@
 Ver 1.4.0 
 __________________________
 Graceful handling of deleted users and accounts
+
+Ver 1.4.0 
+__________________________
+Graceful handling of deleted users and accounts
 Ver 1.3.2 
 __________________________
 Support for historical response time if current response time is not available
