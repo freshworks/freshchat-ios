@@ -258,7 +258,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)cleanUpData:(void (^)())completion{
     KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
-    NSDictionary *previousUser = [self getPreviousUserInfo];
+    NSDictionary *previousUser = [self getPreviousUserConfig];
     [dataManager deleteAllSolutions:^(NSError *error) {
         FDLog(@"All solutions deleted");
         [dataManager deleteAllIndices:^(NSError *error) {
@@ -268,7 +268,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }];
 }
 
--(NSDictionary *) getPreviousUserInfo{
+-(NSDictionary *) getPreviousUserConfig{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = nil;
     if( [HLUser isUserRegistered] &&
@@ -653,7 +653,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     
     if(!previousUser) {
-        previousUser = [self getPreviousUserInfo];
+        previousUser = [self getPreviousUserConfig];
     }
     
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];

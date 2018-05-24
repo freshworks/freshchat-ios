@@ -30,7 +30,7 @@
 
 -(void)performPendingTasks;
 -(void)registerDeviceToken;
--(NSDictionary *) getPreviousUserInfo;
+-(NSDictionary *) getPreviousUserConfig;
 -(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore;
 
 @end
@@ -583,7 +583,7 @@
     [[KonotorDataManager sharedInstance] clearUserExceptTags:^(NSError *error) {
         FDSecureStore *store = [FDSecureStore sharedInstance];
         // Store the user again to send uninstall api again
-        NSDictionary *previousUser = [[Freshchat sharedInstance] getPreviousUserInfo];
+        NSDictionary *previousUser = [[Freshchat sharedInstance] getPreviousUserConfig];
         BOOL isUserRegistered = [HLUser isUserRegistered];
         if(previousUser && isUserRegistered) {
             [[Freshchat sharedInstance] storePreviousUser:previousUser inStore:store];
