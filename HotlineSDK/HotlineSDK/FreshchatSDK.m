@@ -527,7 +527,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
     if([FDUtilities isAccountDeleted]){
-        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE) message:nil andCancelText:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_ALERT_CANCEL)];
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
         return;
     }
     [HLControllerUtils presentOn:controller option:options];
@@ -535,7 +535,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
     if([FDUtilities isAccountDeleted]){
-        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE) message:nil andCancelText:HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_ALERT_CANCEL)];
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
         return;
     }
     [HLControllerUtils presentOn:controller option:options];
@@ -737,7 +737,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         return;
     }
     if([FDUtilities isAccountDeleted]){
-        NSLog(@"%@", HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE));
+        NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];

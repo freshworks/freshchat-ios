@@ -63,8 +63,8 @@
 "server_error_info_text"="Problem sending message. Please try again later.";
 
 /* Account delete messages for actions*/
-"account_delete_option_not_avail_alert_title" = "Support option no longer available";
-"account_delete_option_not_avail_cancel" = "Cancel";
+"error_message_account_not_active_text" = "This section is no longer available";
+"error_message_account_not_active_cancel" = "Cancel";
 
 /* Posting audio message alerts */
 "short_audio_alert_title" = "Your message is too short.";

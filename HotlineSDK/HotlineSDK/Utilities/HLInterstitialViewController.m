@@ -66,7 +66,7 @@
 
 -(NSString *)loadingText{
     if([FDUtilities isAccountDeleted]){
-        return HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE);
+        return HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT);
     }
     else if(self.restoring) {
         return HLLocalizedString(LOC_RESTORING_CHANNEL_TEXT);

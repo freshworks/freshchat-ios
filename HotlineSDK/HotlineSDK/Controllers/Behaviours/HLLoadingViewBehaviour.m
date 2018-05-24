@@ -101,7 +101,7 @@
         if(count == 0) {
             NSString *message;
             if([FDUtilities isAccountDeleted]){
-                message = HLLocalizedString(LOC_ACCOUNT_DELETE_OPTION_UNAVAIL_TITLE);
+                message = HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT);
             }
             else if(isLoading){
                 message = [self.loadingViewDelegate loadingText];
