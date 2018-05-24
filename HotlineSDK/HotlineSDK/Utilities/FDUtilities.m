@@ -682,7 +682,9 @@ static NSInteger networkIndicator = 0;
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];
-        [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_EVENT];
+        [[Freshchat sharedInstance] resetUserWithCompletion:^{
+            [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_EVENT];
+        }];
     } else {
         [[Freshchat sharedInstance] resetUserWithCompletion:^{
             dispatch_async(dispatch_get_main_queue(), ^{

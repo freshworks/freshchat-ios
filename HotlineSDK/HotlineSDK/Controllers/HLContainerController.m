@@ -20,7 +20,7 @@
 
 @interface Freshchat ()
 
--(void)customDismissFreshchatViews;
+-(void)dismissEmbededFreshchatViews;
 
 @end
 
@@ -108,11 +108,9 @@
                                                  name:FRESHCHAT_ACCOUNT_DELETED_EVENT object:nil];
 }
 - (void) handleAccountDeletedState{
-    [[Freshchat sharedInstance] resetUserWithCompletion:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[Freshchat sharedInstance] customDismissFreshchatViews];
-        });
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[Freshchat sharedInstance] dismissEmbededFreshchatViews];
+    });
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

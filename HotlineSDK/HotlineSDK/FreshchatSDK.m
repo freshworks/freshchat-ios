@@ -794,7 +794,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
             if([tempVC isKindOfClass:[HLContainerController class]]){
                 UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
                 if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
-                   [firstViewController isKindOfClass:[FDMessageController class]] ) {
+                   [firstViewController isKindOfClass:[HLCategoryGridViewController class]] ||
+                   [firstViewController isKindOfClass:[HLListViewController class]] ||
+                   [firstViewController isKindOfClass:[HLArticleDetailViewController class]] ||
+                   [firstViewController isKindOfClass:[FDMessageController class]]  ) {
                     [tempVC dismissViewControllerAnimated:NO completion:completion];
                 }
                 
@@ -812,7 +815,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
--(void) customDismissFreshchatViews {
+-(void) dismissEmbededFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [self dismissHotlineViewInController:rootController withCompletion:nil];
     if(!rootController.isBeingPresented) { // Embeded case
