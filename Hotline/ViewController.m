@@ -193,6 +193,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
     if(![_audioPlayer isPlaying]){
         [_audioPlayer play];
     }
