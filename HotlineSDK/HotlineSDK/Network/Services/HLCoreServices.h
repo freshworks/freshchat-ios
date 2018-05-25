@@ -42,4 +42,8 @@
 
 +(void) resetUserData:(void (^)())completion;
 
++(void) setAsUploadedTo:(NSArray *) properties withCompletion:(void (^)())completion;
+
++(NSArray *) updatePropertiesTo: (NSMutableDictionary *) userInfo;
+
 @end

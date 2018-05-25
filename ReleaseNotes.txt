@@ -3,9 +3,9 @@ Ver 1.4.0
 __________________________
 Graceful handling of deleted users and accounts
 
-Ver 1.3.3
+Ver 1.3.3 
 __________________________
-Bug fixes
+Bug Fixes
 
 Ver 1.3.2 
 __________________________
