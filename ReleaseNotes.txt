@@ -1,4 +1,8 @@
 
+Ver 1.4.1 
+__________________________
+Fix regression with user updates
+
 Ver 1.4.0 
 __________________________
 Graceful handling of deleted users and accounts
@@ -17,11 +21,6 @@ __________________________
 -Team Member info now controlled by a unified flag (teamMemberInfoVisible)
 -Message cell rendering fixes for orientation changes
 -Miscellaneous fixes
-
-Ver 1.3.0 
-__________________________
-SDK header file name updated :to FreshchatSDK.h for naming consistency.
-Better rendering support for RTL content.
 
 Ver 1.3.0 
 __________________________
