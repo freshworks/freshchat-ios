@@ -11,7 +11,8 @@
 #import "Message.h"
 #import "HLMacros.h"
 #import "HotlineAppState.h"
-#import "HLTags.h" 
+#import "FDImageView.h"
+#import "HLTags.h"
 
 @implementation HLChannel
 
@@ -84,6 +85,13 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
+    
+    //FDwebimage prefetch image and will be used by channel fetch
+    if(channel.iconURL){
+        [FDUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
+            FDLog(@"Image with url cached successfully %@", channel.iconURL)
+        }];
+    }
     
     if ([channelInfo objectForKey:@"restricted"]) {
         channel.isRestricted = channelInfo[@"restricted"];

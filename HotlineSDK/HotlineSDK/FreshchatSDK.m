@@ -51,7 +51,7 @@
 #import "FDImageView.h"
 #import "FDVotingManager.h"
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
-
+#define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
 
 @interface FDNotificationBanner ()
@@ -165,6 +165,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
+        [FDImageCache sharedImageCache].config.maxCacheAge = FD_IMAGE_CACHE_DURATION;
         [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
@@ -667,6 +668,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     } else {
         config.themeName = FD_DEFAULT_THEME_NAME;
     }
+    
+    //Clear FDWebImage user cache
+    [[FDImageCache sharedImageCache] clearMemory];
+    [[FDImageCache sharedImageCache] clearDiskOnCompletion:nil];
     
     if(!previousUser) {
         previousUser = [self getPreviousUserConfig];

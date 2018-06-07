@@ -267,17 +267,17 @@
     
     if (indexPath.row < self.channels.count) {
         HLChannelInfo *channel =  self.channels[indexPath.row];
-
+        
         Message *lastMessage = [self getLastMessageInChannel:channel.channelID];
         cell.separatorInset = UIEdgeInsetsZero;
         cell.titleLabel.text  = channel.name;
         
         cell.tag = indexPath.row;
-
+        
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
         
         if([lastMessage.createdMillis intValue]){
-           cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
+            cell.lastUpdatedLabel.text= [FDDateUtil getStringFromDate:date];
         }
         else{
             cell.lastUpdatedLabel.text = nil;
@@ -286,9 +286,9 @@
         NSString *fragmentHTML = [lastMessage getDetailDescriptionForMessage];
         NSError *parseErr;
         NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[fragmentHTML dataUsingEncoding:NSUnicodeStringEncoding]
-                                                                                            options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
-                                                                                            documentAttributes:nil
-                                                                                            error:&parseErr];
+                                                                                                   options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
+                                                                                        documentAttributes:nil
+                                                                                                     error:&parseErr];
         
         if(parseErr) {
             cell.detailLabel.text = fragmentHTML;
@@ -296,59 +296,30 @@
             cell.detailLabel.text = [attributedTitleString string];
         }
         
-
-
+        
+        
         NSInteger unreadCount = [Message getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
-
+        
         FDSecureStore *store = [FDSecureStore sharedInstance];
         BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
-
+        
+        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
+        cell.imgView.image = placeholderImage;
+        
         if(showChannelThumbnail){
-            if (channel.icon) {
-                cell.imgView.image = [UIImage imageWithData:channel.icon];
-            }
-            else{
-                UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
-                NSURL *iconURL = [NSURL URLWithString:channel.iconURL];
-                if(iconURL){
-                    if (cell.tag == indexPath.row) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            cell.imgView.image = placeholderImage;
-                            [cell setNeedsLayout];
-                        });
-                    }
-                    
-                    [self.iconDownloader enqueue:^{
-                        NSData *imageData = [NSData dataWithContentsOfURL:iconURL];
-                        UIImage *image = [[UIImage alloc] initWithData:imageData];
-                        if (image) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                if (cell.tag == indexPath.row) {
-                                    cell.imgView.image = image;
-                                    [cell setNeedsLayout];
-                                    channel.icon = UIImagePNGRepresentation(image);
-                                }
-                            });
-                        }else{
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                cell.imgView.image = placeholderImage;
-                                [cell setNeedsLayout];
-                            });
-                        }
-                    }];
-                }
-                else{
-                    cell.imgView.image = placeholderImage;
-                }
+            if (channel.iconURL) {
+                [FDUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        cell.imgView.image = image;
+                    });
+                }];
+                
             }
         }
-
     }
-    
     [cell adjustPadding];
-
     return cell;
 }
 

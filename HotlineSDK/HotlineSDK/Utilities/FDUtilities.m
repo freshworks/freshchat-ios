@@ -26,6 +26,7 @@
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
 #import "HLContainerController.h"
+#import "FDImageView.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -480,6 +481,15 @@ static NSInteger networkIndicator = 0;
     NSString* fName = firstName ? firstName : @"";
     NSString* lName = lastName ? lastName : @"";
     return ([@[fName, spaceStr, lName] componentsJoinedByString:@""]);
+}
+
++ (void) getFDImageWithURL : (NSString *) stringUrl withCompletion:(void (^)(UIImage* image))completion{
+    FDWebImageManager *manager = [FDWebImageManager sharedManager];
+    [manager loadImageWithURL:[NSURL URLWithString:stringUrl] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        completion(image);
+    }];
 }
 
 +(NSString*)deviceModelName{

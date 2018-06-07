@@ -255,11 +255,14 @@
     
     self.titleLabel.text = channel.name;
     
-    if (channel.icon) {
-        self.imgView.image = [UIImage imageWithData:channel.icon];
-    }else{
-        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
-        self.imgView.image = placeholderImage;
+    UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
+    self.imgView.image = placeholderImage;
+    if (channel.iconURL) {
+        [FDUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.imgView.image = image;
+            });
+        }];
     }
     
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;
