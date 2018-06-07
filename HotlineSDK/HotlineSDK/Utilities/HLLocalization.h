@@ -50,8 +50,6 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_DEFAULT_VIDEO_BUTTON_TEXT @"default_video_button_text"
 #define LOC_DEFAULT_FILE_BUTTON_TEXT @"default_file_button_text"
 
-#define LOC_EMPTY_MSG_TITLE @"empty_message_title"
-#define LOC_EMPTY_MSG_INFO_TEXT @"empty_message_info_text"
 #define LOC_MODIFY_PUSH_SETTING_TITLE @"modify_push_setting_title"
 #define LOC_MODIFY_PUSH_SETTING_INFO_TEXT @"modify_push_setting_info_text"
 #define LOC_MESSAGE_UNSENT_TITLE @"message_unsent_title"

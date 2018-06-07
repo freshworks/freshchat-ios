@@ -163,11 +163,11 @@
     return [matches count] > 0;
 }
 
-+(BOOL)isNotEmpty:(NSString *)str{
++(BOOL)isNotEmptyString:(NSString *)str{
     return str && str.length > 0;
 }
 
-+(BOOL)isEmpty:(NSString *)str{
-    return ![FDStringUtil isNotEmpty:str];
++(BOOL)isEmptyString:(NSString *)str{
+    return ![FDStringUtil isNotEmptyString:trimString(str)];
 }
 @end

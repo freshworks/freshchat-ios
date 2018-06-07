@@ -16,6 +16,7 @@
 #import "FDSecureStore.h"
 #import "FDAutolayoutHelper.h"
 #import "FDPlistManager.h"
+#import "FDStringUtil.h"
 
 @interface FDInputToolbarView () <UITextViewDelegate>{
     NSString *placeHolderText;
@@ -31,6 +32,7 @@
 @property (nonatomic, strong) NSLayoutConstraint   *accessoryViewWidthConstraint;
 @property (nonatomic, strong) NSLayoutConstraint   *accessoryViewHeightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint   *accessoryViewYConstraint;
+@property (nonatomic, strong) UILabel *placeholderLabel;
 
 @property (nonatomic, assign) BOOL isVoiceMessageEnabled;
 
@@ -39,7 +41,7 @@
 @implementation FDInputToolbarView
 
 @synthesize innerImageView, outerImageView,textView, sendButton, attachButton, attachButtonWidthConstraint,
-micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewContainer, accessoryViewHeightConstraint, accessoryViewWidthConstraint, dividerView;
+micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewContainer, accessoryViewHeightConstraint, accessoryViewWidthConstraint, dividerView, placeholderLabel;
 
 -(instancetype)initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate{
     self = [super init];
@@ -51,9 +53,10 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         dividerView = [[UIView alloc] init];
         dividerView.translatesAutoresizingMaskIntoConstraints = NO;
         dividerView.backgroundColor = [[FCTheme sharedInstance] inputToolbarDividerColor];
+        
         textView=[[UITextView alloc] init];
         [textView setFont:[self.theme inputTextFont]];
-        [textView setTextColor:[self.theme inputTextPlaceholderFontColor]];
+        [textView setTextColor:[self.theme inputTextFontColor]];
         textView.tintColor = [self.theme inputTextCursorColor];
         textView.layer.borderColor=[[self.theme inputTextBorderColor] CGColor];
         textView.layer.cornerRadius=5.0;
@@ -61,15 +64,19 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         textView.delegate = self;
         textView.backgroundColor = [self.theme inputTextfieldBackgroundColor];
         [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        placeHolderText = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
-        textView.text = placeHolderText;
         textView.delegate = self;
+        
+        placeholderLabel = [[UILabel alloc] init];
+        placeholderLabel.text = HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT);
+        [placeholderLabel setTextColor:[self.theme inputTextPlaceholderFontColor]];
+        [placeholderLabel setFont:[self.theme inputTextFont]];
+        placeholderLabel.translatesAutoresizingMaskIntoConstraints = NO;
         
         attachButton = [FDButton buttonWithType:UIButtonTypeCustom];
         attachButton.translatesAutoresizingMaskIntoConstraints = NO;
+        attachButton.backgroundColor = [UIColor clearColor];
         UIImage *attachmentImage = [self.theme getImageValueWithKey:IMAGE_ATTACH_ICON];
         [attachButton setImage:attachmentImage forState:UIControlStateNormal];
-        attachButton.backgroundColor = [UIColor clearColor];
         [attachButton addTarget:self action:@selector(attachmentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         micButton = [FDButton buttonWithType:UIButtonTypeCustom];
@@ -79,6 +86,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         [micButton setImage:micImage forState:UIControlStateNormal];
         micButton.backgroundColor = [UIColor clearColor];
         [micButton addTarget:self action:@selector(micButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        
         
         sendButton = [FDButton buttonWithType:UIButtonTypeSystem];
         sendButton.backgroundColor = [UIColor clearColor];
@@ -100,20 +108,28 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         [self addSubview:textView];
         [self addSubview:accessoryViewContainer];
         [self addSubview:attachButton];
+        [self addSubview:placeholderLabel];
         
         [accessoryViewContainer addSubview:micButton];
         [accessoryViewContainer addSubview:sendButton];
         
-        NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(dividerView,attachButton,textView,
-                                                                                                                  sendButton, micButton, accessoryViewContainer)];
+        NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:NSDictionaryOfVariableBindings(dividerView, attachButton, textView, sendButton, micButton, accessoryViewContainer, placeholderLabel)];
+        
+        NSDictionary *metrics = @{
+                                  @"kPadding" : @5,
+                                  @"kPaddingWithTxtV" : @10
+                                  };//used to avoid multple values, for single values its not req.
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[dividerView]|" options:0 metrics:nil views:views]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[dividerView(1)]-4-[textView]-5-|" options:0 metrics:nil views:views]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[attachButton]-5-[textView]-5-[accessoryViewContainer]-5-|" options:0 metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[dividerView(1)]-4-[textView]-kPadding-|" options:0 metrics:metrics views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-kPadding-[attachButton]-kPadding-[textView]-kPadding-[accessoryViewContainer]-kPadding-|" options:0 metrics:metrics views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attachButton(24)]" options:0 metrics:nil views:views]];
 
         [accessoryViewContainer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[micButton(20)]" options:0 metrics:nil views:views]];
         [accessoryViewContainer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[micButton(24)]" options:0 metrics:nil views:views]];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[dividerView]-4-[placeholderLabel]-kPadding-|" options:0 metrics:metrics views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[attachButton]-kPaddingWithTxtV-[placeholderLabel]-kPadding-[accessoryViewContainer]" options:0 metrics:metrics views:views]];//kPaddingWithTxtV include kPadding + 5 as default textView padding
         
         [FDAutolayoutHelper center:sendButton onView:accessoryViewContainer];
         [FDAutolayoutHelper center:micButton onView:accessoryViewContainer];
@@ -132,7 +148,6 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     accessoryViewHeightConstraint = [FDAutolayoutHelper setHeight:20 forView:accessoryViewContainer inView:self];
 }
 
-
 -(void)prepareView{
     [self setNeedsLayout];
     [self layoutIfNeeded];
@@ -145,7 +160,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     
     self.isVoiceMessageEnabled = [plistManager isVoiceMessageEnabled] && !self.isFromAttachmentScreen;
 
-    [self updateActionButtons:textView];
+    [self updateAudioRecBtn:textView];
     
     //Vertically center buttons in the toolbar
     CGFloat attachButtonYpos = (self.frame.size.height - self.attachButton.frame.size.height)/2.0;
@@ -156,11 +171,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     accessoryViewYConstraint.constant = - accessoryViewYpos;
 }
 
+#pragma mark Button Actions
+
 -(void)showAttachButton:(BOOL)state{
     self.canShowAttachButton = state;
 }
-
-#pragma mark Button Actions
 
 -(void)attachmentButtonAction:(id)sender{
     [self.delegate inputToolbar:self attachmentButtonPressed:sender];
@@ -168,7 +183,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 
 -(void)sendButtonAction:(id)sender{
     [self.delegate inputToolbar:self sendButtonPressed:sender];
-    [self updateActionButtons:self.textView];
+    [self updateAudioRecBtn:self.textView];
 }
 
 -(void)micButtonAction:(id)sender{
@@ -178,40 +193,37 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
     [self.delegate inputToolbar:self micButtonPressed:sender];
 }
 
+#pragma mark Send Button State
+
+- (void) setSendButtonEnabled : (BOOL) state{
+    sendButton.enabled = state;
+    sendButton.alpha = state ? 1.0 : 0.6;
+}
+
 #pragma mark Text view delegates
 
 - (void)textViewDidChange:(UITextView *)inputTextView{
-    [self updateActionButtons:inputTextView];
+    [self updateAudioRecBtn:inputTextView];
+    self.placeholderLabel.hidden =  [FDStringUtil isNotEmptyString: inputTextView.text];
     [self.delegate inputToolbar:self textViewDidChange:inputTextView];
+    if(!self.isFromAttachmentScreen){
+        [self setSendButtonEnabled:[FDStringUtil isNotEmptyString: inputTextView.text]];
+    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)chatTextView{
     textView.textAlignment = NSTextAlignmentNatural;
-    if ([chatTextView.text isEqualToString:placeHolderText]){
-        chatTextView.text = @"";
-    }
-    [chatTextView setTextColor:[self.theme inputTextFontColor]];
-    chatTextView.textColor = [[FCTheme sharedInstance] inputTextFontColor];
     [chatTextView becomeFirstResponder];
 }
 
-- (void)textViewDidEndEditing:(UITextView *)chatTextView{
-    NSString *currentText = trimString(chatTextView.text);
-    if ([currentText isEqualToString:@""]) {
-        chatTextView.text = placeHolderText;
-        chatTextView.textColor = [self.theme inputTextPlaceholderFontColor]; //optional
-    }
-}
-
 //TODO: Replace once support for audio is enabled
--(void)updateActionButtons:(UITextView *)inputTextView{
-    //if(!self.isVoiceMessageEnabled){
-    if(true) {
-        [self showMicButton:NO];
-    }else{
-        BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]);
-        [self showMicButton:isTextViewEmpty];
-    }
+-(void)updateAudioRecBtn:(UITextView *)inputTextView{
+//    if(true) {
+//        [self showMicButton:NO];
+//    }else{
+//        BOOL isTextViewEmpty = ([inputTextView.text isEqualToString:@""] || [inputTextView.text isEqualToString:placeHolderText]); //Pass this as parameter in showmicbutton
+        [self showMicButton:NO] ;
+//    }
 }
 
 -(void)showMicButton:(BOOL)canShow{
@@ -219,18 +231,11 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         self.micButton.hidden = NO;
         self.sendButton.hidden = YES;
         accessoryViewWidthConstraint.constant = self.micButton.frame.size.width;
-    }else{
+    }else {
         self.micButton.hidden = YES;
         self.sendButton.hidden = NO;
         accessoryViewWidthConstraint.constant = self.sendButton.frame.size.width;
     }
-}
-
-//TODO: Replace textiew used in this class with FDGrowingTextView
--(BOOL)containsUserInputText{
-    return (self.textView.text &&
-            ![self.textView.text isEqualToString:@""] &&
-            ![self.textView.text isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)]);
 }
 
 @end

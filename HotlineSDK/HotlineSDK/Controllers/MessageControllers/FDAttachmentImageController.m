@@ -51,6 +51,7 @@
     self.inputToolbar = [[FDInputToolbarView alloc]initWithDelegate:self];
     self.inputToolbar.translatesAutoresizingMaskIntoConstraints = NO;
     self.inputToolbar.isFromAttachmentScreen = YES;
+    [self.inputToolbar setSendButtonEnabled:YES];
     [self setHeightForTextView:self.inputToolbar.textView];
     [self.inputToolbar prepareView];
     

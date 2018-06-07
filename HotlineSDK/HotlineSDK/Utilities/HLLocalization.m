@@ -68,7 +68,7 @@
 
 +(BOOL) isNotEmpty:(NSString *)key{
     NSString *value = [HLLocalization localize:key];
-    return [FDStringUtil isNotEmpty:value] && [HLLocalization isLocalizedString:value forKey:key];
+    return [FDStringUtil isNotEmptyString:value] && [HLLocalization isLocalizedString:value forKey:key];
 }
 
 @end

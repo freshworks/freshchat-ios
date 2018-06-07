@@ -286,6 +286,7 @@ typedef struct {
     self.tableView.tableHeaderView = [self tableHeaderView];
     [self processPendingCSAT];
     [self checkRestoreStateChanged];
+    [self.inputToolbar setSendButtonEnabled: [FDStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
 }
 
 //TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
@@ -699,14 +700,10 @@ typedef struct {
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     self.inputToolbar.textView.text = @"";
-    if(([toSend isEqualToString:@""]) || ([toSend isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)])){
-        [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
-        
-    }else{
-        [Konotor uploadMessageWithImage:nil textFeed:toSend onConversation:self.conversation andChannel:self.channel];
-        [self checkPushNotificationState];
-        [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
-    }
+    [self.inputToolbar setSendButtonEnabled:NO];
+    [Konotor uploadMessageWithImage:nil textFeed:toSend onConversation:self.conversation andChannel:self.channel];
+    [self checkPushNotificationState];
+    [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     [self refreshView];
     [self.messagesPoller reset];
 }
@@ -1259,7 +1256,7 @@ typedef struct {
 
 -(void)processPendingCSAT{
     
-    if ([self.inputToolbar containsUserInputText] || [KonotorAudioRecorder isRecording]){
+    if ([FDStringUtil isNotEmptyString:self.inputToolbar.textView.text] || [KonotorAudioRecorder isRecording]){
         FDLog(@"Not showing CSAT prompt, User is currently engaging input toolbar");
         return;
     }
