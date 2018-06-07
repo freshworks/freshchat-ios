@@ -28,7 +28,6 @@
 
 @interface Freshchat ()
 
--(void)performPendingTasks;
 -(void)registerDeviceToken;
 -(NSDictionary *) getPreviousUserConfig;
 -(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore;
@@ -572,7 +571,7 @@
                     [HLUser setUserMessageInitiated];
                     [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                     [FDUtilities updateUserWithExternalID:response[@"identifier"] withRestoreID:response[@"restoreId"]];
-                    [[Freshchat sharedInstance] performPendingTasks];
+                    [FDUtilities initiatePendingTasks];
                 }
             }
         } else { //If the user is not found
@@ -582,7 +581,7 @@
             [[Freshchat sharedInstance] setUser:oldUser];
             [FDUtilities resetAlias];
             [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
-            [[Freshchat sharedInstance] performPendingTasks];
+            [FDUtilities initiatePendingTasks];
         }
         
         if(completion){
@@ -607,10 +606,10 @@
         }
         // Clear the Channel & Coversation call to fetch again.
         [store removeObjectWithKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];        
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
+        [store removeObjectWithKey:FC_CHANNELS_LAST_MODIFIED_AT];
+        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+        [store removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
+        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
         
         // Clear the token again to register again
         [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];

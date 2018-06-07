@@ -254,7 +254,7 @@
 }
 
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
+    [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels, NSError *error){
         HLViewController *preferedController = nil;
         if([channels count] == 0 ) {
             HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];

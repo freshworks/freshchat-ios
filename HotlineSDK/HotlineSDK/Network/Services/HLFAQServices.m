@@ -68,7 +68,7 @@
                             NSMutableDictionary *dictionary = [responseInfo responseAsDictionary][CONTENT_LOCALE];
                             NSNumber *responseLocaleId = [dictionary objectForKey:@"localeId"];
                             if( ![requestlocaleId isEqualToNumber:responseLocaleId] ) {
-                                [HLUserDefaults setNumber:responseLocaleId forKey:HOTLINE_DEFAULTS_FAQ_LOCALEID];
+                                [HLUserDefaults setNumber:responseLocaleId forKey:FC_SOLUTIONS_LAST_RECEIVED_LOCALE];
                                 [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];
                                 FDLog(@"LocaleID changed from %@ -> %@ & Cleared Voted Articles",[FDLocaleUtil getContentLocaleId],responseLocaleId);
                             }

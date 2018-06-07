@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
     @property (nullable, nonatomic, retain) KonotorConversation *belongsToConversation;
 
     +(Message *)getWelcomeMessageForChannel:(HLChannel *)channel;
+    +(void) removeWelcomeMessage:(HLChannel *)channel;
     +(Message *) retriveMessageForMessageId: (NSString *)messageId;
     -(NSString *) getJSON;
     +(NSString *)generateMessageID;

@@ -48,14 +48,15 @@
 -(void) getTaggableIdsForTags : (NSArray *)tags
                      forTypes : (NSArray *) tagTypes
                 inContext   : (NSManagedObjectContext *) context
-                withCompletion:(void (^)(NSArray<HLTags *> *))completion {
+                withCompletion:(void (^)(NSArray<HLTags *> *,NSError*))completion {
     [context performBlock:^{
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_TAGS_ENTITY];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"tagName IN %@ AND taggableType IN %@",
                                             tags, tagTypes];
-        NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+        NSError *error;
+        NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
         if(completion) {
-            completion(matches);
+            completion(matches,error);
         }
     }];
 }
@@ -63,7 +64,7 @@
 -(void)getArticlesForTags:(NSArray *)tags
               inContext:(NSManagedObjectContext *) context
           withCompletion :(void (^)(NSArray<HLArticle *> *))completion{
-    [self getTaggableIdsForTags:tags forTypes:ARTICLE_AND_CATEGORY_TAGS inContext:context withCompletion:^(NSArray<HLTags *> *matchingTags){
+    [self getTaggableIdsForTags:tags forTypes:ARTICLE_AND_CATEGORY_TAGS inContext:context withCompletion:^(NSArray<HLTags *> *matchingTags, NSError* error){
         NSMutableArray *articleIds = [NSMutableArray array];
         NSMutableArray *categoryIds = [NSMutableArray array];
         for(HLTags *tag in matchingTags){
@@ -91,7 +92,7 @@
 - (void) getCategoriesForTags : (NSArray *)tags
                     inContext : (NSManagedObjectContext *) context
                 withCompletion:(void (^)(NSArray<HLCategory *> *))completion {
-    [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeCategory)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags) {
+    [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeCategory)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags, NSError* error) {
         NSArray* categoryIds = [matchingTags valueForKey:@"taggableID"];
         [context performBlock:^{
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CATEGORY_ENTITY];
@@ -108,17 +109,18 @@
 
 - (void) getChannelsForTags : (NSArray *)tags
                   inContext : (NSManagedObjectContext *) context
-              withCompletion:(void (^)(NSArray<HLChannel *> *))completion {
-    [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeChannel)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags) {
+              withCompletion:(void (^)(NSArray<HLChannel *> *, NSError *))completion {
+    [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeChannel)] inContext:context withCompletion:^(NSArray<HLTags *> * matchingTags, NSError* error) {
         NSArray* channelIds = [matchingTags valueForKey:@"taggableID"];
         [context performBlock:^{
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_CHANNEL_ENTITY];
             fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@ AND isHidden == NO",channelIds];
             NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             fetchRequest.sortDescriptors = @[position];
-            NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+            NSError *error;
+            NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
             if(completion) {
-                completion(matches);
+                completion(matches, error);
             }
         }];
     }];

@@ -11,10 +11,12 @@
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 #import "SampleController.h"
+#import "Hotline_Demo-Swift.h"
+
 #define kOFFSET_FOR_KEYBOARD 160.0
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
 
-@interface ViewController ()<UITextFieldDelegate>
+@interface ViewController ()<UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -44,17 +46,30 @@
 
 @property (nonatomic, assign) BOOL gridval;
 
+@property (nonatomic, retain) UIAlertController *pickerViewPopup;
+@property (nonatomic, retain) UIPickerView *categoryPickerView;
+@property (nonatomic, retain) NSMutableArray *dataArray;
+@property (weak, nonatomic) IBOutlet UIButton *languageTranslation;
+
 @end
 
 @implementation ViewController
+
+@synthesize pickerViewPopup,categoryPickerView;
+@synthesize dataArray;
 
 - (void)viewDidLoad {
     self.switchVal = true;
     self.gridval = true;
     [self setupSubview];
-    
+    [self.languageTranslation setHidden:YES];
+    #if ENABLE_RTL_RUNTIME
+        NSLog(@"You can change language on Runtime.");
+        [self.languageTranslation setHidden:NO];
+    #endif    
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
+    [self configurePicker];
     NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
     NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
     
@@ -197,6 +212,7 @@
     if(![_audioPlayer isPlaying]){
         [_audioPlayer play];
     }
+    [self updateSelectedItem];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if (appDelegate.pickedImage) {
         self.imageView.image = appDelegate.pickedImage;
@@ -268,8 +284,6 @@ SampleController *sampleController;
     //[[Freshchat sharedInstance] showConversations:self withOptions:opt];
     UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
     [self.navigationController pushViewController:viewController animated:true];
-    
-    
 }
 
 - (IBAction)channelFilter2:(id)sender{
@@ -285,6 +299,10 @@ SampleController *sampleController;
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
     [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+}
+
+- (IBAction)showLanguagePicker:(id)sender {
+    [self presentViewController:self.pickerViewPopup animated:true completion:nil];
 }
 
 //2
@@ -355,6 +373,75 @@ SampleController *sampleController;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
+}
+
+-(void) configurePicker  {
+    self.dataArray = [[NSMutableArray alloc] initWithArray:@[@"en", @"ar", @"fr"]];
+    self.pickerViewPopup = [UIAlertController alertControllerWithTitle:@"\n\n\n\n\n\n" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    self.categoryPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, pickerViewPopup.view.bounds.size.width,150)];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];
+    [self.pickerViewPopup addAction:cancelAction];
+    [self.categoryPickerView setDataSource:self];
+    [self.categoryPickerView setDelegate:self];
+    self.categoryPickerView.showsSelectionIndicator = YES;
+    UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
+    pickerToolbar.barStyle = UIBarStyleBlackOpaque;
+    [pickerToolbar sizeToFit];
+    
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(categoryDoneButtonPressed)];
+    
+    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(categoryCancelButtonPressed)];
+    
+    [pickerToolbar setItems:@[cancelBtn, flexSpace, doneBtn] animated:YES];
+    
+    //[self.pickerViewPopup.view addSubview:pickerToolbar];
+    [self.pickerViewPopup.view addSubview:self.categoryPickerView];
+    [self.pickerViewPopup.view setBounds:CGRectMake(0,0,320, 464)];
+}
+
+-(void) updateSelectedItem {
+    NSInteger selectedIndex = [dataArray indexOfObject:[L102Language currentAppleLanguage]];
+    if(selectedIndex >= 0) {
+        [self.categoryPickerView selectRow:selectedIndex inComponent:0 animated:true];
+    }
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
+    NSString *selectedCategory = [NSString stringWithFormat:@"%@",[dataArray objectAtIndex:row]];
+    [L102Language setAppleLAnguageToLang:selectedCategory];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if([selectedCategory isEqualToString:@"ar"]) {
+        UIView.appearance.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+    } else {
+        UIView.appearance.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+    }
+    [appDelegate setupRootController];
+    __weak typeof(self)weakSelf = self;
+    [[NSNotificationCenter defaultCenter] postNotificationName:FRESHCHAT_USER_LOCALE_CHANGED object:weakSelf];
+    [self updateSelectedItem];
+}
+// tell the picker how many rows are available for a given component
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return [dataArray count];
+}
+
+// tell the picker how many components it will have
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+// tell the picker the title for a given component
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return [dataArray objectAtIndex: row];
+    
+}
+
+// tell the picker the width of each row for a given component
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
+    int sectionWidth = 300;
+    return sectionWidth;
 }
 
 @end

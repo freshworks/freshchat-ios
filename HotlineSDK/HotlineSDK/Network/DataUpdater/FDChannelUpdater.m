@@ -20,7 +20,7 @@
     if (self) {
         //[self useInterval:CHANNELS_FETCH_INTERVAL_DEFAULT];
         [self useInterval:[FCRemoteConfig sharedInstance].refreshIntervals.channelsFetchIntervalLaidback];
-        [self useConfigKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
+        [self useConfigKey:FC_CHANNELS_LAST_REQUESTED_TIME];
     }
     return self;
 }

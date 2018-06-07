@@ -128,7 +128,7 @@ static HLNotificationHandler *handleUpdateNotification;
         NSString *userAlias = [FDUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         HLServiceRequest *request = [[HLServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
-        NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
         NSString *source = [NSString stringWithFormat:@"src=%d",requestSource];
@@ -209,8 +209,8 @@ static HLNotificationHandler *handleUpdateNotification;
 +(BOOL)processMessageResponse:(NSDictionary *)response{
     NSNumber *channelId;
     NSString *messageText;
-    BOOL isRestore = [[FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME] isEqualToNumber:@0];
-    __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+    BOOL isRestore = [[FDUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME] isEqualToNumber:@0];
+    __block NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
     NSArray *conversations = response[@"conversations"];
     for (int i=0; i<conversations.count; i++) {
         NSDictionary *conversationInfo = conversations[i];
@@ -269,10 +269,10 @@ static HLNotificationHandler *handleUpdateNotification;
 
     FDSecureStore *secureStore = [FDSecureStore sharedInstance];
     if([lastUpdateTime integerValue] != 0 ){
-        [secureStore setObject:lastUpdateTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        [secureStore setObject:lastUpdateTime forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
     }else{
-        NSNumber *lastUpdatedChannelTime = [secureStore objectForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
-        [secureStore setObject:lastUpdatedChannelTime forKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+        NSNumber *lastUpdatedChannelTime = [secureStore objectForKey:FC_CHANNELS_LAST_MODIFIED_AT];
+        [secureStore setObject:lastUpdatedChannelTime forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
     }
     if( conversations && conversations.count > 0 ){
         [FDLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
@@ -323,7 +323,7 @@ static HLNotificationHandler *handleUpdateNotification;
     NSString *appKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_CHANNELS_PATH,appID];
     NSString *token = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,appKey];
-    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+    NSNumber *lastUpdateTime = [FDUtilities getLastUpdatedTimeForKey:FC_CHANNELS_LAST_MODIFIED_AT];
     NSString *afterTime = [NSString stringWithFormat:PARAM_SINCE,lastUpdateTime];
     NSNumber *requestlocaleId = [FDLocaleUtil getConvLocaleId];
     NSMutableArray *reqParams = [[NSMutableArray alloc]initWithArray:@[token,afterTime]];
@@ -335,31 +335,22 @@ static HLNotificationHandler *handleUpdateNotification;
             /* This check is added to delete all messages that are migrated from konotor SDK,
                but this is also performed for new installs as well (a harmless side-effect). */
             // TODO : Come up with a better logic to do this migration
-            NSNumber *messageLastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
             NSMutableDictionary *dictionary = [responseInfo responseAsDictionary][CONTENT_LOCALE];
             NSNumber *responseLocaleId = [dictionary objectForKey:@"localeId"];
             if( ![requestlocaleId isEqualToNumber:responseLocaleId] ) {
-                [HLUserDefaults setNumber:responseLocaleId forKey:HOTLINE_DEFAULTS_CONV_LOCALEID];
+                [HLUserDefaults setNumber:responseLocaleId forKey:FC_CHANNELS_LAST_RECEIVED_LOCALE];
             }
             [FDLocaleUtil updateLocale];
-            
-            BOOL isRestore = [messageLastUpdatedTime isEqualToNumber:@0];
-            if (isRestore) {
-                [[KonotorDataManager sharedInstance]deleteAllMessages:^(NSError *error) {
-                    [self importChannels:[responseInfo responseAsDictionary] handler:handler];
-                }];
-            }else{
-                [self hideAllChannelsWithCompletion:^(NSError *error) {
-                    [self importChannels:[responseInfo responseAsDictionary] handler:handler];
-                }];
-            }
+            [self hideAllChannelsWithCompletion:^(NSError *error) {
+                [self importChannels:[responseInfo responseAsDictionary] handler:handler];
+            }];
         }else if(statusCode == 304){
             if (handler) handler(nil, error);
             FDLog(@"No change in channel  data")
             if (handler) handler(nil, error);
         }else{
             if (handler) handler(nil, error);
-            NSNumber *messageLastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
+            NSNumber *messageLastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
             if (error.code == -1009 && [messageLastUpdatedTime intValue] == 0) {
                 [FDLocalNotification post:HOTLINE_CHANNELS_UPDATED];
             }
@@ -393,7 +384,7 @@ static HLNotificationHandler *handleUpdateNotification;
     NSMutableArray *channelList = [NSMutableArray new];
     NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
-        NSNumber *lastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+        NSNumber *lastUpdatedTime = [FDUtilities getLastUpdatedTimeForKey:FC_CHANNELS_LAST_MODIFIED_AT];
         NSInteger channelCount = [channels count];
         HLChannel *channel = nil;
         if (channelCount!=0) {
@@ -426,7 +417,8 @@ static HLNotificationHandler *handleUpdateNotification;
                 }
             }
         }
-        [[FDSecureStore sharedInstance] setObject: channelsInfo[LAST_MODIFIED_AT] forKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
+        [[FDSecureStore sharedInstance] setObject: channelsInfo[LAST_MODIFIED_AT] forKey:FC_CHANNELS_LAST_MODIFIED_AT];
+        [[FDSecureStore sharedInstance] setObject: channelsInfo[LAST_MODIFIED_AT] forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
         [context save:nil];
         if (handler) handler(channelList,nil);
         if(channelCount > 0) {

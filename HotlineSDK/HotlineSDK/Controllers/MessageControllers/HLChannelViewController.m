@@ -69,7 +69,6 @@
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
-    parent.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
     self.theme = [FCTheme sharedInstance];
     self.tableView.backgroundColor = [self.theme channelListBackgroundColor];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
@@ -133,7 +132,7 @@
     if(self.isFilteredView){
         [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags
                                                     inContext:context
-                                               withCompletion:^(NSArray<HLChannel *> *channels){
+                                               withCompletion:^(NSArray<HLChannel *> *channels, NSError *error){
             
             [self updateChannelWithInfo:channels];
         }];
@@ -153,12 +152,8 @@
         if(defaultChannel != nil) {
             channelInfo = @[defaultChannel];
         } else {
-            if ( ![[FDReachabilityManager sharedInstance] isReachable]) {
-                [self.loadingViewBehaviour updateResultsView:NO andCount:channelInfo.count];
-                channelInfo = @[];
-            } else {
-                return;
-            }
+            [self.loadingViewBehaviour updateResultsView:NO andCount:channelInfo.count];
+            channelInfo = @[];
         }
     }
     if (channelInfo.count == 1) {
@@ -211,6 +206,7 @@
 
 -(void)setNavigationItem{
     UIBarButtonItem *closeButton = [[FDBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    self.parentViewController.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
 
     if (!self.embedded) {
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;

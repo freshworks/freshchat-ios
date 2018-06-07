@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
+//@class L102Language;
+
 @interface ViewController : UIViewController
 
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;

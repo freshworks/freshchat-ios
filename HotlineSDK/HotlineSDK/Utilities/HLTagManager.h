@@ -20,7 +20,7 @@
 
 - (void) getChannelsForTags : (NSArray *)tags
                       inContext : (NSManagedObjectContext *) context
-                  withCompletion:(void (^)(NSArray<HLChannel *> *))completion;
+                  withCompletion:(void (^)(NSArray<HLChannel *> *, NSError *))completion;
 
 - (void) getCategoriesForTags : (NSArray *)tags
                     inContext : (NSManagedObjectContext *) context

@@ -93,17 +93,14 @@
     
     Message *welcomeMessage = [Message getWelcomeMessageForChannel:channel];
     NSDictionary *welcomeMsgData = channelInfo[@"welcomeMessage"];
-    if (welcomeMessage) {
-        //welcomeMessage.text = updatedMessage;
-        //fragment here
-    }else{
-        //welcomeMessage.text = updatedMessage;
-        //fragment here
-        welcomeMessage = [Message createNewMessage:channelInfo[@"welcomeMessage"] toChannelID:channel.channelID];        
+    if (welcomeMsgData) {
+        if (welcomeMessage) {
+            [Message removeWelcomeMessage:channel];
+        }
+        welcomeMessage = [Message createNewMessage:welcomeMsgData toChannelID:channel.channelID];
         welcomeMessage.createdMillis = @0;
         [channel addMessagesObject:welcomeMessage];
     }
-    
     return channel;
 }
 

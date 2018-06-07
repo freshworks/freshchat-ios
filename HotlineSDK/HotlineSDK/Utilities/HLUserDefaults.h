@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define HOTLINE_DEFAULTS_FAQ_LOCALEID @"hotline_defaults_faq_localeid"
-#define HOTLINE_DEFAULTS_CONV_LOCALEID @"hotline_defaults_conv_localeid"
+#define FC_SOLUTIONS_LAST_RECEIVED_LOCALE @"hotline_defaults_faq_localeid"
+#define FC_CHANNELS_LAST_RECEIVED_LOCALE @"hotline_defaults_conv_localeid"
 #define HOTLINE_DEFAULTS_CONTENT_LOCALE @"hotline_defaults_content_locale"
 #define HOTLINE_DEFAULTS_IS_USER_DEFERED @"hotline_defaults_is_user_defered"
 #define HOTLINE_DEFAULTS_IS_MESSAGE_SENT @"hotline_defaults_is_message_sent"

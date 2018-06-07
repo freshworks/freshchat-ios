@@ -194,15 +194,19 @@ typedef struct {
     self.channelName.textAlignment = UITextAlignmentCenter;
     self.channelName.font = [[FCTheme sharedInstance] navigationBarTitleFont];
     self.channelName.textColor = [[FCTheme sharedInstance] navigationBarTitleColor];
-    self.channelName.text = self.channel.name;
     [self.titleView addSubview:self.channelName];
     
     self.typicalReply.font = [[FCTheme sharedInstance] responseTimeExpectationsFontName];
     self.typicalReply.textColor = [[FCTheme sharedInstance] responseTimeExpectationsFontColor];
     self.typicalReply.textAlignment = UITextAlignmentCenter;
     [self.titleView addSubview:self.typicalReply];
+    [self updateTitle];
     parent.navigationItem.titleView = self.titleView;
     
+}
+
+-(void) updateTitle {
+    self.channelName.text = self.channel.name;
 }
 
 -(void) setFooterView {
@@ -715,6 +719,7 @@ typedef struct {
                 [self updateBottomViewAfterCSATSubmisssion];
                 [self rebuildMessages];
             }
+            [self updateTitle];
             [self refreshView];
         }
     }];
@@ -727,7 +732,7 @@ typedef struct {
         BOOL isChannelValid = NO;
         BOOL hasTags =  [HLConversationUtil hasTags:self.convOptions];
         HLChannel *channelToChk = [HLChannel getWithID:self.channelID inContext:ctx];
-        if ( channelToChk && channelToChk.isHidden != 0 ) {
+        if ( channelToChk && ( [channelToChk.isHidden intValue] == 0 || [channelToChk.isDefault intValue] == 1 ) ) {
             if(hasTags){ // contains tags .. so check that as well
                 if([channelToChk hasAtleastATag:self.convOptions.tags]){
                     isChannelValid = YES;
@@ -737,31 +742,18 @@ typedef struct {
                 isChannelValid = YES;
             }
         }
-        if(!isChannelValid){ // remove this channel from the view
-            [self.parentViewController.navigationController popViewControllerAnimated:YES];
-            if(completion) {
-                completion(isChannelValid);
-            }
+        if(hasTags){
+            [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels, NSError *error) {
+                [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
+            }];
         }
         else {
-            // if channel count changed
-            if(completion) {
-                completion(isChannelValid);
-            }
-            if(hasTags){
-                [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
-                    if(channels && channels.count  > 1 ){
-                        [self alterNavigationStack];
-                    }
-                }];
-            }
-            else {
-                [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
-                    if(!error && channelInfos && channelInfos.count > 1){
-                        [self alterNavigationStack];
-                    }
-                }];
-            }
+            [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
+                [self processNavStackChanges:channelInfos channelsError:error isValidChannel:isChannelValid];
+            }];
+        }
+        if(completion) {
+            completion(isChannelValid);
         }
     }];
 }
@@ -784,6 +776,22 @@ typedef struct {
     NSDictionary *overlayHeightmetrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
     self.viewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:overlayHeightmetrics views:self.views];
     [self.view addConstraints:self.viewVerticalConstraints];
+}
+
+-(void) processNavStackChanges: (NSArray*)channels channelsError:(NSError *)error isValidChannel:(BOOL)isValidChannel  {
+    if (error) {
+        return;
+    }
+    if(!isValidChannel) {
+        if(channels && channels.count == 0 ){
+            [self alterNavigationStack];
+        }
+        [self.parentViewController.navigationController popViewControllerAnimated:YES];
+    } else {
+        if(channels && channels.count > 1) {
+            [self alterNavigationStack];
+        }
+    }
 }
 
 -(void) alterNavigationStack
@@ -1076,7 +1084,7 @@ typedef struct {
     }
 }
 
-- (void) refreshView{
+- (void) refreshView {
     [self refreshView:nil];
 }
 

@@ -56,6 +56,20 @@
     return self;
 }
 
+-(void) resetView {
+    if (self) {
+        if(self.iPhoneXStatusbarView) {
+            [self.iPhoneXStatusbarView removeFromSuperview];
+        }
+        if(self.contentView) {
+            [self.contentView removeFromSuperview];
+        }
+        self.theme = [FCTheme sharedInstance];
+        [self setSubViews];
+        [self setNeedsDisplay];
+    }
+}
+
 -(void)setMessage:(NSString *)message{
     if (message && ![message isKindOfClass:[NSNull class]]) {
         if([FDUtilities containsHTMLContent:message]) {
@@ -217,7 +231,6 @@
     self.imgView.layer.masksToBounds = YES;
     [self.imgView.layer setBorderColor:[[self.theme notificationChannelIconBorderColor]CGColor]];
     [self.imgView.layer setBorderWidth: 1.5];
-    
 }
 
 -(void)displayBannerWithChannel:(HLChannel *)channel{
