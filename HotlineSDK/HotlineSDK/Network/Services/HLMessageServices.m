@@ -524,6 +524,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 pMessage.messageAlias = messageInfo[@"alias"];
                 pMessage.createdMillis = messageInfo[@"createdMillis"];
                 [channel addMessagesObject:pMessage];
+                [[KonotorDataManager sharedInstance]save];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
                 if ( error && error.code == -1009 ) {
@@ -535,11 +536,9 @@ static HLNotificationHandler *handleUpdateNotification;
                 else {
                     [Konotor NotifyServerError];
                 }
-                pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-                [channel addMessagesObject:pMessage];
+                [self markUploadFailedAndSaveMessage:pMessage inChannel:channel];
             }
             
-            [[KonotorDataManager sharedInstance]save];
             [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
             HideNetworkActivityIndicator();
 
@@ -627,9 +626,7 @@ static HLNotificationHandler *handleUpdateNotification;
                 else {
                     [Konotor NotifyServerError];
                 }
-                pMessage.uploadStatus = @(MESSAGE_NOT_UPLOADED);
-                [channel addMessagesObject:pMessage];
-                [[KonotorDataManager sharedInstance]save];
+                [self markUploadFailedAndSaveMessage:pMessage inChannel:channel];
             }
             [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
             HideNetworkActivityIndicator();
@@ -638,6 +635,14 @@ static HLNotificationHandler *handleUpdateNotification;
             }
         }];
     }];
+}
+
++(void) markUploadFailedAndSaveMessage:(Message *) message inChannel: (HLChannel*) channel {
+    message.uploadStatus = @(MESSAGE_NOT_UPLOADED);
+    if (channel != nil) {
+        [channel addMessagesObject:message];
+    }
+    [[KonotorDataManager sharedInstance]save];
 }
 
 +(void)uploadAllUnuploadedMessages:(NSArray *)messages index:(NSInteger)currentIndex {
@@ -702,6 +707,10 @@ static HLNotificationHandler *handleUpdateNotification;
                 if(completion) {
                     completion();
                 }
+            }
+            else{
+                FDLog(@"Message upload failed!");
+                [self markUploadFailedAndSaveMessage:pMessage inChannel:nil];
             }
             [[FDBackgroundTaskManager sharedInstance]endTask:taskID];
             HideNetworkActivityIndicator();

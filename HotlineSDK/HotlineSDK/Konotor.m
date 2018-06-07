@@ -160,15 +160,30 @@ __weak static id <KonotorDelegate> _delegate;
     Message *message = [Message saveMessageInCoreData:fragmentsInfo onConversation:conversation];
     [channel addMessagesObject:message];
     [[KonotorDataManager sharedInstance]save];
+    
+    if(![HLUser isUserRegistered]) {
+        [HLUser registerUser:^(NSError *error) {
+            if(!error) {
+                [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
+            } else {
+                [HLMessageServices markUploadFailedAndSaveMessage:message inChannel:channel];
+            }
+        }];
+    } else {
+        [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
+    }
+
+}
+
++ (void) uploadMessage :(Message *) message withImage:(UIImage*)image inChannel:(HLChannel *) channel andConversation : (KonotorConversation *)conversation {
+    [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias];
     if(image){
-        [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
         [HLMessageServices uploadPictureMessage:message toConversation:conversation withCompletion:^{
             [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
             [[Konotor delegate] didStartUploadingNewMessage];
         }];
     }
     else{
-        [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:message.messageAlias]; //Show upload notification
         [HLMessageServices uploadNewMessage:message toConversation:conversation onChannel:channel];
         [[Konotor delegate] didStartUploadingNewMessage];
     }
