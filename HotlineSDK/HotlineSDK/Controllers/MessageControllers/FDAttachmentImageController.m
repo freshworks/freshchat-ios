@@ -149,6 +149,9 @@
 
 -(void)setNavigationItem{
     
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.tintColor = [[FCTheme sharedInstance] imgAttachBackButtonFontColor];
+    
     self.navigationController.navigationBar.titleTextAttributes = @{
                                                                     NSForegroundColorAttributeName: [[FCTheme sharedInstance] navigationBarTitleColor],
                                                                     NSFontAttributeName: [[FCTheme sharedInstance] navigationBarTitleFont]
@@ -156,16 +159,12 @@
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:HLLocalizedString(LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN) style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
     
-    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:
-     @{UITextAttributeTextColor:[[FCTheme sharedInstance] imgAttachBackButtonFontColor],
-       UITextAttributeTextShadowColor:[UIColor whiteColor],
-       UITextAttributeFont:[[FCTheme sharedInstance] imgAttachBackButtonFont]
-       }
-                                                                                            forState:UIControlStateNormal];
+    [backButton setTitleTextAttributes:@{
+                                         NSFontAttributeName :[[FCTheme sharedInstance] imgAttachBackButtonFont],
+                                         NSForegroundColorAttributeName :[[FCTheme sharedInstance] imgAttachBackButtonFontColor]
+                                         } forState:UIControlStateNormal];
     
     self.navigationItem.leftBarButtonItem = backButton;
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
 }
 
 -(void)sendMessage {
