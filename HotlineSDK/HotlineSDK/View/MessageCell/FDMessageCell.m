@@ -12,6 +12,7 @@
 #import "HLLocalization.h"
 #import "FDSecureStore.h"
 #import "FDParticipant.h"
+#import "FDDateUtil.h"
 
 #define KONOTOR_VERTICAL_PADDING 2
 #define KONOTOR_AGENT_NAME_MIN_PADDING 8
@@ -239,7 +240,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
         CGSize txtSize = [tempView sizeThatFits:CGSizeMake(messageContentViewWidth, 1000)];
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:message.createdMillis.longLongValue/1000];
-        NSString *strDate = [FDStringUtil stringRepresentationForDate:date];
+        NSString *strDate = [FDDateUtil stringRepresentationForDate:date];
         
         [tempView setFrame:CGRectMake(0,0,messageContentViewWidth,1000)];
         [tempView setFont:(customFontName?[UIFont fontWithName:customFontName size:11.0]:[UIFont systemFontOfSize:11.0])];
@@ -322,7 +323,7 @@ static float EXTRA_HEIGHT_WITHOUT_SENDER_NAME =KONOTOR_VERTICAL_PADDING+ 16 + KO
         }
     }
     else{
-        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
+        messageSentTimeLabel.text = [FDDateUtil stringRepresentationForDate:date];
     }
     
     CGRect messageTextBoxFrame=CGRectMake(messageTextBoxX,messageTextBoxY,messageTextBoxWidth,0);

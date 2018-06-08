@@ -22,7 +22,6 @@
 +(NSString *)sanitizeStringForUTF8:(NSString *)string;
 +(NSString *)sanitizeStringForNewLineCharacter:(NSString *)string;
 +(NSString *)replaceSpecialCharacters:(NSString *)term with:(NSString *)replaceString;
-+(NSString*)stringRepresentationForDate:(NSDate*) date;
 +(BOOL) checkRegexPattern:(NSString *)regex inString:(NSString *)string;
 +(NSString *)replaceInString:(NSString *)string usingRegex:(NSString *)regexString replaceWith:(NSString *) replaceString;
 +(BOOL)isNotEmptyString:(NSString *)str;

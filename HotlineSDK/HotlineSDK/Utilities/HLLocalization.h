@@ -96,14 +96,6 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 
 #define LOC_CSAT_PROMPT_PARTIAL @"chat_resolution_prompt"
 
-#define LOC_DAY_SUNDAY @"day_sunday"
-#define LOC_DAY_MONDAY @"day_monday"
-#define LOC_DAY_TUESDAY @"day_tuesday"
-#define LOC_DAY_WEDNESDAY @"day_wednesday"
-#define LOC_DAY_THURSDAY @"day_thursday"
-#define LOC_DAY_FRIDAY @"day_friday"
-#define LOC_DAY_SATURDAY @"day_saturday"
-
 #define LOC_DEFAULT_NOTIFICATION_MESSAGE @"notification_message_default"
 
 #define LOC_OFFLINE_MISSING_CONTENT_TEXT @"offline_missing_content_text"

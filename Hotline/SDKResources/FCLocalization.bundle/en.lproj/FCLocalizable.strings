@@ -98,14 +98,6 @@
 "image_attachment_select_existing_image"="Upload from gallery";
 "image_attachment_select_new_image"="Take a picture";
 
-/*days*/
-"day_sunday"="Sunday";
-"day_monday"="Monday";
-"day_tuesday"="Tuesday";
-"day_wednesday"="Wednesday";
-"day_thursday"="Thursday";
-"day_friday"="Friday";
-"day_saturday"="Saturday";
 
 /*Notifications*/
 "notification_message_default"="You've got a message!";
