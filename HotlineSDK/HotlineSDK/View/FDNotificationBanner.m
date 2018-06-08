@@ -52,6 +52,7 @@
     if (self) {
         self.theme = [FCTheme sharedInstance];
         [self setSubViews];
+        [self setView];
     }
     return self;
 }
@@ -177,15 +178,17 @@
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[iPhoneXTopView]|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:nil views:views]];
     
-    self.backgroundColor = [self.theme notificationBackgroundColor];
-    
+
+}
+
+-(void) setView {
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;
     [currentWindow addSubview:self];
     
     self.frame = CGRectMake(0, -(NOTIFICATION_BANNER_HEIGHT+(float)self.iPhoneXStatusbarHeightConstraint.constant), currentWindow.frame.size.width, NOTIFICATION_BANNER_HEIGHT+(float)self.iPhoneXStatusbarHeightConstraint.constant);
     self.hidden = YES;
-    
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.backgroundColor = [self.theme notificationBackgroundColor];
 }
 
 - (void)orientationChanged:(NSNotification *)notification{
