@@ -9,7 +9,7 @@
 #import "FDStringUtil.h"
 #import "HLLocalization.h"
 #import "HLMacros.h"
-
+#import "FDLocaleUtil.h"
 
 @implementation FDStringUtil
 
@@ -115,11 +115,11 @@
     
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
     NSCalendar* calendar=[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents* comp=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date];
-    NSDateComponents* comp2=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:today];
+    NSDateComponents* dateComponent1=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date];
+    NSDateComponents* dateComponent2=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:today];
     
-    NSDate* date2=[calendar dateFromComponents:comp];
-    NSDate* today2=[calendar dateFromComponents:comp2];
+    NSDate* date2=[calendar dateFromComponents:dateComponent1];
+    NSDate* today2=[calendar dateFromComponents:dateComponent2];
     
     NSDateComponents* comp3=[calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date2 toDate:today2 options:0];
     
@@ -134,23 +134,35 @@
     NSDateComponents* comp3=[calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:date2 toDate:today2 options:0];
     
 #endif
+    NSDateFormatter *dateFormatter = [self getDateFormatter];
     int days=(int)comp3.year*36+(int)comp3.month*30+(int)comp3.day;
-    if([comp isEqual:comp2]){
-        timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+    if([dateComponent1 isEqual:dateComponent2]){
+        timeString = [self getDateStrInUserLocale:date withFormatter:dateFormatter forDateStyle:NSDateFormatterNoStyle andTimeStyle:NSDateFormatterShortStyle];
     }
     else{
-        if((days>7)||(days<0)){
-            timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+        if((days>7)||(days<0)) {
+            timeString = [self getDateStrInUserLocale:date withFormatter:dateFormatter forDateStyle:NSDateFormatterShortStyle andTimeStyle:NSDateFormatterShortStyle];
+        } else if(days==1) {
+            timeString=[NSString stringWithFormat:@"Yesterday %@",[self getDateStrInUserLocale:date withFormatter:dateFormatter forDateStyle:NSDateFormatterNoStyle andTimeStyle:NSDateFormatterShortStyle]];
+        } else if(days>1) {
+            timeString=[NSString stringWithFormat:@"%@ %@",[weekdays objectAtIndex:(dateComponent1.weekday-1)],[self getDateStrInUserLocale:date withFormatter:dateFormatter forDateStyle:NSDateFormatterNoStyle andTimeStyle:NSDateFormatterShortStyle]];
         }
-        else if(days==1)
-            timeString=[NSString stringWithFormat:@"Yesterday %@",[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
-        else if(days>1)
-            timeString=[NSString stringWithFormat:@"%@ %@",[weekdays objectAtIndex:(comp.weekday-1)],[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
     }
     return timeString;
-    
 }
 
++ (NSString *) getDateStrInUserLocale : (NSDate *) date withFormatter :(NSDateFormatter *)dateFormatter forDateStyle : (NSDateFormatterStyle) dateStyle andTimeStyle : (NSDateFormatterStyle )timeStyle{
+    [dateFormatter setDateStyle:dateStyle];
+    [dateFormatter setTimeStyle:timeStyle];
+    return [dateFormatter stringFromDate:date];
+}
+
++ (NSDateFormatter *) getDateFormatter {
+    NSLocale *locale =[[NSLocale alloc] initWithLocaleIdentifier:[FDLocaleUtil getUserLocale]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:locale];
+    return dateFormatter;
+}
 
 +(BOOL) checkRegexPattern:(NSString *)regexStr inString:(NSString *)string{
     NSError *error = nil;
