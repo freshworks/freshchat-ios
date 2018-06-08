@@ -339,7 +339,7 @@
     NSString *description = nil;
     Fragment *fragment = [Fragment getAllFragments:self].lastObject;
     if([fragment.type isEqualToString:@"2"]) {
-        description = @"[Picture Message]";
+        description = @"📷";
     } else if([fragment.type isEqualToString:@"1"]) {
         description = fragment.content;
     } else if ([fragment.type isEqualToString:@"5"]) {
