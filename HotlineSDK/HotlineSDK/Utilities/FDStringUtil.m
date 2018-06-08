@@ -164,7 +164,7 @@
 }
 
 +(BOOL)isNotEmptyString:(NSString *)str{
-    return str && str.length > 0;
+    return str && ([trimString(str) length] > 0);
 }
 
 +(BOOL)isEmptyString:(NSString *)str{
