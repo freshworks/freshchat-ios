@@ -1,4 +1,10 @@
 
+Ver 1.4.2 
+__________________________
+Support for locale changes at runtime
+Fix channel icon in in-app notification
+Fix theme issue with back button when closing gallery
+
 Ver 1.4.1 
 __________________________
 Fix regression with user updates
