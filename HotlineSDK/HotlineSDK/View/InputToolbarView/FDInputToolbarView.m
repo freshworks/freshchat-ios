@@ -185,6 +185,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 -(void)sendButtonAction:(id)sender{
     [self.delegate inputToolbar:self sendButtonPressed:sender];
     [self updateAudioRecBtn:self.textView];
+    self.placeholderLabel.hidden = NO;
 }
 
 -(void)micButtonAction:(id)sender{
