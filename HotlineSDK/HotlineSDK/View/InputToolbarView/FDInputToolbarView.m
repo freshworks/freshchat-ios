@@ -59,6 +59,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         [textView setTextColor:[self.theme inputTextFontColor]];
         textView.tintColor = [self.theme inputTextCursorColor];
         textView.layer.borderColor=[[self.theme inputTextBorderColor] CGColor];
+        textView.textAlignment = NSTextAlignmentNatural;
         textView.layer.cornerRadius=5.0;
         textView.layer.borderWidth=1.0;
         textView.delegate = self;
@@ -212,7 +213,6 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)chatTextView{
-    textView.textAlignment = NSTextAlignmentNatural;
     [chatTextView becomeFirstResponder];
 }
 
