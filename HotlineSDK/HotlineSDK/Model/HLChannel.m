@@ -11,7 +11,8 @@
 #import "Message.h"
 #import "HLMacros.h"
 #import "HotlineAppState.h"
-#import "HLTags.h" 
+#import "FDImageView.h"
+#import "HLTags.h"
 
 @implementation HLChannel
 
@@ -85,6 +86,13 @@
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
     
+    //FDwebimage prefetch image and will be used by channel fetch
+    if(channel.iconURL){
+        [FDUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
+            FDLog(@"Image with url cached successfully %@", channel.iconURL)
+        }];
+    }
+    
     if ([channelInfo objectForKey:@"restricted"]) {
         channel.isRestricted = channelInfo[@"restricted"];
     }else{
@@ -93,17 +101,14 @@
     
     Message *welcomeMessage = [Message getWelcomeMessageForChannel:channel];
     NSDictionary *welcomeMsgData = channelInfo[@"welcomeMessage"];
-    if (welcomeMessage) {
-        //welcomeMessage.text = updatedMessage;
-        //fragment here
-    }else{
-        //welcomeMessage.text = updatedMessage;
-        //fragment here
-        welcomeMessage = [Message createNewMessage:channelInfo[@"welcomeMessage"] toChannelID:channel.channelID];        
+    if (welcomeMsgData) {
+        if (welcomeMessage) {
+            [Message removeWelcomeMessage:channel];
+        }
+        welcomeMessage = [Message createNewMessage:welcomeMsgData toChannelID:channel.channelID];
         welcomeMessage.createdMillis = @0;
         [channel addMessagesObject:welcomeMessage];
     }
-    
     return channel;
 }
 

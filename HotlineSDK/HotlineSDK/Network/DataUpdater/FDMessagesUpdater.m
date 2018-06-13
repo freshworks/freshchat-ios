@@ -23,7 +23,7 @@
     if (self) {
         //[self useInterval:MESSAGES_FETCH_INTERVAL_DEFAULT];
         [self useInterval:[FCRemoteConfig sharedInstance].refreshIntervals.msgFetchIntervalLaidback];
-        [self useConfigKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
+        [self useConfigKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
     }
     return self;
 }

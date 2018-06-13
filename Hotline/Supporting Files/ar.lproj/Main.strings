@@ -14,8 +14,8 @@
 /* Class = "UITextField"; placeholder = "Contact Us tag2"; ObjectID = "COe-Ai-wtg"; */
 "COe-Ai-wtg.placeholder" = "Contact Us tag2";
 
-/* Class = "UIButton"; normalTitle = "Show Conversation"; ObjectID = "E9O-AL-c7N"; */
-"E9O-AL-c7N.normalTitle" = "Show Conversation";
+/* Class = "UIButton"; normalTitle = "Conversation[Push]"; ObjectID = "E9O-AL-c7N"; */
+"E9O-AL-c7N.normalTitle" = "Conversation[Push]";
 
 /* Class = "UITextField"; placeholder = "Title"; ObjectID = "H0x-v6-fUJ"; */
 "H0x-v6-fUJ.placeholder" = "Title";
@@ -67,6 +67,9 @@
 
 /* Class = "UITextField"; placeholder = "tags 1"; ObjectID = "k2Q-6y-c57"; */
 "k2Q-6y-c57.placeholder" = "tags 1";
+
+/* Class = "UIButton"; normalTitle = "Conversations"; ObjectID = "uzT-qf-t8G"; */
+"uzT-qf-t8G.normalTitle" = "Conversations";
 
 /* Class = "UITextField"; placeholder = "Tags"; ObjectID = "vvd-O5-Z8Q"; */
 "vvd-O5-Z8Q.placeholder" = "Tags";

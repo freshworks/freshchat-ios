@@ -52,8 +52,23 @@
     if (self) {
         self.theme = [FCTheme sharedInstance];
         [self setSubViews];
+        [self setView];
     }
     return self;
+}
+
+-(void) resetView {
+    if (self) {
+        if(self.iPhoneXStatusbarView) {
+            [self.iPhoneXStatusbarView removeFromSuperview];
+        }
+        if(self.contentView) {
+            [self.contentView removeFromSuperview];
+        }
+        self.theme = [FCTheme sharedInstance];
+        [self setSubViews];
+        [self setNeedsDisplay];
+    }
 }
 
 -(void)setMessage:(NSString *)message{
@@ -163,15 +178,17 @@
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[iPhoneXTopView]|" options:0 metrics:nil views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:nil views:views]];
     
-    self.backgroundColor = [self.theme notificationBackgroundColor];
-    
+
+}
+
+-(void) setView {
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;
     [currentWindow addSubview:self];
     
     self.frame = CGRectMake(0, -(NOTIFICATION_BANNER_HEIGHT+(float)self.iPhoneXStatusbarHeightConstraint.constant), currentWindow.frame.size.width, NOTIFICATION_BANNER_HEIGHT+(float)self.iPhoneXStatusbarHeightConstraint.constant);
     self.hidden = YES;
-    
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.backgroundColor = [self.theme notificationBackgroundColor];
 }
 
 - (void)orientationChanged:(NSNotification *)notification{
@@ -217,7 +234,6 @@
     self.imgView.layer.masksToBounds = YES;
     [self.imgView.layer setBorderColor:[[self.theme notificationChannelIconBorderColor]CGColor]];
     [self.imgView.layer setBorderWidth: 1.5];
-    
 }
 
 -(void)displayBannerWithChannel:(HLChannel *)channel{
@@ -242,11 +258,14 @@
     
     self.titleLabel.text = channel.name;
     
-    if (channel.icon) {
-        self.imgView.image = [UIImage imageWithData:channel.icon];
-    }else{
-        UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
-        self.imgView.image = placeholderImage;
+    UIImage *placeholderImage = [FDCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
+    self.imgView.image = placeholderImage;
+    if (channel.iconURL) {
+        [FDUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.imgView.image = image;
+            });
+        }];
     }
     
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;

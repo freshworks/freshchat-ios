@@ -521,9 +521,4 @@
         });
     }];
 }
-
--(void)deleteAllMessages:(void (^)(NSError *))handler{
-    [self deleteAllEntriesOfEntity:HOTLINE_MESSAGE_ENTITY handler:handler inContext:self.mainObjectContext];
-}
-
 @end

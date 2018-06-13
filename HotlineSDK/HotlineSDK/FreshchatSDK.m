@@ -51,7 +51,14 @@
 #import "FDImageView.h"
 #import "FDVotingManager.h"
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
+#define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
+
+@interface FDNotificationBanner ()
+
+-(void) resetView;
+
+@end
 
 @interface Freshchat ()
 
@@ -61,6 +68,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 @property (nonatomic, strong) HLMessagePoller *messagePoller;
 
 -(void)resetUserWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser;
+
+-(void) updateLocaleMeta;
 
 @end
 
@@ -156,6 +165,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     if (config) {
+        [FDImageCache sharedImageCache].config.maxCacheAge = FD_IMAGE_CACHE_DURATION;
         [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
@@ -216,6 +226,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performPendingTasks)
                                                  name:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLocaleMeta)
+                                                 name:FRESHCHAT_USER_LOCALE_CHANGED object:nil];
 }
 
 -(void)updateAppVersion{
@@ -366,7 +379,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                     oldUser.restoreID = nil;
                     [FDUtilities resetAlias];
                     [[Freshchat sharedInstance] setUser:oldUser];
-                    [[Freshchat sharedInstance] performPendingTasks];
+                    [FDUtilities initiatePendingTasks];
                 }];
             }
         }
@@ -451,10 +464,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void) updateLocaleMeta {
-    if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
-        [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
+    if([FDLocaleUtil hadLocaleChange])  {
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
+        [FDLocaleUtil updateLocaleWith:localLocale];
         [[Freshchat sharedInstance] updateUserLocaleProperties:localLocale];
+        [[FDSecureStore sharedInstance] removeObjectWithKey:FC_SOLUTIONS_LAST_REQUESTED_TIME];
+        [[FDSecureStore sharedInstance] removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
+        [FDUtilities initiatePendingTasks];
+        [[FDNotificationBanner sharedInstance] resetView];
     }
 }
 
@@ -652,6 +669,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         config.themeName = FD_DEFAULT_THEME_NAME;
     }
     
+    //Clear FDWebImage user cache
+    [[FDImageCache sharedImageCache] clearMemory];
+    [[FDImageCache sharedImageCache] clearDiskOnCompletion:nil];
+    
     if(!previousUser) {
         previousUser = [self getPreviousUserConfig];
     }
@@ -719,7 +740,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
             else {
                 [[HLTagManager sharedInstance] getChannelsForTags:tags
                                                         inContext:[KonotorDataManager sharedInstance].mainObjectContext
-                                                   withCompletion:^(NSArray<HLChannel *> * channels) {
+                                                   withCompletion:^(NSArray<HLChannel *> * channels, NSError *error) {
                                                        for(HLChannel *channel in channels){
                                                            count += [channel unreadCount];
                                                        }
@@ -742,7 +763,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
+        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels, NSError *error){
             HLChannel *channel;
             if(channels.count >=1){
                 channel = [channels firstObject];  // 1 will have the match , if more than one. it is ordered by pos

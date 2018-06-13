@@ -23,6 +23,7 @@
 #import "FDImageView.h"
 #import "FCRemoteConfig.h"
 #import "FDSecureStore.h"
+#import "FDDateUtil.h"
 
 @interface HLAgentMessageCell ()
 
@@ -177,13 +178,12 @@
     
     if(!currentMessage.isWelcomeMessage){
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
-        messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
+        messageSentTimeLabel.text = [FDDateUtil stringRepresentationForDate:date];
         [contentEncloser addSubview:messageSentTimeLabel];
         [views setObject:messageSentTimeLabel forKey:@"messageSentTimeLabel"]; //Constraints not yet set.
     }
     
     [self.contentView addSubview:contentEncloser];
-    
     
     for(int i=0; i<currentMessage.fragments.count; i++) {
         FragmentData *fragment = currentMessage.fragments[i];

@@ -25,7 +25,7 @@
     if (self) {
         //[self useInterval:SOLUTIONS_FETCH_INTERVAL_DEFAULT];
         [self useInterval:[FCRemoteConfig sharedInstance].refreshIntervals.faqFetchIntervalLaidback];
-        [self useConfigKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
+        [self useConfigKey:FC_SOLUTIONS_LAST_REQUESTED_TIME];
     }
     return self;
 }

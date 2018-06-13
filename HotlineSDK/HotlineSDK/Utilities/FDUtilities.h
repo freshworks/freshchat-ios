@@ -77,7 +77,7 @@
 + (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo;
 + (void) updateAccountDeletedStatusAs :(BOOL) state;
 + (BOOL) isAccountDeleted;
-
++ (void) getFDImageWithURL : (NSString *) stringUrl withCompletion:(void (^)(UIImage* image))completion;
 @end
 
 #endif

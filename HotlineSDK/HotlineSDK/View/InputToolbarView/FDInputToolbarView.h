@@ -33,6 +33,6 @@
 -(instancetype) initWithDelegate:(id <FDInputToolbarViewDelegate>)delegate;
 -(void)showAttachButton:(BOOL)state;
 -(void)prepareView;
--(BOOL)containsUserInputText;
+-(void)setSendButtonEnabled : (BOOL) state;
 
 @end
