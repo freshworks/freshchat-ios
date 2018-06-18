@@ -54,13 +54,15 @@
 
 "cancel_audio_recording_alert"="Are you sure you want to cancel recording?";
 
-"empty_message_title"="Empty Message";
-"empty_message_info_text"="Whoa there! You cannot send an empty message. Compose a message to send";
 "modify_push_setting_title"="Modify Push Setting";
 "modify_push_setting_info_text"="Enable push notifications to be notified even when out of this chat. Enable push notifications for this app from Settings --> Notification Centre";
 "message_unsent_title"="Your message was not sent";
 "message_unsent_info_text"="We were unable to send your message(s) at this time. Check internet or try again later";
 "server_error_info_text"="Problem sending message. Please try again later.";
+
+/* Account delete messages for actions*/
+"error_message_account_not_active_text" = "This section is no longer available";
+"error_message_account_not_active_cancel" = "Cancel";
 
 /* Posting audio message alerts */
 "short_audio_alert_title" = "Your message is too short.";
@@ -96,14 +98,6 @@
 "image_attachment_select_existing_image"="Upload from gallery";
 "image_attachment_select_new_image"="Take a picture";
 
-/*days*/
-"day_sunday"="Sunday";
-"day_monday"="Monday";
-"day_tuesday"="Tuesday";
-"day_wednesday"="Wednesday";
-"day_thursday"="Thursday";
-"day_friday"="Friday";
-"day_saturday"="Saturday";
 
 /*Notifications*/
 "notification_message_default"="You've got a message!";

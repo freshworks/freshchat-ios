@@ -18,6 +18,12 @@
 
 @end
 
+@interface Freshchat ()
+
+-(void)dismissEmbededFreshchatViews;
+
+@end
+
 @implementation HLContainerController
 
 -(instancetype)initWithController:(HLViewController *)controller andEmbed:(BOOL) embed{
@@ -92,14 +98,25 @@
                                                                       }];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = self.childController;
+    if([FDUtilities isAccountDeleted]) {
+        [self handleAccountDeletedState];
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAccountDeletedState)
+                                                 name:FRESHCHAT_ACCOUNT_DELETED_EVENT object:nil];
+}
+- (void) handleAccountDeletedState{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[Freshchat sharedInstance] dismissEmbededFreshchatViews];
+    });
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [HotlineAppState sharedInstance].currentVisibleController = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:FRESHCHAT_ACCOUNT_DELETED_EVENT];
 }
 
 @end

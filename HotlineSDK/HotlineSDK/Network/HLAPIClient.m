@@ -8,6 +8,7 @@
 
 #import "HLAPIClient.h"
 #import "FDMemLogger.h"
+#import "FDUtilities.h"
 
 @interface HLAPIClient ()
 
@@ -33,38 +34,46 @@
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         self.session = [NSURLSession sessionWithConfiguration:configuration];
         self.loggedAPICalls = [[NSMutableArray alloc]init];
+        self.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
     }
     return self;
 }
 
 -(NSURLSessionDataTask *)request:(HLServiceRequest *)request withHandler:(HLNetworkCallback)handler{
+    if([FDUtilities isAccountDeleted]){
+        return Nil;
+    }
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         
         FDResponseInfo *responseInfo = [[FDResponseInfo alloc]initWithResponse:response andHTTPBody:data];
-        if (statusCode >= 400) {
-            [self logRequest:request response:responseInfo];
-            NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
-            if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
-        }else{
-            if (!error) {
+        if (statusCode >= BadRequest) {
+            if(statusCode == Gone){//For GDPR compliance
+                self.FC_IS_USER_OR_ACCOUNT_DELETED = YES;
+                [FDUtilities handleGDPRForResponse:responseInfo];
                 if (handler) handler(responseInfo,nil);
-            }else{
-                if (handler) handler(responseInfo,error);
             }
+            else{
+                [self logRequest:request];
+                NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
+                if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
+            }
+        }
+        else{
+            if (handler) handler(responseInfo, error ? error : nil);
         }
     }];
     [task resume];
     return task;
 }
 
--(void)logRequest:(HLServiceRequest *)request response:(FDResponseInfo *)response{
+-(void)logRequest:(HLServiceRequest *)request {
     NSString *path = request.URL.path;
     if (path) {
         if (![self.loggedAPICalls containsObject:path]) {
             [self.loggedAPICalls addObject:path];
             FDMemLogger *logger = [FDMemLogger new];
-            [logger addErrorInfo:@{ @"request" : request.toString, @"response" : response.toString}];
+            [logger addErrorInfo:@{ @"request" : request.toString}];
             [logger upload];
         }
     }

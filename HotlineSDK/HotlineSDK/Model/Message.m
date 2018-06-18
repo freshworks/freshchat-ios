@@ -263,6 +263,30 @@
     return message;
 }
 
++(void)removeWelcomeMessage:(HLChannel *)channel{
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_MESSAGE_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"belongsToChannel == %@ AND isWelcomeMessage == 1",channel];
+    NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+    for (int i=0; i<matches.count; i++) {
+        Message *message = matches[i];
+        [Message removeFragmentsInMessage:message];
+        [context deleteObject:message];
+    }   
+}
+
++(void) removeFragmentsInMessage:(Message *) message {
+    NSManagedObjectContext *context = [KonotorDataManager sharedInstance].mainObjectContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_FRAGMENT_ENTITY];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"message == %@",message];
+    NSArray *matches = [context executeFetchRequest:fetchRequest error:nil];
+    for (int i=0; i<matches.count; i++) {
+        Fragment *fragment = matches[i];
+        [context deleteObject:fragment];
+    }
+}
+
+
 +(bool) hasUserMessageInContext:(NSManagedObjectContext *)context {
     static BOOL messageExists = NO;
     if(messageExistsDirty){
@@ -315,7 +339,7 @@
     NSString *description = nil;
     Fragment *fragment = [Fragment getAllFragments:self].lastObject;
     if([fragment.type isEqualToString:@"2"]) {
-        description = @"[Picture Message]";
+        description = @"📷";
     } else if([fragment.type isEqualToString:@"1"]) {
         description = fragment.content;
     } else if ([fragment.type isEqualToString:@"5"]) {

@@ -10,7 +10,6 @@
 #import "HLLocalization.h"
 #import "HLMacros.h"
 
-
 @implementation FDStringUtil
 
 +(NSString *)base64EncodedStringFromString:(NSString *)string{
@@ -99,59 +98,6 @@
     return ([propertyPatternPredicate evaluateWithObject:name]) ? YES : NO;
 }
 
-+(NSString*) stringRepresentationForDate:(NSDate*) date{
-    NSString* timeString;
-    
-    NSArray* weekdays=[NSArray arrayWithObjects:
-                       HLLocalizedString( LOC_DAY_SUNDAY ),
-                       HLLocalizedString( LOC_DAY_MONDAY ),
-                       HLLocalizedString( LOC_DAY_TUESDAY ),
-                       HLLocalizedString( LOC_DAY_WEDNESDAY ),
-                       HLLocalizedString( LOC_DAY_THURSDAY ),
-                       HLLocalizedString( LOC_DAY_FRIDAY ),
-                       HLLocalizedString( LOC_DAY_SATURDAY ),nil];
-    
-    NSDate* today=[[NSDate alloc] init];
-    
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0)
-    NSCalendar* calendar=[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents* comp=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date];
-    NSDateComponents* comp2=[calendar components:(NSWeekdayCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:today];
-    
-    NSDate* date2=[calendar dateFromComponents:comp];
-    NSDate* today2=[calendar dateFromComponents:comp2];
-    
-    NSDateComponents* comp3=[calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit) fromDate:date2 toDate:today2 options:0];
-    
-#else
-    NSCalendar* calendar=[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents* comp=[calendar components:(NSCalendarUnitWeekday|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:date];
-    NSDateComponents* comp2=[calendar components:(NSCalendarUnitWeekday|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:today];
-    
-    NSDate* date2=[calendar dateFromComponents:comp];
-    NSDate* today2=[calendar dateFromComponents:comp2];
-    
-    NSDateComponents* comp3=[calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:date2 toDate:today2 options:0];
-    
-#endif
-    int days=(int)comp3.year*36+(int)comp3.month*30+(int)comp3.day;
-    if([comp isEqual:comp2]){
-        timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-    }
-    else{
-        if((days>7)||(days<0)){
-            timeString=[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
-        }
-        else if(days==1)
-            timeString=[NSString stringWithFormat:@"Yesterday %@",[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
-        else if(days>1)
-            timeString=[NSString stringWithFormat:@"%@ %@",[weekdays objectAtIndex:(comp.weekday-1)],[NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
-    }
-    return timeString;
-    
-}
-
-
 +(BOOL) checkRegexPattern:(NSString *)regexStr inString:(NSString *)string{
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexStr
@@ -163,11 +109,11 @@
     return [matches count] > 0;
 }
 
-+(BOOL)isNotEmpty:(NSString *)str{
-    return str && str.length > 0;
++(BOOL)isNotEmptyString:(NSString *)str{
+    return str && ([trimString(str) length] > 0);
 }
 
-+(BOOL)isEmpty:(NSString *)str{
-    return ![FDStringUtil isNotEmpty:str];
++(BOOL)isEmptyString:(NSString *)str{
+    return ![FDStringUtil isNotEmptyString:trimString(str)];
 }
 @end

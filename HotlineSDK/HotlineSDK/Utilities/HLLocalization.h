@@ -50,13 +50,14 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_DEFAULT_VIDEO_BUTTON_TEXT @"default_video_button_text"
 #define LOC_DEFAULT_FILE_BUTTON_TEXT @"default_file_button_text"
 
-#define LOC_EMPTY_MSG_TITLE @"empty_message_title"
-#define LOC_EMPTY_MSG_INFO_TEXT @"empty_message_info_text"
 #define LOC_MODIFY_PUSH_SETTING_TITLE @"modify_push_setting_title"
 #define LOC_MODIFY_PUSH_SETTING_INFO_TEXT @"modify_push_setting_info_text"
 #define LOC_MESSAGE_UNSENT_TITLE @"message_unsent_title"
 #define LOC_MESSAGE_UNSENT_INFO_TEXT @"message_unsent_info_text"
 #define LOC_SERVER_ERROR_INFO_TEXT @"server_error_info_text"
+
+#define LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT @"error_message_account_not_active_text"
+#define LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL @"error_message_account_not_active_cancel"
 
 #define LOC_AUDIO_MSG_TITLE @"audio_message_title"
 #define LOC_PICTURE_MSG_TITLE @"picture_message_title"
@@ -94,14 +95,6 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_TEXT_PARTIAL @"_text"
 
 #define LOC_CSAT_PROMPT_PARTIAL @"chat_resolution_prompt"
-
-#define LOC_DAY_SUNDAY @"day_sunday"
-#define LOC_DAY_MONDAY @"day_monday"
-#define LOC_DAY_TUESDAY @"day_tuesday"
-#define LOC_DAY_WEDNESDAY @"day_wednesday"
-#define LOC_DAY_THURSDAY @"day_thursday"
-#define LOC_DAY_FRIDAY @"day_friday"
-#define LOC_DAY_SATURDAY @"day_saturday"
 
 #define LOC_DEFAULT_NOTIFICATION_MESSAGE @"notification_message_default"
 

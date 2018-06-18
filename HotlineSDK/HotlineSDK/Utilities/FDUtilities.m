@@ -25,15 +25,14 @@
 #import "HLConstants.h"
 #import "HLLocalization.h"
 #import "FDAutolayoutHelper.h"
+#import "HLContainerController.h"
+#import "FDImageView.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
+#define ERROR_CODE_USER_DELETED 19
+#define ERROR_CODE_ACCOUNT_DELETED 20
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
-
-@interface Freshchat ()
-    -(void)dismissChannelScreens;
-@end
-
 
 @implementation FDUtilities
 
@@ -484,6 +483,15 @@ static NSInteger networkIndicator = 0;
     return ([@[fName, spaceStr, lName] componentsJoinedByString:@""]);
 }
 
++ (void) getFDImageWithURL : (NSString *) stringUrl withCompletion:(void (^)(UIImage* image))completion{
+    FDWebImageManager *manager = [FDWebImageManager sharedManager];
+    [manager loadImageWithURL:[NSURL URLWithString:stringUrl] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        completion(image);
+    }];
+}
+
 +(NSString*)deviceModelName{
     struct utsname systemInfo;
     uname(&systemInfo);
@@ -673,6 +681,31 @@ static NSInteger networkIndicator = 0;
 +(BOOL)isValidUUIDForKey : (NSString *)key
 {
     return (bool)[[NSUUID alloc] initWithUUIDString:key];
+}
+//Update account state, Caution : use "Yes" carefully
++ (void) updateAccountDeletedStatusAs :(BOOL) state{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    [store setBoolValue:state forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
+}
+
++ (BOOL) isAccountDeleted{
+    FDSecureStore *store = [FDSecureStore sharedInstance];
+    return (BOOL)[store boolValueForKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
+}
+
++ (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo {
+    if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
+        [self updateAccountDeletedStatusAs:TRUE];
+        [[Freshchat sharedInstance] resetUserWithCompletion:^{
+            [FDLocalNotification post:FRESHCHAT_ACCOUNT_DELETED_EVENT];
+        }];
+    } else {
+        [[Freshchat sharedInstance] resetUserWithCompletion:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[Freshchat sharedInstance] dismissFreshchatViews];
+            });
+        }];
+    }
 }
 
 +(void)unreadCountInternalHandler:(void (^)(NSInteger count))completion{

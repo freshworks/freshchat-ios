@@ -51,7 +51,14 @@
 #import "FDImageView.h"
 #import "FDVotingManager.h"
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
+#define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
+
+@interface FDNotificationBanner ()
+
+-(void) resetView;
+
+@end
 
 @interface Freshchat ()
 
@@ -61,6 +68,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 @property (nonatomic, strong) HLMessagePoller *messagePoller;
 
 -(void)resetUserWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser;
+
+-(void) updateLocaleMeta;
 
 @end
 
@@ -133,6 +142,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     self.config = processedConfig;
     if ([self hasUpdatedConfig:processedConfig]) {
+        [FDUtilities updateAccountDeletedStatusAs:FALSE];
         [self cleanUpData:^{
             [self updateConfig:processedConfig andRegisterUser:completion];
         }];
@@ -168,6 +178,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         else if(![FDUtilities isValidUUIDForKey:config.appID] && [FDUtilities isValidUUIDForKey:config.appKey]){
             [self addInvalidAppIDKeyExceptionString:@"AppId!"];
         }
+        [FDImageCache sharedImageCache].config.maxCacheAge = FD_IMAGE_CACHE_DURATION;
         [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
         [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
         [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
@@ -232,6 +243,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performPendingTasks)
                                                  name:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLocaleMeta)
+                                                 name:FRESHCHAT_USER_LOCALE_CHANGED object:nil];
 }
 
 -(void)updateAppVersion{
@@ -274,7 +288,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)cleanUpData:(void (^)())completion{
     KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
-    NSDictionary *previousUser = [self getPreviousUserInfo];
+    NSDictionary *previousUser = [self getPreviousUserConfig];
     [dataManager deleteAllSolutions:^(NSError *error) {
         FDLog(@"All solutions deleted");
         [dataManager deleteAllIndices:^(NSError *error) {
@@ -284,7 +298,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }];
 }
 
--(NSDictionary *) getPreviousUserInfo{
+-(NSDictionary *) getPreviousUserConfig{
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = nil;
     if( [HLUser isUserRegistered] &&
@@ -303,10 +317,17 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(BOOL)hasUpdatedConfig:(FreshchatConfig *)config{
     FDSecureStore *store = [FDSecureStore sharedInstance];
+    NSDictionary *oldUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])) {
-        return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID]) ? YES : NO;
+    NSString *existingAppKey = [store objectForKey:HOTLINE_DEFAULTS_APP_KEY];
+    if(!existingDomainName && !existingAppID && !existingAppKey && oldUserInfo){
+        existingDomainName = oldUserInfo[@"domain"];
+        existingAppID      = oldUserInfo[@"appId"];
+        existingAppKey     = oldUserInfo[@"appKey"];
+    }
+    if ((existingDomainName && ![existingDomainName isEqualToString:@""])&&(existingAppID && ![existingAppID isEqualToString:@""])&&(existingAppKey && ![existingAppKey isEqualToString:@""])) {
+        return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID] || ![existingAppKey isEqualToString:config.appKey]) ? YES : NO;
     }else{
         //This is first launch, do not treat this as config update.
         [FDUtilities removeUUIDWithAppID:config.appID];
@@ -375,7 +396,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                     oldUser.restoreID = nil;
                     [FDUtilities resetAlias];
                     [[Freshchat sharedInstance] setUser:oldUser];
-                    [[Freshchat sharedInstance] performPendingTasks];
+                    [FDUtilities initiatePendingTasks];
                 }];
             }
         }
@@ -460,10 +481,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void) updateLocaleMeta {
-    if([FDLocaleUtil hadLocaleChange] && [HLUser isUserRegistered])  {
-        [[FDSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME];
+    if([FDLocaleUtil hadLocaleChange])  {
         NSString *localLocale = [FDLocaleUtil getLocalLocale];
+        [FDLocaleUtil updateLocaleWith:localLocale];
         [[Freshchat sharedInstance] updateUserLocaleProperties:localLocale];
+        [[FDSecureStore sharedInstance] removeObjectWithKey:FC_SOLUTIONS_LAST_REQUESTED_TIME];
+        [[FDSecureStore sharedInstance] removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
+        [FDUtilities initiatePendingTasks];
+        [[FDNotificationBanner sharedInstance] resetView];
     }
 }
 
@@ -517,7 +542,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
-    
     if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
         [self showFAQs:controller withOptions:[FAQOptions new]];
     }
@@ -536,10 +560,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
+    if([FDUtilities isAccountDeleted]){
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
+        return;
+    }
     [HLControllerUtils presentOn:controller option:options];
 }
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
+    if([FDUtilities isAccountDeleted]){
+        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
+        return;
+    }
     [HLControllerUtils presentOn:controller option:options];
 }
 
@@ -654,13 +686,17 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         config.themeName = FD_DEFAULT_THEME_NAME;
     }
     
+    //Clear FDWebImage user cache
+    [[FDImageCache sharedImageCache] clearMemory];
+    [[FDImageCache sharedImageCache] clearDiskOnCompletion:nil];
+    
     if(!previousUser) {
-        previousUser = [self getPreviousUserInfo];
+        previousUser = [self getPreviousUserConfig];
     }
     
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
     BOOL isUserRegistered = [HLUser isUserRegistered];
-    
+    BOOL isAccountDeleted = [FDUtilities isAccountDeleted];
     [[FreshchatUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
     
     //Clear secure store
@@ -668,7 +704,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[FDSecureStore persistedStoreInstance]clearStoreData];
     [[FDVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
     [HLUserDefaults clearUserDefaults];
-    
+    [store setBoolValue:isAccountDeleted forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
     if(previousUser && isUserRegistered) {
         [self storePreviousUser:previousUser inStore:store];
     } else {
@@ -676,18 +712,20 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     [self markPreviousUserUninstalledIfPresent];
     [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
-        if(doInit){
-            [self initWithConfig:config completion:completion];
-        }
-        if (deviceToken) {
-            [self storeDeviceToken:deviceToken];
+        if(![FDUtilities isAccountDeleted]){
+            if(doInit){
+                [self initWithConfig:config completion:completion];
+            }
+            if (deviceToken) {
+                [self storeDeviceToken:deviceToken];
+            }
+            [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
+            [FDUtilities initiatePendingTasks];
         }
         if (completion) {
             completion();
         }
-        [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
         [FDUtilities postUnreadCountNotification];
-        [FDUtilities initiatePendingTasks];
     }];
 }
 
@@ -719,7 +757,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
             else {
                 [[HLTagManager sharedInstance] getChannelsForTags:tags
                                                         inContext:[KonotorDataManager sharedInstance].mainObjectContext
-                                                   withCompletion:^(NSArray<HLChannel *> * channels) {
+                                                   withCompletion:^(NSArray<HLChannel *> * channels, NSError *error) {
                                                        for(HLChannel *channel in channels){
                                                            count += [channel unreadCount];
                                                        }
@@ -733,12 +771,16 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void) sendMessage:(FreshchatMessage *)messageObject{
-     if(messageObject.message.length == 0 || messageObject.tag.length == 0){
+    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
+        return;
+    }
+    if([FDUtilities isAccountDeleted]){
+        NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
     NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels){
+        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels, NSError *error){
             HLChannel *channel;
             if(channels.count >=1){
                 channel = [channels firstObject];  // 1 will have the match , if more than one. it is ordered by pos
@@ -767,6 +809,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
+    HLAPIClient *client = [HLAPIClient sharedInstance];
+    if(client.FC_IS_USER_OR_ACCOUNT_DELETED) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
     FDSecureStore *store = [FDSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
@@ -782,28 +826,26 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)dismissHotlineViewInController:(UIViewController *) controller
-                         channelsOnly:(BOOL)channelsOnly
                        withCompletion: (void(^)())completion  {
     void (^clearHLControllers)() = ^void() {
         for(UIViewController *tempVC in controller.childViewControllers){
             if([tempVC isKindOfClass:[HLContainerController class]]){
-                if(channelsOnly) {
-                    UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
-                    if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
-                       [firstViewController isKindOfClass:[FDMessageController class]] ) {
-                        [tempVC dismissViewControllerAnimated:NO completion:completion];
-                    }
-                } else {
+                UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
+                if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
+                   [firstViewController isKindOfClass:[HLCategoryGridViewController class]] ||
+                   [firstViewController isKindOfClass:[HLListViewController class]] ||
+                   [firstViewController isKindOfClass:[HLArticleDetailViewController class]] ||
+                   [firstViewController isKindOfClass:[FDMessageController class]]  ) {
                     [tempVC dismissViewControllerAnimated:NO completion:completion];
                 }
-            } else if(channelsOnly && [tempVC isKindOfClass:[FDAttachmentImageController class]]) {
+                
+            } else if([tempVC isKindOfClass:[FDAttachmentImageController class]]) {
                 [tempVC dismissViewControllerAnimated:NO completion:completion];
             }
         }
     };
     if(controller.presentedViewController){
         [self dismissHotlineViewInController:controller.presentedViewController
-                                channelsOnly:channelsOnly
                               withCompletion:clearHLControllers];
     }
     else {
@@ -811,15 +853,36 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
 }
 
--(void) dismissFreshchatViews {
+-(void) dismissEmbededFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [self dismissHotlineViewInController:rootController channelsOnly:false withCompletion:nil];
+    [self dismissHotlineViewInController:rootController withCompletion:nil];
+    if(!rootController.isBeingPresented) { // Embeded case
+        UITabBarController *tabBar = (UITabBarController*) rootController;
+        if(tabBar!= nil) { //Tab bar case
+            UIViewController *selectedVC = tabBar.selectedViewController;
+            if(selectedVC!= nil) {
+                NSMutableArray<UIViewController *> *viewControllers = [[NSMutableArray alloc]init];
+                for(UIViewController *tempVC in selectedVC.childViewControllers) {
+                    if([tempVC isKindOfClass:[HLContainerController class]]) { // Check for our Freshchat SDK screen
+                        HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:nil andIsEmbed:YES];                        
+                        UINavigationController *navigationController = (UINavigationController *)selectedVC;
+                        if (interstitialController != nil && navigationController != nil) {
+                            [viewControllers addObject:interstitialController];
+                            [navigationController setViewControllers:viewControllers animated:NO];
+                        }
+                        break; //Set the top most custom screens if any with the current not supported support section
+                    } else {
+                        [viewControllers addObject:tempVC]; //Insert all the top most custom screens
+                    }
+                }
+            }
+        }
+    }
 }
 
-
--(void) dismissChannelScreens {
+-(void) dismissFreshchatViews {
     UIViewController *rootController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [self dismissHotlineViewInController:rootController channelsOnly:true withCompletion:nil];
+    [self dismissHotlineViewInController:rootController withCompletion:nil];
 }
 
 @end

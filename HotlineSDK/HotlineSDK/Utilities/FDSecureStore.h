@@ -50,17 +50,22 @@
 
 #define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME @"hotline_defaults_solutions_last_updated_svr_time_v3"
 //v2 - Version for Force reload of data from server for Tag Data
-#define HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_INTERVAL_TIME @"hotline_defaults_solutions_last_updated_itv_time_v3"
-#define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME @"hotline_defaults_channels_last_updated_svr_time_v2"
-#define HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME @"hotline_defaults_channels_last_updated_itv_time_v2"
-#define HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME @"hotline_defaults_conversations_last_updated_svr_time"
-#define HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME @"hotline_defaults_conversations_last_updated_itv_time"
+#define FC_SOLUTIONS_LAST_REQUESTED_TIME @"hotline_defaults_solutions_last_updated_itv_time_v3"
+
+#define FC_CHANNELS_LAST_MODIFIED_AT @"hotline_defaults_channels_last_updated_svr_time_v2"
+#define FC_CHANNELS_LAST_REQUESTED_TIME @"hotline_defaults_channels_last_updated_itv_time_v2"
+
+#define FC_CONVERSATIONS_LAST_MODIFIED_AT @"hotline_defaults_conversations_last_updated_svr_time"
+#define FC_CONVERSATIONS_LAST_REQUESTED_TIME @"hotline_defaults_conversations_last_updated_itv_time"
+
 #define HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME @"hotline_defaults_dau_last_updated_time"
 
 #define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
 #define HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN @"hotline_defaults_notification_disabled_alert_shown"
 #define HOTLINE_DEFAULTS_VOTED_ARTICLES @"hotline_defaults_voted_articles"
 #define HOTLINE_DEFAULTS_STRINGS_BUNDLE @"hotline_defaults_strings_bundle"
+
+#define FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED @"freshchat_defaults_is_account_deleted"
 
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"

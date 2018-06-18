@@ -10,7 +10,7 @@
 
 @interface FDDateUtil : NSObject
 
-+(NSString *)getStringFromDate:(NSDate *)date;
++(NSString*) stringRepresentationForDate:(NSDate*) dateToDisplay;
 +(NSNumber *) maxDateOfNumber:(NSNumber *) lastUpdatedTime andStr:(NSString*) lastUpdatedStr;
 
 @end

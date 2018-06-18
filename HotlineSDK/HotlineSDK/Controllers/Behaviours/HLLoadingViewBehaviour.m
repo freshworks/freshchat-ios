@@ -95,12 +95,15 @@
             return;
         }
         
-        if(!isLoading){
+        if(!isLoading || [FDUtilities isAccountDeleted]){
             [self removeLoadingIndicator];
         }
         if(count == 0) {
             NSString *message;
-            if(isLoading){
+            if([FDUtilities isAccountDeleted]){
+                message = HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT);
+            }
+            else if(isLoading){
                 message = [self.loadingViewDelegate loadingText];
             }
             else if(![[FDReachabilityManager sharedInstance] isReachable]){

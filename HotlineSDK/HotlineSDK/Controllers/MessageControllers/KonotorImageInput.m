@@ -30,6 +30,7 @@
 @property (nonatomic, strong) KonotorConversation *conversation;
 @property (nonatomic, strong) HLChannel *channel;
 @property (nonatomic, strong) FDAttachmentImageController *imageController;
+@property (nonatomic, strong) UIActionSheet *inputOptions;
 
 @end
 
@@ -55,31 +56,31 @@
     isCameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     isGallerySelectionEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
     NSArray *actionButtons;
-    UIActionSheet *inputOptions = [[UIActionSheet alloc] initWithTitle:nil
+    self.inputOptions = [[UIActionSheet alloc] initWithTitle:nil
                                                               delegate:self
                                                      cancelButtonTitle:HLLocalizedString(LOC_IMAGE_ATTACHMENT_CANCEL_BUTTON_TEXT)
                                                 destructiveButtonTitle:nil
                                                      otherButtonTitles:nil];
     if(isCameraCaptureEnabled && isGallerySelectionEnabled){
         actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT),HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT)];
-        inputOptions.tag = 0;
+        self.inputOptions.tag = 0;
     }
     else if(isCameraCaptureEnabled){
         actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_NEW_IMAGE_BUTTON_TEXT)];
-        inputOptions.tag = 2;
+        self.inputOptions.tag = 2;
     }
     else if(isGallerySelectionEnabled){
         actionButtons = @[HLLocalizedString(LOC_IMAGE_ATTACHMENT_EXISTING_IMAGE_BUTTON_TEXT)];
-        inputOptions.tag = 1;
+        self.inputOptions.tag = 1;
     }
     
     for (NSString *actionTitle in actionButtons) {
-        [inputOptions addButtonWithTitle:actionTitle];
+        [self.inputOptions addButtonWithTitle:actionTitle];
     }
-    inputOptions.delegate = self;
+    self.inputOptions.delegate = self;
     self.sourceViewController=viewController;
     self.sourceView=viewController.view;
-    [inputOptions showInView:self.sourceView];
+    [self.inputOptions showInView:self.sourceView];
     
 }
 
@@ -215,6 +216,10 @@
     self.imagePicked = selectedImage;
     UINavigationController *navcontroller = [[UINavigationController alloc] initWithRootViewController:self.imageController];
     [self.sourceViewController presentViewController:navcontroller animated:YES completion:nil];
+}
+
+- (void) dismissAttachmentActionSheet{
+    [self.inputOptions dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 -(void)attachmentController:(FDAttachmentImageController *)controller didFinishSelectingImage:(UIImage *)image withCaption:(NSString *)caption {

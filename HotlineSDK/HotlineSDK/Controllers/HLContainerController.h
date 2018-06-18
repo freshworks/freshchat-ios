@@ -10,6 +10,8 @@
 #import "HLViewController.h"
 #import "FCFooterView.h"
 
+#define FRESHCHAT_ACCOUNT_DELETED_EVENT @"com.freshworks.freshchat_account_deleted_event"
+
 @interface HLContainerController : UIViewController
 
 @property (nonatomic,strong)UIView *containerView;

@@ -375,9 +375,6 @@
 -(void)deleteAllEntriesOfEntity:(NSString *)entity handler:(void(^)(NSError *error))handler inContext:(NSManagedObjectContext *)context{
     [context performBlock:^{
         @try {
-            if ([entity isEqualToString:HOTLINE_MESSAGE_ENTITY]) {
-                NSLog(@"hello");
-            }
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entity];
             NSArray *results = [context executeFetchRequest:request error:nil];
             for (int i=0; i<results.count; i++) {
@@ -524,9 +521,4 @@
         });
     }];
 }
-
--(void)deleteAllMessages:(void (^)(NSError *))handler{
-    [self deleteAllEntriesOfEntity:HOTLINE_MESSAGE_ENTITY handler:handler inContext:self.mainObjectContext];
-}
-
 @end

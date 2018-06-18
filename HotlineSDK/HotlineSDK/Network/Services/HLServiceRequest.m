@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "FDSecureStore.h"
 #import "HLVersionConstants.h"
+#import "FDStringUtil.h"
 
 @interface HLServiceRequest ()
 
@@ -154,8 +155,20 @@ static NSString * const FDMultipartFormCRLF = @"\r\n";
 }
 
 -(NSString *)toString{
+    HLServiceRequest *serReq = [self copy];
     NSString *body = [[[NSString alloc]initWithData:self.formData encoding:self.preferredEncoding] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    return [NSString stringWithFormat:@"HEADERS : %@ REQUEST: %@ HTTP-BODY:%@", [self allHTTPHeaderFields] , self, body];
+    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:serReq.URL resolvingAgainstBaseURL:false];
+    NSMutableArray<NSURLQueryItem*> *queryItems = [[NSMutableArray alloc]init];
+    for (NSURLQueryItem *item in components.queryItems) {
+        if([item.name isEqual: @"t"]) {
+            [queryItems addObject:[[NSURLQueryItem alloc]initWithName:@"t" value:@"XXXXXXXXXXX"]];
+        } else {
+            [queryItems addObject:[[NSURLQueryItem alloc]initWithName:item.name value:item.value]];
+        }
+    }
+    [components setQueryItems:queryItems];
+    serReq.URL = components.URL;
+    return [NSString stringWithFormat:@"HEADERS : %@ REQUEST: %@ HTTP-BODY:%@", [self allHTTPHeaderFields] , serReq, body];
 }
 
 @end

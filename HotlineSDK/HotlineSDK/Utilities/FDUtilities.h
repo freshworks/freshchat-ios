@@ -14,6 +14,8 @@
 #import "FDStringUtil.h"
 #import "FreshchatSDK.h"
 #import "FDMessageController.h"
+#import "FDResponseInfo.h"
+
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
 @interface FreshchatUser()
@@ -73,7 +75,10 @@
 + (NSString *) appendFirstName :(NSString *)firstName withLastName:(NSString *) lastName;
 + (UIColor *) invertColor :(UIColor *)color;
 + (BOOL)isValidUUIDForKey : (NSString *)key;
-
++ (void) handleGDPRForResponse :(FDResponseInfo *)responseInfo;
++ (void) updateAccountDeletedStatusAs :(BOOL) state;
++ (BOOL) isAccountDeleted;
++ (void) getFDImageWithURL : (NSString *) stringUrl withCompletion:(void (^)(UIImage* image))completion;
 @end
 
 #endif

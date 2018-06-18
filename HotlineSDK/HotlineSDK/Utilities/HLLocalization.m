@@ -12,28 +12,25 @@
 #import "FDStringUtil.h"
 
 @interface HLLocalization ()
-
 @end
 
 @implementation HLLocalization
 
 +(NSArray *) getBundlePriorityArray{
-    static NSArray *bundleArray ;
-    if(!bundleArray){
-        NSMutableArray *priorityArray = [NSMutableArray new];
-        NSString *lookupBundleName = [[FDSecureStore sharedInstance]objectForKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
-        lookupBundleName = lookupBundleName ? lookupBundleName : DEFAULT_BUNDLE_NAME;
-        
-        NSBundle *overrideBundle = [self bundleWithName:lookupBundleName andLang:[self getPreferredLang]];
-        NSBundle *overrideBundleForDefaultLanguage = [self bundleWithName:lookupBundleName andLang:DEFAULT_LANG];
-        NSBundle *defaultPodBundleForDefaultLanguage = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
-        
-        if(overrideBundle) [priorityArray addObject:overrideBundle];
-        if(overrideBundleForDefaultLanguage) [priorityArray addObject:overrideBundleForDefaultLanguage];
-        if(defaultPodBundleForDefaultLanguage && ![lookupBundleName isEqualToString:DEFAULT_BUNDLE_NAME]) [priorityArray addObject:defaultPodBundleForDefaultLanguage];
-        
-        bundleArray = [[NSArray alloc] initWithArray:priorityArray];
-    }
+    NSArray *bundleArray;
+    NSMutableArray *priorityArray = [NSMutableArray new];
+    NSString *lookupBundleName = [[FDSecureStore sharedInstance]objectForKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
+    lookupBundleName = lookupBundleName ? lookupBundleName : DEFAULT_BUNDLE_NAME;
+    
+    NSBundle *overrideBundle = [self bundleWithName:lookupBundleName andLang:[self getPreferredLang]];
+    NSBundle *overrideBundleForDefaultLanguage = [self bundleWithName:lookupBundleName andLang:DEFAULT_LANG];
+    NSBundle *defaultPodBundleForDefaultLanguage = [self bundleWithName:DEFAULT_BUNDLE_NAME andLang:DEFAULT_LANG];
+    
+    if(overrideBundle) [priorityArray addObject:overrideBundle];
+    if(overrideBundleForDefaultLanguage) [priorityArray addObject:overrideBundleForDefaultLanguage];
+    if(defaultPodBundleForDefaultLanguage && ![lookupBundleName isEqualToString:DEFAULT_BUNDLE_NAME]) [priorityArray addObject:defaultPodBundleForDefaultLanguage];
+    
+    bundleArray = [[NSArray alloc] initWithArray:priorityArray];
     return bundleArray;
 }
 
@@ -71,7 +68,7 @@
 
 +(BOOL) isNotEmpty:(NSString *)key{
     NSString *value = [HLLocalization localize:key];
-    return [FDStringUtil isNotEmpty:value] && [HLLocalization isLocalizedString:value forKey:key];
+    return [FDStringUtil isNotEmptyString:value] && [HLLocalization isLocalizedString:value forKey:key];
 }
 
 @end

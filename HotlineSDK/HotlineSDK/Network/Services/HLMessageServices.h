@@ -61,4 +61,6 @@ enum MessageRequestSource {
 
 +(void)uploadUnuploadedCSAT;
 
++(void) markUploadFailedAndSaveMessage:(Message *) message inChannel: (HLChannel*) channel;
+
 @end

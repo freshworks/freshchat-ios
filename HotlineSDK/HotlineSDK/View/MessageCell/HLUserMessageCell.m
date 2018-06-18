@@ -18,6 +18,7 @@
 #import "FDVideoFragment.h"
 #import "FDAudioFragment.h"
 #import "FDFileFragment.h"
+#import "FDDateUtil.h"
 
 @implementation HLUserMessageCell
 
@@ -102,7 +103,7 @@
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
     NSDate* date=[NSDate dateWithTimeIntervalSince1970:currentMessage.createdMillis.longLongValue/1000];
     
-    messageSentTimeLabel.text = [FDStringUtil stringRepresentationForDate:date];
+    messageSentTimeLabel.text = [FDDateUtil stringRepresentationForDate:date];
     [chatBubbleImageView setImage:[userChatBubble resizableImageWithCapInsets:userChatBubbleInsets]];
     if([currentMessage uploadStatus].integerValue==2)  {
         [uploadStatusImageView setImage:sentImage];

@@ -65,7 +65,10 @@
 }
 
 -(NSString *)loadingText{
-    if(self.restoring) {
+    if([FDUtilities isAccountDeleted]){
+        return HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT);
+    }
+    else if(self.restoring) {
         return HLLocalizedString(LOC_RESTORING_CHANNEL_TEXT);
     }
     else if([self.options isKindOfClass:[FAQOptions class]]){
@@ -251,7 +254,7 @@
 }
 
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(HLViewController *))completion{
-    [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels){
+    [[HLTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[KonotorDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<HLChannel *> *channels, NSError *error){
         HLViewController *preferedController = nil;
         if([channels count] == 0 ) {
             HLChannel *defaultChannel = [HLChannel getDefaultChannelInContext:[KonotorDataManager sharedInstance].mainObjectContext];

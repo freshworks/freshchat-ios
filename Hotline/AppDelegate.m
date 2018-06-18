@@ -10,7 +10,8 @@
 #import "ViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import "HotlineConfigStrings.h"
+#import "Hotline_Demo-Swift.h"
+
 
 @interface AppDelegate ()
 
@@ -46,6 +47,18 @@
     
 }
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    #if ENABLE_RTL_RUNTIME
+        [L102Localizer DoTheMagic];
+        if([[L102Language currentAppleLanguage] isEqualToString:@"ar"]) {
+            UIView.appearance.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        } else {
+            UIView.appearance.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+        }
+        NSLog(@":::Current Language : %@", [L102Language currentAppleLanguage]);
+    #endif
+    return true;
+}
 
 -(void)launchSampleController {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
@@ -65,7 +78,7 @@
     
     if (isTabViewPreferred) {
         ConversationOptions *convOptions = [[ConversationOptions alloc] init];
-        [convOptions filterByTags:@[@"wow"] withTitle:@"Wow Conversations"];
+        [convOptions filterByTags:@[@"wow"] withTitle:@"Wow Conv[App]"];
         NSArray *arr = @[@"wow"];
         NSArray *contactUsTagsArray = @[@"wow"];
         FAQOptions *faqOptions = [FAQOptions new];
@@ -73,12 +86,13 @@
         faqOptions.showContactUsOnFaqScreens = YES;
         
         [faqOptions filterContactUsByTags:contactUsTagsArray withTitle:@"Wow ContactUS"];
-        [faqOptions filterByTags:arr withTitle:@"Wow Articles" andType: ARTICLE];
+        [faqOptions filterByTags:arr withTitle:@"Wow Articles[App]" andType: ARTICLE];
         UINavigationController* faqControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getFAQsControllerForEmbedWithOptions:faqOptions]];
         UINavigationController* convControllerOption = [[UINavigationController alloc]initWithRootViewController:[[Freshchat sharedInstance]getConversationsControllerForEmbedWithOptions:convOptions]];
         UIStoryboard *sb = [UIStoryboard storyboardWithName:STORYBOARD_NAME bundle:nil];
         
         ViewController *mainController = [sb instantiateViewControllerWithIdentifier:STORYBOARD_IDENTIFIER];
+        UINavigationController *mainNavigationController = [[UINavigationController alloc] initWithRootViewController:mainController];
         UINavigationController *FAQController = [[UINavigationController alloc]initWithRootViewController:
                                                  [freshchatSDK getFAQsControllerForEmbed]];
         
@@ -89,7 +103,7 @@
         convControllerOption.title = @"ConvWithOptions";
 
         UITabBarController* tabBarController=[[UITabBarController alloc] init];
-        [tabBarController setViewControllers:@[mainController, FAQController,faqControllerOption, _channelsController,convControllerOption]];
+        [tabBarController setViewControllers:@[mainNavigationController, FAQController,faqControllerOption, _channelsController,convControllerOption]];
         [tabBarController.tabBar setClipsToBounds:NO];
         [tabBarController.tabBar setTintColor:[UIColor colorWithRed:(0x33/0xFF) green:(0x36/0xFF) blue:(0x45/0xFF) alpha:1.0]];
         [tabBarController.tabBar setBarStyle:UIBarStyleDefault];

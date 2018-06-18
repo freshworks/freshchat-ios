@@ -11,7 +11,14 @@
 #import "FDResponseInfo.h"
 #import "HLServiceRequest.h"
 
+enum FCHTTPResponseCode {
+    BadRequest = 400,
+    Gone = 410
+};
+
 @interface HLAPIClient : NSObject
+
+@property(nonatomic, assign) BOOL FC_IS_USER_OR_ACCOUNT_DELETED;
 
 typedef void(^HLNetworkCallback)(FDResponseInfo *responseInfo, NSError *error);
 

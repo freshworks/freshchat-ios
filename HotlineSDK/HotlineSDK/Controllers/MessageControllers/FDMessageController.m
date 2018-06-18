@@ -194,15 +194,19 @@ typedef struct {
     self.channelName.textAlignment = UITextAlignmentCenter;
     self.channelName.font = [[FCTheme sharedInstance] navigationBarTitleFont];
     self.channelName.textColor = [[FCTheme sharedInstance] navigationBarTitleColor];
-    self.channelName.text = self.channel.name;
     [self.titleView addSubview:self.channelName];
     
     self.typicalReply.font = [[FCTheme sharedInstance] responseTimeExpectationsFontName];
     self.typicalReply.textColor = [[FCTheme sharedInstance] responseTimeExpectationsFontColor];
     self.typicalReply.textAlignment = UITextAlignmentCenter;
     [self.titleView addSubview:self.typicalReply];
+    [self updateTitle];
     parent.navigationItem.titleView = self.titleView;
     
+}
+
+-(void) updateTitle {
+    self.channelName.text = self.channel.name;
 }
 
 -(void) setFooterView {
@@ -280,9 +284,9 @@ typedef struct {
     [self localNotificationSubscription];
     [self setFooterView];
     self.tableView.tableHeaderView = [self tableHeaderView];
-    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self processPendingCSAT];
     [self checkRestoreStateChanged];
+    [self.inputToolbar setSendButtonEnabled: [FDStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
 }
 
 //TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
@@ -298,6 +302,7 @@ typedef struct {
     [super viewDidAppear:animated];
     [self registerAppAudioCategory];
     [self checkChannel];
+    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self.messagesPoller begin];
     if([FDUtilities canMakeTypicallyRepliesCall] ){
         [self fetchReplyResonseTime];
@@ -358,7 +363,7 @@ typedef struct {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.messagesPoller end];
-    
+    [self.imageInput dismissAttachmentActionSheet];
     if([Konotor getCurrentPlayingMessageID]){
         [Konotor StopPlayback];
     }
@@ -695,14 +700,10 @@ typedef struct {
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     self.inputToolbar.textView.text = @"";
-    if(([toSend isEqualToString:@""]) || ([toSend isEqualToString:HLLocalizedString(LOC_MESSAGE_PLACEHOLDER_TEXT)])){
-        [self showAlertWithTitle:HLLocalizedString(LOC_EMPTY_MSG_TITLE) andMessage:HLLocalizedString(LOC_EMPTY_MSG_INFO_TEXT)];
-        
-    }else{
-        [Konotor uploadMessageWithImage:nil textFeed:toSend onConversation:self.conversation andChannel:self.channel];
-        [self checkPushNotificationState];
-        [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
-    }
+    [self.inputToolbar setSendButtonEnabled:NO];
+    [Konotor uploadMessageWithImage:nil textFeed:toSend onConversation:self.conversation andChannel:self.channel];
+    [self checkPushNotificationState];
+    [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
     [self refreshView];
     [self.messagesPoller reset];
 }
@@ -715,6 +716,7 @@ typedef struct {
                 [self updateBottomViewAfterCSATSubmisssion];
                 [self rebuildMessages];
             }
+            [self updateTitle];
             [self refreshView];
         }
     }];
@@ -727,7 +729,7 @@ typedef struct {
         BOOL isChannelValid = NO;
         BOOL hasTags =  [HLConversationUtil hasTags:self.convOptions];
         HLChannel *channelToChk = [HLChannel getWithID:self.channelID inContext:ctx];
-        if ( channelToChk && channelToChk.isHidden != 0 ) {
+        if ( channelToChk && ( [channelToChk.isHidden intValue] == 0 || [channelToChk.isDefault intValue] == 1 ) ) {
             if(hasTags){ // contains tags .. so check that as well
                 if([channelToChk hasAtleastATag:self.convOptions.tags]){
                     isChannelValid = YES;
@@ -737,31 +739,18 @@ typedef struct {
                 isChannelValid = YES;
             }
         }
-        if(!isChannelValid){ // remove this channel from the view
-            [self.parentViewController.navigationController popViewControllerAnimated:YES];
-            if(completion) {
-                completion(isChannelValid);
-            }
+        if(hasTags){
+            [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels, NSError *error) {
+                [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
+            }];
         }
         else {
-            // if channel count changed
-            if(completion) {
-                completion(isChannelValid);
-            }
-            if(hasTags){
-                [[HLTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels){
-                    if(channels && channels.count  > 1 ){
-                        [self alterNavigationStack];
-                    }
-                }];
-            }
-            else {
-                [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
-                    if(!error && channelInfos && channelInfos.count > 1){
-                        [self alterNavigationStack];
-                    }
-                }];
-            }
+            [[KonotorDataManager sharedInstance] fetchAllVisibleChannelsWithCompletion:^(NSArray *channelInfos, NSError *error) {
+                [self processNavStackChanges:channelInfos channelsError:error isValidChannel:isChannelValid];
+            }];
+        }
+        if(completion) {
+            completion(isChannelValid);
         }
     }];
 }
@@ -784,6 +773,22 @@ typedef struct {
     NSDictionary *overlayHeightmetrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
     self.viewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:overlayHeightmetrics views:self.views];
     [self.view addConstraints:self.viewVerticalConstraints];
+}
+
+-(void) processNavStackChanges: (NSArray*)channels channelsError:(NSError *)error isValidChannel:(BOOL)isValidChannel  {
+    if (error) {
+        return;
+    }
+    if(!isValidChannel) {
+        if(channels && channels.count == 0 ){
+            [self alterNavigationStack];
+        }
+        [self.parentViewController.navigationController popViewControllerAnimated:YES];
+    } else {
+        if(channels && channels.count > 1) {
+            [self alterNavigationStack];
+        }
+    }
 }
 
 -(void) alterNavigationStack
@@ -816,7 +821,7 @@ typedef struct {
     self.channel = [HLChannel getWithID:self.channelID inContext:[KonotorDataManager sharedInstance].mainObjectContext];
     self.conversation = [self.channel primaryConversation];
     self.imageInput = [[KonotorImageInput alloc]initWithConversation:self.conversation onChannel:self.channel];
-    
+    [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;    
 }
 
 -(void)checkPushNotificationState{
@@ -1076,7 +1081,7 @@ typedef struct {
     }
 }
 
-- (void) refreshView{
+- (void) refreshView {
     [self refreshView:nil];
 }
 
@@ -1251,7 +1256,7 @@ typedef struct {
 
 -(void)processPendingCSAT{
     
-    if ([self.inputToolbar containsUserInputText] || [KonotorAudioRecorder isRecording]){
+    if ([FDStringUtil isNotEmptyString:self.inputToolbar.textView.text] || [KonotorAudioRecorder isRecording]){
         FDLog(@"Not showing CSAT prompt, User is currently engaging input toolbar");
         return;
     }

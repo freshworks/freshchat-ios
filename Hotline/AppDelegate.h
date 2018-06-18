@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FreshchatSDK/FreshchatSDK.h"
+#import "HotlineConfigStrings.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -15,7 +16,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UIImage *pickedImage;
-
+-(void)setupRootController;
 +(FreshchatUser *)createFreshchatUser;
 
 @end

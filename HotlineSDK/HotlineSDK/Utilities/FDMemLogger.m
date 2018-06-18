@@ -119,7 +119,7 @@ static NSString * const LOGGER_API = @"https://xp8jwcfqkf.execute-api.us-east-1.
 
 -(void)upload{
     
-    if (self.logList.count == 0) return;
+    if (self.logList.count == 0 || [FDUtilities isAccountDeleted]) return;
     
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];

@@ -28,9 +28,8 @@
 
 @interface Freshchat ()
 
--(void)performPendingTasks;
 -(void)registerDeviceToken;
--(NSDictionary *) getPreviousUserInfo;
+-(NSDictionary *) getPreviousUserConfig;
 -(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore;
 
 @end
@@ -69,7 +68,7 @@
     return task;
 }
 
--(NSDictionary *)getUserInfo:(NSString *) userAlias{
+-(NSMutableDictionary *)getUserInfo:(NSString *) userAlias{
     NSMutableDictionary *userInfo = [NSMutableDictionary new];
     NSString *adId = [FDUtilities getAdID];
     NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
@@ -88,7 +87,7 @@
         }
         return nil;
     }
-
+    
     if (deviceProps) {
         userInfo[@"deviceIosMeta"] = deviceProps;
     }
@@ -97,7 +96,7 @@
         userInfo[@"adId"] = adId;
     }
     
-    return  @{ @"user" : userInfo };
+    return userInfo;
 }
 
 -(NSURLSessionDataTask *)registerUser:(void (^)(NSError *error))handler{
@@ -106,14 +105,15 @@
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_USER_REGISTRATION_PATH,appID];
     
-    NSDictionary *userInfo = [self getUserInfo:[FDUtilities getUserAliasWithCreate]];
+    NSMutableDictionary *userInfo = [self getUserInfo:[FDUtilities getUserAliasWithCreate]];
+    NSArray *userProperties = [HLCoreServices updatePropertiesTo:userInfo];
     
     if (!userInfo) {
         return nil;
     }
     
     NSError *error = nil;
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
     
     if (error) {
         FDLog(@"Error while serializing user information");
@@ -138,7 +138,7 @@
                 ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
                 
                 [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-                
+                [HLCoreServices setAsUploadedTo:userProperties withCompletion:nil];
                 if (handler) handler(nil);
                 
             }else{
@@ -153,6 +153,42 @@
         }
     }];
     return task;
+}
+
++ (NSArray *) updatePropertiesTo: (NSMutableDictionary *) userInfo {
+    NSArray *propertiesToUpload = [KonotorCustomProperty getUnuploadedProperties];
+    if (propertiesToUpload.count > 0) {
+        NSMutableDictionary *metaInfo = [NSMutableDictionary new];
+        for (int i=0; i<propertiesToUpload.count; i++) {
+            KonotorCustomProperty *property = propertiesToUpload[i];
+            if (property.key) {
+                if (property.isUserProperty) {
+                    userInfo[property.key] = property.value;
+                }else{
+                    metaInfo[property.key] = property.value;
+                }
+            }
+        }
+        userInfo[@"meta"] = metaInfo;
+    }
+    return propertiesToUpload;
+}
+
++(void) setAsUploadedTo:(NSArray *) properties withCompletion:(void (^)())completion {
+    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
+        for (int i=0; i<properties.count; i++) {
+            KonotorCustomProperty *property = properties[i];
+            if (property.managedObjectContext != nil) {
+                property.uploadStatus = @1;
+            } else {
+                FDLog(@"Trying to access deleted meta object - Ignoring");
+            }
+        }
+        [[KonotorDataManager sharedInstance]save];
+        if(completion){
+            completion();
+        }
+    }];
 }
  
 -(NSURLSessionDataTask *)registerAppWithToken:(NSString *)pushToken forUser:(NSString *)userAlias handler:(void (^)(NSError *))handler{
@@ -206,22 +242,10 @@
         NSMutableDictionary *info = [NSMutableDictionary new];
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         
-        NSArray *unuploadedProperties = [KonotorCustomProperty getUnuploadedProperties];
         
-        if (unuploadedProperties.count > 0 || forceUpdate) {
-            NSMutableDictionary *metaInfo = [NSMutableDictionary new];
-            for (int i=0; i<unuploadedProperties.count; i++) {
-                KonotorCustomProperty *property = unuploadedProperties[i];
-                if (property.key) {
-                    if (property.isUserProperty) {
-                        userInfo[property.key] = property.value;
-                    }else{
-                        metaInfo[property.key] = property.value;
-                    }
-                }
-            }
+        NSArray *userProperties = [HLCoreServices updatePropertiesTo:userInfo];
+        if (userProperties.count > 0 || forceUpdate) {
             userInfo[@"alias"] = [FDUtilities currentUserAlias];
-            userInfo[@"meta"] = metaInfo;
             NSDictionary *deviceProps = [FDUtilities deviceInfoProperties];
             if (deviceProps) {
                 userInfo[@"deviceIosMeta"] = deviceProps;
@@ -241,17 +265,7 @@
         
         [self updateUserProperties:info handler:^(NSError *error) {
             if (!error) {
-                [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-                    for (int i=0; i<unuploadedProperties.count; i++) {
-                        KonotorCustomProperty *property = unuploadedProperties[i];
-                        if (property.managedObjectContext != nil) {
-                            property.uploadStatus = @1;
-                        }else{
-                            FDLog(@"Trying to access deleted meta object - Ignoring");
-                        }
-                    }
-                    [[KonotorDataManager sharedInstance]save];
-                    
+                [HLCoreServices setAsUploadedTo:userProperties withCompletion:^{
                     IN_PROGRESS = NO;
                     NSArray *remaining = [KonotorCustomProperty getUnuploadedProperties];
                     if (remaining.count > 0) {
@@ -549,6 +563,7 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FDResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         NSDictionary *response = responseInfo.responseAsDictionary;
+        apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
         if (statusCode == 200) { //If the user is found
             if(response[@"restoreId"] && response[@"identifier"]) {
                 if (![[FDUtilities currentUserAlias] isEqual:response[@"alias"]]) {
@@ -556,7 +571,7 @@
                     [HLUser setUserMessageInitiated];
                     [[FDSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                     [FDUtilities updateUserWithExternalID:response[@"identifier"] withRestoreID:response[@"restoreId"]];
-                    [[Freshchat sharedInstance] performPendingTasks];
+                    [FDUtilities initiatePendingTasks];
                 }
             }
         } else { //If the user is not found
@@ -566,7 +581,7 @@
             [[Freshchat sharedInstance] setUser:oldUser];
             [FDUtilities resetAlias];
             [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
-            [[Freshchat sharedInstance] performPendingTasks];
+            [FDUtilities initiatePendingTasks];
         }
         
         if(completion){
@@ -582,7 +597,7 @@
     [[KonotorDataManager sharedInstance] clearUserExceptTags:^(NSError *error) {
         FDSecureStore *store = [FDSecureStore sharedInstance];
         // Store the user again to send uninstall api again
-        NSDictionary *previousUser = [[Freshchat sharedInstance] getPreviousUserInfo];
+        NSDictionary *previousUser = [[Freshchat sharedInstance] getPreviousUserConfig];
         BOOL isUserRegistered = [HLUser isUserRegistered];
         if(previousUser && isUserRegistered) {
             [[Freshchat sharedInstance] storePreviousUser:previousUser inStore:store];
@@ -591,10 +606,10 @@
         }
         // Clear the Channel & Coversation call to fetch again.
         [store removeObjectWithKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];        
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_SERVER_TIME];
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_SERVER_TIME];
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CHANNELS_LAST_UPDATED_INTERVAL_TIME];
-        [store removeObjectWithKey:HOTLINE_DEFAULTS_CONVERSATIONS_LAST_UPDATED_INTERVAL_TIME];
+        [store removeObjectWithKey:FC_CHANNELS_LAST_MODIFIED_AT];
+        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+        [store removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
+        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
         
         // Clear the token again to register again
         [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];

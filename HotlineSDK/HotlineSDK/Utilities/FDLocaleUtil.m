@@ -11,16 +11,17 @@
 #import "FDUtilities.h"
 #import "FDSecureStore.h"
 #import "FDConstants.h"
+#import "HLMacros.h"
 
 @implementation FDLocaleUtil
 
 
 +(NSNumber *)getContentLocaleId{
-    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_FAQ_LOCALEID];
+    return [HLUserDefaults getNumberForKey:FC_SOLUTIONS_LAST_RECEIVED_LOCALE];
 }
 
 +(NSNumber *) getConvLocaleId{
-    return [HLUserDefaults getNumberForKey:HOTLINE_DEFAULTS_CONV_LOCALEID];
+    return [HLUserDefaults getNumberForKey:FC_CHANNELS_LAST_RECEIVED_LOCALE];
 }
 
 +(NSString *)getUserLocale{
@@ -74,7 +75,11 @@
 +(BOOL)hadLocaleChange {
     NSString *localLocale = [self getLocalLocale];
     NSString *userLocale = [self getUserLocale];
-    return !([localLocale isEqualToString:userLocale]);
+    BOOL hasChanged = !([localLocale isEqualToString:userLocale]);
+    if (hasChanged) {
+        FDLog(@"Locale change from %@ -> %@",userLocale,localLocale);
+    }
+    return hasChanged;
 }
 
 @end
