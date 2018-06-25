@@ -162,13 +162,7 @@ __weak static id <KonotorDelegate> _delegate;
     [[KonotorDataManager sharedInstance]save];
     
     if(![HLUser isUserRegistered]) {
-        [HLUser registerUser:^(NSError *error) {
-            if(!error) {
-                [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
-            } else {
-                [HLMessageServices markUploadFailedAndSaveMessage:message inChannel:channel];
-            }
-        }];
+        [HLUser registerUser:nil];
     } else {
         [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
     }

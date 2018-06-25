@@ -1,4 +1,8 @@
 
+Ver 1.4.3 
+__________________________
+Fix for duplicate first message
+
 Ver 1.4.2 
 __________________________
 Support for locale changes at runtime
