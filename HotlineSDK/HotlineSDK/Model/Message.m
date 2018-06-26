@@ -125,18 +125,14 @@
     [request setPredicate:predicate];
     
     NSArray *array = [context executeFetchRequest:request error:&pError];
-    if([array count]==0){
-        return nil;
+
+    if([array count] >1) {
+        FDLog(@"%@", @"Multiple Messages stored with the same message Id");
     }
     
-    if([array count] >1){
-        return array[0];
-        FDLog(@"%@", @"Multiple Messages stored with the same message Id");
-    }else if([array count]==1){
+    if([array count] >0) {
         Message *message = [array objectAtIndex:0];
-        if(message){
-            return message;
-        }
+        return message;
     }
     return nil;
 }

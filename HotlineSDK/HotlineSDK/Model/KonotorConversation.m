@@ -73,6 +73,7 @@
 }
 
 +(KonotorConversation *)createConversationWithID:(NSString *)conversationID ForChannel:(HLChannel *)channel{
+    
     NSManagedObjectContext *context = [[KonotorDataManager sharedInstance]mainObjectContext];
     KonotorConversation *newConversation = [NSEntityDescription insertNewObjectForEntityForName:HOTLINE_CONVERSATION_ENTITY inManagedObjectContext:context];
 

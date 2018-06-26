@@ -601,9 +601,12 @@ static HLNotificationHandler *handleUpdateNotification;
 
                 NSString *conversationID = [messageInfo[@"conversationId"] stringValue];
                 if (!conversation || ![conversationID isEqualToString:conversation.conversationAlias]) {
-                    KonotorConversation *newConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
-                    if(newConversation){
-                        pMessage.belongsToConversation = newConversation;
+                    KonotorConversation *existingConversation = [KonotorConversation RetriveConversationForConversationId:conversationID];
+                    if (existingConversation == nil) {
+                        existingConversation = [KonotorConversation createConversationWithID:conversationID ForChannel:channel];
+                    }
+                    if(existingConversation != nil) {
+                        pMessage.belongsToConversation = existingConversation;
                     }
                 }else{
                     pMessage.belongsToConversation = conversation;
@@ -613,7 +616,6 @@ static HLNotificationHandler *handleUpdateNotification;
                 pMessage.messageAlias = messageInfo[@"alias"];
                 pMessage.createdMillis = messageInfo[@"createdMillis"];
                 pMessage.isMarkedForUpload = NO;
-                [channel addMessagesObject:pMessage];
                 [[KonotorDataManager sharedInstance]save];
                 [Konotor performSelector:@selector(UploadFinishedNotification:) withObject:messageAlias];
             }else{
