@@ -73,10 +73,8 @@
     }
 
     -(void) showImagePreview:(id) sender {
-        if (self.agentMessageDelegate != nil) {
-            [self.agentMessageDelegate agentCellPerfomAction:self.fragmentData];
-        } else {
-            [self.userMessageDelegate userCellPerfomAction:self.fragmentData];
+        if (self.delegate != nil) {
+            [self.delegate performActionOn:self.fragmentData];
         }
     }
 @end

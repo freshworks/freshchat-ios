@@ -47,6 +47,7 @@
 #import "HLUser.h"
 #import "HLCoreServices.h"
 
+
 typedef struct {
     BOOL isLoading;
     BOOL isShowingAlert;
@@ -56,7 +57,7 @@ typedef struct {
 } FDMessageControllerFlags;
 
 
-@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLUserMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
+@interface FDMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIActivityIndicatorView *loadingView;
@@ -1151,14 +1152,14 @@ typedef struct {
 
 #pragma mark - Message cell delegates
 
--(void)agentCellPerfomAction:(FragmentData *)fragment {
+-(void)performActionOn:(FragmentData *)fragment {
     NSNumber *fragmentType = @([fragment.type intValue]);
     if ([fragmentType isEqualToValue:@2]) {
         FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:[UIImage imageWithData:fragment.binaryData1]];
         [imageController presentOnController:self];
     } else if ([fragmentType isEqualToValue:@5]) {
-        NSURL *url = [[NSURL alloc]initWithString:fragment.content];
-        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];        
+        NSURL *url = [fragment getOpenURL];
+        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
         NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
         for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
             if (queryItem.value == nil) {
@@ -1184,7 +1185,7 @@ typedef struct {
         }
         else {
             @try{
-                NSURL * actionUrl=[NSURL URLWithString:fragment.content];
+                NSURL *actionUrl = [fragment getOpenURL];
                 if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [[UIApplication sharedApplication] openURL:actionUrl];
@@ -1195,14 +1196,6 @@ typedef struct {
                 ALog(@"%@",e);
             }
         }
-    }
-}
-
--(void)userCellPerfomAction:(FragmentData *)fragment {
-    NSNumber *fragmentType = @([fragment.type intValue]);
-    if ([fragmentType isEqualToValue:@2]) {
-        FDImagePreviewController *imageController = [[FDImagePreviewController alloc]initWithImage:[UIImage imageWithData:fragment.binaryData1]];
-        [imageController presentOnController:self];
     }
 }
 

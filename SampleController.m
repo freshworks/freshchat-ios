@@ -162,9 +162,6 @@
 }
 
 - (IBAction)loadChannels:(id)sender {
-    FreshchatConfig *fchatConfig = [[FreshchatConfig alloc] initWithAppID:@"7558e847-515b-4688-9d64-638496e0f7c3" andAppKey:@"ef99705a-4a49-4274-afef-9622bd404e0e"]; //Enter your AppID and AppKey here
-    [[Freshchat sharedInstance] initWithConfig:fchatConfig];
-    [[Freshchat sharedInstance] identifyUserWithExternalID:@"john.doe1987" restoreID:@"10b61cc6-6faf-45fa-b95a-d2cf90fff29e"];
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:@[@"wow"] withTitle:@"heyyyy"];
     [[Freshchat sharedInstance] showConversations:self withOptions:opt];

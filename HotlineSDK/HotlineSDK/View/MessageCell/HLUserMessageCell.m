@@ -29,7 +29,7 @@
 
 @synthesize userChatBubble,userChatBubbleInsets;
 
-- (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<HLUserMessageCellDelegate>)delegate{
+- (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<HLMessageCellDelegate>)delegate{
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     if (self) {
         self.delegate = delegate;
@@ -122,6 +122,7 @@
     [self.contentView addSubview:contentEncloser];
     
     
+    
     for(int i=0; i<currentMessage.fragments.count; i++) {
         FragmentData *fragment = currentMessage.fragments[i];
         if ([fragment.type isEqualToString:@"1"]) {
@@ -134,7 +135,7 @@
         } else if([fragment.type isEqualToString:@"2"]) {
             //IMAGE
             FDImageFragment *imageFragment = [[FDImageFragment alloc]initWithFragment:fragment ofMessage:currentMessage];
-            imageFragment.userMessageDelegate = self.delegate;
+            imageFragment.delegate = self.delegate;
             [views setObject:imageFragment forKey:[@"image_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:imageFragment];
             [fragmensViewArr addObject:[@"image_" stringByAppendingFormat:@"%d",i]];
@@ -146,7 +147,11 @@
             //Skip now
             //NSLog(@"Video");
         } else if([fragment.type isEqualToString:@"5"] ) {
-            //Skip now
+            FDDeeplinkFragment *fileFragment = [[FDDeeplinkFragment alloc] initWithFragment:fragment];
+            [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
+            [contentEncloser addSubview:fileFragment];
+            fileFragment.delegate = self.delegate;
+            [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"Button");
         } else if([fragment.type isEqualToString:@"6"]) {
             //Skip now
@@ -188,6 +193,10 @@
             NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(<=%ld)]-%@-|",leftPadding,str,(long)self.maxcontentWidth,rightPadding];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-(%@)-[%@(>=0)]",[self isTopFragment:fragmensViewArr currentIndex:i] ? topPadding : internalPadding,str]];
+        } else if([str containsString:@"button_"]) {
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-%@-[%@(>=75)]-(>=%@)-|",leftPadding,str,rightPadding];
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+            [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-[%@]",[self isTopFragment:fragmensViewArr currentIndex:i]? topPadding : internalPadding, str]];
         }
     }
     

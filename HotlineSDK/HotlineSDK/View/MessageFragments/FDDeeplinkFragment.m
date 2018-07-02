@@ -42,11 +42,13 @@
             self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
             self.translatesAutoresizingMaskIntoConstraints = NO;
             self.userInteractionEnabled = true;
-            [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(showFAQs:)]];
+            [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(openLink:)]];
         }
         return self;
     }
-    -(void) showFAQs:(id) sender {
-        [self.agentMessageDelegate agentCellPerfomAction:self.fragmentData];
+    -(void) openLink:(id) sender {
+        if(self.delegate != nil) {
+            [self.delegate performActionOn:self.fragmentData];
+        }
     }
 @end

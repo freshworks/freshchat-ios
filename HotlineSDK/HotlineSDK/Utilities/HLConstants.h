@@ -5,7 +5,7 @@
 //  Created by Aravinth Chandran on 24/09/15.
 //  Copyright © 2015 Freshdesk. All rights reserved.
 //
-#include "HLVersionConstants.h"
+#import "HLVersionConstants.h"
 
 #ifndef HLConstants_h
 #define HLConstants_h
