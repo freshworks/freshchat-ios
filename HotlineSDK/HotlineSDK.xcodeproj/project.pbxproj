@@ -358,6 +358,7 @@
 		3CADFA2D1E25B20D00829E7F /* HLCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLCategoryViewBehaviour.m; path = Behaviours/HLCategoryViewBehaviour.m; sourceTree = "<group>"; };
 		3CADFA2E1E25B20D00829E7F /* HLLoadingViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HLLoadingViewBehaviour.h; path = Behaviours/HLLoadingViewBehaviour.h; sourceTree = "<group>"; };
 		3CADFA2F1E25B20D00829E7F /* HLLoadingViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HLLoadingViewBehaviour.m; path = Behaviours/HLLoadingViewBehaviour.m; sourceTree = "<group>"; };
+		95DEF8B520E39B8B00422D58 /* FCProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCProtocols.h; sourceTree = "<group>"; };
 		C5D4ED981E57036100E121B4 /* HLUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLUserDefaults.m; sourceTree = "<group>"; };
 		C5D4ED9A1E5704E000E121B4 /* HLUserDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HLUserDefaults.h; sourceTree = "<group>"; };
 		C5D4ED9B1E574B5C00E121B4 /* FDLocaleUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDLocaleUtil.h; sourceTree = "<group>"; };
@@ -736,6 +737,7 @@
 				CE390FB41F2B3488006A1BDD /* HLUser.h */,
 				CE340D2B1F3077610095A50E /* HLAttributedText.m */,
 				CE340D2D1F30776F0095A50E /* HLAttributedText.h */,
+				95DEF8B520E39B8B00422D58 /* FCProtocols.h */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";

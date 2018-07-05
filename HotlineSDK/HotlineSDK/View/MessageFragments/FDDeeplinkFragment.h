@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Fragment.h"
 #import "HLAgentMessageCell.h"
+#import "HLUserMessageCell.h"
 
 @interface FDDeeplinkFragment : UIButton
     -(id) initWithFragment: (FragmentData *) fragment;
-    @property (nonatomic, weak) id<HLMessageCellDelegate> agentMessageDelegate;
+    @property (nonatomic, weak) id<HLMessageCellDelegate> delegate;
     @property FragmentData *fragmentData;
 @end

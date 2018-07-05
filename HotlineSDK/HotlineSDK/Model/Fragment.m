@@ -7,8 +7,8 @@
 //
 
 
-#include "Fragment.h"
-#include "FragmentData.h"
+#import "Fragment.h"
+#import "FragmentData.h"
 
 @implementation Fragment
 
@@ -240,6 +240,22 @@
             [[KonotorDataManager sharedInstance]save];
         }
     }
+}
+
+- (NSURL *) getOpenURL {
+    NSURL *url;
+    NSData *extraJSONData = [self.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData
+                                                                  options:0
+                                                                    error:&err];
+    if(!err && extraJSONDict[@"iosUri"] != nil) {
+        url = [[NSURL alloc]initWithString:extraJSONDict[@"iosUri"]];
+    }
+    if(url == nil) {
+        url = [[NSURL alloc] initWithString:self.content];
+    }
+    return url;
 }
 
 @end

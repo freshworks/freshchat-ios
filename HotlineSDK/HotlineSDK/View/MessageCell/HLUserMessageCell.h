@@ -8,22 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Message.h"
+#import "FCProtocols.h"
 
 #define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
 
-@class FDImageFragment;
-@class FDHtmlFragment;
-
-@protocol HLUserMessageCellDelegate <NSObject>
-
--(void)userCellPerfomAction:(FragmentData *)fragment;
-
-@end
-
-
 @interface HLUserMessageCell : UITableViewCell
 
-- (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<HLUserMessageCellDelegate>)delegate;
+- (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<HLMessageCellDelegate>)delegate;
 - (void) drawMessageViewForMessage:(MessageData *)currentMessage parentView:(UIView*)parentView;
 
 @property (nonatomic) BOOL showsTimeStamp;
@@ -32,7 +23,7 @@
 @property (strong, nonatomic) NSString* customFontName;
 @property (nonatomic) NSInteger maxcontentWidth;
 @property (nonatomic, strong) MessageData *messageData;
-@property (nonatomic, weak) id<HLUserMessageCellDelegate> delegate;
+@property (nonatomic, weak) id<HLMessageCellDelegate> delegate;
 
 @property (nonatomic) UIEdgeInsets userChatBubbleInsets;
 @property (strong, nonatomic) UIImage *userChatBubble;

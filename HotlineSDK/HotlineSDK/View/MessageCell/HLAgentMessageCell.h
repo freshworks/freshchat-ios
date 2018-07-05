@@ -8,17 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Message.h"
+#import "FCProtocols.h"
 
 #define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
-
-@protocol HLMessageCellDelegate <NSObject>
-
--(void)agentCellPerfomAction:(FragmentData *)fragment;
-
-@end
-
-@class FDImageFragment;
-@class FDHtmlFragment;
 
 @interface HLAgentMessageCell : UITableViewCell
 

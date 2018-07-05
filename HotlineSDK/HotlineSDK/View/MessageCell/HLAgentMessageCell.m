@@ -190,7 +190,6 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FDHtmlFragment *htmlFragment = [[FDHtmlFragment alloc]initFragment:fragment withFont:[[FCTheme sharedInstance] agentMessageFont] andType:1];
-            
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];
@@ -198,7 +197,7 @@
         } else if([fragment.type isEqualToString:@"2"]) {
             //IMAGE
             FDImageFragment *imageFragment = [[FDImageFragment alloc]initWithFragment:fragment ofMessage:currentMessage];
-            imageFragment.agentMessageDelegate = self.delegate;
+            imageFragment.delegate = self.delegate;
             [views setObject:imageFragment forKey:[@"image_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:imageFragment];
             [fragmensViewArr addObject:[@"image_" stringByAppendingFormat:@"%d",i]];
@@ -208,23 +207,15 @@
             //Skip now
             //NSLog(@"AUDIO");
         } else if([fragment.type isEqualToString:@"4"]) {
-            FDVideoFragment *fileFragment = [[FDVideoFragment alloc] initWithFragment:fragment];
-            [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
-            [contentEncloser addSubview:fileFragment];
-            [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"VIDEO");
         } else if([fragment.type isEqualToString:@"5"]) {
             FDDeeplinkFragment *fileFragment = [[FDDeeplinkFragment alloc] initWithFragment:fragment];
             [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:fileFragment];
-            fileFragment.agentMessageDelegate = self.delegate;
+            fileFragment.delegate = self.delegate;
             [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"BUTTON");
         } else if([fragment.type isEqualToString:@"6"]) {
-            FDFileFragment *fileFragment = [[FDFileFragment alloc] initWithFragment:fragment];
-            [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
-            [contentEncloser addSubview:fileFragment];
-            [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"FILE");
         }
     }

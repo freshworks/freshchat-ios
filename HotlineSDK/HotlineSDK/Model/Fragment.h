@@ -39,7 +39,6 @@ enum FragmentStatus {
     +(Fragment *) getImageFragment: (Message *)messsage;
     - (NSDictionary *)toDictionary;
     -(void)updateWithInfo:(NSDictionary *)info;
-
 @end
 
 @interface FragmentData : NSObject
@@ -52,6 +51,7 @@ enum FragmentStatus {
     @property (nonatomic,retain) NSData *binaryData1;
     @property (nonatomic,retain) NSData *binaryData2;
     -(void)storeImageDataOfMessage:(MessageData *)message withCompletion:(void (^)())completion;
+    - (NSURL *) getOpenURL;
 @end
 
 NS_ASSUME_NONNULL_END
