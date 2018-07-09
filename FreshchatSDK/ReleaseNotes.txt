@@ -2,7 +2,11 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 1.4.4
+Version         : 1.4.5
+
+Ver 1.4.5 
+__________________________
+Fix marketing campaign notifications not showing when app is open
 
 Ver 1.4.4 
 __________________________
