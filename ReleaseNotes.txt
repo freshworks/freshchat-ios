@@ -1,4 +1,8 @@
 
+Ver 1.4.5 
+__________________________
+Fix marketing campaign notification
+
 Ver 1.4.4 
 __________________________
 Display files sent by user from other platforms
