@@ -1248,7 +1248,7 @@ typedef struct {
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing) {
+        if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing && self.yesNoPrompt) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
             [self.view layoutIfNeeded];
         }
