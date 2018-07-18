@@ -22,16 +22,6 @@
                 self.dataDetectorTypes = UIDataDetectorTypeAll;
                 [self setEditable:NO];
                 
-                if(type == AGENT){
-                    [self setTintColor:[[FCTheme sharedInstance] agentHyperlinkColor]];
-                    self.textColor = [[FCTheme sharedInstance] agentMessageFontColor];
-                    [self setTextAlignment:[[FCTheme sharedInstance] agentMessageTextAlignment]];
-                }
-                else{
-                    [self setTintColor:[[FCTheme sharedInstance] userHyperlinkColor]];
-                    self.textColor = [[FCTheme sharedInstance] userMessageFontColor];
-                    [self setTextAlignment:[[FCTheme sharedInstance] userMessageTextAlignment]];
-                }
                 [self setBackgroundColor:UIColor.clearColor];                
                 [self setScrollEnabled:NO];
                 self.font = font;
@@ -45,6 +35,17 @@
                     }
                 } else {
                     self.text = fragment.content;
+                }
+                //Req. color values here, else color property will not apply for html content as attributedtext default color (black) will over-ride for message
+                if(type == AGENT){
+                    [self setTintColor:[[FCTheme sharedInstance] agentHyperlinkColor]];
+                    self.textColor = [[FCTheme sharedInstance] agentMessageFontColor];
+                    [self setTextAlignment:[[FCTheme sharedInstance] agentMessageTextAlignment]];
+                }
+                else{
+                    [self setTintColor:[[FCTheme sharedInstance] userHyperlinkColor]];
+                    self.textColor = [[FCTheme sharedInstance] userMessageFontColor];
+                    [self setTextAlignment:[[FCTheme sharedInstance] userMessageTextAlignment]];
                 }
             }
             return self;

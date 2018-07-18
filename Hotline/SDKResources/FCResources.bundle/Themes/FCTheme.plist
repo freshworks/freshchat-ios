@@ -444,6 +444,8 @@
 		</dict>
 		<key>NotificationCancel</key>
 		<string>FCResources.bundle/Images/freshchat_notification_cancel_icon</string>
+		<key>ShowPushPrompt</key>
+		<true/>
 	</dict>
 	<key>Miscellaneous</key>
 	<dict>

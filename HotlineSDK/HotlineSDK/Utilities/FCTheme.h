@@ -173,6 +173,7 @@
 -(UIFont *)notificationMessageFont;
 -(UIColor *)notificationChannelIconBorderColor;
 -(UIColor *)notificationChannelIconBackgroundColor;
+-(BOOL) shouldShowPushPrompt;
 
 //Grid View Cell
 -(UIFont *)faqCategoryTitleFont;
