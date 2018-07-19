@@ -527,6 +527,13 @@
     return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
 }
 
+-(BOOL) shouldShowPushPrompt{
+    if([self.themePreferences valueForKeyPath:@"Notification.ShowPushPrompt"]){
+        return [[self.themePreferences valueForKeyPath:@"Notification.ShowPushPrompt"] boolValue];
+    }
+    return true;
+}
+
 #pragma mark - Article list
 
 -(UIColor *)articleListFontColor{

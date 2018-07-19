@@ -299,12 +299,4 @@ __weak static id <KonotorDelegate> _delegate;
     }
 }
 
-+ (BOOL) showNotificationDisabledAlert {
-    return ![[FDSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN];
-}
-
-+ (void) setDisabledNotificationAlertShown:(BOOL) shown{
-    [[FDSecureStore sharedInstance] setBoolValue:shown forKey:HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN];
-}
-
 @end

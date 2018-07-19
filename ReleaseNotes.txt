@@ -1,4 +1,9 @@
 
+Ver 1.4.6 
+__________________________
+Fix theme color for message text
+Make push prompt configurable
+
 Ver 1.4.5 
 __________________________
 Fix marketing campaign notification
