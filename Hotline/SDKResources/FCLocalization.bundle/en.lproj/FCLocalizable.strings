@@ -54,8 +54,6 @@
 
 "cancel_audio_recording_alert"="Are you sure you want to cancel recording?";
 
-"modify_push_setting_title"="Modify Push Setting";
-"modify_push_setting_info_text"="Enable push notifications to be notified even when out of this chat. Enable push notifications for this app from Settings --> Notification Centre";
 "message_unsent_title"="Your message was not sent";
 "message_unsent_info_text"="We were unable to send your message(s) at this time. Check internet or try again later";
 "server_error_info_text"="Problem sending message. Please try again later.";

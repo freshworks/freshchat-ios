@@ -826,18 +826,14 @@ typedef struct {
 }
 
 -(void)checkPushNotificationState{
-    
+    if(![[FCTheme sharedInstance] shouldShowPushPrompt]) return;
     BOOL notificationEnabled = [HLNotificationHandler areNotificationsEnabled];
-    
     if (!notificationEnabled) {
-        if([Konotor showNotificationDisabledAlert]){
-            [self showAlertWithTitle:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)
-                          andMessage:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_INFO_TEXT)];
-        }
+        [self showNotificationPermissionPrompt];
     }
 }
 
--(void) askForNotifications{
+-(void) showNotificationPermissionPrompt{
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -1044,6 +1040,8 @@ typedef struct {
     }
 }
 
+//Will use when we are start using audio message cc @PrasannanFD
+/*
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     _flags.isShowingAlert = NO;
     
@@ -1052,12 +1050,7 @@ typedef struct {
             [self sendMessage];
         }
     }
-    if([alertView.title isEqualToString:HLLocalizedString(LOC_MODIFY_PUSH_SETTING_TITLE)]){
-        //TODO: Handle this better. Checking for title looks bad
-        [Konotor setDisabledNotificationAlertShown:YES];
-        [self askForNotifications];
-    }
-}
+}*/
 
 - (void) didEncounterErrorWhileDownloading:(NSString *)messageID{
     //Show Toast
@@ -1255,7 +1248,7 @@ typedef struct {
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing) {
+        if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing && self.yesNoPrompt) {
             [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
             [self.view layoutIfNeeded];
         }

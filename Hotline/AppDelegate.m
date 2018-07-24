@@ -29,7 +29,9 @@
 #define LAUNCH_SAMPLE_CONTROLLERT NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self registerAppForNotifications];
+    if(PUSH_ENABLED){
+        [self registerAppForNotifications];
+    }
     [self hotlineIntegration];
     if (LAUNCH_SAMPLE_CONTROLLERT) {
         [self launchSampleController];

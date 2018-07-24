@@ -1,3 +1,6 @@
+
+#define ENABLE_RTL_RUNTIME 1
+#define PUSH_ENABLED 0
 #define HOTLINE_DOMAIN @"msdk.freshchat.com"
 
 //sanjith.kanagavel+web@freshworks.com/testtest

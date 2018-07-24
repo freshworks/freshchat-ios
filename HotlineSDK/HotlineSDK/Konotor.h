@@ -56,8 +56,6 @@
 +(void)uploadNewMsgWithImage:(UIImage *)image textFeed:(NSString *)caption onConversation:(KonotorConversation *)conversation andChannel:(HLChannel *)channel;
 
 +(void) uploadVoiceRecordingWithMessageID: (NSString *)MessageID toConversationID: (NSString *)ConversationID onChannel:(HLChannel*)channel;
-+ (BOOL) showNotificationDisabledAlert;
-+ (void) setDisabledNotificationAlertShown:(BOOL) shown;
 
 //TODO: The following are indirectly called by KonotorDelegate and need to be removed.
 +(void) MediaDownloadFailedNotification:(NSString *) messageID;
