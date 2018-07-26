@@ -9,7 +9,7 @@
 #import "FreshchatSDK.h"
 
 #import <Foundation/Foundation.h>
-#import "FDUtilities.h"
+#import "FCUtilities.h"
 
 @interface FAQOptions()
 
@@ -41,7 +41,7 @@
 
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (enum TagFilterType) type{
     
-    self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:tags];
+    self.filterByTags = [FCUtilities convertTagsArrayToLowerCase:tags];
     self.tagViewTitle = title;
     self.filterType = type;
 }
@@ -51,7 +51,7 @@
 }
 
 -(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title {
-    self.contactUsTags = [FDUtilities convertTagsArrayToLowerCase:tags];
+    self.contactUsTags = [FCUtilities convertTagsArrayToLowerCase:tags];
     self.contactUsTitle = title;
 }
 
@@ -92,7 +92,7 @@
 }
 
 -(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title{
-    self.filterByTags = [FDUtilities convertTagsArrayToLowerCase:[tags mutableCopy]];
+    self.filterByTags = [FCUtilities convertTagsArrayToLowerCase:[tags mutableCopy]];
     self.tagViewTitle = title;
 }
 

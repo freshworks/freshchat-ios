@@ -7,8 +7,8 @@
 //
 
 #import "FCRemoteConfig.h"
-#import "FDSecureStore.h"
-#import "Message.h"
+#import "FCSecureStore.h"
+#import "FCMessages.h"
 
 
 @implementation FCRemoteConfig
@@ -31,31 +31,32 @@
         self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
         self.accountActive                  = [self getDefaultAccountActive];
         self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
+        self.csatSettings                    = [[FCCSatSettings alloc]init];
     }
     return self;
 }
 
 -(BOOL) getDefaultAccountActive {
-    if ([HLUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE] != nil) {
-        return [HLUserDefaults getBoolForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE] != nil) {
+        return [FCUserDefaults getBoolForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
     }
     return YES;
 }
 
 - (long) getDefaultSessionTimeOutInterval {
-    if ([HLUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {
-        return [HLUserDefaults getLongForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {
+        return [FCUserDefaults getLongForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
     }
     return 30 * ONE_MINUTE_IN_MS;
 }
 
 - (void) updateAccountActive:(BOOL)accountActive {
-    [HLUserDefaults setBool:accountActive forKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
+    [FCUserDefaults setBool:accountActive forKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
     self.accountActive = accountActive;
 }
 
 - (void) updateSessionTimeOutInterval:(long) sessionTimeOutInterval {
-    [HLUserDefaults setLong:sessionTimeOutInterval forKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
+    [FCUserDefaults setLong:sessionTimeOutInterval forKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL];
     self.sessionTimeOutInterval = sessionTimeOutInterval;
 }
 
@@ -64,6 +65,7 @@
     NSArray *enabledFeaturesArray       = [configDict objectForKey:@"enabledFeatures"];
     NSDictionary *refreshIntervalsDict  = [configDict objectForKey:@"refreshIntervals"];
     NSDictionary *convConfigDict        = [configDict objectForKey:@"conversationConfig"];
+    NSDictionary *csatSettingsDict      = [configDict objectForKey:@"csatSettings"];
     
     [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
     [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
@@ -77,6 +79,9 @@
     if (refreshIntervalsDict != nil) {
         [self.refreshIntervals updateRefreshConfig:refreshIntervalsDict];
     }
+    if (csatSettingsDict != nil) {
+        [self.csatSettings updateCSatConfig:csatSettingsDict];
+    }
 }
 
 - (BOOL) isActiveInboxAndAccount {
@@ -88,7 +93,7 @@
 }
 
 - (BOOL) isActiveConvAvailable{
-    long days = [Message daysSinceLastMessageInContext: [[KonotorDataManager sharedInstance] mainObjectContext]];
+    long days = [FCMessages daysSinceLastMessageInContext: [[FCDataManager sharedInstance] mainObjectContext]];
     if( days * ONE_SECONDS_IN_MS < self.conversationConfig.activeConvWindow ){
         return true;
     }

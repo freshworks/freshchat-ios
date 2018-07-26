@@ -107,6 +107,8 @@
 "chat_resolution_prompt_yes_button_text"="Yes!";
 "chat_resolution_prompt_no_button_text"="No";
 
+"chat_resolution_survey_question_text"="";
+
 /* Survey prompt */
 "cust_sat_not_resolved_prompt"="How could we have helped you better?";
 "cust_sat_user_comments_placeholder"="Additional feedback";

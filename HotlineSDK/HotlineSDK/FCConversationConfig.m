@@ -7,7 +7,7 @@
 //
 
 #import "FCConversationConfig.h"
-#import "HLUserDefaults.h"
+#import "FCUserDefaults.h"
 #import "FCRefreshIntervals.h"
 
 @implementation FCConversationConfig
@@ -24,50 +24,50 @@
 }
 
 - (BOOL) getDefaultLaunchDeeplinkFromNotification {
-    if ([HLUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED] != nil) {
-        return [HLUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED] != nil) {
+        return [FCUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
     }
     return YES;
 }
 
 - (int) getDefaultAgentAvatar {
-    if ([HLUserDefaults getObjectForKey:CONFIG_RC_AGENT_AVATAR_TYPE] != nil) {
-        return (int)[HLUserDefaults getIntegerForKey:CONFIG_RC_AGENT_AVATAR_TYPE];
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_AGENT_AVATAR_TYPE] != nil) {
+        return (int)[FCUserDefaults getIntegerForKey:CONFIG_RC_AGENT_AVATAR_TYPE];
     }
     return 1;
 }
 
 - (float) getDefaultActiveConvFetchBackoffRatio {
-    if ([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO] != nil) {
-        return [HLUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO] != nil) {
+        return [FCUserDefaults getFloatForKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
     }
     return 1.25;
 }
 
 - (long) getDefaultActiveConvWindow {
-    if ([HLUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] != nil) {
-        return [HLUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_ACTIVE_CONV_WINDOW] != nil) {
+        return [FCUserDefaults getLongForKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
     }
     return 3 * ONE_DAY_IN_MS;
 }
 
 - (void) updateLaunchDeeplinkFromNotification :(BOOL) launchDeeplinkFromNotification {
-    [HLUserDefaults setBool:launchDeeplinkFromNotification forKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
+    [FCUserDefaults setBool:launchDeeplinkFromNotification forKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
     self.launchDeeplinkFromNotification = launchDeeplinkFromNotification;
 }
 
 - (void) updateAgentAvatar: (int) agentAvatar {
-    [HLUserDefaults setIntegerValue:agentAvatar forKey:CONFIG_RC_AGENT_AVATAR_TYPE];
+    [FCUserDefaults setIntegerValue:agentAvatar forKey:CONFIG_RC_AGENT_AVATAR_TYPE];
     self.agentAvatar = agentAvatar;
 }
 
 - (void) updateActiveConvWindow:(long) activeConvWindow {
-    [HLUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
+    [FCUserDefaults setLong:activeConvWindow forKey:CONFIG_RC_ACTIVE_CONV_WINDOW];
     self.activeConvWindow = activeConvWindow;
 }
 
 - (void) updateActiveConvFetchBackOffRatio:(float) activeConvFetchBackoffRatio {
-    [HLUserDefaults setFloat:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
+    [FCUserDefaults setFloat:activeConvFetchBackoffRatio forKey:CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO];
     self.activeConvFetchBackoffRatio = activeConvFetchBackoffRatio;
 }
 

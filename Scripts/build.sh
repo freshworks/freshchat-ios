@@ -46,11 +46,11 @@ CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
 #fix version in file
 git checkout ${CONSTANTS_FILE} # make pristine
 cp ${CONSTANTS_FILE} ${CONSTANTS_FILE}.original
-PREV_VERSION=`cat ${CONSTANTS_FILE} | grep HOTLINE_SDK_VERSION | awk -F'"' ' {print $2 }'`
-sed -e "s/HOTLINE_SDK_VERSION\(.*\)/HOTLINE_SDK_VERSION @\"${VERSION}\"/g" -i .old ${CONSTANTS_FILE}
-BUILD_NUMBER=`cat ${CONSTANTS_FILE} | grep HOTLINE_SDK_BUILD_NUMBER | awk -F'"' ' {print $2 }'`
+PREV_VERSION=`cat ${CONSTANTS_FILE} | grep FRESHCHAT_SDK_VERSION | awk -F'"' ' {print $2 }'`
+sed -e "s/FRESHCHAT_SDK_VERSION\(.*\)/FRESHCHAT_SDK_VERSION @\"${VERSION}\"/g" -i .old ${CONSTANTS_FILE}
+BUILD_NUMBER=`cat ${CONSTANTS_FILE} | grep FRESHCHAT_SDK_BUILD_NUMBER | awk -F'"' ' {print $2 }'`
 BUILD_NUMBER=`expr $BUILD_NUMBER + 1`
-sed -e "s/HOTLINE_SDK_BUILD_NUMBER\(.*\)/HOTLINE_SDK_BUILD_NUMBER @\"${BUILD_NUMBER}\"/g" -i .old ${CONSTANTS_FILE}
+sed -e "s/FRESHCHAT_SDK_BUILD_NUMBER\(.*\)/FRESHCHAT_SDK_BUILD_NUMBER @\"${BUILD_NUMBER}\"/g" -i .old ${CONSTANTS_FILE}
 
 
 CONCAT=$(cat ${CONSTANTS_FILE})

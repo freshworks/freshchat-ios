@@ -10,7 +10,8 @@
 #import "FCRefreshIntervals.h"
 #import "FCEnabledFeatures.h"
 #import "FCConversationConfig.h"
-#import "HLUserDefaults.h"
+#import "FCCSatSettings.h"
+#import "FCUserDefaults.h"
 
 @interface FCRemoteConfig : NSObject
 
@@ -24,6 +25,7 @@
 @property (nonatomic, strong) FCConversationConfig *conversationConfig;
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
 @property (nonatomic, strong) FCEnabledFeatures *enabledFeatures;
+@property (nonatomic, strong) FCCSatSettings *csatSettings;
 
 - (void) updateRemoteConfig : (NSDictionary *) configDict;
 

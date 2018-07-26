@@ -7,8 +7,8 @@
 //
 
 #import "FCFooterView.h"
-#import "FDUtilities.h"
-#import "FDAutolayoutHelper.h"
+#import "FCUtilities.h"
+#import "FCAutolayoutHelper.h"
 
 @implementation FCFooterView
 
@@ -28,14 +28,14 @@
         
         self.footerLabel.font = [UIFont systemFontOfSize:11];
         [self addSubview:self.footerLabel];
-        if([FDUtilities isIPhoneXView] && !isEmbed){
-            [FDAutolayoutHelper centerX:self.footerLabel onView:self];
-            [FDAutolayoutHelper centerY:self.footerLabel onView:self M:0.60 C:0];
+        if([FCUtilities isIPhoneXView] && !isEmbed){
+            [FCAutolayoutHelper centerX:self.footerLabel onView:self];
+            [FCAutolayoutHelper centerY:self.footerLabel onView:self M:0.60 C:0];
         }
         else{
-            [FDAutolayoutHelper center:self.footerLabel onView:self];
+            [FCAutolayoutHelper center:self.footerLabel onView:self];
         }
-        if([FDUtilities isPoweredByFooterViewHidden]){
+        if([FCUtilities isPoweredByFooterViewHidden]){
             self.footerLabel.text = @"";
         }
         else{
@@ -47,7 +47,7 @@
 
 -(void)setViewColor:(UIColor*) color{
     self.backgroundColor = color;
-    self.footerLabel.textColor = [FDUtilities invertColor:color];
+    self.footerLabel.textColor = [FCUtilities invertColor:color];
 }
 
 @end

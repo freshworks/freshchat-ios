@@ -7,54 +7,54 @@
 //
 
 #import "FreshchatSDK.h"
-#import "HLContainerController.h"
-#import "HLCategoryListController.h"
-#import "HLCategoryGridViewController.h"
-#import "FDAttachmentImageController.h"
-#import "FDReachabilityManager.h"
-#import "HLChannelViewController.h"
-#import "KonotorDataManager.h"
-#import "FDMessageController.h"
-#import "FDSecureStore.h"
-#import "HLMacros.h"
-#import "HLUser.h"
-#import "Konotor.h"
-#import "HLCoreServices.h"
-#import "FDUtilities.h"
-#import "FDSolutionUpdater.h"
-#import "FDMessagesUpdater.h"
-#import "Message.h"
-#import "HLConstants.h"
-#import "HLMessageServices.h"
-#import "KonotorCustomProperty.h"
-#import "KonotorUser.h"
-#import "HLVersionConstants.h"
-#import "HLNotificationHandler.h"
-#import "HLTagManager.h"
-#import "HLArticlesController.h"
-#import "HLArticleDetailViewController.h"
-#import "FDIndex.h"
-#import "KonotorMessageBinary.h"
-#import "FDLocalNotification.h"
-#import "FDPlistManager.h"
-#import "FDMemLogger.h"
-#import "HLInterstitialViewController.h"
-#import "HLControllerUtils.h"
-#import "HLMessagePoller.h"
+#import "FCContainerController.h"
+#import "FCCategoryListController.h"
+#import "FCCategoryGridViewController.h"
+#import "FCAttachmentImageController.h"
+#import "FCReachabilityManager.h"
+#import "FCChannelViewController.h"
+#import "FCDataManager.h"
+#import "FCMessageController.h"
+#import "FCSecureStore.h"
+#import "FCMacros.h"
+#import "FCUserUtil.h"
+#import "FCMessageHelper.h"
+#import "FCCoreServices.h"
+#import "FCUtilities.h"
+#import "FCSolutionUpdater.h"
+#import "FCMessagesUpdater.h"
+#import "FCMessages.h"
+#import "FCConstants.h"
+#import "FCMessageServices.h"
+#import "FCUserProperties.h"
+#import "FCUsers.h"
+#import "FCVersionConstants.h"
+#import "FCNotificationHandler.h"
+#import "FCTagManager.h"
+#import "FCArticlesController.h"
+#import "FCArticleDetailViewController.h"
+#import "FCFAQSearchIndex.h"
+#import "FCMessageBinaries.h"
+#import "FCLocalNotification.h"
+#import "FCPlistManager.h"
+#import "FCMemLogger.h"
+#import "FCInterstitialViewController.h"
+#import "FCControllerUtils.h"
+#import "FCMessagePoller.h"
 #import "FDThemeConstants.h"
-#import "FDUtilities.h"
-#import "FDLocaleUtil.h"
-#import "FDConstants.h"
+#import "FCUtilities.h"
+#import "FCLocaleUtil.h"
+#import "FCLocaleConstants.h"
 #import "FCRemoteConfig.h"
-#import "HLLocalization.h"
-#import "HLUserDefaults.h"
+#import "FCLocalization.h"
+#import "FCUserDefaults.h"
 #import "FDImageView.h"
-#import "FDVotingManager.h"
+#import "FCVotingManager.h"
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
 
-@interface FDNotificationBanner ()
+@interface FCNotificationBanner ()
 
 -(void) resetView;
 
@@ -64,8 +64,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 @property(nonatomic, strong, readwrite) FreshchatConfig *config;
 @property (nonatomic, assign) BOOL showChannelThumbnail;
-@property (nonatomic, strong) HLNotificationHandler *notificationHandler;
-@property (nonatomic, strong) HLMessagePoller *messagePoller;
+@property (nonatomic, strong) FCNotificationHandler *notificationHandler;
+@property (nonatomic, strong) FCMessagePoller *messagePoller;
 
 -(void)resetUserWithCompletion:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser;
 
@@ -93,18 +93,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         sharedInstance = [[Freshchat alloc]init];
     });
     if(![sharedInstance checkPersistence]) { //Log on loggly
-        [FDMemLogger sendMessage:@"COREDATA_EXCEPTION: Persistence not linked to Freshchat's SharedInstance" fromMethod:NSStringFromSelector(_cmd)];
+        [FCMemLogger sendMessage:@"COREDATA_EXCEPTION: Persistence not linked to Freshchat's SharedInstance" fromMethod:NSStringFromSelector(_cmd)];
     }
     return sharedInstance;
     
 }
 
 +(NSString *)SDKVersion{
-    return HOTLINE_SDK_VERSION;
+    return FRESHCHAT_SDK_VERSION;
 }
 
 -(BOOL)checkPersistence {
-    if(![[KonotorDataManager sharedInstance] isReady]){
+    if(![[FCDataManager sharedInstance] isReady]){
         return false;
     }
     return true;
@@ -113,24 +113,24 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 - (instancetype)init{
     self = [super init];
     if (self) {
-        [FDIndex load];
-        [KonotorMessageBinary load];
-        [[FDReachabilityManager sharedInstance] start];
+        [FCFAQSearchIndex load];
+        [FCMessageBinaries load];
+        [[FCReachabilityManager sharedInstance] start];
         [self registerAppNotificationListeners];
-        self.messagePoller = [[HLMessagePoller alloc] initWithPollType:OffScreenPollFetch];
+        self.messagePoller = [[FCMessagePoller alloc] initWithPollType:OffScreenPollFetch];
     }
     return self;
 }
 
 -(void)networkReachable{
-    [FDUtilities initiatePendingTasks];
+    [FCUtilities initiatePendingTasks];
 }
 
 -(void)initWithConfig:(FreshchatConfig *)config{
     @try {
         [self initWithConfig:config completion:nil];
     } @catch (NSException *exception) {
-        [FDMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
+        [FCMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
         if([exception.name isEqualToString: @"FreshchatInvalidArgumentException"]){
             @throw ([NSException exceptionWithName:exception.name reason:exception.description userInfo:nil]);
         }
@@ -142,7 +142,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     self.config = processedConfig;
     if ([self hasUpdatedConfig:processedConfig]) {
-        [FDUtilities updateAccountDeletedStatusAs:FALSE];
+        [FCUtilities updateAccountDeletedStatusAs:FALSE];
         [self cleanUpData:^{
             [self updateConfig:processedConfig andRegisterUser:completion];
         }];
@@ -166,16 +166,16 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     if (config) {
         
-        if([config.appID isEqualToString: config.appKey] || (![FDUtilities isValidUUIDForKey:config.appID] && ![FDUtilities isValidUUIDForKey:config.appKey])){
+        if([config.appID isEqualToString: config.appKey] || (![FCUtilities isValidUUIDForKey:config.appID] && ![FCUtilities isValidUUIDForKey:config.appKey])){
             [self addInvalidAppIDKeyExceptionString:@"AppId or AppKey!"];
         }
-        else if([FDUtilities isValidUUIDForKey:config.appID] && ![FDUtilities isValidUUIDForKey:config.appKey]){
+        else if([FCUtilities isValidUUIDForKey:config.appID] && ![FCUtilities isValidUUIDForKey:config.appKey]){
             [self addInvalidAppIDKeyExceptionString:@"AppKey!"];
         }
-        else if(![FDUtilities isValidUUIDForKey:config.appID] && [FDUtilities isValidUUIDForKey:config.appKey]){
+        else if(![FCUtilities isValidUUIDForKey:config.appID] && [FCUtilities isValidUUIDForKey:config.appKey]){
             [self addInvalidAppIDKeyExceptionString:@"AppId!"];
         }
         [FDImageCache sharedImageCache].config.maxCacheAge = FD_IMAGE_CACHE_DURATION;
@@ -193,9 +193,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeName:config.themeName];
     }
-    [HLUser registerUser:completion];
-    if([HLUser isUserRegistered]) {
-        [FDUtilities postUnreadCountNotification];
+    [FCUserUtil registerUser:completion];
+    if([FCUserUtil isUserRegistered]) {
+        [FCUtilities postUnreadCountNotification];
     }
 }
 
@@ -204,7 +204,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)checkMediaPermissions:(FreshchatConfig *)config{
-    FDPlistManager *plistManager = [[FDPlistManager alloc] init];
+    FCPlistManager *plistManager = [[FCPlistManager alloc] init];
     NSMutableString *message = [NSMutableString new];
     
     //    if (config.voiceMessagingEnabled) {
@@ -249,45 +249,45 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)updateAppVersion{
-    if([HLUser isUserRegistered]){
-        FDSecureStore *store = [FDSecureStore sharedInstance];
+    if([FCUserUtil isUserRegistered]){
+        FCSecureStore *store = [FCSecureStore sharedInstance];
         NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_APP_VERSION];
         NSString *currentValue = [[[NSBundle bundleForClass:[self class]] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
         if (storedValue && ![storedValue isEqualToString:currentValue]) {
-            [KonotorCustomProperty createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
-            [HLCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
+            [FCUserProperties createNewPropertyForKey:@"app_version" WithValue:currentValue isUserProperty:NO];
+            [FCCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
         }
         [store setObject:currentValue forKey:HOTLINE_DEFAULTS_APP_VERSION];
     }
 }
 
 - (void)updateiOSVersion{
-    if([HLUser isUserRegistered]){
-        NSString *storedIOSValue = [HLUserDefaults getStringForKey:FRESHCHAT_DEFAULTS_USER_IOS_VERSION];
+    if([FCUserUtil isUserRegistered]){
+        NSString *storedIOSValue = [FCUserDefaults getStringForKey:FRESHCHAT_DEFAULTS_USER_IOS_VERSION];
         NSString *currentIOSValue = [[UIDevice currentDevice] systemVersion];
         if(!storedIOSValue){
-            [HLUserDefaults setObject:[[UIDevice currentDevice] systemVersion] forKey:FRESHCHAT_DEFAULTS_USER_IOS_VERSION];
+            [FCUserDefaults setObject:[[UIDevice currentDevice] systemVersion] forKey:FRESHCHAT_DEFAULTS_USER_IOS_VERSION];
         }
         else if(storedIOSValue && ![storedIOSValue isEqualToString:currentIOSValue]){
-            [HLCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
-            [HLUserDefaults setObject:[[UIDevice currentDevice] systemVersion] forKey:FRESHCHAT_DEFAULTS_USER_IOS_VERSION];
+            [FCCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
+            [FCUserDefaults setObject:[[UIDevice currentDevice] systemVersion] forKey:FRESHCHAT_DEFAULTS_USER_IOS_VERSION];
         }
     }
 }
 
 -(void)updateSDKBuildNumber{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *storedValue = [store objectForKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
-    NSString *currentValue = HOTLINE_SDK_BUILD_NUMBER;
+    NSString *currentValue = FRESHCHAT_SDK_BUILD_NUMBER;
     if (![storedValue isEqualToString:currentValue]) {
-        [store setObject:HOTLINE_SDK_BUILD_NUMBER forKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
-        [HLCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
+        [store setObject:FRESHCHAT_SDK_BUILD_NUMBER forKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
+        [FCCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
     }
 }
 
 
 -(void)cleanUpData:(void (^)())completion{
-    KonotorDataManager *dataManager = [KonotorDataManager sharedInstance];
+    FCDataManager *dataManager = [FCDataManager sharedInstance];
     NSDictionary *previousUser = [self getPreviousUserConfig];
     [dataManager deleteAllSolutions:^(NSError *error) {
         FDLog(@"All solutions deleted");
@@ -299,16 +299,16 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(NSDictionary *) getPreviousUserConfig{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     NSDictionary *previousUserInfo = nil;
-    if( [HLUser isUserRegistered] &&
+    if( [FCUserUtil isUserRegistered] &&
        [store objectForKey:HOTLINE_DEFAULTS_APP_ID] &&
        [store objectForKey:HOTLINE_DEFAULTS_APP_KEY] &&
        [store objectForKey:HOTLINE_DEFAULTS_DOMAIN] &&
-       [FDUtilities currentUserAlias]){
+       [FCUtilities currentUserAlias]){
         previousUserInfo =  @{ @"appId" : [store objectForKey:HOTLINE_DEFAULTS_APP_ID],
                                @"appKey" : [store objectForKey:HOTLINE_DEFAULTS_APP_KEY],
-                               @"userAlias" :[FDUtilities currentUserAlias],
+                               @"userAlias" :[FCUtilities currentUserAlias],
                                @"domain" : [store objectForKey:HOTLINE_DEFAULTS_DOMAIN]
                                };
     }
@@ -316,7 +316,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(BOOL)hasUpdatedConfig:(FreshchatConfig *)config{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     NSDictionary *oldUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
     NSString *existingDomainName = [store objectForKey:HOTLINE_DEFAULTS_DOMAIN];
     NSString *existingAppID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -330,21 +330,21 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         return (![existingDomainName isEqualToString:config.domain] || ![existingAppID isEqualToString:config.appID] || ![existingAppKey isEqualToString:config.appKey]) ? YES : NO;
     }else{
         //This is first launch, do not treat this as config update.
-        [FDUtilities removeUUIDWithAppID:config.appID];
+        [FCUtilities removeUUIDWithAppID:config.appID];
         FDLog(@"First launch");
         return NO;
     }
 }
 
 -(void) updateConversationBannerMessage:(NSString *) message{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     [store setObject:message forKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
-    [FDLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
+    [FCLocalNotification post:HOTLINE_BANNER_MESSAGE_UPDATED];
 }
 
 -(void)setUser:(FreshchatUser *)user{
-    [KonotorUser storeUserInfo:user];
-    [HLCoreServices uploadUnuploadedProperties];
+    [FCUsers storeUserInfo:user];
+    [FCCoreServices uploadUnuploadedProperties];
 }
 
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID {
@@ -363,7 +363,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             // E0 R0 -> E1 -> R1
             //Flush and restore
             FDLog(@"E0 R0 -> E1 -> R1");
-            [FDUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:nil];
+            [FCUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:nil];
         } else  if (([externalID length] > 0) && ([restoreID length] == 0)) {
             // E0 R0 -> E1 -> R0
             // Update to the local user data
@@ -384,19 +384,19 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                  FDLog(@"EX RX -> EY -> RY Same E Different R");
             }
             if( ![oldRestoreID isEqualToString:restoreID] || ![oldExternalID isEqualToString:externalID]) {
-                [FDUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:nil];
+                [FCUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:nil];
             }
          } else if (([externalID length] > 0) && ([restoreID length] == 0)) { // EY R0
             if (![oldExternalID isEqual:externalID]) {
                 // E1 R1 - > E2 R0
                 FDLog(@"E1 R1 - > E2 R0");
-                [FDUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:^{
+                [FCUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:^{
                     FreshchatUser* oldUser = [FreshchatUser sharedInstance];
                     oldUser.externalID = externalID;
                     oldUser.restoreID = nil;
-                    [FDUtilities resetAlias];
+                    [FCUtilities resetAlias];
                     [[Freshchat sharedInstance] setUser:oldUser];
-                    [FDUtilities initiatePendingTasks];
+                    [FCUtilities initiatePendingTasks];
                 }];
             }
         }
@@ -404,27 +404,27 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
          // E1 R0 -> E1 -> R1
          //Flush and restore
          FDLog(@"E1 R0 -> E1 -> R1");
-         [FDUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:nil];
+         [FCUtilities resetDataAndRestoreWithExternalID:externalID withRestoreID:restoreID withCompletion:nil];
      }
 }
 
 -(void)setUserProperties:(NSDictionary*)props{
-    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-        NSDictionary *filteredProps = [FDUtilities filterValidUserPropEntries:props];
+    [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
+        NSDictionary *filteredProps = [FCUtilities filterValidUserPropEntries:props];
         if(filteredProps){
             for(NSString *key in filteredProps){
                 NSString *value = props[key];
-                [KonotorCustomProperty createNewPropertyForKey:key WithValue:value isUserProperty:NO];
+                [FCUserProperties createNewPropertyForKey:key WithValue:value isUserProperty:NO];
             }
         }
-        [HLCoreServices uploadUnuploadedProperties];
+        [FCCoreServices uploadUnuploadedProperties];
     }];
 }
 
 -(void)updateUserLocaleProperties:(NSString *)locale {
-    [[KonotorDataManager sharedInstance].mainObjectContext performBlock:^{
-        [KonotorCustomProperty createNewPropertyForKey:LOCALE WithValue:locale isUserProperty:YES];
-        [HLCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
+    [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
+        [FCUserProperties createNewPropertyForKey:LOCALE WithValue:locale isUserProperty:YES];
+        [FCCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
     }];
 }
 
@@ -440,14 +440,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)registerDeviceToken{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
-    if([HLUser isUserRegistered]){
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    if([FCUserUtil isUserRegistered]){
         BOOL isDeviceTokenRegistered = [store boolValueForKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         if (!isDeviceTokenRegistered) {
-            if([HLUser isUserRegistered] && [FCRemoteConfig sharedInstance].accountActive){
-                NSString *userAlias = [FDUtilities currentUserAlias];
+            if([FCUserUtil isUserRegistered] && [FCRemoteConfig sharedInstance].accountActive){
+                NSString *userAlias = [FCUtilities currentUserAlias];
                 NSString *token = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-                [[[HLCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
+                [[[FCCoreServices alloc]init] registerAppWithToken:token forUser:userAlias handler:nil];
             }
         }
     }
@@ -460,11 +460,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
  when the SDK's app is transitioned from background to foreground  */
 
 -(void)newSession:(NSNotification *)notification{
-    if([FDUtilities hasInitConfig]) {
+    if([FCUtilities hasInitConfig]) {
         if(FC_POLL_WHEN_APP_ACTIVE){
             [self.messagePoller begin];
         }
-        [FDUtilities initiatePendingTasks];
+        [FCUtilities initiatePendingTasks];
     }
 }
 
@@ -475,38 +475,38 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (void) updateSessionInterval{
-    if([HLUser isUserRegistered]){
-        [HLUserDefaults setObject:[NSDate date] forKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
+    if([FCUserUtil isUserRegistered]){
+        [FCUserDefaults setObject:[NSDate date] forKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
     }
 }
 
 -(void) updateLocaleMeta {
-    if([FDLocaleUtil hadLocaleChange])  {
-        NSString *localLocale = [FDLocaleUtil getLocalLocale];
-        [FDLocaleUtil updateLocaleWith:localLocale];
+    if([FCLocaleUtil hadLocaleChange])  {
+        NSString *localLocale = [FCLocaleUtil getLocalLocale];
+        [FCLocaleUtil updateLocaleWith:localLocale];
         [[Freshchat sharedInstance] updateUserLocaleProperties:localLocale];
-        [[FDSecureStore sharedInstance] removeObjectWithKey:FC_SOLUTIONS_LAST_REQUESTED_TIME];
-        [[FDSecureStore sharedInstance] removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
-        [FDUtilities initiatePendingTasks];
-        [[FDNotificationBanner sharedInstance] resetView];
+        [[FCSecureStore sharedInstance] removeObjectWithKey:FC_SOLUTIONS_LAST_REQUESTED_TIME];
+        [[FCSecureStore sharedInstance] removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
+        [FCUtilities initiatePendingTasks];
+        [[FCNotificationBanner sharedInstance] resetView];
     }
 }
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
-    if ([HLUser canRegisterUser]) {
-        [HLUser registerUser:nil];
+    if ([FCUserUtil canRegisterUser]) {
+        [FCUserUtil registerUser:nil];
     }
-    if([FDUtilities hasInitConfig]) {
-        [HLCoreServices performDAUCall];
-        if([FDUtilities canMakeRemoteConfigCall]){
-            [HLCoreServices fetchRemoteConfig];            
+    if([FCUtilities hasInitConfig]) {
+        [FCCoreServices performDAUCall];
+        if([FCUtilities canMakeRemoteConfigCall]){
+            [FCCoreServices fetchRemoteConfig];            
         }
         dispatch_async(dispatch_get_main_queue(),^{
-            if([HLUser isUserRegistered]){
-                [HLCoreServices performHeartbeatCall];
-                if([FDUtilities canMakeSessionCall]){
-                    [HLCoreServices performSessionCall];
+            if([FCUserUtil isUserRegistered]){
+                [FCCoreServices performHeartbeatCall];
+                if([FCUtilities canMakeSessionCall]){
+                    [FCCoreServices performSessionCall];
                     [self updateSessionInterval];
                 }
                 [self registerDeviceToken];
@@ -515,13 +515,13 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                 [self updateiOSVersion];
                 [self updateAdId];
                 [self updateSDKBuildNumber];
-                [HLCoreServices uploadUnuploadedProperties];
-                [Message uploadAllUnuploadedMessages];
-                [HLMessageServices uploadUnuploadedCSAT];
+                [FCCoreServices uploadUnuploadedProperties];
+                [FCMessages uploadAllUnuploadedMessages];
+                [FCMessageServices uploadUnuploadedCSAT];
             }
             [self updateLocaleMeta];
-            [[[FDSolutionUpdater alloc]init] fetch];
-            [HLMessageServices fetchChannelsAndMessagesWithFetchType:InitFetch
+            [[[FCSolutionUpdater alloc]init] fetch];
+            [FCMessageServices fetchChannelsAndMessagesWithFetchType:InitFetch
                                                              source : Init
                                                           andHandler:nil];
             [self markPreviousUserUninstalledIfPresent];
@@ -530,12 +530,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void) updateAdId{
-    FDSecureStore *secureStore = [FDSecureStore sharedInstance];
+    FCSecureStore *secureStore = [FCSecureStore sharedInstance];
     NSString *storedAdId = [secureStore objectForKey:HOTLINE_DEFAULTS_ADID];
-    NSString *adId = [FDUtilities getAdID];
+    NSString *adId = [FCUtilities getAdID];
     if(adId && adId.length > 0 && ![adId isEqualToString:storedAdId]){
         [secureStore setObject:adId forKey:HOTLINE_DEFAULTS_ADID];
-        [KonotorCustomProperty createNewPropertyForKey:@"adId" WithValue:adId isUserProperty:YES];
+        [FCUserProperties createNewPropertyForKey:@"adId" WithValue:adId isUserProperty:YES];
     }
 }
 
@@ -546,7 +546,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [self showFAQs:controller withOptions:[FAQOptions new]];
     }
     else{
-        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_FAQ_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_FAQ_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
     }
 }
 
@@ -555,24 +555,24 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [self showConversations:controller withOptions:[ConversationOptions new]];
     }
     else{
-        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_CHANNELS_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_CHANNELS_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
     }
 }
 
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options{
-    if([FDUtilities isAccountDeleted]){
-        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
+    if([FCUtilities isAccountDeleted]){
+        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
         return;
     }
-    [HLControllerUtils presentOn:controller option:options];
+    [FCControllerUtils presentOn:controller option:options];
 }
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
-    if([FDUtilities isAccountDeleted]){
-        [FDUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
+    if([FCUtilities isAccountDeleted]){
+        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
         return;
     }
-    [HLControllerUtils presentOn:controller option:options];
+    [FCControllerUtils presentOn:controller option:options];
 }
 
 -(UIViewController*) getFAQsControllerForEmbed{
@@ -584,11 +584,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(UIViewController*) getConversationsControllerForEmbedWithOptions:(ConversationOptions *) convOptions{
-    return [HLControllerUtils getEmbedded:convOptions];
+    return [FCControllerUtils getEmbedded:convOptions];
 }
 
 -(UIViewController*) getFAQsControllerForEmbedWithOptions:(FAQOptions *) faqOptions{
-    return [HLControllerUtils getEmbedded:faqOptions];
+    return [FCControllerUtils getEmbedded:faqOptions];
 }
 
 #pragma mark Push notifications
@@ -603,14 +603,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void) storeDeviceToken:(NSString *) deviceTokenString{
     if (deviceTokenString) {
-        FDSecureStore *store = [FDSecureStore sharedInstance];
+        FCSecureStore *store = [FCSecureStore sharedInstance];
         [store setObject:deviceTokenString forKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         [store setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
     }
 }
 
 -(BOOL)isDeviceTokenUpdated:(NSString *)newToken{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     if (newToken && ![newToken isEqualToString:@""]) {
         NSString* storedDeviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
         return (storedDeviceToken == nil || ![storedDeviceToken isEqualToString:newToken]);
@@ -621,9 +621,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(BOOL)isFreshchatNotification:(NSDictionary *)info{
     @try {
-        return [HLNotificationHandler isFreshchatNotification:info];
+        return [FCNotificationHandler isFreshchatNotification:info];
     } @catch (NSException *exception) {
-        FDMemLogger *logger = [FDMemLogger new];
+        FCMemLogger *logger = [FCMemLogger new];
         [logger addMessage:exception.debugDescription withMethodName:NSStringFromSelector(_cmd)];
         [logger addErrorInfo:info];
         [logger upload];
@@ -636,10 +636,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         if(![self isFreshchatNotification:info]){
             return;
         }
-        self.notificationHandler = [[HLNotificationHandler alloc]init];
+        self.notificationHandler = [[FCNotificationHandler alloc]init];
         [self.notificationHandler handleNotification:info appState:appState];
     } @catch (NSException *exception) {
-        FDMemLogger *logger = [FDMemLogger new];
+        FCMemLogger *logger = [FCMemLogger new];
         [logger addMessage:exception.debugDescription withMethodName:NSStringFromSelector(_cmd)];
         [logger addErrorInfo:info];
         [logger upload];
@@ -669,7 +669,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)processClearUserData:(void (^)())completion init:(BOOL)doInit andOldUser:(NSDictionary*) previousUser{
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     FreshchatConfig *config = [[FreshchatConfig alloc] initWithAppID:[store objectForKey:HOTLINE_DEFAULTS_APP_ID]
                                                            andAppKey:[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     if([store objectForKey:HOTLINE_DEFAULTS_DOMAIN]){
@@ -695,15 +695,15 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     
     NSString *deviceToken = [store objectForKey:HOTLINE_DEFAULTS_PUSH_TOKEN];
-    BOOL isUserRegistered = [HLUser isUserRegistered];
-    BOOL isAccountDeleted = [FDUtilities isAccountDeleted];
+    BOOL isUserRegistered = [FCUserUtil isUserRegistered];
+    BOOL isAccountDeleted = [FCUtilities isAccountDeleted];
     [[FreshchatUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
     
     //Clear secure store
-    [[FDSecureStore sharedInstance]clearStoreData];
-    [[FDSecureStore persistedStoreInstance]clearStoreData];
-    [[FDVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
-    [HLUserDefaults clearUserDefaults];
+    [[FCSecureStore sharedInstance]clearStoreData];
+    [[FCSecureStore persistedStoreInstance]clearStoreData];
+    [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
+    [FCUserDefaults clearUserDefaults];
     [store setBoolValue:isAccountDeleted forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
     if(previousUser && isUserRegistered) {
         [self storePreviousUser:previousUser inStore:store];
@@ -711,21 +711,21 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         [self storePreviousUser:nil inStore:store];
     }
     [self markPreviousUserUninstalledIfPresent];
-    [[KonotorDataManager sharedInstance] cleanUpUser:^(NSError *error) {
-        if(![FDUtilities isAccountDeleted]){
+    [[FCDataManager sharedInstance] cleanUpUser:^(NSError *error) {
+        if(![FCUtilities isAccountDeleted]){
             if(doInit){
                 [self initWithConfig:config completion:completion];
             }
             if (deviceToken) {
                 [self storeDeviceToken:deviceToken];
             }
-            [FDLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
-            [FDUtilities initiatePendingTasks];
+            [FCLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
+            [FCUtilities initiatePendingTasks];
         }
         if (completion) {
             completion();
         }
-        [FDUtilities postUnreadCountNotification];
+        [FCUtilities postUnreadCountNotification];
     }];
 }
 
@@ -735,10 +735,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
     if (completion) {
-        [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
+        [FCMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
                                                           source:UnreadCount
                                                       andHandler:^(NSError *error) {
-                                                          [FDUtilities unreadCountInternalHandler:^(NSInteger count) {
+                                                          [FCUtilities unreadCountInternalHandler:^(NSInteger count) {
                                                               completion(count);
                                                           }];
                                                       }];
@@ -749,16 +749,16 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     __block int count=0;
     if (completion) {
         NSLog(@"Unread tags Fetch here");
-        [HLMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
+        [FCMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
             if(error) {
                 completion(count);
                 return;
             }
             else {
-                [[HLTagManager sharedInstance] getChannelsForTags:tags
-                                                        inContext:[KonotorDataManager sharedInstance].mainObjectContext
-                                                   withCompletion:^(NSArray<HLChannel *> * channels, NSError *error) {
-                                                       for(HLChannel *channel in channels){
+                [[FCTagManager sharedInstance] getChannelsForTags:tags
+                                                        inContext:[FCDataManager sharedInstance].mainObjectContext
+                                                   withCompletion:^(NSArray<FCChannels *> * channels, NSError *error) {
+                                                       for(FCChannels *channel in channels){
                                                            count += [channel unreadCount];
                                                        }
                                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -774,49 +774,49 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
     }
-    if([FDUtilities isAccountDeleted]){
+    if([FCUtilities isAccountDeleted]){
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
-    NSManagedObjectContext *mainContext = [[KonotorDataManager sharedInstance] mainObjectContext];
+    NSManagedObjectContext *mainContext = [[FCDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
-        [[HLTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<HLChannel *> *channels, NSError *error){
-            HLChannel *channel;
+        [[FCTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+            FCChannels *channel;
             if(channels.count >=1){
                 channel = [channels firstObject];  // 1 will have the match , if more than one. it is ordered by pos
             }
             if(!channel){
-                channel = [HLChannel getDefaultChannelInContext:mainContext];
+                channel = [FCChannels getDefaultChannelInContext:mainContext];
             }
             if(channel){
-                KonotorConversation *conversation;
+                FCConversations *conversation;
                 NSSet *conversations = channel.conversations;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                [Konotor uploadMessageWithImage:nil textFeed:messageObject.message onConversation:conversation andChannel:channel];
+                [FCMessageHelper uploadMessageWithImage:nil textFeed:messageObject.message onConversation:conversation andChannel:channel];
             }
         }];
     }];
 }
 
 - (NSString *)validateDomain:(NSString*)domain{
-    return [FDStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
+    return [FCStringUtil replaceInString:trimString(domain) usingRegex:@"^http[s]?:\\/\\/" replaceWith:@""];
 }
 
--(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FDSecureStore *)secureStore{
+-(void)storePreviousUser:(NSDictionary *) previousUserInfo inStore:(FCSecureStore *)secureStore{
     [secureStore setObject:previousUserInfo forKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
 }
 
 -(void)markPreviousUserUninstalledIfPresent{
-    HLAPIClient *client = [HLAPIClient sharedInstance];
+    FCAPIClient *client = [FCAPIClient sharedInstance];
     if(client.FC_IS_USER_OR_ACCOUNT_DELETED) return;
     static BOOL inProgress = false; // performPendingTasks can be called twice so sequence
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     NSDictionary *previousUserInfo = [store objectForKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
     if(previousUserInfo && !inProgress){
         inProgress = true;
-        [HLCoreServices trackUninstallForUser:previousUserInfo withCompletion:^(NSError *error) {
+        [FCCoreServices trackUninstallForUser:previousUserInfo withCompletion:^(NSError *error) {
             if(!error){
                 [store removeObjectWithKey:HOTLINE_DEFAULTS_OLD_USER_INFO];
             }
@@ -829,17 +829,17 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                        withCompletion: (void(^)())completion  {
     void (^clearHLControllers)() = ^void() {
         for(UIViewController *tempVC in controller.childViewControllers){
-            if([tempVC isKindOfClass:[HLContainerController class]]){
+            if([tempVC isKindOfClass:[FCContainerController class]]){
                 UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
-                if([firstViewController isKindOfClass:[HLChannelViewController class]] ||
-                   [firstViewController isKindOfClass:[HLCategoryGridViewController class]] ||
-                   [firstViewController isKindOfClass:[HLListViewController class]] ||
-                   [firstViewController isKindOfClass:[HLArticleDetailViewController class]] ||
-                   [firstViewController isKindOfClass:[FDMessageController class]]  ) {
+                if([firstViewController isKindOfClass:[FCChannelViewController class]] ||
+                   [firstViewController isKindOfClass:[FCCategoryGridViewController class]] ||
+                   [firstViewController isKindOfClass:[FCListViewController class]] ||
+                   [firstViewController isKindOfClass:[FCArticleDetailViewController class]] ||
+                   [firstViewController isKindOfClass:[FCMessageController class]]  ) {
                     [tempVC dismissViewControllerAnimated:NO completion:completion];
                 }
                 
-            } else if([tempVC isKindOfClass:[FDAttachmentImageController class]]) {
+            } else if([tempVC isKindOfClass:[FCAttachmentImageController class]]) {
                 [tempVC dismissViewControllerAnimated:NO completion:completion];
             }
         }
@@ -863,8 +863,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
             if(selectedVC!= nil) {
                 NSMutableArray<UIViewController *> *viewControllers = [[NSMutableArray alloc]init];
                 for(UIViewController *tempVC in selectedVC.childViewControllers) {
-                    if([tempVC isKindOfClass:[HLContainerController class]]) { // Check for our Freshchat SDK screen
-                        HLInterstitialViewController *interstitialController = [[HLInterstitialViewController alloc] initViewControllerWithOptions:nil andIsEmbed:YES];                        
+                    if([tempVC isKindOfClass:[FCContainerController class]]) { // Check for our Freshchat SDK screen
+                        FCInterstitialViewController *interstitialController = [[FCInterstitialViewController alloc] initViewControllerWithOptions:nil andIsEmbed:YES];                        
                         UINavigationController *navigationController = (UINavigationController *)selectedVC;
                         if (interstitialController != nil && navigationController != nil) {
                             [viewControllers addObject:interstitialController];

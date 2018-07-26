@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "FreshchatSDK.h"
-#import "FDSecureStore.h"
-#import "FDUtilities.h"
-#import "KonotorUser.h"
-#import "HLCoreServices.h"
-#import "KonotorCustomProperty.h"
+#import "FCSecureStore.h"
+#import "FCUtilities.h"
+#import "FCUsers.h"
+#import "FCCoreServices.h"
+#import "FCUserProperties.h"
 
 
 @implementation FreshchatUser
@@ -28,7 +28,7 @@
 }
 
 -(void)copyValuesFromStore {
-    FDSecureStore *store = [FDSecureStore sharedInstance];
+    FCSecureStore *store = [FCSecureStore sharedInstance];
     self.firstName = [store objectForKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];
     self.lastName = [store objectForKey:HOTLINE_DEFAULTS_USER_LAST_NAME];
     self.email = [store objectForKey:HOTLINE_DEFAULTS_USER_EMAIL];
