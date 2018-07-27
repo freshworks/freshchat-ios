@@ -42,7 +42,7 @@ then
   fi;
 fi;
 
-CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/HLVersionConstants.h
+CONSTANTS_FILE=HotlineSDK/HotlineSDK/Utilities/FCVersionConstants.h
 #fix version in file
 git checkout ${CONSTANTS_FILE} # make pristine
 cp ${CONSTANTS_FILE} ${CONSTANTS_FILE}.original
