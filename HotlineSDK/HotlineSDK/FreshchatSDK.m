@@ -225,7 +225,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
     
     if (message.length > 0) {
-        NSString *info = @"Warning! Hotline SDK needs the following keys added to Info.plist for media access on iOS 10";
+        NSString *info = @"Warning! Freshchat SDK needs the following keys added to Info.plist for media access on iOS 10";
         ALog(@"\n\n** %@ ** \n %@ \n\n", info, message);
     }
 }
@@ -714,7 +714,12 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[FCDataManager sharedInstance] cleanUpUser:^(NSError *error) {
         if(![FCUtilities isAccountDeleted]){
             if(doInit){
-                [self initWithConfig:config completion:completion];
+                if(!config.appID || !config.appKey){
+                    ALog(@"Warning! Freshchat SDK has not been initialized and resetUser has been called");
+                }
+                else{
+                    [self initWithConfig:config completion:completion];
+                }
             }
             if (deviceToken) {
                 [self storeDeviceToken:deviceToken];
