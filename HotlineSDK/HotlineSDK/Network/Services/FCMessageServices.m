@@ -129,7 +129,7 @@ static FCNotificationHandler *handleUpdateNotification;
         NSString *userAlias = [FCUtilities currentUserAlias];
         NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
         FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
-        NSNumber *lastUpdateTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+        NSNumber *lastUpdateTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
         NSString *source = [NSString stringWithFormat:@"src=%d",requestSource];
@@ -211,7 +211,7 @@ static FCNotificationHandler *handleUpdateNotification;
     NSNumber *channelId;
     NSString *messageText;
     BOOL isRestore = [[FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME] isEqualToNumber:@0];
-    __block NSNumber *lastUpdateTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+    __block NSNumber *lastUpdateTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
     NSArray *conversations = response[@"conversations"];
     for (int i=0; i<conversations.count; i++) {
         NSDictionary *conversationInfo = conversations[i];
@@ -270,10 +270,10 @@ static FCNotificationHandler *handleUpdateNotification;
 
     FCSecureStore *secureStore = [FCSecureStore sharedInstance];
     if([lastUpdateTime integerValue] != 0 ){
-        [secureStore setObject:lastUpdateTime forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+        [secureStore setObject:lastUpdateTime forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
     }else{
         NSNumber *lastUpdatedChannelTime = [secureStore objectForKey:FC_CHANNELS_LAST_MODIFIED_AT];
-        [secureStore setObject:lastUpdatedChannelTime forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+        [secureStore setObject:lastUpdatedChannelTime forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
     }
     if( conversations && conversations.count > 0 ){
         [FCLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
@@ -355,7 +355,7 @@ static FCNotificationHandler *handleUpdateNotification;
             if (handler) handler(nil, error);
         }else{
             if (handler) handler(nil, error);
-            NSNumber *messageLastUpdatedTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+            NSNumber *messageLastUpdatedTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
             if (error.code == -1009 && [messageLastUpdatedTime intValue] == 0) {
                 [FCLocalNotification post:HOTLINE_CHANNELS_UPDATED];
             }
@@ -423,7 +423,6 @@ static FCNotificationHandler *handleUpdateNotification;
             }
         }
         [[FCSecureStore sharedInstance] setObject: channelsInfo[LAST_MODIFIED_AT] forKey:FC_CHANNELS_LAST_MODIFIED_AT];
-        [[FCSecureStore sharedInstance] setObject: channelsInfo[LAST_MODIFIED_AT] forKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
         [context save:nil];
         if (handler) handler(channelList,nil);
         if(channelCount > 0) {

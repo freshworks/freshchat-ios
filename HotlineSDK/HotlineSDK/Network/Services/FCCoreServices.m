@@ -607,7 +607,8 @@
         // Clear the Channel & Coversation call to fetch again.
         [store removeObjectWithKey:HOTLINE_DEFAULTS_VOTED_ARTICLES];        
         [store removeObjectWithKey:FC_CHANNELS_LAST_MODIFIED_AT];
-        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];
+        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT];//Absolute after v1.5.0 : Can be removed in later versions of SDK
+        [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
         [store removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
         
