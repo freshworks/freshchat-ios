@@ -667,7 +667,7 @@ static NSInteger networkIndicator = 0;
 +(void)postUnreadCountNotification{
     dispatch_async(dispatch_get_main_queue(), ^{
         [FCUtilities unreadCountInternalHandler:^(NSInteger count) {
-            [FCLocalNotification post:FRESHCHAT_UNREAD_MESSAGE_COUNT info:@{ @"count" : @(count)}];
+            [FCLocalNotification post:FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED info:@{}];
         }];
     });
 }

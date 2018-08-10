@@ -53,6 +53,10 @@ static FCNotificationHandler *handleUpdateNotification;
         if (!([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]
               && [FCUserUtil isUserRegistered]
               && ([[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_CONFIG_RC_MANUAL_CAMPAIGNS_ENABLED] || [[FCRemoteConfig sharedInstance] isActiveConvAvailable]))){
+            if(handler) {
+                NSError *error = [NSError errorWithDomain:@"USER_NOT_CREATED" code:1 userInfo:@{ @"Reason" : @"User not created/registered" }];
+                handler(error);
+            }
             return;
         }
     }
@@ -202,7 +206,6 @@ static FCNotificationHandler *handleUpdateNotification;
                 [FCMessageHelper performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
                 if(handler) handler(error);
             }            
-            [FCUtilities postUnreadCountNotification];
         });
     }];
 }
@@ -263,7 +266,6 @@ static FCNotificationHandler *handleUpdateNotification;
             handleUpdateNotification = [[FCNotificationHandler alloc] init];
             [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
         }
-        [FCUtilities postUnreadCountNotification];
     }
     
     [[FCDataManager sharedInstance]save];
@@ -279,6 +281,7 @@ static FCNotificationHandler *handleUpdateNotification;
         [FCLocalNotification post:HOTLINE_MESSAGES_DOWNLOADED];
     }
     [FCMessageHelper performSelectorOnMainThread:@selector(conversationsDownloaded) withObject:nil waitUntilDone:NO];
+    [FCUtilities postUnreadCountNotification];
     return true;
 }
 

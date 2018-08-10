@@ -86,9 +86,9 @@
                 }
             }
             [FCCoreServices sendLatestUserActivity:channel];
+            [FCUtilities postUnreadCountNotification];
+            [context save:nil];
         }
-        [FCUtilities postUnreadCountNotification];
-        [context save:nil];
     }];
 }
 

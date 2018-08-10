@@ -114,7 +114,11 @@
         NSArray* channelIds = [matchingTags valueForKey:@"taggableID"];
         [context performBlock:^{
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_CHANNELS_ENTITY];
-            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@ AND isHidden == NO",channelIds];
+            if ([tags count] == 0) {
+                fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@ AND isHidden == NO AND isRestricted == NO",channelIds];
+            } else {
+                fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@",channelIds];
+            }
             NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
             fetchRequest.sortDescriptors = @[position];
             NSError *error;

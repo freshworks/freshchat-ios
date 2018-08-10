@@ -58,11 +58,7 @@
         }
         
         self.userDetails.text = userContent;
-    }];
-    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_UNREAD_MESSAGE_COUNT object:nil queue:nil usingBlock:^(NSNotification *note) {
-        self.unreadCount.text = (note.userInfo[@"count"] != nil) ? [NSString stringWithFormat:@"%@ unread messages", note.userInfo[@"count"]] : @"0 unread messages";
-        NSLog(@"Unread count  %@", note.userInfo[@"count"]);
-    }];
+    }];    
 }
 
 -(float)getTimeoutDuration {
@@ -152,7 +148,7 @@
         [self.timerState setOn:false];
     }
     [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_USER_RESTORE_ID_GENERATED];
-    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_UNREAD_MESSAGE_COUNT];
+    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED];
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
@@ -165,6 +161,7 @@
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:@[@"wow"] withTitle:@"heyyyy"];
     [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)loadFAQs:(id)sender {

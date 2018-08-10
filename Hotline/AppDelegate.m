@@ -80,8 +80,8 @@
     
     if (isTabViewPreferred) {
         ConversationOptions *convOptions = [[ConversationOptions alloc] init];
-        [convOptions filterByTags:@[@"wow"] withTitle:@"Wow Conv[App]"];
-        NSArray *arr = @[@"wow"];
+        [convOptions filterByTags:@[@"wow",@"wow1"] withTitle:@"Wow Conv[App]"];
+        NSArray *arr = @[@"wow",@"wow1"];
         NSArray *contactUsTagsArray = @[@"wow"];
         FAQOptions *faqOptions = [FAQOptions new];
         faqOptions.showFaqCategoriesAsGrid = NO;

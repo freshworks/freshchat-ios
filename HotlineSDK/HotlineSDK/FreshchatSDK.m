@@ -739,37 +739,38 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{
-    if (completion) {
-        [FCMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch
-                                                          source:UnreadCount
-                                                      andHandler:^(NSError *error) {
-                                                          [FCUtilities unreadCountInternalHandler:^(NSInteger count) {
-                                                              completion(count);
-                                                          }];
-                                                      }];
-    }
+    FDLog(@"unreadCountWithCompletion:: Unread count function called.");
+    [self unreadCountForTags:nil withCompletion:completion];
 }
 
 -(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion{
     __block int count=0;
     if (completion) {
-        NSLog(@"Unread tags Fetch here");
+        FDLog(@"unreadCountForTags:: Unread tags count function called.");
         [FCMessageServices fetchChannelsAndMessagesWithFetchType:OffScreenPollFetch source:UnreadCount andHandler:^(NSError *error) {
             if(error) {
                 completion(count);
                 return;
             }
             else {
-                [[FCTagManager sharedInstance] getChannelsForTags:tags
-                                                        inContext:[FCDataManager sharedInstance].mainObjectContext
-                                                   withCompletion:^(NSArray<FCChannels *> * channels, NSError *error) {
-                                                       for(FCChannels *channel in channels){
-                                                           count += [channel unreadCount];
-                                                       }
-                                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                                           completion(count);
-                                                       });
-                                                   }];
+                if ([tags count] == 0) {
+                    FDLog(@"unreadCountForTags:: Fetching count for all visible channel.");
+                    [FCUtilities unreadCountInternalHandler:^(NSInteger count) {
+                        completion(count);
+                    }];
+                } else {
+                    FDLog(@"unreadCountForTags:: Fetching count only for matching channels.");
+                    [[FCTagManager sharedInstance] getChannelsForTags:tags
+                                                            inContext:[FCDataManager sharedInstance].mainObjectContext
+                                                       withCompletion:^(NSArray<FCChannels *> * channels, NSError *error) {
+                                                           for(FCChannels *channel in channels){
+                                                               count += [channel unreadCount];
+                                                           }
+                                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                                               completion(count);
+                                                           });
+                                                       }];
+                }
             }
         }];
     }

@@ -21,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) NSURL *soundUrl;
+@property (weak, nonatomic) IBOutlet UILabel *unreadCountAll;
+@property (weak, nonatomic) IBOutlet UILabel *unreadCountTags;
 
 @property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
 @property (nonatomic, strong) IBOutlet UITextField *faqTagsField2;
@@ -73,6 +75,27 @@
     NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
     NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
     
+    [[Freshchat sharedInstance] unreadCountForTags:@[] withCompletion:^(NSInteger count) {
+        self.unreadCountTags.text = [NSString stringWithFormat:@"UT  %d",count];
+        NSLog(@"--With tags : %d",count);
+    }];
+    
+    [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
+        self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
+        NSLog(@"--Without tags : %d",count);
+    }];
+    
+    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [[Freshchat sharedInstance] unreadCountForTags:@[@"wow1",@"wow"] withCompletion:^(NSInteger count) {
+            self.unreadCountTags.text = [NSString stringWithFormat:@"UT  %d",count];
+            NSLog(@"--With tags : %d",count);
+        }];
+        
+        [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
+            self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
+            NSLog(@"--Without tags : %d",count);
+        }];
+    }];
     
     self.faqTagsField1.delegate = self;
     self.faqTagsField2.delegate = self;
@@ -281,7 +304,6 @@ SampleController *sampleController;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    //[[Freshchat sharedInstance] showConversations:self withOptions:opt];
     UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
     [self.navigationController pushViewController:viewController animated:true];
 }
