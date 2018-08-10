@@ -89,9 +89,7 @@
     
     //FDwebimage prefetch image and will be used by channel fetch
     if(channel.iconURL){
-        [FCUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
-            FDLog(@"Image with url cached successfully %@", channel.iconURL)
-        }];
+        [FCUtilities cacheImageWithUrl:channel.iconURL];
     }
     
     if ([channelInfo objectForKey:@"restricted"]) {

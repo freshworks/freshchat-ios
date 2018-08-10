@@ -30,6 +30,7 @@
 #import "FCCategoryViewBehaviour.h"
 #import "FCLoadingViewBehaviour.h"
 #import "FCControllerUtils.h"
+#import "FCUtilities.h"
 
 @interface FCCategoryGridViewController () <UIScrollViewDelegate,UISearchBarDelegate,FDMarginalViewDelegate,HLCategoryViewBehaviourDelegate,HLLoadingViewBehaviourDelegate>
 
@@ -225,11 +226,7 @@
         cell.backgroundColor = [self.theme faqCategoryBackgroundColor];
         cell.cardView.backgroundColor = [[FCTheme sharedInstance] gridViewCardBackgroundColor];
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        if (!category.icon){
-            cell.imageView.image = [FCCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
-        }else{
-            cell.imageView.image = [UIImage imageWithData:category.icon];
-        }
+        [FCUtilities loadImageAndPlaceholderBgWithUrl:category.iconURL forView:cell.imageView withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor] andName:category.title];
     }
     return cell;
 }

@@ -258,15 +258,7 @@
     
     self.titleLabel.text = channel.name;
     
-    UIImage *placeholderImage = [FCCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
-    self.imgView.image = placeholderImage;
-    if (channel.iconURL) {
-        [FCUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.imgView.image = image;
-            });
-        }];
-    }
+    [FCUtilities loadImageAndPlaceholderBgWithUrl:channel.iconURL forView:self.imgView withColor:[[FCTheme sharedInstance] channelIconPlaceholderImageBackgroundColor] andName:channel.name];
     
     UIWindow* currentWindow = [UIApplication sharedApplication].keyWindow;
     [currentWindow bringSubviewToFront:self];

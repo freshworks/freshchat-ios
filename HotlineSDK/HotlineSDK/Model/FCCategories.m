@@ -12,6 +12,7 @@
 #import "FCMacros.h"
 #import "FCTagManager.h"
 #import "FCTags.h"
+#import "FCUtilities.h"
 
 @implementation FCCategories
 
@@ -56,13 +57,9 @@
     category.position = categoryInfo[@"position"];
     category.lastUpdatedTime = [NSDate dateWithTimeIntervalSince1970:[categoryInfo[@"lastUpdatedAt"]doubleValue]];
     category.categoryDescription = categoryInfo[@"description"];
-
-    //Prefetch category icon
-    __block NSData *imageData = nil;
-    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:categoryInfo[@"icon"]]];
-    });
-    category.icon = imageData;
+    if(category.iconURL){
+        [FCUtilities cacheImageWithUrl:category.iconURL];
+    }
     
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];

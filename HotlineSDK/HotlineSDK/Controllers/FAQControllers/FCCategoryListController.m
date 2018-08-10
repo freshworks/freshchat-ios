@@ -28,6 +28,7 @@
 #import "FCCategoryViewBehaviour.h"
 #import "FCLoadingViewBehaviour.h"
 #import "FCControllerUtils.h"
+#import "FCUtilities.h"
 
 @interface FCCategoryListController () <HLCategoryViewBehaviourDelegate,HLLoadingViewBehaviourDelegate>
 
@@ -156,12 +157,7 @@
         cell.titleLabel.text  = category.title;
         cell.detailLabel.text = category.categoryDescription;
         cell.separatorInset = UIEdgeInsetsZero;
-        if(!category.icon){
-            cell.imgView.image = [FCCell generateImageForLabel:category.title withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor]];
-        }
-        else{
-            cell.imgView.image = [UIImage imageWithData:category.icon];
-        }
+        [FCUtilities loadImageAndPlaceholderBgWithUrl:category.iconURL forView:cell.imageView withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor] andName:category.title];
     }
     
     [cell adjustPadding];

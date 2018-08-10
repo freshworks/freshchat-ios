@@ -32,7 +32,6 @@
 #define HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED @"hotline_defaults_agent_avatar_enabled"
 #define HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER @"hotline_defaults_show_notification_banner"
 #define HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED @"hotline_defaults_camera_capture_enabled"
-#define HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL @"hotline_defaults_show_channel_thumbnail"
 #define HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE @"hotline_conversation_banner_message"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_OLD_USER_INFO @"hotline_defaults_old_user_info"

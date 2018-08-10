@@ -297,29 +297,12 @@
         } else {
             cell.detailLabel.text = [attributedTitleString string];
         }
-        
-        
-        
         NSInteger unreadCount = [FCMessages getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
         
-        FCSecureStore *store = [FCSecureStore sharedInstance];
-        BOOL showChannelThumbnail = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
-        
-        UIImage *placeholderImage = [FCCell generateImageForLabel:channel.name withColor:[self.theme channelIconPlaceholderImageBackgroundColor]];
-        cell.imgView.image = placeholderImage;
-        
-        if(showChannelThumbnail){
-            if (channel.iconURL) {
-                [FCUtilities getFDImageWithURL:channel.iconURL withCompletion:^(UIImage *image) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        cell.imgView.image = image;
-                    });
-                }];
-                
-            }
-        }
+        [FCUtilities loadImageAndPlaceholderBgWithUrl:channel.iconURL forView:cell.imgView withColor:[[FCTheme sharedInstance] channelIconPlaceholderImageBackgroundColor] andName:channel.name];
+
     }
     [cell adjustPadding];
     return cell;

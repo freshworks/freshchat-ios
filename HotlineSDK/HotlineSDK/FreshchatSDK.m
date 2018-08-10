@@ -189,7 +189,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setBoolValue:config.teamMemberInfoVisible forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-        [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_SHOW_CHANNEL_THUMBNAIL];
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeName:config.themeName];
     }

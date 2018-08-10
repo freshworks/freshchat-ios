@@ -487,13 +487,54 @@ static NSInteger networkIndicator = 0;
     return ([@[fName, spaceStr, lName] componentsJoinedByString:@""]);
 }
 
-+ (void) getFDImageWithURL : (NSString *) stringUrl withCompletion:(void (^)(UIImage* image))completion{
++ (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName {
+    imageView.image = [FCUtilities generateImageForLabel:channelName withColor:color];
+    if (url.length){//check if its valid but empty stringas well as if it's nil, since calling length on nil will also return 0
+        [FCUtilities loadImageWithUrl:url forView:imageView];
+    }
+}
+
++ (void) loadImageWithUrl : (NSString *) url forView : (UIImageView *) imgView{
     FDWebImageManager *manager = [FDWebImageManager sharedManager];
-    [manager loadImageWithURL:[NSURL URLWithString:stringUrl] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+    [manager loadImageWithURL:[NSURL URLWithString:url] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-        completion(image);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(imgView){
+                imgView.image = image;
+            }
+        });
     }];
+}
+
++ (void) cacheImageWithUrl : (NSString *) url {
+    FDWebImageManager *manager = [FDWebImageManager sharedManager];
+    [manager loadImageWithURL:[NSURL URLWithString:url] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        FDLog(@"Image cached - %@", imageURL);
+    }];
+}
+
++(UIImage *)generateImageForLabel:(NSString *)labelText withColor :(UIColor *)color{
+    FCTheme *theme = [FCTheme sharedInstance];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+    NSString *firstLetter = [labelText substringToIndex:1];
+    firstLetter = [firstLetter uppercaseString];
+    label.text = firstLetter;
+    label.font = [theme channelIconPlaceholderImageCharFont];
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = color;
+    label.layer.cornerRadius = label.frame.size.height / 8.0f;
+    label.clipsToBounds = YES;
+    
+    UIGraphicsBeginImageContextWithOptions(label.frame.size, NO, 0.0);
+    
+    [[label layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 +(NSString *) getLocalizedPositiveFeedCSATQues{

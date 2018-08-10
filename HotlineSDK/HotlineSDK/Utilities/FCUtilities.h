@@ -80,9 +80,10 @@
 + (void) handleGDPRForResponse :(FCResponseInfo *)responseInfo;
 + (void) updateAccountDeletedStatusAs :(BOOL) state;
 + (BOOL) isAccountDeleted;
-+ (void) getFDImageWithURL : (NSString *) stringUrl withCompletion:(void (^)(UIImage* image))completion;
 + (NSString *) getLocalizedPositiveFeedCSATQues;
 + (NSMutableAttributedString *) getAttributedContentForString :(NSString *)strVal withFont :(UIFont *) font;
++ (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName;
++ (void) cacheImageWithUrl : (NSString *) url;
 
 @end
 
