@@ -106,6 +106,11 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_CUST_SAT_SUBMIT_BUTTON_TEXT @"cust_sat_submit_button_text"
 #define LOC_CUST_SAT_NOT_RESOLVED_PROMPT @"cust_sat_not_resolved_prompt"
 
+#define LOC_CHAT_MESSAGE_TIME_TODAY @"chat_message_time_today"
+#define LOC_CHAT_MESSAGE_TIME_THIS_YEAR_SHORT @"chat_message_time_this_year_short"
+#define LOC_CHAT_MESSAGE_TIME_THIS_YEAR_LONG @"chat_message_time_this_year_long"
+#define LOC_CHAT_MESSAGE_TIME_OTHER_YEAR @"chat_message_time_other_year"
+
 #define LOC_TYPICALLY_REPLIES_WITHIN_MIN  @"typically_replies_within_a_minute"
 #define LOC_TYPICALLY_REPLIES_WITHIN_X_MIN @"typically_replies_within_x_minutes"
 #define LOC_TYPICALLY_REPLIES_WITHIN_HOUR @"typically_replies_within_an_hour"

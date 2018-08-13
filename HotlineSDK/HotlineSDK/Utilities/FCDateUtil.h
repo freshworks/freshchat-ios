@@ -11,6 +11,7 @@
 @interface FCDateUtil : NSObject
 
 +(NSString*) stringRepresentationForDate:(NSDate*) dateToDisplay;
++(NSString*) stringRepresentationForDate:(NSDate*) dateToDisplay includeTimeForCurrentYear : (BOOL)includeTimeForCurrentYear;
 +(NSNumber *) maxDateOfNumber:(NSNumber *) lastUpdatedTime andStr:(NSString*) lastUpdatedStr;
 
 @end

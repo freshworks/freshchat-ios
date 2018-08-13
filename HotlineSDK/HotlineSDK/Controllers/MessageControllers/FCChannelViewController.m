@@ -279,7 +279,7 @@
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
         
         if([lastMessage.createdMillis intValue]){
-            cell.lastUpdatedLabel.text= [FCDateUtil stringRepresentationForDate:date];
+            cell.lastUpdatedLabel.text= [FCDateUtil stringRepresentationForDate:date includeTimeForCurrentYear:NO];
         }
         else{
             cell.lastUpdatedLabel.text = nil;
