@@ -157,7 +157,7 @@
         cell.titleLabel.text  = category.title;
         cell.detailLabel.text = category.categoryDescription;
         cell.separatorInset = UIEdgeInsetsZero;
-        [FCUtilities loadImageAndPlaceholderBgWithUrl:category.iconURL forView:cell.imageView withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor] andName:category.title];
+        [FCUtilities loadImageAndPlaceholderBgWithUrl:category.iconURL forView:cell.imgView withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor] andName:category.title];
     }
     
     [cell adjustPadding];
