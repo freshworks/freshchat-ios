@@ -1,8 +1,9 @@
 
 Ver 1.5.0 
 __________________________
-Support for auto expiring Customer Satisfaction Survey
-Add support for overriding CSAT survey question
+Support for auto expiring Customer Satisfaction Surveys
+Add support for overriding CSAT survey's question
+Action name for unread count API  changed to FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED
 
 Ver 1.4.6 
 __________________________
