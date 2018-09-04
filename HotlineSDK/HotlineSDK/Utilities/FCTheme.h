@@ -158,6 +158,9 @@
 //message detail bg component
 -(id) getMessageDetailBackgroundComponent;
 
+-(UIImage *) getCustomAgentIconComponent;
+-(BOOL) isTeamMemberAvatarVisibile;
+
 -(UIColor *)agentMessageFontColor;
 -(UIColor *)userMessageFontColor;
 -(UIColor *)agentNameFontColor;

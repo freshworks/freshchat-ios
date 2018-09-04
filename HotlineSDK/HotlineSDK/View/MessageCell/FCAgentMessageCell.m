@@ -29,8 +29,8 @@
 
 @property (strong, nonatomic) NSLayoutConstraint *senderLabelHeight;
 @property (nonatomic, strong) NSString *agentName;
-@property (nonatomic, assign) BOOL showRealAvatar;
-@property (nonatomic, assign) BOOL isAgentAvatarEnabled;
+@property (nonatomic, assign) BOOL showteamMemberInfo; //display team member info
+@property (nonatomic, assign) BOOL showAvatarView; //plist flag TeamMemberAvatarStyle.visible
 
 @end
 
@@ -52,9 +52,9 @@
 }
 
 -(BOOL) showAgentAvatarLabelWithAlias : (NSString *)alias {
-    FCParticipants *participant = [FCParticipants fetchParticipantForAlias:alias inContext:[FCDataManager sharedInstance].mainObjectContext];
     
-    if(self.isAgentAvatarEnabled){
+    if(self.showteamMemberInfo){
+        FCParticipants *participant = [FCParticipants fetchParticipantForAlias:alias inContext:[FCDataManager sharedInstance].mainObjectContext];
         if(participant.firstName || participant.lastName){
             self.agentName = [FCUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
         }
@@ -64,8 +64,9 @@
         else{
             self.agentName = @"";
         }
+        return [FCStringUtil isNotEmptyString:self.agentName];//return value based on current status of agent name
     }
-    return self.isAgentAvatarEnabled;
+    return false;
 }
 
 - (void) initCell{
@@ -98,8 +99,8 @@
     profileImageView.translatesAutoresizingMaskIntoConstraints = NO;
     profileImageView.backgroundColor = [UIColor clearColor];
     profileImageView.clipsToBounds = YES;
-    profileImageView.contentMode = UIViewContentModeScaleAspectFit;
-    profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
+    profileImageView.contentMode = UIViewContentModeScaleAspectFill;
+    profileImageView.layer.cornerRadius=FC_PROFILEIMAGE_DIMENSION/2;
     
     chatBubbleImageView.translatesAutoresizingMaskIntoConstraints = NO;
     chatBubbleImageView.clipsToBounds = YES;
@@ -107,12 +108,11 @@
     uploadStatusImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
     [uploadStatusImageView setImage:sentImage];
     uploadStatusImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.isAgentAvatarEnabled = [[FCSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-    if(self.isAgentAvatarEnabled){
+    self.showAvatarView = [[FCTheme sharedInstance] isTeamMemberAvatarVisibile];
+    self.showteamMemberInfo = [[FCSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+    if(self.showteamMemberInfo){
         int agentAvatarRCVal = [FCRemoteConfig sharedInstance].conversationConfig.agentAvatar;
         self.showsProfile = (agentAvatarRCVal <= 2);
-        self.showRealAvatar = (agentAvatarRCVal == 1);
     }
     
     agentChatBubble = [[FCTheme sharedInstance]getImageValueWithKey:IMAGE_BUBBLE_CELL_LEFT];
@@ -124,7 +124,7 @@
     [self.contentView setClipsToBounds:YES];
 }
 
-- (void) drawMessageViewForMessage:(FCMessageData*)currentMessage parentView:(UIView*)parentView {
+- (void) drawMessageViewForMessage:(FCMessageData*)currentMessage parentView:(UIView*)parentView withTag:(NSInteger )tag {
     
     [self clearAllSubviews];
     contentEncloser = [[UIView alloc] init];
@@ -136,9 +136,7 @@
     NSString *leftPadding = [theme agentMessageLeftPadding] ? [theme agentMessageLeftPadding] : @"10";
     NSString *rightPadding = [theme agentMessageRightPadding] ? [theme agentMessageRightPadding] : @"10";
     NSString *internalPadding = @"5";
-    
     showsSenderName = [self showAgentAvatarLabelWithAlias:currentMessage.messageUserAlias];
-    self.showRealAvatar = true;
     
     NSMutableArray *fragmensViewArr = [[NSMutableArray alloc]init];
     NSMutableDictionary *views = [[NSMutableDictionary alloc]init];
@@ -149,30 +147,35 @@
     [contentEncloser addSubview:chatBubbleImageView];
     [views setObject:self.senderNameLabel forKey:@"senderLabel"];
     [self.contentView addSubview:senderNameLabel];
-
-    if(showsProfile){
-        profileImageView.image = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_AVATAR_AGENT];
-        
-        profileImageView.frame = CGRectMake(0, 0, 40, 40);
-        [self.contentView addSubview:profileImageView];
-        [views setObject:profileImageView forKey:@"profileImageView"];
-        
-        if(participant.profilePicURL && self.showRealAvatar){
-            FDWebImageManager *manager = [FDWebImageManager sharedManager];
-            if(participant)
-                [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                    
-                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                    if(image && finished){
-                        profileImageView.image = image;
-                    }
-                    else{
-                        profileImageView.image = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_AVATAR_AGENT];
-                    }
-                }];
+    profileImageView.image = nil;
+    profileImageView.frame = CGRectMake(0, 0, FC_PROFILEIMAGE_DIMENSION, FC_PROFILEIMAGE_DIMENSION);
+    [self.contentView addSubview:profileImageView];
+    [views setObject:profileImageView forKey:@"profileImageView"];
+    if(self.showAvatarView){
+        if(participant.profilePicURL && self.showteamMemberInfo){
+            [[FDWebImageManager sharedManager] diskImageExistsForURL:[NSURL URLWithString:participant.profilePicURL] completion:^(BOOL isInCache) {
+                if(isInCache){//If image is available then get it from cache itself
+                    [profileImageView setImage: [[FDImageCache sharedImageCache] imageFromDiskCacheForKey:participant.profilePicURL]];
+                }
+                else{//This will get called only first time
+                    profileImageView.image = [[FCTheme sharedInstance] getCustomAgentIconComponent];
+                    FDWebImageManager *manager = [FDWebImageManager sharedManager];
+                    [manager loadImageWithURL:[NSURL URLWithString:participant.profilePicURL] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                        
+                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                        if(image && finished){
+                            [[FDImageCache sharedImageCache] storeImage:image forKey:participant.profilePicURL completion:^{
+                                if(self.tagVal && (tag == self.tagVal)){
+                                    profileImageView.image = image;
+                                }
+                            }];
+                        }
+                    }];
+                }
+            }];
         }
-        else{
-            profileImageView.image = [[FCTheme sharedInstance] getImageValueWithKey:IMAGE_AVATAR_AGENT];
+        else if([[FCTheme sharedInstance] getCustomAgentIconComponent]){ // added just to avoid no icon condition
+            profileImageView.image = [[FCTheme sharedInstance] getCustomAgentIconComponent];
         }
     }
     
@@ -222,30 +225,20 @@
     }
     
     //All details are in contentview but no constrains set
-    
-    if(showsProfile) {
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
-        if(showsSenderName) {
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(40)]-5-[senderLabel(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[senderLabel]-2-[profileImageView(40)]" options:0 metrics:nil views:views]];
-        } else {
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[profileImageView(40)]" options:0 metrics:nil views:views]];
-        }
-    } else {
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-8-[contentEncloser(<=%ld)]",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
-        if(showsSenderName) {
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-8-[senderLabel]-(<=%ld)-|",(long)self.maxcontentWidth] options:0 metrics:nil views: views]];
-        }
-    }
-    
-    
+    int agentImagedim = self.showAvatarView ? FC_PROFILEIMAGE_DIMENSION : 0;
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(%d)]-5-[contentEncloser(<=%ld)]",agentImagedim ,(long)self.maxcontentWidth] options:0 metrics:nil views:views]];
     if(showsSenderName) {
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[senderLabel]-2-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(%d)]-5-[senderLabel(<=%ld)]",agentImagedim ,(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-2-[senderLabel]-2-[profileImageView(%d)]",agentImagedim] options:0 metrics:nil views:views]];
+        if(self.showteamMemberInfo){
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[senderLabel]-2-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
+        }
     } else {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-2-[profileImageView(%d)]",agentImagedim] options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[contentEncloser(>=50)]-2-|" options:0 metrics:nil views:views]];
     }
-    //Constraints for profileview and contentEncloser are done.
     
+    //Constraints for profileview and contentEncloser are done.
     [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
     [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[chatBubbleImageView]-|" options:0 metrics:nil views:views]];
     //Constraints for chatbubble are done.

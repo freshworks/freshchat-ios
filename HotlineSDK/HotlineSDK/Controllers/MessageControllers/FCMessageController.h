@@ -14,6 +14,8 @@
 #import "FCCSATView.h"
 #import "ConversationOptionsInterface.h"
 
+#define FC_PROFILEIMAGE_DIMENSION 40.0
+
 enum ResponseTimeType {
     CURRENT_AVG  = 1,
     LAST_WEEK_AVG = 2

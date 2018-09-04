@@ -267,7 +267,7 @@ typedef struct {
             FCUserMessageCell *messageCell = [self.tableView cellForRowAtIndexPath:indexPath];
             if ( messageCell ) {
                 touchLoc = [self.tableView convertPoint:touchLoc toView:messageCell]; //Convert the touch point with respective tableview cell
-                if (! CGRectContainsPoint(messageCell.chatBubbleImageView.frame,touchLoc) && ! CGRectContainsPoint(messageCell.profileImageView.frame,touchLoc)) {
+                if (! CGRectContainsPoint(messageCell.chatBubbleImageView.frame,touchLoc)) {
                     [self dismissKeyboard];
                 }
             }
@@ -573,7 +573,6 @@ typedef struct {
     FCUserMessageCell *userCell;
     BOOL isAgentMessage = true;
     CGRect screenRect = self.view.bounds;
-    
     if (indexPath.row < self.messages.count) {
         FCMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
         isAgentMessage = [FCMessageHelper isCurrentUser:[message messageUserType]]?NO:YES; //Changed
@@ -583,9 +582,10 @@ typedef struct {
             if (!agentCell) {
                 agentCell = [[FCAgentMessageCell alloc] initWithReuseIdentifier:agentCellIdentifier andDelegate:self];
             }
+            agentCell.tagVal = indexPath.row;
             agentCell.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20);
             agentCell.messageData = message;
-            [agentCell drawMessageViewForMessage:message parentView:self.view];
+            [agentCell drawMessageViewForMessage:message parentView:self.view withTag:indexPath.row];
         } else {
             userCell = [tableView dequeueReusableCellWithIdentifier:userCellIdentifier];
             if (!userCell) {

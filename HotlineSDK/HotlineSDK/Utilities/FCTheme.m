@@ -761,6 +761,27 @@
     return nil;
 }
 
+-(BOOL) isTeamMemberAvatarVisibile{
+    
+    return [[self.themePreferences valueForKeyPath:@"ConversationDetail.TeamMemberAvatarStyle.visible"] boolValue];
+}
+
+-(UIImage *) getCustomAgentIconComponent{
+    UIImage *componentImage = nil;
+    UIImage *avatarImage = [self getImageValueWithKey:@"ConversationDetail.TeamMemberAvatarIcon"];
+    if(avatarImage){
+        componentImage = avatarImage;
+    }
+    else{
+        componentImage = [self getCurrentAppIcon];
+    }
+    return componentImage;
+}
+
+- (UIImage *) getCurrentAppIcon{
+    return [UIImage imageNamed: [[[[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIcons"] objectForKey:@"CFBundlePrimaryIcon"] objectForKey:@"CFBundleIconFiles"]  objectAtIndex:0]];
+}
+
 #pragma mark - Grid View Cell
 -(UIFont *)faqCategoryTitleFont{
     return [self getFontValueWithKey:@"FAQCategoryList.FAQCategoryNameTextStyle" andDefaultSize:14];

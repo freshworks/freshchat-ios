@@ -10,8 +10,6 @@
 #import "FCMessages.h"
 #import "FCProtocols.h"
 
-#define KONOTOR_PROFILEIMAGE_DIMENSION 40.0
-
 @interface FCUserMessageCell : UITableViewCell
 
 - (instancetype) initWithReuseIdentifier:(NSString *)identifier andDelegate:(id<HLMessageCellDelegate>)delegate;
@@ -33,7 +31,6 @@
 @property (strong, nonatomic) UITextView* messageTextView;
 @property (strong, nonatomic) UIImage* sentImage;
 @property (strong, nonatomic) UIImage* sendingImage;
-@property (strong, nonatomic) UIImageView* profileImageView;
 @property (strong, nonatomic) UIImageView* uploadStatusImageView;
 @property (strong, nonatomic) UIImageView* chatBubbleImageView;
 

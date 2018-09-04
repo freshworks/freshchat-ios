@@ -25,7 +25,7 @@
 @synthesize messageSentTimeLabel,contentEncloser,maxcontentWidth,customFontName,
             showsTimeStamp,showsUploadStatus,sentImage,sendingImage,
             chatBubbleImageView,uploadStatusImageView,
-            profileImageView,senderNameLabel,messageTextFont;
+            senderNameLabel,messageTextFont;
 
 @synthesize userChatBubble,userChatBubbleInsets;
 
@@ -63,12 +63,6 @@
     [messageSentTimeLabel setBackgroundColor:[UIColor clearColor]];
     [messageSentTimeLabel setTextAlignment:NSTextAlignmentRight];
     messageSentTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    profileImageView=[[UIImageView alloc] initWithFrame:CGRectZero];
-    profileImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    profileImageView.clipsToBounds = YES;
-    profileImageView.contentMode = UIViewContentModeScaleAspectFit;
-    profileImageView.layer.cornerRadius=KONOTOR_PROFILEIMAGE_DIMENSION/2;
     
     chatBubbleImageView.translatesAutoresizingMaskIntoConstraints = NO;
     chatBubbleImageView.clipsToBounds = YES;
