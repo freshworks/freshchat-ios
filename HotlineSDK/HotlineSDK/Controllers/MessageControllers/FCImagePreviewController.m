@@ -8,6 +8,8 @@
 
 #import "FCTheme.h"
 #import "FCImagePreviewController.h"
+#define CLOSE_BTN_INSET 3
+#define CLOSE_BTN_DIMENSION 25
 
 @interface FCImagePreviewController (){
     CGFloat beginX, beginY;
@@ -77,17 +79,18 @@ static const CGFloat THROWING_THRESHOLD = 1600;
     
     closeButton.translatesAutoresizingMaskIntoConstraints = NO;
     [closeButton setImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_CLOSE_PREVIEW] forState:UIControlStateNormal];
-    closeButton.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
+    
+    int closeBtnTopSpace = [UIApplication sharedApplication].statusBarFrame.size.height + CLOSE_BTN_INSET;
+    closeButton.imageEdgeInsets = UIEdgeInsetsMake(CLOSE_BTN_INSET, CLOSE_BTN_INSET, CLOSE_BTN_INSET, CLOSE_BTN_INSET);
+    
     [self.view addSubview:closeButton];
     
     NSDictionary *views = @{ @"closeBtn" :closeButton, @"scrollView" :self.scrollView};
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|" options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|" options:0 metrics:nil views:views]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[closeBtn(25)]-14-|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-14-[closeBtn(25)]" options:0 metrics:nil views:views]];
-
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[closeBtn(%d)]-14-|",CLOSE_BTN_DIMENSION] options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat: @"V:|-%d-[closeBtn(%d)]",closeBtnTopSpace, CLOSE_BTN_DIMENSION] options:0 metrics:nil views:views]];
 }
 
 - (BOOL)prefersStatusBarHidden {
