@@ -154,8 +154,10 @@
     if(self.showAvatarView){
         if(participant.profilePicURL && self.showteamMemberInfo){
             [[FDWebImageManager sharedManager] diskImageExistsForURL:[NSURL URLWithString:participant.profilePicURL] completion:^(BOOL isInCache) {
-                if(isInCache){//If image is available then get it from cache itself
-                    [profileImageView setImage: [[FDImageCache sharedImageCache] imageFromDiskCacheForKey:participant.profilePicURL]];
+                if(isInCache) {//If image is available then get it from cache itself
+                    if(self.tagVal && (tag == self.tagVal)){
+                        [profileImageView setImage: [[FDImageCache sharedImageCache] imageFromDiskCacheForKey:participant.profilePicURL]];
+                    }
                 }
                 else{//This will get called only first time
                     profileImageView.image = [[FCTheme sharedInstance] getCustomAgentIconComponent];
