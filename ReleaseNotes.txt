@@ -1,4 +1,9 @@
 
+Ver 1.5.1 
+__________________________
+Agent avatar behaviour change - specific order of fallback (agent avatar, then custom static icon, then app icon)
+iPhoneX image preview changes
+
 Ver 1.5.0 
 __________________________
 Support for auto expiring Customer Satisfaction Surveys
