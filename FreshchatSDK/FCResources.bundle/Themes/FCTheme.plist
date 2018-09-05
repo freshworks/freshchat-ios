@@ -13,11 +13,16 @@
 		<key>CancelIcon</key>
 		<string>FCResources.bundle/Images/freshchat_cancel_icon</string>
 		<key>TeamMemberAvatarIcon</key>
-		<string>FCResources.bundle/Images/freshchat_agent_avatar_icon</string>
+		<string></string>
 		<key>SendIcon</key>
 		<string>FCResources.bundle/Images/freshchat_send_icon</string>
 		<key>RecordIcon</key>
 		<string>FCResources.bundle/Images/freshchat_mic_icon</string>
+		<key>TeamMemberAvatarStyle</key>
+		<dict>
+			<key>visible</key>
+			<true/>
+		</dict>
 		<key>TeamMemberNameTextStyle</key>
 		<dict>
 			<key>fontName</key>
