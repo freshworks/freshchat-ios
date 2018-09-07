@@ -52,21 +52,26 @@
 }
 
 -(BOOL) showAgentAvatarLabelWithAlias : (NSString *)alias {
-    
     if(self.showteamMemberInfo){
         FCParticipants *participant = [FCParticipants fetchParticipantForAlias:alias inContext:[FCDataManager sharedInstance].mainObjectContext];
         if(participant.firstName || participant.lastName){
             self.agentName = [FCUtilities appendFirstName:participant.firstName withLastName:participant.lastName];
         }
-        else if ([FCLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
-            self.agentName = HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
-        }
         else{
-            self.agentName = @"";
+            self.agentName = [self getLocalizedAgentName];
         }
-        return [FCStringUtil isNotEmptyString:self.agentName];//return value based on current status of agent name
     }
-    return false;
+    else{
+        self.agentName = [self getLocalizedAgentName];
+    }
+    return [FCStringUtil isNotEmptyString:self.agentName];
+}
+
+- (NSString *) getLocalizedAgentName{
+    if ([FCLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT]){
+        return HLLocalizedString(LOC_MESSAGES_AGENT_LABEL_TEXT);
+    }
+    return @"";
 }
 
 - (void) initCell{
@@ -232,9 +237,7 @@
     if(showsSenderName) {
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[profileImageView(%d)]-5-[senderLabel(<=%ld)]",agentImagedim ,(long)self.maxcontentWidth] options:0 metrics:nil views:views]]; //Correct
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-2-[senderLabel]-2-[profileImageView(%d)]",agentImagedim] options:0 metrics:nil views:views]];
-        if(self.showteamMemberInfo){
-            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[senderLabel]-2-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
-        }
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[senderLabel]-2-[contentEncloser(>=50)]-5-|" options:0 metrics:nil views:views]];
     } else {
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-2-[profileImageView(%d)]",agentImagedim] options:0 metrics:nil views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-2-[contentEncloser(>=50)]-2-|" options:0 metrics:nil views:views]];
