@@ -1,4 +1,8 @@
 
+Ver 1.5.2 
+__________________________
+Display brand's name or default text (Support) as name when TeamMemberInfoVisible is false
+
 Ver 1.5.1 
 __________________________
 Agent avatar behaviour change - specific order of fallback (agent avatar, then custom static icon, then app icon)
