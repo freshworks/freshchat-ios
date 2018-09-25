@@ -142,7 +142,7 @@
     [self.contentEncloser addSubview:self.titleLabel];
     [self.contentEncloser addSubview:self.messageLabel];
     
-    if([FCUtilities isIPhoneXView]){
+    if([FCUtilities hasNotchDisplay]){
         if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
         {
             self.iPhoneXStatusbarHeightConstraint = [FCAutolayoutHelper setHeight:0 forView:self.iPhoneXStatusbarView inView:self];
@@ -240,7 +240,7 @@
     
     [[[[UIApplication sharedApplication] delegate] window] setWindowLevel:UIWindowLevelStatusBar+1];
     
-    if([FCUtilities isIPhoneXView]) {
+    if([FCUtilities hasNotchDisplay]) {
         self.iPhoneXStatusbarHeightConstraint.constant = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? 0 : IPHONEX_STATUSBAR_HEIGHT;
         [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
     }
@@ -286,7 +286,7 @@
         self.hidden = YES;
         [[[[UIApplication sharedApplication] delegate] window] setWindowLevel:UIWindowLevelNormal];
     } ];
-    if([FCUtilities isIPhoneXView]) {
+    if([FCUtilities hasNotchDisplay]) {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     }
 }

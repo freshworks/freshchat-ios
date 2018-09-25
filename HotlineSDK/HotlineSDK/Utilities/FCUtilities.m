@@ -590,6 +590,10 @@ static NSInteger networkIndicator = 0;
       @"iPhone10,5":   @"iPhone 8 Plus",
       @"iPhone10,3":   @"iPhone X",
       @"iPhone10,6":   @"iPhone X",
+      @"iPhone11,2":   @"iPhoneXs",
+      @"iPhone11,4":   @"iPhoneXsMax",
+      @"iPhone11,6":   @"iPhoneXsMax",
+      @"iPhone11,8":   @"iPhoneXr",
       
       @"iPad1,1":  @"iPad",
       @"iPad2,1":  @"iPad 2(WiFi)",
@@ -722,11 +726,15 @@ static NSInteger networkIndicator = 0;
     return [self isPoweredByHidden];
 }
 
-+ (BOOL) isIPhoneXView{
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-        if ((!UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && screenSize.height == 812.0f) || (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) && screenSize.width == 812.0f)){
-            return true;
++ (BOOL) hasNotchDisplay{
+    if([[UIDevice currentDevice]userInterfaceIdiom]==UIUserInterfaceIdiomPhone) {
+        switch ((int)[[UIScreen mainScreen] nativeBounds].size.height) {
+            case 2436: //X, XS
+            case 2688: //XS Max
+            case 1792: //XR
+                return true;
+            default:
+                return false;
         }
     }
     return false;

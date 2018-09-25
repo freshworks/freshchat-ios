@@ -55,14 +55,14 @@
     [self.view addSubview:self.footerView];
     NSDictionary *views = @{ @"containerView" : self.containerView, @"footerView" : self.footerView, @"childControllerView" : self.childController.view};
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView]|" options:0 metrics:nil views:views]];
-    if([FCUtilities isPoweredByFooterViewHidden] &&(![FCUtilities isIPhoneXView] || isembedView)){
+    if([FCUtilities isPoweredByFooterViewHidden] &&(![FCUtilities hasNotchDisplay] || isembedView)){
         [self.footerView removeFromSuperview];
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[containerView]|" options:0 metrics:nil views:views]];
     }
     else{
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
         int footerViewHeight = 20;
-        if([FCUtilities isIPhoneXView] && !isembedView) {
+        if([FCUtilities hasNotchDisplay] && !isembedView) {
             footerViewHeight = 33;
         }
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|[containerView][footerView(%d)]|", footerViewHeight] options:0 metrics:nil views:views]];

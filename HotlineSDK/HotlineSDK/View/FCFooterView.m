@@ -28,7 +28,7 @@
         
         self.footerLabel.font = [UIFont systemFontOfSize:11];
         [self addSubview:self.footerLabel];
-        if([FCUtilities isIPhoneXView] && !isEmbed){
+        if([FCUtilities hasNotchDisplay] && !isEmbed){
             [FCAutolayoutHelper centerX:self.footerLabel onView:self];
             [FCAutolayoutHelper centerY:self.footerLabel onView:self M:0.60 C:0];
         }

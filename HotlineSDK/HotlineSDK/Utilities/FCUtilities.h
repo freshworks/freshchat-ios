@@ -54,7 +54,7 @@
 +(NSString *) returnLibraryPathForDir : (NSString *) directory;
 +(NSDictionary*) filterValidUserPropEntries :(NSDictionary*) userDict;
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
-+ (BOOL) isIPhoneXView;
++ (BOOL) hasNotchDisplay;
 +(BOOL)isiOS10;
 + (BOOL)isDeviceLanguageRTL;
 

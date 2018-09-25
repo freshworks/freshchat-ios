@@ -126,10 +126,10 @@
     [self.view addSubview:footerView];
     [footerView setViewColor:self.view.backgroundColor];
     footerViewHeight = 20;
-    if([FCUtilities isIPhoneXView] && !self.isEmbedView){
+    if([FCUtilities hasNotchDisplay] && !self.isEmbedView){
         footerViewHeight = 33;
     }
-    if([FCUtilities isPoweredByFooterViewHidden] && ![FCUtilities isIPhoneXView]){
+    if([FCUtilities isPoweredByFooterViewHidden] && ![FCUtilities hasNotchDisplay]){
         footerViewHeight = 0;
     }
     NSDictionary *views = @{@"footerView" : footerView};    

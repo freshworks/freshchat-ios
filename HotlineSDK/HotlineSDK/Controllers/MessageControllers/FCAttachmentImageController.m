@@ -75,10 +75,10 @@
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[footerView]-0-|" options:0 metrics:nil views:views]];
     footerViewHeight = 20;
-    if([FCUtilities isIPhoneXView]){
+    if([FCUtilities hasNotchDisplay]){
         footerViewHeight = 33;
     }
-    if([FCUtilities isPoweredByFooterViewHidden] && ![FCUtilities isIPhoneXView]){
+    if([FCUtilities isPoweredByFooterViewHidden] && ![FCUtilities hasNotchDisplay]){
         footerViewHeight = 0;
     }
     
