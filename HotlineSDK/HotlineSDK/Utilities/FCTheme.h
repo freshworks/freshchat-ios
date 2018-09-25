@@ -42,7 +42,7 @@
 @property (strong, nonatomic) NSString *themeName;
 
 + (instancetype)sharedInstance;
--(void)setThemeName:(NSString *)themeName;
+-(void)setThemeWithName:(NSString *)themeName;
 -(UIColor *)searchBarInnerBackgroundColor;
 +(UIColor *)colorWithHex:(NSString *)value;
 

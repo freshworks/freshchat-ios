@@ -190,7 +190,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
-        [[FCTheme sharedInstance]setThemeName:config.themeName];
+        [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
     [FCUserUtil registerUser:completion];
     if([FCUserUtil isUserRegistered]) {

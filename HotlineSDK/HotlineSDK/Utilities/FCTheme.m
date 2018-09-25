@@ -15,7 +15,9 @@
 @interface FCTheme ()
 
 @property (strong, nonatomic) NSMutableDictionary *themePreferences;
+@property (strong, nonatomic) NSMutableDictionary *defaultThemePrefs;
 @property (strong, nonatomic) UIFont *systemFont;
+@property (assign, nonatomic) BOOL hasCustomTheme;
 
 @end
 
@@ -44,12 +46,16 @@
     self.systemFont = [self sdkFont];
 }
 
--(void)setThemeName:(NSString *)themeName{
+-(void)setThemeWithName:(NSString *)themeName{
     NSString *themeFilePath = [self getPathForTheme:themeName];
     if (themeFilePath) {
         _themeName = themeName;
         NSData *plistData = [[NSFileManager defaultManager] contentsAtPath:themeFilePath];
-        [self updateThemePreferencesWithData:plistData];
+        [self updateThemePreferencesWithData:plistData forDefaultTheme:NO];
+        if(self.hasCustomTheme && [self getDefaultThemePath]) {
+            NSData *defaultPlistData = [[NSFileManager defaultManager] contentsAtPath:[self getDefaultThemePath]];
+            [self updateThemePreferencesWithData:defaultPlistData forDefaultTheme:YES];
+        }
     }else{
         NSString *exceptionName   = @"HOTLINE_SDK_INVALID_THEME_FILE";
         NSString *reason          = @"You are attempting to set a theme file \"%@\" that is not linked with the project through HLResourcesBundle";
@@ -58,12 +64,17 @@
     }
 }
 
--(void)updateThemePreferencesWithData:(NSData *)plistData{
+-(void)updateThemePreferencesWithData:(NSData *)plistData forDefaultTheme : (BOOL) defaultTheme  {
     NSString *errorDescription;
     NSPropertyListFormat plistFormat;
     NSDictionary *immutablePlistInfo = (NSDictionary *)[NSPropertyListSerialization propertyListFromData:plistData mutabilityOption:NSPropertyListMutableContainers format:&plistFormat errorDescription:&errorDescription];
     if (immutablePlistInfo) {
-        self.themePreferences = [NSMutableDictionary dictionaryWithDictionary:immutablePlistInfo];
+        if(defaultTheme){
+            self.defaultThemePrefs = [NSMutableDictionary dictionaryWithDictionary:immutablePlistInfo];
+        }
+        else{
+            self.themePreferences = [NSMutableDictionary dictionaryWithDictionary:immutablePlistInfo];
+        }
     }
 }
 
@@ -81,12 +92,19 @@
 }
 
 -(NSString *)getPathForTheme:(NSString *)theme{
-    NSString *fileExt = [theme rangeOfString:@".plist"].location != NSNotFound ? nil : @".plist";
+    NSString *fileExt = [theme rangeOfString:FD_DEFAULT_THEME_EXTENSION].location != NSNotFound ? nil : FD_DEFAULT_THEME_EXTENSION;
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:theme ofType:fileExt];
+    self.hasCustomTheme = YES;
     if (!path) {
-        NSBundle *hlResourcesBundle = [self getHLResourceBundle];
-        path = [hlResourcesBundle pathForResource:theme ofType:fileExt inDirectory:FD_THEMES_DIR];
+        self.hasCustomTheme = NO;
+        path = [self getDefaultThemePath];
     }
+    return path;
+}
+
+- (NSString *) getDefaultThemePath{
+    NSBundle *hlResourcesBundle = [self getHLResourceBundle];
+    NSString* path = [hlResourcesBundle pathForResource:FD_DEFAULT_THEME_NAME ofType:FD_DEFAULT_THEME_EXTENSION inDirectory:FD_THEMES_DIR];
     return path;
 }
 
@@ -96,7 +114,7 @@
 }
 
 -(UIImage *)getImageWithKey:(NSString *)key{
-    NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"Images.%@",key]];
+    NSString *imageName = [self fetchThemeValueForKey:[NSString stringWithFormat:@"Images.%@",key]];
     UIImage *image = [UIImage imageNamed:imageName];
     if([FCUtilities isDeviceLanguageRTL] && ([key isEqualToString:IMAGE_SEND_ICON] || [key isEqualToString:IMAGE_BACK_BUTTON] || [key isEqualToString:IMAGE_TABLEVIEW_ACCESSORY_ICON])){
         image =  [image imageFlippedForRightToLeftLayoutDirection];
@@ -104,24 +122,35 @@
     return image;
 }
 
+- (NSString *) fetchThemeValueForKey : (NSString *)keyPath {
+    if([self.themePreferences valueForKeyPath:keyPath]){
+        return [self.themePreferences valueForKeyPath:keyPath];
+    }
+    else if([self.defaultThemePrefs valueForKeyPath:keyPath]){
+        return [self.defaultThemePrefs valueForKeyPath:keyPath];
+    }
+    return nil;
+}
+
 /*
  User message padding
  */
 
 -(NSString *)userMessageLeftPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageLeft"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.UserMessageLeft"];
 }
 
 -(NSString *)userMessageRightPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageRight"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.UserMessageRight"];
 }
 
 -(NSString *)userMessageTopPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageTop"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.UserMessageTop"];
 }
 
 -(NSString *)userMessageBottomPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.UserMessageBottom"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.UserMessageBottom"];
+    
 }
 
 /*
@@ -129,23 +158,24 @@
  */
 
 -(NSString *)agentMessageLeftPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageLeft"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.AgentMessageLeft"];
 }
 
 -(NSString *)agentMessageRightPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageRight"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.AgentMessageRight"];
 }
 
 -(NSString *)agentMessageTopPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageTop"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.AgentMessageTop"];
 }
 
 -(NSString *)agentMessageBottomPadding {
-    return [self.themePreferences valueForKeyPath:@"ConversationDetail.MessagePadding.AgentMessageBottom"];
+    return [self fetchThemeValueForKey:@"ConversationDetail.MessagePadding.AgentMessageBottom"];
 }
 
 -(UIImage *)getImageValueWithKey:(NSString *)key{
-    NSString *imageName = [self.themePreferences valueForKeyPath:[NSString stringWithFormat:@"%@",key]];
+    NSString *imageName = [self fetchThemeValueForKey:[NSString stringWithFormat:@"%@",key]];
+    
     UIImage *image = [UIImage imageNamed:imageName];
     if([FCUtilities isDeviceLanguageRTL] && ![key isEqualToString:IMAGE_SEARCH_ICON]){
        image =  [image imageFlippedForRightToLeftLayoutDirection];
@@ -155,7 +185,7 @@
 
 
 -(UIColor *)getColorForKeyPath:(NSString *)path{
-    NSString *hexString = [self.themePreferences valueForKeyPath:path];
+    NSString *hexString = [self fetchThemeValueForKey:path];
     return hexString ? [FCTheme colorWithHex:hexString] : nil;
 }
 +(UIColor *)colorWithHex:(NSString *)value{
@@ -174,7 +204,7 @@
                            alpha:1.0f];
 }
 -(UIColor *)getColorValueForKeyPath:(NSString *)path{
-    NSString *hexString = [self.themePreferences valueForKeyPath:path];
+    NSString *hexString = [self fetchThemeValueForKey:path];
     return hexString ? [FCTheme colorValueWithHex:hexString] : nil;
 }
 +(UIColor *)colorValueWithHex:(NSString *)value{
@@ -219,7 +249,7 @@
 #pragma mark - Status Bar
 
 -(UIStatusBarStyle)statusBarStyle{
-    NSString *statusBarStyle = [self.themePreferences valueForKeyPath:@"Miscellaneous.StatusBarStyle.StatusBarBackground"];
+    NSString *statusBarStyle = [self fetchThemeValueForKey:@"Miscellaneous.StatusBarStyle.StatusBarBackground"];
     if([statusBarStyle isEqualToString:@"UIStatusBarStyleLightContent"]){
         return UIStatusBarStyleLightContent;
     }
@@ -415,8 +445,8 @@
 
 -(UIFont *)getFontWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
     NSString *preferredFontName; CGFloat preferredFontSize;
-    NSString *fontNameValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@"FontName"]];
-    NSString *fontSizeValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@"FontSize"]];
+    NSString *fontNameValue = [self fetchThemeValueForKey:[key stringByAppendingString:@"FontName"]];
+    NSString *fontSizeValue = [self fetchThemeValueForKey:[key stringByAppendingString:@"FontSize"]];
     
     if (([fontNameValue caseInsensitiveCompare:@"SYS_DEFAULT_FONT_NAME"] == NSOrderedSame) || (fontNameValue == nil) ){
         preferredFontName = self.systemFont.familyName;
@@ -442,8 +472,8 @@
 
 -(UIFont *)getFontValueWithKey:(NSString *)key andDefaultSize:(CGFloat)defaultSize {
     NSString *preferredFontName; CGFloat preferredFontSize;
-    NSString *fontNameValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@".fontName"]];
-    NSString *fontSizeValue = [self.themePreferences valueForKeyPath:[key stringByAppendingString:@".textSize"]];
+    NSString *fontNameValue = [self fetchThemeValueForKey:[key stringByAppendingString:@".fontName"]];
+    NSString *fontSizeValue = [self fetchThemeValueForKey:[key stringByAppendingString:@".textSize"]];
     
     if (([fontNameValue caseInsensitiveCompare:@"SYS_DEFAULT_FONT_NAME"] == NSOrderedSame) || (fontNameValue == nil) ){
         preferredFontName = self.systemFont.familyName;
@@ -470,11 +500,14 @@
 - (UIEdgeInsets) getInsetWithKey :(NSString *)chatOwner{
     
     float resolution = [UIScreen mainScreen].scale;
+    float topInset = [[self fetchThemeValueForKey:[chatOwner stringByAppendingString:@"Top"]] floatValue] *resolution;
     
-    float topInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Top"]] floatValue] *resolution;
-    float leftInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Left"]] floatValue] * resolution;
-    float bottomInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Bottom"]] floatValue] * resolution;
-    float rightInset = [[self.themePreferences valueForKeyPath:[chatOwner stringByAppendingString:@"Right"]] floatValue] * resolution;
+    float leftInset = [[self fetchThemeValueForKey:[chatOwner stringByAppendingString:@"Left"]] floatValue] * resolution;
+    
+    float bottomInset = [[self fetchThemeValueForKey:[chatOwner stringByAppendingString:@"Bottom"]] floatValue] * resolution;
+    
+    float rightInset = [[self fetchThemeValueForKey:[chatOwner stringByAppendingString:@"Right"]] floatValue] * resolution;
+    
     UIEdgeInsets bubbleInset = UIEdgeInsetsMake(topInset, leftInset, bottomInset, rightInset);
     return bubbleInset;
 }
@@ -483,12 +516,12 @@
 #pragma mark - Table View
 
 - (int)numberOfChannelListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"ChannelList.ChannelDescriptionTextStyle.maxLines"] intValue];
+    int linesNo = [[self fetchThemeValueForKey:@"ChannelList.ChannelDescriptionTextStyle.maxLines"] intValue];
     return MIN(linesNo, 2);
 }
 
 - (int)numberOfCategoryListDescriptionLines{
-    int linesNo = [[self.themePreferences valueForKeyPath:@"FAQCategoryList.FAQCategoryDescriptionTextStyle.maxLines"] intValue];
+    int linesNo = [[self fetchThemeValueForKey:@"FAQCategoryList.FAQCategoryDescriptionTextStyle.maxLines"] intValue];
     return MIN(linesNo, 2);
 }
 
@@ -528,10 +561,7 @@
 }
 
 -(BOOL) shouldShowPushPrompt{
-    if([self.themePreferences valueForKeyPath:@"Notification.ShowPushPrompt"]){
-        return [[self.themePreferences valueForKeyPath:@"Notification.ShowPushPrompt"] boolValue];
-    }
-    return true;
+    return [[self fetchThemeValueForKey:@"Notification.ShowPushPrompt"] boolValue];
 }
 
 #pragma mark - Article list
@@ -582,7 +612,8 @@
 }
 
 -(NSString *)getArticleDetailCSSFileName{
-    NSString *filename = [self.themePreferences valueForKeyPath:@"Miscellaneous.ArticleDetailCSSFileName"];
+    NSString *filename = [self fetchThemeValueForKey:@"Miscellaneous.ArticleDetailCSSFileName"];
+    
     if (!filename) {
         filename = FD_DEFAULT_ARTICLE_DETAIL_CSS_FILENAME;
     }
@@ -595,7 +626,8 @@
 }
 
 -(UIFont *) sdkFont {
-    NSString *sdkFontString = [self.themePreferences valueForKeyPath:@"Miscellaneous.DefaultGlobalFont"];
+    NSString *sdkFontString = [self fetchThemeValueForKey:@"Miscellaneous.DefaultGlobalFont"];
+    
     UIFont *sysFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     UIFont *sdkFont = [UIFont fontWithName:sdkFontString size:sysFont.pointSize];
     if(sdkFont) {
@@ -742,15 +774,15 @@
 }
 
 -(NSTextAlignment) userMessageTextAlignment{
-    return [self getTextAlignmentForKey:trimString([self.themePreferences valueForKeyPath:@"ConversationDetail.UserMessageTextStyle.textAlignment"])];
+    return [self getTextAlignmentForKey:trimString([self fetchThemeValueForKey:@"ConversationDetail.UserMessageTextStyle.textAlignment"])];
 }
 
 -(NSTextAlignment) agentMessageTextAlignment{
-    return [self getTextAlignmentForKey:trimString([self.themePreferences valueForKeyPath:@"ConversationDetail.TeamMemberMessageTextStyle.textAlignment"])];
+    return [self getTextAlignmentForKey:trimString([self fetchThemeValueForKey:@"ConversationDetail.TeamMemberMessageTextStyle.textAlignment"])];
 }
 
 -(id) getMessageDetailBackgroundComponent{
-    NSString *bgComponent = [self.themePreferences valueForKeyPath:@"ConversationDetail.MessageListStyle.background"];
+    NSString *bgComponent = [self fetchThemeValueForKey:@"ConversationDetail.MessageListStyle.background"];
     if(([bgComponent hasPrefix:@"#"]) && (bgComponent.length == 7)){
         UIColor *color = [FCTheme colorValueWithHex:bgComponent];
         return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
@@ -762,8 +794,7 @@
 }
 
 -(BOOL) isTeamMemberAvatarVisibile{
-    
-    return [[self.themePreferences valueForKeyPath:@"ConversationDetail.TeamMemberAvatarStyle.visible"] boolValue];
+    return [[self fetchThemeValueForKey:@"ConversationDetail.TeamMemberAvatarStyle.visible"] boolValue];
 }
 
 -(UIImage *) getCustomAgentIconComponent{
