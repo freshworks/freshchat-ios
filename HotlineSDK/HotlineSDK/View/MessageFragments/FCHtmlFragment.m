@@ -12,6 +12,7 @@
 #import "FCUtilities.h"
 
 @implementation FCHtmlFragment
+
 -(id) initFragment: (FragmentData *) fragment withFont :(UIFont *)font andType:(enum ConvMessageType) type{
         @synchronized(self) {
             self = [self initWithFrame:CGRectZero];
@@ -21,9 +22,10 @@
                 [self setTextContainerInset:UIEdgeInsetsMake(0, 0, 0, 0)];
                 self.dataDetectorTypes = UIDataDetectorTypeAll;
                 [self setEditable:NO];
-                
+                [self setSelectable:YES];
                 [self setBackgroundColor:UIColor.clearColor];                
                 [self setScrollEnabled:NO];
+                self.delegate = self;
                 self.font = font;
                 if([FCUtilities containsHTMLContent:fragment.content]) {
                     self.attributedText = [FCUtilities getAttributedContentForString:fragment.content withFont:self.font];
@@ -45,4 +47,13 @@
             return self;
         }
     }
+
+    - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+        if ([Freshchat sharedInstance].shouldInteractWithURL != nil) {
+            [Freshchat sharedInstance].shouldInteractWithURL(URL);
+        }
+        return YES;
+    }
+
+
 @end

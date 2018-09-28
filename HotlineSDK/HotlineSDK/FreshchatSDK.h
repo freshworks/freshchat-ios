@@ -295,6 +295,8 @@ enum TagFilterType {
  */
 -(void) dismissFreshchatViews;
 
+@property (nonatomic, copy) BOOL(^shouldInteractWithURL)(NSURL*);
+
 @end
 
 

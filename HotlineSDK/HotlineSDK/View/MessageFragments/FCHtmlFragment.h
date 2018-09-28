@@ -14,7 +14,7 @@ enum ConvMessageType {
     USER = 2
 };
 
-@interface FCHtmlFragment : UITextView
+@interface FCHtmlFragment : UITextView <UITextViewDelegate>
 
 -(id) initFragment: (FragmentData *) fragment withFont :(UIFont *)font andType:(enum ConvMessageType) type;
 

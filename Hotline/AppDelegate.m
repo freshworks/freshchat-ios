@@ -171,6 +171,12 @@
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
 
     config.teamMemberInfoVisible = YES;
+    
+    [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
+        NSLog(@"%@",url.path);        
+        return FALSE;
+    };
+    
     //config.pictureMessagingEnabled = YES;
     config.cameraCaptureEnabled = YES;
     if(![FreshchatUser sharedInstance].firstName){
