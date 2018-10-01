@@ -80,6 +80,14 @@
         NSLog(@"--With tags : %d",count);
     }];
     
+    [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
+        NSLog(@"%@",url.path);
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
+        sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
+        [self presentViewController:sampleController animated:YES completion:nil];
+        return YES;
+    };
+    
     [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
         self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
         NSLog(@"--Without tags : %d",count);
@@ -253,6 +261,7 @@
                                                object:nil];
 }
 SampleController *sampleController;
+
 - (IBAction)chatButtonPressed:(id)sender {
     if(sampleController == nil) {
         UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];

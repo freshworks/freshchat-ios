@@ -50,9 +50,10 @@
 
     - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
         if ([Freshchat sharedInstance].shouldInteractWithURL != nil) {
-            [Freshchat sharedInstance].shouldInteractWithURL(URL);
+            return [Freshchat sharedInstance].shouldInteractWithURL(URL);            
+        } else {
+            return YES;
         }
-        return YES;
     }
 
 
