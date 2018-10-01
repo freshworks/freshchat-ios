@@ -80,14 +80,15 @@
         NSLog(@"--With tags : %d",count);
     }];
     
-    [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
-        NSLog(@"%@",url.path);
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
-        sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
-        [self presentViewController:sampleController animated:YES completion:nil];
-        return YES;
-    };
-    
+    /*
+        [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
+            NSLog(@"%@",url.description);
+            UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
+            sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
+            [self presentViewController:sampleController animated:YES completion:nil];
+            return FALSE;
+        };
+    */
     [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
         self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
         NSLog(@"--Without tags : %d",count);

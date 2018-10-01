@@ -173,7 +173,7 @@
     config.teamMemberInfoVisible = YES;
     
     [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
-        NSLog(@"%@",url.path);        
+        NSLog(@"%@",url.description);        
         return FALSE;
     };
     
