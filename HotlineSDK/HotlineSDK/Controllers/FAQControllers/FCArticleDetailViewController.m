@@ -237,6 +237,9 @@
             [FCFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions];
             return NO;
         }
+        if ([Freshchat sharedInstance].shouldInteractWithURL != nil) {
+            return [Freshchat sharedInstance].shouldInteractWithURL([inRequest URL]);
+        }
         [[UIApplication sharedApplication] openURL:[inRequest URL]];
         return NO;
     }
