@@ -1244,6 +1244,7 @@ typedef struct {
 
 -(void)processPendingCSAT{
     
+    
     if ([FCStringUtil isNotEmptyString:self.inputToolbar.textView.text] || [FCAudioRecorder isRecording]){
         FDLog(@"Not showing CSAT prompt, User is currently engaging input toolbar");
         return;

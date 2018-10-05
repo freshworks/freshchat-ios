@@ -21,6 +21,7 @@
 @property (nonatomic, assign) long sessionTimeOutInterval;
 @property (nonatomic, assign) float activeConvFetchBackoffRatio;
 @property (nonatomic, assign) long activeConvWindow;
+@property (nonatomic, assign) BOOL authJWTEnabled;
 
 @property (nonatomic, strong) FCConversationConfig *conversationConfig;
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;

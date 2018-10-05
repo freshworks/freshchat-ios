@@ -30,8 +30,9 @@
         self.refreshIntervals               = [[FCRefreshIntervals alloc] init];
         self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
         self.accountActive                  = [self getDefaultAccountActive];
+        self.authJWTEnabled                 = [self isAuthJWTEnabled];
         self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
-        self.csatSettings                    = [[FCCSatSettings alloc]init];
+        self.csatSettings                   = [[FCCSatSettings alloc]init];
     }
     return self;
 }
@@ -39,6 +40,13 @@
 -(BOOL) getDefaultAccountActive {
     if ([FCUserDefaults getObjectForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE] != nil) {
         return [FCUserDefaults getBoolForKey:CONFIG_RC_IS_ACCOUNT_ACTIVE];
+    }
+    return YES;
+}
+
+- (BOOL) isAuthJWTEnabled {
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_IS_JWT_ENABLED] != nil) {
+        return [FCUserDefaults getBoolForKey:CONFIG_RC_IS_JWT_ENABLED];
     }
     return YES;
 }

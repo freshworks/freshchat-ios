@@ -34,6 +34,7 @@
 #define CONFIG_RC_FAQ_FETCH_INTERVAL_NORMAL @"config_rc_faq_fetch_interval_normal"
 
 #define CONFIG_RC_IS_ACCOUNT_ACTIVE @"config_rc_is_account_active"
+#define CONFIG_RC_IS_JWT_ENABLED @"config_rc_is_jwt_enabled"
 
 #define CONFIG_RC_MSG_FETCH_INTERVAL_LAIDBACK @"config_rc_msg_fetch_interval_laidback"
 #define CONFIG_RC_MSG_FETCH_INTERVAL_NORMAL @"config_rc_msg_fetch_interval_normal"
