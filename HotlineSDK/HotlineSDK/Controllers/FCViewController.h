@@ -17,7 +17,11 @@
 
 -(void)configureBackButton;
 -(UIViewController <UIGestureRecognizerDelegate> *) gestureDelegate;
-
+-(void)jwtActive;
+-(void)waitForFirstToken;
+-(void)verificationUnderProgress;
+-(void)waitingForRefreshToken;
+-(void)tokenVerificationFailed;
 @end
 
 

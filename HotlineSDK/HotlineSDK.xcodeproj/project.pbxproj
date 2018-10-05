@@ -104,6 +104,7 @@
 		3C160B061D05A59C000440D4 /* FCFAQUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C160B051D05A59C000440D4 /* FCFAQUtil.m */; };
 		3CADFA301E25B20D00829E7F /* FCCategoryViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2D1E25B20D00829E7F /* FCCategoryViewBehaviour.m */; };
 		3CADFA311E25B20D00829E7F /* FCLoadingViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CADFA2F1E25B20D00829E7F /* FCLoadingViewBehaviour.m */; };
+		950A3F85216742990000754E /* JWTAuthValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 950A3F84216742990000754E /* JWTAuthValidator.m */; };
 		C5D4ED991E57036100E121B4 /* FCUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4ED981E57036100E121B4 /* FCUserDefaults.m */; };
 		C5D4ED9D1E574B5C00E121B4 /* FCLocaleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4ED9C1E574B5C00E121B4 /* FCLocaleUtil.m */; };
 		CE06F8B91E2CD18F00D4063B /* FCInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE06F8B81E2CD18F00D4063B /* FCInterstitialViewController.m */; };
@@ -357,6 +358,8 @@
 		3CADFA2D1E25B20D00829E7F /* FCCategoryViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCCategoryViewBehaviour.m; path = Behaviours/FCCategoryViewBehaviour.m; sourceTree = "<group>"; };
 		3CADFA2E1E25B20D00829E7F /* FCLoadingViewBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCLoadingViewBehaviour.h; path = Behaviours/FCLoadingViewBehaviour.h; sourceTree = "<group>"; };
 		3CADFA2F1E25B20D00829E7F /* FCLoadingViewBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCLoadingViewBehaviour.m; path = Behaviours/FCLoadingViewBehaviour.m; sourceTree = "<group>"; };
+		950A3F84216742990000754E /* JWTAuthValidator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JWTAuthValidator.m; sourceTree = "<group>"; };
+		950A3F86216744F40000754E /* JWTAuthValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JWTAuthValidator.h; sourceTree = "<group>"; };
 		95DEF8B520E39B8B00422D58 /* FCProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCProtocols.h; sourceTree = "<group>"; };
 		C5D4ED981E57036100E121B4 /* FCUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCUserDefaults.m; sourceTree = "<group>"; };
 		C5D4ED9A1E5704E000E121B4 /* FCUserDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCUserDefaults.h; sourceTree = "<group>"; };
@@ -545,6 +548,7 @@
 		35B2EEBB1D000E620014867F /* HotlineSDK */ = {
 			isa = PBXGroup;
 			children = (
+				950A3F83216740BE0000754E /* JWTProxy */,
 				35B2EED91D000E620014867F /* FreshchatSDK.h */,
 				35B2EEDA1D000E620014867F /* FreshchatSDK.m */,
 				35B2EEDE1D000E620014867F /* FCMessageHelper.h */,
@@ -919,6 +923,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		950A3F83216740BE0000754E /* JWTProxy */ = {
+			isa = PBXGroup;
+			children = (
+				950A3F84216742990000754E /* JWTAuthValidator.m */,
+				950A3F86216744F40000754E /* JWTAuthValidator.h */,
+			);
+			path = JWTProxy;
+			sourceTree = "<group>";
+		};
 		CE274D001DB78E5C00733EDB /* HCSStarRatingView-1.4.5 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1166,6 +1179,7 @@
 				3CADFA311E25B20D00829E7F /* FCLoadingViewBehaviour.m in Sources */,
 				CE642C1F1F308C1D00264CA0 /* FCAgentMessageCell.m in Sources */,
 				35B2EFB51D000E620014867F /* FCTheme.m in Sources */,
+				950A3F85216742990000754E /* JWTAuthValidator.m in Sources */,
 				CE642C201F308C1D00264CA0 /* FCUserMessageCell.m in Sources */,
 				35D4E81C1D118E9000EFFE07 /* FCImagePreviewController.m in Sources */,
 				35B2EFA51D000E620014867F /* FCCoreServices.m in Sources */,

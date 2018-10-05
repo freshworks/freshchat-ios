@@ -509,8 +509,7 @@ static NSInteger networkIndicator = 0;
 
 + (void) cacheImageWithUrl : (NSString *) url {
     FDWebImageManager *manager = [FDWebImageManager sharedManager];
-    [manager loadImageWithURL:[NSURL URLWithString:url] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        
+    [manager loadImageWithURL:[NSURL URLWithString:url] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {        
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         FDLog(@"Image cached - %@", imageURL);
     }];

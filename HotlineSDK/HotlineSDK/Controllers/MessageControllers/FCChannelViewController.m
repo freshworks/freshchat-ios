@@ -373,4 +373,10 @@
     [self localNotificationUnSubscription];
 }
 
+//JWT Methods
+
+- (void)jwtActive {
+    NSLog(@"jwtActive");
+}
+
 @end

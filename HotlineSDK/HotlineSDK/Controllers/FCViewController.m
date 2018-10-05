@@ -12,8 +12,19 @@
 #import "FCMacros.h"
 #import "FCBarButtonItem.h"
 #import "FCControllerUtils.h"
+#import "JWTAuthValidator.h"
 
 @implementation FCViewController : UIViewController
+
+-(void) viewDidLoad {
+    [super viewDidLoad];
+    [self addJWTObserevers];
+}
+
+-(void) viewDidUnload {
+    [super viewDidUnload];
+    [self removeJWTObserevers];
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -42,6 +53,63 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return [[FCTheme sharedInstance]statusBarStyle];
+}
+
+-(void) addJWTObserevers {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(jwtActive)
+                                                 name:ACTIVE_EVENT
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(waitForFirstToken)
+                                                 name:WAIT_FOR_FIRST_TOKEN_EVENT
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(verificationUnderProgress)
+                                                 name:VERIFICATION_UNDER_PROGRESS_EVENT
+                                               object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(waitingForRefreshToken)
+                                                 name:WAITING_FOR_REFRESH_TOKEN_EVENT
+                                               object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(tokenVerificationFailed)
+                                                 name:TOKEN_VERIFICATION_FAILED_EVENT
+                                               object:nil];
+}
+
+-(void) removeJWTObserevers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ACTIVE_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:WAIT_FOR_FIRST_TOKEN_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:VERIFICATION_UNDER_PROGRESS_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:WAITING_FOR_REFRESH_TOKEN_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:TOKEN_VERIFICATION_FAILED_EVENT object:nil];
+}
+
+-(void)jwtActive {
+    
+}
+
+-(void)waitForFirstToken {
+    
+}
+
+-(void)verificationUnderProgress {
+    
+}
+
+-(void)waitingForRefreshToken {
+    
+}
+
+-(void)tokenVerificationFailed {
+    
 }
 
 @end

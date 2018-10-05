@@ -50,6 +50,7 @@
 #import "FCUserDefaults.h"
 #import "FDImageView.h"
 #import "FCVotingManager.h"
+#import "JWTAuthValidator.h"
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
@@ -464,6 +465,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [self.messagePoller begin];
         }
         [FCUtilities initiatePendingTasks];
+        [JWTAuthValidator sharedInstance];
     }
 }
 
