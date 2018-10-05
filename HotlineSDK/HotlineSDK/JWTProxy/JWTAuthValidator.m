@@ -41,7 +41,7 @@
             break;
     }
     if (![value isEqualToString:@""]) {
-        [[NSNotificationCenter defaultCenter] postNotification:value];
+        [[NSNotificationCenter defaultCenter] postNotificationName:value object:nil];        
     }
 }
 
@@ -56,13 +56,13 @@
 -(void) startTimer {
     _timer = [NSTimer scheduledTimerWithTimeInterval:10.0
                                              target:self
-                                            selector:@selector(fireChange:)
+                                           selector:@selector(fireChange)
                                            userInfo:nil
                                             repeats:true];
     _state = ACTIVE;
 }
 
--(void)fireChange:(NSNotification *)notification {
+-(void)fireChange {
     switch (_state) {
         case ACTIVE:
             _state = WAIT_FOR_FIRST_TOKEN;
