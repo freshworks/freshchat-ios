@@ -14,6 +14,8 @@
 #import "FCLocalization.h"
 #import "FCUtilities.h"
 
+#define VIEWPADDING 4
+
 @interface FCCSATView() <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *transparentView;
@@ -47,7 +49,7 @@
         //CSAT prompt
         self.CSATPrompt = [UIView new];
         self.CSATPrompt.translatesAutoresizingMaskIntoConstraints = NO;
-        self.CSATPrompt.backgroundColor = self.theme.csatPromptBackgroundColor;
+        self.CSATPrompt.backgroundColor = self.theme.csatDialogBackgroundColor;
         self.CSATPrompt.center = self.transparentView.center;
         self.CSATPrompt.layer.cornerRadius = 15;
         [self.transparentView addSubview:self.CSATPrompt];
@@ -66,19 +68,6 @@
             self.surveyTitle.accessibilityIdentifier = @"lblSurveyTitle";
         #endif
         [self.CSATPrompt addSubview:self.surveyTitle];
-        
-        //Submit button
-        self.submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.submitButton setTitleColor:self.theme.csatPromptSubmitButtonColor forState:UIControlStateNormal];
-        self.submitButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.submitButton setTitle:HLLocalizedString(LOC_CUST_SAT_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
-        [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
-        self.submitButton.backgroundColor = [self.theme csatPromptSubmitButtonBackgroundColor];
-        [self.submitButton.titleLabel setFont:[self.theme csatPromptSubmitButtonTitleFont]];
-        #if DEBUG
-        self.submitButton.accessibilityIdentifier = @"btnFeedbackSubmit";
-        #endif
-        [self.CSATPrompt addSubview:self.submitButton];
         
         //Feedback textview
         self.feedbackView = [FCGrowingTextView new];
@@ -103,6 +92,21 @@
         horizontalLine.backgroundColor = self.theme.csatPromptHorizontalLineColor;
         horizontalLine.translatesAutoresizingMaskIntoConstraints = NO;
         [self.CSATPrompt addSubview:horizontalLine];
+        
+        //Submit button
+        self.submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.CSATPrompt.clipsToBounds = YES;
+        [self.submitButton setTitleColor:self.theme.csatPromptSubmitButtonColor forState:UIControlStateNormal];
+        self.submitButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.submitButton setTitle:HLLocalizedString(LOC_CUST_SAT_SUBMIT_BUTTON_TEXT) forState:(UIControlStateNormal)];
+        [self.submitButton addTarget:self action:@selector(submitButtonPressed) forControlEvents:(UIControlEventTouchUpInside)];
+    
+        self.submitButton.backgroundColor = [self.theme csatPromptSubmitButtonBackgroundColor];
+        [self.submitButton.titleLabel setFont:[self.theme csatPromptSubmitButtonTitleFont]];
+#if DEBUG
+        self.submitButton.accessibilityIdentifier = @"btnFeedbackSubmit";
+#endif
+        [self.CSATPrompt addSubview:self.submitButton];
         
         //Layout constraints
         NSDictionary *views = @{@"survey_title" : self.surveyTitle, @"submit_button" : self.submitButton,
@@ -144,11 +148,13 @@
            [self enableSubmitButton:YES];
        }
         
-        NSDictionary *metrics = @{@"feedbackview_height": @(feedbackviewHeight), @"ratingbar_height" : @(ratingbarHeight) };
+        NSDictionary *metrics = @{@"feedbackview_height": @(feedbackviewHeight), @"ratingbar_height" : @(ratingbarHeight),@"padding" : @VIEWPADDING, @"submit_height": @(self.submitButton.intrinsicContentSize.height+VIEWPADDING) };
 
         [FCAutolayoutHelper setHeight:promptHeight forView:self.CSATPrompt inView:self.transparentView];
         
-        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(<=ratingbar_height@900)]-10-[feedback_view(<=feedbackview_height@500)]-[horizontal_line(1)]-8-[submit_button(20)]-8-|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
+        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[survey_title(50)][star_rating_view(<=ratingbar_height@900)]-[feedback_view(<=feedbackview_height@500)]-padding-[horizontal_line(1)][submit_button(submit_height)]|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
+        
+        [self.CSATPrompt addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[submit_button]|" options:NSLayoutFormatAlignAllCenterX metrics:metrics views:views]];
         
         //Initial view config
         self.transparentView.hidden = YES;
@@ -168,7 +174,7 @@
 
 -(UIView *)createStarRatingView{
     FCStarRatingView *starRatingView = [FCStarRatingView new];
-    starRatingView.backgroundColor = self.theme.csatPromptBackgroundColor;
+    starRatingView.backgroundColor = [UIColor clearColor];
     starRatingView.translatesAutoresizingMaskIntoConstraints = NO;
     starRatingView.maximumValue = 5;
     starRatingView.minimumValue = 0;

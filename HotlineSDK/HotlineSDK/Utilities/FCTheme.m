@@ -1056,6 +1056,11 @@
     return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
 }
 
+- (UIColor *)csatDialogBackgroundColor {
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.CustomerSurveyDialogStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
+}
+
 -(UIFont *)csatPromptQuestionTextFont{
     return [self getFontValueWithKey:@"ConversationDetail.CustomerSurveyQuestionTextStyle" andDefaultSize:15];
 }
