@@ -375,22 +375,27 @@
 
 //JWT Methods
 - (void)jwtActive {
+    [super jwtActive];
     NSLog(@"jwtActive:%@",[self class]);
 }
 
 -(void)waitForFirstToken {
+    [super waitForFirstToken];
     NSLog(@"waitForFirstToken:%@",[self class]);
 }
 
 -(void)verificationUnderProgress {
+    [super verificationUnderProgress];
     NSLog(@"verificationUnderProgress:%@",[self class]);
 }
 
 -(void)waitingForRefreshToken {
+    [super waitingForRefreshToken];
     NSLog(@"waitingForRefreshToken:%@",[self class]);
 }
 
 -(void)tokenVerificationFailed {
+    [super tokenVerificationFailed];
     NSLog(@"tokenVerificationFailed:%@",[self class]);
 }
 

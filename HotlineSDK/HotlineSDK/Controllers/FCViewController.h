@@ -14,6 +14,8 @@
 @interface FCViewController : UIViewController
 
 @property BOOL embedded;
+@property (nonatomic,strong) NSDictionary *views;
+@property (nonatomic,strong) UIView *loadingVC;
 
 -(void)configureBackButton;
 -(UIViewController <UIGestureRecognizerDelegate> *) gestureDelegate;
@@ -22,6 +24,7 @@
 -(void)verificationUnderProgress;
 -(void)waitingForRefreshToken;
 -(void)tokenVerificationFailed;
+
 @end
 
 

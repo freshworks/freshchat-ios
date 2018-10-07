@@ -97,11 +97,11 @@
 }
 
 -(void)waitForFirstToken {
-    
+    [self showLoadingScreen];
 }
 
 -(void)verificationUnderProgress {
-    
+    [self removeLoadingScreen];
 }
 
 -(void)waitingForRefreshToken {
@@ -111,5 +111,21 @@
 -(void)tokenVerificationFailed {
     
 }
+
+-(void) showLoadingScreen {
+    self.loadingVC = [[UIView alloc]init];
+    self.loadingVC.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.loadingVC.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.loadingVC];
+    self.views = @{ @"loadingVC" : self.loadingVC};
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[loadingVC]-10-|" options:0 metrics:nil views:self.views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[loadingVC]-10-|" options:0 metrics:nil views:self.views]];
+}
+
+-(void) removeLoadingScreen {
+    [self.loadingVC removeFromSuperview];
+    self.views = @{};
+}
+
 
 @end
