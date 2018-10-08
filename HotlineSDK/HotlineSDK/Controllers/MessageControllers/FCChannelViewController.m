@@ -33,6 +33,7 @@
 #import "FCLoadingViewBehaviour.h"
 #import "FCSecureStore.h"
 #import "FCCSATUtil.h"
+#import "JWTAuthValidator.h"
 
 @interface FCChannelViewController () <HLLoadingViewBehaviourDelegate>
 
@@ -96,8 +97,26 @@
     return NO;
 }
 
--(void)viewDidLoad{
-    [super viewDidLoad];
+-(void) checkStates {
+    switch ([JWTAuthValidator sharedInstance].state) {
+        case ACTIVE:
+            [self jwtActive];
+            break;
+        case WAIT_FOR_FIRST_TOKEN:
+            [self waitForFirstToken];
+            break;
+        case VERIFICATION_UNDER_PROGRESS:
+            [self verificationUnderProgress];
+            break;
+        case WAITING_FOR_REFRESH_TOKEN:
+            [self waitingForRefreshToken];
+            break;
+        case TOKEN_VERIFICATION_FAILED:
+            [self tokenVerificationFailed];
+            break;
+        default:
+            break;
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -106,6 +125,7 @@
     [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
     [self checkRestoreStateChanged];
+    [self checkStates];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -398,5 +418,7 @@
     [super tokenVerificationFailed];
     NSLog(@"tokenVerificationFailed:%@",[self class]);
 }
+
+
 
 @end

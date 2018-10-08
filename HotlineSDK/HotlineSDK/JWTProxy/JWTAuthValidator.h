@@ -26,7 +26,7 @@ enum API_STATES {
 @interface JWTAuthValidator: NSObject
 
 + (instancetype) sharedInstance;
-+ (void) postNotification:(enum API_STATES)state;
++ (void) postNotification;
 @property (strong, nonatomic) NSTimer* timer;
 @property (assign, nonatomic) enum API_STATES state;
 

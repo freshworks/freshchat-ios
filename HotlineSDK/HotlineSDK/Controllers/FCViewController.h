@@ -14,7 +14,7 @@
 @interface FCViewController : UIViewController
 
 @property BOOL embedded;
-@property (nonatomic,strong) NSDictionary *views;
+@property (nonatomic,strong) NSDictionary *viewsVC;
 @property (nonatomic,strong) UIView *loadingVC;
 
 -(void)configureBackButton;
@@ -24,6 +24,10 @@
 -(void)verificationUnderProgress;
 -(void)waitingForRefreshToken;
 -(void)tokenVerificationFailed;
+-(void)resetViews;
+-(void)showLoadingScreen;
+-(void)removeLoadingScreen;
+
 
 @end
 

@@ -19,9 +19,9 @@
     return sharedJWTAuthValidator;
 }
 
-+ (void) postNotification:(enum API_STATES)state {
++ (void) postNotification {
     NSString *value = @"";
-    switch (state) {
+    switch ([[JWTAuthValidator sharedInstance] state]) {
         case ACTIVE:
             value = ACTIVE_EVENT;
             break;
@@ -59,30 +59,30 @@
                                            selector:@selector(fireChange)
                                            userInfo:nil
                                             repeats:true];
-    _state = ACTIVE;
+    self.state = ACTIVE;
 }
 
 -(void)fireChange {
     switch (_state) {
         case ACTIVE:
-            _state = WAIT_FOR_FIRST_TOKEN;
+            self.state = WAIT_FOR_FIRST_TOKEN;
             break;
         case WAIT_FOR_FIRST_TOKEN:
-            _state = VERIFICATION_UNDER_PROGRESS;
+            self.state = VERIFICATION_UNDER_PROGRESS;
             break;
         case VERIFICATION_UNDER_PROGRESS:
-            _state = WAITING_FOR_REFRESH_TOKEN;
+            self.state = WAITING_FOR_REFRESH_TOKEN;
             break;
         case WAITING_FOR_REFRESH_TOKEN:
-            _state = TOKEN_VERIFICATION_FAILED;
+            self.state = TOKEN_VERIFICATION_FAILED;
             break;
         case TOKEN_VERIFICATION_FAILED:
-            _state = ACTIVE;
+            self.state = ACTIVE;
             break;
         default:
             break;
     }
-    [JWTAuthValidator postNotification:_state];
+    [JWTAuthValidator postNotification];
 }
 
 -(void) stopTimer {

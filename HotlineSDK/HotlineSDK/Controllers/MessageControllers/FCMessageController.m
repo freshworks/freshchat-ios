@@ -47,6 +47,7 @@
 #import "FCUserUtil.h"
 #import "FCCoreServices.h"
 #import "FCCSATUtil.h"
+#import "JWTAuthValidator.h"
 
 typedef struct {
     BOOL isLoading;
@@ -174,6 +175,28 @@ typedef struct {
     [self prepareInputToolbar];
 }
 
+-(void) checkStates {
+    switch ([JWTAuthValidator sharedInstance].state) {
+        case ACTIVE:
+            [self jwtActive];
+            break;
+        case WAIT_FOR_FIRST_TOKEN:
+            [self waitForFirstToken];
+            break;
+        case VERIFICATION_UNDER_PROGRESS:
+            [self verificationUnderProgress];
+            break;
+        case WAITING_FOR_REFRESH_TOKEN:
+            [self waitingForRefreshToken];
+            break;
+        case TOKEN_VERIFICATION_FAILED:
+            [self tokenVerificationFailed];
+            break;
+        default:
+            break;
+    }
+}
+
 -(void) setNavigationTitle:(UIViewController *)parent {
         
     UIBarButtonItem *left = parent.navigationItem.leftBarButtonItem;
@@ -289,6 +312,7 @@ typedef struct {
     [self processPendingCSAT];
     [self checkRestoreStateChanged];
     [self.inputToolbar setSendButtonEnabled: [FCStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
+    [self checkStates];
 }
 
 //TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
@@ -1369,24 +1393,52 @@ typedef struct {
 
 //JWT Methods
 - (void)jwtActive {
+    [super jwtActive];
     NSLog(@"jwtActive:%@",[self class]);
 }
 
 -(void)waitForFirstToken {
+    [super waitForFirstToken];
     NSLog(@"waitForFirstToken:%@",[self class]);
 }
 
 -(void)verificationUnderProgress {
+    [super verificationUnderProgress];
+    [self showEditor];
     NSLog(@"verificationUnderProgress:%@",[self class]);
 }
 
 -(void)waitingForRefreshToken {
+    [super waitingForRefreshToken];
     NSLog(@"waitingForRefreshToken:%@",[self class]);
 }
 
 -(void)tokenVerificationFailed {
+    [super tokenVerificationFailed];
+    [self.inputToolbar setHidden:false];
+    [self showAlertWithTitle:@"tokenVerificationFailed"
+                  andMessage:@"tokenVerificationFailed"];
+    if(self.tabBarController != nil) {
+        [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        [self showLoadingScreen];
+    } else {
+        [self dismissViewControllerAnimated:true completion:nil];
+    }
+    _flags.isShowingAlert = YES;
     NSLog(@"tokenVerificationFailed:%@",[self class]);
 }
 
+-(void) showEditor {
+    [self.inputToolbar setHidden:false];
+}
+
+-(void) hideEditor {
+    [self.inputToolbar setHidden:true];
+}
+
+-(void)resetViews {
+    [super resetViews];
+    [self showEditor];
+}
 
 @end

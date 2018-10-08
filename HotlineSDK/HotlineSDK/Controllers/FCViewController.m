@@ -17,13 +17,11 @@
 @implementation FCViewController : UIViewController
 
 -(void) viewDidLoad {
-    [super viewDidLoad];
-    [self addJWTObserevers];
+    [super viewDidLoad];    
 }
 
 -(void) viewDidUnload {
     [super viewDidUnload];
-    [self removeJWTObserevers];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -36,11 +34,17 @@
                                                                     UIBarStyleBlack : UIBarStyleDefault; // barStyle has a different enum but same values .. so hack to clear the update.
         self.navigationController.navigationBar.tintColor = [[FCTheme sharedInstance] navigationBarButtonColor];
     }
+    [self addJWTObserevers];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [FCControllerUtils configureGestureDelegate:[self gestureDelegate] forController:self withEmbedded:self.embedded];
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self removeJWTObserevers];
 }
 
 -(UIViewController<UIGestureRecognizerDelegate> *) gestureDelegate {
@@ -93,39 +97,46 @@
 }
 
 -(void)jwtActive {
-    
+    [self resetViews];
 }
 
 -(void)waitForFirstToken {
+    [self resetViews];
     [self showLoadingScreen];
 }
 
 -(void)verificationUnderProgress {
-    [self removeLoadingScreen];
+    [self resetViews];
 }
 
 -(void)waitingForRefreshToken {
-    
+    [self resetViews];
 }
 
 -(void)tokenVerificationFailed {
-    
+    [self resetViews];
+}
+
+-(void) resetViews {
+    [self removeLoadingScreen];
 }
 
 -(void) showLoadingScreen {
     self.loadingVC = [[UIView alloc]init];
-    self.loadingVC.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.loadingVC.frame = CGRectMake(-20, -20, self.view.frame.size.width, self.view.frame.size.height);
     self.loadingVC.translatesAutoresizingMaskIntoConstraints = NO;
+    self.loadingVC.backgroundColor = UIColor.whiteColor;
+    self.loadingVC.alpha = 0.6;
     [self.view addSubview:self.loadingVC];
-    self.views = @{ @"loadingVC" : self.loadingVC};
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[loadingVC]-10-|" options:0 metrics:nil views:self.views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[loadingVC]-10-|" options:0 metrics:nil views:self.views]];
+    self.viewsVC = @{ @"loadingVC" : self.loadingVC};
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[loadingVC]-0-|" options:0 metrics:nil views:self.viewsVC]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[loadingVC]-0-|" options:0 metrics:nil views:self.viewsVC]];
+    [self.view bringSubviewToFront:self.loadingVC];
 }
 
 -(void) removeLoadingScreen {
     [self.loadingVC removeFromSuperview];
-    self.views = @{};
+    self.viewsVC = @{};
 }
-
 
 @end
