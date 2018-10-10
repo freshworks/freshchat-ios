@@ -1422,7 +1422,7 @@ typedef struct {
 
 -(FCLoadingViewBehaviour*)loadingViewBehaviour {
     if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2 isWaitingForJWT:FALSE];
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
     }
     return _loadingViewBehaviour;
 }
@@ -1443,7 +1443,7 @@ typedef struct {
 
 -(void) showJWTLoading {
     if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2 isWaitingForJWT:FALSE];
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
     }
     [_loadingViewBehaviour toggelJWTState:TRUE];
     [_loadingViewBehaviour showLoadingScreen];

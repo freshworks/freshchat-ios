@@ -51,7 +51,7 @@
 -(FCLoadingViewBehaviour*)loadingViewBehaviour {
     if(_loadingViewBehaviour == nil){
         enum SupportType type = [self.options isKindOfClass:[ConversationOptions class]] ? 2 : 1;
-        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:type isWaitingForJWT:FALSE];
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:type];
     }
     return _loadingViewBehaviour;
 }

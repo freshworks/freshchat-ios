@@ -35,13 +35,13 @@
 
 @implementation FCLoadingViewBehaviour
 
--(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType isWaitingForJWT:(BOOL) isWaitingForJWT{
+-(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType{
     self = [super init];
     if(self){
         self.loadingViewDelegate = viewController;
         self.theme = [FCTheme sharedInstance];
         self.solType = solType;
-        self.isWaitingForJWT = isWaitingForJWT;
+        self.isWaitingForJWT = FALSE;
     }
     return self;
 }

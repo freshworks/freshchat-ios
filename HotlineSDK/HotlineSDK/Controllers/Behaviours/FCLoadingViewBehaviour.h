@@ -24,7 +24,7 @@
 @interface FCLoadingViewBehaviour : NSObject
 
 
--(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType isWaitingForJWT:(BOOL) isWaitingForJWT;
+-(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType;
 
 -(void) load:(long)currentCount;
 -(void) unload;
