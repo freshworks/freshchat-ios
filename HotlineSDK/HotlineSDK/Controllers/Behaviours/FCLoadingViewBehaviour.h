@@ -24,11 +24,15 @@
 @interface FCLoadingViewBehaviour : NSObject
 
 
--(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType;
+-(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType isWaitingForJWT:(BOOL) isWaitingForJWT;
 
 -(void) load:(long)currentCount;
 -(void) unload;
--(void)updateResultsView:(BOOL)isLoading andCount:(long) count;
+-(void) updateResultsView:(BOOL)isLoading andCount:(long) count;
+-(void) toggelJWTState:(BOOL) isAuthInProgress;
+-(BOOL) getJWTState;
+-(void) showLoadingScreen;
+-(void) hideLoadingScreen;
 
 @end
 

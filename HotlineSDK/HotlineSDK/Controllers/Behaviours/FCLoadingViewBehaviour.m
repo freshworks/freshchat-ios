@@ -29,17 +29,19 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) FCEmptyResultView *emptyResultView;
 @property (nonatomic) enum SupportType solType;
+@property (nonatomic) BOOL isWaitingForJWT;
 
 @end
 
 @implementation FCLoadingViewBehaviour
 
--(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType{
+-(instancetype) initWithViewController:(UIViewController <HLLoadingViewBehaviourDelegate> *) viewController withType:(enum SupportType)solType isWaitingForJWT:(BOOL) isWaitingForJWT{
     self = [super init];
     if(self){
         self.loadingViewDelegate = viewController;
         self.theme = [FCTheme sharedInstance];
         self.solType = solType;
+        self.isWaitingForJWT = isWaitingForJWT;
     }
     return self;
 }
@@ -89,6 +91,7 @@
 }
 
 -(void)updateResultsView:(BOOL)isLoading andCount:(long) count{
+    NSLog(@"updateResultsView");
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if(self.loadingViewDelegate == nil ) {
@@ -96,7 +99,9 @@
         }
         
         if(!isLoading || [FCUtilities isAccountDeleted]){
-            [self removeLoadingIndicator];
+            if(!self.isWaitingForJWT) {
+                [self removeLoadingIndicator];
+            }
         }
         if(count == 0) {
             NSString *message;
@@ -112,15 +117,38 @@
             else {
                 message = [self.loadingViewDelegate emptyText];
             }
+            
+            if (self.isWaitingForJWT) {
+                message = @"Waiting for JWT Auth";
+            }
             self.emptyResultView.emptyResultLabel.text = message;
             [self.loadingViewDelegate.view addSubview:self.emptyResultView];
             [FCAutolayoutHelper center:self.emptyResultView onView:self.loadingViewDelegate.view];
         }
         else{
-            self.emptyResultView.frame = CGRectZero;
-            [self.emptyResultView removeFromSuperview];
+            if (!self.isWaitingForJWT) {
+                self.emptyResultView.frame = CGRectZero;
+                [self.emptyResultView removeFromSuperview];
+            }
         }
+        
     });
+}
+
+-(void) toggelJWTState:(BOOL) isAuthInProgress {
+    self.isWaitingForJWT = isAuthInProgress;
+}
+
+-(BOOL) getJWTState{
+    return self.isWaitingForJWT;
+}
+
+-(void) showLoadingScreen {
+    [self load:0];
+}
+
+-(void) hideLoadingScreen {
+    [self updateResultsView:NO andCount:1];
 }
 
 @end

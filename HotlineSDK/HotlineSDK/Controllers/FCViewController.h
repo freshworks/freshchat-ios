@@ -10,24 +10,19 @@
 #define HLViewController_h
 
 #import <UIKit/UIKit.h>
+#import "FCLoadingViewBehaviour.h"
 
 @interface FCViewController : UIViewController
 
 @property BOOL embedded;
-@property (nonatomic,strong) NSDictionary *viewsVC;
-@property (nonatomic,strong) UIView *loadingVC;
 
 -(void)configureBackButton;
 -(UIViewController <UIGestureRecognizerDelegate> *) gestureDelegate;
--(void)jwtActive;
--(void)waitForFirstToken;
--(void)verificationUnderProgress;
--(void)waitingForRefreshToken;
--(void)tokenVerificationFailed;
--(void)resetViews;
--(void)showLoadingScreen;
--(void)removeLoadingScreen;
 
+-(void)jwtEventChange;
+-(void)addJWTObservers;
+-(void)removeJWTObservers;
+- (enum JWT_UI_STATE) getUpdatedAction;
 
 @end
 

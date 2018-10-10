@@ -10,7 +10,7 @@
 
 enum SupportType {
     SOLUTIONS  = 1,
-    CONVERSATION = 2
+    CONVERSATION = 2,
 };
 
 @interface FCEmptyResultView : UIView
@@ -18,6 +18,8 @@ enum SupportType {
 @property (strong, nonatomic) UIImageView *emptyResultImage;
 @property (strong, nonatomic) UILabel *emptyResultLabel;
 
--(id)initWithImage:(UIImage *)image withType:(enum SupportType)solType andText:(NSString *)text;
+-(id)initWithImage:(UIImage *)image
+          withType:(enum SupportType)solType
+           andText:(NSString *)text;
 
 @end

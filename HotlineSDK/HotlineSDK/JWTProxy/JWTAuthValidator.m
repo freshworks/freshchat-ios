@@ -19,32 +19,6 @@
     return sharedJWTAuthValidator;
 }
 
-+ (void) postNotification {
-    NSString *value = @"";
-    switch ([[JWTAuthValidator sharedInstance] state]) {
-        case ACTIVE:
-            value = ACTIVE_EVENT;
-            break;
-        case WAIT_FOR_FIRST_TOKEN:
-            value = WAIT_FOR_FIRST_TOKEN_EVENT;
-            break;
-        case VERIFICATION_UNDER_PROGRESS:
-            value = VERIFICATION_UNDER_PROGRESS_EVENT;
-            break;
-        case WAITING_FOR_REFRESH_TOKEN:
-            value = WAITING_FOR_REFRESH_TOKEN_EVENT;
-            break;
-        case TOKEN_VERIFICATION_FAILED:
-            value = TOKEN_VERIFICATION_FAILED_EVENT;
-            break;
-        default:
-            break;
-    }
-    if (![value isEqualToString:@""]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:value object:nil];        
-    }
-}
-
 - (instancetype)init{
     self = [super init];
     if (self) {
@@ -59,33 +33,89 @@
                                            selector:@selector(fireChange)
                                            userInfo:nil
                                             repeats:true];
-    self.state = ACTIVE;
+    self.prevState = NONE;
+    self.currState = ACTIVE;
 }
 
 -(void)fireChange {
-    switch (_state) {
+    [JWTAuthValidator sharedInstance].prevState = [JWTAuthValidator sharedInstance].currState;
+    switch ([JWTAuthValidator sharedInstance].currState) {
         case ACTIVE:
-            self.state = WAIT_FOR_FIRST_TOKEN;
+            self.currState = WAIT_FOR_FIRST_TOKEN;
             break;
         case WAIT_FOR_FIRST_TOKEN:
-            self.state = VERIFICATION_UNDER_PROGRESS;
+            self.currState = VERIFICATION_UNDER_PROGRESS;
             break;
         case VERIFICATION_UNDER_PROGRESS:
-            self.state = WAITING_FOR_REFRESH_TOKEN;
+            self.currState = WAITING_FOR_REFRESH_TOKEN;
             break;
         case WAITING_FOR_REFRESH_TOKEN:
-            self.state = TOKEN_VERIFICATION_FAILED;
+            self.currState = TOKEN_VERIFICATION_FAILED;
             break;
         case TOKEN_VERIFICATION_FAILED:
-            self.state = ACTIVE;
+            self.currState = ACTIVE;
             break;
         default:
             break;
     }
-    [JWTAuthValidator postNotification];
+    [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
 
--(void) stopTimer {
-    
+-(enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState {
+    if(apiState != NONE) {
+        switch (apiState) {
+            case ACTIVE:
+                return SHOW_CONTENT;
+            case WAIT_FOR_FIRST_TOKEN:
+            case VERIFICATION_UNDER_PROGRESS:
+            case WAITING_FOR_REFRESH_TOKEN:
+                return LOADING;
+            case TOKEN_VERIFICATION_FAILED:
+                return SHOW_ALERT;
+            default:
+                return NO_CHANGE;
+        }
+    }
+    return NO_CHANGE;
 }
+
+-(enum JWT_UI_STATE) getUiActionForTransition {
+    if([JWTAuthValidator sharedInstance].currState == [JWTAuthValidator sharedInstance].prevState) {
+        return NO_CHANGE;
+    }
+    
+    if([JWTAuthValidator sharedInstance].prevState == NONE) {
+        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState:[JWTAuthValidator sharedInstance].currState];
+    }
+
+    if([JWTAuthValidator sharedInstance].currState == NONE) {
+        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].prevState];
+    }
+
+    if([JWTAuthValidator sharedInstance].currState == ACTIVE) {
+        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].currState];
+    } else if([JWTAuthValidator sharedInstance].currState == TOKEN_VERIFICATION_FAILED) {
+        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].currState];
+    } else if([JWTAuthValidator sharedInstance].currState == WAIT_FOR_FIRST_TOKEN) {
+        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].currState];
+    } else if([JWTAuthValidator sharedInstance].currState == WAITING_FOR_REFRESH_TOKEN) {
+        if ([JWTAuthValidator sharedInstance].prevState == ACTIVE) {
+            return SHOW_CONTENT;
+        }
+        return LOADING;
+    } else if([JWTAuthValidator sharedInstance].currState == VERIFICATION_UNDER_PROGRESS) {
+        if([JWTAuthValidator sharedInstance].prevState == ACTIVE || [JWTAuthValidator sharedInstance].prevState == WAITING_FOR_REFRESH_TOKEN){
+            return SHOW_CONTENT;
+        } else {
+            return LOADING;
+        }
+    }
+    
+    return NO_CHANGE;
+}
+
+
+
+
+
 @end

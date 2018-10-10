@@ -57,7 +57,7 @@
 
 -(FCLoadingViewBehaviour*)loadingViewBehaviour {
     if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:1];
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:1 isWaitingForJWT:FALSE];
     }
     return _loadingViewBehaviour;
 }

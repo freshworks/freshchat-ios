@@ -13,6 +13,7 @@
 #import "FCBarButtonItem.h"
 #import "FCControllerUtils.h"
 #import "JWTAuthValidator.h"
+#import "FCAutolayoutHelper.h"
 
 @implementation FCViewController : UIViewController
 
@@ -34,7 +35,6 @@
                                                                     UIBarStyleBlack : UIBarStyleDefault; // barStyle has a different enum but same values .. so hack to clear the update.
         self.navigationController.navigationBar.tintColor = [[FCTheme sharedInstance] navigationBarButtonColor];
     }
-    [self addJWTObserevers];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -44,7 +44,6 @@
 
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self removeJWTObserevers];
 }
 
 -(UIViewController<UIGestureRecognizerDelegate> *) gestureDelegate {
@@ -59,84 +58,35 @@
     return [[FCTheme sharedInstance]statusBarStyle];
 }
 
--(void) addJWTObserevers {
+-(void) addJWTObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(jwtActive)
-                                                 name:ACTIVE_EVENT
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(waitForFirstToken)
-                                                 name:WAIT_FOR_FIRST_TOKEN_EVENT
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(verificationUnderProgress)
-                                                 name:VERIFICATION_UNDER_PROGRESS_EVENT
-                                               object:nil];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(waitingForRefreshToken)
-                                                 name:WAITING_FOR_REFRESH_TOKEN_EVENT
-                                               object:nil];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(tokenVerificationFailed)
-                                                 name:TOKEN_VERIFICATION_FAILED_EVENT
+                                             selector:@selector(jwtEventChange)
+                                                 name:JWT_EVENT
                                                object:nil];
 }
 
--(void) removeJWTObserevers {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:ACTIVE_EVENT object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:WAIT_FOR_FIRST_TOKEN_EVENT object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:VERIFICATION_UNDER_PROGRESS_EVENT object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:WAITING_FOR_REFRESH_TOKEN_EVENT object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:TOKEN_VERIFICATION_FAILED_EVENT object:nil];
+-(void) removeJWTObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:JWT_EVENT object:nil];
 }
 
--(void)jwtActive {
-    [self resetViews];
+-(void) jwtEventChange {
+    
 }
 
--(void)waitForFirstToken {
-    [self resetViews];
-    [self showLoadingScreen];
+- (enum JWT_UI_STATE) getUpdatedAction {
+    return NO_CHANGE;
 }
 
--(void)verificationUnderProgress {
-    [self resetViews];
+- (UIView *)contentDisplayView {
+    return self.view;
 }
 
--(void)waitingForRefreshToken {
-    [self resetViews];
+- (NSString *)emptyText {
+    return @"JWT ERROR";
 }
 
--(void)tokenVerificationFailed {
-    [self resetViews];
-}
-
--(void) resetViews {
-    [self removeLoadingScreen];
-}
-
--(void) showLoadingScreen {
-    self.loadingVC = [[UIView alloc]init];
-    self.loadingVC.frame = CGRectMake(-20, -20, self.view.frame.size.width, self.view.frame.size.height);
-    self.loadingVC.translatesAutoresizingMaskIntoConstraints = NO;
-    self.loadingVC.backgroundColor = UIColor.whiteColor;
-    self.loadingVC.alpha = 0.6;
-    [self.view addSubview:self.loadingVC];
-    self.viewsVC = @{ @"loadingVC" : self.loadingVC};
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[loadingVC]-0-|" options:0 metrics:nil views:self.viewsVC]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[loadingVC]-0-|" options:0 metrics:nil views:self.viewsVC]];
-    [self.view bringSubviewToFront:self.loadingVC];
-}
-
--(void) removeLoadingScreen {
-    [self.loadingVC removeFromSuperview];
-    self.viewsVC = @{};
+- (NSString *)loadingText {
+    return @"Waiting for JWT auth";
 }
 
 @end

@@ -35,7 +35,7 @@
 #import "FCCSATUtil.h"
 #import "JWTAuthValidator.h"
 
-@interface FCChannelViewController () <HLLoadingViewBehaviourDelegate>
+@interface FCChannelViewController () <HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *channels;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -44,30 +44,13 @@
 @property (nonatomic, strong) ConversationOptions *convOptions;
 @property (nonatomic, strong) FCTheme *theme;
 @property BOOL isFilteredView;
+
 @property (nonatomic, strong) FCLoadingViewBehaviour *loadingViewBehaviour;
+@property (nonatomic) BOOL isJWTAlertShown;
 
 @end
 
 @implementation FCChannelViewController
-
--(FCLoadingViewBehaviour*)loadingViewBehaviour {
-    if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
-    }
-    return _loadingViewBehaviour;
-}
-
--(UIView *)contentDisplayView{
-    return self.tableView;
-}
-
--(NSString *)emptyText{
-    return HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-}
-
--(NSString *)loadingText{
-    return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
-}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
@@ -97,35 +80,14 @@
     return NO;
 }
 
--(void) checkStates {
-    switch ([JWTAuthValidator sharedInstance].state) {
-        case ACTIVE:
-            [self jwtActive];
-            break;
-        case WAIT_FOR_FIRST_TOKEN:
-            [self waitForFirstToken];
-            break;
-        case VERIFICATION_UNDER_PROGRESS:
-            [self verificationUnderProgress];
-            break;
-        case WAITING_FOR_REFRESH_TOKEN:
-            [self waitingForRefreshToken];
-            break;
-        case TOKEN_VERIFICATION_FAILED:
-            [self tokenVerificationFailed];
-            break;
-        default:
-            break;
-    }
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [FCCSATUtil deleteExpiredCSAT];
     [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
     [self checkRestoreStateChanged];
-    [self checkStates];
+    [self addJWTObservers];
+    [self jwtEventChange];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -274,6 +236,7 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
+    [self removeJWTObservers];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -389,36 +352,99 @@
                      withRowAnimation:UITableViewRowAnimationNone];
 }
 
+-(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
+    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
+                                        cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == [alertView cancelButtonIndex]){
+        self.isJWTAlertShown = FALSE;
+    }
+}
+
 -(void)dealloc{
     [self localNotificationUnSubscription];
 }
 
-//JWT Methods
-- (void)jwtActive {
-    [super jwtActive];
-    NSLog(@"jwtActive:%@",[self class]);
+#pragma mark - JWT Handling
+
+- (enum JWT_UI_STATE) getUpdatedAction {
+    switch ([[JWTAuthValidator sharedInstance] getUiActionForTransition]) {
+        case LOADING:
+            return LOADING;
+        case SHOW_ALERT:
+            return SHOW_ALERT;
+        default:
+            return NO_CHANGE;
+    };
+    return NO_CHANGE;
 }
 
--(void)waitForFirstToken {
-    [super waitForFirstToken];
-    NSLog(@"waitForFirstToken:%@",[self class]);
-}
-
--(void)verificationUnderProgress {
-    [super verificationUnderProgress];
-    NSLog(@"verificationUnderProgress:%@",[self class]);
-}
-
--(void)waitingForRefreshToken {
-    [super waitingForRefreshToken];
-    NSLog(@"waitingForRefreshToken:%@",[self class]);
-}
-
--(void)tokenVerificationFailed {
-    [super tokenVerificationFailed];
-    NSLog(@"tokenVerificationFailed:%@",[self class]);
+-(void)jwtEventChange {
+    switch ([[JWTAuthValidator sharedInstance] getUiActionForTransition]) {
+        case LOADING:
+            [self showJWTLoading];
+            break;
+        case SHOW_ALERT:
+            [self showJWTVerificationFailedAlert];
+            break;
+        default:
+            [self hideJWTLoading];
+            break;
+    };
 }
 
 
+#pragma mark - LoadingView behaviour change
+
+-(FCLoadingViewBehaviour*)loadingViewBehaviour {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2 isWaitingForJWT:FALSE];
+    }
+    return _loadingViewBehaviour;
+}
+
+-(UIView *)contentDisplayView{
+    return self.tableView;
+}
+
+-(NSString *)emptyText{
+    return HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+}
+
+-(NSString *)loadingText{
+    return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+}
+
+#pragma mark - Show/Hide JWT Loading/Alert
+
+
+-(void) showJWTLoading {
+    [_loadingViewBehaviour toggelJWTState:TRUE];
+    [_loadingViewBehaviour showLoadingScreen];
+    [self.tableView setHidden:true];
+}
+
+-(void) hideJWTLoading {
+    [_loadingViewBehaviour toggelJWTState:FALSE];
+    [_loadingViewBehaviour hideLoadingScreen];
+    [self.tableView setHidden:false];
+}
+
+-(void) showJWTVerificationFailedAlert {
+    [self hideJWTLoading];
+    if(!self.isJWTAlertShown) {
+        [self showAlertWithTitle:@"JWT Failure"
+                      andMessage:@"JWT - Verification Failure"];
+        self.isJWTAlertShown = TRUE;
+        if(self.tabBarController != nil) {
+            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        } else {
+            [self dismissViewControllerAnimated:true completion:nil];
+        }
+    }
+}
 
 @end
