@@ -12,7 +12,7 @@
 #import "FCMacros.h"
 #import "FCBarButtonItem.h"
 #import "FCControllerUtils.h"
-#import "JWTAuthValidator.h"
+#import "FCJWTAuthValidator.h"
 #import "FCAutolayoutHelper.h"
 
 @implementation FCViewController : UIViewController

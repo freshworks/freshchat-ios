@@ -50,7 +50,7 @@
 #import "FCUserDefaults.h"
 #import "FDImageView.h"
 #import "FCVotingManager.h"
-#import "JWTAuthValidator.h"
+#import "FCJWTAuthValidator.h"
 #import "FCJWTUtilities.h"
 
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
@@ -505,7 +505,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [self.messagePoller begin];
         }
         [FCUtilities initiatePendingTasks];
-        [JWTAuthValidator sharedInstance];
+        [FCJWTAuthValidator sharedInstance];
     }
 }
 

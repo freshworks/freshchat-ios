@@ -6,12 +6,12 @@
 //  Copyright © 2018 Freshdesk. All rights reserved.
 //
 
-#import "JWTAuthValidator.h"
+#import "FCJWTAuthValidator.h"
 
-@implementation JWTAuthValidator
+@implementation FCJWTAuthValidator
 
 + (instancetype)sharedInstance {
-    static JWTAuthValidator *sharedJWTAuthValidator = nil;
+    static FCJWTAuthValidator *sharedJWTAuthValidator = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedJWTAuthValidator = [[self alloc]init];
@@ -40,8 +40,8 @@
 }
 
 -(void)fireChange {
-    [JWTAuthValidator sharedInstance].prevState = [JWTAuthValidator sharedInstance].currState;
-    switch ([JWTAuthValidator sharedInstance].currState) {
+    [FCJWTAuthValidator sharedInstance].prevState = [FCJWTAuthValidator sharedInstance].currState;
+    switch ([FCJWTAuthValidator sharedInstance].currState) {
         case ACTIVE:
             self.currState = WAIT_FOR_FIRST_TOKEN;
             break;
@@ -63,8 +63,8 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
 
--(void)fireChange : (enum JWT_STATE) stateChange {
-    [JWTAuthValidator sharedInstance].currState = stateChange;
+- (void) updateAuthState : (enum JWT_STATE) state{
+    [FCJWTAuthValidator sharedInstance].currState = state;
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
 
@@ -87,31 +87,31 @@
 }
 
 -(enum JWT_UI_STATE) getUiActionForTransition {
-    if([JWTAuthValidator sharedInstance].currState == [JWTAuthValidator sharedInstance].prevState) {
+    if([FCJWTAuthValidator sharedInstance].currState == [FCJWTAuthValidator sharedInstance].prevState) {
         return NO_CHANGE;
     }
     
-    if([JWTAuthValidator sharedInstance].prevState == NONE) {
-        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState:[JWTAuthValidator sharedInstance].currState];
+    if([FCJWTAuthValidator sharedInstance].prevState == NONE) {
+        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState:[FCJWTAuthValidator sharedInstance].currState];
     }
 
-    if([JWTAuthValidator sharedInstance].currState == NONE) {
-        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].prevState];
+    if([FCJWTAuthValidator sharedInstance].currState == NONE) {
+        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].prevState];
     }
 
-    if([JWTAuthValidator sharedInstance].currState == ACTIVE) {
-        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].currState];
-    } else if([JWTAuthValidator sharedInstance].currState == TOKEN_VERIFICATION_FAILED) {
-        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].currState];
-    } else if([JWTAuthValidator sharedInstance].currState == WAIT_FOR_FIRST_TOKEN) {
-        return [[JWTAuthValidator sharedInstance] getUiActionForTokenState: [JWTAuthValidator sharedInstance].currState];
-    } else if([JWTAuthValidator sharedInstance].currState == WAITING_FOR_REFRESH_TOKEN) {
-        if ([JWTAuthValidator sharedInstance].prevState == ACTIVE) {
+    if([FCJWTAuthValidator sharedInstance].currState == ACTIVE) {
+        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
+    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_VERIFICATION_FAILED) {
+        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
+    } else if([FCJWTAuthValidator sharedInstance].currState == WAIT_FOR_FIRST_TOKEN) {
+        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
+    } else if([FCJWTAuthValidator sharedInstance].currState == WAITING_FOR_REFRESH_TOKEN) {
+        if ([FCJWTAuthValidator sharedInstance].prevState == ACTIVE) {
             return SHOW_CONTENT;
         }
         return LOADING;
-    } else if([JWTAuthValidator sharedInstance].currState == VERIFICATION_UNDER_PROGRESS) {
-        if([JWTAuthValidator sharedInstance].prevState == ACTIVE || [JWTAuthValidator sharedInstance].prevState == WAITING_FOR_REFRESH_TOKEN){
+    } else if([FCJWTAuthValidator sharedInstance].currState == VERIFICATION_UNDER_PROGRESS) {
+        if([FCJWTAuthValidator sharedInstance].prevState == ACTIVE || [FCJWTAuthValidator sharedInstance].prevState == WAITING_FOR_REFRESH_TOKEN){
             return SHOW_CONTENT;
         } else {
             return LOADING;

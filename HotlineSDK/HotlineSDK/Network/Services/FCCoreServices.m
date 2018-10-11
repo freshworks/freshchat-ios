@@ -26,7 +26,6 @@
 #import "FCVotingManager.h"
 #import "FCJWTUtilities.h"
 
-
 @interface Freshchat ()
 
 -(void)registerDeviceToken;
@@ -57,7 +56,7 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     [request setRelativePath:path andURLParams:@[appKey,clientVersion,@"clientType=2"]];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             [store setObject:FRESHCHAT_SDK_BUILD_NUMBER forKey:HOTLINE_DEFAULTS_SDK_BUILD_NUMBER];
             FDLog(@"SDK build number updated to server");
@@ -109,26 +108,31 @@
     NSMutableDictionary *userInfo = [self getUserInfo:[FCUtilities getUserAliasWithCreate]];
     NSArray *userProperties = [FCCoreServices updatePropertiesTo:userInfo];
     
-    if (!userInfo) {
-        return nil;
-    }
-    
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    NSData *userData;
     NSError *error = nil;
-    
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
+    if(![FCJWTUtilities isUserAuthEnabled]){
+        if(userInfo){
+            userData = [NSJSONSerialization dataWithJSONObject:@{@"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
+        }
+        else{
+            return nil;
+        }
+    }
+    else {
+        userData = [NSJSONSerialization dataWithJSONObject:@{@"jwtAuthToken" :[FreshchatUser sharedInstance].jwtToken, @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
+    }
     
     if (error) {
         FDLog(@"Error while serializing user information");
     }
-    
-    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:userData];
     [request setRelativePath:path andURLParams:@[appKey]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
-            
+            NSDictionary *response = responseInfo.responseAsDictionary;
             FDLog(@"*** User registration status ***");
             
             if (statusCode == 201 || statusCode == 304) {
@@ -137,7 +141,12 @@
                 
                 if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
                 
-                ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
+                if([FCJWTUtilities isUserAuthEnabled]){//For JWT user alias will be taken from response
+                    [FCUtilities updateUserAlias: [response objectForKey:@"alias"]];
+                }
+                else{
+                    ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
+                }
                 
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 [FCCoreServices setAsUploadedTo:userProperties withCompletion:nil];
@@ -165,7 +174,8 @@
             FCUserProperties *property = propertiesToUpload[i];
             if (property.key) {
                 if (property.isUserProperty) {
-                    userInfo[property.key] = property.value;
+                    if(![FCJWTUtilities isUserAuthEnabled])
+                        userInfo[property.key] = property.value;
                 }else{
                     metaInfo[property.key] = property.value;
                 }
@@ -204,7 +214,7 @@
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     [request setRelativePath:path andURLParams:@[@"notification_type=2", notificationID, appKey]];
 
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             [store setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
             ALog(@"Push token registered : %@", pushToken);
@@ -221,6 +231,9 @@
 }
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
+    if([FCJWTUtilities isUserAuthEnabled]){ //Ignore property update for JWT AUTH
+        return;
+    }
     
     static BOOL IN_PROGRESS = NO;
     
@@ -297,7 +310,7 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     [request setBody:encodedInfo];
     [request setRelativePath:path andURLParams:@[appKey]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 200){
@@ -327,7 +340,7 @@
         [request setRelativePath:path andURLParams:@[appKey,@"source=MOBILE"]];
         FCAPIClient *apiClient = [FCAPIClient sharedInstance];
         @try {
-            NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+            NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
                 if (!error) {
                     NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
                     if(statusCode == 200){
@@ -359,7 +372,7 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setRelativePath:path andURLParams:@[appKey]];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 200){
@@ -382,7 +395,7 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setRelativePath:path andURLParams:@[appKey]];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 200){
@@ -429,7 +442,7 @@
     [request setBody:userData];
     [request setRelativePath:path andURLParams:@[appKey]];
     
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"*** Read reciept : Updated Successfully ***")
         }else{
@@ -470,7 +483,7 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithBaseURL:url andMethod:HTTP_METHOD_PUT];
     [request setRelativePath:path andURLParams:@[appKey]];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 202 || statusCode == 200){
@@ -507,7 +520,7 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
             NSDictionary *configDict = responseInfo.responseAsDictionary;
@@ -529,7 +542,7 @@
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
     [request setRelativePath:path andURLParams:@[appKey]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
             if (statusCode == 200) {
@@ -549,8 +562,8 @@
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     //NSString *userAlias = [FCUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_USER_RESTORE_WITH_JWT_PATH,appID];
-    
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RESTORE_WITH_JWT_PATH,appID];
+    [[FreshchatUser sharedInstance] setJwtToken:token];
     NSError *error = nil;
     NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
     
@@ -558,7 +571,7 @@
     [request setBody:userData];
     [request setRelativePath:path andURLParams:@[appKey]];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         NSDictionary *response = responseInfo.responseAsDictionary;
         apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
@@ -569,9 +582,12 @@
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 [FCUtilities initiatePendingTasks];
                 //Authenticated User
+                //[[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
             }
         } else {
             //If the user is not found
+            [FCUtilities resetAlias];
+            [FCUsers removeUserInfo];
         }
         
         if(completion){
@@ -600,7 +616,7 @@
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
     [request setRelativePath:path andURLParams:params];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         NSDictionary *response = responseInfo.responseAsDictionary;
         apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;

@@ -140,7 +140,7 @@ static FCNotificationHandler *handleUpdateNotification;
 
         [request setRelativePath:path andURLParams:@[appKey, afterTime, source]];
         
-        [[FCAPIClient sharedInstance] request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        [[FCAPIClient sharedInstance] request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
             if (!error) {
                 NSDictionary *response = responseInfo.responseAsDictionary;
@@ -337,7 +337,7 @@ static FCNotificationHandler *handleUpdateNotification;
     NSMutableArray *reqParams = [[NSMutableArray alloc]initWithArray:@[token,afterTime]];
     [reqParams addObjectsFromArray:[FCLocaleUtil channelLocaleParams]];
     [request setRelativePath:path andURLParams:reqParams];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error && statusCode == 200) {
             /* This check is added to delete all messages that are migrated from konotor SDK,
@@ -507,7 +507,7 @@ static FCNotificationHandler *handleUpdateNotification;
     ShowNetworkActivityIndicator();
     UIBackgroundTaskIdentifier taskID = [[FCBackgroundTaskManager sharedInstance]beginTask];
 
-    [[FCAPIClient sharedInstance]request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    [[FCAPIClient sharedInstance]request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         
@@ -593,7 +593,7 @@ static FCNotificationHandler *handleUpdateNotification;
     ShowNetworkActivityIndicator();
     
     UIBackgroundTaskIdentifier taskID = [[FCBackgroundTaskManager sharedInstance]beginTask];
-    [[FCAPIClient sharedInstance]request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    [[FCAPIClient sharedInstance]request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
@@ -706,7 +706,7 @@ static FCNotificationHandler *handleUpdateNotification;
     ShowNetworkActivityIndicator();
     UIBackgroundTaskIdentifier taskID = [[FCBackgroundTaskManager sharedInstance]beginTask];
     
-    [[FCAPIClient sharedInstance]request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {        
+    [[FCAPIClient sharedInstance]request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
@@ -757,7 +757,7 @@ static FCNotificationHandler *handleUpdateNotification;
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
     [request setRelativePath:path andURLParams:@[@"clicked=1",appKey]];
-    [[FCAPIClient sharedInstance] request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    [[FCAPIClient sharedInstance] request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         if (!error) {
             FDLog(@"*** Marked as Clicked *** Marketing campaign message with ID  %@", marketingId);
         }else{
@@ -785,7 +785,7 @@ static FCNotificationHandler *handleUpdateNotification;
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_PUT];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH, appID,userAlias,marketingId.stringValue];
     [request setRelativePath:path andURLParams:@[@"seen=1",appKey]];
-    [[FCAPIClient sharedInstance] request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    [[FCAPIClient sharedInstance] request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         [context performBlock:^{
             if (!error) {
                 FDLog(@"*** Marked as Seen *** Marketing campaign message with ID : %@ ", marketingId);
@@ -854,7 +854,7 @@ static FCNotificationHandler *handleUpdateNotification;
         request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"csatResponse": response} options:NSJSONWritingPrettyPrinted error:nil];
         [request setRelativePath:path andURLParams:@[appKey]];
         
-        [[FCAPIClient sharedInstance] request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        [[FCAPIClient sharedInstance] request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
             [context performBlock:^{
                 NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
                 if (!error && statusCode == 201) {

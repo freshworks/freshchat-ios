@@ -33,7 +33,7 @@
 #import "FCLoadingViewBehaviour.h"
 #import "FCSecureStore.h"
 #import "FCCSATUtil.h"
-#import "JWTAuthValidator.h"
+#import "FCJWTAuthValidator.h"
 
 @interface FCChannelViewController () <HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
@@ -370,7 +370,7 @@
 #pragma mark - JWT Handling
 
 - (enum JWT_UI_STATE) getUpdatedAction {
-    switch ([[JWTAuthValidator sharedInstance] getUiActionForTransition]) {
+    switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
         case LOADING:
             return LOADING;
         case SHOW_ALERT:
@@ -382,7 +382,7 @@
 }
 
 -(void)jwtEventChange {
-    switch ([[JWTAuthValidator sharedInstance] getUiActionForTransition]) {
+    switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
         case LOADING:
             [self showJWTLoading];
             break;

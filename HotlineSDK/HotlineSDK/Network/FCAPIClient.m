@@ -10,7 +10,7 @@
 #import "FCMemLogger.h"
 #import "FCUtilities.h"
 #import "FCJWTUtilities.h"
-#import "JWTAuthValidator.h"
+#import "FCJWTAuthValidator.h"
 
 @interface FCAPIClient ()
 
@@ -46,44 +46,42 @@
     
 }
 
--(NSURLSessionDataTask *)request:(FCServiceRequest *)request withHandler:(HLNetworkCallback)handler{
+- (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler{
     if([FCUtilities isAccountDeleted]){
         return Nil;
     }
-    if ([FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
-        //UnAuthenticate State or invalid state
-        [[JWTAuthValidator sharedInstance] fireChange:VERIFICATION_UNDER_PROGRESS];
+    if (isAuthEnabled && [FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
+        
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:VERIFICATION_UNDER_PROGRESS];
         NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
         if (handler) handler(nil, error);
         return Nil;
     }
     
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-
-        if ([FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
-            //UnAuthenticate State or invalid state
-            NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
-            if (handler) handler(nil, error);
-        } else {
-            NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-            
-            FCResponseInfo *responseInfo = [[FCResponseInfo alloc]initWithResponse:response andHTTPBody:data];
-            if (statusCode >= BadRequest) {
-                if(statusCode == Gone){//For GDPR compliance
-                    self.FC_IS_USER_OR_ACCOUNT_DELETED = YES;
-                    [FCUtilities handleGDPRForResponse:responseInfo];
-                    if (handler) handler(responseInfo,nil);
-                }
-                else{
-                    [self logRequest:request];
-                    NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
-                    if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
-                }
+        NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
+        
+        FCResponseInfo *responseInfo = [[FCResponseInfo alloc]initWithResponse:response andHTTPBody:data];
+        if (statusCode >= BadRequest) {
+            if(statusCode == Gone){//For GDPR compliance
+                self.FC_IS_USER_OR_ACCOUNT_DELETED = YES;
+                [FCUtilities handleGDPRForResponse:responseInfo];
+                if (handler) handler(responseInfo,nil);
             }
             else{
-                if (handler) handler(responseInfo, error ? error : nil);
+                [self logRequest:request];
+                NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
+                if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
             }
         }
+        else if (statusCode == UnAuthorized) {
+            //Unauthorized state
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+        }
+        else{
+            if (handler) handler(responseInfo, error ? error : nil);
+        }
+        
     }];
     [task resume];
     return task;

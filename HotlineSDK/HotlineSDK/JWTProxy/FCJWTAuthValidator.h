@@ -1,5 +1,5 @@
 //
-//  JWTAuthValidator.h
+//  ACTIVE.h
 //  HotlineSDK
 //
 //  Created by Sanjith Kanagavel on 05/10/18.
@@ -32,10 +32,10 @@ enum JWT_UI_STATE {
 };
 
 
-@interface JWTAuthValidator: NSObject
+@interface FCJWTAuthValidator: NSObject
 
 + (instancetype) sharedInstance;
-- (void)fireChange : (enum JWT_STATE) stateChange;
+- (void) updateAuthState : (enum JWT_STATE) state;
 
 - (enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState;
 - (enum JWT_UI_STATE) getUiActionForTransition;

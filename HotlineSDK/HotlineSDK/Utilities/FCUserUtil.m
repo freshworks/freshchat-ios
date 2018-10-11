@@ -11,12 +11,16 @@
 #import "FCCoreServices.h"
 #import "FCUserUtil.h"
 #import "FCSecureStore.h"
+#import "FCJWTUtilities.h"
 
 @implementation FCUserUtil
 
 static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(void)registerUser:(void(^)(NSError *error))completion{
+    if([FCJWTUtilities isUserAuthEnabled] && ![FreshchatUser sharedInstance].jwtToken){
+        return;
+    }
     @synchronized ([FCUserUtil class]) {
         if ([FCUserUtil canRegisterUser]) {
             if (IS_USER_REGISTRATION_IN_PROGRESS == NO) {

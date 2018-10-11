@@ -268,6 +268,7 @@ SampleController *sampleController;
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
+    
     options.showContactUsOnAppBar = true;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
@@ -307,8 +308,9 @@ SampleController *sampleController;
 //    UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
 //    [self.navigationController pushViewController:viewController animated:true];
     
-        NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.px8zeIBH6zIn-cZ70_O_PTTH-Y3FYYOe_3Z3X1_s2c0L8P_Ca7cEwFQGCkxjeODi96ZSPa7eR0bhHDXng5Tv52rsJvukrTvsXN_UoQTqvgklAlClZp_GbfzYCLY6zQ2tg5bYrtS6fLHw6Gs3XbDx2b_h1WZ-vQCsQgL1X5EG3y93sLwc2DkjMaGMnp-apoKTWecF0a0v27H5tnfPeLImdTHZc1Y3eHLbNJJYJckxvE6Onux-Bhyh5EyaVUg1Z41Nt9UWKfRLpIOmiA6cA0mZLVegILKYratN5pUPbxLddq9oMBqdKaBAzpNdkzfQzVveYo6Alrg6g_Tzlfni7JIc9mcERbAyNYgGy7rbt6sMtFM3oLuIqMOINJ5rwekG33AiDwrGGUnYLNBs5oPOjgPY_R6gRYfxkYZrHPMuNKsF4obFtCOUSnYEIjNA3yt7w1lkXtbw-BnP0UJGNqO80fEtB-NlRlbKGZ4Ye6DtMFLZ8PCQaYi2Y6eI0MtUHK-Wwp-0TNuhd5gv8WFR-9VHX9WF0LUqDY9BMkDp8ctvQsOerk3aD998_3vmCP0wVUam3wDoZqk246RScV5MdBxPoJ2xymxmP30nueli0SGcbS0J8KYS_jgdRzmAs4KdYPrbJGqUrwLQFAf6XpZokJKVP862sA_VPcgqCg8V0_tS7BbpZoU";
-        [[Freshchat sharedInstance] setUserWithIdToken:jwt];
+        NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IkpvaG4gRG9lIiwicmVmZXJlbmNlX2lkIjoiYWJkQHJyLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.SfcrTXVErs0S_NBz6HruybgbIL_j95i85EtpgZhzXSIj44j44uhfxitoGJwb_SRtSAWwYWHbUDYa7-XgEpwYPjHU-aizYJSiuZIC9pCj2ujYhPEgKgpTMlYwYA-tjdZmaE7lDcmOQ-EXQs4a-WZkCsh3o4VTQ9_f-jG2ASPSL0aF8Twr_5bFUk6pr9P8SfKMS5n9O2s0Vl04ppegTGrwo6r9blirHmNvcZmCRQQ0Pri8cn-w7QFoxtfusrMjgn-S6oXrNx_l4WZOEA3k922g7yn_oQd0sHat6M5MNAwFNA-wTTBVdlhCkeFDZMoasCLecAk7BxuCJD_EtpfxGXZl8n1XC4cmoDCSXIbTkp7lEdHdV2hb00NN1OcARb5KBr9M_3EhqphKVwKW8DsV1_Tpg6xQHgzOSFhCSCg6EdkuUs9HpsYF2mp8LMZ3YgPGqfF1IFriO9DXUdMKzE1PJhfHqTe-Iv2l6FVn-bfEYU11DRJgkOCPp61TBrViQOoIHxS_jESHE9k0-j9BFAI_FDF8bU6joEEso9N985g2-OZXILB6jhilxU4MUCvvxla3MsWosVWYFoGkhoH9ibLjgbAylJ01n0-E6RufcWplD9m3WKtjlL5uInKaC-KBww-NAo4HCk6s-nZByQhTTZKcJ_gJi6uPGWfHmf7VP0AF8UFUc80";
+        //[[Freshchat sharedInstance] setUserWithIdToken:jwt];
+    [[Freshchat sharedInstance] identifyUserWithIdToken:jwt];
 }
 
 - (IBAction)channelFilter2:(id)sender{

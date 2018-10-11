@@ -47,7 +47,7 @@
 #import "FCUserUtil.h"
 #import "FCCoreServices.h"
 #import "FCCSATUtil.h"
-#import "JWTAuthValidator.h"
+#import "FCJWTAuthValidator.h"
 #import "FCLoadingViewBehaviour.h"
 
 typedef struct {
@@ -1398,11 +1398,11 @@ typedef struct {
 #pragma mark - JWT Handling
 
 - (enum JWT_UI_STATE) getUpdatedAction {
-    return [[JWTAuthValidator sharedInstance] getUiActionForTransition];
+    return [[FCJWTAuthValidator sharedInstance] getUiActionForTransition];
 }
 
 -(void)jwtEventChange {
-    switch ([[JWTAuthValidator sharedInstance] getUiActionForTransition]) {
+    switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
         case LOADING:
             [self showJWTLoading];
             break;

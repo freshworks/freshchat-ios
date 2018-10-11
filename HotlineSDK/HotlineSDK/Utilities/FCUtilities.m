@@ -27,6 +27,7 @@
 #import "FCAutolayoutHelper.h"
 #import "FCContainerController.h"
 #import "FDImageView.h"
+#import "FCJWTUtilities.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -717,7 +718,12 @@ static NSInteger networkIndicator = 0;
     user.phoneCountryCode = userDict[@"phoneCountry"];
     user.externalID = userDict[@"identifier"];
     user.restoreID = userDict[@"restoreId"];
-    [[Freshchat sharedInstance]setUser:user];
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [FCUsers storeUserInfo:user];
+    }
+    else{
+        [[Freshchat sharedInstance]setUser:user];
+    }
     [self updateUserAlias: userDict[@"alias"]];
 }
 
