@@ -680,6 +680,19 @@ static NSInteger networkIndicator = 0;
     }];
 }
 
++(void) resetDataAndRestoreWithJwtToken: (NSString *) token withCompletion:(void (^)())completion {
+     [FCCoreServices resetUserData:^{
+         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+         [FCUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
+         FreshchatUser* oldUser = [FreshchatUser sharedInstance];
+         [FCUsers storeUserInfo:oldUser];
+         [FCCoreServices restoreUserWithJwtToken:token withCompletion:nil];
+         if(completion) {
+             completion();
+         }
+     }];
+}
+
 +(void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID {
     if (restoreID && externalID) {
         if ( restoreID != [FreshchatUser sharedInstance].restoreID || externalID != [FreshchatUser sharedInstance].externalID ) {

@@ -22,7 +22,9 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        [self startTimer];
+        self.prevState = NONE;
+        self.currState = NONE;
+      //  [self startTimer];
     }
     return self;
 }
@@ -58,6 +60,11 @@
         default:
             break;
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
+}
+
+-(void)fireChange : (enum JWT_STATE) stateChange {
+    [JWTAuthValidator sharedInstance].currState = stateChange;
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
 

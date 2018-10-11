@@ -36,7 +36,7 @@
 
 - (void) updateUserAuthConfig : (NSDictionary *) info {
     [FCUserDefaults setBool:[info[@"jwtAuthEnabled"] boolValue] forKey:CONFIG_RC_JWT_AUTH_ENABLED];
-    [FCUserDefaults setBool:[info[@"StrictModeEnabled"] boolValue] forKey:CONFIG_RC_JWT_AUTH_STRICT_MODE_ENABLED];
+    [FCUserDefaults setBool:[info[@"strictModeEnabled"] boolValue] forKey:CONFIG_RC_JWT_AUTH_STRICT_MODE_ENABLED];
 }
 
 @end

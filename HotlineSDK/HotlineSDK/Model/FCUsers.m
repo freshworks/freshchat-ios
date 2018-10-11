@@ -12,6 +12,7 @@
 #import "FCMacros.h"
 #import "FCUtilities.h"
 #import "FCSecureStore.h"
+#import "FCJWTUtilities.h"
 
 @implementation FCUsers
 
@@ -58,7 +59,10 @@
         [FCUserProperties createNewPropertyForKey:@"restoreId" WithValue:userInfo.restoreID isUserProperty:YES];
         [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
         [FCUserProperties createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
-        
+        if (userInfo.jwtToken && ![userInfo.jwtToken isEqualToString:@""]) {
+            [store setObject:userInfo.jwtToken forKey:HOTLINE_DEFAULTS_USER_JWT_TOKEN];
+            [FCUserProperties createNewPropertyForKey:@"jwtToken" WithValue:userInfo.jwtToken isUserProperty:YES];
+        }
         [[FCDataManager sharedInstance]save];
     }];
 }
@@ -79,6 +83,7 @@
     [FreshchatUser sharedInstance].phoneCountryCode = nil;
     [FreshchatUser sharedInstance].restoreID = nil;
     [FreshchatUser sharedInstance].externalID = nil;
+    [FreshchatUser sharedInstance].jwtToken = nil;
 }
 
 +(FCUsers *)getUser{

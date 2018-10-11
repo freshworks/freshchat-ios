@@ -181,7 +181,8 @@
     NSLog(@"Current User :Name  %@ %@", [FreshchatUser sharedInstance].firstName,[FreshchatUser sharedInstance].lastName);
     NSLog(@"Current User :Identifier  %@ restoreID: %@", [FreshchatUser sharedInstance].externalID, [FreshchatUser sharedInstance].restoreID);
     [[Freshchat sharedInstance]initWithConfig:config];
-    
+//    NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.px8zeIBH6zIn-cZ70_O_PTTH-Y3FYYOe_3Z3X1_s2c0L8P_Ca7cEwFQGCkxjeODi96ZSPa7eR0bhHDXng5Tv52rsJvukrTvsXN_UoQTqvgklAlClZp_GbfzYCLY6zQ2tg5bYrtS6fLHw6Gs3XbDx2b_h1WZ-vQCsQgL1X5EG3y93sLwc2DkjMaGMnp-apoKTWecF0a0v27H5tnfPeLImdTHZc1Y3eHLbNJJYJckxvE6Onux-Bhyh5EyaVUg1Z41Nt9UWKfRLpIOmiA6cA0mZLVegILKYratN5pUPbxLddq9oMBqdKaBAzpNdkzfQzVveYo6Alrg6g_Tzlfni7JIc9mcERbAyNYgGy7rbt6sMtFM3oLuIqMOINJ5rwekG33AiDwrGGUnYLNBs5oPOjgPY_R6gRYfxkYZrHPMuNKsF4obFtCOUSnYEIjNA3yt7w1lkXtbw-BnP0UJGNqO80fEtB-NlRlbKGZ4Ye6DtMFLZ8PCQaYi2Y6eI0MtUHK-Wwp-0TNuhd5gv8WFR-9VHX9WF0LUqDY9BMkDp8ctvQsOerk3aD998_3vmCP0wVUam3wDoZqk246RScV5MdBxPoJ2xymxmP30nueli0SGcbS0J8KYS_jgdRzmAs4KdYPrbJGqUrwLQFAf6XpZokJKVP862sA_VPcgqCg8V0_tS7BbpZoU";
+//    [[Freshchat sharedInstance] setUserWithIdToken:jwt];
     //if(![FreshchatUser sharedInstance].restoreID)
     //{
         //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];

@@ -24,6 +24,7 @@
 #import "FCUserUtil.h"
 #import "FCLocalNotification.h"
 #import "FCVotingManager.h"
+#import "FCJWTUtilities.h"
 
 
 @interface Freshchat ()
@@ -113,6 +114,7 @@
     }
     
     NSError *error = nil;
+    
     NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
     
     if (error) {
@@ -537,6 +539,44 @@
             }
         }
         if (handler) handler(responseInfo,error);
+    }];
+    return task;
+}
+
++(NSURLSessionDataTask *)restoreUserWithJwtToken:(NSString *)token withCompletion:(void (^)(NSError *))completion{
+    
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    //NSString *userAlias = [FCUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_USER_RESTORE_WITH_JWT_PATH,appID];
+    
+    NSError *error = nil;
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
+    
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setBody:userData];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        NSDictionary *response = responseInfo.responseAsDictionary;
+        apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
+        if (statusCode == 200) { //If the user is found
+            if (![[FCUtilities currentUserAlias] isEqual:response[@"alias"]]) {
+                [FCUtilities updateUserWithData:response];
+                [FCUserUtil setUserMessageInitiated];
+                [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                [FCUtilities initiatePendingTasks];
+                //Authenticated User
+            }
+        } else {
+            //If the user is not found
+        }
+        
+        if(completion){
+            completion(error);
+        }
     }];
     return task;
 }

@@ -153,6 +153,11 @@ enum TagFilterType {
  *
  */
 -(void)setUser:(FreshchatUser *) user;
+/*
+ * Set user for JWT Auth strict mode
+ * Sync any change to user information, specified in JWT Token with Freshchat
+ */
+- (void)setUserWithIdToken :(NSString *) token;
 /**
 *  Restore User
 *
@@ -165,6 +170,13 @@ enum TagFilterType {
 *
 */
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID;
+/**
+ *Identify and restore an user base on reference_id
+ *
+ *@param jwtToken The Jwt Id Token for the current user signed by your account's private key
+ *
+ */
+-(void)identifyUserWithIdToken:(NSString *) jwtIdToken;
 /**
  *  Clear User Data
  *

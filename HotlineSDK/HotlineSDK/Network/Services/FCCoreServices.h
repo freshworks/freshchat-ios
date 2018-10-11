@@ -40,6 +40,8 @@
 
 +(NSURLSessionDataTask *)restoreUserWithExtId:(NSString *)extId restoreId:(NSString *)restoreIdVal withCompletion:(void (^)(NSError *))completion;
 
++(NSURLSessionDataTask *)restoreUserWithJwtToken:(NSString *)token withCompletion:(void (^)(NSError *))completion;
+
 +(void) resetUserData:(void (^)())completion;
 
 +(void) setAsUploadedTo:(NSArray *) properties withCompletion:(void (^)())completion;

@@ -51,6 +51,8 @@
 #import "FDImageView.h"
 #import "FCVotingManager.h"
 #import "JWTAuthValidator.h"
+#import "FCJWTUtilities.h"
+
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
@@ -136,9 +138,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             @throw ([NSException exceptionWithName:exception.name reason:exception.description userInfo:nil]);
         }
     }
+    
+//    NSString *jwtString = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjIsImhlbGxvIjp0cnVlLCJwcm9wIjoxMjN9.XbR7r3e_p98UDafk77WYKk1RJxrPd7ow3fL4YNWWD-DFovfuZgkJatWPDST-s9fp8DynA6Iod8_iJgG3at1bbM3IwxipgsHwgAEub_9ch5DBFHPIG6zo98Ev3nsr0GRKkvxJpTuF_W-ljYWya_Y7DITdRSSH4as8hXuyH9PZGN2iVbgL-kw4hpbJ10VCyLOs2chjHf0DzuWUR3Y2DlEm7kugd3Yb3kje0LIiD8zNn5Canm9eW6oRvETrPwVHhrpT4xc8esz0WepWT__zgeNzudtGW7S0udi_ZF5CLlWGChgAEFUxYsqqktBOLo9V0dsFTiiG8WqgvplwFgFs0e2GR9opQnztxzLOav6fmRKzatylyLfLXHoiiW3Nv95LZBNYQuMNoGUni3cV87Wl9Qg9v9_f2WiwXc86dPkwmlbIeG8z9Oph74iaWAJOwDWNgcsZ5-gdmi3olffF7KjifRGyztuWjIL-IeWUGC6bmo2tlCO0bI-_vMPcHtHwNUJIzk-9JLTT66acKGYsDJN2zSu8AhPZhRM3xbaLfLIrzITp00lK7yNz5MHv6J8yGTAA46h1j6NUpc_rBEC4pc9Afe0Gvpw23dEVnd3cW71RctdBUsqisawH6gdVgKq3xN9tVtz5sqvity4fgZeRHt1NBY20C0UjXlTRsymmcrYxXX-yjz8";
+//    NSDictionary *dict = [FCJWTUtilities getJWTUserPayloadFromToken:jwtString];
+    
 }
 
 -(void)initWithConfig:(FreshchatConfig *)config completion:(void(^)(NSError *error))completion{
+    //Call user restore
     FreshchatConfig *processedConfig = [self processConfig:config];
     
     self.config = processedConfig;
@@ -201,6 +208,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 - (void) addInvalidAppIDKeyExceptionString :(NSString *) string{
     [NSException raise:@"FreshchatInvalidArgumentException" format:@"Initialization failed : FreshchatSDK initialized with invalid %@", string];
+}
+
+- (void) addInvalidMethodException : (NSString *) apiName {
+    [NSException raise:@"FreshchatInvalidMethodException" format:@"API failed : FreshchatSDK failed with invalid API - %@", apiName];
 }
 
 -(void)checkMediaPermissions:(FreshchatConfig *)config{
@@ -343,8 +354,29 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)setUser:(FreshchatUser *)user{
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        return;
+    }
     [FCUsers storeUserInfo:user];
     [FCCoreServices uploadUnuploadedProperties];
+}
+
+- (void) setUserWithIdToken :(NSString *) token {
+    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+    fcUser.jwtToken = token;
+    [FCUsers storeUserInfo:fcUser];
+}
+
+-(void)identifyUserWithIdToken:(NSString *) jwtToken{
+    if(jwtToken.length == 0){
+        ALog(@"Freshchat : JWT token missing for identifyUser API!");
+        return;
+    }
+    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+    fcUser.jwtToken = jwtToken;
+    [FCUsers storeUserInfo:fcUser];
+    [FCUtilities resetDataAndRestoreWithJwtToken:jwtToken withCompletion:nil];
 }
 
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID {
@@ -409,6 +441,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)setUserProperties:(NSDictionary*)props{
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        return;
+    }
     [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
         NSDictionary *filteredProps = [FCUtilities filterValidUserPropEntries:props];
         if(filteredProps){
@@ -431,6 +467,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 
 -(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        return;
+    }
     if (key && value) {
         [self setUserProperties:@{ key : value}];
     }

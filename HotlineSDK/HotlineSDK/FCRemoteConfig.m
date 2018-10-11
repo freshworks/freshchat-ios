@@ -30,9 +30,9 @@
         self.refreshIntervals               = [[FCRefreshIntervals alloc] init];
         self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
         self.accountActive                  = [self getDefaultAccountActive];
-        self.authJWTEnabled                 = [self isAuthJWTEnabled];
         self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
         self.csatSettings                   = [[FCCSatSettings alloc]init];
+        self.userAuthConfig                 = [[FCUserAuthConfig alloc] init];
     }
     return self;
 }
@@ -90,7 +90,6 @@
     if (csatSettingsDict != nil) {
         [self.csatSettings updateCSatConfig:csatSettingsDict];
     }
-    
     if (userAuthConfig != nil) {
         [self.userAuthConfig updateUserAuthConfig:userAuthConfig];
     }

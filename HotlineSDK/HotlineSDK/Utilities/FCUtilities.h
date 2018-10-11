@@ -23,6 +23,7 @@
     @property (nonatomic) BOOL isRestoring;
     @property (strong, nonatomic, readwrite) NSString *externalID;
     @property (strong, nonatomic, readwrite) NSString *restoreID;
+    @property (strong, nonatomic, readwrite) NSString *jwtToken;
 @end
 
 
@@ -35,6 +36,7 @@
 +(NSString *)getUserAliasWithCreate;
 +(NSString *)generateUserAlias;
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion;
++(void) resetDataAndRestoreWithJwtToken: (NSString *) token withCompletion:(void (^)())completion;
 + (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController;
 
 +(UIImage *)imageWithColor:(UIColor *)color;
