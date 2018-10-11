@@ -24,7 +24,7 @@ typedef void(^HLNetworkCallback)(FCResponseInfo *responseInfo, NSError *error);
 
 +(id)sharedInstance;
 
-- (NSURLSessionDataTask *)request:(FCServiceRequest *)request withHandler:(HLNetworkCallback)handler;
+- (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler;
 
 @end
 

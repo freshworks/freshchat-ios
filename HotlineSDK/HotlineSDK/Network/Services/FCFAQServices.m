@@ -54,7 +54,7 @@
     [request setRelativePath:path andURLParams:reqParams];
     [request setValue:[lastUpdateTime stringValue]  forHTTPHeaderField:IF_MODIFIED_SINCE];
     
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
             FCDataManager *dataManager = [FCDataManager sharedInstance];
@@ -183,7 +183,7 @@
     }
     NSData *postData = [NSJSONSerialization dataWithJSONObject:voteInfo options:0 error:nil];
     [request setBody:postData];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo,NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request  isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo,NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
             FDLog(@"Article vote successful");

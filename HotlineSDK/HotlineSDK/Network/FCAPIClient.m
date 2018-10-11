@@ -46,12 +46,12 @@
     
 }
 
--(NSURLSessionDataTask *)request:(FCServiceRequest *)request withHandler:(HLNetworkCallback)handler{
+- (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler{
     if([FCUtilities isAccountDeleted]){
         return Nil;
     }
-    if ([FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
-        //UnAuthenticate State or invalid state
+    if (isAuthEnabled && [FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
+        
         [[JWTAuthValidator sharedInstance] fireChange:VERIFICATION_UNDER_PROGRESS];
         NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
         if (handler) handler(nil, error);
@@ -60,7 +60,7 @@
     
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 
-        if ([FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
+        if (isAuthEnabled && [FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
             //UnAuthenticate State or invalid state
             NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
             if (handler) handler(nil, error);
