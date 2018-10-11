@@ -186,9 +186,6 @@ typedef struct {
     [self prepareInputToolbar];
 }
 
--(void) checkStates {
-}
-
 -(void) setNavigationTitle:(UIViewController *)parent {
         
     UIBarButtonItem *left = parent.navigationItem.leftBarButtonItem;
@@ -1432,11 +1429,11 @@ typedef struct {
 }
 
 -(NSString *)emptyText{
-    return HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+    return @"";
 }
 
 -(NSString *)loadingText{
-    return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+    return @"";
 }
 
 #pragma mark - Show/Hide JWT Loading/Alert

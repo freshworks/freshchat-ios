@@ -17,14 +17,6 @@
 
 @implementation FCViewController : UIViewController
 
--(void) viewDidLoad {
-    [super viewDidLoad];    
-}
-
--(void) viewDidUnload {
-    [super viewDidUnload];
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (self.navigationController == nil) {
@@ -40,10 +32,6 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [FCControllerUtils configureGestureDelegate:[self gestureDelegate] forController:self withEmbedded:self.embedded];
-}
-
--(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
 }
 
 -(UIViewController<UIGestureRecognizerDelegate> *) gestureDelegate {
@@ -70,23 +58,7 @@
 }
 
 -(void) jwtEventChange {
-    
-}
-
-- (enum JWT_UI_STATE) getUpdatedAction {
-    return NO_CHANGE;
-}
-
-- (UIView *)contentDisplayView {
-    return self.view;
-}
-
-- (NSString *)emptyText {
-    return @"JWT ERROR";
-}
-
-- (NSString *)loadingText {
-    return @"Waiting for JWT auth";
+    // Just a skeleton method
 }
 
 @end

@@ -44,7 +44,6 @@
 @property (nonatomic, strong) ConversationOptions *convOptions;
 @property (nonatomic, strong) FCTheme *theme;
 @property BOOL isFilteredView;
-
 @property (nonatomic, strong) FCLoadingViewBehaviour *loadingViewBehaviour;
 @property (nonatomic) BOOL isJWTAlertShown;
 
@@ -419,7 +418,6 @@
 }
 
 #pragma mark - Show/Hide JWT Loading/Alert
-
 
 -(void) showJWTLoading {
     [_loadingViewBehaviour toggelJWTState:TRUE];

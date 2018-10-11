@@ -10,7 +10,6 @@
 #define HLViewController_h
 
 #import <UIKit/UIKit.h>
-#import "FCLoadingViewBehaviour.h"
 
 @interface FCViewController : UIViewController
 
@@ -22,7 +21,6 @@
 -(void)jwtEventChange;
 -(void)addJWTObservers;
 -(void)removeJWTObservers;
-- (enum JWT_UI_STATE) getUpdatedAction;
 
 @end
 
