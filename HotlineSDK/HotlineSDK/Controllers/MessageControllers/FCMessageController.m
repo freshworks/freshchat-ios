@@ -464,6 +464,7 @@ typedef struct {
     self.bannerMessageView = [UIView new];
     self.bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
     self.bannerMessageView.backgroundColor = [[FCTheme sharedInstance] conversationOverlayBackgroundColor];
+    self.messageDetailView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.messageDetailView addSubview:self.bannerMessageView];
 
     self.bannerMesagelabel = [[UILabel alloc] init];
@@ -578,7 +579,6 @@ typedef struct {
 
 -(void)updateBottomViewWith:(UIView *)view andHeight:(CGFloat) height{
     [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
     [self.bottomView addSubview:view];
     self.bottomViewHeightConstraint.constant = height;
     
