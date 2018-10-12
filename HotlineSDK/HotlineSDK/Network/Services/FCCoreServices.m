@@ -612,7 +612,7 @@
     } else {
         return nil;
     }
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_USER_RESTORE_PATH,appID];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RESTORE_PATH,appID];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
     [request setRelativePath:path andURLParams:params];

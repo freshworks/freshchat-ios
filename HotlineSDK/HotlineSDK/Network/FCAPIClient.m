@@ -41,10 +41,10 @@
     return self;
 }
 
-//method has to be wrirren with validator
-- (void) validateStateForUserJWTWithCompletionHandler : (void(^)(enum API_STATES))handler{
-    
-}
+////method has to be wrirren with validator
+//- (void) validateStateForUserJWTWithCompletionHandler : (void(^)(enum API_STATES))handler{
+//    
+//}
 
 - (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler{
     if([FCUtilities isAccountDeleted]){
@@ -53,6 +53,7 @@
     if (isAuthEnabled && [FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
         
         [[FCJWTAuthValidator sharedInstance] updateAuthState:VERIFICATION_UNDER_PROGRESS];
+
         NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
         if (handler) handler(nil, error);
         return Nil;

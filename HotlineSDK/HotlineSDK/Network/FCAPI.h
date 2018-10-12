@@ -58,7 +58,7 @@
 
 #define HOTLINE_API_TYPLICAL_REPLY @"app/services/app/%@/channels/response_time"
 
-#define FRESHCHAT_USER_RESTORE_PATH @"/app/services/app/%@/user/restore"
+#define FRESHCHAT_API_USER_RESTORE_PATH @"/app/services/app/%@/user/restore"
 
 #define FRESHCHAT_API_JWT_VALIDATE @"/app/services/app/webchat/%@/jwt/validate"
 
