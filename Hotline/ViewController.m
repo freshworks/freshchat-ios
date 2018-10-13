@@ -309,8 +309,8 @@ SampleController *sampleController;
 //    [self.navigationController pushViewController:viewController animated:true];
     
         NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IkpvaG4gRG9lIiwicmVmZXJlbmNlX2lkIjoiYWJkQHJyLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.SfcrTXVErs0S_NBz6HruybgbIL_j95i85EtpgZhzXSIj44j44uhfxitoGJwb_SRtSAWwYWHbUDYa7-XgEpwYPjHU-aizYJSiuZIC9pCj2ujYhPEgKgpTMlYwYA-tjdZmaE7lDcmOQ-EXQs4a-WZkCsh3o4VTQ9_f-jG2ASPSL0aF8Twr_5bFUk6pr9P8SfKMS5n9O2s0Vl04ppegTGrwo6r9blirHmNvcZmCRQQ0Pri8cn-w7QFoxtfusrMjgn-S6oXrNx_l4WZOEA3k922g7yn_oQd0sHat6M5MNAwFNA-wTTBVdlhCkeFDZMoasCLecAk7BxuCJD_EtpfxGXZl8n1XC4cmoDCSXIbTkp7lEdHdV2hb00NN1OcARb5KBr9M_3EhqphKVwKW8DsV1_Tpg6xQHgzOSFhCSCg6EdkuUs9HpsYF2mp8LMZ3YgPGqfF1IFriO9DXUdMKzE1PJhfHqTe-Iv2l6FVn-bfEYU11DRJgkOCPp61TBrViQOoIHxS_jESHE9k0-j9BFAI_FDF8bU6joEEso9N985g2-OZXILB6jhilxU4MUCvvxla3MsWosVWYFoGkhoH9ibLjgbAylJ01n0-E6RufcWplD9m3WKtjlL5uInKaC-KBww-NAo4HCk6s-nZByQhTTZKcJ_gJi6uPGWfHmf7VP0AF8UFUc80";
-        //[[Freshchat sharedInstance] setUserWithIdToken:jwt];
-    [[Freshchat sharedInstance] identifyUserWithIdToken:jwt];
+        [[Freshchat sharedInstance] setUserWithIdToken:jwt];
+    //[[Freshchat sharedInstance] identifyUserWithIdToken:jwt];
 }
 
 - (IBAction)channelFilter2:(id)sender{

@@ -680,4 +680,30 @@
     }];
 }
 
++ (NSURLSessionDataTask *)validateJwtToken:(NSString *)token completion:(void(^)(BOOL valid, NSError *error))handler {
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE,appID];
+    [[FreshchatUser sharedInstance] setJwtToken:token];
+    NSError *error = nil;
+    NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
+    
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setBody:jwtData];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        if(handler){
+            if (statusCode == 200) {
+                handler(true, error);
+            } else {
+                handler(false, error);
+            }
+        }
+    }];
+    return task;
+}
+
 @end

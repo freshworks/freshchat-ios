@@ -22,6 +22,8 @@
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 
++(NSURLSessionDataTask *)validateJwtToken:(NSString *)token completion:(void(^)(BOOL valid, NSError *error))handler;
+
 +(NSURLSessionDataTask *)registerUserConversationActivity :(FCMessages *)message;
 
 +(void)uploadUnuploadedProperties;

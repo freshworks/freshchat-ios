@@ -363,9 +363,13 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (void) setUserWithIdToken :(NSString *) token {
-    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
-    fcUser.jwtToken = token;
-    [FCUsers storeUserInfo:fcUser];
+    [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
+        if(!error && valid){
+            FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+            fcUser.jwtToken = token;
+            [FCUsers storeUserInfo:fcUser];
+        }
+    }];
 }
 
 -(void)identifyUserWithIdToken:(NSString *) jwtToken{
