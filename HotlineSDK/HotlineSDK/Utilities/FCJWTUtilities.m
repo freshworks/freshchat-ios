@@ -8,12 +8,13 @@
 
 #import "FCJWTUtilities.h"
 #import "FCRemoteConfig.h"
+#import "FCUtilities.h"
 
 @implementation FCJWTUtilities
 
 + (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) token{
     
-    if(!token.length) return 0;
+    if(!token.length) return @{};
     NSArray *tokenStucture = [token componentsSeparatedByString:@"."];
     
     NSString *tokenPayload = [tokenStucture objectAtIndex:1];
@@ -29,8 +30,25 @@
     return ([FCRemoteConfig sharedInstance].userAuthConfig.isjwtAuthEnabled && [FCRemoteConfig sharedInstance].userAuthConfig.isStrictModeEnabled);
 }
 
-+ (BOOL) isExpiredJWTToken {
-    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:[FCUserDefaults getObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME]];
++ (BOOL) isJWTTokenExpired {
+    if([FreshchatUser sharedInstance].jwtToken){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:[FreshchatUser sharedInstance].jwtToken];
+        if([jwtTokenInfo objectForKey:@"iat"] && [jwtTokenInfo objectForKey:@"exp"]){
+             NSTimeInterval currentRequestTime = [FCUtilities getCurrentTimeInMillis];
+            if(currentRequestTime > ([[jwtTokenInfo objectForKey:@"exp"] longValue] * ONE_SECONDS_IN_MS)){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
++ (BOOL) hasValidRefIdForJWTToken :(NSString *) token {
+    NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:[FreshchatUser sharedInstance].jwtToken];
+    if([jwtTokenInfo objectForKey:@"reference_id"] != nil){
+        return true;
+    }
+    return false;
 }
 
 @end

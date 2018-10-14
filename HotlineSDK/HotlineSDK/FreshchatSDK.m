@@ -363,13 +363,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (void) setUserWithIdToken :(NSString *) token {
-    [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
-        if(!error && valid){
-            FreshchatUser *fcUser = [FreshchatUser sharedInstance];
-            fcUser.jwtToken = token;
-            [FCUsers storeUserInfo:fcUser];
-        }
-    }];
+    if(![FCJWTUtilities isUserAuthEnabled]){
+        ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
+    }
+    if(!([[FCJWTUtilities getJWTUserPayloadFromToken: token] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
+        [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
+            if(!error && valid){
+                FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+                fcUser.jwtToken = token;
+                [FCUsers storeUserInfo:fcUser];
+            }
+        }];
+    }
 }
 
 -(void)identifyUserWithIdToken:(NSString *) jwtToken{
@@ -377,10 +382,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         ALog(@"Freshchat : JWT token missing for identifyUser API!");
         return;
     }
-    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
-    fcUser.jwtToken = jwtToken;
-    [FCUsers storeUserInfo:fcUser];
-    [FCUtilities resetDataAndRestoreWithJwtToken:jwtToken withCompletion:nil];
+    NSDictionary *jwtTokenInfo = [FCJWTUtilities getJWTUserPayloadFromToken:jwtToken];
+    if([jwtTokenInfo objectForKey:@"reference_id"] != nil) {
+        [FCUtilities resetDataAndRestoreWithJwtToken:jwtToken withCompletion:nil];
+    }
 }
 
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID {
