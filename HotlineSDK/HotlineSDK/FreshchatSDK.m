@@ -384,38 +384,24 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     if(!([[FCJWTUtilities getReferenceID: token] isEqualToString:
           [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
-        [[FCSecureStore sharedInstance] removeObjectWithKey:@"firstAuth"];
+        [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
         //Whenever the user changes
     }
     
-    if([[FCSecureStore sharedInstance] boolValueForKey:@"firstAuth"]) {
+    if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAITING_FOR_REFRESH_TOKEN];
     } else {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
     }
-//
-    [self updateUserWithIdToken:token]; //To store if internet is not available //WAITING_FOR_AUTH
+    [FCUsers updateUserWithIdToken:token];//To store if internet is not available //WAITING_FOR_AUTH
     [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
         if(!error && valid){
-            [self updateUserWithIdToken:token]; //ACTIVE
+            [FCUsers updateUserWithIdToken:token]; //ACTIVE
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
         } else {
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
         }
     }];
-}
-
-// UnidentifiedUser1 - j2r0 - token2 for user 1
-// UnidentifiedUser2 - j1r0 - token1 for user 2
-// AuthenticatedUser3 - j5r4 - token5 for user 3
-
-// intial j2r0 - setUser(j1r0) -
-// intial j2r0 - setUser(j5r4) -
-
-- (void) updateUserWithIdToken : (NSString *) token {
-    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
-    fcUser.jwtToken = token;
-    [FCUsers storeUserInfo:fcUser];
 }
 
 -(void)identifyUserWithIdToken:(NSString *) jwtToken{
@@ -432,7 +418,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     //If
     if(!([[FCJWTUtilities getReferenceID: jwtToken] isEqualToString:
           [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
-        [[FCSecureStore sharedInstance] removeObjectWithKey:@"firstAuth"];
+        [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
         //Whenever the user changes
     }
     

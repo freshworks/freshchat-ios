@@ -573,24 +573,22 @@
         NSDictionary *response = responseInfo.responseAsDictionary;
         apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
         if (statusCode == 200) { //If the user is found
-            NSString *alias = [FCJWTUtilities getAliasFrom:token];
-            if (![[FCUtilities currentUserAlias] isEqual:response[@"alias"]]) {
-                [FCUtilities updateUserWithData:response];
-                [FCUserUtil setUserMessageInitiated];
-                [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-                [FCUtilities initiatePendingTasks];
-                [[FCSecureStore sharedInstance] setBoolValue:true forKey:@"firstAuth"];
-                [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
-                //Authenticated User
-                //[[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
-            }
-        } else {
+            [FCUtilities updateUserWithData:response];
+            [FCUserUtil setUserMessageInitiated];
+            [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+            [FCUtilities initiatePendingTasks];
+            [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
+        } else if (statusCode == 404) {
+            [FCUsers updateUserWithIdToken:token];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
+        }
+        else {
             //If the user is not found
             [FCUtilities resetAlias];
             [FCUsers removeUserInfo];
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
         }
-        
         if(completion){
             completion(error);
         }
@@ -631,7 +629,8 @@
                     [FCUtilities initiatePendingTasks];
                 }
             }
-        } else { //If the user is not found
+        }
+        else { //If the user is not found
             FreshchatUser* oldUser = [FreshchatUser sharedInstance];
             oldUser.externalID = extId;
             oldUser.restoreID = nil;
@@ -668,7 +667,7 @@
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
         [store removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
-        [store removeObjectWithKey:@"firstAuth"];
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
         
         // Clear the token again to register again
         [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
@@ -700,7 +699,7 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(handler){
             if (statusCode == 200) {
-                [[FCSecureStore sharedInstance] setBoolValue:true forKey:@"firstAuth"];
+                [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
                 NSString *jwtAlias = [FCJWTUtilities getAliasFrom:token];
                 if(jwtAlias) {
                     [FCUtilities updateUserAlias:jwtAlias];

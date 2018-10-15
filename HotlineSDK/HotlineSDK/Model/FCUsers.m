@@ -67,6 +67,12 @@
     }];
 }
 
++ (void) updateUserWithIdToken : (NSString *) token {
+    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+    fcUser.jwtToken = token;
+    [FCUsers storeUserInfo:fcUser];
+}
+
 +(void) removeUserInfo {
     FCSecureStore *store = [FCSecureStore sharedInstance];
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];

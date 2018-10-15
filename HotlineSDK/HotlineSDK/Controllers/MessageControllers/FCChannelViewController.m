@@ -352,9 +352,11 @@
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
-    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
-                                        cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
+    dispatch_async(dispatch_get_main_queue(), ^{ /* show alert view */
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
+                                            cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

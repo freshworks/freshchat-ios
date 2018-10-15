@@ -14,14 +14,22 @@
 
 + (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) token{
     
+    
+    
     if(!token.length) return @{};
     NSArray *tokenStucture = [token componentsSeparatedByString:@"."];
     
     NSString *tokenPayload = [tokenStucture objectAtIndex:1];
-    NSString *pay = [tokenPayload stringByPaddingToLength:[tokenPayload length]+(tokenPayload.length)%4 withString:@"=" startingAtIndex:0];
+    int modPayload = tokenPayload.length % 4;
+    int repeatCount= 0;
+    if(modPayload!=0) {
+        repeatCount = 4-modPayload;
+    }
+    
+    NSString *pay = [tokenPayload stringByPaddingToLength:[tokenPayload length]+repeatCount withString:@"=" startingAtIndex:0];
     
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:pay options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
+      NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
     NSDictionary *payloadDict = [NSJSONSerialization JSONObjectWithData:[decodedString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     return payloadDict;
 }
@@ -63,6 +71,7 @@
     }
     return nil;
 }
+
 
 + (BOOL) hasValidRefIdForJWTToken :(NSString *) token {
     NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:[FreshchatUser sharedInstance].jwtToken];
