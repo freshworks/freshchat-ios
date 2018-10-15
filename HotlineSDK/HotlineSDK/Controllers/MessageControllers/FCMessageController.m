@@ -1442,12 +1442,13 @@ typedef struct {
     if(_loadingViewBehaviour == nil){
         _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
     }
+    [self.messageDetailView endEditing:YES];
     [_loadingViewBehaviour toggelJWTState:TRUE];
     [_loadingViewBehaviour showLoadingScreen];
     [self.messageDetailView setHidden:true];
 }
 
--(void) hideJWTLoading {
+-(void) hideJWTLoading {    
     [_loadingViewBehaviour toggelJWTState:FALSE];
     [_loadingViewBehaviour hideLoadingScreen];
     [self.messageDetailView setHidden:false];

@@ -144,6 +144,7 @@ enum TagFilterType {
  *
  */
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options;
+
 /**
  *  Set user Info
  *
@@ -153,11 +154,23 @@ enum TagFilterType {
  *
  */
 -(void)setUser:(FreshchatUser *) user;
+
+/**
+ *  Get user Alias
+ *
+ *  @discussion This method lets you to get user alias in Strict Mode for setting up user payload
+ *
+ */
+- (NSString *) getFreshchatUserId;
+
 /*
  * Set user for JWT Auth strict mode
+ *
  * Sync any change to user information, specified in JWT Token with Freshchat
+ *
  */
 - (void)setUserWithIdToken :(NSString *) token;
+
 /**
 *  Restore User
 *

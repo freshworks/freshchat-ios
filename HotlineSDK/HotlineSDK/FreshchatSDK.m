@@ -362,19 +362,41 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     [FCCoreServices uploadUnuploadedProperties];
 }
 
+- (NSString *) getUserAliasForIdToken{
+    if([FCJWTUtilities isUserAuthEnabled]){
+        return [FCUtilities currentUserAlias];
+    }
+    else{
+        //Throw exception or error
+        return nil;
+    }
+}
+
 - (void) setUserWithIdToken :(NSString *) token {
     if(![FCJWTUtilities isUserAuthEnabled]){
         ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
     }
     if(!([[FCJWTUtilities getJWTUserPayloadFromToken: token] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
+        [self updateUserWithIdToken:token]; //To store if internet is not available
         [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
             if(!error && valid){
-                FreshchatUser *fcUser = [FreshchatUser sharedInstance];
-                fcUser.jwtToken = token;
-                [FCUsers storeUserInfo:fcUser];
+                [self updateUserWithIdToken:token];
             }
         }];
     }
+}
+
+// UnidentifiedUser1 - j2r0 - token2 for user 1
+// UnidentifiedUser2 - j1r0 - token1 for user 2
+// AuthenticatedUser3 - j5r4 - token5 for user 3
+
+// intial j2r0 - setUser(j1r0) -
+// intial j2r0 - setUser(j5r4) -
+
+- (void) updateUserWithIdToken : (NSString *) token {
+    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+    fcUser.jwtToken = token;
+    [FCUsers storeUserInfo:fcUser];
 }
 
 -(void)identifyUserWithIdToken:(NSString *) jwtToken{

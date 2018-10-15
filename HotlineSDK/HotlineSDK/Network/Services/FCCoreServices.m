@@ -141,12 +141,8 @@
                 
                 if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
                 
-                if([FCJWTUtilities isUserAuthEnabled]){//For JWT user alias will be taken from response
-                    [FCUtilities updateUserAlias: [response objectForKey:@"alias"]];
-                }
-                else{
-                    ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
-                }
+
+                ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
                 
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 [FCCoreServices setAsUploadedTo:userProperties withCompletion:nil];
