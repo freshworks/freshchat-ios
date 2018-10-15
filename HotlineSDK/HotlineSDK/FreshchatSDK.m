@@ -375,15 +375,34 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 - (void) setUserWithIdToken :(NSString *) token {
     if(![FCJWTUtilities isUserAuthEnabled]){
         ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
+        return;
     }
+    
     if(!([[FCJWTUtilities getJWTUserPayloadFromToken: token] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
-        [self updateUserWithIdToken:token]; //To store if internet is not available
-        [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
-            if(!error && valid){
-                [self updateUserWithIdToken:token];
-            }
-        }];
+        //return;
     }
+    
+    if(!([[FCJWTUtilities getReferenceID: token] isEqualToString:
+          [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
+        [[FCSecureStore sharedInstance] removeObjectWithKey:@"firstAuth"];
+        //Whenever the user changes
+    }
+    
+    if([[FCSecureStore sharedInstance] boolValueForKey:@"firstAuth"]) {
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:WAITING_FOR_REFRESH_TOKEN];
+    } else {
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+    }
+//
+    [self updateUserWithIdToken:token]; //To store if internet is not available //WAITING_FOR_AUTH
+    [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
+        if(!error && valid){
+            [self updateUserWithIdToken:token]; //ACTIVE
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
+        } else {
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+        }
+    }];
 }
 
 // UnidentifiedUser1 - j2r0 - token2 for user 1

@@ -50,13 +50,16 @@
     if([FCUtilities isAccountDeleted]){
         return Nil;
     }
-    if (isAuthEnabled && [FCJWTUtilities isUserAuthEnabled] && [FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]){
-        
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:VERIFICATION_UNDER_PROGRESS];
-
-        NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
-        if (handler) handler(nil, error);
-        return Nil;
+    if( isAuthEnabled && [FCJWTUtilities isUserAuthEnabled]) {
+        if([FCJWTAuthValidator sharedInstance].currState != ACTIVE ) {
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:VERIFICATION_UNDER_PROGRESS];
+        }
+        if ([FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]) {
+            NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+            if (handler) handler(nil, error);
+            return Nil;
+        }
     }
     
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

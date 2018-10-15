@@ -19,5 +19,9 @@
 
 + (BOOL) hasValidRefIdForJWTToken :(NSString *) token;
 
++ (NSString*) getReferenceID: (NSString *) token;
+
++ (NSString*) getAliasFrom: (NSString *) token;
+
 @end
 

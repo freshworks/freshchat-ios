@@ -25,6 +25,7 @@
 #import "FCLocalNotification.h"
 #import "FCVotingManager.h"
 #import "FCJWTUtilities.h"
+#import "FCJWTAuthValidator.h"
 
 @interface Freshchat ()
 
@@ -663,12 +664,15 @@
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
         [store removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
+        [store removeObjectWithKey:@"firstAuth"];
         
         // Clear the token again to register again
         [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         [store removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
         [FCUserDefaults removeObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
         [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
+        [FCJWTAuthValidator sharedInstance].currState = NONE;
+        [FCJWTAuthValidator sharedInstance].prevState = NONE;
         [FCUsers removeUserInfo];
         if(completion){
             completion(error);
@@ -684,7 +688,6 @@
     [[FreshchatUser sharedInstance] setJwtToken:token];
     NSError *error = nil;
     NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
-    
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:jwtData];
     [request setRelativePath:path andURLParams:@[appKey]];
@@ -693,6 +696,11 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(handler){
             if (statusCode == 200) {
+                [[FCSecureStore sharedInstance] setBoolValue:true forKey:@"firstAuth"];
+                NSString *jwtAlias = [FCJWTUtilities getAliasFrom:token];
+                if(jwtAlias) {
+                    [FCUtilities updateUserAlias:jwtAlias];
+                }
                 handler(true, error);
             } else {
                 handler(false, error);

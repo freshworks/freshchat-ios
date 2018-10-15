@@ -27,7 +27,8 @@
 }
 
 + (BOOL) isUserAuthEnabled {
-    return ([FCRemoteConfig sharedInstance].userAuthConfig.isjwtAuthEnabled && [FCRemoteConfig sharedInstance].userAuthConfig.isStrictModeEnabled);
+    return ([FCRemoteConfig sharedInstance].userAuthConfig.isjwtAuthEnabled
+            && [FCRemoteConfig sharedInstance].userAuthConfig.isStrictModeEnabled);
 }
 
 + (BOOL) isJWTTokenExpired {
@@ -41,6 +42,26 @@
         }
     }
     return false;
+}
+
++ (NSString*) getReferenceID: (NSString *) token {
+    if(token){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:token];
+        if([jwtTokenInfo objectForKey:@"reference_id"]){
+            return [jwtTokenInfo objectForKey:@"reference_id"];
+        }
+    }
+    return nil;
+}
+
++ (NSString*) getAliasFrom: (NSString *) token {
+    if(token){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:token];
+        if([jwtTokenInfo objectForKey:@"freshchat_uuid"]){
+            return [jwtTokenInfo objectForKey:@"freshchat_uuid"];
+        }
+    }
+    return nil;
 }
 
 + (BOOL) hasValidRefIdForJWTToken :(NSString *) token {

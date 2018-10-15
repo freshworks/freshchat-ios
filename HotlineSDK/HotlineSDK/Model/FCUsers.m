@@ -76,6 +76,7 @@
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_RESTORE_ID];
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_JWT_TOKEN];
     [FreshchatUser sharedInstance].firstName = nil;
     [FreshchatUser sharedInstance].lastName = nil;
     [FreshchatUser sharedInstance].email = nil;
