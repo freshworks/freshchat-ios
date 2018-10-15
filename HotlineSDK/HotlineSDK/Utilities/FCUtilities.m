@@ -28,6 +28,7 @@
 #import "FCContainerController.h"
 #import "FDImageView.h"
 #import "FCJWTUtilities.h"
+#import "FCJWTAuthValidator.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -687,7 +688,8 @@ static NSInteger networkIndicator = 0;
          [FCUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
          FreshchatUser* oldUser = [FreshchatUser sharedInstance];
          [FCUsers storeUserInfo:oldUser];
-         [FCCoreServices restoreUserWithJwtToken:token withCompletion:nil];
+         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+         [FCCoreServices restoreUserWithJwtToken:token withCompletion:nil];         
          if(completion) {
              completion();
          }

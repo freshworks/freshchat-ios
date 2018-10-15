@@ -52,6 +52,7 @@
 @property (nonatomic, retain) UIPickerView *categoryPickerView;
 @property (nonatomic, retain) NSMutableArray *dataArray;
 @property (weak, nonatomic) IBOutlet UIButton *languageTranslation;
+@property (weak, nonatomic) NSString* jwtStr;
 
 @end
 
@@ -72,6 +73,7 @@
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
     [self configurePicker];
+    self.jwtStr = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlNBTkpJVEggS0FOQUdBVkVMIiwiZnJlc2hjaGF0X3V1aWQiOiJzYW5qaXRoLWthbmFnYXZlbCIsInJlZmVyZW5jZV9pZCI6InNhbmppdGhAa2FuYWdhdmVsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.hbWoAFjKOyZqeRPYE8bha0SpjH1vYNDEczPMHgoCRhJSKDN-YhK4lTWLchJxke6WiGUQIebIU3ZR2e96pAui1LLpS6W8SRel3-Ks_sJkuDRrsadv4z0ZifMMwHcZffp0BjTzxJrRgFmjikd4sH79KhEnndDJyWDYpHFDXkcdfqJh_iY9xp0dkKqk8YDDVeAyl-SC9WkPUGiNn82MSqMcSsrjcjipa6OsuUcKU6oBpSW9THYR3mRQCZA88I6tkvarD17PufblNjF3UmBy4osBxnnhXNDoI8Zk_4-wQLV7VoATnauqu0dzDLx3_-PT43P5XkPB4bNUsBmOoe4YMNIcovcgPE8-Fwiaj3kdchnhB4fvxaECnYyrT1KDORIL_X8DIvv9WDULZbhS1lcrjoKr27axSnbF4QGv8d0SptOrpTka2aIFo2WCRwj5XleD1ulWBThNux9CI_3yYrDumnaGviTYY7Yfml4eeiK8cIVNpiuNysnvLBa7ibY_494uzX5BVV-2JiMrL1kdltkfD-2DwcxBX2LeEyKomtAfEbtkyWbKaQrHTGyZ-Bowd1DZdkWM6UFqVNzQ-b9j2X2CHnafnsc0B3oo-5h4Go5mH29juFDERUxV0s3ZKF0t-tFb1XtHc3KdGz4dsW3EJjk03r8X0e-8ZujSod_w-httfQ4s7uE";
     NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
     NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
     
@@ -293,7 +295,7 @@ SampleController *sampleController;
 
 
 - (IBAction)channelFilter1:(id)sender{
-    
+    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtStr];
 //    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
 //    ConversationOptions *opt = [ConversationOptions new];
 //    [opt filterByTags:arr withTitle:self.conversationTitle.text];
@@ -308,13 +310,13 @@ SampleController *sampleController;
 //    UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
 //    [self.navigationController pushViewController:viewController animated:true];
     
-        NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IkpvaG4gRG9lIiwiZnJlc2hjaGF0X3V1aWQiOiJjNzE0MDk0ZS1jM2MxLTQ2NjktYWRjMy00M2M1MTYzMzM0Y2MiLCJyZWZlcmVuY2VfaWQiOiJhYmQxQHJyLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.uZbaYlGrAZSThdQKxaZUDwFwsLcCx34BPIiSRHqj4JTb8Mj6bpBthXbfnChh661YSiBfLtI6aGmiwZ8fDjHl4xzJiJiSgfWCK0_j6I94DYzagQFVkl1bKHlgzX9K3R0PCm2ytpyLKLjcVE_quaDJlRFhyZBRQuVjSYq2h-2ezVpOpuaz72ot45bBKzLi4TQvb2uPHHzeYpAjrNmh2uOify0Y5vjZEHITlf-oDm9kV00aS0fW9MZwQMw9DSA0PQiNfh_d4molsfUhHXMmDSHlqOTZzAkJzpzPgLY1SKwVJaBhdzkFxc6-0UhiW6lSZwxM0tcjmkPAUL51qHdommon4SvgWiClbWXFeZGMmJ9mQq6dW4iezjgliGqR7NE-8YwjeM_-cpANaoi6cpYh5pOZmYRhdKYBHYymhylc9rDzQgPTSFW-dHpnvSxM0oZ76LVtnyqS_uPTQiWZ7or62BO8eV4MFQ_G7ZMLyN4XPNCiXct4X2iPFnl_LKBIMcOwvAwMaoTUhbV4u1ezAyNi4dW27O4Y0eVKBYCDwEf4OGHoX460PepgPtVdX971oycwTBfI5oB2_LcMPlLoQ7nABDDll3UpWY13kK3wfQhKGTBrd7zsUMSDsL0QmOT2daMwJu48JJOXmvhHfXdAwjfECs7-qQNYCmaU-gKp3FCPLeYP7k4";
-       // [[Freshchat sharedInstance] setUserWithIdToken:jwt];
-    [[Freshchat sharedInstance] identifyUserWithIdToken:jwt];
+    
+    //
 }
 
 - (IBAction)channelFilter2:(id)sender{
-    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+     [[Freshchat sharedInstance] identifyUserWithIdToken:self.jwtStr];
+    /*NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:arr withTitle:self.conversationTitle.text];
     FAQOptions *options = [FAQOptions new];
@@ -325,7 +327,8 @@ SampleController *sampleController;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];*/
+   
 }
 
 - (IBAction)showLanguagePicker:(id)sender {

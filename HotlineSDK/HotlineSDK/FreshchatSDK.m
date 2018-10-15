@@ -423,8 +423,20 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         ALog(@"Freshchat : JWT token missing for identifyUser API!");
         return;
     }
-    NSDictionary *jwtTokenInfo = [FCJWTUtilities getJWTUserPayloadFromToken:jwtToken];
-    if([jwtTokenInfo objectForKey:@"reference_id"] != nil) {
+    
+    //If he is the same guy
+    if(!([[FCJWTUtilities getJWTUserPayloadFromToken: jwtToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
+        //return;
+    }
+    
+    //If
+    if(!([[FCJWTUtilities getReferenceID: jwtToken] isEqualToString:
+          [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
+        [[FCSecureStore sharedInstance] removeObjectWithKey:@"firstAuth"];
+        //Whenever the user changes
+    }
+    
+    if ([FCJWTUtilities getReferenceID:jwtToken]) {
         [FCUtilities resetDataAndRestoreWithJwtToken:jwtToken withCompletion:nil];
     }
 }

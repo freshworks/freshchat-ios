@@ -573,11 +573,14 @@
         NSDictionary *response = responseInfo.responseAsDictionary;
         apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
         if (statusCode == 200) { //If the user is found
+            NSString *alias = [FCJWTUtilities getAliasFrom:token];
             if (![[FCUtilities currentUserAlias] isEqual:response[@"alias"]]) {
                 [FCUtilities updateUserWithData:response];
                 [FCUserUtil setUserMessageInitiated];
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 [FCUtilities initiatePendingTasks];
+                [[FCSecureStore sharedInstance] setBoolValue:true forKey:@"firstAuth"];
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
                 //Authenticated User
                 //[[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
             }
@@ -585,6 +588,7 @@
             //If the user is not found
             [FCUtilities resetAlias];
             [FCUsers removeUserInfo];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
         }
         
         if(completion){
