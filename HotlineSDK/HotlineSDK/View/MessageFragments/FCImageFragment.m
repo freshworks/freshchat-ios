@@ -9,8 +9,12 @@
 #import "FCImageFragment.h"
 #import "FCImagePreviewController.h"
 
-#define DEFAULT_THUMBNAIL_HEIGHT 200
-#define DEFAULT_THUMBNAIL_WIDTH 200
+#define DEFAULT_THUMBNAIL_HEIGHT 225
+#define DEFAULT_THUMBNAIL_WIDTH 225
+
+#define MIN_THUMBNAIL_HEIGHT 75
+#define MIN_THUMBNAIL_WIDTH 75
+
 
 @implementation FCImageFragment
 
@@ -41,14 +45,22 @@
             int thumbnailWidth =  DEFAULT_THUMBNAIL_WIDTH ;
             if(extraJSONDict[@"thumbnail"]) {
                 NSDictionary *thumbnailDict = extraJSONDict[@"thumbnail"];
+                
                 if(thumbnailDict[@"height"] && thumbnailDict[@"width"]) {
-                    if ((int)thumbnailDict[@"height"] < DEFAULT_THUMBNAIL_HEIGHT) {
-                        thumbnailHeight = (int)thumbnailDict[@"height"];
+                    if ([thumbnailDict[@"height"] intValue] <= DEFAULT_THUMBNAIL_HEIGHT) {
+                        thumbnailHeight = [thumbnailDict[@"height"] intValue];
                     }
-                        
-                    if ((int)thumbnailDict[@"width"] < DEFAULT_THUMBNAIL_WIDTH) {
-                        thumbnailWidth = (int)thumbnailDict[@"width"];
+                    if([thumbnailDict[@"height"] intValue] <= MIN_THUMBNAIL_HEIGHT) {
+                        thumbnailHeight = MIN_THUMBNAIL_HEIGHT;
                     }
+                    
+                    if ([thumbnailDict[@"width"] intValue] <= DEFAULT_THUMBNAIL_WIDTH) {
+                        thumbnailWidth = [thumbnailDict[@"width"] intValue];
+                    }
+                    if([thumbnailDict[@"width"] intValue] <= MIN_THUMBNAIL_WIDTH) {
+                        thumbnailWidth = MIN_THUMBNAIL_WIDTH;
+                    }                    
+                    
                 }
                 if (imageToBeDownloaded) {
                     [self setImage:[[FCTheme sharedInstance ] getImageWithKey:IMAGE_PLACEHOLDER]];

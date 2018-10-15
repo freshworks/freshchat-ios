@@ -78,8 +78,8 @@
         self.nRestoreID.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"nRestoreID"];
         self.nExternalID.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"nExternalID"];
     } else {
-        self.nRestoreID.text = @"10b61cc6-6faf-45fa-b95a-d2cf90fff29e,d9ef6b37-5447-4ee4-ba04-752eb1736481,9da10947-a891-468b-a6a6-e02a32e1b488,clear";
-        self.nExternalID.text = @"john.doe1987,john.doe1987,new user,clear";
+        self.nRestoreID.text = @"a53df44e-6023-4402-8c08-549fd70628f3";
+        self.nExternalID.text = @"test";
     }
 }
 

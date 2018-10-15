@@ -171,7 +171,7 @@
             FCImageFragment *imageFragment = views[str];
             NSString *imageHeight = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.height];
             NSString *imageWidth = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.width];
-                NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(%@)-[%@(%@)]-(%@)-|",leftPadding,str,imageWidth,rightPadding];
+            NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=%@)-[%@(%@)]-(>=%@)-|",leftPadding,str,imageWidth,rightPadding];
             [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             NSLayoutConstraint *centerConstraint = [NSLayoutConstraint constraintWithItem:imageFragment
                                                                                 attribute:NSLayoutAttributeCenterX
