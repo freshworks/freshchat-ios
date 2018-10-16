@@ -25,13 +25,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *unreadCountTags;
 
 @property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqTagsField2;
+
+@property (nonatomic, strong) IBOutlet UITextView *jwtTextView;
+
 @property (nonatomic, strong) IBOutlet UITextField *faqTitleField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqTitleField2;
+
 @property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField2;
+
 @property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField2;
 
 @property (nonatomic, strong) IBOutlet UITextField *conversationTitle;
 @property (nonatomic, strong) IBOutlet UITextField *conversationTags;
@@ -73,7 +74,7 @@
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
     [self configurePicker];
-    self.jwtStr = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlNBTkpJVEggS0FOQUdBVkVMIiwiZnJlc2hjaGF0X3V1aWQiOiJzYW5qaXRoLWthbmFnYXZlbCIsInJlZmVyZW5jZV9pZCI6InNhbmppdGhAa2FuYWdhdmVsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.hbWoAFjKOyZqeRPYE8bha0SpjH1vYNDEczPMHgoCRhJSKDN-YhK4lTWLchJxke6WiGUQIebIU3ZR2e96pAui1LLpS6W8SRel3-Ks_sJkuDRrsadv4z0ZifMMwHcZffp0BjTzxJrRgFmjikd4sH79KhEnndDJyWDYpHFDXkcdfqJh_iY9xp0dkKqk8YDDVeAyl-SC9WkPUGiNn82MSqMcSsrjcjipa6OsuUcKU6oBpSW9THYR3mRQCZA88I6tkvarD17PufblNjF3UmBy4osBxnnhXNDoI8Zk_4-wQLV7VoATnauqu0dzDLx3_-PT43P5XkPB4bNUsBmOoe4YMNIcovcgPE8-Fwiaj3kdchnhB4fvxaECnYyrT1KDORIL_X8DIvv9WDULZbhS1lcrjoKr27axSnbF4QGv8d0SptOrpTka2aIFo2WCRwj5XleD1ulWBThNux9CI_3yYrDumnaGviTYY7Yfml4eeiK8cIVNpiuNysnvLBa7ibY_494uzX5BVV-2JiMrL1kdltkfD-2DwcxBX2LeEyKomtAfEbtkyWbKaQrHTGyZ-Bowd1DZdkWM6UFqVNzQ-b9j2X2CHnafnsc0B3oo-5h4Go5mH29juFDERUxV0s3ZKF0t-tFb1XtHc3KdGz4dsW3EJjk03r8X0e-8ZujSod_w-httfQ4s7uE";
+    
     NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
     NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
     
@@ -100,13 +101,9 @@
     }];
     
     self.faqTagsField1.delegate = self;
-    self.faqTagsField2.delegate = self;
     self.faqTitleField1.delegate = self;
-    self.faqTitleField2.delegate = self;
     self.faqContactUsTagsField1.delegate = self;
-    self.faqContactUsTagsField2.delegate = self;
     self.faqContactUsTitleField1.delegate = self;
-    self.faqContactUsTitleField2.delegate = self;
     self.conversationTitle.delegate = self;
     self.conversationTags.delegate = self;
     self.message.delegate = self;
@@ -196,7 +193,7 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)sender
 {
-    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTitleField2]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqTagsField2]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTagsField2]||[sender isEqual:self.faqContactUsTitleField1]||[sender isEqual:self.faqContactUsTitleField2])
+    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTitleField1])
     {
         //move the main view, so that the keyboard does not hide it.
         if  (self.view.frame.origin.y >= 0)
@@ -295,28 +292,8 @@ SampleController *sampleController;
 
 
 - (IBAction)channelFilter1:(id)sender{
-    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtStr];
-//    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
-//    ConversationOptions *opt = [ConversationOptions new];
-//    [opt filterByTags:arr withTitle:self.conversationTitle.text];
-//    FAQOptions *options = [FAQOptions new];
-//    options.showContactUsOnAppBar = true;
-//    options.showContactUsOnFaqScreens = true;
-//    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
-//    [contactUsTagsArray removeObject:@""];
-//    if(contactUsTagsArray.count){
-//        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
-//    }
-//    UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
-//    [self.navigationController pushViewController:viewController animated:true];
     
-    
-    //
-}
-
-- (IBAction)channelFilter2:(id)sender{
-     [[Freshchat sharedInstance] identifyUserWithIdToken:self.jwtStr];
-    /*NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:arr withTitle:self.conversationTitle.text];
     FAQOptions *options = [FAQOptions new];
@@ -327,8 +304,28 @@ SampleController *sampleController;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [[Freshchat sharedInstance] showConversations:self withOptions:opt];*/
+    UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
+    [self.navigationController pushViewController:viewController animated:true];
+    
+    
+    //
+}
+
+- (IBAction)channelFilter2:(id)sender{
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.conversationTitle.text];
+    FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnAppBar = true;
+    options.showContactUsOnFaqScreens = true;
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.convContactUsTags.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
+    }
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
    
+    
 }
 
 - (IBAction)showLanguagePicker:(id)sender {
@@ -337,31 +334,20 @@ SampleController *sampleController;
 
 //2
 - (IBAction)articleFilter2:(id)sender{
-    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
-    [contactUsTagsArray removeObject:@""];
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
-    options.showContactUsOnFaqScreens = self.switchVal;
-    if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
+    
+    NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlNBTkpJVEggS0FOQUdBVkVMIiwiZnJlc2hjaGF0X3V1aWQiOiJ0ZXN0dGVzdCIsInJlZmVyZW5jZV9pZCI6InF3ZXJ0eSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.12_LiYN_uUMwozM4fQRTe5qpD0VDTQXNIKM5UkxaG54Ea5tTDeGBu46lcL4WQFhcuQEOcE816SS5hVQDQ5k9ebdyT8jmfWX41tbeEP7UPw-DAX88NyrxzJlB7Ow0WlMhVZvrvVkZ2sEq-O6KhrgDXwQ2Tfg1LaS-qY8P5hDnvZ4e7Tz7sY_NQaU8mM4LmpbuOlIsgyT5MNQRvDNLE9zbUsSskse0S2TXgn54XQ4dGYRkClib9r20n7p5NAX3ZFBY9GXTg2AIx7PHhIByIlfFyY5e3sza3mwTW5WWPy5jFMj6yS0YvAX_pC3rjnAf3XIQa72NijR0lb-FrlzBMK9VPAfSinCdvSm95OhVKUG_1ik--xXx6Hsc0YH1P0wOitMqk7X68FMlz_v9U_8-j89scyajTRWz7XFWeuHRbAW2N9XttnJEJE_tQ3PvgMKGdsEBCbJh9aZ0RlGCTVzLM_7LiuVyVsWXtZE8O7OEzl0edGy-WO0vbpkbWdJL9UaxqDAfmQXE_GmHl4wof90KGNJbwRw25EgfLnCueZr4nr04HbwIn5yWo1fYcZD1Hxyfir3hgNyAXj_i_z4IhnC5jo7YnvxlIjGLPZUPnlbRMfhm4nqTivFgqee087w93j96HGbz5vPVhNkB-oxs_2FwkRIi23rwuUVKdRHzWrUZNc6lBqg";
+    if(self.jwtTextView.text.length >0){
+        jwt = self.jwtTextView.text;
     }
-    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: ARTICLE];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance] setUserWithIdToken:jwt];
 }
 
 - (IBAction)categoryFilter2:(id)sender{
-    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
-    [contactUsTagsArray removeObject:@""];
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
-    options.showContactUsOnFaqScreens = self.switchVal;
-    if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
+    NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlNBTkpJVEggS0FOQUdBVkVMIiwicmVmZXJlbmNlX2lkIjoicXdlcnR5IiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.dy9Uw37aBjW_HJcpZxrYeDaJGFh9mTZFtYCK0i_jQc-z9FllS_ZHWNuCt6JmPsrOhXb9s4w_aq8dUUM_pYB-HGSUG2F9LIOMs7_20iQYKVxTSPCurnPZXLQFFWggv8Slz0n6z4Y7N16M5GGOdKdIGkFw_6xjb2KOiZmT5p__ysR_vsJO2H9wSYohJlQ4rmZEdhfupnGGKuWsJwaf268CJsHvArzPfz8EwB_Aoisyqzo22P99Qwf8AdXyUtVAwt6bMmkfVzORRK04nOKF0wW62H-kY--7YAWwdY3x2b6NbisaSNu3doOx34UkQRVRUFkelWmFJtAOyGwKK1hu2gskPO6q1GIKGcX40J1ExjDSBmC7FM1bHsPTNpxvkN4TC08NVvAnKpTDnhi6P03eiN-0pdiZS1E5wsEURaAIT-yHeuozT6pa46LneMblW0KJSJiLwv5AADCznY7zuwgoLiApzuAEf5uV2yIfaftLvNzytX78bOfZq8jx2nWrLgMQT1BEjglEmyZEx7VDFtP1AEMATyO80gjrSgrP7El5rxNwFFcTTTKZmDAn3z9fzErII0y_dVmFVg7ABtBNpy3cufaCf-8ACYxOXqup3fhPjfzF0wFvtND7sa3GvpLoX8i2XSPqAazcGjOT1KUqt4Ytnfn3j1o7x9xRbqCxZMT_HfS6rto";
+    if(self.jwtTextView.text.length >0){
+        jwt = self.jwtTextView.text;
     }
-    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: CATEGORY];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance] identifyUserWithIdToken:jwt];
 }
 
 - (IBAction)sendMessage:(id)sender{

@@ -158,7 +158,7 @@ enum TagFilterType {
 /**
  *  Get user Alias
  *
- *  @discussion This method lets you to get user alias in Strict Mode for setting up user payload
+ *  @discussion This method lets you to get user Id in Strict Mode for setting up JWT paload
  *
  */
 - (NSString *) getFreshchatUserId;

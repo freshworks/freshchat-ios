@@ -138,10 +138,15 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             @throw ([NSException exceptionWithName:exception.name reason:exception.description userInfo:nil]);
         }
     }
+}
+
+- (NSString *) getFreshchatUserId{
     
-//    NSString *jwtString = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjIsImhlbGxvIjp0cnVlLCJwcm9wIjoxMjN9.XbR7r3e_p98UDafk77WYKk1RJxrPd7ow3fL4YNWWD-DFovfuZgkJatWPDST-s9fp8DynA6Iod8_iJgG3at1bbM3IwxipgsHwgAEub_9ch5DBFHPIG6zo98Ev3nsr0GRKkvxJpTuF_W-ljYWya_Y7DITdRSSH4as8hXuyH9PZGN2iVbgL-kw4hpbJ10VCyLOs2chjHf0DzuWUR3Y2DlEm7kugd3Yb3kje0LIiD8zNn5Canm9eW6oRvETrPwVHhrpT4xc8esz0WepWT__zgeNzudtGW7S0udi_ZF5CLlWGChgAEFUxYsqqktBOLo9V0dsFTiiG8WqgvplwFgFs0e2GR9opQnztxzLOav6fmRKzatylyLfLXHoiiW3Nv95LZBNYQuMNoGUni3cV87Wl9Qg9v9_f2WiwXc86dPkwmlbIeG8z9Oph74iaWAJOwDWNgcsZ5-gdmi3olffF7KjifRGyztuWjIL-IeWUGC6bmo2tlCO0bI-_vMPcHtHwNUJIzk-9JLTT66acKGYsDJN2zSu8AhPZhRM3xbaLfLIrzITp00lK7yNz5MHv6J8yGTAA46h1j6NUpc_rBEC4pc9Afe0Gvpw23dEVnd3cW71RctdBUsqisawH6gdVgKq3xN9tVtz5sqvity4fgZeRHt1NBY20C0UjXlTRsymmcrYxXX-yjz8";
-//    NSDictionary *dict = [FCJWTUtilities getJWTUserPayloadFromToken:jwtString];
-    
+    if(![FCJWTUtilities isUserAuthEnabled]){
+        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        return nil;
+    }
+    return [FCUtilities currentUserAlias];
 }
 
 -(void)initWithConfig:(FreshchatConfig *)config completion:(void(^)(NSError *error))completion{
