@@ -91,7 +91,6 @@
 }
 
 -(void)updateResultsView:(BOOL)isLoading andCount:(long) count{
-    NSLog(@"updateResultsView");
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if(self.loadingViewDelegate == nil ) {
@@ -135,12 +134,8 @@
     });
 }
 
--(void) toggelJWTState:(BOOL) isAuthInProgress {
+-(void) setJWTState:(BOOL) isAuthInProgress {
     self.isWaitingForJWT = isAuthInProgress;
-}
-
--(BOOL) getJWTState{
-    return self.isWaitingForJWT;
 }
 
 -(void) showLoadingScreen {

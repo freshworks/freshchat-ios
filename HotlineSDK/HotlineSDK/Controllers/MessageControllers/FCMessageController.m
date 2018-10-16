@@ -302,7 +302,7 @@ typedef struct {
     [self checkRestoreStateChanged];
     [self.inputToolbar setSendButtonEnabled: [FCStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
     [self addJWTObservers];
-    [self jwtEventChange];
+    [self jwtStateChange];
 }
 
 //TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
@@ -1401,7 +1401,7 @@ typedef struct {
     return [[FCJWTAuthValidator sharedInstance] getUiActionForTransition];
 }
 
--(void)jwtEventChange {
+-(void)jwtStateChange {
     switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
         case LOADING:
             [self showJWTLoading];
@@ -1443,13 +1443,13 @@ typedef struct {
         _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
     }
     [self.messageDetailView endEditing:YES];
-    [_loadingViewBehaviour toggelJWTState:TRUE];
+    [_loadingViewBehaviour setJWTState:TRUE];
     [_loadingViewBehaviour showLoadingScreen];
     [self.messageDetailView setHidden:true];
 }
 
 -(void) hideJWTLoading {    
-    [_loadingViewBehaviour toggelJWTState:FALSE];
+    [_loadingViewBehaviour setJWTState:FALSE];
     [_loadingViewBehaviour hideLoadingScreen];
     [self.messageDetailView setHidden:false];
 }

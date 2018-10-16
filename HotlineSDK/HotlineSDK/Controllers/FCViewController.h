@@ -18,7 +18,7 @@
 -(void)configureBackButton;
 -(UIViewController <UIGestureRecognizerDelegate> *) gestureDelegate;
 
--(void)jwtEventChange;
+-(void)jwtStateChange;
 -(void)addJWTObservers;
 -(void)removeJWTObservers;
 

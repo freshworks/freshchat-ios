@@ -29,8 +29,7 @@
 -(void) load:(long)currentCount;
 -(void) unload;
 -(void) updateResultsView:(BOOL)isLoading andCount:(long) count;
--(void) toggelJWTState:(BOOL) isAuthInProgress;
--(BOOL) getJWTState;
+-(void) setJWTState:(BOOL) isAuthInProgress;
 -(void) showLoadingScreen;
 -(void) hideLoadingScreen;
 

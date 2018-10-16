@@ -48,7 +48,7 @@
 
 -(void) addJWTObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(jwtEventChange)
+                                             selector:@selector(jwtStateChange)
                                                  name:JWT_EVENT
                                                object:nil];
 }
@@ -57,7 +57,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:JWT_EVENT object:nil];
 }
 
--(void) jwtEventChange {
+-(void) jwtStateChange {
     // Just a skeleton method
 }
 

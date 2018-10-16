@@ -86,7 +86,7 @@
     [self loadChannels];
     [self checkRestoreStateChanged];
     [self addJWTObservers];
-    [self jwtEventChange];
+    [self jwtStateChange];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -383,7 +383,7 @@
     return NO_CHANGE;
 }
 
--(void)jwtEventChange {
+-(void)jwtStateChange {
     switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
         case LOADING:
             [self showJWTLoading];
@@ -422,13 +422,13 @@
 #pragma mark - Show/Hide JWT Loading/Alert
 
 -(void) showJWTLoading {
-    [_loadingViewBehaviour toggelJWTState:TRUE];
+    [_loadingViewBehaviour setJWTState:TRUE];
     [_loadingViewBehaviour showLoadingScreen];
     [self.tableView setHidden:true];
 }
 
 -(void) hideJWTLoading {
-    [_loadingViewBehaviour toggelJWTState:FALSE];
+    [_loadingViewBehaviour setJWTState:FALSE];
     [_loadingViewBehaviour hideLoadingScreen];
     [self.tableView setHidden:false];
 }
