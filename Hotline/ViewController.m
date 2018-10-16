@@ -16,7 +16,7 @@
 #define kOFFSET_FOR_KEYBOARD 160.0
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
 
-@interface ViewController ()<UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
+@interface ViewController ()<UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -53,7 +53,6 @@
 @property (nonatomic, retain) UIPickerView *categoryPickerView;
 @property (nonatomic, retain) NSMutableArray *dataArray;
 @property (weak, nonatomic) IBOutlet UIButton *languageTranslation;
-@property (weak, nonatomic) NSString* jwtStr;
 
 @end
 
@@ -107,6 +106,8 @@
     self.conversationTitle.delegate = self;
     self.conversationTags.delegate = self;
     self.message.delegate = self;
+    self.jwtTextView.delegate = self;
+    self.jwtTextView.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"jwtToken"];
     self.sendMessageTag.delegate = self;
     //[[Freshchat sharedInstance] updateConversationBannerMessage:@"123"];
 
@@ -160,6 +161,10 @@
     {
         [self setViewMovedUp:NO];
     }
+}
+
+- (void)textViewDidChange:(UITextView *)textView {
+    [[NSUserDefaults standardUserDefaults] setObject:self.jwtTextView.text forKey:@"jwtToken"];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -332,22 +337,21 @@ SampleController *sampleController;
     [self presentViewController:self.pickerViewPopup animated:true completion:nil];
 }
 
+
+
 //2
-- (IBAction)articleFilter2:(id)sender{
-    
-    NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlNBTkpJVEggS0FOQUdBVkVMIiwiZnJlc2hjaGF0X3V1aWQiOiJ0ZXN0dGVzdCIsInJlZmVyZW5jZV9pZCI6InF3ZXJ0eSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.12_LiYN_uUMwozM4fQRTe5qpD0VDTQXNIKM5UkxaG54Ea5tTDeGBu46lcL4WQFhcuQEOcE816SS5hVQDQ5k9ebdyT8jmfWX41tbeEP7UPw-DAX88NyrxzJlB7Ow0WlMhVZvrvVkZ2sEq-O6KhrgDXwQ2Tfg1LaS-qY8P5hDnvZ4e7Tz7sY_NQaU8mM4LmpbuOlIsgyT5MNQRvDNLE9zbUsSskse0S2TXgn54XQ4dGYRkClib9r20n7p5NAX3ZFBY9GXTg2AIx7PHhIByIlfFyY5e3sza3mwTW5WWPy5jFMj6yS0YvAX_pC3rjnAf3XIQa72NijR0lb-FrlzBMK9VPAfSinCdvSm95OhVKUG_1ik--xXx6Hsc0YH1P0wOitMqk7X68FMlz_v9U_8-j89scyajTRWz7XFWeuHRbAW2N9XttnJEJE_tQ3PvgMKGdsEBCbJh9aZ0RlGCTVzLM_7LiuVyVsWXtZE8O7OEzl0edGy-WO0vbpkbWdJL9UaxqDAfmQXE_GmHl4wof90KGNJbwRw25EgfLnCueZr4nr04HbwIn5yWo1fYcZD1Hxyfir3hgNyAXj_i_z4IhnC5jo7YnvxlIjGLPZUPnlbRMfhm4nqTivFgqee087w93j96HGbz5vPVhNkB-oxs_2FwkRIi23rwuUVKdRHzWrUZNc6lBqg";
-    if(self.jwtTextView.text.length >0){
-        jwt = self.jwtTextView.text;
+- (IBAction)setJWTUser:(id)sender{
+    if(self.jwtTextView.text.length == 0){
+        return;
     }
-    [[Freshchat sharedInstance] setUserWithIdToken:jwt];
+    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtTextView.text];
 }
 
-- (IBAction)categoryFilter2:(id)sender{
-    NSString *jwt = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlNBTkpJVEggS0FOQUdBVkVMIiwicmVmZXJlbmNlX2lkIjoicXdlcnR5IiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.dy9Uw37aBjW_HJcpZxrYeDaJGFh9mTZFtYCK0i_jQc-z9FllS_ZHWNuCt6JmPsrOhXb9s4w_aq8dUUM_pYB-HGSUG2F9LIOMs7_20iQYKVxTSPCurnPZXLQFFWggv8Slz0n6z4Y7N16M5GGOdKdIGkFw_6xjb2KOiZmT5p__ysR_vsJO2H9wSYohJlQ4rmZEdhfupnGGKuWsJwaf268CJsHvArzPfz8EwB_Aoisyqzo22P99Qwf8AdXyUtVAwt6bMmkfVzORRK04nOKF0wW62H-kY--7YAWwdY3x2b6NbisaSNu3doOx34UkQRVRUFkelWmFJtAOyGwKK1hu2gskPO6q1GIKGcX40J1ExjDSBmC7FM1bHsPTNpxvkN4TC08NVvAnKpTDnhi6P03eiN-0pdiZS1E5wsEURaAIT-yHeuozT6pa46LneMblW0KJSJiLwv5AADCznY7zuwgoLiApzuAEf5uV2yIfaftLvNzytX78bOfZq8jx2nWrLgMQT1BEjglEmyZEx7VDFtP1AEMATyO80gjrSgrP7El5rxNwFFcTTTKZmDAn3z9fzErII0y_dVmFVg7ABtBNpy3cufaCf-8ACYxOXqup3fhPjfzF0wFvtND7sa3GvpLoX8i2XSPqAazcGjOT1KUqt4Ytnfn3j1o7x9xRbqCxZMT_HfS6rto";
-    if(self.jwtTextView.text.length >0){
-        jwt = self.jwtTextView.text;
+- (IBAction)idenfiyJWTUser:(id)sender{
+    if(self.jwtTextView.text.length ==0){
+        return;
     }
-    [[Freshchat sharedInstance] identifyUserWithIdToken:jwt];
+    [[Freshchat sharedInstance] identifyUserWithIdToken:self.jwtTextView.text];
 }
 
 - (IBAction)sendMessage:(id)sender{
