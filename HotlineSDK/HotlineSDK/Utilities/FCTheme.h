@@ -249,6 +249,7 @@
 -(UIColor *) csatPromptSubmitButtonBackgroundColor;
 
 -(UIColor *)csatPromptHorizontalLineColor;
+-(UIColor *)csatDialogBackgroundColor;
 -(UIFont *)csatPromptQuestionTextFont;
 -(UIColor *)csatPromptQuestionTextFontColor;
 -(UIFont *)csatPromptInputTextFont;

@@ -258,7 +258,6 @@
             NSString *imageHeight = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.height];
             NSString *imageWidth = [NSString stringWithFormat:@"%d",(int)imageFragment.imgFrame.size.width];
             NSString *horizontalConstraint = [NSString stringWithFormat:@"H:|-(>=%@)-[%@(%@)]-(>=%@)-|",leftPadding,str,imageWidth,rightPadding];
-                [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
             NSLayoutConstraint *centerConstraint = [NSLayoutConstraint constraintWithItem:imageFragment
                                                                                 attribute:NSLayoutAttributeCenterX
                                                                                 relatedBy:NSLayoutRelationEqual
@@ -267,6 +266,8 @@
                                                                                multiplier:1
                                                                                  constant:0];
             [contentEncloser addConstraint:centerConstraint];
+            [contentEncloser addConstraints:[NSLayoutConstraint constraintsWithVisualFormat : horizontalConstraint options:0 metrics:nil views:views]];
+            
             [veriticalConstraint appendString:[NSString stringWithFormat:@"-%@-[%@(<=%@)]",[self isTopFragment:fragmensViewArr currentIndex:i]? topPadding : internalPadding,str,imageHeight]];
         } else if([str containsString:@"text_"]) {
             if(welcomeTextMsg) { //If it has only text message in welcome message
