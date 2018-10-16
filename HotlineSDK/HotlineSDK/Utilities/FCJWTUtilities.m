@@ -9,13 +9,11 @@
 #import "FCJWTUtilities.h"
 #import "FCRemoteConfig.h"
 #import "FCUtilities.h"
+#import "FCSecureStore.h"
 
 @implementation FCJWTUtilities
 
 + (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) token{
-    
-    
-    
     if(!token.length) return @{};
     NSArray *tokenStucture = [token componentsSeparatedByString:@"."];
     
@@ -80,5 +78,24 @@
     }
     return false;
 }
+
++(BOOL) isJwtWaitingToAuth {
+    return ([FCJWTUtilities getPendingJWTToken] != nil);
+}
+
++(NSString *) getPendingJWTToken {
+    return [[FCSecureStore sharedInstance] objectForKey:@"PendingToken"];
+}
+
++(void) setPendingJWTToken : (NSString *) token {
+    [[FCSecureStore sharedInstance] setObject:token forKey:@"PendingToken"];
+}
+
++(void) removePendingJWTToken {
+    [[FCSecureStore sharedInstance] removeObjectWithKey:@"PendingToken"];
+}
+
+
+
 
 @end

@@ -383,26 +383,50 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         return;
     }
     
-    if(!([[FCJWTUtilities getJWTUserPayloadFromToken: token] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
-        //return;
+    
+    if([FreshchatUser sharedInstance].jwtToken != nil) {
+        //Same Token Payload Check
+        if(([[FCJWTUtilities getJWTUserPayloadFromToken: token] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
+            //return;
+        }
+        
+        if ([FCJWTUtilities getAliasFrom: token] == nil) {
+            [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
+            return;
+        }
+        
+        //Check for different alias(User 1  to User 2)
+        if(!([[FCJWTUtilities getAliasFrom: token] isEqualToString:
+              [FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken]])) {
+            [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
+            return;
+        }
+        
+        if(!([[FCJWTUtilities getReferenceID:token] isEqualToString:
+              [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
+            [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
+            return;
+        }
     }
     
-    if(!([[FCJWTUtilities getReferenceID: token] isEqualToString:
-          [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
-        [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-        //Whenever the user changes
-    }
     
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAITING_FOR_REFRESH_TOKEN];
     } else {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
     }
-    [FCUsers updateUserWithIdToken:token];//To store if internet is not available //WAITING_FOR_AUTH
+    
+    //To store if internet is not available //WAITING_FOR_AUTH
+    [FCJWTUtilities setPendingJWTToken:token];
+    
     [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
+        if([[FCReachabilityManager sharedInstance] isReachable]) {
+            [FCJWTUtilities removePendingJWTToken];
+        }
         if(!error && valid){
             [FCUsers updateUserWithIdToken:token]; //ACTIVE
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
+            [FCUtilities initiatePendingTasks];
         } else {
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
         }
@@ -588,6 +612,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
+    
+    if([FCJWTUtilities isJwtWaitingToAuth]) {        
+        [self setUserWithIdToken:[FCJWTUtilities getPendingJWTToken]];
+        return;
+    }
+
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
     }

@@ -228,10 +228,7 @@
 }
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
-    if([FCJWTUtilities isUserAuthEnabled]){ //Ignore property update for JWT AUTH
-        return;
-    }
-    
+
     static BOOL IN_PROGRESS = NO;
     
     if(IN_PROGRESS){
@@ -254,7 +251,6 @@
         NSMutableDictionary *info = [NSMutableDictionary new];
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         
-        
         NSArray *userProperties = [FCCoreServices updatePropertiesTo:userInfo];
         if (userProperties.count > 0 || forceUpdate) {
             userInfo[@"alias"] = [FCUtilities currentUserAlias];
@@ -268,6 +264,10 @@
             info[@"user"] = userInfo;
         }else{
             IN_PROGRESS = NO;
+        }
+        
+        if([FCJWTUtilities isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken != nil){
+            info[@"jwtAuthToken"] = [FreshchatUser sharedInstance].jwtToken;
         }
         
         if ([info count] == 0) {
@@ -314,6 +314,7 @@
                 FDLog(@"Pushed properties to server %@", info);
                 NSDictionary *response = responseInfo.responseAsDictionary;
                 [FCUtilities updateUserWithExternalID:[response objectForKey:@"identifier"] withRestoreID:[response objectForKey:@"restoreId"]];
+                [FCUtilities updateUserWithData:response];
                 if (handler) handler(nil);
             }
         }else{
@@ -579,7 +580,7 @@
             [FCUtilities initiatePendingTasks];
             [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
-        } else if (statusCode == 404) {
+        } else if (statusCode == 404 || statusCode == 418) {
             [FCUsers updateUserWithIdToken:token];
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
         }
@@ -687,8 +688,7 @@
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE,appID];
-    [[FreshchatUser sharedInstance] setJwtToken:token];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE,appID];    
     NSError *error = nil;
     NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];

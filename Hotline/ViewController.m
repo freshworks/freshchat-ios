@@ -107,6 +107,7 @@
     self.conversationTags.delegate = self;
     self.message.delegate = self;
     self.jwtTextView.delegate = self;
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"jwtToken"];
     self.jwtTextView.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"jwtToken"];
     self.sendMessageTag.delegate = self;
     //[[Freshchat sharedInstance] updateConversationBannerMessage:@"123"];
