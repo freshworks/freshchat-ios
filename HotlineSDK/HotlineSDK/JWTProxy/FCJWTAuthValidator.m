@@ -24,43 +24,8 @@
     if (self) {
         self.prevState = NONE;
         self.currState = NONE;
-      //  [self startTimer];
     }
     return self;
-}
-
--(void) startTimer {
-    _timer = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                             target:self
-                                           selector:@selector(fireChange)
-                                           userInfo:nil
-                                            repeats:true];
-    self.prevState = NONE;
-    self.currState = ACTIVE;
-}
-
--(void)fireChange {
-    [FCJWTAuthValidator sharedInstance].prevState = [FCJWTAuthValidator sharedInstance].currState;
-    switch ([FCJWTAuthValidator sharedInstance].currState) {
-        case ACTIVE:
-            self.currState = WAIT_FOR_FIRST_TOKEN;
-            break;
-        case WAIT_FOR_FIRST_TOKEN:
-            self.currState = VERIFICATION_UNDER_PROGRESS;
-            break;
-        case VERIFICATION_UNDER_PROGRESS:
-            self.currState = WAITING_FOR_REFRESH_TOKEN;
-            break;
-        case WAITING_FOR_REFRESH_TOKEN:
-            self.currState = TOKEN_VERIFICATION_FAILED;
-            break;
-        case TOKEN_VERIFICATION_FAILED:
-            self.currState = ACTIVE;
-            break;
-        default:
-            break;
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
 
 - (void) updateAuthState : (enum JWT_STATE) state{
