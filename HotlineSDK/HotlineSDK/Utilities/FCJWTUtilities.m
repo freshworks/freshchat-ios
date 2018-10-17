@@ -79,12 +79,16 @@
     return false;
 }
 
-+(BOOL) isJWTTokenVerified {
-    return [FCUserDefaults getBoolForKey:FRESHCHAT_DEFAULTS_IS_ID_TOKEN_VERIFIED];
++(NSString *) getPendingJWTToken {
+    return [FCUserDefaults getStringForKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
-+(void) setTokenVerificationStatus : (BOOL) status {
-    [FCUserDefaults setBool:status forKey:FRESHCHAT_DEFAULTS_IS_ID_TOKEN_VERIFIED];
++(void) setPendingJWTToken : (NSString *) token {
+    [FCUserDefaults setString:token forKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
+}
+
++ (BOOL) isJWTTokenPendingForAuth {
+    return ([FCJWTUtilities getPendingJWTToken] != nil);
 }
 
 @end

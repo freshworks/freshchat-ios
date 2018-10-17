@@ -205,6 +205,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
+    if([FCJWTUtilities isUserAuthEnabled]){
+        if([FCJWTAuthValidator sharedInstance].prevState == NONE){
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:WAITING_FOR_REFRESH_TOKEN];
+        }
+    }
     [FCUserUtil registerUser:completion];
     if([FCUserUtil isUserRegistered]) {
         [FCUtilities postUnreadCountNotification];
@@ -418,10 +423,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     //To store if internet is not available
     [FCUsers updateUserWithIdToken:token];
-    [FCJWTUtilities setTokenVerificationStatus:FALSE];
+    [FCJWTUtilities setPendingJWTToken:token];
     [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
         if(!error && valid){
-            [FCJWTUtilities setTokenVerificationStatus:TRUE];
+            [FCJWTUtilities setPendingJWTToken:nil];
             [FCUsers updateUserWithIdToken:token]; //ACTIVE
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
             [FCUtilities initiatePendingTasks];
@@ -611,10 +616,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     
-//    if([FCJWTUtilities isUserAuthEnabled] && ![FCJWTUtilities isJWTTokenVerified]) {
-//        [self setUserWithIdToken:[FreshchatUser sharedInstance].jwtToken];
-//        return;
-//    }
+    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities isJWTTokenPendingForAuth]) {
+        [self setUserWithIdToken:[FreshchatUser sharedInstance].jwtToken];
+        return;
+    }
 
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
