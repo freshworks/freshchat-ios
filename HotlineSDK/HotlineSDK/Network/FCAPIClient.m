@@ -11,6 +11,7 @@
 #import "FCUtilities.h"
 #import "FCJWTUtilities.h"
 #import "FCJWTAuthValidator.h"
+#import "FCSecureStore.h"
 
 @interface FCAPIClient ()
 
@@ -51,14 +52,17 @@
         return Nil;
     }
     if( isAuthEnabled && [FCJWTUtilities isUserAuthEnabled]) {
-        if([FCJWTAuthValidator sharedInstance].currState != ACTIVE ) {
+        if([FCJWTAuthValidator sharedInstance].currState != ACTIVE && [FCJWTAuthValidator sharedInstance].currState != NONE ) {
             [[FCJWTAuthValidator sharedInstance] updateAuthState:VERIFICATION_UNDER_PROGRESS];
         }
-        if ([FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]) {
-            NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
-            if (handler) handler(nil, error);
-            return Nil;
+        //TODO : rename FRESHCHAT_DEFAULTS_IS_FIRST_AUTH
+        if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
+            if ([FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]) {
+                NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+                if (handler) handler(nil, error);
+                return Nil;
+            }
         }
     }
     

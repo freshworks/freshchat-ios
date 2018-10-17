@@ -384,17 +384,19 @@
 }
 
 -(void)jwtStateChange {
-    switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
-        case LOADING:
-            [self showJWTLoading];
-            break;
-        case SHOW_ALERT:
-            [self showJWTVerificationFailedAlert];
-            break;
-        default:
-            [self hideJWTLoading];
-            break;
-    };
+    dispatch_async(dispatch_get_main_queue(), ^{ /* show alert view */
+        switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
+            case LOADING:
+                [self showJWTLoading];
+                break;
+            case SHOW_ALERT:
+                [self showJWTVerificationFailedAlert];
+                break;
+            default:
+                [self hideJWTLoading];
+                break;
+        };
+    });
 }
 
 
@@ -434,7 +436,11 @@
 }
 
 -(void) showJWTVerificationFailedAlert {
-    [self hideJWTLoading];
+    if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
+        [self hideJWTLoading];
+    } else {
+        [self showJWTLoading];
+    }
     if(!self.isJWTAlertShown) {
         [self showAlertWithTitle:@"JWT Failure"
                       andMessage:@"JWT - Verification Failure"];

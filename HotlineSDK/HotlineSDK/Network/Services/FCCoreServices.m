@@ -132,8 +132,7 @@
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
-        if (!error) {
-            NSDictionary *response = responseInfo.responseAsDictionary;
+        if (!error) {            
             FDLog(@"*** User registration status ***");
             
             if (statusCode == 201 || statusCode == 304) {
@@ -150,11 +149,16 @@
                 if (handler) handler(nil);
                 
             }else{
-                FDLog(@"Failed with wrong status code");
-                if (handler) handler([NSError new]);
+                if(statusCode == 409) {
+                    [FCCoreServices resetUserData:^{
+                        if (handler) handler([NSError new]);
+                    }];
+                } else {
+                    FDLog(@"Failed with wrong status code");
+                    if (handler) handler([NSError new]);
+                }
             }
-            
-        }else{
+        } else{
             FDLog(@"User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
             if (handler) handler(error);
@@ -574,21 +578,20 @@
         NSDictionary *response = responseInfo.responseAsDictionary;
         apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
         if (statusCode == 200) { //If the user is found
+            [FCUtilities updateUserAlias:response[@"alias"]];
             [FCUtilities updateUserWithData:response];
             [FCUserUtil setUserMessageInitiated];
             [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             [FCUtilities initiatePendingTasks];
             [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
-        } else if (statusCode == 404 || statusCode == 418) {
-            [FCUsers updateUserWithIdToken:token];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
-        }
-        else {
-            //If the user is not found
-            [FCUtilities resetAlias];
+        } else { //Any failure case
             [FCUsers removeUserInfo];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+            [FCUtilities resetAlias];
+            [FreshchatUser sharedInstance].isRestoring = false;
+            [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
+            [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
         }
         if(completion){
             completion(error);
