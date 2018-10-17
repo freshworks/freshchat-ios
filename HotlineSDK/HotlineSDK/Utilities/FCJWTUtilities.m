@@ -9,7 +9,7 @@
 #import "FCJWTUtilities.h"
 #import "FCRemoteConfig.h"
 #import "FCUtilities.h"
-#import "FCSecureStore.h"
+#import "FCUserDefaults.h"
 
 @implementation FCJWTUtilities
 
@@ -79,23 +79,12 @@
     return false;
 }
 
-+(BOOL) isJwtWaitingToAuth {
-    return ([FCJWTUtilities getPendingJWTToken] != nil);
++(BOOL) isJWTTokenVerified {
+    return [FCUserDefaults getBoolForKey:FRESHCHAT_DEFAULTS_IS_ID_TOKEN_VERIFIED];
 }
 
-+(NSString *) getPendingJWTToken {
-    return [[FCSecureStore sharedInstance] objectForKey:@"PendingToken"];
++(void) setTokenVerificationStatus : (BOOL) status {
+    [FCUserDefaults setBool:status forKey:FRESHCHAT_DEFAULTS_IS_ID_TOKEN_VERIFIED];
 }
-
-+(void) setPendingJWTToken : (NSString *) token {
-    [[FCSecureStore sharedInstance] setObject:token forKey:@"PendingToken"];
-}
-
-+(void) removePendingJWTToken {
-    [[FCSecureStore sharedInstance] removeObjectWithKey:@"PendingToken"];
-}
-
-
-
 
 @end

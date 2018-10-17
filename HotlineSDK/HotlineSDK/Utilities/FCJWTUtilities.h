@@ -23,13 +23,9 @@
 
 + (NSString*) getAliasFrom: (NSString *) token;
 
-+(BOOL) isJwtWaitingToAuth;
++(BOOL) isJWTTokenVerified;
 
-+(NSString *) getPendingJWTToken;
-
-+(void) setPendingJWTToken : (NSString *) token;
-
-+(void) removePendingJWTToken;
++(void) setTokenVerificationStatus : (BOOL) status;
 
 @end
 

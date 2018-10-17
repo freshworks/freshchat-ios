@@ -383,6 +383,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         return;
     }
     
+    if(trimString(token).length == 0) return;
     
     if([FreshchatUser sharedInstance].jwtToken != nil) {
         //Same Token Payload Check
@@ -409,21 +410,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         }
     }
     
-    
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAITING_FOR_REFRESH_TOKEN];
     } else {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
     }
     
-    //To store if internet is not available //WAITING_FOR_AUTH
-    [FCJWTUtilities setPendingJWTToken:token];
-    
+    //To store if internet is not available
+    [FCUsers updateUserWithIdToken:token];
+    [FCJWTUtilities setTokenVerificationStatus:FALSE];
     [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
-        if([[FCReachabilityManager sharedInstance] isReachable]) {
-            [FCJWTUtilities removePendingJWTToken];
-        }
         if(!error && valid){
+            [FCJWTUtilities setTokenVerificationStatus:TRUE];
             [FCUsers updateUserWithIdToken:token]; //ACTIVE
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
             [FCUtilities initiatePendingTasks];
@@ -613,10 +611,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     
-    if([FCJWTUtilities isJwtWaitingToAuth]) {        
-        [self setUserWithIdToken:[FCJWTUtilities getPendingJWTToken]];
-        return;
-    }
+//    if([FCJWTUtilities isUserAuthEnabled] && ![FCJWTUtilities isJWTTokenVerified]) {
+//        [self setUserWithIdToken:[FreshchatUser sharedInstance].jwtToken];
+//        return;
+//    }
 
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
