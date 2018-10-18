@@ -390,10 +390,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([FreshchatUser sharedInstance].jwtToken != nil) {
         //Same Token Payload Check
         if(([[FCJWTUtilities getJWTUserPayloadFromToken: token] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
-            //return;
+            ALog(@"Freshchat API : Same Payload");
+            return;
         }
         
         if ([FCJWTUtilities getAliasFrom: token] == nil) {
+            ALog(@"Freshchat API : Empty Alias Found");
             [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
             return;
         }
@@ -401,6 +403,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         //Check for different alias(User 1  to User 2)
         if(!([[FCJWTUtilities getAliasFrom: token] isEqualToString:
               [FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken]])) {
+            ALog(@"Freshchat API : Different Alias Found");
             [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
             return;
         }
@@ -408,6 +411,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         if(!([[FCJWTUtilities getReferenceID:token] isEqualToString:
               [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
             if (!([FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken] == nil && [FCJWTUtilities getReferenceID:token] == nil)) {
+                ALog(@"Freshchat API : Different Reference ID");
                 [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
             }
             return;
