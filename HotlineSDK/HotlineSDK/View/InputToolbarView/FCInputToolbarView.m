@@ -17,6 +17,7 @@
 #import "FCAutolayoutHelper.h"
 #import "FCPlistManager.h"
 #import "FCStringUtil.h"
+#import "FCLocalNotification.h"
 
 @interface FCInputToolbarView () <UITextViewDelegate>{
     NSString *placeHolderText;
@@ -183,6 +184,7 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
 }
 
 -(void)sendButtonAction:(id)sender{
+    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"new_message"];
     [self.delegate inputToolbar:self sendButtonPressed:sender];
     [self updateAudioRecBtn:self.textView];
     self.placeholderLabel.hidden = NO;

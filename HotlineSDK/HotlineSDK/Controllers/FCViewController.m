@@ -14,11 +14,18 @@
 #import "FCControllerUtils.h"
 #import "FCJWTAuthValidator.h"
 #import "FCAutolayoutHelper.h"
+#import "FCChannelViewController.h"
+#import "FCMessageController.h"
+#import "FCAttachmentImageController.h"
+#import "FCLocalNotification.h"
 
 @implementation FCViewController : UIViewController
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if([self.class isEqual:[FCChannelViewController class]] || [self.class isEqual:[FCMessageController class]] || [self.class isEqual:[FCAttachmentImageController class]]){
+        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"screen_transition"];
+    }
     if (self.navigationController == nil) {
         ALog(@"Warning: Use Hotline controllers inside navigation controller");
     }

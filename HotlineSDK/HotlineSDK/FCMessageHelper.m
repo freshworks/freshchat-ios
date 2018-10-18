@@ -17,8 +17,8 @@
 #import "FCSecureStore.h"
 #import <ImageIO/ImageIO.h>
 #import "FCUserUtil.h"
-
 #import "FCMessages.h"
+#import "FCJWTUtilities.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -162,7 +162,13 @@ __weak static id <KonotorDelegate> _delegate;
     [[FCDataManager sharedInstance]save];
     
     if(![FCUserUtil isUserRegistered]) {
-        [FCUserUtil registerUser:nil];
+        if([FCJWTUtilities isUserAuthEnabled]){
+            ALog(@"Freshchat Error : Please create user before sending message");
+            return;
+        }
+        else{
+            [FCUserUtil registerUser:nil];
+        }
     } else {
         [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
     }

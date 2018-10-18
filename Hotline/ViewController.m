@@ -27,6 +27,7 @@
 @property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
 
 @property (nonatomic, strong) IBOutlet UITextView *jwtTextView;
+@property (nonatomic, strong) IBOutlet UITextView *userAliasView;
 
 @property (nonatomic, strong) IBOutlet UITextField *faqTitleField1;
 
@@ -107,6 +108,7 @@
     self.conversationTags.delegate = self;
     self.message.delegate = self;
     self.jwtTextView.delegate = self;
+    self.userAliasView.delegate = self;
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"jwtToken"];
     self.jwtTextView.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"jwtToken"];
     self.sendMessageTag.delegate = self;
@@ -129,6 +131,16 @@
                                                  name:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(jwtActionEvent:)
+                                                 name:FRESHCHAT_ACTION_USER_ACTIONS
+                                               object:nil];
+    
+    
+}
+
+- (void) jwtActionEvent:(NSNotification *)notif {
+    NSLog(@"====JWT Event - %@ ====", notif.userInfo);
 }
 
 - (void) receiveHLPlayNotification:(NSNotification *) notification{
@@ -342,10 +354,10 @@ SampleController *sampleController;
 
 //2
 - (IBAction)setJWTUser:(id)sender{
-    if(self.jwtTextView.text.length == 0){
-        return;
-    }
-    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtTextView.text];
+//    if(self.jwtTextView.text.length == 0){
+//        return;
+//    }
+    [[Freshchat sharedInstance] setUserWithIdToken:@"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6IlRlc3RpbmdkYWQiLCJmcmVzaGNoYXRfdXVpZCI6IjBBNUQwOEVFLUU1QjItNDk5MS04ODdFLUZGQjNGM0VDQTE3MSIsInJlZmVyZW5jZV9pZCI6InRlc3R0ZXN0MTIzNDUiLCJpYXQiOjE1MTYyMzkwMjJ9.oLQ4xC-p_fKSPIOwm2ir48yf_-o7NLmkv1Knp9yNzp5QIJeIdqX6Zg6BwiBqV0EQ-UIpOaVX3Ro2cfT_q8Ru3TBsG8EQoWs_iAzx8WXxLOlPgw9XOJoyur6_8WoRXDQIFbxBZdI0_wTfrxrzAf-we9PjjKSkXWTd1zO9YVfNxCvnjvmZuIsCz_qrNYjJPYL1P04iOuC8KXqsKgo0OXjZJhglzicpIFkShyWCsE2OnsUiCZ3uRu2X4-PwSpkeqmGlftWLNaUSBEYVTpi_RlRfVfKF0mPOAG3rD7NN-ybA2E8n7VInbzQlsvBKaH8cwdQsXHh1wup_hUJxlvDv6tALLCuKg0-XHiZSvL3YJCOq-2XIP_RmIQG3oy1H5FMstzPXJdkKdJdp_wJybJwcO6pqrxeXhgXgmecPBJc32FVvD_zFwgPQoDUpFXZ0PUvDLL6Z6ryNzuy8yI6dIDmzoG81dViChTFrUkoUrSsJxgySU3nenIcgR9TzOj64TuuVHCAOI7j90Mj5rTHo7Ish3FlgTbbs3KpkK49v63NqP7yQVayYcrRmz9U9aZwFjkV-7BcXPrqLC-xT6_FrqJSICsdc0BEChg4wIbk4y2xYqDbv24mL0mEn3HdqwtsSBeOCJvSbRT7M79GIprGbrcG06vUZVo0qQTiIvS1-wtPGDNM3vC4"];
 }
 
 - (IBAction)idenfiyJWTUser:(id)sender{
@@ -368,6 +380,11 @@ SampleController *sampleController;
     } else {
         self.switchVal = false;
     }
+}
+
+- (IBAction) getUserAliasForJWT:(id)sender {
+    self.userAliasView.text = [[Freshchat sharedInstance] getFreshchatUserId];
+    NSLog(@"User Id is - %@", [[Freshchat sharedInstance] getFreshchatUserId]);
 }
 
 - (IBAction)switchGridAction:(id)sender {

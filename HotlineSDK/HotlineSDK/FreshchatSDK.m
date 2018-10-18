@@ -916,6 +916,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
+    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"new_message"];
     NSManagedObjectContext *mainContext = [[FCDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
         [[FCTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
