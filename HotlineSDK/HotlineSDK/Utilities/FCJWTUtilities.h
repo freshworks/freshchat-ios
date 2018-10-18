@@ -31,5 +31,11 @@
 
 +(void) removePendingJWTToken;
 
++(void) setPendingRestoreJWTToken : (NSString *) token;
+
++ (void) removePendingRestoreJWTToken;
+
++ (NSString *) getPendingRestoreJWTToken;
+
 @end
 

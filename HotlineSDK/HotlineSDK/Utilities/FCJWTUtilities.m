@@ -85,18 +85,27 @@
 }
 
 +(NSString *) getPendingJWTToken {
-    return [[FCSecureStore sharedInstance] objectForKey:@"PendingToken"];
+    return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
 +(void) setPendingJWTToken : (NSString *) token {
-    [[FCSecureStore sharedInstance] setObject:token forKey:@"PendingToken"];
+    [[FCSecureStore sharedInstance] setObject:token forKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
 +(void) removePendingJWTToken {
-    [[FCSecureStore sharedInstance] removeObjectWithKey:@"PendingToken"];
+    [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
++ (void) setPendingRestoreJWTToken : (NSString *) token {
+    [[FCSecureStore sharedInstance] setObject:token forKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
+}
 
++ (void) removePendingRestoreJWTToken {
+    [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
+}
 
++ (NSString *) getPendingRestoreJWTToken {
+    return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
+}
 
 @end

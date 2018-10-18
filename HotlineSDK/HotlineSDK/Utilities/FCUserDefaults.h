@@ -56,7 +56,6 @@
 #define CONFIG_RC_JWT_AUTH_STRICT_MODE_ENABLED @"config_rc_jwt_auth_strict_mode_enabled"
 
 #define FRESHCHAT_DEFAULTS_USER_IOS_VERSION @"freshchat_defaults_user_ios_version"
-#define FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN @"freshchat_defaults_user_verification_pending_token"
 
 @interface FCUserDefaults : NSObject
 

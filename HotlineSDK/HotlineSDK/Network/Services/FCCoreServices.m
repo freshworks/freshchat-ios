@@ -26,6 +26,7 @@
 #import "FCVotingManager.h"
 #import "FCJWTUtilities.h"
 #import "FCJWTAuthValidator.h"
+#import "FCReachabilityManager.h"
 
 @interface Freshchat ()
 
@@ -577,6 +578,9 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         NSDictionary *response = responseInfo.responseAsDictionary;
         apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
+        if([[FCReachabilityManager sharedInstance] isReachable]) {
+            [FCJWTUtilities removePendingRestoreJWTToken];
+        }
         if (statusCode == 200) { //If the user is found
             [FCUtilities updateUserAlias:response[@"alias"]];
             [FCUtilities updateUserWithData:response];

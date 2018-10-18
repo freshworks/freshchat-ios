@@ -72,9 +72,12 @@
 #define FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED @"freshchat_defaults_is_account_deleted"
 
 #define FRESHCHAT_DEFAULTS_IS_FIRST_AUTH @"freshchat_defaults_is_first_auth"
+#define FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN @"freshchat_defaults_user_verification_pending_token"
+#define FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN @"freshchat_defaults_user_auth_id_restore_pending_token"
 
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
+
 
 @interface FCSecureStore : NSObject
 
