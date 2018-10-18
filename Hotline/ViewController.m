@@ -81,7 +81,7 @@
     }];
     
     /*
-        [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
+        [Freshchat sharedInstance].handleLink = ^BOOL(NSURL * url) {
             NSLog(@"%@",url.description);
             UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
             sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];

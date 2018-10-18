@@ -1194,6 +1194,10 @@ typedef struct {
     }
 }
 
+-(BOOL)handleLinkDelegate: (NSURL *)url {
+    return [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController];
+}
+
 //TODO: Needs refractor
 #pragma mark - Audio toolbar delegates
 

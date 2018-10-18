@@ -7,6 +7,7 @@
 //
 
 #import "FCHtmlFragment.h"
+
 #import "FCTheme.h"
 #import "FCAttributedText.h"
 #import "FCUtilities.h"
@@ -49,11 +50,10 @@
     }
 
     - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-        if ([Freshchat sharedInstance].shouldInteractWithURL != nil) {
-            return [Freshchat sharedInstance].shouldInteractWithURL(URL);            
-        } else {
-            return YES;
+        if(self.mcDelegate != nil) {
+            return ![self.mcDelegate handleLinkDelegate:URL];
         }
+        return YES;
     }
 
 

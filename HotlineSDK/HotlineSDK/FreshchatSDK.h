@@ -295,7 +295,11 @@ enum TagFilterType {
  */
 -(void) dismissFreshchatViews;
 
-@property (nonatomic, copy) BOOL(^shouldInteractWithURL)(NSURL*);
+/**
+ *  Code block for handling links. Return 'YES' to override default link behaviour and 'NO' to handle it on the block itself.
+ */
+
+@property (nonatomic, copy) BOOL(^handleLink)(NSURL*);
 
 @end
 

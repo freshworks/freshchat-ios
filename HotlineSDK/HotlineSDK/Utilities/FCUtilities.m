@@ -27,6 +27,7 @@
 #import "FCAutolayoutHelper.h"
 #import "FCContainerController.h"
 #import "FDImageView.h"
+#import "FCFAQUtil.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -666,6 +667,7 @@ static NSInteger networkIndicator = 0;
 }
 
 
+
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion {
     [FCCoreServices resetUserData:^{
         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
@@ -793,6 +795,20 @@ static NSInteger networkIndicator = 0;
                                                green:(1.0 - componentColors[1])
                                                 blue:(1.0 - componentColors[2])
                                                alpha:componentColors[3]];
+}
+
++(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UINavigationController *) navController {
+    if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame) ||
+       ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame))  { 
+        NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
+        NSNumber *articleId = [numbFormatter numberFromString:[url host]];
+        [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
+        return YES;
+    }
+    else if ([Freshchat sharedInstance].handleLink != nil) {
+        return [Freshchat sharedInstance].handleLink(url);
+    }
+    return NO;
 }
 
 @end

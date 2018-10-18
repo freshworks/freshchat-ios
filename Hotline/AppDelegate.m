@@ -172,9 +172,9 @@
 
     config.teamMemberInfoVisible = YES;
     
-    [Freshchat sharedInstance].shouldInteractWithURL = ^BOOL(NSURL * url) {
+    [Freshchat sharedInstance].handleLink = ^BOOL(NSURL * url) {
         NSLog(@"%@",url.description);        
-        return FALSE;
+        return NO;
     };
     
     //config.pictureMessagingEnabled = YES;

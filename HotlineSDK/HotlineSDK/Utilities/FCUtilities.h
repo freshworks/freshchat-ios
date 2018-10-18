@@ -84,6 +84,7 @@
 + (NSMutableAttributedString *) getAttributedContentForString :(NSString *)strVal withFont :(UIFont *) font;
 + (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName;
 + (void) cacheImageWithUrl : (NSString *) url;
++(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UINavigationController *) navController;
 
 @end
 
