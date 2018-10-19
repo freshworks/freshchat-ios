@@ -131,7 +131,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)initWithConfig:(FreshchatConfig *)config{
     @try {
-        [self initWithConfig:config completion:nil];
+        [self initWithConfig:config completion:^(NSError *error) {
+            if(error == nil) {
+                [self newSession];
+            }
+        }];
     } @catch (NSException *exception) {
         [FCMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
         if([exception.name isEqualToString: @"FreshchatInvalidArgumentException"]){
@@ -209,7 +213,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
        && [FreshchatUser sharedInstance].jwtToken == nil) {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
     }
-        
+
     [FCUserUtil registerUser:completion];
     if([FCUserUtil isUserRegistered]) {
         [FCUtilities postUnreadCountNotification];
@@ -253,7 +257,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void) registerAppNotificationListeners{
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(newSession:)
+                                             selector: @selector(newSession)
                                                  name: UIApplicationDidBecomeActiveNotification object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
@@ -582,7 +586,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 /*  This function is called during every launch &
  when the SDK's app is transitioned from background to foreground  */
 
--(void)newSession:(NSNotification *)notification{
+-(void)newSession{
     if([FCUtilities hasInitConfig]) {
         if(FC_POLL_WHEN_APP_ACTIVE){
             [self.messagePoller begin];

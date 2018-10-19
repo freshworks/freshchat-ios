@@ -48,6 +48,10 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
                     }
                 }
             }
+        } else {
+            if (completion) {
+                completion(nil);
+            }
         }
     }
 }
