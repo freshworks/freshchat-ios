@@ -681,6 +681,12 @@
         [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         [store removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
         [FCUserDefaults removeObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
+        
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
+        
         [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
         [FCJWTAuthValidator sharedInstance].currState = NONE;
         [FCJWTAuthValidator sharedInstance].prevState = NONE;

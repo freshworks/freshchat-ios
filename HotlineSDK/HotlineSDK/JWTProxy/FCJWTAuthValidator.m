@@ -24,13 +24,22 @@
     self = [super init];
     if (self) {
         self.prevState = NONE;
-        self.currState = NONE;
+        self.currState = [self setDefaultJWTState];
     }
     return self;
 }
 
+-(enum JWT_STATE) setDefaultJWTState {
+    NSNumber *stateNumb = [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
+    if(stateNumb != nil) {
+        return (enum JWT_STATE)[stateNumb intValue];
+    }
+    return NONE;
+}
+
 - (void) updateAuthState : (enum JWT_STATE) state{
     [FCJWTAuthValidator sharedInstance].currState = state;
+    [[FCSecureStore sharedInstance] setIntValue:(int)state forKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
 

@@ -15,7 +15,7 @@
 #define WAITING_FOR_REFRESH_TOKEN_EVENT @"com.freshchat.jwt.wrt"
 #define TOKEN_VERIFICATION_FAILED_EVENT @"com.freshchat.jwt.tvf"
 
-enum JWT_STATE {
+enum JWT_STATE : NSInteger {
     NONE = 0,
     ACTIVE = 1,
     WAIT_FOR_FIRST_TOKEN = 2,

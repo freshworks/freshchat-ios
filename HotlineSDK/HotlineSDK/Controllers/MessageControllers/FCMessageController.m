@@ -1457,19 +1457,13 @@ typedef struct {
 }
 
 -(void) showJWTVerificationFailedAlert {
-    if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
-        [self hideJWTLoading];
-    } else {
-        [self showJWTLoading];
-    }
-    
+    [self showJWTLoading];
     if(!self.isJWTAlertShown) {
         [self showAlertWithTitle:@"JWT Failure"
                       andMessage:@"JWT - Verification Failure"];
         self.isJWTAlertShown = TRUE;
         if(self.tabBarController != nil) {
             [self.parentViewController.navigationController popViewControllerAnimated:YES];
-            [self hideJWTLoading];
         } else {
             [self dismissViewControllerAnimated:true completion:nil];
         }

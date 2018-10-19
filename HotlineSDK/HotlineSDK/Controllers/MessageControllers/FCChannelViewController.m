@@ -436,11 +436,7 @@
 }
 
 -(void) showJWTVerificationFailedAlert {
-    if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
-        [self hideJWTLoading];
-    } else {
-        [self showJWTLoading];
-    }
+    [self showJWTLoading];
     if(!self.isJWTAlertShown) {
         [self showAlertWithTitle:@"JWT Failure"
                       andMessage:@"JWT - Verification Failure"];
