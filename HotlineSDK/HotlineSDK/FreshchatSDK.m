@@ -448,13 +448,13 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)identifyUserWithIdToken:(NSString *) jwtToken{
-    [FCJWTUtilities removePendingJWTToken];
     if(jwtToken.length == 0){
         ALog(@"Freshchat : JWT token missing for identifyUser API!");
         return;
     }
     
     if ([FCJWTUtilities getReferenceID:jwtToken] && [FCJWTUtilities getAliasFrom:jwtToken]) {
+        [FCJWTUtilities removePendingJWTToken];
         [FCJWTUtilities setPendingRestoreJWTToken:jwtToken];
         [FCUtilities resetDataAndRestoreWithJwtToken:jwtToken withCompletion:nil];
     } else {
