@@ -162,13 +162,7 @@ __weak static id <KonotorDelegate> _delegate;
     [[FCDataManager sharedInstance]save];
     
     if(![FCUserUtil isUserRegistered]) {
-        if([FCJWTUtilities isUserAuthEnabled]){
-            ALog(@"Freshchat Error : Please create user before sending message");
-            return;
-        }
-        else{
-            [FCUserUtil registerUser:nil];
-        }
+        [FCUserUtil registerUser:nil];
     } else {
         [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
     }

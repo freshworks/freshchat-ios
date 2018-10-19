@@ -205,6 +205,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
+    if([FCJWTUtilities isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken) {
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+    }
+        
     [FCUserUtil registerUser:completion];
     if([FCUserUtil isUserRegistered]) {
         [FCUtilities postUnreadCountNotification];
@@ -932,6 +936,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 NSSet *conversations = channel.conversations;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
+                }
+                if([FCJWTUtilities isUserAuthEnabled] && ![FCUserUtil isUserRegistered]){
+                    ALog(@"Freshchat Error : Please create user before sending message");
+                    return;
                 }
                 [FCMessageHelper uploadMessageWithImage:nil textFeed:messageObject.message onConversation:conversation andChannel:channel];
             }
