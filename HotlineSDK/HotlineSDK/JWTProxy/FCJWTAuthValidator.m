@@ -7,6 +7,7 @@
 //
 
 #import "FCJWTAuthValidator.h"
+#import "FCSecureStore.h"
 
 @implementation FCJWTAuthValidator
 

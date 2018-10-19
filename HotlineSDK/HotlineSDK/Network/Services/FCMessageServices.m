@@ -258,7 +258,10 @@ static FCNotificationHandler *handleUpdateNotification;
                 
                 if([newMessage.messageUserType integerValue] == 0) { //Set user messages from other devices/os
                      newMessage.isRead = YES;
-                }
+                } else {
+                    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"new_message"];
+
+                }                
             }
         }
         

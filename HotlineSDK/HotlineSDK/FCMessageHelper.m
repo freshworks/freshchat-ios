@@ -19,6 +19,7 @@
 #import "FCUserUtil.h"
 #import "FCMessages.h"
 #import "FCJWTUtilities.h"
+#import "FCLocalNotification.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -187,6 +188,7 @@ __weak static id <KonotorDelegate> _delegate;
 +(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(FCConversations *)conversation andChannel:(FCChannels *)channel{
     [FCUserUtil setUserMessageInitiated];
     [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
+    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"new_message"];
 }
 
 +(void)uploadImage:(UIImage *)image onConversation:(FCConversations *)conversation onChannel:(FCChannels *)channel{

@@ -205,7 +205,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
-    if([FCJWTUtilities isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken) {
+    if([FCJWTUtilities isUserAuthEnabled]
+       && [FreshchatUser sharedInstance].jwtToken == nil) {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
     }
         
@@ -439,7 +440,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
             [FCUtilities initiatePendingTasks];
         } else {
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+            if([[FCReachabilityManager sharedInstance] isReachable]) {
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];                
+            }
         }
     }];
 }
@@ -651,7 +654,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                 [FCMessages uploadAllUnuploadedMessages];
                 [FCMessageServices uploadUnuploadedCSAT];
             } else {
-                if([FCJWTUtilities isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken == nil){
+                if([FCJWTUtilities isUserAuthEnabled]
+                   && [FreshchatUser sharedInstance].jwtToken == nil){
                     [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
                 }
             }
@@ -920,7 +924,6 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
-    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"new_message"];
     NSManagedObjectContext *mainContext = [[FCDataManager sharedInstance] mainObjectContext];
     [mainContext performBlock:^{
         [[FCTagManager sharedInstance] getChannelsForTags:@[messageObject.tag] inContext:mainContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
@@ -937,8 +940,9 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                if([FCJWTUtilities isUserAuthEnabled] && ![FCUserUtil isUserRegistered]){
-                    ALog(@"Freshchat Error : Please create user before sending message");
+                if([FCJWTUtilities isUserAuthEnabled]
+                   && [FreshchatUser sharedInstance].jwtToken == nil){
+                    ALog(@"Freshchat Error : Please Validate the user first.");
                     return;
                 }
                 [FCMessageHelper uploadMessageWithImage:nil textFeed:messageObject.message onConversation:conversation andChannel:channel];
