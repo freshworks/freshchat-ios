@@ -386,6 +386,13 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
 }
 
+- (NSString *)getUserIdTokenStatus{
+    if ([[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE]){
+        return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
+    }
+    return @"NONE";
+}
+
 - (void) setUserWithIdToken :(NSString *) token {
     
     [FCJWTUtilities removePendingRestoreJWTToken];
@@ -639,6 +646,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([FCUtilities hasInitConfig]) {
         [FCCoreServices performDAUCall];
         if([FCUtilities canMakeRemoteConfigCall]){
+            if([FCJWTUtilities isUserAuthEnabled]
+               && [FreshchatUser sharedInstance].jwtToken == nil){
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+            }
             [FCCoreServices fetchRemoteConfig];            
         }
         dispatch_async(dispatch_get_main_queue(),^{

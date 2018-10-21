@@ -172,6 +172,11 @@ enum TagFilterType {
  */
 - (void)setUserWithIdToken :(NSString *) token;
 
+/*
+ * In Auth Strict Mode get status of User Auth Token
+ */
+- (NSString *)getUserIdTokenStatus;
+
 /**
 *  Restore User
 *
@@ -184,6 +189,7 @@ enum TagFilterType {
 *
 */
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID;
+
 /**
  *Identify and restore an user base on reference_id
  *
