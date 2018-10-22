@@ -118,7 +118,7 @@
             }
             
             if (self.isWaitingForJWT) {
-                message = @"Waiting for JWT Auth";
+                message = HLLocalizedString(LOC_WAIT_FOR_JWT_MESSAGE);
             }
             self.emptyResultView.emptyResultLabel.text = message;
             [self.loadingViewDelegate.view addSubview:self.emptyResultView];

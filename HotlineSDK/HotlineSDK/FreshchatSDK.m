@@ -629,9 +629,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
-    
     [self performPendingJWTTasks];
-    
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
     }
