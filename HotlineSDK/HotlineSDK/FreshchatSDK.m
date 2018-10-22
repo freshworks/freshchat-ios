@@ -961,7 +961,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                     conversation = [conversations anyObject];
                 }
                 if([FCJWTUtilities isUserAuthEnabled]
-                   && ([FreshchatUser sharedInstance].jwtToken == nil || [[FreshchatUser sharedInstance].jwtToken isEqualToString:@""])){
+                   && ([FreshchatUser sharedInstance].jwtToken == nil && ![[FreshchatUser sharedInstance].jwtToken isEqualToString:@""])){
                     ALog(@"Freshchat Error : Please Validate the user first.");
                     return;
                 }
