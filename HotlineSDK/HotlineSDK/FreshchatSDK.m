@@ -458,7 +458,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }];
 }
 
--(void)identifyUserWithIdToken:(NSString *) jwtToken{
+-(void)restoreUserWithIdToken:(NSString *) jwtToken{
     if(jwtToken.length == 0){
         ALog(@"Freshchat : JWT token missing for identifyUser API!");
         return;
@@ -636,7 +636,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
     
     if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
-        [self identifyUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
+        [self restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
         return;
     }
     
@@ -646,11 +646,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if([FCUtilities hasInitConfig]) {
         [FCCoreServices performDAUCall];
         if([FCUtilities canMakeRemoteConfigCall]){
+            [FCCoreServices fetchRemoteConfig];
             if([FCJWTUtilities isUserAuthEnabled]
                && [FreshchatUser sharedInstance].jwtToken == nil){
                 [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
             }
-            [FCCoreServices fetchRemoteConfig];            
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([FCUserUtil isUserRegistered]){

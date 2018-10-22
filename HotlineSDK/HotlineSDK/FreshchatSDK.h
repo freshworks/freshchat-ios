@@ -196,7 +196,7 @@ enum TagFilterType {
  *@param jwtToken The Jwt Id Token for the current user signed by your account's private key
  *
  */
--(void)identifyUserWithIdToken:(NSString *) jwtIdToken;
+-(void)restoreUserWithIdToken:(NSString *) jwtIdToken;
 /**
  *  Clear User Data
  *

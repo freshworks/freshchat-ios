@@ -24,7 +24,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if([self.class isEqual:[FCChannelViewController class]] || [self.class isEqual:[FCMessageController class]] || [self.class isEqual:[FCAttachmentImageController class]]){
-        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"screen_transition"];
+        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"SCREEN_TRANSITION"}];
     }
     if (self.navigationController == nil) {
         ALog(@"Warning: Use Hotline controllers inside navigation controller");

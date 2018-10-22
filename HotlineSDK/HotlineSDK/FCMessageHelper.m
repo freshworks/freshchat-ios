@@ -188,7 +188,7 @@ __weak static id <KonotorDelegate> _delegate;
 +(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(FCConversations *)conversation andChannel:(FCChannels *)channel{
     [FCUserUtil setUserMessageInitiated];
     [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
-    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@"new_message"];
+    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"NEW_MESSAGE"}];
 }
 
 +(void)uploadImage:(UIImage *)image onConversation:(FCConversations *)conversation onChannel:(FCChannels *)channel{
