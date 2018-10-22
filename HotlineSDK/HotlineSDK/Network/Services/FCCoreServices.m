@@ -529,6 +529,7 @@
             NSDictionary *configDict = responseInfo.responseAsDictionary;
             [FCUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
             [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
+            [FCJWTUtilities setTokenInitialState];
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);
@@ -588,14 +589,14 @@
             [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             [FCUtilities initiatePendingTasks];
             [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
         } else { //Any failure case
             [FCUsers removeUserInfo];
             [FCUtilities resetAlias];
             [FreshchatUser sharedInstance].isRestoring = false;
             [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
             [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
         }
         if(completion){
             completion(error);
@@ -686,8 +687,8 @@
         [store removeObjectWithKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
         
         [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
-        [FCJWTAuthValidator sharedInstance].currState = NONE;
-        [FCJWTAuthValidator sharedInstance].prevState = NONE;
+        [FCJWTAuthValidator sharedInstance].currState = TOKEN_NOT_SET;
+        [FCJWTAuthValidator sharedInstance].prevState = TOKEN_NOT_SET;
         [FCUsers removeUserInfo];
         if(completion){
             completion(error);

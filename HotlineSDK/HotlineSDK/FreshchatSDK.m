@@ -211,7 +211,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
     if([FCJWTUtilities isUserAuthEnabled]
        && [FreshchatUser sharedInstance].jwtToken == nil) {
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
     }
 
     [FCUserUtil registerUser:completion];
@@ -390,7 +390,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if ([[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE]){
         return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
     }
-    return @"NONE";
+    return @"TOKEN_NOT_SET";
 }
 
 - (void) setUserWithIdToken :(NSString *) token {
@@ -435,9 +435,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
     
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:WAITING_FOR_REFRESH_TOKEN];
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
     } else {
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
     }
     
     //To store if internet is not available
@@ -448,11 +448,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         }
         if(!error && valid){
             [FCUsers updateUserWithIdToken:token]; //ACTIVE
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:ACTIVE];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
             [FCUtilities initiatePendingTasks];
         } else {
             if([[FCReachabilityManager sharedInstance] isReachable]) {
-                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];                
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];                
             }
         }
     }];
@@ -630,15 +630,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
     
-    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
-        [self setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];
-        return;
-    }
-    
-    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
-        [self restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
-        return;
-    }
+    [self performPendingJWTTasks];
     
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
@@ -647,10 +639,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [FCCoreServices performDAUCall];
         if([FCUtilities canMakeRemoteConfigCall]){
             [FCCoreServices fetchRemoteConfig];
-            if([FCJWTUtilities isUserAuthEnabled]
-               && [FreshchatUser sharedInstance].jwtToken == nil){
-                [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
-            }
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([FCUserUtil isUserRegistered]){
@@ -669,10 +657,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                 [FCMessages uploadAllUnuploadedMessages];
                 [FCMessageServices uploadUnuploadedCSAT];
             } else {
-                if([FCJWTUtilities isUserAuthEnabled]
-                   && [FreshchatUser sharedInstance].jwtToken == nil){
-                    [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
-                }
+                [FCJWTUtilities setTokenInitialState];
             }
             [self updateLocaleMeta];
             [[[FCSolutionUpdater alloc]init] fetch];
@@ -681,6 +666,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                                                           andHandler:nil];
             [self markPreviousUserUninstalledIfPresent];
         });
+    }
+}
+
+- (void) performPendingJWTTasks {
+    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
+        [self setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];
+        return;
+    }
+    
+    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
+        [self restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
+        return;
     }
 }
 

@@ -11,6 +11,7 @@
 #import "FCUtilities.h"
 #import "FCUserDefaults.h"
 #import "FCSecureStore.h"
+#import "FCJWTAuthValidator.h"
 
 @implementation FCJWTUtilities
 
@@ -78,6 +79,13 @@
         return true;
     }
     return false;
+}
+
++ (void) setTokenInitialState{
+    if([FCJWTUtilities isUserAuthEnabled]
+       && [FreshchatUser sharedInstance].jwtToken == nil){
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
+    }
 }
 
 +(BOOL) isJwtWaitingToAuth {

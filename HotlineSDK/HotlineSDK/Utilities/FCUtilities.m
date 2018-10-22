@@ -688,7 +688,7 @@ static NSInteger networkIndicator = 0;
          [FCUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
          FreshchatUser* oldUser = [FreshchatUser sharedInstance];
          [FCUsers storeUserInfo:oldUser];
-         [[FCJWTAuthValidator sharedInstance] updateAuthState:WAIT_FOR_FIRST_TOKEN];
+         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
          [FCCoreServices restoreUserWithJwtToken:token withCompletion:nil];         
          if(completion) {
              completion();

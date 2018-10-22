@@ -37,5 +37,7 @@
 
 + (NSString *) getPendingRestoreJWTToken;
 
++ (void) setTokenInitialState;
+
 @end
 

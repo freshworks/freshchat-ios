@@ -8,20 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-#define ACTIVE_EVENT @"com.freshchat.jwt.active"
+#define ACTIVE_EVENT @"com.freshchat.jwt.active_event"
 #define JWT_EVENT @"com.freshchat.jwt.event"
-#define WAIT_FOR_FIRST_TOKEN_EVENT @"com.freshchat.jwt.wft"
-#define VERIFICATION_UNDER_PROGRESS_EVENT @"com.freshchat.jwt.vup"
-#define WAITING_FOR_REFRESH_TOKEN_EVENT @"com.freshchat.jwt.wrt"
-#define TOKEN_VERIFICATION_FAILED_EVENT @"com.freshchat.jwt.tvf"
+#define TOKEN_NOT_SET_EVENT @"com.freshchat.jwt.token_not_set_event"
+#define TOKEN_NOT_PROCESSED_EVENT @"com.freshchat.jwt.token_not_processed_event"
+#define TOKEN_EXPIRED_EVENT @"com.freshchat.jwt.token_expired_event"
+#define TOKEN_INVALID_EVENT @"com.freshchat.jwt.token_invalid_event"
 
 enum JWT_STATE : NSInteger {
-    NONE = 0,
-    ACTIVE = 1,
-    WAIT_FOR_FIRST_TOKEN = 2,
-    VERIFICATION_UNDER_PROGRESS = 3,
-    WAITING_FOR_REFRESH_TOKEN = 4,
-    TOKEN_VERIFICATION_FAILED = 5
+    TOKEN_VALID = 1,
+    TOKEN_NOT_SET = 2,
+    TOKEN_NOT_PROCESSED = 3,
+    TOKEN_EXPIRED = 4,
+    TOKEN_INVALID = 5
 };
 
 enum JWT_UI_STATE {

@@ -52,14 +52,14 @@
         return Nil;
     }
     if( isAuthEnabled && [FCJWTUtilities isUserAuthEnabled]) {
-        if([FCJWTAuthValidator sharedInstance].currState != ACTIVE && [FCJWTAuthValidator sharedInstance].currState != NONE ) {
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:VERIFICATION_UNDER_PROGRESS];
+        if([FCJWTAuthValidator sharedInstance].currState != TOKEN_VALID && [FCJWTAuthValidator sharedInstance].currState != TOKEN_NOT_SET ) {
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_PROCESSED];
         }
         //TODO : rename FRESHCHAT_DEFAULTS_IS_FIRST_AUTH
         if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
             if ([FCStringUtil isEmptyString:[FreshchatUser sharedInstance].jwtToken]) {
                 NSError *error = [NSError errorWithDomain:@"JWT_ERROR" code:1 userInfo:@{ @"Reason" : @"JWT Failed" }];
-                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                 if (handler) handler(nil, error);
                 return Nil;
             }
@@ -84,7 +84,7 @@
         }
         else if (statusCode == UnAuthorized) {
             //Unauthorized state
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VERIFICATION_FAILED];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
         }
         else{
             if (handler) handler(responseInfo, error ? error : nil);

@@ -23,7 +23,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        self.prevState = NONE;
+        self.prevState = TOKEN_NOT_SET;
         self.currState = [self setDefaultJWTState];
     }
     return self;
@@ -34,7 +34,7 @@
     if(stateNumb != nil) {
         return (enum JWT_STATE)[stateNumb intValue];
     }
-    return NONE;
+    return TOKEN_NOT_SET;
 }
 
 - (void) updateAuthState : (enum JWT_STATE) state{
@@ -44,49 +44,38 @@
 }
 
 -(enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState {
-    if(apiState != NONE) {
         switch (apiState) {
-            case ACTIVE:
+            case TOKEN_VALID:
                 return SHOW_CONTENT;
-            case WAIT_FOR_FIRST_TOKEN:
-            case VERIFICATION_UNDER_PROGRESS:
-            case WAITING_FOR_REFRESH_TOKEN:
+            case TOKEN_NOT_SET:
+            case TOKEN_NOT_PROCESSED:
+            case TOKEN_EXPIRED:
                 return LOADING;
-            case TOKEN_VERIFICATION_FAILED:
+            case TOKEN_INVALID:
                 return SHOW_ALERT;
             default:
                 return NO_CHANGE;
         }
-    }
-    return NO_CHANGE;
 }
 
 -(enum JWT_UI_STATE) getUiActionForTransition {
     if([FCJWTAuthValidator sharedInstance].currState == [FCJWTAuthValidator sharedInstance].prevState) {
         return NO_CHANGE;
     }
-    
-    if([FCJWTAuthValidator sharedInstance].prevState == NONE) {
-        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState:[FCJWTAuthValidator sharedInstance].currState];
-    }
 
-    if([FCJWTAuthValidator sharedInstance].currState == NONE) {
-        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].prevState];
-    }
-
-    if([FCJWTAuthValidator sharedInstance].currState == ACTIVE) {
+    if([FCJWTAuthValidator sharedInstance].currState == TOKEN_VALID) {
         return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
-    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_VERIFICATION_FAILED) {
+    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_INVALID) {
         return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
-    } else if([FCJWTAuthValidator sharedInstance].currState == WAIT_FOR_FIRST_TOKEN) {
+    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_NOT_SET) {
         return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
-    } else if([FCJWTAuthValidator sharedInstance].currState == WAITING_FOR_REFRESH_TOKEN) {
-        if ([FCJWTAuthValidator sharedInstance].prevState == ACTIVE) {
+    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_EXPIRED) {
+        if ([FCJWTAuthValidator sharedInstance].prevState == TOKEN_VALID) {
             return SHOW_CONTENT;
         }
         return LOADING;
-    } else if([FCJWTAuthValidator sharedInstance].currState == VERIFICATION_UNDER_PROGRESS) {
-        if([FCJWTAuthValidator sharedInstance].prevState == ACTIVE || [FCJWTAuthValidator sharedInstance].prevState == WAITING_FOR_REFRESH_TOKEN){
+    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_NOT_PROCESSED) {
+        if([FCJWTAuthValidator sharedInstance].prevState == TOKEN_VALID || [FCJWTAuthValidator sharedInstance].prevState == TOKEN_EXPIRED){
             return SHOW_CONTENT;
         } else {
             return LOADING;
