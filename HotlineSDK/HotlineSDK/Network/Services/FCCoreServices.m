@@ -596,7 +596,7 @@
             [FreshchatUser sharedInstance].isRestoring = false;
             [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
             [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
         }
         if(completion){
             completion(error);
