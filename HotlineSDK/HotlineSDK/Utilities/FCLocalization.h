@@ -104,6 +104,9 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 
 #define LOC_WAIT_FOR_JWT_MESSAGE @"wait_for_jwt_message"
 
+#define LOC_JWT_FAILURE_ALERT_TITLE @"jwt_failure_alert_title"
+#define LOC_JWT_FAILURE_ALERT_MESSAGE @"jwt_failure_alert_message"
+
 #define LOC_CUST_SAT_USER_COMMENTS_PLACEHOLDER @"cust_sat_user_comments_placeholder"
 #define LOC_CUST_SAT_SUBMIT_BUTTON_TEXT @"cust_sat_submit_button_text"
 #define LOC_CUST_SAT_NOT_RESOLVED_PROMPT @"cust_sat_not_resolved_prompt"

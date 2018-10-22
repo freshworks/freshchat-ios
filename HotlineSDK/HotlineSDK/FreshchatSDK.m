@@ -147,7 +147,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 - (NSString *) getFreshchatUserId{
     
     if(![FCJWTUtilities isUserAuthEnabled]){
-        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        ALog(@"Freshchat API : JWT is disabled.");
         return nil;
     }
     return [FCUtilities currentUserAlias];
@@ -209,11 +209,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
-    if([FCJWTUtilities isUserAuthEnabled]
-       && [FreshchatUser sharedInstance].jwtToken == nil) {
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
-    }
-
+    
+    [FCJWTUtilities setTokenInitialState];
     [FCUserUtil registerUser:completion];
     if([FCUserUtil isUserRegistered]) {
         [FCUtilities postUnreadCountNotification];
@@ -369,7 +366,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUser:(FreshchatUser *)user{
     if([FCJWTUtilities isUserAuthEnabled]){
-        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
     [FCUsers storeUserInfo:user];
@@ -388,7 +385,21 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 - (NSString *)getUserIdTokenStatus{
     if ([[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE]){
-        return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
+        NSInteger stateInt = [[[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE] integerValue];
+        switch (stateInt) {
+            case 1:
+                return @"TOKEN_VALID";
+            case 2:
+                return @"TOKEN_NOT_SET";
+            case 3:
+                return @"TOKEN_NOT_PROCESSED";
+            case 4:
+                return @"TOKEN_EXPIRED";
+            case 5:
+                return @"TOKEN_INVALID";
+            default:
+                return @"TOKEN_NOT_SET";
+        }
     }
     return @"TOKEN_NOT_SET";
 }
@@ -412,7 +423,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         
         if ([FCJWTUtilities getAliasFrom: token] == nil) {
             ALog(@"Freshchat API : Empty Alias Found");
-            [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
             return;
         }
         
@@ -420,7 +430,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         if(!([[FCJWTUtilities getAliasFrom: token] isEqualToString:
               [FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken]])) {
             ALog(@"Freshchat API : Different Alias Found");
-            [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]]; //REFACTOR
             return;
         }
         
@@ -428,7 +437,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
               [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
             if (!([FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken] == nil && [FCJWTUtilities getReferenceID:token] == nil)) {
                 ALog(@"Freshchat API : Different Reference ID");
-                [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
             }
             return;
         }
@@ -452,8 +460,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [FCUtilities initiatePendingTasks];
         } else {
             if([[FCReachabilityManager sharedInstance] isReachable]) {
+                [FCUsers updateUserWithIdToken:@""]; //Invalid
                 [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];                
             }
+            
         }
     }];
 }
@@ -536,7 +546,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUserProperties:(NSDictionary*)props{
     if([FCJWTUtilities isUserAuthEnabled]){
-        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
     [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
@@ -562,7 +572,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if([FCJWTUtilities isUserAuthEnabled]){
-        [self addInvalidMethodException:[NSString stringWithUTF8String:__func__]];
+        ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
     if (key && value) {
@@ -951,7 +961,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                     conversation = [conversations anyObject];
                 }
                 if([FCJWTUtilities isUserAuthEnabled]
-                   && [FreshchatUser sharedInstance].jwtToken == nil){
+                   && ([FreshchatUser sharedInstance].jwtToken == nil || [[FreshchatUser sharedInstance].jwtToken isEqualToString:@""])){
                     ALog(@"Freshchat Error : Please Validate the user first.");
                     return;
                 }

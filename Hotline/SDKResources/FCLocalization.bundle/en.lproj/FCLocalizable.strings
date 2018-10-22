@@ -24,7 +24,9 @@
 "offline_missing_content_text"="Please connect to the internet to view media content available on this article.";
 
 /* JWT */
- "wait_for_jwt_message" = ""
+"wait_for_jwt_message" = "Waiting for Authorization";
+"jwt_failure_alert_title" = "";
+"jwt_failure_alert_message" = "Re-Authorization Failed";
 
 /* No Internet Connectivity */
 "offline_internet_message"="Uh-uh. No internet connection";

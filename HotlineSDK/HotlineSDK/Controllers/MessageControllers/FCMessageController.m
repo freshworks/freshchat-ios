@@ -1401,6 +1401,7 @@ typedef struct {
     return [[FCJWTAuthValidator sharedInstance] getUiActionForTransition];
 }
 
+// TODO : Duplication
 -(void)jwtStateChange {
     dispatch_async(dispatch_get_main_queue(), ^{ /* show alert view */
         switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
@@ -1459,8 +1460,8 @@ typedef struct {
 -(void) showJWTVerificationFailedAlert {
     [self showJWTLoading];
     if(!self.isJWTAlertShown) {
-        [self showAlertWithTitle:@"JWT Failure"
-                      andMessage:@"JWT - Verification Failure"];
+        [self showAlertWithTitle:HLLocalizedString(LOC_JWT_FAILURE_ALERT_TITLE)
+                      andMessage:HLLocalizedString(LOC_JWT_FAILURE_ALERT_MESSAGE)];
         self.isJWTAlertShown = TRUE;
         if(self.tabBarController != nil) {
             [self.parentViewController.navigationController popViewControllerAnimated:YES];

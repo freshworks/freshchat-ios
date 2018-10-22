@@ -83,7 +83,7 @@
 
 + (void) setTokenInitialState{
     if([FCJWTUtilities isUserAuthEnabled]
-       && [FreshchatUser sharedInstance].jwtToken == nil){
+       && ([FreshchatUser sharedInstance].jwtToken == nil || [[FreshchatUser sharedInstance].jwtToken isEqualToString:@""]) ){
         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
     }
 }
