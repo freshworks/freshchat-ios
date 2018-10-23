@@ -437,8 +437,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
               [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
             if (!([FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken] == nil && [FCJWTUtilities getReferenceID:token] == nil)) {
                 ALog(@"Freshchat API : Different Reference ID");
-            }
-            return;
+                return;
+            }            
         }
     }
     

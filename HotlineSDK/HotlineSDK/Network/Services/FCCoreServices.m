@@ -585,6 +585,7 @@
         if (statusCode == 200) { //If the user is found
             [FCUtilities updateUserAlias:response[@"alias"]];
             [FCUtilities updateUserWithData:response];
+            [FCUsers updateUserWithIdToken:token];
             [FCUserUtil setUserMessageInitiated];
             [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             [FCUtilities initiatePendingTasks];
@@ -596,7 +597,17 @@
             [FreshchatUser sharedInstance].isRestoring = false;
             [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
             [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+            if(statusCode ==  404) {
+                if([FCJWTUtilities getAliasFrom:token] != nil &&
+                   ![[FCJWTUtilities getAliasFrom:token] isEqualToString:@""]) {
+                    [FCUtilities updateUserAlias: [FCJWTUtilities getAliasFrom:token]];
+                }
+                [FCUsers updateUserWithIdToken:token];
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+                [FCUtilities initiatePendingTasks];                
+            } else { //Check again confirm with muthu
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+            }
         }
         if(completion){
             completion(error);
