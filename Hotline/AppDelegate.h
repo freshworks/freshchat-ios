@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "FreshchatSDK/FreshchatSDK.h"
 #import "HotlineConfigStrings.h"
+#define STORYBOARD_NAME @"Main"
+#define STORYBOARD_IDENTIFIER @"HotlineViewController"
+#define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define IN_APP_BROWSER_STORYBOARD_CONTROLLER @"InAppBrowser"
+#define LAUNCH_SAMPLE_CONTROLLERT NO
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

@@ -10,6 +10,7 @@
 #import "ViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "InAppBrowser.h"
 #import "Hotline_Demo-Swift.h"
 
 
@@ -22,11 +23,6 @@
 @end
 
 @implementation AppDelegate
-
-#define STORYBOARD_NAME @"Main"
-#define STORYBOARD_IDENTIFIER @"HotlineViewController"
-#define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
-#define LAUNCH_SAMPLE_CONTROLLERT NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     if(PUSH_ENABLED){
@@ -171,12 +167,6 @@
 //    config.appKey = @"c4cdef27-ff3d-4d01-a0af-7e3c4cde4fc6";
 
     config.teamMemberInfoVisible = YES;
-    
-    [Freshchat sharedInstance].handleLink = ^BOOL(NSURL * url) {
-        NSLog(@"%@",url.description);        
-        return NO;
-    };
-    
     //config.pictureMessagingEnabled = YES;
     config.cameraCaptureEnabled = YES;
     if(![FreshchatUser sharedInstance].firstName){

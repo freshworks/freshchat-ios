@@ -6,10 +6,11 @@
 //  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 
-#import "ViewController.h"
 #import "FreshchatSDK/FreshchatSDK.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "InAppBrowser.h"
 #import "SampleController.h"
 #import "Hotline_Demo-Swift.h"
 
@@ -80,15 +81,15 @@
         NSLog(@"--With tags : %d",count);
     }];
     
-    /*
-        [Freshchat sharedInstance].handleLink = ^BOOL(NSURL * url) {
-            NSLog(@"%@",url.description);
-            UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
-            sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
-            [self presentViewController:sampleController animated:YES completion:nil];
-            return FALSE;
-        };
-    */
+    [Freshchat sharedInstance].handleLink = ^BOOL(NSURL * url) {
+        UIStoryboard *inAppBrowserSB = [UIStoryboard storyboardWithName:IN_APP_BROWSER_STORYBOARD_CONTROLLER bundle:nil];
+        InAppBrowser *inAppBrowserVC = [inAppBrowserSB instantiateViewControllerWithIdentifier:IN_APP_BROWSER_STORYBOARD_CONTROLLER];
+        inAppBrowserVC.url = url;
+        [self presentViewController:inAppBrowserVC animated:YES completion:nil];
+        NSLog(@"%@",url.description);
+        return YES;
+    };
+    
     [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
         self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
         NSLog(@"--Without tags : %d",count);
