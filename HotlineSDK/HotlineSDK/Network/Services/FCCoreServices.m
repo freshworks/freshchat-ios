@@ -150,19 +150,21 @@
                 if (handler) handler(nil);
                 
             }else{
-                if(statusCode == 409) {
-                    [FCCoreServices resetUserData:^{
-                        if (handler) handler([NSError new]);
-                    }];
-                } else {
-                    FDLog(@"Failed with wrong status code");
-                    if (handler) handler([NSError new]);
-                }
+                FDLog(@"Failed with wrong status code");
+                if (handler) handler([NSError new]);
             }
         } else{
             FDLog(@"User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
-            if (handler) handler(error);
+            if(statusCode == 409) {
+                [FCCoreServices resetUserData:^{
+                    if (handler) handler([NSError new]);
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                }];
+            }
+            else{
+                if (handler) handler(error);
+            }
         }
     }];
     return task;
@@ -720,14 +722,22 @@
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        NSDictionary *response = responseInfo.responseAsDictionary;
         if(handler){
             if (statusCode == 200) {
-                [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-                NSString *jwtAlias = [FCJWTUtilities getAliasFrom:token];
-                if(jwtAlias) {
-                    [FCUtilities updateUserAlias:jwtAlias];
+                if([response[@"userAliasExists"] boolValue]){
+                    [FCCoreServices resetUserData:^{
+                        handler(false, error);
+                    }];
                 }
-                handler(true, error);
+                else {
+                    [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+                    NSString *jwtAlias = [FCJWTUtilities getAliasFrom:token];
+                    if(jwtAlias) {
+                        [FCUtilities updateUserAlias:jwtAlias];
+                    }
+                    handler(true, error);
+                }
             } else {
                 handler(false, error);
             }

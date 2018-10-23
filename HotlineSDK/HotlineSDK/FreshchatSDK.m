@@ -440,6 +440,13 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                 return;
             }            
         }
+        
+        //If user laready registered no need to call validate JWT token API
+        if([FCUserUtil isUserRegistered]){
+            [FCUsers updateUserWithIdToken:token];
+            [FCUtilities initiatePendingTasks];
+            return;
+        }
     }
     
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
