@@ -8,8 +8,9 @@
 #import "InAppBrowser.h"
 #import <WebKit/WebKit.h>
 
-@interface InAppBrowser : UIViewController
+@interface InAppBrowser : UIViewController<WKNavigationDelegate>
     @property NSURL *url;
 @property (weak, nonatomic) IBOutlet UIView *webUIView;
 @property (strong, nonatomic) IBOutlet WKWebView *webView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingView;
 @end
