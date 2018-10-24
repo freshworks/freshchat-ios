@@ -102,8 +102,6 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 
 #define LOC_OFFLINE_INTERNET_MESSAGE @"offline_internet_message"
 
-#define LOC_WAIT_FOR_JWT_MESSAGE @"wait_for_jwt_message"
-
 #define LOC_JWT_FAILURE_ALERT_TITLE @"jwt_failure_alert_title"
 #define LOC_JWT_FAILURE_ALERT_MESSAGE @"jwt_failure_alert_message"
 

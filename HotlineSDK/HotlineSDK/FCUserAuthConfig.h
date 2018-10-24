@@ -12,6 +12,7 @@
 
 @property (nonatomic, assign) BOOL isjwtAuthEnabled;
 @property (nonatomic, assign) BOOL isStrictModeEnabled;
+@property (nonatomic, assign) long authTimeOutInterval;
 
 - (void) updateUserAuthConfig : (NSDictionary *) info;
 

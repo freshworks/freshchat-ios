@@ -20,6 +20,7 @@
 #import "FCEmptyResultView.h"
 #import "FCAutolayoutHelper.h"
 #import "FCReachabilityManager.h"
+#import "FCRemoteConfig.h"
 
 
 @interface  FCLoadingViewBehaviour ()
@@ -59,6 +60,10 @@
     self.loadingViewDelegate = nil;
 }
 
+-(void) dismissView {
+    [[Freshchat sharedInstance] dismissFreshchatViews];
+}
+
 -(void)addLoadingIndicator{
     if(self.activityIndicator || self.loadingViewDelegate == nil){
         return;
@@ -70,7 +75,8 @@
     self.activityIndicator.color = [[FCTheme sharedInstance] progressBarColor];
     [self.activityIndicator startAnimating];
     [FCAutolayoutHelper centerX:self.activityIndicator onView:view M:1 C:0];
-    [FCAutolayoutHelper centerY:self.activityIndicator onView:view M:1.5 C:0];
+    CGFloat multiplier = (self.isWaitingForJWT) ? 1.0 : 1.5;
+    [FCAutolayoutHelper centerY:self.activityIndicator onView:view M:multiplier C:0];
 }
 
 -(FCEmptyResultView *)emptyResultView
@@ -118,7 +124,12 @@
             }
             
             if (self.isWaitingForJWT) {
-                message = HLLocalizedString(LOC_WAIT_FOR_JWT_MESSAGE);
+                
+                self.emptyResultView.emptyResultImage.image = nil;
+                self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )* NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    [self dismissView];
+                });
             }
             self.emptyResultView.emptyResultLabel.text = message;
             [self.loadingViewDelegate.view addSubview:self.emptyResultView];

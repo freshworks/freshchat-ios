@@ -16,6 +16,7 @@
     if (self) {
         self.isjwtAuthEnabled = [self isjwtAuthEnabled];
         self.isStrictModeEnabled = [self isStrictModeEnabled];
+        self.authTimeOutInterval = [self getJWTLoadingTimeoutMillis];
     }
     return self;
 }
@@ -34,9 +35,17 @@
     return FALSE;
 }
 
+- (long) getJWTLoadingTimeoutMillis{
+    if ([FCUserDefaults getObjectForKey:CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL] != nil) {
+        return [FCUserDefaults getLongForKey:CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL];
+    }
+    return 0;
+}
+
 - (void) updateUserAuthConfig : (NSDictionary *) info {
     [FCUserDefaults setBool:[info[@"jwtAuthEnabled"] boolValue] forKey:CONFIG_RC_JWT_AUTH_ENABLED];
     [FCUserDefaults setBool:[info[@"strictModeEnabled"] boolValue] forKey:CONFIG_RC_JWT_AUTH_STRICT_MODE_ENABLED];
+    [FCUserDefaults setLong:[info[@"authTimeOutInterval"] longValue] forKey:CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL];
 }
 
 @end

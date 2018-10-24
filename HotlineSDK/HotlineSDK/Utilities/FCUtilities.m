@@ -782,6 +782,12 @@ static NSInteger networkIndicator = 0;
     return (BOOL)[store boolValueForKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
 }
 
++ (void) processResetChanges {
+    [FreshchatUser sharedInstance].isRestoring = false;
+    [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
+    [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+}
+
 + (void) handleGDPRForResponse :(FCResponseInfo *)responseInfo {
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];

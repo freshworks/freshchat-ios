@@ -159,7 +159,7 @@
             if(statusCode == 409) {
                 [FCCoreServices resetUserData:^{
                     if (handler) handler([NSError new]);
-                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                    [FCUtilities processResetChanges];
                 }];
             }
             else{
@@ -596,9 +596,7 @@
         } else { //Any failure case
             [FCUsers removeUserInfo];
             [FCUtilities resetAlias];
-            [FreshchatUser sharedInstance].isRestoring = false;
-            [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
-            [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+            [FCUtilities processResetChanges];
             if(statusCode ==  404) {
                 if([FCJWTUtilities getAliasFrom:token] != nil &&
                    ![[FCJWTUtilities getAliasFrom:token] isEqualToString:@""]) {
@@ -727,6 +725,7 @@
             if (statusCode == 200) {
                 if([response[@"userAliasExists"] boolValue]){
                     [FCCoreServices resetUserData:^{
+                        [FCUtilities processResetChanges];
                         handler(false, error);
                     }];
                 }
