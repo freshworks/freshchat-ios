@@ -1467,7 +1467,7 @@ typedef struct {
 -(void) showJWTVerificationFailedAlert {
     [self showJWTLoading];
     if(!self.isJWTAlertShown) {
-        [self showAlertWithTitle:HLLocalizedString(LOC_JWT_FAILURE_ALERT_TITLE)
+        [self showAlertWithTitle:nil
                       andMessage:HLLocalizedString(LOC_JWT_FAILURE_ALERT_MESSAGE)];
         self.isJWTAlertShown = TRUE;
         if(self.tabBarController != nil) {

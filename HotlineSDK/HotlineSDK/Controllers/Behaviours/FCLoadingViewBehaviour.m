@@ -62,7 +62,12 @@
 
 -(void)addLoadingIndicator{
     if(self.activityIndicator || self.loadingViewDelegate == nil){
-        [self.activityIndicator removeFromSuperview];
+        if(self.isWaitingForJWT){
+            [self.activityIndicator removeFromSuperview];
+        }
+        else{
+            return;
+        }
     }
     UIView *view = self.loadingViewDelegate.view;
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
