@@ -8,6 +8,7 @@
 
 #import "FCUserAuthConfig.h"
 #import "FCUserDefaults.h"
+#import "FCRefreshIntervals.h"
 
 @implementation FCUserAuthConfig
 
@@ -39,7 +40,7 @@
     if ([FCUserDefaults getObjectForKey:CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL] != nil) {
         return [FCUserDefaults getLongForKey:CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL];
     }
-    return 0;
+    return (30 * ONE_SECONDS_IN_MS);
 }
 
 - (void) updateUserAuthConfig : (NSDictionary *) info {
