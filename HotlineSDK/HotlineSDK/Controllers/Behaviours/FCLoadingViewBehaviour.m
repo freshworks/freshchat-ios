@@ -66,7 +66,7 @@
 
 -(void)addLoadingIndicator{
     if(self.activityIndicator || self.loadingViewDelegate == nil){
-        return;
+        [self.activityIndicator removeFromSuperview];
     }
     UIView *view = self.loadingViewDelegate.view;
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -126,6 +126,7 @@
             if (self.isWaitingForJWT) {
                 
                 self.emptyResultView.emptyResultImage.image = nil;
+                message = nil;
                 self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )* NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     [self dismissView];
