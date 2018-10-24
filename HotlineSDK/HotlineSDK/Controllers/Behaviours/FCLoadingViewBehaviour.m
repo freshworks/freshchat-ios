@@ -60,10 +60,6 @@
     self.loadingViewDelegate = nil;
 }
 
--(void) dismissView {
-    [[Freshchat sharedInstance] dismissFreshchatViews];
-}
-
 -(void)addLoadingIndicator{
     if(self.activityIndicator || self.loadingViewDelegate == nil){
         [self.activityIndicator removeFromSuperview];
@@ -129,7 +125,7 @@
                 message = nil;
                 self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )* NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                    [self dismissView];
+                    [[Freshchat sharedInstance] dismissFreshchatViews];
                 });
             }
             self.emptyResultView.emptyResultLabel.text = message;

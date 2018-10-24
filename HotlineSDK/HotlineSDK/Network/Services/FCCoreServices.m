@@ -160,6 +160,7 @@
                 [FCCoreServices resetUserData:^{
                     if (handler) handler([NSError new]);
                     [FCUtilities processResetChanges];
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                 }];
             }
             else{
@@ -528,6 +529,7 @@
     NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:NO withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
+            //Add flg flag for config fetch
             NSDictionary *configDict = responseInfo.responseAsDictionary;
             [FCUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
             [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
@@ -726,6 +728,7 @@
                 if([response[@"userAliasExists"] boolValue]){
                     [FCCoreServices resetUserData:^{
                         [FCUtilities processResetChanges];
+                        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                         handler(false, error);
                     }];
                 }

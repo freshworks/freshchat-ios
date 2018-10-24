@@ -407,7 +407,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 - (void) setUserWithIdToken :(NSString *) token {
     
     [FCJWTUtilities removePendingRestoreJWTToken];
-    if(![FCJWTUtilities isUserAuthEnabled]){
+    if(![FCJWTUtilities isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
         ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
         return;
     }
@@ -457,6 +457,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     //To store if internet is not available
     [FCJWTUtilities setPendingJWTToken:token];
+    if(![FCUtilities isRemoteConfigFetched]){
+        [self performPendingTasks];
+        return;
+    }
     [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
         if([[FCReachabilityManager sharedInstance] isReachable]) {
             [FCJWTUtilities removePendingJWTToken];
@@ -484,6 +488,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if ([FCJWTUtilities getReferenceID:jwtToken] && [FCJWTUtilities getAliasFrom:jwtToken]) {
         [FCJWTUtilities removePendingJWTToken];
         [FCJWTUtilities setPendingRestoreJWTToken:jwtToken];
+        
+        if(![FCUtilities isRemoteConfigFetched]){
+            [self performPendingTasks];
+            return;
+        }
         [FCUtilities resetDataAndRestoreWithJwtToken:jwtToken withCompletion:nil];
     } else {
         ALog(@"Freshchat : JWT reference id or alias missing.");

@@ -69,6 +69,7 @@
 + (BOOL) canMakeSessionCall;
 + (BOOL) canMakeDAUCall;
 + (BOOL) canMakeRemoteConfigCall;
++ (BOOL) isRemoteConfigFetched;
 + (BOOL) canMakeTypicallyRepliesCall;
 + (NSTimeInterval) getCurrentTimeInMillis;
 + (NSString *) getReplyResponseForTime :(NSInteger)timeInSec andType: (enum ResponseTimeType) type;

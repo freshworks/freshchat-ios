@@ -403,6 +403,11 @@ static NSInteger networkIndicator = 0;
     }
     return false;
 }
+
++ (BOOL) isRemoteConfigFetched {
+    return ([FCUserDefaults getObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME])? TRUE :FALSE;
+}
+
 +(BOOL) canMakeSessionCall {
     if(![FCUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
         return  true;
