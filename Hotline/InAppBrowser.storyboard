@@ -33,9 +33,11 @@
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ceI-Fk-dKo">
-                                <rect key="frame" x="26" y="20" width="39" height="30"/>
+                                <rect key="frame" x="10" y="20" width="60" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="2mv-Lo-DVo"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="HV7-7Y-u7k"/>
+                                    <constraint firstAttribute="width" constant="60" id="qVX-oH-bkD"/>
                                 </constraints>
                                 <state key="normal" title="Close">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -44,6 +46,12 @@
                                     <action selector="dismissView:" destination="Swp-az-EEp" eventType="touchDown" id="FQJ-mM-CDQ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="www.google.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6XF-f7-EPc">
+                                <rect key="frame" x="70" y="20" width="259" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
@@ -53,10 +61,14 @@
                             <constraint firstItem="ceI-Fk-dKo" firstAttribute="top" secondItem="se3-bd-g4a" secondAttribute="bottom" id="C0L-lC-t6G"/>
                             <constraint firstItem="66P-Ap-ZZ1" firstAttribute="leading" secondItem="yj1-3W-T15" secondAttribute="leading" id="D6A-nL-4LS"/>
                             <constraint firstItem="66P-Ap-ZZ1" firstAttribute="top" secondItem="ceI-Fk-dKo" secondAttribute="bottom" id="IGe-t2-zrJ"/>
-                            <constraint firstItem="ceI-Fk-dKo" firstAttribute="leading" secondItem="yj1-3W-T15" secondAttribute="leadingMargin" constant="10" id="IHl-Go-Ik8"/>
+                            <constraint firstItem="ceI-Fk-dKo" firstAttribute="leading" secondItem="yj1-3W-T15" secondAttribute="leading" constant="10" id="IHl-Go-Ik8"/>
                             <constraint firstItem="66P-Ap-ZZ1" firstAttribute="top" secondItem="se3-bd-g4a" secondAttribute="bottom" constant="30" id="Mlz-l2-Qly"/>
+                            <constraint firstItem="6XF-f7-EPc" firstAttribute="leading" secondItem="ceI-Fk-dKo" secondAttribute="trailing" id="NDe-da-tPt"/>
                             <constraint firstAttribute="trailing" secondItem="66P-Ap-ZZ1" secondAttribute="trailing" id="NtP-y4-m7F"/>
                             <constraint firstItem="L4Z-hk-Rek" firstAttribute="top" secondItem="se3-bd-g4a" secondAttribute="bottom" id="Ph3-Tz-chb"/>
+                            <constraint firstItem="6XF-f7-EPc" firstAttribute="top" secondItem="se3-bd-g4a" secondAttribute="bottom" id="lhm-kw-oN1"/>
+                            <constraint firstItem="66P-Ap-ZZ1" firstAttribute="top" secondItem="6XF-f7-EPc" secondAttribute="bottom" id="mr0-rC-lJ5"/>
+                            <constraint firstItem="L4Z-hk-Rek" firstAttribute="leading" secondItem="6XF-f7-EPc" secondAttribute="trailing" id="p9V-OY-1UD"/>
                             <constraint firstItem="3Xx-lw-Wxu" firstAttribute="top" secondItem="66P-Ap-ZZ1" secondAttribute="bottom" id="z6m-MG-FOU"/>
                         </constraints>
                         <variation key="default">
@@ -67,6 +79,7 @@
                     </view>
                     <connections>
                         <outlet property="loadingView" destination="L4Z-hk-Rek" id="nMd-pg-sxF"/>
+                        <outlet property="urlLabel" destination="6XF-f7-EPc" id="ZhE-YW-glQ"/>
                         <outlet property="webUIView" destination="66P-Ap-ZZ1" id="zXJ-Ah-NBV"/>
                     </connections>
                 </viewController>

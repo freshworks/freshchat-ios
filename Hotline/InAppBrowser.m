@@ -15,6 +15,7 @@
     WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
     WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width ,self.webUIView.frame.size.height ) configuration:theConfiguration];
     NSURLRequest *nsrequest=[NSURLRequest requestWithURL:_url];
+    self.urlLabel.text = [self.url absoluteString];
     webView.navigationDelegate = self;
     [webView loadRequest:nsrequest];
     webView.translatesAutoresizingMaskIntoConstraints = NO;

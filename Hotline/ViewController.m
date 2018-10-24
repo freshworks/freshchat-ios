@@ -85,7 +85,8 @@
         UIStoryboard *inAppBrowserSB = [UIStoryboard storyboardWithName:IN_APP_BROWSER_STORYBOARD_CONTROLLER bundle:nil];
         InAppBrowser *inAppBrowserVC = [inAppBrowserSB instantiateViewControllerWithIdentifier:IN_APP_BROWSER_STORYBOARD_CONTROLLER];
         inAppBrowserVC.url = url;
-        [self presentViewController:inAppBrowserVC animated:YES completion:nil];
+        UIViewController *topController = [self.navigationController visibleViewController];
+        [topController presentViewController:inAppBrowserVC animated:YES completion:nil];
         NSLog(@"%@",url.description);
         return YES;
     };

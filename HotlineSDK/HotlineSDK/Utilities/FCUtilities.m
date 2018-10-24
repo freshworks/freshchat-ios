@@ -802,8 +802,10 @@ static NSInteger networkIndicator = 0;
        ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame))  { 
         NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
         NSNumber *articleId = [numbFormatter numberFromString:[url host]];
-        [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
-        return YES;
+            if (articleId!= nil) {
+            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
+            return YES;
+        }
     }
     else if ([Freshchat sharedInstance].handleLink != nil) {
         return [Freshchat sharedInstance].handleLink(url);

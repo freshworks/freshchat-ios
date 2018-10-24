@@ -1,11 +1,11 @@
 
 #define ENABLE_RTL_RUNTIME 1
 #define PUSH_ENABLED 1
-#define HOTLINE_DOMAIN @"msdk.freshchat.com"
+#define HOTLINE_DOMAIN @"ms-green.freshpori.com"
 
 //sanjith.kanagavel+web@freshworks.com/testtest
-#define HOTLINE_APP_ID @"7558e847-515b-4688-9d64-638496e0f7c3"
-#define HOTLINE_APP_KEY @"ef99705a-4a49-4274-afef-9622bd404e0e"
+#define HOTLINE_APP_ID @"36f11f97-9400-4705-8884-1acb18508dbf"
+#define HOTLINE_APP_KEY @"ac3f7467-1c1e-4c03-af74-936a22812247"
 
 //vidya.anand+pod@freshworks.com/test@123
 //#define HOTLINE_APP_ID @"251869c4-d037-4427-8859-bfadcd8c6d3c"

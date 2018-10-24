@@ -12,5 +12,6 @@
     @property NSURL *url;
 @property (weak, nonatomic) IBOutlet UIView *webUIView;
 @property (strong, nonatomic) IBOutlet WKWebView *webView;
+@property (weak, nonatomic) IBOutlet UILabel *urlLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingView;
 @end
