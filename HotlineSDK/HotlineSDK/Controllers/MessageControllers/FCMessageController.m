@@ -48,6 +48,7 @@
 #import "FCCoreServices.h"
 #import "FCCSATUtil.h"
 #import "FCJWTAuthValidator.h"
+#import "FCJWTUtilities.h"
 #import "FCLoadingViewBehaviour.h"
 
 typedef struct {
@@ -301,8 +302,12 @@ typedef struct {
     [self processPendingCSAT];
     [self checkRestoreStateChanged];
     [self.inputToolbar setSendButtonEnabled: [FCStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
-    [self addJWTObservers];
-    [self jwtStateChange];
+    
+    //Add JWT Enabled disabled check
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self addJWTObservers];
+        [self jwtStateChange];
+    }
 }
 
 //TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
@@ -398,7 +403,9 @@ typedef struct {
         FDLog(@"Leaving message screen with active CSAT, Recording YES state");
         [self handleUserEvadedCSAT];
     }
-    [self removeJWTObservers];
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self removeJWTObservers];
+    }
 }
 
 -(void)registerAppAudioCategory{

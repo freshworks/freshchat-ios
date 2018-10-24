@@ -34,6 +34,7 @@
 #import "FCSecureStore.h"
 #import "FCCSATUtil.h"
 #import "FCJWTAuthValidator.h"
+#import "FCJWTUtilities.h"
 
 @interface FCChannelViewController () <HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
@@ -85,8 +86,10 @@
     [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
     [self checkRestoreStateChanged];
-    [self addJWTObservers];
-    [self jwtStateChange];
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self addJWTObservers];
+        [self jwtStateChange];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -235,7 +238,9 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
-    [self removeJWTObservers];
+    if([FCJWTUtilities isUserAuthEnabled]){
+        [self removeJWTObservers];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
