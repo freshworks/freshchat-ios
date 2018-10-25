@@ -366,7 +366,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUser:(FreshchatUser *)user{
     if([FCJWTUtilities isUserAuthEnabled]){
-        ALog(@"Freshchat API : JWT is Enabled.");
+        ALog(@"Freshchat API : JWT is Enabled for thisb please use setUserWithIdToken!");
         return;
     }
     [FCUsers storeUserInfo:user];
@@ -414,6 +414,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
     
     if(trimString(token).length == 0) return;
+    if([FCJWTUtilities isValidityExpiedForJWTToken:token]){
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
+        return;
+    }
     
     if([FreshchatUser sharedInstance].jwtToken != nil) {
         //Same Token Payload Check
@@ -487,6 +491,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if(jwtToken.length == 0){
         ALog(@"Freshchat : JWT token missing for identifyUser API!");
          [FCJWTUtilities removePendingRestoreJWTToken];//Remove if it is called by non JWT user before RC
+        return;
+    }
+    
+    if([FCJWTUtilities isValidityExpiedForJWTToken:jwtToken]){
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
         return;
     }
     

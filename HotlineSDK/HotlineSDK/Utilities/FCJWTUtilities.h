@@ -15,7 +15,7 @@
 
 + (BOOL) isUserAuthEnabled;
 
-+ (BOOL) isJWTTokenExpired;
++ (BOOL) isValidityExpiedForJWTToken :(NSString*) token;
 
 + (BOOL) hasValidRefIdForJWTToken :(NSString *) token;
 

@@ -39,17 +39,17 @@
             && [FCRemoteConfig sharedInstance].userAuthConfig.isStrictModeEnabled);
 }
 
-+ (BOOL) isJWTTokenExpired {
-    if([FreshchatUser sharedInstance].jwtToken){
-        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:[FreshchatUser sharedInstance].jwtToken];
-        if([jwtTokenInfo objectForKey:@"iat"] && [jwtTokenInfo objectForKey:@"exp"]){
-             NSTimeInterval currentRequestTime = [FCUtilities getCurrentTimeInMillis];
++ (BOOL) isValidityExpiedForJWTToken :(NSString*) token {
+    if(token.length > 0){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:token];
+        if([jwtTokenInfo objectForKey:@"exp"]){
+            NSTimeInterval currentRequestTime = [FCUtilities getCurrentTimeInMillis];
             if(currentRequestTime > ([[jwtTokenInfo objectForKey:@"exp"] longValue] * ONE_SECONDS_IN_MS)){
-                return true;
+                return TRUE;
             }
         }
     }
-    return false;
+    return FALSE;
 }
 
 + (NSString*) getReferenceID: (NSString *) token {
@@ -71,7 +71,6 @@
     }
     return nil;
 }
-
 
 + (BOOL) hasValidRefIdForJWTToken :(NSString *) token {
     NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:[FreshchatUser sharedInstance].jwtToken];
