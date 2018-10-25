@@ -39,5 +39,7 @@
 
 + (void) setTokenInitialState;
 
++ (void) performPendingJWTTasks;
+
 @end
 

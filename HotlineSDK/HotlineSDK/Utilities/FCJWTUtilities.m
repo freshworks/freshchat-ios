@@ -116,4 +116,16 @@
     return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
 }
 
++ (void) performPendingJWTTasks {
+    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
+        [[Freshchat sharedInstance] setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];
+        return;
+    }
+    
+    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
+        [[Freshchat sharedInstance] restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
+        return;
+    }
+}
+
 @end

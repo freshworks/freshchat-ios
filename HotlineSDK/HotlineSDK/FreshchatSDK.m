@@ -409,6 +409,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     [FCJWTUtilities removePendingRestoreJWTToken];
     if(![FCJWTUtilities isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
         ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
+        [FCJWTUtilities removePendingJWTToken]; //Remove pending state if non JWT called before call
         return;
     }
     
@@ -457,14 +458,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     //To store if internet is not available
     [FCJWTUtilities setPendingJWTToken:token];
-    if(![FCUtilities isRemoteConfigFetched]){
+    if(![FCUtilities isRemoteConfigFetched] && [[FCReachabilityManager sharedInstance] isReachable]){
         [self performPendingTasks];
         return;
     }
     [FCCoreServices validateJwtToken:token completion:^(BOOL valid, NSError *error) {
-        if([[FCReachabilityManager sharedInstance] isReachable]) {
-            [FCJWTUtilities removePendingJWTToken];
-        }
         if(!error && valid){
             [FCUsers updateUserWithIdToken:token]; //ACTIVE
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
@@ -480,16 +478,22 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)restoreUserWithIdToken:(NSString *) jwtToken{
+    [FCJWTUtilities removePendingJWTToken];
+    if(![FCJWTUtilities isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
+        ALog(@"Freshchat API Error : restoreUserWithIdToken is valid only in Strict mode!!");
+        [FCJWTUtilities removePendingRestoreJWTToken]; //Remove pending state if non JWT called before call
+        return;
+    }
     if(jwtToken.length == 0){
         ALog(@"Freshchat : JWT token missing for identifyUser API!");
+         [FCJWTUtilities removePendingRestoreJWTToken];//Remove if it is called by non JWT user before RC
         return;
     }
     
     if ([FCJWTUtilities getReferenceID:jwtToken] && [FCJWTUtilities getAliasFrom:jwtToken]) {
-        [FCJWTUtilities removePendingJWTToken];
         [FCJWTUtilities setPendingRestoreJWTToken:jwtToken];
         
-        if(![FCUtilities isRemoteConfigFetched]){
+        if(![FCUtilities isRemoteConfigFetched] && [[FCReachabilityManager sharedInstance] isReachable]){
             [self performPendingTasks];
             return;
         }
@@ -655,7 +659,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
-    [self performPendingJWTTasks];
+    [FCJWTUtilities performPendingJWTTasks];
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
     }
@@ -690,18 +694,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                                                           andHandler:nil];
             [self markPreviousUserUninstalledIfPresent];
         });
-    }
-}
-
-- (void) performPendingJWTTasks {
-    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
-        [self setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];
-        return;
-    }
-    
-    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
-        [self restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
-        return;
     }
 }
 

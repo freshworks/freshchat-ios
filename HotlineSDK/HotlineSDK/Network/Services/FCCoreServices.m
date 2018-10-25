@@ -534,6 +534,7 @@
             [FCUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
             [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
             [FCJWTUtilities setTokenInitialState];
+            [FCJWTUtilities performPendingJWTTasks];
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);
@@ -724,6 +725,10 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         NSDictionary *response = responseInfo.responseAsDictionary;
         if(handler){
+            //Added to avoid edge loop cases
+            if([[FCReachabilityManager sharedInstance] isReachable]) {
+                [FCJWTUtilities removePendingJWTToken];
+            }
             if (statusCode == 200) {
                 if([response[@"userAliasExists"] boolValue]){
                     [FCCoreServices resetUserData:^{
