@@ -17,7 +17,6 @@
 #import "FCAutolayoutHelper.h"
 #import "FCPlistManager.h"
 #import "FCStringUtil.h"
-#import "FCLocalNotification.h"
 
 @interface FCInputToolbarView () <UITextViewDelegate>{
     NSString *placeHolderText;

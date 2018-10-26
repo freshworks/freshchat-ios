@@ -565,16 +565,16 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)restoreUserWithJwtToken:(NSString *)token withCompletion:(void (^)(NSError *))completion{
++(NSURLSessionDataTask *)restoreUserWithJwtToken:(NSString *)jwtIdToken withCompletion:(void (^)(NSError *))completion{
     
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     //NSString *userAlias = [FCUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RESTORE_WITH_JWT_PATH,appID];
-    [[FreshchatUser sharedInstance] setJwtToken:token];
+    [[FreshchatUser sharedInstance] setJwtToken:jwtIdToken];
     NSError *error = nil;
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
     
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:userData];
@@ -590,7 +590,7 @@
         if (statusCode == 200) { //If the user is found
             [FCUtilities updateUserAlias:response[@"alias"]];
             [FCUtilities updateUserWithData:response];
-            [FCUsers updateUserWithIdToken:token];
+            [FCUsers updateUserWithIdToken:jwtIdToken];
             [FCUserUtil setUserMessageInitiated];
             [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
             [FCUtilities initiatePendingTasks];
@@ -601,11 +601,11 @@
             [FCUtilities resetAlias];
             [FCUtilities processResetChanges];
             if(statusCode ==  404) {
-                if([FCJWTUtilities getAliasFrom:token] != nil &&
-                   ![[FCJWTUtilities getAliasFrom:token] isEqualToString:@""]) {
-                    [FCUtilities updateUserAlias: [FCJWTUtilities getAliasFrom:token]];
+                if([FCJWTUtilities getAliasFrom:jwtIdToken] != nil &&
+                   ![[FCJWTUtilities getAliasFrom:jwtIdToken] isEqualToString:@""]) {
+                    [FCUtilities updateUserAlias: [FCJWTUtilities getAliasFrom:jwtIdToken]];
                 }
-                [FCUsers updateUserWithIdToken:token];
+                [FCUsers updateUserWithIdToken:jwtIdToken];
                 [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
                 [FCUtilities initiatePendingTasks];                
             } else { //Check again confirm with muthu
@@ -710,13 +710,13 @@
     }];
 }
 
-+ (NSURLSessionDataTask *)validateJwtToken:(NSString *)token completion:(void(^)(BOOL valid, NSError *error))handler {
++ (NSURLSessionDataTask *)validateJwtToken:(NSString *)jwtIdToken completion:(void(^)(BOOL valid, NSError *error))handler {
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE,appID];    
     NSError *error = nil;
-    NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : token } options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:jwtData];
     [request setRelativePath:path andURLParams:@[appKey]];
@@ -739,7 +739,7 @@
                 }
                 else {
                     [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
-                    NSString *jwtAlias = [FCJWTUtilities getAliasFrom:token];
+                    NSString *jwtAlias = [FCJWTUtilities getAliasFrom:jwtIdToken];
                     if(jwtAlias) {
                         [FCUtilities updateUserAlias:jwtAlias];
                     }

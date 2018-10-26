@@ -39,8 +39,6 @@ enum JWT_UI_STATE {
 - (enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState;
 - (enum JWT_UI_STATE) getUiActionForTransition;
 
-
-@property (strong, nonatomic) NSTimer* timer;
 @property (assign, nonatomic) enum JWT_STATE currState;
 @property (assign, nonatomic) enum JWT_STATE prevState;
 

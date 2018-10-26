@@ -42,11 +42,6 @@
     return self;
 }
 
-////method has to be wrirren with validator
-//- (void) validateStateForUserJWTWithCompletionHandler : (void(^)(enum API_STATES))handler{
-//    
-//}
-
 - (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler{
     if([FCUtilities isAccountDeleted]){
         return Nil;

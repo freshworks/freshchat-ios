@@ -15,9 +15,9 @@
 
 @implementation FCJWTUtilities
 
-+ (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) token{
-    if(!token.length) return @{};
-    NSArray *tokenStucture = [token componentsSeparatedByString:@"."];
++ (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) jwtIdToken{
+    if(!jwtIdToken.length) return @{};
+    NSArray *tokenStucture = [jwtIdToken componentsSeparatedByString:@"."];
     
     NSString *tokenPayload = [tokenStucture objectAtIndex:1];
     int modPayload = tokenPayload.length % 4;
@@ -39,9 +39,9 @@
             && [FCRemoteConfig sharedInstance].userAuthConfig.isStrictModeEnabled);
 }
 
-+ (BOOL) isValidityExpiedForJWTToken :(NSString*) token {
-    if(token.length > 0){
-        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:token];
++ (BOOL) isValidityExpiedForJWTToken :(NSString*) jwtIdToken {
+    if(jwtIdToken.length > 0){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:jwtIdToken];
         if([jwtTokenInfo objectForKey:@"exp"]){
             NSTimeInterval currentRequestTime = [FCUtilities getCurrentTimeInMillis];
             if(currentRequestTime > ([[jwtTokenInfo objectForKey:@"exp"] longValue] * ONE_SECONDS_IN_MS)){
@@ -52,9 +52,9 @@
     return FALSE;
 }
 
-+ (NSString*) getReferenceID: (NSString *) token {
-    if(token){
-        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:token];
++ (NSString*) getReferenceID: (NSString *) jwtIdToken {
+    if(jwtIdToken){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:jwtIdToken];
         if([jwtTokenInfo objectForKey:@"reference_id"]){
             return [jwtTokenInfo objectForKey:@"reference_id"];
         }
@@ -62,9 +62,9 @@
     return nil;
 }
 
-+ (NSString*) getAliasFrom: (NSString *) token {
-    if(token){
-        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:token];
++ (NSString*) getAliasFrom: (NSString *) jwtIdToken {
+    if(jwtIdToken){
+        NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:jwtIdToken];
         if([jwtTokenInfo objectForKey:@"freshchat_uuid"]){
             return [jwtTokenInfo objectForKey:@"freshchat_uuid"];
         }
@@ -72,7 +72,7 @@
     return nil;
 }
 
-+ (BOOL) hasValidRefIdForJWTToken :(NSString *) token {
++ (BOOL) hasValidRefIdForJWTToken :(NSString *) jwtIdToken {
     NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:[FreshchatUser sharedInstance].jwtToken];
     if([jwtTokenInfo objectForKey:@"reference_id"] != nil){
         return true;
@@ -95,16 +95,16 @@
     return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
-+(void) setPendingJWTToken : (NSString *) token {
-    [[FCSecureStore sharedInstance] setObject:token forKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
++(void) setPendingJWTToken : (NSString *) jwtIdToken {
+    [[FCSecureStore sharedInstance] setObject:jwtIdToken forKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
 +(void) removePendingJWTToken {
     [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
 
-+ (void) setPendingRestoreJWTToken : (NSString *) token {
-    [[FCSecureStore sharedInstance] setObject:token forKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
++ (void) setPendingRestoreJWTToken : (NSString *) jwtIdToken {
+    [[FCSecureStore sharedInstance] setObject:jwtIdToken forKey:FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN];
 }
 
 + (void) removePendingRestoreJWTToken {

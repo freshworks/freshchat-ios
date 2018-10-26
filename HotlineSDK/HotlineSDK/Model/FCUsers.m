@@ -65,9 +65,9 @@
     }];
 }
 
-+ (void) updateUserWithIdToken : (NSString *) token {
++ (void) updateUserWithIdToken : (NSString *) jwtIdToken {
     FreshchatUser *fcUser = [FreshchatUser sharedInstance];
-    fcUser.jwtToken = token;
+    fcUser.jwtToken = jwtIdToken;
     [FCUsers storeUserInfo:fcUser];
 }
 

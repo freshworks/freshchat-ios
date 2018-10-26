@@ -36,7 +36,7 @@
 +(NSString *)getUserAliasWithCreate;
 +(NSString *)generateUserAlias;
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion;
-+(void) resetDataAndRestoreWithJwtToken: (NSString *) token withCompletion:(void (^)())completion;
++(void) resetDataAndRestoreWithJwtToken: (NSString *) jwtIdToken withCompletion:(void (^)())completion;
 + (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController;
 
 +(UIImage *)imageWithColor:(UIColor *)color;

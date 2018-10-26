@@ -170,7 +170,7 @@ enum TagFilterType {
  * Sync any change to user information, specified in JWT Token with Freshchat
  *
  */
-- (void)setUserWithIdToken :(NSString *) token;
+- (void)setUserWithIdToken :(NSString *) jwtIdToken;
 
 /*
  * In Auth Strict Mode get status of User Auth Token

@@ -11,27 +11,27 @@
 
 @interface FCJWTUtilities : NSObject
 
-+ (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) token;
++ (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) jwtIdToken;
 
 + (BOOL) isUserAuthEnabled;
 
-+ (BOOL) isValidityExpiedForJWTToken :(NSString*) token;
++ (BOOL) isValidityExpiedForJWTToken :(NSString*) jwtIdToken;
 
-+ (BOOL) hasValidRefIdForJWTToken :(NSString *) token;
++ (BOOL) hasValidRefIdForJWTToken :(NSString *) jwtIdToken;
 
-+ (NSString*) getReferenceID: (NSString *) token;
++ (NSString*) getReferenceID: (NSString *) jwtIdToken;
 
-+ (NSString*) getAliasFrom: (NSString *) token;
++ (NSString*) getAliasFrom: (NSString *) jwtIdToken;
 
 +(BOOL) isJwtWaitingToAuth;
 
 +(NSString *) getPendingJWTToken;
 
-+(void) setPendingJWTToken : (NSString *) token;
++(void) setPendingJWTToken : (NSString *) jwtIdToken;
 
 +(void) removePendingJWTToken;
 
-+(void) setPendingRestoreJWTToken : (NSString *) token;
++(void) setPendingRestoreJWTToken : (NSString *) jwtIdToken;
 
 + (void) removePendingRestoreJWTToken;
 
