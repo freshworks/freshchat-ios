@@ -146,7 +146,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 - (NSString *) getFreshchatUserId{
     
-    if(![FCJWTUtilities isUserAuthEnabled]){
+    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         ALog(@"Freshchat API : JWT is disabled.");
         return nil;
     }
@@ -365,7 +365,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)setUser:(FreshchatUser *)user{
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         ALog(@"Freshchat API : JWT is Enabled for thisb please use setUserWithIdToken!");
         return;
     }
@@ -374,7 +374,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (NSString *) getUserAliasForIdToken{
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         return [FCUtilities currentUserAlias];
     }
     else{
@@ -407,52 +407,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 - (void) setUserWithIdToken :(NSString *) jwtIdToken {
     
     [FCJWTUtilities removePendingRestoreJWTToken];
-    if(![FCJWTUtilities isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
-        ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
-        [FCJWTUtilities removePendingJWTToken]; //Remove pending state if non JWT called before call
-        return;
-    }
     
-    if(trimString(jwtIdToken).length == 0) return;
-    if([FCJWTUtilities isValidityExpiedForJWTToken:jwtIdToken]){
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
-        return;
-    }
-    
-    if([FreshchatUser sharedInstance].jwtToken != nil) {
-        //Same Token Payload Check
-        if(([[FCJWTUtilities getJWTUserPayloadFromToken: jwtIdToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
-            ALog(@"Freshchat API : Same Payload");
-            return;
-        }
-        
-        if ([FCJWTUtilities getAliasFrom: jwtIdToken] == nil) {
-            ALog(@"Freshchat API : Empty Alias Found");
-            return;
-        }
-        
-        //Check for different alias(User 1  to User 2)
-        if(!([[FCJWTUtilities getAliasFrom: jwtIdToken] isEqualToString:
-              [FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken]])) {
-            ALog(@"Freshchat API : Different Alias Found");
-            return;
-        }
-        
-        if(!([[FCJWTUtilities getReferenceID:jwtIdToken] isEqualToString:
-              [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
-            if (!([FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken] == nil && [FCJWTUtilities getReferenceID:jwtIdToken] == nil)) {
-                ALog(@"Freshchat API : Different Reference ID");
-                return;
-            }            
-        }
-        
-        //If user laready registered no need to call validate JWT token API
-        if([FCUserUtil isUserRegistered]){
-            [FCUsers updateUserWithIdToken:jwtIdToken];
-            [FCUtilities initiatePendingTasks];
-            return;
-        }
-    }
+    if(![FCJWTUtilities canProgressSetUserForToken:jwtIdToken]) return;
     
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
@@ -483,7 +439,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)restoreUserWithIdToken:(NSString *) jwtIdToken{
     [FCJWTUtilities removePendingJWTToken];
-    if(![FCJWTUtilities isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
+    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
         ALog(@"Freshchat API Error : restoreUserWithIdToken is valid only in Strict mode!!");
         [FCJWTUtilities removePendingRestoreJWTToken]; //Remove pending state if non JWT called before call
         return;
@@ -574,7 +530,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)setUserProperties:(NSDictionary*)props{
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
@@ -600,7 +556,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 
 -(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
@@ -976,7 +932,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
                 }
-                if([FCJWTUtilities isUserAuthEnabled]
+                if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]
                    && ([FreshchatUser sharedInstance].jwtToken == nil && ![[FreshchatUser sharedInstance].jwtToken isEqualToString:@""])){
                     ALog(@"Freshchat Error : Please Validate the user first.");
                     return;

@@ -725,7 +725,7 @@ static NSInteger networkIndicator = 0;
     user.phoneCountryCode = userDict[@"phoneCountry"];
     user.externalID = userDict[@"identifier"];
     user.restoreID = userDict[@"restoreId"];
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [FCUsers storeUserInfo:user];
     }
     else{

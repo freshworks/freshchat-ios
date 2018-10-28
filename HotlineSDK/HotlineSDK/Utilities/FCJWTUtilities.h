@@ -13,11 +13,11 @@
 
 + (NSDictionary *) getJWTUserPayloadFromToken : (NSString *) jwtIdToken;
 
-+ (BOOL) isUserAuthEnabled;
-
 + (BOOL) isValidityExpiedForJWTToken :(NSString*) jwtIdToken;
 
 + (BOOL) hasValidRefIdForJWTToken :(NSString *) jwtIdToken;
+
++ (BOOL) canProgressSetUserForToken : (NSString *) jwtIdToken;
 
 + (NSString*) getReferenceID: (NSString *) jwtIdToken;
 

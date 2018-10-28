@@ -12,6 +12,9 @@
 #import "FCUserDefaults.h"
 #import "FCSecureStore.h"
 #import "FCJWTAuthValidator.h"
+#import "FCMacros.h"
+#import "FCUserUtil.h"
+#import "FCUsers.h"
 
 @implementation FCJWTUtilities
 
@@ -34,11 +37,6 @@
     return payloadDict;
 }
 
-+ (BOOL) isUserAuthEnabled {
-    return ([FCRemoteConfig sharedInstance].userAuthConfig.isjwtAuthEnabled
-            && [FCRemoteConfig sharedInstance].userAuthConfig.isStrictModeEnabled);
-}
-
 + (BOOL) isValidityExpiedForJWTToken :(NSString*) jwtIdToken {
     if(jwtIdToken.length > 0){
         NSDictionary *jwtTokenInfo = [self getJWTUserPayloadFromToken:jwtIdToken];
@@ -50,6 +48,63 @@
         }
     }
     return FALSE;
+}
+
++ (BOOL) canProgressSetUserForToken : (NSString *) jwtIdToken {
+    
+    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
+        ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
+        [FCJWTUtilities removePendingJWTToken]; //Remove pending state if non JWT called before call
+        return FALSE;
+    }
+    
+    if([FCJWTUtilities isValidityExpiedForJWTToken:jwtIdToken]){
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
+        return FALSE;
+    }
+    
+    if(trimString(jwtIdToken).length == 0){
+        return FALSE;
+    }
+    else {
+        //Same Token Payload Check
+        if(([[FCJWTUtilities getJWTUserPayloadFromToken: jwtIdToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
+            ALog(@"Freshchat API : Same Payload");
+            return FALSE;
+        }
+        
+        if ([FCJWTUtilities getAliasFrom: jwtIdToken] == nil) {
+            ALog(@"Freshchat API : Empty Alias Found");
+            return FALSE;
+        }
+        
+        //Check for different alias(User 1  to User 2)
+        if(!([[FCJWTUtilities getAliasFrom: jwtIdToken] isEqualToString:
+              [FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken]])) {
+            ALog(@"Freshchat API : Different Alias Found");
+            return FALSE;
+        }
+        
+        if(!([[FCJWTUtilities getReferenceID:jwtIdToken] isEqualToString:
+              [FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken]])) {
+            if (!([FCJWTUtilities getReferenceID: [FreshchatUser sharedInstance].jwtToken] == nil && [FCJWTUtilities getReferenceID:jwtIdToken] == nil)) {
+                ALog(@"Freshchat API : Different Reference ID");
+                return FALSE;
+            }
+        }
+        
+        //If user laready registered no need to call validate JWT token API
+        if([FCUserUtil isUserRegistered]){
+            [FCUsers updateUserWithIdToken:jwtIdToken];
+            [FCUtilities initiatePendingTasks];
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
++ (BOOL) canProgressUserRestoreForToken : (NSString *) jwtIdToken{
+    
 }
 
 + (NSString*) getReferenceID: (NSString *) jwtIdToken {
@@ -81,7 +136,7 @@
 }
 
 + (void) setTokenInitialState{
-    if([FCJWTUtilities isUserAuthEnabled]
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]
        && ([FreshchatUser sharedInstance].jwtToken == nil && ![[FreshchatUser sharedInstance].jwtToken isEqualToString:@""]) ){
         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
     }
@@ -116,12 +171,12 @@
 }
 
 + (void) performPendingJWTTasks {
-    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
         [[Freshchat sharedInstance] setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];
         return;
     }
     
-    if([FCJWTUtilities isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
         [[Freshchat sharedInstance] restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
         return;
     }

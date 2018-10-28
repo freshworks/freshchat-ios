@@ -19,6 +19,7 @@
 #import "FCAttachmentImageController.h"
 #import "FCLocalNotification.h"
 #import "FCJWTUtilities.h"
+#import "FCRemoteConfig.h"
 
 @implementation FCViewController : UIViewController
 
@@ -36,7 +37,7 @@
 }
 
 - (void) postNotifForScreenTransition {
-    if(![FCJWTUtilities isUserAuthEnabled]) return;
+    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]) return;
     if([self.class isEqual:[FCChannelViewController class]] || [self.class isEqual:[FCMessageController class]] || [self.class isEqual:[FCAttachmentImageController class]]){
         [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"SCREEN_TRANSITION"}];
     }

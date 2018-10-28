@@ -114,7 +114,7 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     NSData *userData;
     NSError *error = nil;
-    if(![FCJWTUtilities isUserAuthEnabled]){
+    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         if(userInfo){
             userData = [NSJSONSerialization dataWithJSONObject:@{@"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
         }
@@ -179,7 +179,7 @@
             FCUserProperties *property = propertiesToUpload[i];
             if (property.key) {
                 if (property.isUserProperty) {
-                    if(![FCJWTUtilities isUserAuthEnabled])
+                    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled])
                         userInfo[property.key] = property.value;
                 }else{
                     metaInfo[property.key] = property.value;
@@ -274,7 +274,7 @@
             IN_PROGRESS = NO;
         }
         
-        if([FCJWTUtilities isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken != nil){
+        if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken != nil){
             info[@"jwtAuthToken"] = [FreshchatUser sharedInstance].jwtToken;
         }
         

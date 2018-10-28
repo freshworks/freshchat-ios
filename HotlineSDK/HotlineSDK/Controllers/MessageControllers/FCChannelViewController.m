@@ -35,6 +35,7 @@
 #import "FCCSATUtil.h"
 #import "FCJWTAuthValidator.h"
 #import "FCJWTUtilities.h"
+#import "FCRemoteConfig.h"
 
 @interface FCChannelViewController () <HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
@@ -86,7 +87,7 @@
     [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
     [self checkRestoreStateChanged];
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [self addJWTObservers];
         [self jwtStateChange];
     }
@@ -237,7 +238,7 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [self removeJWTObservers];
     }
 }

@@ -304,7 +304,7 @@ typedef struct {
     [self.inputToolbar setSendButtonEnabled: [FCStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
     
     //Add JWT Enabled disabled check
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [self addJWTObservers];
         [self jwtStateChange];
     }
@@ -403,7 +403,7 @@ typedef struct {
         FDLog(@"Leaving message screen with active CSAT, Recording YES state");
         [self handleUserEvadedCSAT];
     }
-    if([FCJWTUtilities isUserAuthEnabled]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [self removeJWTObservers];
     }
 }

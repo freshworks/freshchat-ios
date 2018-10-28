@@ -35,5 +35,6 @@
 - (BOOL) isActiveInboxAndAccount;
 - (BOOL) isActiveFAQAndAccount;
 - (BOOL) isActiveConvAvailable;
+- (BOOL) isUserAuthEnabled;
 
 @end

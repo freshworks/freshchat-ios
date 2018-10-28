@@ -103,6 +103,11 @@
     return self.accountActive && self.enabledFeatures.faqEnabled;
 }
 
+- (BOOL) isUserAuthEnabled {
+    return (self.userAuthConfig.isjwtAuthEnabled
+            && self.userAuthConfig.isStrictModeEnabled);
+}
+
 - (BOOL) isActiveConvAvailable{
     long days = [FCMessages daysSinceLastMessageInContext: [[FCDataManager sharedInstance] mainObjectContext]];
     if( days * ONE_SECONDS_IN_MS < self.conversationConfig.activeConvWindow ){

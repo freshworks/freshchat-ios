@@ -191,12 +191,13 @@ enum TagFilterType {
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID;
 
 /**
- *Identify and restore an user base on reference_id
+ * Identify and restore an user base on reference_id and can only be called in auth strict mode
  *
- *@param jwtToken The Jwt Id Token for the current user signed by your account's private key
+ * @param jwtIdToken Set a valid Id Token for the current user signed with your account key(s)
  *
  */
 -(void)restoreUserWithIdToken:(NSString *) jwtIdToken;
+
 /**
  *  Clear User Data
  *
