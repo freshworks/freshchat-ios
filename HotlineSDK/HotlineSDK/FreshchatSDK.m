@@ -440,7 +440,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     
     if(![FCJWTUtilities canProgressUserRestoreForToken:jwtIdToken]) return;
     
-    if ([FCJWTUtilities getReferenceID:jwtIdToken] && [FCJWTUtilities getAliasFrom:jwtIdToken]) {
+    if ([FCJWTUtilities getReferenceID:jwtIdToken]) {
         [FCJWTUtilities setPendingRestoreJWTToken:jwtIdToken];
         
         if(![FCUtilities isRemoteConfigFetched] && [[FCReachabilityManager sharedInstance] isReachable]){
