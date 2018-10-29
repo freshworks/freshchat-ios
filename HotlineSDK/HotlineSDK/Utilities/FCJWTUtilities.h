@@ -19,6 +19,8 @@
 
 + (BOOL) canProgressSetUserForToken : (NSString *) jwtIdToken;
 
++ (BOOL) canProgressUserRestoreForToken : (NSString *) jwtIdToken;
+
 + (NSString*) getReferenceID: (NSString *) jwtIdToken;
 
 + (NSString*) getAliasFrom: (NSString *) jwtIdToken;

@@ -245,7 +245,7 @@
 		35B2EF1C1D000E620014867F /* FCResponseInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCResponseInfo.h; sourceTree = "<group>"; };
 		35B2EF1D1D000E620014867F /* FCResponseInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCResponseInfo.m; sourceTree = "<group>"; };
 		35B2EF1E1D000E620014867F /* FCAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCAPI.h; sourceTree = "<group>"; };
-		35B2EF1F1D000E620014867F /* FCAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCAPIClient.h; sourceTree = "<group>"; };
+		35B2EF1F1D000E620014867F /* FCAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCAPIClient.h; sourceTree = "<group>"; wrapsLines = 0; };
 		35B2EF201D000E620014867F /* FCAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCAPIClient.m; sourceTree = "<group>"; };
 		35B2EF221D000E620014867F /* FCCoreServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCCoreServices.h; sourceTree = "<group>"; };
 		35B2EF231D000E620014867F /* FCCoreServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCCoreServices.m; sourceTree = "<group>"; };

@@ -12,6 +12,7 @@
 #import "FCJWTUtilities.h"
 #import "FCJWTAuthValidator.h"
 #import "FCSecureStore.h"
+#import "FCRemoteConfig.h"
 
 @interface FCAPIClient ()
 
@@ -43,10 +44,8 @@
 }
 
 - (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler{
-    if([FCUtilities isAccountDeleted]){
-        return Nil;
-    }
-    if( isAuthEnabled && [FCJWTUtilities isUserAuthEnabled]) {
+    
+    if( isAuthEnabled && [[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
         if([FCJWTAuthValidator sharedInstance].currState != TOKEN_VALID && [FCJWTAuthValidator sharedInstance].currState != TOKEN_NOT_SET ) {
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_PROCESSED];
         }
@@ -59,6 +58,17 @@
                 return Nil;
             }
         }
+    }
+    
+    NSURLSessionDataTask *task = [self request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        if (handler) handler(responseInfo, error ? error : nil);
+    }];
+    return task;
+}
+
+-(NSURLSessionDataTask *)request:(FCServiceRequest *)request withHandler:(HLNetworkCallback)handler {
+    if([FCUtilities isAccountDeleted]){
+        return Nil;
     }
     
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -84,7 +94,6 @@
         else{
             if (handler) handler(responseInfo, error ? error : nil);
         }
-        
     }];
     [task resume];
     return task;

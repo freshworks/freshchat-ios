@@ -432,28 +432,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                 [FCUsers updateUserWithIdToken:@""]; //Invalid
                 [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];                
             }
-            
         }
     }];
 }
 
 -(void)restoreUserWithIdToken:(NSString *) jwtIdToken{
     [FCJWTUtilities removePendingJWTToken];
-    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
-        ALog(@"Freshchat API Error : restoreUserWithIdToken is valid only in Strict mode!!");
-        [FCJWTUtilities removePendingRestoreJWTToken]; //Remove pending state if non JWT called before call
-        return;
-    }
-    if(trimString(jwtIdToken).length == 0){
-        ALog(@"Freshchat : JWT token missing for identifyUser API!");
-         [FCJWTUtilities removePendingRestoreJWTToken];//Remove if it is called by non JWT user before RC
-        return;
-    }
     
-    if([FCJWTUtilities isValidityExpiedForJWTToken:jwtIdToken]){
-        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
-        return;
-    }
+    if(![FCJWTUtilities canProgressUserRestoreForToken:jwtIdToken]) return;
     
     if ([FCJWTUtilities getReferenceID:jwtIdToken] && [FCJWTUtilities getAliasFrom:jwtIdToken]) {
         [FCJWTUtilities setPendingRestoreJWTToken:jwtIdToken];
