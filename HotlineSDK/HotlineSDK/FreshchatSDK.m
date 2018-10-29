@@ -307,7 +307,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
 }
 
-
 -(void)cleanUpData:(void (^)())completion{
     FCDataManager *dataManager = [FCDataManager sharedInstance];
     NSDictionary *previousUser = [self getPreviousUserConfig];
@@ -457,6 +456,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID {
     if(externalID == nil) { //Safety check
         return;
+    }
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        ALog(@"Freshchat : identifyUserWithExternalID is not allowed in auth strict mode");
     }
     NSString *oldExternalID = [FreshchatUser sharedInstance].externalID;
     NSString *oldRestoreID = [FreshchatUser sharedInstance].restoreID;

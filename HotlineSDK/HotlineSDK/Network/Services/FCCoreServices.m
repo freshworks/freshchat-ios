@@ -571,10 +571,13 @@
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     //NSString *userAlias = [FCUtilities currentUserAlias];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RESTORE_WITH_JWT_PATH,appID];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RENEW_BY_JWT_PATH,appID];
     [[FreshchatUser sharedInstance] setJwtToken:jwtIdToken];
     NSError *error = nil;
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    userInfo[@"deviceIosMeta"] = [FCUtilities deviceInfoProperties];
+    
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{@"user":userInfo ,@"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
     
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:userData];
@@ -714,7 +717,7 @@
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE,appID];    
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE_PATH,appID];    
     NSError *error = nil;
     NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
