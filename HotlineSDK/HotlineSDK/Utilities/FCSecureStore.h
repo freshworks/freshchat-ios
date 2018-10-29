@@ -79,6 +79,7 @@
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
 
+#define FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES @"freshchat_defaults_drop_update_user_properties" //Dismiss user properties update for JWT Restore
 
 @interface FCSecureStore : NSObject
 
