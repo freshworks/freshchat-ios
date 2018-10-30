@@ -67,8 +67,8 @@
         return FALSE;
     }
     else {
-        //Same Token Payload Check
-        if(([[FCJWTUtilities getJWTUserPayloadFromToken: jwtIdToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]])) {
+        //same token same payload
+        if(([[FCJWTUtilities getJWTUserPayloadFromToken: jwtIdToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]]) && ([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken])) {
             ALog(@"Freshchat API : Same Payload");
             return FALSE;
         }
@@ -92,11 +92,11 @@
         }
         
         //If user laready registered no need to call validate JWT token API
-        if([FCUserUtil isUserRegistered]){
+        /*if([FCUserUtil isUserRegistered] && [jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken]){
             [FCUsers updateUserWithIdToken:jwtIdToken];
             [FCUtilities initiatePendingTasks];
             return FALSE;
-        }
+        }*/
     }
     return TRUE;
 }

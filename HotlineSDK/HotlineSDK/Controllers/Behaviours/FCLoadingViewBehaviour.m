@@ -31,6 +31,7 @@
 @property (nonatomic, strong) FCEmptyResultView *emptyResultView;
 @property (nonatomic) enum SupportType solType;
 @property (nonatomic) BOOL isWaitingForJWT;
+@property (nonatomic, strong) NSTimer *loadingDismissTimer;
 
 @end
 
@@ -137,9 +138,14 @@
                 message = nil;
                 self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
                 if(self.canStartsLoadingTimer){
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )* NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                        [[Freshchat sharedInstance] dismissFreshchatViews];
-                    });
+                    if(self.loadingDismissTimer.isValid) {
+                        [self.loadingDismissTimer invalidate];
+                    }
+                    self.loadingDismissTimer = [NSTimer scheduledTimerWithTimeInterval:([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )
+                                                                      target:self
+                                                                    selector:@selector(dismissFreshchatViews)
+                                                                    userInfo:nil
+                                                                     repeats:NO];
                 }
             }
             self.emptyResultView.emptyResultLabel.text = message;
@@ -152,8 +158,11 @@
                 [self.emptyResultView removeFromSuperview];
             }
         }
-        
     });
+}
+
+- (void) dismissFreshChatViews{
+    [[Freshchat sharedInstance] dismissFreshchatViews];
 }
 
 -(void) setJWTState:(BOOL) isAuthInProgress {

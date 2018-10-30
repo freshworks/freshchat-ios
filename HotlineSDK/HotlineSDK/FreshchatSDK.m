@@ -52,6 +52,7 @@
 #import "FCVotingManager.h"
 #import "FCJWTAuthValidator.h"
 #import "FCJWTUtilities.h"
+#import "FCJWTAuthValidator.h"
 
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
@@ -902,6 +903,10 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     }
     if([FCUtilities isAccountDeleted]){
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
+        return;
+    }
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && !([FCJWTAuthValidator sharedInstance].currState == TOKEN_VALID)){
+        ALog(@"Freshchat Error : Please set the user with valid token first.");
         return;
     }
     NSManagedObjectContext *mainContext = [[FCDataManager sharedInstance] mainObjectContext];
