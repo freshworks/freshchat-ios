@@ -88,9 +88,9 @@
 + (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName;
 + (void) cacheImageWithUrl : (NSString *) url;
 + (void) processResetChanges;
-+ (void) addFlagToDropUserPropUpdate;
-+ (void) removeFlagToDropUserPropUpdate;
-+ (BOOL) isUserPropUpdateFlagEnabled;
++ (void) addFlagToDisableUserPropUpdate;
++ (void) removeFlagToDisableUserPropUpdate;
++ (BOOL) isUpdateUserPropertiesEnabled;
 
 @end
 

@@ -406,7 +406,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 - (void) setUserWithIdToken :(NSString *) jwtIdToken {
     
     [FCJWTUtilities removePendingRestoreJWTToken];
-    
+    [FCUtilities removeFlagToDisableUserPropUpdate];
     if(![FCJWTUtilities canProgressSetUserForToken:jwtIdToken]) return;
     
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {

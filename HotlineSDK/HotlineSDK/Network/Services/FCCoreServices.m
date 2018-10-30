@@ -236,7 +236,9 @@
 }
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
-
+    if([FCUtilities isUpdateUserPropertiesEnabled]){
+        return;
+    }
     static BOOL IN_PROGRESS = NO;
     
     if(IN_PROGRESS){
@@ -590,6 +592,7 @@
         if([[FCReachabilityManager sharedInstance] isReachable]) {
             [FCJWTUtilities removePendingRestoreJWTToken];
         }
+        [FCUtilities addFlagToDisableUserPropUpdate];
         if (statusCode == 200) { //If the user is found
             [FCUtilities updateUserAlias:response[@"alias"]];
             [FCUtilities updateUserWithData:response];
