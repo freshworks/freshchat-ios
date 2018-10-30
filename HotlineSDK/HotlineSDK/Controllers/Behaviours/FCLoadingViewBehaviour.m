@@ -21,7 +21,7 @@
 #import "FCAutolayoutHelper.h"
 #import "FCReachabilityManager.h"
 #import "FCRemoteConfig.h"
-
+#import "FCJWTAuthValidator.h"
 
 @interface  FCLoadingViewBehaviour ()
 
@@ -58,6 +58,13 @@
     self.activityIndicator = nil;
     self.emptyResultView = nil;
     self.loadingViewDelegate = nil;
+}
+
+- (BOOL) canStartsLoadingTimer {
+    if(([FCJWTAuthValidator sharedInstance].currState == TOKEN_NOT_SET) || ([FCJWTAuthValidator sharedInstance].currState == TOKEN_EXPIRED)){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 -(void)addLoadingIndicator{
@@ -129,9 +136,11 @@
                 self.emptyResultView.emptyResultImage.image = nil;
                 message = nil;
                 self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )* NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                    [[Freshchat sharedInstance] dismissFreshchatViews];
-                });
+                if(self.canStartsLoadingTimer){
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )* NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        [[Freshchat sharedInstance] dismissFreshchatViews];
+                    });
+                }
             }
             self.emptyResultView.emptyResultLabel.text = message;
             [self.loadingViewDelegate.view addSubview:self.emptyResultView];
