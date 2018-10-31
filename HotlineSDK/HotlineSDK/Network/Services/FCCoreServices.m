@@ -236,7 +236,7 @@
 }
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
-    if([FCUtilities isUpdateUserPropertiesEnabled]){
+    if([[FCRemoteConfig sharedInstance]isUserAuthEnabled] && ([FCUtilities isUpdateUserPropertiesEnabled] || ([FreshchatUser sharedInstance].jwtToken == nil))){
         return;
     }
     static BOOL IN_PROGRESS = NO;
