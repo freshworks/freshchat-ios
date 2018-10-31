@@ -429,8 +429,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [FCUtilities initiatePendingTasks];
         } else {
             if([[FCReachabilityManager sharedInstance] isReachable]) {
-                [FCUsers updateUserWithIdToken:@""]; //Invalid
-                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];                
+                [FCCoreServices resetUserData:^{
+                    [FCUtilities processResetChanges];
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                }];
             }
         }
     }];

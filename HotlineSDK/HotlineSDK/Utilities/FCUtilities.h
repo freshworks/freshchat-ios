@@ -90,7 +90,7 @@
 + (void) processResetChanges;
 + (void) addFlagToDisableUserPropUpdate;
 + (void) removeFlagToDisableUserPropUpdate;
-+ (BOOL) isUpdateUserPropertiesEnabled;
++ (BOOL) canUpdateUserProperties;
 
 @end
 

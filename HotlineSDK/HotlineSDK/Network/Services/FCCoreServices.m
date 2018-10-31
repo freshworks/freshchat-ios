@@ -236,9 +236,14 @@
 }
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
-    if([[FCRemoteConfig sharedInstance]isUserAuthEnabled] && ([FCUtilities isUpdateUserPropertiesEnabled] || ([FreshchatUser sharedInstance].jwtToken == nil))){
+    
+    //JWT Handling
+    if([[FCRemoteConfig sharedInstance]isUserAuthEnabled]
+       && (![FCUtilities canUpdateUserProperties]
+           || (trimString([FreshchatUser sharedInstance].jwtToken) == 0))) {
         return;
     }
+
     static BOOL IN_PROGRESS = NO;
     
     if(IN_PROGRESS){

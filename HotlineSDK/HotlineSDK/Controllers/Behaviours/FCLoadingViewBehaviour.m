@@ -137,10 +137,7 @@
                 self.emptyResultView.emptyResultImage.image = nil;
                 message = nil;
                 self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
-                if(self.canStartsLoadingTimer){
-                    if(self.loadingDismissTimer.isValid) {
-                        [self.loadingDismissTimer invalidate];
-                    }
+                if(self.canStartsLoadingTimer && self.loadingDismissTimer == nil){
                     self.loadingDismissTimer = [NSTimer scheduledTimerWithTimeInterval:([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )
                                                                       target:self
                                                                     selector:@selector(dismissFreshchatViews)

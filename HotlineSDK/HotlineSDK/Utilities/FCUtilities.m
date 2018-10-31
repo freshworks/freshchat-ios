@@ -827,15 +827,15 @@ static NSInteger networkIndicator = 0;
 }
 
 + (void) addFlagToDisableUserPropUpdate {
-    [[FCSecureStore sharedInstance] setBoolValue:YES forKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
+    [[FCSecureStore sharedInstance] setBoolValue:TRUE forKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
 }
 
 + (void) removeFlagToDisableUserPropUpdate {
     [[FCSecureStore sharedInstance] setBoolValue:FALSE forKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
 }
 
-+ (BOOL) isUpdateUserPropertiesEnabled {
-    return [[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES] ? TRUE : FALSE;
++ (BOOL) canUpdateUserProperties {
+    return ![[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
 }
 
 @end
