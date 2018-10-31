@@ -55,6 +55,9 @@
 @property (nonatomic, retain) NSMutableArray *dataArray;
 @property (weak, nonatomic) IBOutlet UIButton *languageTranslation;
 
+@property (nonatomic, retain) IBOutlet UILabel *event;
+@property (nonatomic, retain) IBOutlet UILabel *tokenState;
+
 @end
 
 @implementation ViewController
@@ -140,7 +143,10 @@
 }
 
 - (void) jwtActionEvent:(NSNotification *)notif {
-    NSLog(@"====JWT Event - %@ ====", notif.userInfo);
+    NSLog(@"====JWT Event - %@ ====", notif.userInfo[@"user_action"]);
+    self.event.text = notif.userInfo[@"user_action"];
+    NSLog(@"====JWT Event - %@ ====", [[Freshchat sharedInstance] getUserIdTokenStatus]);
+    self.tokenState.text = [[Freshchat sharedInstance] getUserIdTokenStatus];
 }
 
 - (void) receiveHLPlayNotification:(NSNotification *) notification{
