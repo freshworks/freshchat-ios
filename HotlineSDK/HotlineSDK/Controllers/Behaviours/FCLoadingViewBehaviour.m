@@ -61,13 +61,6 @@
     self.loadingViewDelegate = nil;
 }
 
-- (BOOL) canStartsLoadingTimer {
-    if(([FCJWTAuthValidator sharedInstance].currState == TOKEN_NOT_SET) || ([FCJWTAuthValidator sharedInstance].currState == TOKEN_EXPIRED)){
-        return TRUE;
-    }
-    return FALSE;
-}
-
 -(void)addLoadingIndicator{
     if(self.activityIndicator || self.loadingViewDelegate == nil){
         if(self.isWaitingForJWT){
@@ -137,7 +130,8 @@
                 self.emptyResultView.emptyResultImage.image = nil;
                 message = nil;
                 self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
-                if(self.canStartsLoadingTimer && self.loadingDismissTimer == nil){
+                if([[FCJWTAuthValidator sharedInstance] canStartLoadingTimer]
+                   && self.loadingDismissTimer == nil ){
                     self.loadingDismissTimer = [NSTimer scheduledTimerWithTimeInterval:([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )
                                                                       target:self
                                                                     selector:@selector(dismissFreshchatViews)

@@ -43,5 +43,7 @@
 
 + (void) performPendingJWTTasks;
 
++ (BOOL) compareAlias:(NSString *)str1 str2:(NSString *)str2;
+
 @end
 

@@ -384,24 +384,20 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (NSString *)getUserIdTokenStatus{
-    if ([[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE]){
-        NSInteger stateInt = [[[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE] integerValue];
-        switch (stateInt) {
-            case 1:
-                return @"TOKEN_VALID";
-            case 2:
-                return @"TOKEN_NOT_SET";
-            case 3:
-                return @"TOKEN_NOT_PROCESSED";
-            case 4:
-                return @"TOKEN_EXPIRED";
-            case 5:
-                return @"TOKEN_INVALID";
-            default:
-                return @"TOKEN_NOT_SET";
-        }
+    switch ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState]) {
+        case 1:
+            return @"TOKEN_VALID";
+        case 2:
+            return @"TOKEN_NOT_SET";
+        case 3:
+            return @"TOKEN_NOT_PROCESSED";
+        case 4:
+            return @"TOKEN_EXPIRED";
+        case 5:
+            return @"TOKEN_INVALID";
+        default:
+            return @"TOKEN_NOT_SET";
     }
-    return @"TOKEN_NOT_SET";
 }
 
 - (void) setUserWithIdToken :(NSString *) jwtIdToken {
@@ -423,14 +419,15 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         return;
     }
     [FCCoreServices validateJwtToken:jwtIdToken completion:^(BOOL valid, NSError *error) {
-        if(!error && valid){
-            [FCUsers updateUserWithIdToken:jwtIdToken]; //ACTIVE
+        if(!error && valid) {
+            [FCUsers updateUserWithIdToken:jwtIdToken]; 
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
             [FCUtilities initiatePendingTasks];
         } else {
             if([[FCReachabilityManager sharedInstance] isReachable]) {
                 [FCCoreServices resetUserData:^{
                     [FCUtilities processResetChanges];
+                    [FCUsers updateUserWithIdToken:jwtIdToken];
                     [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                 }];
             }
@@ -907,7 +904,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
-    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && !([FCJWTAuthValidator sharedInstance].currState == TOKEN_VALID)){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]
+       && !([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_VALID)){
         ALog(@"Freshchat Error : Please set the user with valid token first.");
         return;
     }

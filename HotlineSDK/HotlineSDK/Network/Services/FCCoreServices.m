@@ -154,13 +154,13 @@
                 if (handler) handler([NSError new]);
             }
         } else{
-            FDLog(@"User registration failed :%@", error);
+            FDLog(@"Conflict :: User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
             if(statusCode == 409) {
                 [FCCoreServices resetUserData:^{
                     if (handler) handler([NSError new]);
                     [FCUtilities processResetChanges];
-                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
                 }];
             }
             else{
@@ -611,16 +611,14 @@
             [FCUsers removeUserInfo];
             [FCUtilities resetAlias];
             [FCUtilities processResetChanges];
+            [FCUsers updateUserWithIdToken:jwtIdToken];
             if(statusCode ==  404) {
                 if([FCJWTUtilities getAliasFrom:jwtIdToken] != nil &&
                    ![[FCJWTUtilities getAliasFrom:jwtIdToken] isEqualToString:@""]) {
                     [FCUtilities updateUserAlias: [FCJWTUtilities getAliasFrom:jwtIdToken]];
                 }
-                [FCUsers updateUserWithIdToken:jwtIdToken];
                 [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
                 [FCUtilities initiatePendingTasks];                
-            } else { //Check again confirm with muthu
-                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
             }
         }
         if(completion){
@@ -664,7 +662,7 @@
                 }
             }
         }
-        else { //If the user is not found
+        else { //If the user is not found 404 should be handled
             FreshchatUser* oldUser = [FreshchatUser sharedInstance];
             oldUser.externalID = extId;
             oldUser.restoreID = nil;
@@ -712,8 +710,7 @@
         [store removeObjectWithKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
         
         [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
-        [FCJWTAuthValidator sharedInstance].currState = TOKEN_NOT_SET;
-        [FCJWTAuthValidator sharedInstance].prevState = TOKEN_NOT_SET;
+        [[FCJWTAuthValidator sharedInstance] resetPrevJWTState];
         [FCUsers removeUserInfo];
         if(completion){
             completion(error);
@@ -741,12 +738,16 @@
                 [FCJWTUtilities removePendingJWTToken];
             }
             if (statusCode == 200) {
+                
                 if([response[@"userAliasExists"] boolValue]){
-                    [FCCoreServices resetUserData:^{
-                        [FCUtilities processResetChanges];
-                        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                    
+                    //Same alias then same existing user                    
+                    if ([FCJWTUtilities compareAlias:jwtIdToken
+                                                str2:[FreshchatUser sharedInstance].jwtToken]) {
+                        handler(true, error);
+                    } else {
                         handler(false, error);
-                    }];
+                    }
                 }
                 else {
                     [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];

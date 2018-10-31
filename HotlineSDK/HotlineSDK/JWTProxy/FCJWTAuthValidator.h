@@ -7,6 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FCSecureStore.h"
+#import "FCJWTUtilities.h"
+#import "FCUsers.h"
+#import "FCUtilities.h"
+
 
 #define ACTIVE_EVENT @"com.freshchat.jwt.active_event"
 #define JWT_EVENT @"com.freshchat.jwt.event"
@@ -34,12 +39,15 @@ enum JWT_UI_STATE {
 @interface FCJWTAuthValidator: NSObject
 
 + (instancetype) sharedInstance;
+- (enum JWT_STATE) getDefaultJWTState;
 - (void) updateAuthState : (enum JWT_STATE) state;
+- (void) resetPrevJWTState;
+- (BOOL) canSetStateToNotProcessed;
+- (BOOL) canStartLoadingTimer;
 
 - (enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState;
 - (enum JWT_UI_STATE) getUiActionForTransition;
 
-@property (assign, nonatomic) enum JWT_STATE currState;
 @property (assign, nonatomic) enum JWT_STATE prevState;
 
 

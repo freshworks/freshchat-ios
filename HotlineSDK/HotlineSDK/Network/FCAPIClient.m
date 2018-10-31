@@ -13,6 +13,8 @@
 #import "FCJWTAuthValidator.h"
 #import "FCSecureStore.h"
 #import "FCRemoteConfig.h"
+#import "FCCoreServices.h"
+
 
 @interface FCAPIClient ()
 
@@ -46,7 +48,7 @@
 - (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler{
     
     if( isAuthEnabled && [[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
-        if([FCJWTAuthValidator sharedInstance].currState != TOKEN_VALID && [FCJWTAuthValidator sharedInstance].currState != TOKEN_NOT_SET ) {
+        if([[FCJWTAuthValidator sharedInstance] canSetStateToNotProcessed]) {
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_PROCESSED];
         }
         //TODO : rename FRESHCHAT_DEFAULTS_IS_FIRST_AUTH
@@ -75,21 +77,26 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
         
         FCResponseInfo *responseInfo = [[FCResponseInfo alloc]initWithResponse:response andHTTPBody:data];
+        
         if (statusCode >= BadRequest) {
+            
+            if ([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
+                if(statusCode == UnAuthorized || statusCode == TokenRequired) {
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                    if (handler) handler(responseInfo, error ? error : nil);
+                }
+            }
+            
             if(statusCode == Gone){//For GDPR compliance
                 self.FC_IS_USER_OR_ACCOUNT_DELETED = YES;
                 [FCUtilities handleGDPRForResponse:responseInfo];
                 if (handler) handler(responseInfo,nil);
             }
-            else{
+            else {
                 [self logRequest:request];
                 NSDictionary *info = @{ @"Status code" : [NSString stringWithFormat:@"%ld", (long)statusCode] };
                 if (handler) handler(responseInfo,[NSError errorWithDomain:@"Request failed" code:statusCode userInfo:info]);
             }
-        }
-        else if (statusCode == UnAuthorized) {
-            //Unauthorized state
-            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
         }
         else{
             if (handler) handler(responseInfo, error ? error : nil);

@@ -7,7 +7,6 @@
 //
 
 #import "FCJWTAuthValidator.h"
-#import "FCSecureStore.h"
 
 @implementation FCJWTAuthValidator
 
@@ -24,21 +23,28 @@
     self = [super init];
     if (self) {
         self.prevState = TOKEN_NOT_SET;
-        self.currState = [self setDefaultJWTState];
     }
     return self;
 }
 
--(enum JWT_STATE) setDefaultJWTState {
+-(enum JWT_STATE) getDefaultJWTState {
+    enum JWT_STATE currentState = TOKEN_NOT_SET;
     NSNumber *stateNumb = [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
     if(stateNumb != nil) {
-        return (enum JWT_STATE)[stateNumb intValue];
+        currentState = (enum JWT_STATE)[stateNumb intValue];
     }
-    return TOKEN_NOT_SET;
+    
+    if([FCJWTUtilities isValidityExpiedForJWTToken:[FreshchatUser sharedInstance].jwtToken] && currentState != TOKEN_EXPIRED){
+        [FCJWTAuthValidator sharedInstance].prevState = currentState;
+        currentState = TOKEN_EXPIRED;
+        [[FCSecureStore sharedInstance] setIntValue:(int)currentState forKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
+        [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
+    }
+    return currentState;
 }
 
 - (void) updateAuthState : (enum JWT_STATE) state{
-    [FCJWTAuthValidator sharedInstance].currState = state;
+    [FCJWTAuthValidator sharedInstance].prevState = [[FCJWTAuthValidator sharedInstance] getDefaultJWTState];
     [[FCSecureStore sharedInstance] setIntValue:(int)state forKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
 }
@@ -60,17 +66,17 @@
 
 -(enum JWT_UI_STATE) getUiActionForTransition {
 
-    if([FCJWTAuthValidator sharedInstance].currState == TOKEN_VALID ||
-       [FCJWTAuthValidator sharedInstance].currState == TOKEN_INVALID ||
-       [FCJWTAuthValidator sharedInstance].currState == TOKEN_NOT_SET) {
-        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [FCJWTAuthValidator sharedInstance].currState];
-    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_EXPIRED) {
+    if([[FCJWTAuthValidator sharedInstance] getDefaultJWTState]  == TOKEN_VALID ||
+       [[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_INVALID ||
+       [[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_NOT_SET) {
+        return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [[FCJWTAuthValidator sharedInstance] getDefaultJWTState]];
+    } else if([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_EXPIRED) {
         if ([FCJWTAuthValidator sharedInstance].prevState == TOKEN_VALID) {
             return SHOW_CONTENT;
         } else {
             return LOADING;
         }
-    } else if([FCJWTAuthValidator sharedInstance].currState == TOKEN_NOT_PROCESSED) {
+    } else if([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_NOT_PROCESSED) {
         if([FCJWTAuthValidator sharedInstance].prevState == TOKEN_EXPIRED){
             return SHOW_CONTENT;
         } else {
@@ -81,7 +87,18 @@
     return NO_CHANGE;
 }
 
+-(void) resetPrevJWTState {
+    [FCJWTAuthValidator sharedInstance].prevState = [[FCJWTAuthValidator sharedInstance] getDefaultJWTState];
 
+}
+
+- (BOOL) canSetStateToNotProcessed {
+    return ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] != TOKEN_VALID && [[FCJWTAuthValidator sharedInstance] getDefaultJWTState] != TOKEN_NOT_SET );
+}
+
+- (BOOL) canStartLoadingTimer {
+    return (([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_NOT_SET) || ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_EXPIRED));
+}
 
 
 
