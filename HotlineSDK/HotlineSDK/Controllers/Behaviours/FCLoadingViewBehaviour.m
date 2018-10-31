@@ -161,7 +161,7 @@
     });
 }
 
-- (void) dismissFreshChatViews{
+- (void) dismissFreshchatViews{
     [[Freshchat sharedInstance] dismissFreshchatViews];
 }
 
