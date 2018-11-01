@@ -798,12 +798,29 @@ static NSInteger networkIndicator = 0;
 }
 
 +(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UINavigationController *) navController {
-    if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame) ||
-       ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame))  { 
+    if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame))  {
         NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
         NSNumber *articleId = [numbFormatter numberFromString:[url host]];
-            if (articleId!= nil) {
+        if (articleId!= nil) {
             [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
+            return YES;
+        }
+    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame &&
+               ([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
+               ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
+            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+                if (queryItem.value == nil) {
+                    continue;
+                }
+                if ([queryItem.name isEqualToString:@"article_id"]) {
+                    articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
+                    break;
+                }
+            }
+        if(articleID.integerValue != -1) {
+            [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions];
             return YES;
         }
     }

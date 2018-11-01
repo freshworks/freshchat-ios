@@ -1156,42 +1156,10 @@ typedef struct {
         NSURL *url = [fragment getOpenURL];
         BOOL linkHandled  = [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController];
         if(!linkHandled) {
-            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
-            NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
-            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
-                if (queryItem.value == nil) {
-                    continue;
-                }
-                if ([queryItem.name isEqualToString:@"article_id"]) {
-                    articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
-                    break;
-                }
-            }
-            
-            if(articleID.integerValue != -1) {
-                @try{
-                    FAQOptions *option = [FAQOptions new];
-                    if([FCConversationUtil hasTags:self.convOptions]){
-                        [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
-                    }
-                    [FCFAQUtil launchArticleID:articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
-                }
-                @catch(NSException* e){
-                    ALog(@"%@",e);
-                }
-            }
-            else {
-                @try{
-                    NSURL *actionUrl = [fragment getOpenURL];
-                    if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [[UIApplication sharedApplication] openURL:actionUrl];
-                        });
-                    }
-                }
-                @catch(NSException* e){
-                    ALog(@"%@",e);
-                }
+            if([[UIApplication sharedApplication] canOpenURL:url]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:url];
+                });
             }
         }
     }
