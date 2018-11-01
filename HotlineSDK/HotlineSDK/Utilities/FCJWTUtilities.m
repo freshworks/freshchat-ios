@@ -90,6 +90,12 @@
             }
         }
         
+        if([FCUserUtil isUserRegistered]) {
+             [FCUsers updateUserWithIdToken:jwtIdToken];
+             [FCUtilities initiatePendingTasks];
+             return FALSE;
+         }
+        
     }
     return TRUE;
 }
