@@ -146,12 +146,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 - (NSString *) getFreshchatUserId{
-    
-    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
-        ALog(@"Freshchat API : JWT is disabled.");
-        return nil;
-    }
-    return [FCUtilities currentUserAlias];
+    return [FCUtilities getUserAliasWithCreate];
 }
 
 -(void)initWithConfig:(FreshchatConfig *)config completion:(void(^)(NSError *error))completion{
