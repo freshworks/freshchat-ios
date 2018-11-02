@@ -330,6 +330,9 @@
                 NSDictionary *response = responseInfo.responseAsDictionary;
                 [FCUtilities updateUserWithExternalID:[response objectForKey:@"identifier"] withRestoreID:[response objectForKey:@"restoreId"]];
                 [FCUtilities updateUserWithData:response];
+                if([[FCRemoteConfig sharedInstance]isUserAuthEnabled] && ([FreshchatUser sharedInstance].jwtToken != nil)){
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+                }
                 if (handler) handler(nil);
             }
         }else{
