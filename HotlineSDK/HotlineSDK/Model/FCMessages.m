@@ -7,6 +7,8 @@
 //
 
 #import "FCMessages.h"
+#import "FCRemoteConfig.h"
+#import "FCJWTAuthValidator.h"
 
 @implementation FCMessages
 
@@ -93,6 +95,7 @@
 }
 
 +(void)uploadAllUnuploadedMessages{
+    if(([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) && !([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_VALID)) return;
     NSManagedObjectContext *context = [[FCDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;

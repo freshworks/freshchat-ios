@@ -15,7 +15,8 @@ enum FCHTTPResponseCode {
     BadRequest = 400,
     Gone = 410,
     UnAuthorized = 412,
-    TokenRequired = 428
+    TokenRequired = 428,
+    TokenExpired = 426
 };
 
 @interface FCAPIClient : NSObject

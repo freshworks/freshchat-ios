@@ -83,8 +83,11 @@
             if ([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
                 if(statusCode == UnAuthorized || statusCode == TokenRequired) {
                     [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
-                    if (handler) handler(responseInfo, error ? error : nil);
                 }
+                else if (statusCode == TokenExpired){
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
+                }
+                if (handler) handler(responseInfo, error ? error : nil);
             }
             
             if(statusCode == Gone){//For GDPR compliance
