@@ -7,6 +7,7 @@
 //
 
 #import "FCJWTAuthValidator.h"
+#import "FCLocalNotification.h"
 
 @implementation FCJWTAuthValidator
 
@@ -47,6 +48,7 @@
     [FCJWTAuthValidator sharedInstance].prevState = [[FCJWTAuthValidator sharedInstance] getDefaultJWTState];
     [[FCSecureStore sharedInstance] setIntValue:(int)state forKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
+    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"ID_TOKEN_STATUS_CHANGED"}];
 }
 
 -(enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState {
