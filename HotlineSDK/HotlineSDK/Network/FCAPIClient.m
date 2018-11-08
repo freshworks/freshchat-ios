@@ -82,12 +82,14 @@
             
             if ([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
                 if(statusCode == UnAuthorized || statusCode == TokenRequired) {
-                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                    if([[[responseInfo responseAsArray] valueForKey:@"errorCode"] intValue] == 26){// 26 -> JWT_TOKEN_EXPIRED
+                        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
+                    }
+                    else{
+                        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                    }
+                    if (handler) handler(responseInfo, error ? error : nil);
                 }
-                else if (statusCode == TokenExpired){
-                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
-                }
-                if (handler) handler(responseInfo, error ? error : nil);
             }
             
             if(statusCode == Gone){//For GDPR compliance
