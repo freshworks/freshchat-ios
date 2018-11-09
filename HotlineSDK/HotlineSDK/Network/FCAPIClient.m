@@ -89,8 +89,8 @@
                     else if (errCode == 23){
                         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                     }
-                    if (handler) handler(responseInfo, error ? error : nil);
                 }
+                if (handler) handler(responseInfo, error ? error : nil);
             }
             
             if(statusCode == Gone){//For GDPR compliance

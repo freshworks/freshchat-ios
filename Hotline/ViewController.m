@@ -11,10 +11,12 @@
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
 #import "SampleController.h"
+#import "JWTScheduler.h"
 #import "Hotline_Demo-Swift.h"
 
 #define kOFFSET_FOR_KEYBOARD 160.0
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define JWT_SCHEDULER_STORYBOARD_CONTROLLER @"JWTScheduler"
 
 @interface ViewController ()<UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
 
@@ -276,12 +278,23 @@
                                                object:nil];
 }
 SampleController *sampleController;
+JWTScheduler *jwtScheduler;
+
 - (IBAction)chatButtonPressed:(id)sender {
-    if(sampleController == nil) {
+    /*
+     //SampleViewController hidden
+     if(sampleController == nil) {
         UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
         sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     }
     [self presentViewController:sampleController animated:YES completion:nil];
+    */
+    
+    if( jwtScheduler == nil) {
+        UIStoryboard *jwtSchedulerSB = [UIStoryboard storyboardWithName:JWT_SCHEDULER_STORYBOARD_CONTROLLER bundle:nil];
+        jwtScheduler = [jwtSchedulerSB instantiateViewControllerWithIdentifier:JWT_SCHEDULER_STORYBOARD_CONTROLLER];
+    }
+    [self presentViewController:jwtScheduler animated:YES completion:nil];
 }
 
 - (IBAction)articleFilter1:(id)sender{

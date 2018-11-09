@@ -166,6 +166,8 @@
 
 -(void) hideLoadingScreen {
     [self updateResultsView:NO andCount:1];
+    [self.loadingDismissTimer invalidate];
+    self.loadingDismissTimer = nil;
 }
 
 @end
