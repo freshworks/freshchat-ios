@@ -1398,6 +1398,8 @@ typedef struct {
     self.tableView.dataSource = nil;
     self.inputToolbar.delegate = nil;
     self.audioMessageInputView.delegate = nil;
+    [_loadingViewBehaviour killTimer];
+    self.loadingViewBehaviour = nil;
     [self localNotificationUnSubscription];
 }
 
@@ -1470,6 +1472,7 @@ typedef struct {
         [self showAlertWithTitle:nil
                       andMessage:HLLocalizedString(LOC_JWT_FAILURE_ALERT_MESSAGE)];
         self.isJWTAlertShown = TRUE;
+        [_loadingViewBehaviour killTimer];
         if(self.tabBarController != nil) {
             [self.parentViewController.navigationController popViewControllerAnimated:YES];
         } else {

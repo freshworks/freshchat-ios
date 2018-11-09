@@ -32,6 +32,7 @@
 -(void) setJWTState:(BOOL) isAuthInProgress;
 -(void) showLoadingScreen;
 -(void) hideLoadingScreen;
+-(void) killTimer;
 
 @end
 

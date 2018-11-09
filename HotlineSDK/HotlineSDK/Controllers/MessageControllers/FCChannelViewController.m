@@ -371,6 +371,8 @@
 }
 
 -(void)dealloc{
+    [_loadingViewBehaviour killTimer];
+    self.loadingViewBehaviour = nil;
     [self localNotificationUnSubscription];
 }
 
@@ -447,7 +449,9 @@
         [self showAlertWithTitle:nil
                       andMessage:HLLocalizedString(LOC_JWT_FAILURE_ALERT_MESSAGE)];
         self.isJWTAlertShown = TRUE;
+        [_loadingViewBehaviour killTimer];
         if(self.tabBarController != nil) {
+            [self hideJWTLoading];
             [self.parentViewController.navigationController popViewControllerAnimated:YES];
         } else {
             [self dismissViewControllerAnimated:true completion:nil];

@@ -397,9 +397,9 @@ JWTScheduler *jwtScheduler;
 
 - (IBAction)idenfiyJWTUser:(id)sender{
     if(self.jwtTextView.text.length == 0){
-        return;
+        //return;
     }
-    [[Freshchat sharedInstance] restoreUserWithIdToken:self.jwtTextView.text];
+    [[Freshchat sharedInstance] restoreUserWithIdToken:@"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZmlyc3RfbmFtZSI6Ik11dGh1IiwibGFzdF9uYW1lIjoiS3Jpc2huYW4iLCJmcmVzaGNoYXRfdXVpZCI6IjkwZmEzYTk0LWNlZWEtNGMyYS1hYzlkLTE0MTJlY2ZkMjQ2NSIsIm9yaWdpbiI6ImFuZHJvaWQiLCJyZWZlcmVuY2VfaWQiOiJ3ZWJ0ZXN0MTIifQ.WWevqCWaS_75xAyQXDllytHTl_kpPT8JpBNdJEGK1-hsVg0gZTCARTpSfJoi2EdGm9gywJi1JXcOfg3ruW5prtFHf3JF0oYD672We8-9J5yu8do9Ehyo_PJYcJXTn0oy3mbH7D2pvq_houASxIDmk2wQn2RTFHspHxXhwdN5_gLni7lGo0tgc1sqJFPI-j_8wnIVKksoQXZBtOrjee3MEPBGflg1DmS97pnDJ4vfYY4ef6SVBapWOuo_AnrFSlsrnRmNx8ismOY3wcB8GHacj3XXQihkNd7_iWeEpw4XW2NlV3JmtZeaCjXpl16rEkwMNTCqhN-rh4YjGL-bl4hPBWodG78Sqp76gjz5QpRwT7LFL6IG0fkUIg3dUFhMTxLCILakpSUsYlkHdkmTPBcRuSTPaPHGsbqrZUSV8fDYHpxKj6jOK-m75CRRScQSud81EdMack7jTu1PePYBkst_Tf5Ddm-KdUXGqQdYB1-p3JaTK0jXbiaCtNyTYy7P6difcQ9Ryna1ZmQnY8n8HOU5Kd3Ac4Iv4s98Tq022t4n8nBZrsLY7t0j0AWRTgjkR8YeHgXkz8davqFcrRQ64kQvYMZ6whVSlOBosICmjimPjLmKXS7d4sx5rkYkgf0QPgo3H8y6T26EeDvnAsTG5CVbeGQzr91cUk5UW28NN-VZsJM"];
 }
 
 - (IBAction)sendMessage:(id)sender{

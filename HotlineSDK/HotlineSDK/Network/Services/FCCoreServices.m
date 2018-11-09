@@ -603,13 +603,13 @@
         [FCUtilities addFlagToDisableUserPropUpdate];
         if (statusCode == 200) { //If the user is found
             [FCUtilities updateUserAlias:response[@"alias"]];
-            [FCUtilities updateUserWithData:response];
             [FCUsers updateUserWithIdToken:jwtIdToken];
+            [FCUtilities updateUserWithData:response];
             [FCUserUtil setUserMessageInitiated];
             [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-            [FCUtilities initiatePendingTasks];
             [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
             [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+            [FCUtilities initiatePendingTasks];
         } else { //Any failure case
             [FCUsers removeUserInfo];
             [FCUtilities resetAlias];
