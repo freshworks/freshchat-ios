@@ -48,7 +48,7 @@
 
 #define HOTLINE_API_MARKETING_MESSAGE_STATUS_UPDATE_PATH @"/app/services/app/%@/user/%@/message/marketing/%@/status"
 
-#define FRESHCHAT_API_REMOTE_CONFIG_PREFIX @"%@/"
+#define FRESHCHAT_API_REMOTE_CONFIG_PREFIX @"config-%@/"
 
 #define FRESHCHAT_API_REMOTE_CONFIG_PATH @"/app/services/app/config/mobile/%@"
 
