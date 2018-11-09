@@ -285,7 +285,7 @@ SampleController *sampleController;
 }
 
 - (IBAction)articleFilter1:(id)sender{
-    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    /*NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
@@ -297,21 +297,37 @@ SampleController *sampleController;
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];*/
+    //Revert back
+    [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)categoryFilter1:(id)sender{
-    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+//    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+//    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
+//    [contactUsTagsArray removeObject:@""];
+//    FAQOptions *options = [FAQOptions new];
+//    options.showFaqCategoriesAsGrid = self.gridval;
+//    options.showContactUsOnFaqScreens = self.switchVal;
+//    if(contactUsTagsArray.count){
+//        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+//    }
+//    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
+//    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    //Revert back
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.conversationTitle.text];
+    FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnAppBar = true;
+    options.showContactUsOnFaqScreens = true;
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
-    options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    
 }
 
 
@@ -360,14 +376,17 @@ SampleController *sampleController;
 
 //2
 - (IBAction)setJWTUser:(id)sender{
-//    if(self.jwtTextView.text.length == 0){
-//        return;
-//    }
-    [[Freshchat sharedInstance] setUserWithIdToken:@"eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibGFzdF9uYW1lIjoiSGV5IFRoZXJlIiwiZnJlc2hjaGF0X3V1aWQiOiJ5b2xvcGE5OCIsImZpcnN0X25hbWUiOiJIZXkgYXAiLCJyZWZlcmVuY2VfaWQiOiJ5b2xvcGE5OCIsImlhdCI6MTUxNjIzOTAyMn0.ReI5sGK-i__rYVhA9hAQCy_2E2cAKjAcjy3fJr6jIPM-TgvNAzrTiSzEP6ZUrqHHuX-5kV4yN_AU2VEZiSmXDxj2pcZ9EIuWrPhZn0Rcbfh22xV9dDrC38ANrBw479i3aXEoeGbv-_YQUZLd05btcNyvbmOEFC6xj-e9bcOArX29R9YNiNWnUXBhRMW6opXWLQ9GJphNYwUpwxX9rKGxbG60ibYBI-dw4sTY6yS0DsiiBvse7b98ZOP9YIm5gAYrqqHxEuSGpr9M0f_6l7jjbHXk_-UxR1aZDc6AVO_m20bkzSndkSnXSr2GThb385IC-soJC636mZH3wUg8BCLveg6oRKfbkDX7ZfjGttCHbi76BjIBbJfRGAf6e72kfID3L5ZSdOLoF0dSbtieAZR-je9ooDmA5HRZYZltROA6eSiD3jg_hgGGc4RKS5gZhBK25A79UBMIhBCYCO3PTsrrdiKYrlBKHMR8DyihqhhpF8IdylB09ew0vGKSdJGagOMnSKFpIq8hlTMhvmAMgOmQWaZNngrDXPa9L2MsP7ECj5xq_KdiE1W_TAtGs5HNapXM48N9Uaqvk3U0Z_Ug8ZtDTOZpwT8v6HGRlSVrocFJcNu9f864euny_PQPtRhFHtiyB05Wh_jwE41dfjR-ARDL_quvAou3zy_5s4-gTZJkiFE"];
+    if(self.jwtTextView.text.length == 0){
+        return;
+    }
+    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtTextView.text];
 }
 
 - (IBAction)idenfiyJWTUser:(id)sender{
-    [[Freshchat sharedInstance] restoreUserWithIdToken:@"eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibGFzdF9uYW1lIjoiSGV5IFRoZXJlIiwiZnJlc2hjaGF0X3V1aWQiOiJ5b2xvcGE5OCIsImZpcnN0X25hbWUiOiJIZXkgYXAiLCJyZWZlcmVuY2VfaWQiOiJ5b2xvcGE5OCIsImlhdCI6MTUxNjIzOTAyMn0.ReI5sGK-i__rYVhA9hAQCy_2E2cAKjAcjy3fJr6jIPM-TgvNAzrTiSzEP6ZUrqHHuX-5kV4yN_AU2VEZiSmXDxj2pcZ9EIuWrPhZn0Rcbfh22xV9dDrC38ANrBw479i3aXEoeGbv-_YQUZLd05btcNyvbmOEFC6xj-e9bcOArX29R9YNiNWnUXBhRMW6opXWLQ9GJphNYwUpwxX9rKGxbG60ibYBI-dw4sTY6yS0DsiiBvse7b98ZOP9YIm5gAYrqqHxEuSGpr9M0f_6l7jjbHXk_-UxR1aZDc6AVO_m20bkzSndkSnXSr2GThb385IC-soJC636mZH3wUg8BCLveg6oRKfbkDX7ZfjGttCHbi76BjIBbJfRGAf6e72kfID3L5ZSdOLoF0dSbtieAZR-je9ooDmA5HRZYZltROA6eSiD3jg_hgGGc4RKS5gZhBK25A79UBMIhBCYCO3PTsrrdiKYrlBKHMR8DyihqhhpF8IdylB09ew0vGKSdJGagOMnSKFpIq8hlTMhvmAMgOmQWaZNngrDXPa9L2MsP7ECj5xq_KdiE1W_TAtGs5HNapXM48N9Uaqvk3U0Z_Ug8ZtDTOZpwT8v6HGRlSVrocFJcNu9f864euny_PQPtRhFHtiyB05Wh_jwE41dfjR-ARDL_quvAou3zy_5s4-gTZJkiFE"];
+    if(self.jwtTextView.text.length == 0){
+        return;
+    }
+    [[Freshchat sharedInstance] restoreUserWithIdToken:self.jwtTextView.text];
 }
 
 - (IBAction)sendMessage:(id)sender{

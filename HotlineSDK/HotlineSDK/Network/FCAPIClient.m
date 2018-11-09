@@ -82,10 +82,11 @@
             
             if ([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
                 if(statusCode == UnAuthorized || statusCode == TokenRequired) {
-                    if([[[responseInfo responseAsArray] valueForKey:@"errorCode"] intValue] == 26){// 26 -> JWT_TOKEN_EXPIRED
+                    int errCode = [[[responseInfo responseAsArray] valueForKey:@"errorCode"] intValue];
+                    if(errCode == 26){
                         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
                     }
-                    else{
+                    else if (errCode == 23){
                         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                     }
                     if (handler) handler(responseInfo, error ? error : nil);
