@@ -21,6 +21,7 @@
 #import "FCJWTUtilities.h"
 #import "FCLocalNotification.h"
 #import "FCRemoteConfig.h"
+#import "FCJWTAuthValidator.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -165,6 +166,7 @@ __weak static id <KonotorDelegate> _delegate;
     
     //Check for JWT Auth and expiry
     if([FCRemoteConfig sharedInstance].isUserAuthEnabled && [FCJWTUtilities isValidityExpiedForJWTToken:[FreshchatUser sharedInstance].jwtToken]){
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
         return;
     }
     
