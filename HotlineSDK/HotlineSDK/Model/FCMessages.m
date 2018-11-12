@@ -95,7 +95,7 @@
 }
 
 +(void)uploadAllUnuploadedMessages{
-    if(([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) && !([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_VALID)) return;
+    if([FCJWTUtilities isJWTTokenInvalid]) return;
     NSManagedObjectContext *context = [[FCDataManager sharedInstance]mainObjectContext];
     [context performBlock:^{
         NSError *pError;

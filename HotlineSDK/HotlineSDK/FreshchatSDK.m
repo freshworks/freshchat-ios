@@ -899,8 +899,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
-    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]
-       && !([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_VALID)){
+    if([FCJWTUtilities isJWTTokenInvalid]){
         BLog(@"Freshchat Error : Please set the user with valid token first.");
         return;
     }

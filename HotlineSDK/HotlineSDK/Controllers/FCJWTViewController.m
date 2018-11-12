@@ -57,4 +57,17 @@
     });
 }
 
+
+-(void) showJWTLoading {
+    //Skeleton Method
+}
+
+-(void) hideJWTLoading {
+    //Skeleton Method
+}
+
+-(void) showJWTVerificationFailedAlert {
+    //Skeleton Method
+}
+
 @end

@@ -45,5 +45,7 @@
 
 + (BOOL) compareAlias:(NSString *)str1 str2:(NSString *)str2;
 
++ (BOOL) isJWTTokenInvalid;
+
 @end
 
