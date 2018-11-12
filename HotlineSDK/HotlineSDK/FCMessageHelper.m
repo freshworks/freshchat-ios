@@ -20,6 +20,7 @@
 #import "FCMessages.h"
 #import "FCJWTUtilities.h"
 #import "FCLocalNotification.h"
+#import "FCRemoteConfig.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -161,6 +162,11 @@ __weak static id <KonotorDelegate> _delegate;
     FCMessages *message = [FCMessages saveMessageInCoreData:fragmentsInfo onConversation:conversation];
     [channel addMessagesObject:message];
     [[FCDataManager sharedInstance]save];
+    
+    //Check for JWT Auth and expiry
+    if([FCRemoteConfig sharedInstance].isUserAuthEnabled && [FCJWTUtilities isValidityExpiedForJWTToken:[FreshchatUser sharedInstance].jwtToken]){
+        return;
+    }
     
     if(![FCUserUtil isUserRegistered]) {
         [FCUserUtil registerUser:nil];
