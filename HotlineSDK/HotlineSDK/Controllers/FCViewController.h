@@ -18,10 +18,6 @@
 -(void)configureBackButton;
 -(UIViewController <UIGestureRecognizerDelegate> *) gestureDelegate;
 
--(void)jwtStateChange;
--(void)addJWTObservers;
--(void)removeJWTObservers;
-
 @end
 
 

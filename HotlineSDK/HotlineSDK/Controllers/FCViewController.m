@@ -12,13 +12,11 @@
 #import "FCMacros.h"
 #import "FCBarButtonItem.h"
 #import "FCControllerUtils.h"
-#import "FCJWTAuthValidator.h"
 #import "FCAutolayoutHelper.h"
 #import "FCChannelViewController.h"
 #import "FCMessageController.h"
 #import "FCAttachmentImageController.h"
 #import "FCLocalNotification.h"
-#import "FCJWTUtilities.h"
 #import "FCRemoteConfig.h"
 
 @implementation FCViewController : UIViewController
@@ -58,21 +56,6 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return [[FCTheme sharedInstance]statusBarStyle];
-}
-
--(void) addJWTObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(jwtStateChange)
-                                                 name:JWT_EVENT
-                                               object:nil];
-}
-
--(void) removeJWTObservers {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:JWT_EVENT object:nil];
-}
-
--(void) jwtStateChange {
-    // Just a skeleton method
 }
 
 @end

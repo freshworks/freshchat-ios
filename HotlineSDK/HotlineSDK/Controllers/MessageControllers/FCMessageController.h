@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FCInputToolbarView.h"
 #import "FCChannels.h"
-#import "FCViewController.h"
+#import "FCJWTViewController.h"
 #import "FCYesNoPromptView.h"
 #import "FCCSATView.h"
 #import "ConversationOptionsInterface.h"
@@ -21,7 +21,7 @@ enum ResponseTimeType {
     LAST_WEEK_AVG = 2
 };
 
-@interface FCMessageController : FCViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, FCYesNoPromptViewDelegate, HLCSATViewDelegate, ConversationOptionsInterface>
+@interface FCMessageController : FCJWTViewController <FDInputToolbarViewDelegate, UIGestureRecognizerDelegate, FCYesNoPromptViewDelegate, HLCSATViewDelegate, ConversationOptionsInterface>
 
 -(BOOL)isModal;
 

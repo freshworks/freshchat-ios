@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "FCMarginalView.h"
-#import "FCViewController.h"
+#import "FCJWTViewController.h"
 #import "FAQOptionsInterface.h"
 
-@interface FCListViewController : FCViewController <UITableViewDelegate, UITableViewDataSource,UIGestureRecognizerDelegate,FDMarginalViewDelegate,FAQOptionsInterface>
+@interface FCListViewController : FCJWTViewController <UITableViewDelegate, UITableViewDataSource,UIGestureRecognizerDelegate,FDMarginalViewDelegate,FAQOptionsInterface>
 
 @property(nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)FCMarginalView *footerView;

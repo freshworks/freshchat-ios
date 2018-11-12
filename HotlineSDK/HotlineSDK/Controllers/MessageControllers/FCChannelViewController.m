@@ -370,43 +370,11 @@
     }
 }
 
--(void)dealloc{
+-(void)dealloc {
     [_loadingViewBehaviour killTimer];
     self.loadingViewBehaviour = nil;
     [self localNotificationUnSubscription];
 }
-
-#pragma mark - JWT Handling
-
-- (enum JWT_UI_STATE) getUpdatedAction {
-    switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
-        case LOADING:
-            return LOADING;
-        case SHOW_ALERT:
-            return SHOW_ALERT;
-        default:
-            return NO_CHANGE;
-    };
-    return NO_CHANGE;
-}
-
-// TODO : Duplication
--(void)jwtStateChange {
-    dispatch_async(dispatch_get_main_queue(), ^{ /* show alert view */
-        switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
-            case LOADING:
-                [self showJWTLoading];
-                break;
-            case SHOW_ALERT:
-                [self showJWTVerificationFailedAlert];
-                break;
-            default:
-                [self hideJWTLoading];
-                break;
-        };
-    });
-}
-
 
 #pragma mark - LoadingView behaviour change
 
@@ -451,7 +419,6 @@
         self.isJWTAlertShown = TRUE;
         [_loadingViewBehaviour killTimer];
         if(self.tabBarController != nil) {
-            [self hideJWTLoading];
             [self.parentViewController.navigationController popViewControllerAnimated:YES];
         } else {
             [self dismissViewControllerAnimated:true completion:nil];

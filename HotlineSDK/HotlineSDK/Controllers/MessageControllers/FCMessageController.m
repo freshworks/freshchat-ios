@@ -1403,30 +1403,6 @@ typedef struct {
     [self localNotificationUnSubscription];
 }
 
-
-#pragma mark - JWT Handling
-
-- (enum JWT_UI_STATE) getUpdatedAction {
-    return [[FCJWTAuthValidator sharedInstance] getUiActionForTransition];
-}
-
-// TODO : Duplication
--(void)jwtStateChange {
-    dispatch_async(dispatch_get_main_queue(), ^{ /* show alert view */
-        switch ([[FCJWTAuthValidator sharedInstance] getUiActionForTransition]) {
-            case LOADING:
-                [self showJWTLoading];
-                break;
-            case SHOW_ALERT:
-                [self showJWTVerificationFailedAlert];
-                break;
-            default:
-                [self hideJWTLoading];
-                break;
-        };
-    });
-}
-
 #pragma mark - LoadingView behaviour change
 
 -(FCLoadingViewBehaviour*)loadingViewBehaviour {

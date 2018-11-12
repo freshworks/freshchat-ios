@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FCSecureStore.h"
 #import "FCJWTUtilities.h"
+#import "FCRemoteConfig.h"
 #import "FCUsers.h"
 #import "FCUtilities.h"
 
@@ -32,7 +33,8 @@ enum JWT_UI_STATE {
     LOADING = 1,
     SHOW_ALERT = 2,
     SHOW_CONTENT = 3,
-    NO_CHANGE = 4
+    SHOW_CONTENT_WITH_TIMER = 4,
+    NO_CHANGE = 5
 };
 
 
@@ -45,10 +47,13 @@ enum JWT_UI_STATE {
 - (BOOL) canSetStateToNotProcessed;
 - (BOOL) canStartLoadingTimer;
 
+-(void) startExpiryTimer;
+-(void) stopExpiryTimer;
+
 - (enum JWT_UI_STATE) getUiActionForTokenState: (enum JWT_STATE) apiState;
 - (enum JWT_UI_STATE) getUiActionForTransition;
 
 @property (assign, nonatomic) enum JWT_STATE prevState;
-
+@property (nonatomic, strong) NSTimer *expiryTimer;
 
 @end

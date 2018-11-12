@@ -332,6 +332,10 @@
                 [FCUtilities updateUserWithData:response];
                 if([[FCRemoteConfig sharedInstance]isUserAuthEnabled] && ([FreshchatUser sharedInstance].jwtToken != nil)){
                     [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+                    if([FCUserUtil isUserRegistered]) {
+                        [FCMessages uploadAllUnuploadedMessages];
+                        [FCMessageServices uploadUnuploadedCSAT];
+                    }
                 }
                 if (handler) handler(nil);
             }

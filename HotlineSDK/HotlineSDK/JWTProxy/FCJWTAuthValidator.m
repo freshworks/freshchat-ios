@@ -45,6 +45,9 @@
 }
 
 - (void) updateAuthState : (enum JWT_STATE) state{
+    if (state == [[FCJWTAuthValidator sharedInstance] getDefaultJWTState]) {
+        return;
+    }
     [FCJWTAuthValidator sharedInstance].prevState = [[FCJWTAuthValidator sharedInstance] getDefaultJWTState];
     [[FCSecureStore sharedInstance] setIntValue:(int)state forKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
     [[NSNotificationCenter defaultCenter] postNotificationName:JWT_EVENT object:nil];
@@ -74,7 +77,7 @@
         return [[FCJWTAuthValidator sharedInstance] getUiActionForTokenState: [[FCJWTAuthValidator sharedInstance] getDefaultJWTState]];
     } else if([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_EXPIRED) {
         if ([FCJWTAuthValidator sharedInstance].prevState == TOKEN_VALID) {
-            return SHOW_CONTENT;
+            return SHOW_CONTENT_WITH_TIMER;
         } else {
             return LOADING;
         }
@@ -102,6 +105,20 @@
     return (([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_NOT_SET) || ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_EXPIRED));
 }
 
+-(void) startExpiryTimer {
+    if(self.expiryTimer == nil) {
+        self.expiryTimer = [NSTimer scheduledTimerWithTimeInterval:([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )
+                                                            target:self                                                      selector:@selector(stopExpiryTimer)
+                                                          userInfo:nil
+                                                           repeats:NO];
+    }
+}
 
+-(void) stopExpiryTimer {
+    [FCJWTAuthValidator sharedInstance].prevState = TOKEN_EXPIRED;
+    [self.expiryTimer invalidate];
+    self.expiryTimer = nil;
+    [[Freshchat sharedInstance] dismissFreshchatViews];
+}
 
 @end

@@ -67,12 +67,11 @@
             return FALSE;
         }
 
-        //same token same payload
-        if(([[FCJWTUtilities getJWTUserPayloadFromToken: jwtIdToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]]) && ([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken])) {
+        //same token
+        if([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken]) {
             BLog(@"Freshchat API : Same Payload");
             return FALSE;
         }
-        
         
         //Check for different alias(User 1  to User 2)
         if ([FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken] != nil) {
@@ -113,7 +112,7 @@
         [FCJWTUtilities removePendingRestoreJWTToken];//Remove if it is called by non JWT user before RC
         return FALSE;
     } else {
-        if(([[FCJWTUtilities getJWTUserPayloadFromToken: jwtIdToken] isEqualToDictionary: [FCJWTUtilities getJWTUserPayloadFromToken: [FreshchatUser sharedInstance].jwtToken]]) && ([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken])) {
+        if([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken]) {
             BLog(@"Freshchat API : Same Payload");
             return FALSE;
         }
