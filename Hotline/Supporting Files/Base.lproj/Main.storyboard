@@ -46,7 +46,7 @@
                                     <constraint firstAttribute="height" constant="33" id="92n-c4-0OT"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Article1"/>
+                                <state key="normal" title="Conversations"/>
                                 <connections>
                                     <action selector="articleFilter1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TxJ-hD-9Sg"/>
                                 </connections>
@@ -54,7 +54,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dr5-9e-4lq">
                                 <rect key="frame" x="192" y="178" width="179" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Category1"/>
+                                <state key="normal" title="ConversationsWithTags"/>
                                 <connections>
                                     <action selector="categoryFilter1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Q01-Ko-zq2"/>
                                 </connections>

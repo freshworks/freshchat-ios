@@ -386,12 +386,8 @@ JWTScheduler *jwtScheduler;
 }
 
 
-
-//2
 - (IBAction)setJWTUser:(id)sender{
-    [[Freshchat sharedInstance] setUserWithIdToken:@"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZnJlc2hjaGF0X3V1aWQiOiJTYW1wbGVVVUlERGVtbzYiLCJyZWZlcmVuY2VfaWQiOiJTYW1wbGVVVUlERGVtbzYiLCJsYXN0X25hbWUiOiJETkQiLCJpYXQiOjE1MTYyMzkwMjJ9.mclO-qzMLPhpCU4M66wgxEC-oe7EP37UYWDc9ZX5hLLNPXPg39LeehvRj7_H6-iKZ_rUphYnlu3p-yUfUIMTpb-ebsEAgE0F0AGlJOsaH2o5maOQj4aSKslObicJAdG5IiyjINg16q-X0KeVNMCUq6MZqmdHHPzdSmHPWxeuGbZm8EXCdsJ0nD0n255Qyars1iKWBmtkd4JrdUNaxMC00PdL4ZvMFoBMuLxPck_lJ4hJjk408cioiMCnuLG-Myifb-KsXK7iUJT83cwnagGs9HfTWm0T25Dce62eIJSl9i3ylbUASrRiwsmwTF2Jp-HQr90fRGr1LHCWHGkQRuLcmQoHE4DWbQsjM7MsixEUafDrER6bklx5Qrf-r7EzEs19aIWhHqgODNztaMUwgS8JGpJfAYgfQiqApFre52mgdlm4KyX7uUrX2O1_KJgQC87XB-ynZ3oa5GGgf8ztO_31IBcBf70PqdxiYjaWNJvSu490kQlB1IlbfQHiRlzdG-_PS4-XIHzEg7-onAmO9tqVz3JxL_R9bC8uZk9VKu-CTqxTB0QwhypKATseMdTq8E8Os9TAsZFVUGMCRAwpvccbQwUtHx7PFKBYKcsrSdXz3-k0JbclTnhyYwmtq-ANMr8qzpxtTByR6-lUIVg_GcB2yUL-xYbcNSWwLO62AXAhvCY"];
-    return;
-    if(self.jwtTextView.text.length == 0){
+    if(self.jwtTextView.text.length == 0) {
         return;
     }
     [[Freshchat sharedInstance] setUserWithIdToken:self.jwtTextView.text];
@@ -399,9 +395,9 @@ JWTScheduler *jwtScheduler;
 
 - (IBAction)idenfiyJWTUser:(id)sender{
     if(self.jwtTextView.text.length == 0){
-        //return;
+        return;
     }
-    [[Freshchat sharedInstance] restoreUserWithIdToken:@"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZnJlc2hjaGF0X3V1aWQiOiJTYW1wbGVVVUlERGVtbzUiLCJyZWZlcmVuY2VfaWQiOiJTYW1wbGVVVUlERGVtbzUiLCJsYXN0X25hbWUiOiJETkQiLCJpYXQiOjE1MTYyMzkwMjJ9.S616_88aY9GvCEDhTjT7FEE3EXx5wRQY0H9gXN2S0Zf7SrPAhXei8y4olCF0Mp6CgQS0bpSGBdWZiP5ESTN58QFjEGy5eYzDWyyPrqgTzpz733WAMkFFeSTyypj2jc9AQA-yKXfucxuDHGijBoM3ZGWc09FmPr2oDjGVSe3J3t-GNNhMn54bo051eteE61WaNBWCVXBegzmwD8LhX-pLmugdhDYNxfeOzEeIA2-kIXf926vah4oZt1nOoU8jCM7_-0vEyEWy5QSpRP6Zmi_Cq5CHuuGKlrEU2HHnHMCc3sglSWz3bcQopxhyCAowWrMXzq-19bC9WCwzctzUvNc6IltLSRI5FoEBLYgrF3zRo6z63oh2XYlV_lP1hEbRwiiXOHC7skqOvr5U35Di1sP7emsD880u-FiMIOWbHbMzWORSKgfgGJ0WZP7uKCvilPoPV8zuccqcY2zDTkPG0y9gktYtsX2p5x3-g7tREQtnFCLlm7cl62Q7W6PXzsFKeOLKHFyxBlIbzsdfsdfZLHLFMAhEQ0Nog3Em2c35RtgR8ZHzM53Ce4DvNC-T7Al0Vuo9u5bOWwowVtL7f-PSWNe2AiBRDzuDrMeDXSsdfsNopGcSmv-32orkybOb6je96du5etkvXknwW7e_oS180Du2gFrKQ2MEgz4K0raKSgWo-eTmVLfa6X_NY"];
+    [[Freshchat sharedInstance] restoreUserWithIdToken:self.jwtTextView.text];
 }
 
 - (IBAction)sendMessage:(id)sender{

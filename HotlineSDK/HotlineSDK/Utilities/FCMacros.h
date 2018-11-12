@@ -58,10 +58,10 @@
 //ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"FRESHCHAT: " fmt), ##__VA_ARGS__);
 
-#define BLog(fmt, ...) NSLog((@"FRESHCHAT: " fmt), ##__VA_ARGS__);
+//#define BLog(fmt, ...) NSLog((@"FRESHCHAT: " fmt), ##__VA_ARGS__);
 
 //Revert back
-//#define BLog(fmt, ...) NSLog((@"FRESHCHAT: " fmt), ##__VA_ARGS__); UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:fmt preferredStyle:UIAlertControllerStyleAlert]; [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]]; UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;     [controller presentViewController:alert animated:YES completion:nil];
+#define BLog(fmt, ...) NSLog((@"FRESHCHAT: " fmt), ##__VA_ARGS__); UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:fmt preferredStyle:UIAlertControllerStyleAlert]; [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]]; UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;     [controller presentViewController:alert animated:YES completion:nil];
 
 
 #define ADLog(fmt, ...) NSLog((@"FRESHCHAT: %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);

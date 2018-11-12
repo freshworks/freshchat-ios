@@ -81,7 +81,6 @@
             }
         }
         
-        
         if([FreshchatUser sharedInstance].externalID != nil) {
             if(!([[FCJWTUtilities getReferenceID:jwtIdToken] isEqualToString:[FreshchatUser sharedInstance].externalID])) {
                 BLog(@"Freshchat API : Different Reference ID");
