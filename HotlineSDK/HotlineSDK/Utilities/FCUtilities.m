@@ -713,13 +713,27 @@ static NSInteger networkIndicator = 0;
 
 + (void) updateUserWithData : (NSDictionary*) userDict{
     FreshchatUser *user = [FreshchatUser sharedInstance];
-    user.firstName = userDict[@"firstName"];
-    user.lastName = userDict[@"lastName"];
-    user.email = userDict[@"email"];
-    user.phoneNumber = userDict[@"phone"];
-    user.phoneCountryCode = userDict[@"phoneCountry"];
-    user.externalID = userDict[@"identifier"];
-    user.restoreID = userDict[@"restoreId"];
+    if(userDict[@"firstName"]){
+        user.firstName = userDict[@"firstName"];
+    }
+    if(userDict[@"lastName"]){
+        user.lastName = userDict[@"lastName"];
+    }
+    if(userDict[@"email"]){
+        user.email = userDict[@"email"];
+    }
+    if(userDict[@"phone"]){
+        user.phoneNumber = userDict[@"phone"];
+    }
+    if(userDict[@"phoneCountry"]){
+        user.phoneCountryCode = userDict[@"phoneCountry"];
+    }
+    if(userDict[@"identifier"]){
+        user.externalID = userDict[@"identifier"];
+    }
+    if(userDict[@"restoreId"]){
+        user.restoreID = userDict[@"restoreId"];
+    }
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [FCUsers storeUserInfo:user];
     }
