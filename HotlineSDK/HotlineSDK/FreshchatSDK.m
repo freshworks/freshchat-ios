@@ -959,7 +959,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                        withCompletion: (void(^)())completion  {
     void (^clearHLControllers)() = ^void() {
         for(UIViewController *tempVC in controller.childViewControllers){
-            if([tempVC isKindOfClass:[FCContainerController class]]){
+            if([tempVC isKindOfClass:[FCContainerController class]] ||
+               [tempVC isKindOfClass:[UITableViewController class]] ) {
                 UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
                 if([firstViewController isKindOfClass:[FCChannelViewController class]] ||
                    [firstViewController isKindOfClass:[FCCategoryGridViewController class]] ||
