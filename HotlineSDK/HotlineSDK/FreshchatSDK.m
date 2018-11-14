@@ -104,7 +104,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 +(NSString *)SDKVersion{
-    return FRESHCHAT_SDK_VERSION;
+    return FRESHCHAT_SDK_BUILD_NUMBER;
 }
 
 -(BOOL)checkPersistence {
