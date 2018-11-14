@@ -31,10 +31,15 @@
                                              selector:@selector(jwtStateChange)
                                                  name:JWT_EVENT
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showJWTLoading)
+                                                 name:JWT_SHOW_LOADING
+                                               object:nil];
 }
 
 -(void) removeJWTObservers {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:JWT_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:JWT_SHOW_LOADING object:nil];
 }
 
 -(void)jwtStateChange {

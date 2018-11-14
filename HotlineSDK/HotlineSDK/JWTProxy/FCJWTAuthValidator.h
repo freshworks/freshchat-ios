@@ -14,12 +14,8 @@
 #import "FCUtilities.h"
 
 
-#define ACTIVE_EVENT @"com.freshchat.jwt.active_event"
 #define JWT_EVENT @"com.freshchat.jwt.event"
-#define TOKEN_NOT_SET_EVENT @"com.freshchat.jwt.token_not_set_event"
-#define TOKEN_NOT_PROCESSED_EVENT @"com.freshchat.jwt.token_not_processed_event"
-#define TOKEN_EXPIRED_EVENT @"com.freshchat.jwt.token_expired_event"
-#define TOKEN_INVALID_EVENT @"com.freshchat.jwt.token_invalid_event"
+#define JWT_SHOW_LOADING @"com.freshchat.jwt.show_loading"
 
 enum JWT_STATE : NSInteger {
     TOKEN_VALID = 1,

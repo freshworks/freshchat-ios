@@ -73,9 +73,9 @@
             return FALSE;
         }
         
-        //Check for different alias(User 1  to User 2)
+        //Check for different alias(Current token vs requested token)
         if ([FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken] != nil) {
-            if(![FCJWTUtilities compareAlias:jwtIdToken str2:[FreshchatUser sharedInstance].jwtToken]) {
+            if(![[FCJWTUtilities getAliasFrom: jwtIdToken] isEqualToString: [[Freshchat sharedInstance] getFreshchatUserId]]) {
                 BLog(@"Freshchat API : Different Alias Found");
                 return FALSE;
             }
