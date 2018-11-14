@@ -734,6 +734,9 @@ static NSInteger networkIndicator = 0;
     if(userDict[@"restoreId"]){
         user.restoreID = userDict[@"restoreId"];
     }
+    if(userDict[@"jwtUserAuthToken"]){
+        user.jwtToken = userDict[@"jwtUserAuthToken"];
+    }
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         [FCUsers storeUserInfo:user];
     }
