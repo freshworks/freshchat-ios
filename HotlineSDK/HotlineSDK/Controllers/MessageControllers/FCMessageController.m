@@ -722,8 +722,10 @@ typedef struct {
     
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == [alertView cancelButtonIndex]){
-        self.isJWTAlertShown = FALSE;
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        if (buttonIndex == [alertView cancelButtonIndex]){
+            self.isJWTAlertShown = FALSE;
+        }
     }
 }
 
@@ -1398,8 +1400,10 @@ typedef struct {
     self.tableView.dataSource = nil;
     self.inputToolbar.delegate = nil;
     self.audioMessageInputView.delegate = nil;
-    [_loadingViewBehaviour killTimer];
-    self.loadingViewBehaviour = nil;
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
+        [_loadingViewBehaviour killTimer];
+        self.loadingViewBehaviour = nil;
+    }
     [self localNotificationUnSubscription];
 }
 

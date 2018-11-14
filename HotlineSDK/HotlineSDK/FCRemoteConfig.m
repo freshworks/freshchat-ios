@@ -44,12 +44,6 @@
     return YES;
 }
 
-- (BOOL) isAuthJWTEnabled {
-    if ([FCUserDefaults getObjectForKey:CONFIG_RC_IS_JWT_ENABLED] != nil) {
-        return [FCUserDefaults getBoolForKey:CONFIG_RC_IS_JWT_ENABLED];
-    }
-    return YES;
-}
 
 - (long) getDefaultSessionTimeOutInterval {
     if ([FCUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {

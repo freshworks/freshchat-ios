@@ -25,8 +25,6 @@
 
 + (NSString*) getAliasFrom: (NSString *) jwtIdToken;
 
-+(BOOL) isJwtWaitingToAuth;
-
 +(NSString *) getPendingJWTToken;
 
 +(void) setPendingJWTToken : (NSString *) jwtIdToken;

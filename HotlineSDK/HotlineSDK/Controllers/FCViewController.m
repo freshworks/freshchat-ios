@@ -35,8 +35,9 @@
 }
 
 - (void) postNotifForScreenTransition {
-    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]) return;
-    if([self.class isEqual:[FCChannelViewController class]] || [self.class isEqual:[FCMessageController class]] || [self.class isEqual:[FCAttachmentImageController class]]){
+    if([self.class isEqual:[FCChannelViewController class]]
+       || [self.class isEqual:[FCMessageController class]]
+       || [self.class isEqual:[FCAttachmentImageController class]]) {
         [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"SCREEN_TRANSITION"}];
     }
 }

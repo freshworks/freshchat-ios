@@ -155,10 +155,6 @@
     }
 }
 
-+(BOOL) isJwtWaitingToAuth {
-    return ([FCJWTUtilities getPendingJWTToken] != nil);
-}
-
 +(NSString *) getPendingJWTToken {
     return [[FCSecureStore sharedInstance] objectForKey:FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN];
 }
@@ -184,12 +180,14 @@
 }
 
 + (void) performPendingJWTTasks {
-    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCJWTUtilities isJwtWaitingToAuth]) {
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] &&
+       [FCJWTUtilities getPendingJWTToken]) {
         [[Freshchat sharedInstance] setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];
         return;
     }
     
-    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCJWTUtilities getPendingRestoreJWTToken]){
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] &&
+       [FCJWTUtilities getPendingRestoreJWTToken]) {
         [[Freshchat sharedInstance] restoreUserWithIdToken:[FCJWTUtilities getPendingRestoreJWTToken]];
         return;
     }

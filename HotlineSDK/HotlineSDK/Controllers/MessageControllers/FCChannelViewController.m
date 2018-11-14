@@ -365,14 +365,18 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == [alertView cancelButtonIndex]){
-        self.isJWTAlertShown = FALSE;
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        if (buttonIndex == [alertView cancelButtonIndex]){
+            self.isJWTAlertShown = FALSE;
+        }
     }
 }
 
 -(void)dealloc {
-    [_loadingViewBehaviour killTimer];
-    self.loadingViewBehaviour = nil;
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
+        [_loadingViewBehaviour killTimer];
+        self.loadingViewBehaviour = nil;
+    }
     [self localNotificationUnSubscription];
 }
 

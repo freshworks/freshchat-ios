@@ -145,12 +145,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
 }
 
-- (NSString *) getFreshchatUserId{
-    return [FCUtilities getUserAliasWithCreate];
-}
-
 -(void)initWithConfig:(FreshchatConfig *)config completion:(void(^)(NSError *error))completion{
-    //Call user restore
     FreshchatConfig *processedConfig = [self processConfig:config];
     
     self.config = processedConfig;
@@ -368,14 +363,9 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     [FCCoreServices uploadUnuploadedProperties];
 }
 
-- (NSString *) getUserAliasForIdToken{
-    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
-        return [FCUtilities currentUserAlias];
-    }
-    else{
-        //Throw exception or error
-        return nil;
-    }
+
+- (NSString *) getFreshchatUserId{
+    return [FCUtilities getUserAliasWithCreate];
 }
 
 - (NSString *)getUserIdTokenStatus{
@@ -449,11 +439,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID {
-    if(externalID == nil) { //Safety check
-        return;
-    }
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         ALog(@"Freshchat : identifyUserWithExternalID is not allowed in auth strict mode");
+    }
+    if(externalID == nil) { //Safety check
+        return;
     }
     NSString *oldExternalID = [FreshchatUser sharedInstance].externalID;
     NSString *oldRestoreID = [FreshchatUser sharedInstance].restoreID;
@@ -892,15 +882,15 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void) sendMessage:(FreshchatMessage *)messageObject{
-    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
-        return;
-    }
     if([FCUtilities isAccountDeleted]){
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
         return;
     }
     if([FCJWTUtilities isJWTTokenInvalid]){
         BLog(@"Freshchat Error : Please set the user with valid token first.");
+        return;
+    }
+    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
     }
     NSManagedObjectContext *mainContext = [[FCDataManager sharedInstance] mainObjectContext];
