@@ -435,7 +435,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         }
         [FCUtilities resetDataAndRestoreWithJwtToken:jwtIdToken withCompletion:nil];
     } else {
-        ALog(@"Freshchat : JWT reference id or alias missing.");
+        ALog(@"Freshchat : JWT reference id missing.");
     }
 }
 
