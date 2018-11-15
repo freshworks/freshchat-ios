@@ -15,6 +15,7 @@
 #import "FCMacros.h"
 #import "FCUserUtil.h"
 #import "FCUsers.h"
+#import "FCReachabilityManager.h"
 
 @implementation FCJWTUtilities
 
@@ -58,36 +59,30 @@
         return FALSE;
     }
     
+    
     if(trimString(jwtIdToken).length == 0){
         return FALSE;
     }
     else {
+        //Empty Alias
         if ([FCJWTUtilities getAliasFrom: jwtIdToken] == nil) {
             BLog(@"Freshchat API : Empty Alias Found");
             return FALSE;
         }
 
-        //same token
+        //Different Alias
+        if(![[FCJWTUtilities getAliasFrom: jwtIdToken] isEqualToString: [[Freshchat sharedInstance] getFreshchatUserId]]) {
+            BLog(@"Freshchat API : Different Alias Found");
+            return FALSE;
+        }
+        
+        //Same token
         if([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken]) {
             BLog(@"Freshchat API : Same Payload");
             return FALSE;
         }
         
-        //Check for different alias(Current token vs requested token)
-        if ([FCJWTUtilities getAliasFrom: [FreshchatUser sharedInstance].jwtToken] != nil) {
-            if(![[FCJWTUtilities getAliasFrom: jwtIdToken] isEqualToString: [[Freshchat sharedInstance] getFreshchatUserId]]) {
-                BLog(@"Freshchat API : Different Alias Found");
-                return FALSE;
-            }
-        }
-        
-        if([FreshchatUser sharedInstance].externalID != nil) {
-            if(!([[FCJWTUtilities getReferenceID:jwtIdToken] isEqualToString:[FreshchatUser sharedInstance].externalID])) {
-                BLog(@"Freshchat API : Different Reference ID");
-                return FALSE;
-            }
-        }
-        
+        //User registered
         if([FCUserUtil isUserRegistered]) {
              [FCUsers updateUserWithIdToken:jwtIdToken];
              [FCUtilities initiatePendingTasks];
@@ -180,6 +175,8 @@
 }
 
 + (void) performPendingJWTTasks {
+    if(![[FCReachabilityManager sharedInstance] isReachable]) return;
+    
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] &&
        [FCJWTUtilities getPendingJWTToken]) {
         [[Freshchat sharedInstance] setUserWithIdToken : [FCJWTUtilities getPendingJWTToken]];

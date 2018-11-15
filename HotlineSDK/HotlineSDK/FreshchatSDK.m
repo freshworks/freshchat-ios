@@ -392,6 +392,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     if(![FCJWTUtilities canProgressSetUserForToken:jwtIdToken]) return;
     
     if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
+        //TODO: Should not set to Expired state should rework
         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
     } else {
         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
