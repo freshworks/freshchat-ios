@@ -356,7 +356,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUser:(FreshchatUser *)user{
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
-        BLog(@"Freshchat API : JWT is Enabled for thisb please use setUserWithIdToken!");
+        ALog(@"Freshchat API : JWT is Enabled for thisb please use setUserWithIdToken!");
         return;
     }
     [FCUsers storeUserInfo:user];
@@ -435,7 +435,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         }
         [FCUtilities resetDataAndRestoreWithJwtToken:jwtIdToken withCompletion:nil];
     } else {
-        BLog(@"Freshchat : JWT reference id or alias missing.");
+        ALog(@"Freshchat : JWT reference id or alias missing.");
     }
 }
 
@@ -505,7 +505,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUserProperties:(NSDictionary*)props{
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
-        BLog(@"Freshchat API : JWT is Enabled.");
+        ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
     [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
@@ -531,7 +531,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
     if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
-        BLog(@"Freshchat API : JWT is Enabled.");
+        ALog(@"Freshchat API : JWT is Enabled.");
         return;
     }
     if (key && value) {
@@ -888,7 +888,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         return;
     }
     if([FCJWTUtilities isJWTTokenInvalid]){
-        BLog(@"Freshchat Error : Please set the user with valid token first.");
+        ALog(@"Freshchat Error : Please set the user with valid token first.");
         return;
     }
     if(messageObject.message.length == 0 || messageObject.tag.length == 0){

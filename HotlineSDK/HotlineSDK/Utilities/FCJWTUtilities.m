@@ -54,7 +54,7 @@
 + (BOOL) canProgressSetUserForToken : (NSString *) jwtIdToken {
     
     if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
-        BLog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
+        ALog(@"Freshchat API Error : setUserWithIdToken is valid only in Strict mode!!");
         [FCJWTUtilities removePendingJWTToken]; //Remove pending state if non JWT called before call
         return FALSE;
     }
@@ -66,19 +66,19 @@
     else {
         //Empty Alias
         if ([FCJWTUtilities getAliasFrom: jwtIdToken] == nil) {
-            BLog(@"Freshchat API : Empty Alias Found");
+            ALog(@"Freshchat API : Empty Alias Found");
             return FALSE;
         }
 
         //Different Alias
         if(![[FCJWTUtilities getAliasFrom: jwtIdToken] isEqualToString: [[Freshchat sharedInstance] getFreshchatUserId]]) {
-            BLog(@"Freshchat API : Different Alias Found");
+            ALog(@"Freshchat API : Different Alias Found");
             return FALSE;
         }
         
         //Same token
         if([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken]) {
-            BLog(@"Freshchat API : Same Payload");
+            ALog(@"Freshchat API : Same Payload");
             return FALSE;
         }
         
@@ -96,18 +96,18 @@
 + (BOOL) canProgressUserRestoreForToken : (NSString *) jwtIdToken{
     
     if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCUtilities isRemoteConfigFetched]){
-        BLog(@"Freshchat API Error : restoreUserWithIdToken is valid only in Strict mode!!");
+        ALog(@"Freshchat API Error : restoreUserWithIdToken is valid only in Strict mode!!");
         [FCJWTUtilities removePendingRestoreJWTToken]; //Remove pending state if non JWT called before call
         return FALSE;
     }
     
     if(trimString(jwtIdToken).length == 0){
-        BLog(@"Freshchat : JWT token missing for identifyUser API!");
+        ALog(@"Freshchat : JWT token missing for identifyUser API!");
         [FCJWTUtilities removePendingRestoreJWTToken];//Remove if it is called by non JWT user before RC
         return FALSE;
     } else {
         if([jwtIdToken isEqualToString:[FreshchatUser sharedInstance].jwtToken]) {
-            BLog(@"Freshchat API : Same Payload");
+            ALog(@"Freshchat API : Same Payload");
             return FALSE;
         }
     }
