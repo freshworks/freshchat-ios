@@ -220,7 +220,7 @@ typedef struct {
 -(void) showReplyResponseTime:(NSInteger) time withType :(enum ResponseTimeType) type {
     NSString *replyResponseTime = [FCUtilities getReplyResponseForTime:time andType:type];
     if(![FCStringUtil isEmptyString:trimString(replyResponseTime)]){
-        self.typicalReply.text = [FCUtilities getReplyResponseForTime:time andType:type];
+        self.typicalReply.text = replyResponseTime;
         [UIView animateWithDuration:0.5 animations:^{
             self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
             self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
