@@ -28,6 +28,7 @@
 #import "FCContainerController.h"
 #import "FDImageView.h"
 #import "FCFAQUtil.h"
+#import "FCChannelUtil.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -823,6 +824,31 @@ static NSInteger networkIndicator = 0;
             [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions];
             return YES;
         }
+    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame &&
+               ([[url host] caseInsensitiveCompare:@"channels"] == NSOrderedSame)) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSMutableArray *tags;
+            NSNumber *channelID;
+            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+                if (queryItem.value == nil) {
+                    continue;
+                }
+                if ([queryItem.name isEqualToString:@"tags"] && queryItem.value != nil) {
+                    tags =[[NSMutableArray alloc] initWithArray:[queryItem.value componentsSeparatedByString:@","]];
+                    break;
+                }
+                if ([queryItem.name isEqualToString:@"id"] && queryItem.value != nil) {
+                    channelID = [[NSNumber alloc]initWithInteger:[queryItem.value integerValue]];
+                    break;
+                }
+            }
+            if (tags!=nil) {
+                [FCChannelUtil launchChannelWithTags:tags withNavigationCtlr:navController];
+                return YES;
+            } else if(channelID!=nil) {
+                [FCChannelUtil launchChannelWithIds:channelID withNavigationCtlr:navController];
+                return YES;
+            }
     }
     else if ([Freshchat sharedInstance].handleLink != nil) {
         return [Freshchat sharedInstance].handleLink(url);
