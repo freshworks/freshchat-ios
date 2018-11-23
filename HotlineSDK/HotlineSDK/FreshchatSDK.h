@@ -206,6 +206,15 @@ enum TagFilterType {
  */
 -(void)setPushRegistrationToken:(NSData *) deviceToken;
 /**
+ *  Generate deeplink from push notification
+ *
+ *  @discussion Returns a channel deeplink from freshchat notification payload.
+ *
+ *  @param info Dictionary received in didReceiveRemoteNotification for Push Notification.
+ *
+ */
+-(NSString *)generateDeeplinkForNotifcation:(NSDictionary *)info;
+/**
  *  Check if a push notification was from Freshchat
  *
  *  @discussion Checks if the push notification received originated from Freshchat by examining the payload dictionary. Use this in conjunction with handleRemoteNotification

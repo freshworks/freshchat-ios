@@ -56,6 +56,11 @@ typedef struct {
     BOOL isModalPresentationPreferred;
 } FDMessageControllerFlags;
 
+@interface ConversationOptions()
+    @property (nonatomic, strong) NSNumber *channelID;
+@end
+
+
 
 @interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
 
@@ -730,8 +735,12 @@ typedef struct {
     [ctx performBlock:^{
         BOOL isChannelValid = NO;
         BOOL hasTags =  [FCConversationUtil hasTags:self.convOptions];
+        BOOL filterByChannelId = (self.convOptions.channelID != nil);
         FCChannels *channelToChk = [FCChannels getWithID:self.channelID inContext:ctx];
         if ( channelToChk && ( [channelToChk.isHidden intValue] == 0 || [channelToChk.isDefault intValue] == 1 ) ) {
+            if(filterByChannelId) {
+                isChannelValid = YES;
+             }
             if(hasTags){ // contains tags .. so check that as well
                 if([channelToChk hasAtleastATag:self.convOptions.tags]){
                     isChannelValid = YES;
@@ -741,7 +750,12 @@ typedef struct {
                 isChannelValid = YES;
             }
         }
-        if(hasTags){
+        if(filterByChannelId) {
+            [[FCTagManager sharedInstance] getChannel:nil channelIds:@[self.convOptions.channelID] inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+                [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
+            }];
+        }
+        else if(hasTags){
             [[FCTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels, NSError *error) {
                 [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
             }];

@@ -806,9 +806,9 @@ static NSInteger networkIndicator = 0;
             [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
             return YES;
         }
-    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame &&
-               ([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
-               ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
+    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame ) {
+        if (([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
+                 ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
             NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
             NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
             for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
@@ -820,12 +820,11 @@ static NSInteger networkIndicator = 0;
                     break;
                 }
             }
-        if(articleID.integerValue != -1) {
-            [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions];
-            return YES;
-        }
-    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame &&
-               ([[url host] caseInsensitiveCompare:@"channels"] == NSOrderedSame)) {
+            if(articleID.integerValue != -1) {
+                [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions];
+                return YES;
+            }
+        } else if (([[url host] caseInsensitiveCompare:@"channels"] == NSOrderedSame)) {
             NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
             NSMutableArray *tags;
             NSNumber *channelID;
@@ -846,11 +845,13 @@ static NSInteger networkIndicator = 0;
                 [FCChannelUtil launchChannelWithTags:tags withNavigationCtlr:navController];
                 return YES;
             } else if(channelID!=nil) {
-                [FCChannelUtil launchChannelWithIds:channelID withNavigationCtlr:navController];
+                [FCChannelUtil launchChannelWithId:channelID withNavigationCtlr:navController];
                 return YES;
             }
-    }
-    else if ([Freshchat sharedInstance].handleLink != nil) {
+        } else {
+            return YES;
+        }
+    } else if ([Freshchat sharedInstance].handleLink != nil) {
         return [Freshchat sharedInstance].handleLink(url);
     }
     return NO;

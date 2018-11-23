@@ -6,8 +6,13 @@
 //  Copyright © 2018 Freshdesk. All rights reserved.
 //
 
-#ifndef FCChannelUtil_h
-#define FCChannelUtil_h
+#import <Foundation/Foundation.h>
+#import "FCFAQUtil.h"
 
+@interface FCChannelUtil : NSObject
 
-#endif /* FCChannelUtil_h */
++(void) launchChannelWithTags:(NSArray *)tags withNavigationCtlr:(UIViewController *)viewController;
+
++(void) launchChannelWithId:(NSNumber *)channelID withNavigationCtlr:(UIViewController *)viewController;
+
+@end
