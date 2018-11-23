@@ -50,8 +50,8 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
 
 +(NSInteger)getChannelIDFromNotification:(NSDictionary *)info{
     NSDictionary *payload = [FCNotificationHandler getPayloadFromNotificationInfo:info];
-    if(payload[@"conv_id"] != nil) {
-        return [payload[@"conv_id"] integerValue];
+    if(payload[@"channel_id"] != nil) {
+        return [payload[@"channel_id"] integerValue];
     }
     return -1;
 }
