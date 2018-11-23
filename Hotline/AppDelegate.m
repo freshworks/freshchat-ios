@@ -10,6 +10,7 @@
 #import "ViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "InAppBrowser.h"
 #import "Hotline_Demo-Swift.h"
 
 
@@ -22,11 +23,6 @@
 @end
 
 @implementation AppDelegate
-
-#define STORYBOARD_NAME @"Main"
-#define STORYBOARD_IDENTIFIER @"HotlineViewController"
-#define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
-#define LAUNCH_SAMPLE_CONTROLLERT NO
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     if(PUSH_ENABLED){
@@ -235,6 +231,7 @@
 
     
     if ([[Freshchat sharedInstance]isFreshchatNotification:info]) {
+        NSLog(@"%@",[[Freshchat sharedInstance] generateDeeplinkForNotifcation:info]);
         [[Freshchat sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }

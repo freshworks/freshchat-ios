@@ -231,13 +231,9 @@
 
 -(BOOL)webView:(UIWebView *)inWeb shouldStartLoadWithRequest:(NSURLRequest *)inRequest navigationType:(UIWebViewNavigationType)inType {
     if (inType == UIWebViewNavigationTypeLinkClicked){
-        if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
-            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-            NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions];
-            return NO;
+        if(![FCUtilities handleLink:[inRequest URL] faqOptions:self.faqOptions navigationController:self.navigationController]) {
+            [[UIApplication sharedApplication] openURL:[inRequest URL]];
         }
-        [[UIApplication sharedApplication] openURL:[inRequest URL]];
         return NO;
     }
     return YES;

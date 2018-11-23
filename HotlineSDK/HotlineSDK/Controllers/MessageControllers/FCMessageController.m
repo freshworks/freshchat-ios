@@ -59,6 +59,11 @@ typedef struct {
     BOOL isModalPresentationPreferred;
 } FDMessageControllerFlags;
 
+@interface ConversationOptions()
+    @property (nonatomic, strong) NSNumber *channelID;
+@end
+
+
 
 @interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate, HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
@@ -766,8 +771,12 @@ typedef struct {
     [ctx performBlock:^{
         BOOL isChannelValid = NO;
         BOOL hasTags =  [FCConversationUtil hasTags:self.convOptions];
+        BOOL filterByChannelId = (self.convOptions.channelID != nil);
         FCChannels *channelToChk = [FCChannels getWithID:self.channelID inContext:ctx];
         if ( channelToChk && ( [channelToChk.isHidden intValue] == 0 || [channelToChk.isDefault intValue] == 1 ) ) {
+            if(filterByChannelId) {
+                isChannelValid = YES;
+             }
             if(hasTags){ // contains tags .. so check that as well
                 if([channelToChk hasAtleastATag:self.convOptions.tags]){
                     isChannelValid = YES;
@@ -777,7 +786,12 @@ typedef struct {
                 isChannelValid = YES;
             }
         }
-        if(hasTags){
+        if(filterByChannelId) {
+            [[FCTagManager sharedInstance] getChannel:nil channelIds:@[self.convOptions.channelID] inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+                [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
+            }];
+        }
+        else if(hasTags){
             [[FCTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels, NSError *error) {
                 [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
             }];
@@ -1190,44 +1204,19 @@ typedef struct {
         [imageController presentOnController:self];
     } else if ([fragmentType isEqualToValue:@5]) {
         NSURL *url = [fragment getOpenURL];
-        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
-        NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
-        for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
-            if (queryItem.value == nil) {
-                continue;
-            }
-            if ([queryItem.name isEqualToString:@"article_id"]) {
-                articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
-                break;
-            }
-        }
-        
-        if(articleID.integerValue != -1) {
-            @try{
-                FAQOptions *option = [FAQOptions new];
-                if([FCConversationUtil hasTags:self.convOptions]){
-                    [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
-                }
-                [FCFAQUtil launchArticleID:articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
-            }
-            @catch(NSException* e){
-                ALog(@"%@",e);
-            }
-        }
-        else {
-            @try{
-                NSURL *actionUrl = [fragment getOpenURL];
-                if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[UIApplication sharedApplication] openURL:actionUrl];
-                    });
-                }
-            }
-            @catch(NSException* e){
-                ALog(@"%@",e);
+        BOOL linkHandled  = [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController];
+        if(!linkHandled) {
+            if([[UIApplication sharedApplication] canOpenURL:url]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:url];
+                });
             }
         }
     }
+}
+
+-(BOOL)handleLinkDelegate: (NSURL *)url {
+    return [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController];
 }
 
 //TODO: Needs refractor

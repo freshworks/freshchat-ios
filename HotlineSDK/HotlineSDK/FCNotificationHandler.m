@@ -48,6 +48,15 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
     return ([payload[@"source"] isEqualToString:FRESHCHAT_NOTIFICATION_PAYLOAD_SOURCE_USER]);
 }
 
++(NSInteger)getChannelIDFromNotification:(NSDictionary *)info{
+    NSDictionary *payload = [FCNotificationHandler getPayloadFromNotificationInfo:info];
+    if(payload[@"channel_id"] != nil) {
+        return [payload[@"channel_id"] integerValue];
+    }
+    return -1;
+}
+
+
 -(void)handleNotification:(NSDictionary *)info appState:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {

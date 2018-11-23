@@ -21,6 +21,7 @@
 @interface FCNotificationHandler : NSObject<FDNotificationBannerDelegate>
 
 +(BOOL)isFreshchatNotification:(NSDictionary *)info;
++(NSInteger) getChannelIDFromNotification:(NSDictionary *)info;
 -(void)handleNotification:(NSDictionary *)payload appState:(UIApplicationState)state;
 -(void)showActiveStateNotificationBanner :(FCChannels *)channel withMessage:(NSString *)message;
 +(BOOL)areNotificationsEnabled;

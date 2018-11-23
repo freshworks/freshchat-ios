@@ -91,6 +91,7 @@
 + (void) addFlagToDisableUserPropUpdate;
 + (void) removeFlagToDisableUserPropUpdate;
 + (BOOL) canUpdateUserProperties;
++ (BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UINavigationController *) navController;
 
 @end
 

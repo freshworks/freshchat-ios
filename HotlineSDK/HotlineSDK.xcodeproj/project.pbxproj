@@ -107,6 +107,8 @@
 		950A3F85216742990000754E /* FCJWTAuthValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 950A3F84216742990000754E /* FCJWTAuthValidator.m */; };
 		951A3CD321996DF90096E816 /* FCJWTViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 951A3CD121996DF90096E816 /* FCJWTViewController.h */; };
 		951A3CD421996DF90096E816 /* FCJWTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 951A3CD221996DF90096E816 /* FCJWTViewController.m */; };
+		95EBEDF721A7FF390087F6D4 /* FCChannelUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 95EBEDF521A7FF390087F6D4 /* FCChannelUtil.h */; };
+		95EBEDF821A7FF390087F6D4 /* FCChannelUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 95EBEDF621A7FF390087F6D4 /* FCChannelUtil.m */; };
 		C5D4ED991E57036100E121B4 /* FCUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4ED981E57036100E121B4 /* FCUserDefaults.m */; };
 		C5D4ED9D1E574B5C00E121B4 /* FCLocaleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4ED9C1E574B5C00E121B4 /* FCLocaleUtil.m */; };
 		CE06F8B91E2CD18F00D4063B /* FCInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE06F8B81E2CD18F00D4063B /* FCInterstitialViewController.m */; };
@@ -367,6 +369,8 @@
 		951A3CD121996DF90096E816 /* FCJWTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCJWTViewController.h; sourceTree = "<group>"; };
 		951A3CD221996DF90096E816 /* FCJWTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCJWTViewController.m; sourceTree = "<group>"; };
 		95DEF8B520E39B8B00422D58 /* FCProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCProtocols.h; sourceTree = "<group>"; };
+		95EBEDF521A7FF390087F6D4 /* FCChannelUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCChannelUtil.h; sourceTree = "<group>"; };
+		95EBEDF621A7FF390087F6D4 /* FCChannelUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCChannelUtil.m; sourceTree = "<group>"; };
 		C5D4ED981E57036100E121B4 /* FCUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCUserDefaults.m; sourceTree = "<group>"; };
 		C5D4ED9A1E5704E000E121B4 /* FCUserDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCUserDefaults.h; sourceTree = "<group>"; };
 		C5D4ED9B1E574B5C00E121B4 /* FCLocaleUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCLocaleUtil.h; sourceTree = "<group>"; };
@@ -700,6 +704,8 @@
 		35B2EF2A1D000E620014867F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				95EBEDF521A7FF390087F6D4 /* FCChannelUtil.h */,
+				95EBEDF621A7FF390087F6D4 /* FCChannelUtil.m */,
 				35B2EED71D000E620014867F /* FCNotificationHandler.h */,
 				35B2EED81D000E620014867F /* FCNotificationHandler.m */,
 				CE0C7C6C1D9539A100F545AE /* FCPlistManager.h */,
@@ -1040,6 +1046,7 @@
 				EA6EB25E21070D4400411D5F /* FCCSATUtil.h in Headers */,
 				EAD751E520EF9B44003DE477 /* FCLocaleConstants.h in Headers */,
 				EAB07907216B696B00B701C9 /* FCUserAuthConfig.h in Headers */,
+				95EBEDF721A7FF390087F6D4 /* FCChannelUtil.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1202,6 +1209,7 @@
 				CE8C7A821F6C216B00E77494 /* UIImage+WebP.m in Sources */,
 				35B2EFA81D000E620014867F /* FCServiceRequest.m in Sources */,
 				35B2EFAC1D000E620014867F /* FCIndexManager.m in Sources */,
+				95EBEDF821A7FF390087F6D4 /* FCChannelUtil.m in Sources */,
 				CE8C7A8A1F6C216B00E77494 /* UIView+WebCacheOperation.m in Sources */,
 				35B2EFB11D000E620014867F /* FCStringUtil.m in Sources */,
 				CE390FB31F2B3479006A1BDD /* FCUserUtil.m in Sources */,

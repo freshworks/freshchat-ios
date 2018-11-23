@@ -25,6 +25,13 @@
 #import "FCUtilities.h"
 #import "FCAutolayoutHelper.h"
 
+@interface ConversationOptions()
+
+@property (nonatomic, strong) NSNumber *channelID;
+
+@end
+
+
 @interface FCInterstitialViewController() <HLLoadingViewBehaviourDelegate>{
     int footerViewHeight;
 }
@@ -149,12 +156,7 @@
     }
     else if([self.options isKindOfClass:[ConversationOptions class]]){
         self.view.backgroundColor = [[FCTheme sharedInstance] channelListBackgroundColor];
-        if([FCConversationUtil hasTags:(ConversationOptions *)self.options]){
-            [self handleConversations:self withOptions:(ConversationOptions *)self.options andEmbed:self.isEmbedView];
-        }
-        else{
-            [self handleConversations:self andEmbed:self.isEmbedView];
-        }
+        [self handleConversations:self withOptions:(ConversationOptions *)self.options andEmbed:self.isEmbedView];
     }
     //[self setFooterView];
 }
@@ -242,7 +244,7 @@
 -(void) handleConversations:(UIViewController *)controller
                withOptions :(ConversationOptions *)options
                    andEmbed:(BOOL) isEmbed {
-    if(options.tags.count > 0){
+    if(options.tags.count > 0 || options.channelID != nil ){
         [self selectConversationController:options withCompletion:^(FCViewController *preferredController) {
             FCContainerController *containerController = [[FCContainerController alloc]initWithController:preferredController andEmbed:isEmbed];
             [self resetNavigationStackWithController:containerController];
@@ -254,13 +256,24 @@
 }
 
 -(void) selectConversationController:(ConversationOptions *)options withCompletion : (void (^)(FCViewController *))completion{
-    [[FCTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+    if(options.tags.count > 0) {
+        [[FCTagManager sharedInstance] getChannelsForTags:[options tags] inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+            [self processSelectConversationController:options channels:channels error:error withCompletion:completion];
+        }];
+    } else if (options.channelID != nil) {
+        [[FCTagManager sharedInstance] getChannel:nil channelIds:@[options.channelID] inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+            [self processSelectConversationController:options channels:channels error:error withCompletion:completion];
+        }];
+    }
+}
+
+-(void) processSelectConversationController:(ConversationOptions *)options channels:(NSArray<FCChannels *>*) channels error:(NSError *) error withCompletion : (void (^)(FCViewController *))completion {
         FCViewController *preferedController = nil;
         if([channels count] == 0 ) {
             FCChannels *defaultChannel = [FCChannels getDefaultChannelInContext:[FCDataManager sharedInstance].mainObjectContext];
             if(defaultChannel != nil ){
                 preferedController = [[FCMessageController alloc]initWithChannelID:defaultChannel.channelID
-                                                             andPresentModally:YES];
+                                                                 andPresentModally:YES];
             }
             else{
                 preferedController = [[FCChannelViewController alloc]init];
@@ -275,7 +288,6 @@
         }
         [FCConversationUtil setConversationOptions:options andViewController:preferedController];
         completion(preferedController);
-    }];
 }
 
 - (void) resetNavigationStackWithController:(UIViewController *)controller{

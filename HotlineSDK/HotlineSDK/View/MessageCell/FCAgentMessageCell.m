@@ -200,7 +200,7 @@
         if ([fragment.type isEqualToString:@"1"]) {
             //HTML
             FCHtmlFragment *htmlFragment = [[FCHtmlFragment alloc]initFragment:fragment withFont:[[FCTheme sharedInstance] agentMessageFont] andType:1];
-            
+            htmlFragment.mcDelegate = self.delegate;
             [views setObject:htmlFragment forKey:[@"text_" stringByAppendingFormat:@"%d",i]];
             [contentEncloser addSubview:htmlFragment];
             [fragmensViewArr addObject:[@"text_" stringByAppendingFormat:@"%d",i]];

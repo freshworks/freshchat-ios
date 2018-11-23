@@ -50,6 +50,7 @@
     return self.tagViewTitle;
 }
 
+
 -(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title {
     self.contactUsTags = [FCUtilities convertTagsArrayToLowerCase:tags];
     self.contactUsTitle = title;
@@ -78,6 +79,7 @@
 
 @property (nonatomic, strong) NSArray *filterByTags;
 @property (nonatomic, strong) NSString *tagViewTitle;
+@property (nonatomic, strong) NSNumber *channelID;
 
 @end
 
@@ -102,6 +104,10 @@
 
 -(NSArray *) tags{
     return self.filterByTags;
+}
+
+-(void) filterByChannelID:(NSNumber *) channelID {
+    self.channelID = channelID;
 }
 
 @end

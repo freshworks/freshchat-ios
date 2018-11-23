@@ -29,6 +29,8 @@
 #import "FDImageView.h"
 #import "FCJWTUtilities.h"
 #import "FCJWTAuthValidator.h"
+#import "FCFAQUtil.h"
+#import "FCChannelUtil.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -667,6 +669,7 @@ static NSInteger networkIndicator = 0;
 }
 
 
+
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion {
     [FCCoreServices resetUserData:^{
         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
@@ -848,6 +851,65 @@ static NSInteger networkIndicator = 0;
 
 + (BOOL) canUpdateUserProperties {
     return ![[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
+}
+
++(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UINavigationController *) navController {
+    if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame))  {
+        NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
+        NSNumber *articleId = [numbFormatter numberFromString:[url host]];
+        if (articleId!= nil) {
+            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
+            return YES;
+        }
+    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame ) {
+        if (([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
+                 ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
+            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+                if (queryItem.value == nil) {
+                    continue;
+                }
+                if ([queryItem.name isEqualToString:@"article_id"]) {
+                    articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
+                    break;
+                }
+            }
+            if(articleID.integerValue != -1) {
+                [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions];
+                return YES;
+            }
+        } else if (([[url host] caseInsensitiveCompare:@"channels"] == NSOrderedSame)) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSMutableArray *tags;
+            NSNumber *channelID;
+            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+                if (queryItem.value == nil) {
+                    continue;
+                }
+                if ([queryItem.name isEqualToString:@"tags"] && queryItem.value != nil) {
+                    tags =[[NSMutableArray alloc] initWithArray:[queryItem.value componentsSeparatedByString:@","]];
+                    break;
+                }
+                if ([queryItem.name isEqualToString:@"id"] && queryItem.value != nil) {
+                    channelID = [[NSNumber alloc]initWithInteger:[queryItem.value integerValue]];
+                    break;
+                }
+            }
+            if (tags!=nil) {
+                [FCChannelUtil launchChannelWithTags:tags withNavigationCtlr:navController];
+                return YES;
+            } else if(channelID!=nil) {
+                [FCChannelUtil launchChannelWithId:channelID withNavigationCtlr:navController];
+                return YES;
+            }
+        } else {
+            return YES;
+        }
+    } else if ([Freshchat sharedInstance].handleLink != nil) {
+        return [Freshchat sharedInstance].handleLink(url);
+    }
+    return NO;
 }
 
 @end

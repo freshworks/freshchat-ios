@@ -36,6 +36,8 @@
 		955807EF21958521000CD9A7 /* JWTScheduler.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 955807EC21958521000CD9A7 /* JWTScheduler.storyboard */; };
 		955807F121958C8A000CD9A7 /* JWTScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 955807F021958C8A000CD9A7 /* JWTScheduler.m */; };
 		957C58CA219ACAB900ED31E1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 957C58C9219ACAB900ED31E1 /* Media.xcassets */; };
+		9579AD0A217F5781004AAD98 /* InAppBrowser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9579AD09217F5781004AAD98 /* InAppBrowser.storyboard */; };
+		9579AD0E217F5796004AAD98 /* InAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9579AD0D217F5796004AAD98 /* InAppBrowser.m */; };
 		95FA87C620BC49AB00457575 /* L102Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FA87C420BC49AA00457575 /* L102Language.swift */; };
 		95FA87C720BC49AB00457575 /* L012Localizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FA87C520BC49AB00457575 /* L012Localizer.swift */; };
 		CE130DCC1EF188F00028CEE7 /* SampleController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE130DCB1EF188F00028CEE7 /* SampleController.storyboard */; };
@@ -118,6 +120,9 @@
 		955807F021958C8A000CD9A7 /* JWTScheduler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JWTScheduler.m; sourceTree = "<group>"; };
 		955807F221958C9C000CD9A7 /* JWTScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JWTScheduler.h; sourceTree = "<group>"; };
 		957C58C9219ACAB900ED31E1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		9579AD09217F5781004AAD98 /* InAppBrowser.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InAppBrowser.storyboard; sourceTree = "<group>"; };
+		9579AD0D217F5796004AAD98 /* InAppBrowser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAppBrowser.m; sourceTree = "<group>"; };
+		9579AD0F217F579F004AAD98 /* InAppBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAppBrowser.h; sourceTree = "<group>"; };
 		95FA87C120BC49AA00457575 /* Hotline Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hotline Demo-Bridging-Header.h"; sourceTree = "<group>"; };
 		95FA87C420BC49AA00457575 /* L102Language.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L102Language.swift; sourceTree = "<group>"; };
 		95FA87C520BC49AB00457575 /* L012Localizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L012Localizer.swift; sourceTree = "<group>"; };
@@ -248,6 +253,9 @@
 				354D0D5B1C48D504004D2AA1 /* Supporting Files */,
 				356F1A201B9DC4D8002F1E2A /* Framework */,
 				95FA87C120BC49AA00457575 /* Hotline Demo-Bridging-Header.h */,
+				9579AD09217F5781004AAD98 /* InAppBrowser.storyboard */,
+				9579AD0D217F5796004AAD98 /* InAppBrowser.m */,
+				9579AD0F217F579F004AAD98 /* InAppBrowser.h */,
 			);
 			path = Hotline;
 			sourceTree = "<group>";
@@ -444,6 +452,7 @@
 				955807EF21958521000CD9A7 /* JWTScheduler.storyboard in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
 				3513FF801CDCC3A3009A7034 /* FCLocalization.bundle in Resources */,
+				9579AD0A217F5781004AAD98 /* InAppBrowser.storyboard in Resources */,
 				354D0D641C48D504004D2AA1 /* Main.storyboard in Resources */,
 				35D3ADA71CEB57280010BA56 /* settings.png in Resources */,
 				35BCD3501CEB64B500795D69 /* FAQ.png in Resources */,
@@ -501,6 +510,7 @@
 				955807F121958C8A000CD9A7 /* JWTScheduler.m in Sources */,
 				35D707161BE2498B0035FD74 /* FDSettingsController.m in Sources */,
 				95FA87C720BC49AB00457575 /* L012Localizer.swift in Sources */,
+				9579AD0E217F5796004AAD98 /* InAppBrowser.m in Sources */,
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
 				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
