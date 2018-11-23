@@ -736,6 +736,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     return nil;
 }
 
+-(void)openFreshchatDeeplink:(NSString *)linkStr
+     viewController:(UIViewController *) viewController {
+    BOOL hasProcessed = [FCUtilities handleLink:[[NSURL alloc]initWithString:linkStr] faqOptions:nil navigationController:viewController handleFreshchatLinks:YES];
+    if(!hasProcessed) {
+        NSLog(@"Freshchat Error: Link not processed.");
+    }
+}
+
 -(BOOL)isFreshchatNotification:(NSDictionary *)info{
     @try {
         return [FCNotificationHandler isFreshchatNotification:info];

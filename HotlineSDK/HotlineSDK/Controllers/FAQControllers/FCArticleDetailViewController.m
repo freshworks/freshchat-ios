@@ -231,7 +231,7 @@
 
 -(BOOL)webView:(UIWebView *)inWeb shouldStartLoadWithRequest:(NSURLRequest *)inRequest navigationType:(UIWebViewNavigationType)inType {
     if (inType == UIWebViewNavigationTypeLinkClicked){
-        if(![FCUtilities handleLink:[inRequest URL] faqOptions:self.faqOptions navigationController:self.navigationController]) {
+        if(![FCUtilities handleLink:[inRequest URL] faqOptions:self.faqOptions navigationController:self.navigationController handleFreshchatLinks:NO]) {
             [[UIApplication sharedApplication] openURL:[inRequest URL]];
         }
         return NO;

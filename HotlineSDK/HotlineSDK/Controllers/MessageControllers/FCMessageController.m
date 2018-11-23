@@ -1204,7 +1204,7 @@ typedef struct {
         [imageController presentOnController:self];
     } else if ([fragmentType isEqualToValue:@5]) {
         NSURL *url = [fragment getOpenURL];
-        BOOL linkHandled  = [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController];
+        BOOL linkHandled  = [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController handleFreshchatLinks:NO];
         if(!linkHandled) {
             if([[UIApplication sharedApplication] canOpenURL:url]){
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -1216,7 +1216,7 @@ typedef struct {
 }
 
 -(BOOL)handleLinkDelegate: (NSURL *)url {
-    return [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController];
+    return [FCUtilities handleLink:url faqOptions:nil navigationController:self.navigationController handleFreshchatLinks:NO];
 }
 
 //TODO: Needs refractor

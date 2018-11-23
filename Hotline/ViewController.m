@@ -89,15 +89,15 @@
         NSLog(@"--With tags : %d",count);
     }];
     
-//    [Freshchat sharedInstance].handleLink = ^BOOL(NSURL * url) {
-//        UIStoryboard *inAppBrowserSB = [UIStoryboard storyboardWithName:IN_APP_BROWSER_STORYBOARD_CONTROLLER bundle:nil];
-//        InAppBrowser *inAppBrowserVC = [inAppBrowserSB instantiateViewControllerWithIdentifier:IN_APP_BROWSER_STORYBOARD_CONTROLLER];
-//        inAppBrowserVC.url = url;
-//        UIViewController *topController = [self.navigationController visibleViewController];
-//        [topController presentViewController:inAppBrowserVC animated:YES completion:nil];
-//        NSLog(@"%@",url.description);
-//        return YES;
-//    };
+    [Freshchat sharedInstance].customLinkHandler = ^BOOL(NSURL * url) {
+        UIStoryboard *inAppBrowserSB = [UIStoryboard storyboardWithName:IN_APP_BROWSER_STORYBOARD_CONTROLLER bundle:nil];
+        InAppBrowser *inAppBrowserVC = [inAppBrowserSB instantiateViewControllerWithIdentifier:IN_APP_BROWSER_STORYBOARD_CONTROLLER];
+        inAppBrowserVC.url = url;
+        UIViewController *topController = [self.navigationController visibleViewController];
+        [topController presentViewController:inAppBrowserVC animated:YES completion:nil];
+        NSLog(@"%@",url.description);
+        return YES;
+    };
     
     [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
         self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
@@ -323,6 +323,7 @@ JWTScheduler *jwtScheduler;
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
     [[Freshchat sharedInstance]showFAQs:self withOptions:options];*/
     //Revert back
+    //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels?id=192" viewController:self];
     [[Freshchat sharedInstance] showConversations:self];
 }
 
@@ -351,7 +352,6 @@ JWTScheduler *jwtScheduler;
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
     [[Freshchat sharedInstance] showConversations:self withOptions:opt];
-    
 }
 
 

@@ -853,17 +853,13 @@ static NSInteger networkIndicator = 0;
     return ![[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
 }
 
-+(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UINavigationController *) navController {
-    if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame))  {
-        NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
-        NSNumber *articleId = [numbFormatter numberFromString:[url host]];
-        if (articleId!= nil) {
-            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
-            return YES;
-        }
-    } else if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame ) {
++(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions
+    navigationController:(UIViewController *) navController
+    handleFreshchatLinks:(BOOL) handleFreshchatLinks {
+    
+    if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame ) {
         if (([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
-                 ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
+            ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
             NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
             NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
             for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
@@ -906,8 +902,17 @@ static NSInteger networkIndicator = 0;
         } else {
             return YES;
         }
-    } else if ([Freshchat sharedInstance].handleLink != nil) {
-        return [Freshchat sharedInstance].handleLink(url);
+    } else if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame))  {
+        NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
+        NSNumber *articleId = [numbFormatter numberFromString:[url host]];
+        if (articleId!= nil) {
+            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions];
+            return YES;
+        }
+    } else if(!handleFreshchatLinks) {
+        if ([Freshchat sharedInstance].customLinkHandler != nil) {
+            return [Freshchat sharedInstance].customLinkHandler(url);
+        }
     }
     return NO;
 }

@@ -161,12 +161,16 @@
 - (IBAction)loadChannels:(id)sender {
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:@[@"wow"] withTitle:@"heyyyy"];
-    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels?id=192" viewController:self];
+
+    //[[Freshchat sharedInstance] showConversations:self withOptions:opt];
     [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)loadFAQs:(id)sender {
     [[Freshchat sharedInstance] showFAQs:self];
+    //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels1?id=192" viewController:self];
+
 }
 
 - (IBAction)clearUserData:(id)sender {

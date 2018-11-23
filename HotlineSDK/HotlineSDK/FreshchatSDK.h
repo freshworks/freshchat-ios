@@ -239,6 +239,17 @@ enum TagFilterType {
  */
 -(void)setPushRegistrationToken:(NSData *) deviceToken;
 /**
+ *  Open Freshchat Deeplink
+ *
+ *  @discussion Handle freshchat channels,faq deeplink and present in viewController
+ *
+ *  @param linkStr Freshchat Deeplink String
+ *
+ *  @param viewController present Freshchat Screen from above the view Controller
+ *
+ */
+-(void) openFreshchatDeeplink:(NSString *)linkStr viewController:(UIViewController *) viewController;
+/**
  *  Generate deeplink from push notification
  *
  *  @discussion Returns a channel deeplink from freshchat notification payload.
@@ -341,7 +352,7 @@ enum TagFilterType {
  *  Code block for handling links. Return 'YES' to override default link behaviour and 'NO' to handle it on the block itself.
  */
 
-@property (nonatomic, copy) BOOL(^handleLink)(NSURL*);
+@property (nonatomic, copy) BOOL(^customLinkHandler)(NSURL*);
 
 @end
 
