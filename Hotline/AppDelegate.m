@@ -231,6 +231,7 @@
 
     
     if ([[Freshchat sharedInstance]isFreshchatNotification:info]) {
+        NSLog(@"%@",[[Freshchat sharedInstance] generateDeeplinkForNotifcation:info]);
         [[Freshchat sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }

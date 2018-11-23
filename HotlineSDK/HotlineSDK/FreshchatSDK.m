@@ -620,9 +620,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(NSString *)generateDeeplinkForNotifcation:(NSDictionary *)info {
     if([[Freshchat sharedInstance] isFreshchatNotification:info]) {
-        NSString *convID = [FCNotificationHandler getChannelIDFromNotification:info];
-        NSString *channelDeeplink = [NSString stringWithFormat:@"freshchat://channels?id=%@",convID];
-        return channelDeeplink;
+        NSInteger convID = [FCNotificationHandler getChannelIDFromNotification:info];
+        if (convID != -1) {
+            NSString *channelDeeplink = [NSString stringWithFormat:@"freshchat://channels?id=%ld",(long)convID];
+            return channelDeeplink;
+        }
     }
     return nil;
 }
