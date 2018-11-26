@@ -323,8 +323,8 @@ JWTScheduler *jwtScheduler;
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
     [[Freshchat sharedInstance]showFAQs:self withOptions:options];*/
     //Revert back
-    //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels?id=192" viewController:self];
-    [[Freshchat sharedInstance] showConversations:self];
+    [[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels?tags=wow,wow1,wow2&title=Hey%20123" viewController:self];
+    //[[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)categoryFilter1:(id)sender{

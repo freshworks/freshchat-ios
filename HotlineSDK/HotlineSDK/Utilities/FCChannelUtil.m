@@ -10,21 +10,21 @@
 
 @interface ConversationOptions()
 
--(void) filterByChannelID:(NSNumber *) channelID;
+-(void) filterByChannelID:(NSNumber *) channelID withTitle:(NSString *)title;
 
 @end
 
 @implementation FCChannelUtil : NSObject
 
-+(void) launchChannelWithTags:(NSArray *)tags withNavigationCtlr:(UIViewController *)viewController {
++(void) launchChannelWithTags:(NSArray *)tags withTitle:(NSString *)title withNavigationCtlr:(UIViewController *)viewController  {
     ConversationOptions *convOptions = [[ConversationOptions alloc] init];
-    [convOptions filterByTags:tags withTitle:nil];
+    [convOptions filterByTags:tags withTitle:title];
     [[Freshchat sharedInstance] showConversations:viewController withOptions:convOptions];
 }
 
-+(void) launchChannelWithId:(NSNumber *)channelID withNavigationCtlr:(UIViewController *)viewController {
++(void) launchChannelWithId:(NSNumber *)channelID  withTitle:(NSString *)title withNavigationCtlr:(UIViewController *)viewController {
     ConversationOptions *convOptions = [[ConversationOptions alloc] init];
-    [convOptions filterByChannelID:channelID];
+    [convOptions filterByChannelID:channelID withTitle:title];
     [[Freshchat sharedInstance] showConversations:viewController withOptions:convOptions];
 
 }

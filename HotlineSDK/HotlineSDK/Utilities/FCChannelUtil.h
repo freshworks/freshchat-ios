@@ -11,8 +11,8 @@
 
 @interface FCChannelUtil : NSObject
 
-+(void) launchChannelWithTags:(NSArray *)tags withNavigationCtlr:(UIViewController *)viewController;
++(void) launchChannelWithTags:(NSArray *)tags withTitle:(NSString *)title withNavigationCtlr:(UIViewController *)viewController;
 
-+(void) launchChannelWithId:(NSNumber *)channelID withNavigationCtlr:(UIViewController *)viewController;
++(void) launchChannelWithId:(NSNumber *)channelID withTitle:(NSString *)title withNavigationCtlr:(UIViewController *)viewController;
 
 @end

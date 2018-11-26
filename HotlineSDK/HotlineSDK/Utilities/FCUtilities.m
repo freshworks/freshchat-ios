@@ -857,6 +857,10 @@ static NSInteger networkIndicator = 0;
     navigationController:(UIViewController *) navController
     handleFreshchatLinks:(BOOL) handleFreshchatLinks {
     
+    if(url == nil) {
+        return NO;
+    }
+    
     if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame ) {
         if (([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
             ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
@@ -871,7 +875,7 @@ static NSInteger networkIndicator = 0;
                     break;
                 }
             }
-            if(articleID.integerValue != -1) {
+            if(articleID.integerValue != -1) {                
                 [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions];
                 return YES;
             }
@@ -879,24 +883,26 @@ static NSInteger networkIndicator = 0;
             NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
             NSMutableArray *tags;
             NSNumber *channelID;
+            NSString *title;
             for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
                 if (queryItem.value == nil) {
                     continue;
                 }
-                if ([queryItem.name isEqualToString:@"tags"] && queryItem.value != nil) {
+                if ([queryItem.name isEqualToString:@"tags"]) {
                     tags =[[NSMutableArray alloc] initWithArray:[queryItem.value componentsSeparatedByString:@","]];
-                    break;
                 }
-                if ([queryItem.name isEqualToString:@"id"] && queryItem.value != nil) {
+                if ([queryItem.name isEqualToString:@"id"]) {
                     channelID = [[NSNumber alloc]initWithInteger:[queryItem.value integerValue]];
-                    break;
+                }
+                if ([queryItem.name isEqualToString:@"title"]) {
+                    title = queryItem.value;
                 }
             }
             if (tags!=nil) {
-                [FCChannelUtil launchChannelWithTags:tags withNavigationCtlr:navController];
+                [FCChannelUtil launchChannelWithTags:tags withTitle:title withNavigationCtlr:navController];
                 return YES;
             } else if(channelID!=nil) {
-                [FCChannelUtil launchChannelWithId:channelID withNavigationCtlr:navController];
+                [FCChannelUtil launchChannelWithId:channelID withTitle:title withNavigationCtlr:navController];
                 return YES;
             }
         } else {

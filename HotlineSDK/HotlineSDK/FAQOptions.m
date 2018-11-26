@@ -106,8 +106,9 @@
     return self.filterByTags;
 }
 
--(void) filterByChannelID:(NSNumber *) channelID {
+-(void) filterByChannelID:(NSNumber *) channelID withTitle:(NSString *)title {
     self.channelID = channelID;
+    self.tagViewTitle = title;
 }
 
 @end
