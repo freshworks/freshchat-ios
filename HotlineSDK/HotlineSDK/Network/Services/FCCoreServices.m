@@ -156,7 +156,7 @@
         } else{
             FDLog(@"Conflict :: User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
-            if(statusCode == 409) {
+            if(statusCode == Conflict) {
                 [FCCoreServices resetUserData:^{
                     if (handler) handler([NSError new]);
                     [FCUtilities processResetChanges];
@@ -323,8 +323,8 @@
     [request setBody:encodedInfo];
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
-            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 200){
                 FDLog(@"Pushed properties to server %@", info);
                 NSDictionary *response = responseInfo.responseAsDictionary;
@@ -340,6 +340,9 @@
                 if (handler) handler(nil);
             }
         }else{
+            if(statusCode == Conflict) {
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+            }
             if (handler) handler(error);
             FDLog(@"Could not update user properties %@", error);
             FDLog(@"Response : %@", responseInfo.response);
