@@ -48,14 +48,6 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
     return ([payload[@"source"] isEqualToString:FRESHCHAT_NOTIFICATION_PAYLOAD_SOURCE_USER]);
 }
 
-+(NSInteger)getChannelIDFromNotification:(NSDictionary *)info{
-    NSDictionary *payload = [FCNotificationHandler getPayloadFromNotificationInfo:info];
-    if(payload[@"channel_id"] != nil) {
-        return [payload[@"channel_id"] integerValue];
-    }
-    return -1;
-}
-
 
 -(void)handleNotification:(NSDictionary *)info appState:(UIApplicationState)appState{
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -162,13 +154,27 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
     });
     BOOL bannerEnabled = [[FCSecureStore sharedInstance] boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     if(bannerEnabled && ![channel isActiveChannel]){
-        [self.banner setMessage:message];
+        [self.banner setMessage:message inChannel:channel];
         [self.banner displayBannerWithChannel:channel];
     }
 }
 
+-(NSString *)generateDeeplinkForNotifcation:(FCChannels *)channel {
+    if(channel.channelID != nil) {
+        NSString *channelDeeplink = [NSString stringWithFormat:@"freshchat://channels?id=%ld",[channel.channelID longValue]];
+        return channelDeeplink;
+    }
+    return nil;
+}
+
+
 - (void) handleNotification :(FCChannels *)channel withMessage:(NSString *)message andState:(UIApplicationState)state{
     if (state == UIApplicationStateInactive) {
+        if([Freshchat sharedInstance].onNotificationClicked != nil) {
+            if([Freshchat sharedInstance].onNotificationClicked([self generateDeeplinkForNotifcation:channel])) {
+                return;
+            }
+        }
         [FCMessageServices markMarketingMessageAsClicked:self.marketingID];
         [self launchMessageControllerOfChannel:channel];
     }
@@ -178,6 +184,11 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
 }
 
 -(void)notificationBanner:(FCNotificationBanner *)banner bannerTapped:(id)sender{
+    if([Freshchat sharedInstance].onNotificationClicked != nil) {
+        if([Freshchat sharedInstance].onNotificationClicked([self generateDeeplinkForNotifcation:banner.currentChannel])) {
+            return;
+        }
+    }
     [FCMessageServices markMarketingMessageAsClicked:self.marketingID];
     [self launchMessageControllerOfChannel:banner.currentChannel];
 }

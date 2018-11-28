@@ -17,6 +17,7 @@
 @interface AppDelegate ()
 
 @property (nonatomic, strong)UIViewController *rootController;
+@property (nonatomic, strong)LinkHandlerVC *linkHandlerVC;
 @property (nonatomic, strong)UIViewController *rootController1;
 @property (nonatomic, strong)UINavigationController *channelsController;
 
@@ -29,15 +30,18 @@
         [self registerAppForNotifications];
     }
     [self hotlineIntegration];
-    if (LAUNCH_SAMPLE_CONTROLLERT) {
+    if(LAUNCH_DEEPLINK_CONTROLLER) {
+        [self launchDeeplinkVC];
+    }
+    else if (LAUNCH_SAMPLE_CONTROLLER) {
         [self launchSampleController];
     } else {
         [self setupRootController];
     }
     /*[[Freshchat sharedInstance]resetUserWithCompletion:^{
         [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
-    }];*/
-    if ([[Freshchat sharedInstance]isFreshchatNotification:launchOptions]) {
+    }];
+    */if ([[Freshchat sharedInstance]isFreshchatNotification:launchOptions]) {
         [[Freshchat sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
     [Fabric with:@[[Crashlytics class]]];
@@ -65,6 +69,23 @@
     [self.window makeKeyAndVisible];
     //[[Freshchat sharedInstance] resetUserWithCompletion:nil];
 }
+
+-(void)launchDeeplinkVC {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_DEEPLINK_CONTROLLER bundle:nil];
+    self.linkHandlerVC = [sb instantiateViewControllerWithIdentifier:SAMPLE_DEEPLINK_CONTROLLER];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.linkHandlerVC];
+    [self.window setRootViewController:navController];
+    [self.window makeKeyAndVisible];
+    [Freshchat sharedInstance].onNotificationClicked = ^BOOL(NSString * urlStr) {
+        //Write some code logic
+        NSLog(@"RN:::Write some code logic");
+        //[[Freshchat sharedInstance] dismissFreshchatViews];
+        return NO;
+    };
+    //[Freshchat sharedInstance].onNotificationClicked = nil;
+    //[[Freshchat sharedInstance] resetUserWithCompletion:nil];
+}
+
 
 -(void)setupRootController{
     
@@ -231,7 +252,6 @@
 
     
     if ([[Freshchat sharedInstance]isFreshchatNotification:info]) {
-        NSLog(@"%@",[[Freshchat sharedInstance] generateDeeplinkForNotifcation:info]);
         [[Freshchat sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
     }
 }

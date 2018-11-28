@@ -250,15 +250,6 @@ enum TagFilterType {
  */
 -(void) openFreshchatDeeplink:(NSString *)linkStr viewController:(UIViewController *) viewController;
 /**
- *  Generate deeplink from push notification
- *
- *  @discussion Returns a channel deeplink from freshchat notification payload.
- *
- *  @param info Dictionary received in didReceiveRemoteNotification for Push Notification.
- *
- */
--(NSString *)generateDeeplinkForNotifcation:(NSDictionary *)info;
-/**
  *  Check if a push notification was from Freshchat
  *
  *  @discussion Checks if the push notification received originated from Freshchat by examining the payload dictionary. Use this in conjunction with handleRemoteNotification
@@ -353,6 +344,12 @@ enum TagFilterType {
  */
 
 @property (nonatomic, copy) BOOL(^customLinkHandler)(NSURL*);
+
+/**
+ *  Code block for push notification tap events . Return 'YES' to not allow channel open and 'NO' to launch the coresponding channel.
+ */
+
+@property (nonatomic, copy) BOOL(^onNotificationClicked)(NSString*);
 
 @end
 

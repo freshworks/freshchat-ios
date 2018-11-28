@@ -12,8 +12,10 @@
 #define STORYBOARD_NAME @"Main"
 #define STORYBOARD_IDENTIFIER @"HotlineViewController"
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define SAMPLE_DEEPLINK_CONTROLLER @"LinkHandlerVC"
 #define IN_APP_BROWSER_STORYBOARD_CONTROLLER @"InAppBrowser"
-#define LAUNCH_SAMPLE_CONTROLLERT NO
+#define LAUNCH_SAMPLE_CONTROLLER NO
+#define LAUNCH_DEEPLINK_CONTROLLER YES
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
