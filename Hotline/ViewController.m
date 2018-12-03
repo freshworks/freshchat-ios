@@ -6,17 +6,20 @@
 //  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 
-#import "ViewController.h"
 #import "FreshchatSDK/FreshchatSDK.h"
 #import "FDSettingsController.h"
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "InAppBrowser.h"
 #import "SampleController.h"
+#import "JWTScheduler.h"
 #import "Hotline_Demo-Swift.h"
 
 #define kOFFSET_FOR_KEYBOARD 160.0
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
+#define JWT_SCHEDULER_STORYBOARD_CONTROLLER @"JWTScheduler"
 
-@interface ViewController ()<UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
+@interface ViewController ()<UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -25,13 +28,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *unreadCountTags;
 
 @property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqTagsField2;
+
+@property (nonatomic, strong) IBOutlet UITextView *jwtTextView;
+@property (nonatomic, strong) IBOutlet UITextView *userAliasView;
+
 @property (nonatomic, strong) IBOutlet UITextField *faqTitleField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqTitleField2;
+
 @property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTagsField2;
+
 @property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField1;
-@property (nonatomic, strong) IBOutlet UITextField *faqContactUsTitleField2;
 
 @property (nonatomic, strong) IBOutlet UITextField *conversationTitle;
 @property (nonatomic, strong) IBOutlet UITextField *conversationTags;
@@ -53,6 +58,9 @@
 @property (nonatomic, retain) NSMutableArray *dataArray;
 @property (weak, nonatomic) IBOutlet UIButton *languageTranslation;
 
+@property (nonatomic, retain) IBOutlet UILabel *event;
+@property (nonatomic, retain) IBOutlet UILabel *tokenState;
+
 @end
 
 @implementation ViewController
@@ -72,6 +80,7 @@
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
     [self configurePicker];
+    
     NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
     NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
     
@@ -79,6 +88,16 @@
         self.unreadCountTags.text = [NSString stringWithFormat:@"UT  %d",count];
         NSLog(@"--With tags : %d",count);
     }];
+    
+    [Freshchat sharedInstance].customLinkHandler = ^BOOL(NSURL * url) {
+        UIStoryboard *inAppBrowserSB = [UIStoryboard storyboardWithName:IN_APP_BROWSER_STORYBOARD_CONTROLLER bundle:nil];
+        InAppBrowser *inAppBrowserVC = [inAppBrowserSB instantiateViewControllerWithIdentifier:IN_APP_BROWSER_STORYBOARD_CONTROLLER];
+        inAppBrowserVC.url = url;
+        UIViewController *topController = [self.navigationController visibleViewController];
+        [topController presentViewController:inAppBrowserVC animated:YES completion:nil];
+        NSLog(@"%@",url.description);
+        return YES;
+    };
     
     [[Freshchat sharedInstance] unreadCountWithCompletion:^(NSInteger count) {
         self.unreadCountAll.text = [NSString stringWithFormat:@"UC  %d",count];
@@ -98,16 +117,16 @@
     }];
     
     self.faqTagsField1.delegate = self;
-    self.faqTagsField2.delegate = self;
     self.faqTitleField1.delegate = self;
-    self.faqTitleField2.delegate = self;
     self.faqContactUsTagsField1.delegate = self;
-    self.faqContactUsTagsField2.delegate = self;
     self.faqContactUsTitleField1.delegate = self;
-    self.faqContactUsTitleField2.delegate = self;
     self.conversationTitle.delegate = self;
     self.conversationTags.delegate = self;
     self.message.delegate = self;
+    self.jwtTextView.delegate = self;
+    self.userAliasView.delegate = self;
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"jwtToken"];
+    self.jwtTextView.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"jwtToken"];
     self.sendMessageTag.delegate = self;
     //[[Freshchat sharedInstance] updateConversationBannerMessage:@"123"];
 
@@ -128,6 +147,19 @@
                                                  name:FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(jwtActionEvent:)
+                                                 name:FRESHCHAT_ACTION_USER_ACTIONS
+                                               object:nil];
+    
+    
+}
+
+- (void) jwtActionEvent:(NSNotification *)notif {
+    NSLog(@"====JWT Event - %@ ====", notif.userInfo[@"user_action"]);
+    self.event.text = notif.userInfo[@"user_action"];
+    NSLog(@"====JWT Event - %@ ====", [[Freshchat sharedInstance] getUserIdTokenStatus]);
+    self.tokenState.text = [[Freshchat sharedInstance] getUserIdTokenStatus];
 }
 
 - (void) receiveHLPlayNotification:(NSNotification *) notification{
@@ -163,6 +195,10 @@
     }
 }
 
+- (void)textViewDidChange:(UITextView *)textView {
+    [[NSUserDefaults standardUserDefaults] setObject:self.jwtTextView.text forKey:@"jwtToken"];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
@@ -194,7 +230,7 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)sender
 {
-    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTitleField2]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqTagsField2]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTagsField2]||[sender isEqual:self.faqContactUsTitleField1]||[sender isEqual:self.faqContactUsTitleField2])
+    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTitleField1])
     {
         //move the main view, so that the keyboard does not hide it.
         if  (self.view.frame.origin.y >= 0)
@@ -252,42 +288,70 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 }
-SampleController *sampleController;
+JWTScheduler *jwtScheduler;
+
 - (IBAction)chatButtonPressed:(id)sender {
-    if(sampleController == nil) {
+    /*
+     SampleController *sampleController;
+     //SampleViewController hidden
+     if(sampleController == nil) {
         UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
         sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     }
     [self presentViewController:sampleController animated:YES completion:nil];
+    */
+    
+    if( jwtScheduler == nil) {
+        UIStoryboard *jwtSchedulerSB = [UIStoryboard storyboardWithName:JWT_SCHEDULER_STORYBOARD_CONTROLLER bundle:nil];
+        jwtScheduler = [jwtSchedulerSB instantiateViewControllerWithIdentifier:JWT_SCHEDULER_STORYBOARD_CONTROLLER];
+    }
+    [self presentViewController:jwtScheduler animated:YES completion:nil];
 }
 
 - (IBAction)articleFilter1:(id)sender{
-    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    /*NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
+    
     options.showContactUsOnAppBar = true;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
     [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance]showFAQs:self withOptions:options];*/
+    //Revert back
+    [[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels?tags=wow,wow1,wow2&title=Hey%20123" viewController:self];
+    //[[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)categoryFilter1:(id)sender{
-    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+//    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+//    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
+//    [contactUsTagsArray removeObject:@""];
+//    FAQOptions *options = [FAQOptions new];
+//    options.showFaqCategoriesAsGrid = self.gridval;
+//    options.showContactUsOnFaqScreens = self.switchVal;
+//    if(contactUsTagsArray.count){
+//        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+//    }
+//    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
+//    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    //Revert back
+    NSArray *arr = [self.conversationTags.text componentsSeparatedByString:@","];
+    ConversationOptions *opt = [ConversationOptions new];
+    [opt filterByTags:arr withTitle:self.conversationTitle.text];
+    FAQOptions *options = [FAQOptions new];
+    options.showContactUsOnAppBar = true;
+    options.showContactUsOnFaqScreens = true;
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
-    options.showContactUsOnFaqScreens = self.switchVal;
     if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: CATEGORY];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
 }
 
 
@@ -306,6 +370,9 @@ SampleController *sampleController;
     }
     UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
     [self.navigationController pushViewController:viewController animated:true];
+    
+    
+    //
 }
 
 - (IBAction)channelFilter2:(id)sender{
@@ -321,39 +388,27 @@ SampleController *sampleController;
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
     [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+   
+    
 }
 
 - (IBAction)showLanguagePicker:(id)sender {
     [self presentViewController:self.pickerViewPopup animated:true completion:nil];
 }
 
-//2
-- (IBAction)articleFilter2:(id)sender{
-    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
-    [contactUsTagsArray removeObject:@""];
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
-    options.showContactUsOnFaqScreens = self.switchVal;
-    if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
+
+- (IBAction)setJWTUser:(id)sender{
+    if(self.jwtTextView.text.length == 0) {
+        return;
     }
-    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: ARTICLE];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtTextView.text];
 }
 
-- (IBAction)categoryFilter2:(id)sender{
-    NSArray *arr = [self.faqTagsField2.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField2.text componentsSeparatedByString:@","]];
-    [contactUsTagsArray removeObject:@""];
-    FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
-    options.showContactUsOnFaqScreens = self.switchVal;
-    if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField2.text];
+- (IBAction)idenfiyJWTUser:(id)sender{
+    if(self.jwtTextView.text.length == 0){
+        return;
     }
-    [options filterByTags:arr withTitle:self.faqTitleField2.text andType: CATEGORY];
-    [[Freshchat sharedInstance]showFAQs:self withOptions:options];
+    [[Freshchat sharedInstance] restoreUserWithIdToken:self.jwtTextView.text];
 }
 
 - (IBAction)sendMessage:(id)sender{
@@ -369,6 +424,12 @@ SampleController *sampleController;
     } else {
         self.switchVal = false;
     }
+}
+
+- (IBAction) getUserAliasForJWT:(id)sender {
+    self.userAliasView.text = [[Freshchat sharedInstance] getFreshchatUserId];
+    NSLog(@"User Id is - %@", [[Freshchat sharedInstance] getFreshchatUserId]);
+    NSLog(@"User Token state - %@",[[Freshchat sharedInstance] getUserIdTokenStatus]);
 }
 
 - (IBAction)switchGridAction:(id)sender {

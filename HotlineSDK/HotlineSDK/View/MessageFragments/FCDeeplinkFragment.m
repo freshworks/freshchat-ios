@@ -49,6 +49,7 @@
     -(void) openLink:(id) sender {
         if(self.delegate != nil) {
             [self.delegate performActionOn:self.fragmentData];
+            
         }
     }
 @end

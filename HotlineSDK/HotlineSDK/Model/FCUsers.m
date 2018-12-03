@@ -12,6 +12,7 @@
 #import "FCMacros.h"
 #import "FCUtilities.h"
 #import "FCSecureStore.h"
+#import "FCJWTUtilities.h"
 
 @implementation FCUsers
 
@@ -58,9 +59,16 @@
         [FCUserProperties createNewPropertyForKey:@"restoreId" WithValue:userInfo.restoreID isUserProperty:YES];
         [store setObject:userInfo.externalID forKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
         [FCUserProperties createNewPropertyForKey:@"identifier" WithValue:userInfo.externalID isUserProperty:YES];
-        
+        [store setObject:userInfo.jwtToken forKey:HOTLINE_DEFAULTS_USER_JWT_TOKEN];
+        [FCUserProperties createNewPropertyForKey:@"jwtToken" WithValue:userInfo.jwtToken isUserProperty:YES];
         [[FCDataManager sharedInstance]save];
     }];
+}
+
++ (void) updateUserWithIdToken : (NSString *) jwtIdToken {
+    FreshchatUser *fcUser = [FreshchatUser sharedInstance];
+    fcUser.jwtToken = jwtIdToken;
+    [FCUsers storeUserInfo:fcUser];
 }
 
 +(void) removeUserInfo {
@@ -72,6 +80,7 @@
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_RESTORE_ID];
     [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
+    [store removeObjectWithKey:HOTLINE_DEFAULTS_USER_JWT_TOKEN];
     [FreshchatUser sharedInstance].firstName = nil;
     [FreshchatUser sharedInstance].lastName = nil;
     [FreshchatUser sharedInstance].email = nil;
@@ -79,6 +88,7 @@
     [FreshchatUser sharedInstance].phoneCountryCode = nil;
     [FreshchatUser sharedInstance].restoreID = nil;
     [FreshchatUser sharedInstance].externalID = nil;
+    [FreshchatUser sharedInstance].jwtToken = nil;
 }
 
 +(FCUsers *)getUser{

@@ -14,7 +14,7 @@
 
 @interface FCContainerController : UIViewController
 
-@property (nonatomic,strong)UIView *containerView;
+@property (nonatomic,strong) UIView *containerView;
 @property (nonatomic, strong) FCViewController *childController;
 @property (nonatomic, strong) FCFooterView  *footerView;
 

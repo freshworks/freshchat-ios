@@ -18,6 +18,7 @@
 #define HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE @"hotline_defaults_user_phone_country_code"
 #define HOTLINE_DEFAULTS_USER_EXTERNAL_ID @"hotline_defaults_user_external_id"
 #define HOTLINE_DEFAULTS_USER_RESTORE_ID @"hotline_defaults_user_restore_id"
+#define HOTLINE_DEFAULTS_USER_JWT_TOKEN @"hotline_defaults_user_jwt_token"
 #define HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED @"hotline_defaults_is_device_token_registered"
 #define HOTLINE_DEFAULTS_IS_USER_REGISTERED @"hotline_defaults_is_user_registered"
 #define HOTLINE_DEFAULTS_APP_VERSION @"hotline_defaults_app_version"
@@ -70,8 +71,15 @@
 
 #define FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED @"freshchat_defaults_is_account_deleted"
 
+#define FRESHCHAT_DEFAULTS_IS_FIRST_AUTH @"freshchat_defaults_is_first_auth"
+#define FRESHCHAT_DEFAULTS_USER_VERIFICATION_PENDING_TOKEN @"freshchat_defaults_user_verification_pending_token"
+#define FRESHCHAT_DEFAULTS_USER_AUTH_ID_RESTORE_PENDING_TOKEN @"freshchat_defaults_user_auth_id_restore_pending_token"
+#define FRESHCHAT_DEFAULTS_AUTH_STATE @"freshchat_defaults_user_auth_state"
+
 //Keys used in persisted store
 #define HOTLINE_DEFAULTS_DEVICE_UUID @"hotline_defaults_device_uuid"
+
+#define FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES @"freshchat_defaults_drop_update_user_properties" //Dismiss user properties update for JWT Restore
 
 @interface FCSecureStore : NSObject
 

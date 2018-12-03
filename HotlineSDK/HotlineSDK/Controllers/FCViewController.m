@@ -12,11 +12,18 @@
 #import "FCMacros.h"
 #import "FCBarButtonItem.h"
 #import "FCControllerUtils.h"
+#import "FCAutolayoutHelper.h"
+#import "FCChannelViewController.h"
+#import "FCMessageController.h"
+#import "FCAttachmentImageController.h"
+#import "FCLocalNotification.h"
+#import "FCRemoteConfig.h"
 
 @implementation FCViewController : UIViewController
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self postNotifForScreenTransition];
     if (self.navigationController == nil) {
         ALog(@"Warning: Use Hotline controllers inside navigation controller");
     }
@@ -24,6 +31,14 @@
         self.navigationController.navigationBar.barStyle = [[FCTheme sharedInstance]statusBarStyle] == UIStatusBarStyleLightContent ?
                                                                     UIBarStyleBlack : UIBarStyleDefault; // barStyle has a different enum but same values .. so hack to clear the update.
         self.navigationController.navigationBar.tintColor = [[FCTheme sharedInstance] navigationBarButtonColor];
+    }
+}
+
+- (void) postNotifForScreenTransition {
+    if([self.class isEqual:[FCChannelViewController class]]
+       || [self.class isEqual:[FCMessageController class]]
+       || [self.class isEqual:[FCAttachmentImageController class]]) {
+        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"SCREEN_TRANSITION"}];
     }
 }
 

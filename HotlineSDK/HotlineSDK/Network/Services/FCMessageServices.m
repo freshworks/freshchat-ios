@@ -258,7 +258,10 @@ static FCNotificationHandler *handleUpdateNotification;
                 
                 if([newMessage.messageUserType integerValue] == 0) { //Set user messages from other devices/os
                      newMessage.isRead = YES;
-                }
+                } else {
+                    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"user_action" :@"NEW_MESSAGE"}];
+
+                }                
             }
         }
         
@@ -706,7 +709,7 @@ static FCNotificationHandler *handleUpdateNotification;
     ShowNetworkActivityIndicator();
     UIBackgroundTaskIdentifier taskID = [[FCBackgroundTaskManager sharedInstance]beginTask];
     
-    [[FCAPIClient sharedInstance]request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {        
+    [[FCAPIClient sharedInstance]request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSDictionary* messageInfo = responseInfo.responseAsDictionary;
         [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
             NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;

@@ -28,7 +28,11 @@
 
 -(void) load:(long)currentCount;
 -(void) unload;
--(void)updateResultsView:(BOOL)isLoading andCount:(long) count;
+-(void) updateResultsView:(BOOL)isLoading andCount:(long) count;
+-(void) setJWTState:(BOOL) isAuthInProgress;
+-(void) showLoadingScreen;
+-(void) hideLoadingScreen;
+-(void) killTimer;
 
 @end
 

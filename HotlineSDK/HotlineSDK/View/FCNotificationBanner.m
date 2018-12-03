@@ -33,6 +33,7 @@
 @property (strong, nonatomic) NSLayoutConstraint *encloserHeightConstraint;
 @property (strong, nonatomic) UIView *iPhoneXStatusbarView;
 @property (strong, nonatomic) NSLayoutConstraint *iPhoneXStatusbarHeightConstraint;
+@property (strong, nonatomic) FCChannels *channel;
 
 @end
 
@@ -71,7 +72,8 @@
     }
 }
 
--(void)setMessage:(NSString *)message{
+-(void)setMessage:(NSString *)message inChannel:(FCChannels *)channel {
+    self.currentChannel = channel;
     if (message && ![message isKindOfClass:[NSNull class]]) {
         if([FCUtilities containsHTMLContent:message]) {
             NSMutableAttributedString *str = [[FCAttributedText sharedInstance] getAttributedString:message];

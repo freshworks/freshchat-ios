@@ -10,12 +10,14 @@
 #import "ViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "InAppBrowser.h"
 #import "Hotline_Demo-Swift.h"
 
 
 @interface AppDelegate ()
 
 @property (nonatomic, strong)UIViewController *rootController;
+@property (nonatomic, strong)LinkHandlerVC *linkHandlerVC;
 @property (nonatomic, strong)UIViewController *rootController1;
 @property (nonatomic, strong)UINavigationController *channelsController;
 
@@ -23,25 +25,23 @@
 
 @implementation AppDelegate
 
-#define STORYBOARD_NAME @"Main"
-#define STORYBOARD_IDENTIFIER @"HotlineViewController"
-#define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
-#define LAUNCH_SAMPLE_CONTROLLERT NO
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     if(PUSH_ENABLED){
         [self registerAppForNotifications];
     }
     [self hotlineIntegration];
-    if (LAUNCH_SAMPLE_CONTROLLERT) {
+    if(LAUNCH_DEEPLINK_CONTROLLER) {
+        [self launchDeeplinkVC];
+    }
+    else if (LAUNCH_SAMPLE_CONTROLLER) {
         [self launchSampleController];
     } else {
         [self setupRootController];
     }
     /*[[Freshchat sharedInstance]resetUserWithCompletion:^{
         [[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
-    }];*/
-    if ([[Freshchat sharedInstance]isFreshchatNotification:launchOptions]) {
+    }];
+    */if ([[Freshchat sharedInstance]isFreshchatNotification:launchOptions]) {
         [[Freshchat sharedInstance]handleRemoteNotification:launchOptions andAppstate:application.applicationState];
     }
     [Fabric with:@[[Crashlytics class]]];
@@ -69,6 +69,23 @@
     [self.window makeKeyAndVisible];
     //[[Freshchat sharedInstance] resetUserWithCompletion:nil];
 }
+
+-(void)launchDeeplinkVC {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_DEEPLINK_CONTROLLER bundle:nil];
+    self.linkHandlerVC = [sb instantiateViewControllerWithIdentifier:SAMPLE_DEEPLINK_CONTROLLER];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.linkHandlerVC];
+    [self.window setRootViewController:navController];
+    [self.window makeKeyAndVisible];
+    [Freshchat sharedInstance].onNotificationClicked = ^BOOL(NSString * urlStr) {
+        //Write some code logic
+        NSLog(@"RN:::Write some code logic");
+        //[[Freshchat sharedInstance] dismissFreshchatViews];
+        return NO;
+    };
+    //[Freshchat sharedInstance].onNotificationClicked = nil;
+    //[[Freshchat sharedInstance] resetUserWithCompletion:nil];
+}
+
 
 -(void)setupRootController{
     
@@ -176,12 +193,12 @@
     if(![FreshchatUser sharedInstance].firstName){
         //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }
+    config.teamMemberInfoVisible = FALSE;
     config.cameraCaptureEnabled = YES;
     config.gallerySelectionEnabled = YES;
     NSLog(@"Current User :Name  %@ %@", [FreshchatUser sharedInstance].firstName,[FreshchatUser sharedInstance].lastName);
     NSLog(@"Current User :Identifier  %@ restoreID: %@", [FreshchatUser sharedInstance].externalID, [FreshchatUser sharedInstance].restoreID);
     [[Freshchat sharedInstance]initWithConfig:config];
-    
     //if(![FreshchatUser sharedInstance].restoreID)
     //{
         //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];

@@ -24,7 +24,9 @@
 #import "FCUserUtil.h"
 #import "FCLocalNotification.h"
 #import "FCVotingManager.h"
-
+#import "FCJWTUtilities.h"
+#import "FCJWTAuthValidator.h"
+#import "FCReachabilityManager.h"
 
 @interface Freshchat ()
 
@@ -108,25 +110,30 @@
     NSMutableDictionary *userInfo = [self getUserInfo:[FCUtilities getUserAliasWithCreate]];
     NSArray *userProperties = [FCCoreServices updatePropertiesTo:userInfo];
     
-    if (!userInfo) {
-        return nil;
-    }
-    
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    NSData *userData;
     NSError *error = nil;
-    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{ @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
+    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        if(userInfo){
+            userData = [NSJSONSerialization dataWithJSONObject:@{@"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
+        }
+        else{
+            return nil;
+        }
+    }
+    else {
+        userData = [NSJSONSerialization dataWithJSONObject:@{@"jwtAuthToken" :[FreshchatUser sharedInstance].jwtToken, @"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
+    }
     
     if (error) {
         FDLog(@"Error while serializing user information");
     }
-    
-    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
-    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     [request setBody:userData];
     [request setRelativePath:path andURLParams:@[appKey]];
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
-        if (!error) {
-            
+        if (!error) {            
             FDLog(@"*** User registration status ***");
             
             if (statusCode == 201 || statusCode == 304) {
@@ -135,6 +142,7 @@
                 
                 if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
                 
+
                 ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
                 
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
@@ -145,11 +153,19 @@
                 FDLog(@"Failed with wrong status code");
                 if (handler) handler([NSError new]);
             }
-            
-        }else{
-            FDLog(@"User registration failed :%@", error);
+        } else{
+            FDLog(@"Conflict :: User registration failed :%@", error);
             FDLog(@"Response : %@", responseInfo.response);
-            if (handler) handler(error);
+            if(statusCode == Conflict) {
+                [FCCoreServices resetUserData:^{
+                    if (handler) handler([NSError new]);
+                    [FCUtilities processResetChanges];
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
+                }];
+            }
+            else{
+                if (handler) handler(error);
+            }
         }
     }];
     return task;
@@ -163,7 +179,8 @@
             FCUserProperties *property = propertiesToUpload[i];
             if (property.key) {
                 if (property.isUserProperty) {
-                    userInfo[property.key] = property.value;
+                    if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled])
+                        userInfo[property.key] = property.value;
                 }else{
                     metaInfo[property.key] = property.value;
                 }
@@ -220,6 +237,13 @@
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate {
     
+    //JWT Handling
+    if([[FCRemoteConfig sharedInstance]isUserAuthEnabled]
+       && (![FCUtilities canUpdateUserProperties]
+           || (trimString([FreshchatUser sharedInstance].jwtToken) == 0))) {
+        return;
+    }
+
     static BOOL IN_PROGRESS = NO;
     
     if(IN_PROGRESS){
@@ -242,7 +266,6 @@
         NSMutableDictionary *info = [NSMutableDictionary new];
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         
-        
         NSArray *userProperties = [FCCoreServices updatePropertiesTo:userInfo];
         if (userProperties.count > 0 || forceUpdate) {
             userInfo[@"alias"] = [FCUtilities currentUserAlias];
@@ -256,6 +279,10 @@
             info[@"user"] = userInfo;
         }else{
             IN_PROGRESS = NO;
+        }
+        
+        if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FreshchatUser sharedInstance].jwtToken != nil){
+            info[@"jwtAuthToken"] = [FreshchatUser sharedInstance].jwtToken;
         }
         
         if ([info count] == 0) {
@@ -296,15 +323,26 @@
     [request setBody:encodedInfo];
     [request setRelativePath:path andURLParams:@[appKey]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
-            NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
             if(statusCode == 200){
                 FDLog(@"Pushed properties to server %@", info);
                 NSDictionary *response = responseInfo.responseAsDictionary;
                 [FCUtilities updateUserWithExternalID:[response objectForKey:@"identifier"] withRestoreID:[response objectForKey:@"restoreId"]];
+                [FCUtilities updateUserWithData:response];
+                if([[FCRemoteConfig sharedInstance]isUserAuthEnabled] && ([FreshchatUser sharedInstance].jwtToken != nil)){
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+                    if([FCUserUtil isUserRegistered]) {
+                        [FCMessages uploadAllUnuploadedMessages];
+                        [FCMessageServices uploadUnuploadedCSAT];
+                    }
+                }
                 if (handler) handler(nil);
             }
         }else{
+            if(statusCode == Conflict) {
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+            }
             if (handler) handler(error);
             FDLog(@"Could not update user properties %@", error);
             FDLog(@"Response : %@", responseInfo.response);
@@ -508,9 +546,12 @@
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
+            //Add flg flag for config fetch
             NSDictionary *configDict = responseInfo.responseAsDictionary;
             [FCUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];
             [[FCRemoteConfig sharedInstance] updateRemoteConfig:configDict];
+            [FCJWTUtilities setTokenInitialState];
+            [FCJWTUtilities performPendingJWTTasks];
         }
         else {
             FDLog(@"User remote config fetch call failed %@", error);
@@ -541,6 +582,65 @@
     return task;
 }
 
++(NSURLSessionDataTask *)restoreUserWithJwtToken:(NSString *)jwtIdToken withCompletion:(void (^)(NSError *))completion{
+    
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    //NSString *userAlias = [FCUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RENEW_BY_JWT_PATH,appID];
+    //[[FreshchatUser sharedInstance] setJwtToken:jwtIdToken];
+    NSError *error = nil;
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    userInfo[@"deviceIosMeta"] = [FCUtilities deviceInfoProperties];
+    
+    NSData *userData = [NSJSONSerialization dataWithJSONObject:@{@"user":userInfo ,@"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
+    
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setBody:userData];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        NSDictionary *response = responseInfo.responseAsDictionary;
+        apiClient.FC_IS_USER_OR_ACCOUNT_DELETED = NO;
+        if([[FCReachabilityManager sharedInstance] isReachable]) {
+            [FCJWTUtilities removePendingRestoreJWTToken];
+            [FCUtilities addFlagToDisableUserPropUpdate];
+            if (statusCode == 200) { //If the user is found
+                [FCUtilities updateUserAlias:response[@"alias"]];
+                [FCUsers updateUserWithIdToken:jwtIdToken];
+                [FCUtilities updateUserWithData:response];
+                [FCUserUtil setUserMessageInitiated];
+                [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+                [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+                [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+                [FCUtilities initiatePendingTasks];
+            } else { //Any failure case
+                [FCUsers removeUserInfo];
+                [FCUtilities resetAlias];
+                [FCUtilities processResetChanges];
+                [FCUsers updateUserWithIdToken:jwtIdToken];
+                if(statusCode ==  404) {
+                    if([FCJWTUtilities getAliasFrom:jwtIdToken] != nil &&
+                       ![[FCJWTUtilities getAliasFrom:jwtIdToken] isEqualToString:@""]) {
+                        [FCUtilities updateUserAlias: [FCJWTUtilities getAliasFrom:jwtIdToken]];
+                    }
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+                    [FCUtilities initiatePendingTasks];
+                }
+            }
+        } else {
+            [FCUtilities processResetChanges];
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
+        }
+        if(completion){
+            completion(error);
+        }
+    }];
+    return task;
+}
+
 +(NSURLSessionDataTask *)restoreUserWithExtId:(NSString *)extId restoreId:(NSString *)restoreIdVal withCompletion:(void (^)(NSError *))completion{
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSMutableArray *params = [[NSMutableArray alloc] init];
@@ -556,7 +656,7 @@
     } else {
         return nil;
     }
-    NSString *path = [NSString stringWithFormat:FRESHCHAT_USER_RESTORE_PATH,appID];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_USER_RESTORE_PATH,appID];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
     [request setRelativePath:path andURLParams:params];
@@ -574,7 +674,8 @@
                     [FCUtilities initiatePendingTasks];
                 }
             }
-        } else { //If the user is not found
+        }
+        else { //If the user is not found 404 should be handled
             FreshchatUser* oldUser = [FreshchatUser sharedInstance];
             oldUser.externalID = extId;
             oldUser.restoreID = nil;
@@ -611,17 +712,70 @@
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
         [store removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
         [store removeObjectWithKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
         
         // Clear the token again to register again
         [store removeObjectWithKey:HOTLINE_DEFAULTS_IS_DEVICE_TOKEN_REGISTERED];
         [store removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
         [FCUserDefaults removeObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME];
+        
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+        [store removeObjectWithKey:FRESHCHAT_DEFAULTS_AUTH_STATE];
+        
         [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
+        [[FCJWTAuthValidator sharedInstance] resetPrevJWTState];
         [FCUsers removeUserInfo];
         if(completion){
             completion(error);
         }
     }];
+}
+
++ (NSURLSessionDataTask *)validateJwtToken:(NSString *)jwtIdToken completion:(void(^)(BOOL valid, NSError *error))handler {
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_JWT_VALIDATE_PATH,appID];    
+    NSError *error = nil;
+    NSData *jwtData = [NSJSONSerialization dataWithJSONObject:@{ @"jwtAuthToken" : jwtIdToken } options:NSJSONWritingPrettyPrinted error:&error];
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setBody:jwtData];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        NSDictionary *response = responseInfo.responseAsDictionary;
+        if(handler){
+            //Added to avoid edge loop cases
+            if([[FCReachabilityManager sharedInstance] isReachable]) {
+                [FCJWTUtilities removePendingJWTToken];
+            }
+            if (statusCode == 200) {
+                
+                if([response[@"userAliasExists"] boolValue]){
+                    
+                    //Same alias then same existing user                    
+                    if ([FCJWTUtilities compareAlias:jwtIdToken
+                                                str2:[FreshchatUser sharedInstance].jwtToken]) {
+                        handler(true, error);
+                    } else {
+                        handler(false, error);
+                    }
+                }
+                else {
+                    [[FCSecureStore sharedInstance] setBoolValue:true forKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+                    NSString *jwtAlias = [FCJWTUtilities getAliasFrom:jwtIdToken];
+                    if(jwtAlias) {
+                        [FCUtilities updateUserAlias:jwtAlias];
+                    }
+                    handler(true, error);
+                }
+            } else {
+                handler(false, error);
+            }
+        }
+    }];
+    return task;
 }
 
 @end

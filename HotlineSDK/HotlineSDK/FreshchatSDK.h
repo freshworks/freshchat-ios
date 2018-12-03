@@ -19,6 +19,7 @@ enum TagFilterType {
 #define FRESHCHAT_USER_RESTORE_ID_GENERATED @"com.freshworks.freshchat_user_restore_id_generated"
 #define FRESHCHAT_USER_LOCALE_CHANGED @"com.freshworks.freshchat_user_locale_changed"
 #define FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED @"com.freshworks.freshchat_unread_message_count_changed"
+#define FRESHCHAT_ACTION_USER_ACTIONS @"com.freshworks.freshchat_action_user_actions"
 
 @class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 
@@ -144,6 +145,7 @@ enum TagFilterType {
  *
  */
 -(void)showFAQs:(UIViewController *)controller withOptions:(FAQOptions *)options;
+
 /**
  *  Set user Info
  *
@@ -153,6 +155,28 @@ enum TagFilterType {
  *
  */
 -(void)setUser:(FreshchatUser *) user;
+
+/**
+ *  Get user Alias
+ *
+ *  @discussion This method lets you to get user Id in Strict Mode for setting up JWT paload
+ *
+ */
+- (NSString *) getFreshchatUserId;
+
+/*
+ * Set user for JWT Auth strict mode
+ *
+ * Sync any change to user information, specified in JWT Token with Freshchat
+ *
+ */
+- (void)setUserWithIdToken :(NSString *) jwtIdToken;
+
+/*
+ * In Auth Strict Mode get status of User Auth Token
+ */
+- (NSString *)getUserIdTokenStatus;
+
 /**
 *  Restore User
 *
@@ -165,6 +189,15 @@ enum TagFilterType {
 *
 */
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID;
+
+/**
+ * Identify and restore an user base on reference_id and can only be called in auth strict mode
+ *
+ * @param jwtIdToken Set a valid Id Token for the current user signed with your account key(s)
+ *
+ */
+-(void)restoreUserWithIdToken:(NSString *) jwtIdToken;
+
 /**
  *  Clear User Data
  *
@@ -205,6 +238,17 @@ enum TagFilterType {
  *
  */
 -(void)setPushRegistrationToken:(NSData *) deviceToken;
+/**
+ *  Open Freshchat Deeplink
+ *
+ *  @discussion Handle freshchat channels,faq deeplink and present in viewController
+ *
+ *  @param linkStr Freshchat Deeplink String
+ *
+ *  @param viewController present Freshchat Screen from above the view Controller
+ *
+ */
+-(void) openFreshchatDeeplink:(NSString *)linkStr viewController:(UIViewController *) viewController;
 /**
  *  Check if a push notification was from Freshchat
  *
@@ -294,6 +338,18 @@ enum TagFilterType {
  *  Dismiss SDK for deeplink screens
  */
 -(void) dismissFreshchatViews;
+
+/**
+ *  Code block for handling links. Return 'YES' to override default link behaviour and 'NO' to handle it on the block itself.
+ */
+
+@property (nonatomic, copy) BOOL(^customLinkHandler)(NSURL*);
+
+/**
+ *  Code block for push notification tap events . Return 'YES' to not allow channel open and 'NO' to launch the coresponding channel.
+ */
+
+@property (nonatomic, copy) BOOL(^onNotificationClicked)(NSString*);
 
 @end
 

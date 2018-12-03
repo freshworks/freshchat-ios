@@ -23,6 +23,7 @@
     @property (nonatomic) BOOL isRestoring;
     @property (strong, nonatomic, readwrite) NSString *externalID;
     @property (strong, nonatomic, readwrite) NSString *restoreID;
+    @property (strong, nonatomic, readwrite) NSString *jwtToken;
 @end
 
 
@@ -35,6 +36,7 @@
 +(NSString *)getUserAliasWithCreate;
 +(NSString *)generateUserAlias;
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion;
++(void) resetDataAndRestoreWithJwtToken: (NSString *) jwtIdToken withCompletion:(void (^)())completion;
 + (void) resetNavigationStackWithController:(UIViewController *)controller currentController:(UIViewController *)currentController;
 
 +(UIImage *)imageWithColor:(UIColor *)color;
@@ -67,6 +69,7 @@
 + (BOOL) canMakeSessionCall;
 + (BOOL) canMakeDAUCall;
 + (BOOL) canMakeRemoteConfigCall;
++ (BOOL) isRemoteConfigFetched;
 + (BOOL) canMakeTypicallyRepliesCall;
 + (NSTimeInterval) getCurrentTimeInMillis;
 + (NSString *) getReplyResponseForTime :(NSInteger)timeInSec andType: (enum ResponseTimeType) type;
@@ -84,6 +87,11 @@
 + (NSMutableAttributedString *) getAttributedContentForString :(NSString *)strVal withFont :(UIFont *) font;
 + (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName;
 + (void) cacheImageWithUrl : (NSString *) url;
++ (void) processResetChanges;
++ (void) addFlagToDisableUserPropUpdate;
++ (void) removeFlagToDisableUserPropUpdate;
++ (BOOL) canUpdateUserProperties;
++ (BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UIViewController *) navController handleFreshchatLinks:(BOOL) handleFreshchatLinks;
 
 @end
 

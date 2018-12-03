@@ -179,11 +179,6 @@
 }
 
 -(void)updateConfigButtonAction:(id)sender{
-    [self testPush];
-    return;
-    
-    NSLog(@"Updating config");
-    
     FreshchatConfig *config = [[FreshchatConfig alloc]initWithAppID:self.appIDField.text
                                                        andAppKey:self.appKeyField.text];
     config.domain = self.domainField.text;
