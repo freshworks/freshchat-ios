@@ -56,11 +56,13 @@
             _placeHolderLabel.backgroundColor = [UIColor clearColor];
             _placeHolderLabel.textColor = self.placeholderColor;
             _placeHolderLabel.alpha = 0;
+            
+            NSDictionary *metrics = @{@"heightPadding": @(self.frame.size.height-25), @"width" : @(self.frame.size.width-10)};
         
             [self addSubview:_placeHolderLabel];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-5-[placeHolderView(==%f)]-5-|",(self.frame.size.width-10)]  options:0 metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[placeHolderView(==width)]-5-|" options:0 metrics:metrics views:views]];
             
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[placeHolderView]" options:0 metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[placeHolderView(==20)]-heightPadding-|" options:0 metrics:metrics views:views]];
         }
         
         _placeHolderLabel.text = self.placeholder;

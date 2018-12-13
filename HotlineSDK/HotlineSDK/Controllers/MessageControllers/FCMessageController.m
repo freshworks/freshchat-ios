@@ -945,7 +945,9 @@ typedef struct {
 #pragma mark Text view delegates
 
 -(void)inputToolbar:(FCInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{
-    [self setHeightForTextView:textView];
+    if (toolbar.superview != nil) {
+        [self setHeightForTextView:textView];
+    }
     [self scrollTableViewToLastCell];
 }
 
