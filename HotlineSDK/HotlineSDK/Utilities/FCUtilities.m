@@ -273,6 +273,7 @@ static NSInteger networkIndicator = 0;
             min = (int) ceil(minutes / 5) * 5;
         }
         messageStr = (type == CURRENT_AVG) ?  HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_X_MIN) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_X_MIN);
+        if([FCStringUtil isEmptyString:trimString(messageStr)]) return nil;
         return [NSString stringWithFormat: @"%@ %d %@",messageStr, min,HLLocalizedString(LOC_PLACEHOLDER_MINS)];
     } else if (minutes <= 60) {
         messageStr = (type == CURRENT_AVG) ? HLLocalizedString(LOC_CURRENTLY_REPLYING_IN_HOUR) : HLLocalizedString(LOC_TYPICALLY_REPLIES_WITHIN_HOUR);
