@@ -3,5 +3,5 @@
 
 target 'SwiftSample' do
   use_frameworks!
-  pod 'FreshchatSDK'
+  pod 'FreshchatSDK', :git => 'https://github.com/freshdesk/freshchat-ios', :branch => 'canary'
 end
