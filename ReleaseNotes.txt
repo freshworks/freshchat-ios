@@ -1,3 +1,15 @@
+Freshchat iOS SDK - Powered by Freshdesk
+
+Documentation   : https://support.freshchat.com
+Support Email   : support@freshchat.com
+Version         : 1.5.6
+
+Ver 1.5.6 
+__________________________
+Enhancement:
+- Ability to hide historical response time.
+Change:
+- Updated FAQ helpful prompt string to “Was this FAQ helpful?”.
 
 Ver 1.5.5 
 __________________________

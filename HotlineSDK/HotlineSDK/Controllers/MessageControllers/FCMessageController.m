@@ -218,13 +218,18 @@ typedef struct {
 }
 
 -(void) showReplyResponseTime:(NSInteger) time withType :(enum ResponseTimeType) type {
-    self.typicalReply.text = [FCUtilities getReplyResponseForTime:time andType:type];
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
-        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
-        self.typicalReply.alpha = 1;
-    }];
+    NSString *replyResponseTime = [FCUtilities getReplyResponseForTime:time andType:type];
+    if(![FCStringUtil isEmptyString:trimString(replyResponseTime)]){
+        self.typicalReply.text = replyResponseTime;
+        [UIView animateWithDuration:0.5 animations:^{
+            self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
+            self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
+            self.typicalReply.alpha = 1;
+        }];
+    }
+    else{
+        [self hideReplyResponseTime];
+    }
 }
 
 -(void) hideReplyResponseTime {
@@ -940,7 +945,9 @@ typedef struct {
 #pragma mark Text view delegates
 
 -(void)inputToolbar:(FCInputToolbarView *)toolbar textViewDidChange:(UITextView *)textView{
-    [self setHeightForTextView:textView];
+    if (toolbar.superview != nil) {
+        [self setHeightForTextView:textView];
+    }
     [self scrollTableViewToLastCell];
 }
 

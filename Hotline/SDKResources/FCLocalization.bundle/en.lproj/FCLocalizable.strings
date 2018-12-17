@@ -12,7 +12,7 @@
 "faq_feature_not_enabled_text"="FAQ feature is disabled";
 
 /* Article UpVote DownVote */
-"article_vote_prompt_text"="Did we address your concerns?";
+"article_vote_prompt_text"="Was this FAQ helpful?";
 "article_vote_prompt_yes_button_text"="Yes";
 "article_vote_prompt_no_button_text"="No";
 
