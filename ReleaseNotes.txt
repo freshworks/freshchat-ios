@@ -1,4 +1,12 @@
 
+Ver 2.0.0 
+__________________________
+Enhancements
+- Ability to intercept all external links
+- Securely identify and restore users using Id Tokens (JWT)
+- Ability to intercept Freshchat notification
+- Ability to listen to Freshchat events like message sent, message received, etc.
+
 Ver 1.5.6 
 __________________________
 Enhancement:
