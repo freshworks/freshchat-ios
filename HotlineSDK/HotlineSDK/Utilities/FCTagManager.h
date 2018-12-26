@@ -35,6 +35,11 @@
                  handler:(void(^)(NSError *error))handler
                inContext:(NSManagedObjectContext *) context;
 
+- (void) getChannel: (NSArray *)tags
+        channelIds : (NSArray *) channelIds
+         inContext : (NSManagedObjectContext *) context
+     withCompletion:(void (^)(NSArray<FCChannels *> *, NSError *))completion;
+
 @end
 
 #endif /* HLTagManager_h */

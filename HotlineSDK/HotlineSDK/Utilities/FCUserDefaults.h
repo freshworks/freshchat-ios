@@ -51,6 +51,10 @@
 #define CONFIG_RC_USER_CSAT_VIEW_TIMER_ENABLED @"config_rc_user_csat_view_timer_enabled"
 #define CONFIG_RC_MAXIMUM_USER_SURVEY_VIEW_MILLIS @"config_rc_maximum_user_survey_view_millis"
 
+#define CONFIG_RC_JWT_AUTH_ENABLED @"config_rc_jwt_auth_enabled"
+#define CONFIG_RC_JWT_AUTH_STRICT_MODE_ENABLED @"config_rc_jwt_auth_strict_mode_enabled"
+#define CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL @"config_rc_jwt_auth_loading_timeout_interval"
+
 #define FRESHCHAT_DEFAULTS_USER_IOS_VERSION @"freshchat_defaults_user_ios_version"
 
 @interface FCUserDefaults : NSObject

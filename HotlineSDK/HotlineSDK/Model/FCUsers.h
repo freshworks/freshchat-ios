@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)storeUserInfo:(FreshchatUser *)userInfo;
 +(FCUsers *)getUser;
 +(void) removeUserInfo;
++ (void) updateUserWithIdToken : (NSString *) jwtIdToken;
 
 @end
 

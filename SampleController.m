@@ -18,12 +18,12 @@
 @property (weak, nonatomic) IBOutlet UITextField *nRestoreID;
 @property (weak, nonatomic) IBOutlet UITextField *unreadCount;
 @property (weak, nonatomic) IBOutlet UILabel *userDetails;
-@property (strong, nonatomic) NSTimer *timer;
 @property (weak, nonatomic) IBOutlet UISwitch *timerState;
 @property (weak, nonatomic) IBOutlet UITextField *timeoutDuration;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *value;
 @property (weak, nonatomic) IBOutlet UISwitch *state;
 @property (nonatomic) BOOL kill;
+@property (strong, nonatomic) NSTimer *timer;
 @property (nonatomic) int itemCount;
 @end
 
@@ -142,6 +142,7 @@
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     [self.view endEditing:YES];
 }
+
 - (IBAction)closeView:(id)sender {
     if(self.kill) {
         [self.timer invalidate];
@@ -160,12 +161,16 @@
 - (IBAction)loadChannels:(id)sender {
     ConversationOptions *opt = [ConversationOptions new];
     [opt filterByTags:@[@"wow"] withTitle:@"heyyyy"];
-    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels?id=192" viewController:self];
+
+    //[[Freshchat sharedInstance] showConversations:self withOptions:opt];
     [[Freshchat sharedInstance] showConversations:self];
 }
 
 - (IBAction)loadFAQs:(id)sender {
     [[Freshchat sharedInstance] showFAQs:self];
+    //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels1?id=192" viewController:self];
+
 }
 
 - (IBAction)clearUserData:(id)sender {

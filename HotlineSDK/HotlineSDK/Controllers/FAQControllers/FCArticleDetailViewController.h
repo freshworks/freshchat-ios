@@ -21,5 +21,7 @@
 @property (strong,nonatomic) NSString *articleTitle;
 @property (strong,nonatomic) NSNumber *categoryID;
 @property (nonatomic, assign) BOOL isFromSearchView;
+@property  BOOL isFilteredView;
+@property  BOOL showCloseButton;
 
 @end

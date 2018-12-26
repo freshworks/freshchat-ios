@@ -112,21 +112,33 @@
               withCompletion:(void (^)(NSArray<FCChannels *> *, NSError *))completion {
     [self getTaggableIdsForTags:tags forTypes:@[@(HLTagTypeChannel)] inContext:context withCompletion:^(NSArray<FCTags *> * matchingTags, NSError* error) {
         NSArray* channelIds = [matchingTags valueForKey:@"taggableID"];
-        [context performBlock:^{
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_CHANNELS_ENTITY];
-            if ([tags count] == 0) {
-                fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@ AND isHidden == NO AND isRestricted == NO",channelIds];
-            } else {
-                fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@",channelIds];
-            }
-            NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
-            fetchRequest.sortDescriptors = @[position];
-            NSError *error;
-            NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
-            if(completion) {
-                completion(matches, error);
-            }
-        }];
+        [self getChannel:tags channelIds:channelIds inContext:context withCompletion:completion];
+    }];
+}
+
+
+
+- (void) getChannel: (NSArray *)tags
+            channelIds : (NSArray *) channelIds
+            inContext : (NSManagedObjectContext *) context
+            withCompletion:(void (^)(NSArray<FCChannels *> *, NSError *))completion {
+    [context performBlock:^{
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_CHANNELS_ENTITY];
+        if([tags count] == 0 && [channelIds count] != 0) {
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@",channelIds];
+        }
+        else if ([tags count] == 0) {
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@ AND isHidden == NO AND isRestricted == NO",channelIds];
+        } else {
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"channelID IN %@",channelIds];
+        }
+        NSSortDescriptor *position = [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES];
+        fetchRequest.sortDescriptors = @[position];
+        NSError *error;
+        NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
+        if(completion) {
+            completion(matches, error);
+        }
     }];
 }
 

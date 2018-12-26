@@ -58,4 +58,8 @@
 
 #define HOTLINE_API_TYPLICAL_REPLY @"app/services/app/%@/channels/response_time"
 
-#define FRESHCHAT_USER_RESTORE_PATH @"/app/services/app/%@/user/restore"
+#define FRESHCHAT_API_USER_RESTORE_PATH @"/app/services/app/%@/user/restore"
+
+#define FRESHCHAT_API_JWT_VALIDATE_PATH @"/app/services/app/%@/jwt/validate"
+
+#define FRESHCHAT_API_USER_RENEW_BY_JWT_PATH @"/app/services/app/%@/user/renew-by-jwt"

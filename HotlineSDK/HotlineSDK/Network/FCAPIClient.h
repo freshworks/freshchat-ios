@@ -13,7 +13,10 @@
 
 enum FCHTTPResponseCode {
     BadRequest = 400,
-    Gone = 410
+    Conflict = 409,
+    Gone = 410,
+    UnAuthorized = 412,
+    TokenRequired = 428
 };
 
 @interface FCAPIClient : NSObject
@@ -23,6 +26,8 @@ enum FCHTTPResponseCode {
 typedef void(^HLNetworkCallback)(FCResponseInfo *responseInfo, NSError *error);
 
 +(id)sharedInstance;
+
+- (NSURLSessionDataTask *)request:(FCServiceRequest *)request isIdAuthEnabled: (BOOL) isAuthEnabled withHandler:(HLNetworkCallback)handler;
 
 -(NSURLSessionDataTask *)request:(FCServiceRequest *)request withHandler:(HLNetworkCallback)handler;
 

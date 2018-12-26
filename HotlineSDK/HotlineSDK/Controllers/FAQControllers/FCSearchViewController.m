@@ -265,7 +265,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row < self.searchResults.count) {
         FCArticleContent *article = self.searchResults[indexPath.row];
-        [FCFAQUtil launchArticleID:article.articleID withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions]; //TODO: - Pass this from outside - Rex
+        [FCFAQUtil launchArticleID:article.articleID withNavigationCtlr:self andFaqOptions:self.faqOptions fromLink:false]; //TODO: - Pass this from outside - Rex
     }
 }
 

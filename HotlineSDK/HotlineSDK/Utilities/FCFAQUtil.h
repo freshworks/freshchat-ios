@@ -16,8 +16,8 @@
 
 @interface FCFAQUtil : NSObject
 
-+(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(UIViewController *) controller andFaqOptions:(FAQOptions *)faqOptions;
-+(void) launchArticle:(FCArticles *) article withNavigationCtlr:(UIViewController *) controller andFaqOptions:(FAQOptions *)faqOptions;
++(void) launchArticleID:(NSNumber *) articleId withNavigationCtlr:(id) controller andFaqOptions:(FAQOptions *)faqOptions fromLink:(BOOL)fromLink;
++(void) launchArticle:(FCArticles *) article withNavigationCtlr:(id) controller andFaqOptions:(FAQOptions *)faqOptions fromLink:(BOOL)fromLink;
 +(FCArticleDetailViewController *) getArticleDetailController:(FCArticles *) article;
 +(void) setFAQOptions:(FAQOptions*) options onController:(FCViewController *)controller;
 +(BOOL) hasTags:(FAQOptions *) options;

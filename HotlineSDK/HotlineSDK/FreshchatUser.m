@@ -13,6 +13,7 @@
 #import "FCUsers.h"
 #import "FCCoreServices.h"
 #import "FCUserProperties.h"
+#import "FCJWTUtilities.h"
 
 
 @implementation FreshchatUser
@@ -29,6 +30,7 @@
 
 -(void)copyValuesFromStore {
     FCSecureStore *store = [FCSecureStore sharedInstance];
+    self.jwtToken = [store objectForKey:HOTLINE_DEFAULTS_USER_JWT_TOKEN];
     self.firstName = [store objectForKey:HOTLINE_DEFAULTS_USER_FIRST_NAME];
     self.lastName = [store objectForKey:HOTLINE_DEFAULTS_USER_LAST_NAME];
     self.email = [store objectForKey:HOTLINE_DEFAULTS_USER_EMAIL];
@@ -36,6 +38,7 @@
     self.phoneCountryCode = [store objectForKey:HOTLINE_DEFAULTS_USER_PHONE_COUNTRY_CODE];
     self.externalID = [store objectForKey:HOTLINE_DEFAULTS_USER_EXTERNAL_ID];
     self.restoreID = [store objectForKey:HOTLINE_DEFAULTS_USER_RESTORE_ID];
+    
 }
 
 -(void)resetUser{
@@ -47,6 +50,7 @@
     self.phoneCountryCode = nil;
     self.externalID = nil;
     self.restoreID = nil;
+    self.jwtToken = nil;
 }
 
 @end
