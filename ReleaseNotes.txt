@@ -1,4 +1,9 @@
 
+Ver 2.1.0 
+__________________________
+Enhancement
+- Ability to mask sensitive data present in user message
+
 Ver 2.0.0 
 __________________________
 Enhancements
