@@ -4,3 +4,4 @@
 target 'ObjectiveCSample' do
   # use_frameworks!
   pod 'FreshchatSDK'
+end
