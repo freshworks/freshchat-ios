@@ -844,6 +844,37 @@ static NSInteger networkIndicator = 0;
                                                alpha:componentColors[3]];
 }
 
+#pragma add regex expressions
+
++ (NSString *) applyRegexForInputText :(NSString *) inputText {
+    NSArray *freshchatRegexArray = [FCRemoteConfig sharedInstance].messageMaskConfig.messageMasks;
+    
+    for (NSDictionary *dict in freshchatRegexArray) {
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[dict objectForKey:@"regex"] options:0 error:&error];
+        NSRange searchedRange = NSMakeRange(0, [inputText length]);
+        
+        NSArray* matches = [regex matchesInString:inputText options:0 range: searchedRange];
+        for (NSTextCheckingResult* match in [matches reverseObjectEnumerator]) {
+            NSString* matchText = [inputText substringWithRange:[match range]];
+            inputText = [inputText stringByReplacingCharactersInRange:[match range] withString:[self replaceMatchString:matchText withString:[dict objectForKey:@"replacementStr"]]];
+        }
+    }
+    return inputText;
+}
+
++ (NSString *) replaceMatchString : (NSString *)matchStr withString : (NSString *)replaceStr{
+    if(replaceStr) {
+        if(replaceStr.length > 1){
+            return replaceStr;
+        }
+        else{
+            return [[NSString new] stringByPaddingToLength:[matchStr length] withString:replaceStr startingAtIndex:0];
+        }
+    }
+    return [[NSString new] stringByPaddingToLength:[matchStr length] withString:@"*" startingAtIndex:0];
+}
+
 + (void) addFlagToDisableUserPropUpdate {
     [[FCSecureStore sharedInstance] setBoolValue:TRUE forKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
 }

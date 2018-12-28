@@ -31,7 +31,8 @@
         self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
         self.accountActive                  = [self getDefaultAccountActive];
         self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
-        self.csatSettings                   = [[FCCSatSettings alloc]init];
+        self.csatSettings                    = [[FCCSatSettings alloc]init];
+        self.messageMaskConfig              = [[FCMessageMaskConfig alloc] init];
         self.userAuthConfig                 = [[FCUserAuthConfig alloc] init];
     }
     return self;
@@ -68,6 +69,7 @@
     NSDictionary *convConfigDict        = [configDict objectForKey:@"conversationConfig"];
     NSDictionary *csatSettingsDict      = [configDict objectForKey:@"csatSettings"];
     NSDictionary *userAuthConfig     = [configDict objectForKey:@"userAuthConfig"];
+    NSDictionary *messageMaskingConfigDict  = [configDict objectForKey:@"messageMaskingConfig"];
     
     [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
     [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
@@ -84,6 +86,11 @@
     if (csatSettingsDict != nil) {
         [self.csatSettings updateCSatConfig:csatSettingsDict];
     }
+    
+    if(messageMaskingConfigDict != nil) {
+        [self.messageMaskConfig updateMessageMaskingInfo:messageMaskingConfigDict];
+    }
+    
     if (userAuthConfig != nil) {
         [self.userAuthConfig updateUserAuthConfig:userAuthConfig];
     }

@@ -15,7 +15,7 @@
 #define SAMPLE_DEEPLINK_CONTROLLER @"LinkHandlerVC"
 #define IN_APP_BROWSER_STORYBOARD_CONTROLLER @"InAppBrowser"
 #define LAUNCH_SAMPLE_CONTROLLER NO
-#define LAUNCH_DEEPLINK_CONTROLLER YES
+#define LAUNCH_DEEPLINK_CONTROLLER NO
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

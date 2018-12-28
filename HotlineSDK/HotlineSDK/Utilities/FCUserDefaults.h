@@ -57,6 +57,8 @@
 
 #define FRESHCHAT_DEFAULTS_USER_IOS_VERSION @"freshchat_defaults_user_ios_version"
 
+#define FRESTCHAT_DEFAULTS_MESSAGE_MASK @"freshchat_defaults_message_mask"
+
 @interface FCUserDefaults : NSObject
 
 +(void)setObject:(id)object forKey:(NSString *)key;
