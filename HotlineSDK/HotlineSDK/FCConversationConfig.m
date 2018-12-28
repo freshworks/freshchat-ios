@@ -24,10 +24,7 @@
 }
 
 - (BOOL) getDefaultLaunchDeeplinkFromNotification {
-    if ([FCUserDefaults getObjectForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED] != nil) {
-        return [FCUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
-    }
-    return YES;
+    return [FCUserDefaults getBoolForKey:CONFIG_RC_NOTIFICATION_DEEPLINK_ENABLED];
 }
 
 - (int) getDefaultAgentAvatar {

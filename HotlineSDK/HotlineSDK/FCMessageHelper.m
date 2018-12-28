@@ -17,6 +17,7 @@
 #import "FCSecureStore.h"
 #import <ImageIO/ImageIO.h>
 #import "FCUserUtil.h"
+#import "FCUserdefaults.h"
 #import "FCMessages.h"
 #import "FCJWTUtilities.h"
 #import "FCLocalNotification.h"
@@ -195,6 +196,8 @@ __weak static id <KonotorDelegate> _delegate;
 
 +(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(FCConversations *)conversation andChannel:(FCChannels *)channel{
     [FCUserUtil setUserMessageInitiated];
+    NSArray *freshchatRegexArray = [FCUserDefaults getObjectForKey:FRESTCHAT_DEFAULTS_MESSAGE_MASK];
+    textFeedback = freshchatRegexArray.count > 0 ? [FCUtilities applyRegexForInputText:textFeedback] : textFeedback;
     [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
     [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"MESSAGE_SENT"}];
 }
