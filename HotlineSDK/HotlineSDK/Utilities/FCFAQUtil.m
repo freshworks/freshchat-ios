@@ -16,25 +16,45 @@
 @implementation FCFAQUtil
 
 +(void) launchArticleID:(NSNumber *) articleId
-     withNavigationCtlr:(UIViewController *) controller
-          andFaqOptions:(FAQOptions *)faqOptions{
+     withNavigationCtlr:(id) controller
+          andFaqOptions:(FAQOptions *)faqOptions
+            fromLink:(BOOL)fromLink {
     NSManagedObjectContext *mContext = [FCDataManager sharedInstance].mainObjectContext;
     [mContext performBlock:^{
         FCArticles *article = [FCArticles getWithID:articleId inContext:mContext];
         if(article){
-            [FCFAQUtil launchArticle:article withNavigationCtlr:controller andFaqOptions:faqOptions];
+            [FCFAQUtil launchArticle:article withNavigationCtlr:controller andFaqOptions:faqOptions fromLink:fromLink];
         }
     }];
 }
 
 +(void) launchArticle:(FCArticles *) article
-   withNavigationCtlr:(UINavigationController *) controller
-           andFaqOptions:(FAQOptions *)faqOptions;{
+        withNavigationCtlr:(id) controller
+           andFaqOptions:(FAQOptions *)faqOptions
+             fromLink: (BOOL) fromLink {
     dispatch_async(dispatch_get_main_queue(),^{
+        UIViewController *viewController = nil;
+        UINavigationController *navigationController = nil;
         FCArticleDetailViewController *articleDetailController = [self getArticleDetailController:article];
-        [FCFAQUtil setFAQOptions:faqOptions onController:articleDetailController];
+        if(fromLink) {
+            articleDetailController.isFilteredView = YES;
+        } else {
+            [FCFAQUtil setFAQOptions:faqOptions onController:articleDetailController];
+        }
+        if([controller isKindOfClass:[UIViewController class]]) {
+            viewController = (UIViewController *) controller;
+            navigationController = viewController.navigationController;
+        } else if([controller isKindOfClass:[UINavigationController class]]) {
+            navigationController = (UINavigationController *) controller;
+        }
         FCContainerController *container = [[FCContainerController alloc]initWithController:articleDetailController andEmbed:NO];
-        [controller pushViewController:container animated:YES];
+        if (navigationController) {
+            [navigationController pushViewController:container animated:YES];
+        } else {
+            articleDetailController.showCloseButton = YES;
+            UINavigationController *navController = [[UINavigationController alloc]     initWithRootViewController:container];
+            [viewController presentViewController:navController animated:YES completion:nil];
+        }
     });
 }
 

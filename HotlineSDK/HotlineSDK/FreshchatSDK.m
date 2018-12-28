@@ -50,6 +50,10 @@
 #import "FCUserDefaults.h"
 #import "FDImageView.h"
 #import "FCVotingManager.h"
+#import "FCJWTAuthValidator.h"
+#import "FCJWTUtilities.h"
+#import "FCJWTAuthValidator.h"
+
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 
@@ -100,7 +104,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 +(NSString *)SDKVersion{
-    return FRESHCHAT_SDK_VERSION;
+    return FRESHCHAT_SDK_BUILD_NUMBER;
 }
 
 -(BOOL)checkPersistence {
@@ -128,7 +132,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)initWithConfig:(FreshchatConfig *)config{
     @try {
-        [self initWithConfig:config completion:nil];
+        [self initWithConfig:config completion:^(NSError *error) {
+            if(error == nil) {
+                [self newSession];
+            }
+        }];
     } @catch (NSException *exception) {
         [FCMemLogger sendMessage:exception.description fromMethod:NSStringFromSelector(_cmd)];
         if([exception.name isEqualToString: @"FreshchatInvalidArgumentException"]){
@@ -192,6 +200,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
         [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
+    
+    [FCJWTUtilities setTokenInitialState];
     [FCUserUtil registerUser:completion];
     if([FCUserUtil isUserRegistered]) {
         [FCUtilities postUnreadCountNotification];
@@ -200,6 +210,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 - (void) addInvalidAppIDKeyExceptionString :(NSString *) string{
     [NSException raise:@"FreshchatInvalidArgumentException" format:@"Initialization failed : FreshchatSDK initialized with invalid %@", string];
+}
+
+- (void) addInvalidMethodException : (NSString *) apiName {
+    [NSException raise:@"FreshchatInvalidMethodException" format:@"API failed : FreshchatSDK failed with invalid API - %@", apiName];
 }
 
 -(void)checkMediaPermissions:(FreshchatConfig *)config{
@@ -231,7 +245,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void) registerAppNotificationListeners{
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(newSession:)
+                                             selector: @selector(newSession)
                                                  name: UIApplicationDidBecomeActiveNotification object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground:)
@@ -283,7 +297,6 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [FCCoreServices uploadUnuploadedPropertiesWithForceUpdate:true];
     }
 }
-
 
 -(void)cleanUpData:(void (^)())completion{
     FCDataManager *dataManager = [FCDataManager sharedInstance];
@@ -342,11 +355,94 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)setUser:(FreshchatUser *)user{
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        ALog(@"Freshchat API : JWT is Enabled for thisb please use setUserWithIdToken!");
+        return;
+    }
     [FCUsers storeUserInfo:user];
     [FCCoreServices uploadUnuploadedProperties];
 }
 
+
+- (NSString *) getFreshchatUserId{
+    return [FCUtilities getUserAliasWithCreate];
+}
+
+- (NSString *)getUserIdTokenStatus{
+    switch ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState]) {
+        case 1:
+            return @"TOKEN_VALID";
+        case 2:
+            return @"TOKEN_NOT_SET";
+        case 3:
+            return @"TOKEN_NOT_PROCESSED";
+        case 4:
+            return @"TOKEN_EXPIRED";
+        case 5:
+            return @"TOKEN_INVALID";
+        default:
+            return @"TOKEN_NOT_SET";
+    }
+}
+
+- (void) setUserWithIdToken :(NSString *) jwtIdToken {
+    
+    [FCJWTUtilities removePendingRestoreJWTToken];
+    [FCUtilities removeFlagToDisableUserPropUpdate];
+    if(![FCJWTUtilities canProgressSetUserForToken:jwtIdToken]) return;
+    
+    if([[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH]) {
+        //TODO: Should not set to Expired state should rework
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
+    } else {
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
+    }
+    
+    //To store if internet is not available
+    [FCJWTUtilities setPendingJWTToken:jwtIdToken];
+    if(![FCUtilities isRemoteConfigFetched] && [[FCReachabilityManager sharedInstance] isReachable]){
+        [self performPendingTasks];
+        return;
+    }
+    [FCCoreServices validateJwtToken:jwtIdToken completion:^(BOOL valid, NSError *error) {
+        if(!error && valid) {
+            [FCUsers updateUserWithIdToken:jwtIdToken]; 
+            [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
+            [FCUtilities initiatePendingTasks];
+        } else {
+            if([[FCReachabilityManager sharedInstance] isReachable]) {
+                [FCCoreServices resetUserData:^{
+                    [FCUtilities processResetChanges];
+                    [FCUsers updateUserWithIdToken:jwtIdToken];
+                    [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
+                }];
+            }
+        }
+    }];
+}
+
+-(void)restoreUserWithIdToken:(NSString *) jwtIdToken{
+    [FCJWTUtilities removePendingJWTToken];
+    
+    if(![FCJWTUtilities canProgressUserRestoreForToken:jwtIdToken]) return;
+    
+    if ([FCJWTUtilities getReferenceID:jwtIdToken]) {
+        [FCJWTUtilities setPendingRestoreJWTToken:jwtIdToken];
+        
+        if(![FCUtilities isRemoteConfigFetched] && [[FCReachabilityManager sharedInstance] isReachable]){
+            [self performPendingTasks];
+            return;
+        }
+        [FCUtilities resetDataAndRestoreWithJwtToken:jwtIdToken withCompletion:nil];
+    } else {
+        ALog(@"Freshchat : JWT reference id missing.");
+    }
+}
+
 -(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID {
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        ALog(@"Freshchat : identifyUserWithExternalID is not allowed in auth strict mode");
+    }
     if(externalID == nil) { //Safety check
         return;
     }
@@ -408,6 +504,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)setUserProperties:(NSDictionary*)props{
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        ALog(@"Freshchat API : JWT is Enabled.");
+        return;
+    }
     [[FCDataManager sharedInstance].mainObjectContext performBlock:^{
         NSDictionary *filteredProps = [FCUtilities filterValidUserPropEntries:props];
         if(filteredProps){
@@ -430,6 +530,10 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 
 -(void)setUserPropertyforKey:(NSString *) key withValue:(NSString *)value{
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        ALog(@"Freshchat API : JWT is Enabled.");
+        return;
+    }
     if (key && value) {
         [self setUserProperties:@{ key : value}];
     }
@@ -458,7 +562,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 /*  This function is called during every launch &
  when the SDK's app is transitioned from background to foreground  */
 
--(void)newSession:(NSNotification *)notification{
+-(void)newSession{
     if([FCUtilities hasInitConfig]) {
         if(FC_POLL_WHEN_APP_ACTIVE){
             [self.messagePoller begin];
@@ -493,13 +597,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)performPendingTasks{
     FDLog(@"Performing pending tasks");
+    [FCJWTUtilities performPendingJWTTasks];
     if ([FCUserUtil canRegisterUser]) {
         [FCUserUtil registerUser:nil];
     }
     if([FCUtilities hasInitConfig]) {
         [FCCoreServices performDAUCall];
         if([FCUtilities canMakeRemoteConfigCall]){
-            [FCCoreServices fetchRemoteConfig];            
+            [FCCoreServices fetchRemoteConfig];
         }
         dispatch_async(dispatch_get_main_queue(),^{
             if([FCUserUtil isUserRegistered]){
@@ -517,6 +622,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
                 [FCCoreServices uploadUnuploadedProperties];
                 [FCMessages uploadAllUnuploadedMessages];
                 [FCMessageServices uploadUnuploadedCSAT];
+            } else {
+                [FCJWTUtilities setTokenInitialState];
             }
             [self updateLocaleMeta];
             [[[FCSolutionUpdater alloc]init] fetch];
@@ -618,6 +725,14 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
     }
 }
 
+-(void)openFreshchatDeeplink:(NSString *)linkStr
+     viewController:(UIViewController *) viewController {
+    BOOL hasProcessed = [FCUtilities handleLink:[[NSURL alloc]initWithString:linkStr] faqOptions:nil navigationController:viewController handleFreshchatLinks:YES];
+    if(!hasProcessed) {
+        NSLog(@"Freshchat Error: Link not processed.");
+    }
+}
+
 -(BOOL)isFreshchatNotification:(NSDictionary *)info{
     @try {
         return [FCNotificationHandler isFreshchatNotification:info];
@@ -635,6 +750,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         if(![self isFreshchatNotification:info]){
             return;
         }
+        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"NOTIFICATION_RECEIVED"}];
         self.notificationHandler = [[FCNotificationHandler alloc]init];
         [self.notificationHandler handleNotification:info appState:appState];
     } @catch (NSException *exception) {
@@ -776,11 +892,15 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 }
 
 -(void) sendMessage:(FreshchatMessage *)messageObject{
-    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
-        return;
-    }
     if([FCUtilities isAccountDeleted]){
         NSLog(@"%@", HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT));
+        return;
+    }
+    if([FCJWTUtilities isJWTTokenInvalid]){
+        ALog(@"Freshchat Error : Please set the user with valid token first.");
+        return;
+    }
+    if(messageObject.message.length == 0 || messageObject.tag.length == 0){
         return;
     }
     NSManagedObjectContext *mainContext = [[FCDataManager sharedInstance] mainObjectContext];
@@ -798,6 +918,11 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                 NSSet *conversations = channel.conversations;
                 if(conversations && [conversations count] > 0 ){
                     conversation = [conversations anyObject];
+                }
+                if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]
+                   && ([FreshchatUser sharedInstance].jwtToken == nil && ![[FreshchatUser sharedInstance].jwtToken isEqualToString:@""])){
+                    ALog(@"Freshchat Error : Please Validate the user first.");
+                    return;
                 }
                 [FCMessageHelper uploadMessageWithImage:nil textFeed:messageObject.message onConversation:conversation andChannel:channel];
             }
@@ -834,7 +959,8 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
                        withCompletion: (void(^)())completion  {
     void (^clearHLControllers)() = ^void() {
         for(UIViewController *tempVC in controller.childViewControllers){
-            if([tempVC isKindOfClass:[FCContainerController class]]){
+            if([tempVC isKindOfClass:[FCContainerController class]] ||
+               [tempVC isKindOfClass:[UITabBarController class]] ) {
                 UIViewController *firstViewController = [tempVC.childViewControllers firstObject];
                 if([firstViewController isKindOfClass:[FCChannelViewController class]] ||
                    [firstViewController isKindOfClass:[FCCategoryGridViewController class]] ||

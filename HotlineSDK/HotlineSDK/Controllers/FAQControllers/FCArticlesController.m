@@ -207,7 +207,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.articles.count) {
         FCArticles *article = self.articles[indexPath.row];
-        [FCFAQUtil launchArticle:article withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions];
+        [FCFAQUtil launchArticle:article withNavigationCtlr:self andFaqOptions:self.faqOptions fromLink:false];
     }
 }
 

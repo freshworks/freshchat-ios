@@ -8,5 +8,6 @@
 
 @protocol HLMessageCellDelegate <NSObject>
     -(void)performActionOn:(FragmentData *)fragment;
+    -(BOOL)handleLinkDelegate: (NSURL *)url;
 @end
 

@@ -39,7 +39,6 @@
 @property (strong, nonatomic) NSString *appAudioCategory;
 @property (strong, nonatomic) NSLayoutConstraint *bottomViewHeightConstraint;
 @property (nonatomic, strong) FAQOptions *faqOptions;
-@property  BOOL isFilteredView;
 
 @end
 
@@ -165,23 +164,36 @@
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.parentViewController.navigationItem.rightBarButtonItem = rightBarButton;
     
-    if(self.isFilteredView){
-        [[FCTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
-            if([articleIds count] == 1){
-                if(!self.embedded){
-                    UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
-                    self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    if(self.isFilteredView) {
+        if(self.faqOptions.tags.count > 0) {
+            [[FCTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray *articleIds) {
+                if([articleIds count] == 1){
+                    self.showCloseButton = YES;
+                    [self setBackButton];
                 }
-            }
-            else {
-                [self configureBackButton];
-            }
-        }];
+                else {
+                    [self configureBackButton];
+                }
+            }];
+        } else {
+            [self setBackButton];
+        }
     }
     else {
         [self configureBackButton];
     }
 }
+
+
+-(void)setBackButton {
+    if(!self.embedded && self.showCloseButton){
+        UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
+    } else {
+        [self configureBackButton];
+    }
+}
+
 
 -(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
     return (self.isFromSearchView? nil : self);
@@ -231,13 +243,9 @@
 
 -(BOOL)webView:(UIWebView *)inWeb shouldStartLoadWithRequest:(NSURLRequest *)inRequest navigationType:(UIWebViewNavigationType)inType {
     if (inType == UIWebViewNavigationTypeLinkClicked){
-        if([[[inRequest URL] scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame){
-            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-            NSNumber *articleId = [f numberFromString:[[inRequest URL] host]]; // host returns articleId since the URL is of pattern "faq://<articleId>
-            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:self.navigationController andFaqOptions:self.faqOptions];
-            return NO;
+        if(![FCUtilities handleLink:[inRequest URL] faqOptions:self.faqOptions navigationController:self handleFreshchatLinks:NO]) {
+            [[UIApplication sharedApplication] openURL:[inRequest URL]];
         }
-        [[UIApplication sharedApplication] openURL:[inRequest URL]];
         return NO;
     }
     return YES;
@@ -292,7 +300,6 @@
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     [self handleArticleVotePrompt];
 }
-
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){

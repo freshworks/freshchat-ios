@@ -17,8 +17,11 @@
 #import "FCSecureStore.h"
 #import <ImageIO/ImageIO.h>
 #import "FCUserUtil.h"
-
 #import "FCMessages.h"
+#import "FCJWTUtilities.h"
+#import "FCLocalNotification.h"
+#import "FCRemoteConfig.h"
+#import "FCJWTAuthValidator.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -161,6 +164,12 @@ __weak static id <KonotorDelegate> _delegate;
     [channel addMessagesObject:message];
     [[FCDataManager sharedInstance]save];
     
+    //Check for JWT Auth and expiry
+    if([FCRemoteConfig sharedInstance].isUserAuthEnabled && [FCJWTUtilities isValidityExpiedForJWTToken:[FreshchatUser sharedInstance].jwtToken]){
+        [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_EXPIRED];
+        return;
+    }
+    
     if(![FCUserUtil isUserRegistered]) {
         [FCUserUtil registerUser:nil];
     } else {
@@ -187,6 +196,7 @@ __weak static id <KonotorDelegate> _delegate;
 +(void) uploadMessageWithImage:(UIImage *)image textFeed:(NSString *)textFeedback onConversation:(FCConversations *)conversation andChannel:(FCChannels *)channel{
     [FCUserUtil setUserMessageInitiated];
     [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
+    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"MESSAGE_SENT"}];
 }
 
 +(void)uploadImage:(UIImage *)image onConversation:(FCConversations *)conversation onChannel:(FCChannels *)channel{

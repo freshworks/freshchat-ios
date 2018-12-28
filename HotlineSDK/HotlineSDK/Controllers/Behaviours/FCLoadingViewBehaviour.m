@@ -20,7 +20,8 @@
 #import "FCEmptyResultView.h"
 #import "FCAutolayoutHelper.h"
 #import "FCReachabilityManager.h"
-
+#import "FCRemoteConfig.h"
+#import "FCJWTAuthValidator.h"
 
 @interface  FCLoadingViewBehaviour ()
 
@@ -29,6 +30,8 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) FCEmptyResultView *emptyResultView;
 @property (nonatomic) enum SupportType solType;
+@property (nonatomic) BOOL isWaitingForJWT;
+@property (nonatomic, strong) NSTimer *loadingDismissTimer;
 
 @end
 
@@ -40,6 +43,7 @@
         self.loadingViewDelegate = viewController;
         self.theme = [FCTheme sharedInstance];
         self.solType = solType;
+        self.isWaitingForJWT = FALSE;
     }
     return self;
 }
@@ -59,7 +63,12 @@
 
 -(void)addLoadingIndicator{
     if(self.activityIndicator || self.loadingViewDelegate == nil){
-        return;
+        if(self.isWaitingForJWT){
+            [self.activityIndicator removeFromSuperview];
+        }
+        else{
+            return;
+        }
     }
     UIView *view = self.loadingViewDelegate.view;
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -68,7 +77,8 @@
     self.activityIndicator.color = [[FCTheme sharedInstance] progressBarColor];
     [self.activityIndicator startAnimating];
     [FCAutolayoutHelper centerX:self.activityIndicator onView:view M:1 C:0];
-    [FCAutolayoutHelper centerY:self.activityIndicator onView:view M:1.5 C:0];
+    CGFloat multiplier = (self.isWaitingForJWT) ? 1.0 : 1.5;
+    [FCAutolayoutHelper centerY:self.activityIndicator onView:view M:multiplier C:0];
 }
 
 -(FCEmptyResultView *)emptyResultView
@@ -96,7 +106,9 @@
         }
         
         if(!isLoading || [FCUtilities isAccountDeleted]){
-            [self removeLoadingIndicator];
+            if(!self.isWaitingForJWT) {
+                [self removeLoadingIndicator];
+            }
         }
         if(count == 0) {
             NSString *message;
@@ -112,15 +124,54 @@
             else {
                 message = [self.loadingViewDelegate emptyText];
             }
+            
+            if (self.isWaitingForJWT) {
+                
+                self.emptyResultView.emptyResultImage.image = nil;
+                message = nil;
+                self.activityIndicator.transform = CGAffineTransformMakeScale(1.7f, 1.7f);
+                if([[FCJWTAuthValidator sharedInstance] canStartLoadingTimer]
+                   && self.loadingDismissTimer == nil ){
+                    self.loadingDismissTimer = [NSTimer scheduledTimerWithTimeInterval:([FCRemoteConfig sharedInstance].userAuthConfig.authTimeOutInterval / 1000 )
+                                                                      target:self
+                                                                    selector:@selector(dismissFreshchatViews)
+                                                                    userInfo:nil
+                                                                     repeats:NO];
+                }
+            }
             self.emptyResultView.emptyResultLabel.text = message;
             [self.loadingViewDelegate.view addSubview:self.emptyResultView];
             [FCAutolayoutHelper center:self.emptyResultView onView:self.loadingViewDelegate.view];
         }
         else{
-            self.emptyResultView.frame = CGRectZero;
-            [self.emptyResultView removeFromSuperview];
+            if (!self.isWaitingForJWT) {
+                self.emptyResultView.frame = CGRectZero;
+                [self.emptyResultView removeFromSuperview];
+            }
         }
     });
+}
+
+- (void) dismissFreshchatViews{
+    [[Freshchat sharedInstance] dismissFreshchatViews];
+}
+
+-(void) setJWTState:(BOOL) isAuthInProgress {
+    self.isWaitingForJWT = isAuthInProgress;
+}
+
+-(void) showLoadingScreen {
+    [self load:0];
+}
+
+-(void) hideLoadingScreen {
+    [self updateResultsView:NO andCount:1];
+    [self killTimer];
+}
+
+- (void)killTimer {
+    [self.loadingDismissTimer invalidate];
+    self.loadingDismissTimer = nil;
 }
 
 @end

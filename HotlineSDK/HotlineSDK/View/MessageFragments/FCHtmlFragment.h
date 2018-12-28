@@ -8,14 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "FCMessageFragments.h"
+#import "FCProtocols.h"
 
 enum ConvMessageType {
     AGENT  = 1,
     USER = 2
 };
 
-@interface FCHtmlFragment : UITextView
+@interface FCHtmlFragment : UITextView <UITextViewDelegate>
 
--(id) initFragment: (FragmentData *) fragment withFont :(UIFont *)font andType:(enum ConvMessageType) type;
-
+    -(id) initFragment: (FragmentData *) fragment withFont :(UIFont *)font andType:(enum ConvMessageType) type;
+    @property (nonatomic, weak) id<HLMessageCellDelegate> mcDelegate;
 @end

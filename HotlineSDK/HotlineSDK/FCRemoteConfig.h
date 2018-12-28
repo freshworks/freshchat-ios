@@ -12,6 +12,7 @@
 #import "FCConversationConfig.h"
 #import "FCCSatSettings.h"
 #import "FCUserDefaults.h"
+#import "FCUserAuthConfig.h"
 
 @interface FCRemoteConfig : NSObject
 
@@ -21,16 +22,19 @@
 @property (nonatomic, assign) long sessionTimeOutInterval;
 @property (nonatomic, assign) float activeConvFetchBackoffRatio;
 @property (nonatomic, assign) long activeConvWindow;
+@property (nonatomic, assign) BOOL authJWTEnabled;
 
 @property (nonatomic, strong) FCConversationConfig *conversationConfig;
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
 @property (nonatomic, strong) FCEnabledFeatures *enabledFeatures;
 @property (nonatomic, strong) FCCSatSettings *csatSettings;
+@property (nonatomic, strong) FCUserAuthConfig *userAuthConfig;
 
 - (void) updateRemoteConfig : (NSDictionary *) configDict;
 
 - (BOOL) isActiveInboxAndAccount;
 - (BOOL) isActiveFAQAndAccount;
 - (BOOL) isActiveConvAvailable;
+- (BOOL) isUserAuthEnabled;
 
 @end

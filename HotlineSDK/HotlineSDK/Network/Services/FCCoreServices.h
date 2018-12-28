@@ -22,6 +22,8 @@
 
 -(NSURLSessionDataTask *)updateSDKBuildNumber:(NSString *)SDKVersion;
 
++(NSURLSessionDataTask *)validateJwtToken:(NSString *)jwtIdToken completion:(void(^)(BOOL valid, NSError *error))handler;
+
 +(NSURLSessionDataTask *)registerUserConversationActivity :(FCMessages *)message;
 
 +(void)uploadUnuploadedProperties;
@@ -39,6 +41,8 @@
 +(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FCResponseInfo *responseInfo, NSError *error))handler;
 
 +(NSURLSessionDataTask *)restoreUserWithExtId:(NSString *)extId restoreId:(NSString *)restoreIdVal withCompletion:(void (^)(NSError *))completion;
+
++(NSURLSessionDataTask *)restoreUserWithJwtToken:(NSString *)jwtIdToken withCompletion:(void (^)(NSError *))completion;
 
 +(void) resetUserData:(void (^)())completion;
 

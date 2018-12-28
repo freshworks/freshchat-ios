@@ -33,8 +33,11 @@
 #import "FCLoadingViewBehaviour.h"
 #import "FCSecureStore.h"
 #import "FCCSATUtil.h"
+#import "FCJWTAuthValidator.h"
+#import "FCJWTUtilities.h"
+#import "FCRemoteConfig.h"
 
-@interface FCChannelViewController () <HLLoadingViewBehaviourDelegate>
+@interface FCChannelViewController () <HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *channels;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -44,29 +47,11 @@
 @property (nonatomic, strong) FCTheme *theme;
 @property BOOL isFilteredView;
 @property (nonatomic, strong) FCLoadingViewBehaviour *loadingViewBehaviour;
+@property (nonatomic) BOOL isJWTAlertShown;
 
 @end
 
 @implementation FCChannelViewController
-
--(FCLoadingViewBehaviour*)loadingViewBehaviour {
-    if(_loadingViewBehaviour == nil){
-        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
-    }
-    return _loadingViewBehaviour;
-}
-
--(UIView *)contentDisplayView{
-    return self.tableView;
-}
-
--(NSString *)emptyText{
-    return HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
-}
-
--(NSString *)loadingText{
-    return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
-}
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     [super willMoveToParentViewController:parent];
@@ -96,16 +81,16 @@
     return NO;
 }
 
--(void)viewDidLoad{
-    [super viewDidLoad];
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [FCCSATUtil deleteExpiredCSAT];
     [self.loadingViewBehaviour load:self.channels.count];
     [self loadChannels];
     [self checkRestoreStateChanged];
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        [self addJWTObservers];
+        [self jwtStateChange];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -177,7 +162,6 @@
         }
         [self.tableView reloadData];
     }
-
 }
  
 
@@ -254,6 +238,9 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self localNotificationUnSubscription];
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        [self removeJWTObservers];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -369,8 +356,78 @@
                      withRowAnimation:UITableViewRowAnimationNone];
 }
 
--(void)dealloc{
+-(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
+    dispatch_async(dispatch_get_main_queue(), ^{ /* show alert view */
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
+                                            cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    });
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        if (buttonIndex == [alertView cancelButtonIndex]){
+            self.isJWTAlertShown = FALSE;
+        }
+    }
+}
+
+-(void)dealloc {
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
+        [_loadingViewBehaviour killTimer];
+        self.loadingViewBehaviour = nil;
+    }
     [self localNotificationUnSubscription];
+}
+
+#pragma mark - LoadingView behaviour change
+
+-(FCLoadingViewBehaviour*)loadingViewBehaviour {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
+    }
+    return _loadingViewBehaviour;
+}
+
+-(UIView *)contentDisplayView{
+    return self.tableView;
+}
+
+-(NSString *)emptyText{
+    return HLLocalizedString(LOC_EMPTY_CHANNEL_TEXT);
+}
+
+-(NSString *)loadingText{
+    return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
+}
+
+#pragma mark - Show/Hide JWT Loading/Alert
+
+-(void) showJWTLoading {
+    [_loadingViewBehaviour setJWTState:TRUE];
+    [_loadingViewBehaviour showLoadingScreen];
+    [self.tableView setHidden:true];
+}
+
+-(void) hideJWTLoading {
+    [_loadingViewBehaviour setJWTState:FALSE];
+    [_loadingViewBehaviour hideLoadingScreen];
+    [self.tableView setHidden:false];
+}
+
+-(void) showJWTVerificationFailedAlert {
+    [self showJWTLoading];
+    if(!self.isJWTAlertShown) {
+        [self showAlertWithTitle:nil
+                      andMessage:HLLocalizedString(LOC_JWT_FAILURE_ALERT_MESSAGE)];
+        self.isJWTAlertShown = TRUE;
+        [_loadingViewBehaviour killTimer];
+        if(self.tabBarController != nil) {
+            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        } else {
+            [self dismissViewControllerAnimated:true completion:nil];
+        }
+    }
 }
 
 @end

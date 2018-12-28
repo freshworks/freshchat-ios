@@ -27,6 +27,10 @@
 #import "FCAutolayoutHelper.h"
 #import "FCContainerController.h"
 #import "FDImageView.h"
+#import "FCJWTUtilities.h"
+#import "FCJWTAuthValidator.h"
+#import "FCFAQUtil.h"
+#import "FCChannelUtil.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -143,11 +147,6 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(NSString *)generateUserAlias{
     NSString *userAlias;
-    //TODO: This logic is too nested. Need to remove this - Rex
-    if(![[FCSecureStore sharedInstance] checkItemWithKey:HOTLINE_DEFAULTS_APP_ID]){
-        FDLog(@"WARNING : getUserAlias Called before init");
-        return nil; // safety check for functions called before init.
-    }
     FCSecureStore *persistedStore = [FCSecureStore persistedStoreInstance];
     NSString *uuIdLookupKey = [FCUtilities getUUIDLookupKey];
     BOOL isExistingUser = [persistedStore checkItemWithKey:uuIdLookupKey];
@@ -402,6 +401,11 @@ static NSInteger networkIndicator = 0;
     }
     return false;
 }
+
++ (BOOL) isRemoteConfigFetched {
+    return ([FCUserDefaults getObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME])? TRUE :FALSE;
+}
+
 +(BOOL) canMakeSessionCall {
     if(![FCUserDefaults getObjectForKey:FRESHCHAT_DEFAULTS_SESSION_UPDATED_TIME]){
         return  true;
@@ -510,8 +514,7 @@ static NSInteger networkIndicator = 0;
 
 + (void) cacheImageWithUrl : (NSString *) url {
     FDWebImageManager *manager = [FDWebImageManager sharedManager];
-    [manager loadImageWithURL:[NSURL URLWithString:url] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        
+    [manager loadImageWithURL:[NSURL URLWithString:url] options:FDWebImageDelayPlaceholder progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {        
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, FDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         FDLog(@"Image cached - %@", imageURL);
     }];
@@ -667,6 +670,7 @@ static NSInteger networkIndicator = 0;
 }
 
 
+
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion {
     [FCCoreServices resetUserData:^{
         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
@@ -680,6 +684,22 @@ static NSInteger networkIndicator = 0;
             completion();
         }
     }];
+}
+
++(void) resetDataAndRestoreWithJwtToken: (NSString *) jwtIdToken withCompletion:(void (^)())completion {
+     [FCCoreServices resetUserData:^{
+         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
+         [FCUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];
+         FreshchatUser* oldUser = [FreshchatUser sharedInstance];
+         [FCUsers storeUserInfo:oldUser];
+         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_NOT_SET];
+         if([[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_ID] && [[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_APP_KEY]){
+             [FCCoreServices restoreUserWithJwtToken:jwtIdToken withCompletion:nil];
+         }
+         if(completion) {
+             completion();
+         }
+     }];
 }
 
 +(void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID {
@@ -699,14 +719,36 @@ static NSInteger networkIndicator = 0;
 
 + (void) updateUserWithData : (NSDictionary*) userDict{
     FreshchatUser *user = [FreshchatUser sharedInstance];
-    user.firstName = userDict[@"firstName"];
-    user.lastName = userDict[@"lastName"];
-    user.email = userDict[@"email"];
-    user.phoneNumber = userDict[@"phone"];
-    user.phoneCountryCode = userDict[@"phoneCountry"];
-    user.externalID = userDict[@"identifier"];
-    user.restoreID = userDict[@"restoreId"];
-    [[Freshchat sharedInstance]setUser:user];
+    if(userDict[@"firstName"]){
+        user.firstName = userDict[@"firstName"];
+    }
+    if(userDict[@"lastName"]){
+        user.lastName = userDict[@"lastName"];
+    }
+    if(userDict[@"email"]){
+        user.email = userDict[@"email"];
+    }
+    if(userDict[@"phone"]){
+        user.phoneNumber = userDict[@"phone"];
+    }
+    if(userDict[@"phoneCountry"]){
+        user.phoneCountryCode = userDict[@"phoneCountry"];
+    }
+    if(userDict[@"identifier"]){
+        user.externalID = userDict[@"identifier"];
+    }
+    if(userDict[@"restoreId"]){
+        user.restoreID = userDict[@"restoreId"];
+    }
+    if(userDict[@"jwtUserAuthToken"]){
+        user.jwtToken = userDict[@"jwtUserAuthToken"];
+    }
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        [FCUsers storeUserInfo:user];
+    }
+    else{
+        [[Freshchat sharedInstance]setUser:user];
+    }
     [self updateUserAlias: userDict[@"alias"]];
 }
 
@@ -763,6 +805,12 @@ static NSInteger networkIndicator = 0;
     return (BOOL)[store boolValueForKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
 }
 
++ (void) processResetChanges {
+    [FreshchatUser sharedInstance].isRestoring = false;
+    [FCLocalNotification post:FRESHCHAT_USER_RESTORE_STATE info:@{@"state":@1}];
+    [[FCSecureStore sharedInstance] removeObjectWithKey:FRESHCHAT_DEFAULTS_IS_FIRST_AUTH];
+}
+
 + (void) handleGDPRForResponse :(FCResponseInfo *)responseInfo {
     if([[responseInfo responseAsDictionary][@"errorCode"] integerValue] == ERROR_CODE_ACCOUNT_DELETED) {
         [self updateAccountDeletedStatusAs:TRUE];
@@ -796,5 +844,88 @@ static NSInteger networkIndicator = 0;
                                                alpha:componentColors[3]];
 }
 
-@end
++ (void) addFlagToDisableUserPropUpdate {
+    [[FCSecureStore sharedInstance] setBoolValue:TRUE forKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
+}
 
++ (void) removeFlagToDisableUserPropUpdate {
+    [[FCSecureStore sharedInstance] setBoolValue:FALSE forKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
+}
+
++ (BOOL) canUpdateUserProperties {
+    return ![[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
+}
+
++(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions
+    navigationController:(UIViewController *) navController
+    handleFreshchatLinks:(BOOL) handleFreshchatLinks {
+    
+    if(url == nil) {
+        return NO;
+    }
+    
+    if ([[url scheme] caseInsensitiveCompare:@"freshchat"] == NSOrderedSame ) {
+        if (([[url host] caseInsensitiveCompare:@"faq"] == NSOrderedSame) &&
+            ([[url path] caseInsensitiveCompare:@"/article"] == NSOrderedSame)) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
+            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+                if (queryItem.value == nil) {
+                    continue;
+                }
+                if ([queryItem.name isEqualToString:@"article_id"]) {
+                    articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
+                    break;
+                }
+            }
+            if(articleID.integerValue != -1) {                
+                [FCFAQUtil launchArticleID:articleID withNavigationCtlr:navController andFaqOptions:faqOptions fromLink:true];
+                return YES;
+            }
+        } else if (([[url host] caseInsensitiveCompare:@"channels"] == NSOrderedSame)) {
+            NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSArray *tags;
+            NSNumber *channelID;
+            NSString *title;
+            for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
+                if (queryItem.value == nil) {
+                    continue;
+                }
+                if ([queryItem.name isEqualToString:@"tags"]) {
+                    NSMutableArray *tagsArr =[[NSMutableArray alloc] initWithArray:[queryItem.value componentsSeparatedByString:@","]];
+                    tags = [FCUtilities convertTagsArrayToLowerCase:tagsArr];
+                }
+                
+                if ([queryItem.name isEqualToString:@"id"]) {
+                    channelID = [[NSNumber alloc]initWithInteger:[queryItem.value integerValue]];
+                }
+                if ([queryItem.name isEqualToString:@"title"]) {
+                    title = queryItem.value;
+                }
+            }
+            if (tags!=nil) {
+                [FCChannelUtil launchChannelWithTags:tags withTitle:title withNavigationCtlr:navController];
+                return YES;
+            } else if(channelID!=nil) {
+                [FCChannelUtil launchChannelWithId:channelID withTitle:title withNavigationCtlr:navController];
+                return YES;
+            }
+        } else {
+            return YES;
+        }
+    } else if(([[url scheme] caseInsensitiveCompare:@"faq"] == NSOrderedSame))  {
+        NSNumberFormatter *numbFormatter = [[NSNumberFormatter alloc] init];
+        NSNumber *articleId = [numbFormatter numberFromString:[url host]];
+        if (articleId!= nil) {
+            [FCFAQUtil launchArticleID:articleId withNavigationCtlr:navController andFaqOptions:faqOptions fromLink:true];
+            return YES;
+        }
+    } else if(!handleFreshchatLinks) {
+        if ([Freshchat sharedInstance].customLinkHandler != nil) {
+            return [Freshchat sharedInstance].customLinkHandler(url);
+        }
+    }
+    return NO;
+}
+
+@end

@@ -31,7 +31,8 @@
         self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
         self.accountActive                  = [self getDefaultAccountActive];
         self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
-        self.csatSettings                    = [[FCCSatSettings alloc]init];
+        self.csatSettings                   = [[FCCSatSettings alloc]init];
+        self.userAuthConfig                 = [[FCUserAuthConfig alloc] init];
     }
     return self;
 }
@@ -42,6 +43,7 @@
     }
     return YES;
 }
+
 
 - (long) getDefaultSessionTimeOutInterval {
     if ([FCUserDefaults getObjectForKey:CONFIG_RC_SESSION_TIMEOUT_INTERVAL] != nil) {
@@ -60,12 +62,12 @@
     self.sessionTimeOutInterval = sessionTimeOutInterval;
 }
 
-
 - (void) updateRemoteConfig : (NSDictionary *) configDict {
     NSArray *enabledFeaturesArray       = [configDict objectForKey:@"enabledFeatures"];
     NSDictionary *refreshIntervalsDict  = [configDict objectForKey:@"refreshIntervals"];
     NSDictionary *convConfigDict        = [configDict objectForKey:@"conversationConfig"];
     NSDictionary *csatSettingsDict      = [configDict objectForKey:@"csatSettings"];
+    NSDictionary *userAuthConfig     = [configDict objectForKey:@"userAuthConfig"];
     
     [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
     [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
@@ -82,6 +84,9 @@
     if (csatSettingsDict != nil) {
         [self.csatSettings updateCSatConfig:csatSettingsDict];
     }
+    if (userAuthConfig != nil) {
+        [self.userAuthConfig updateUserAuthConfig:userAuthConfig];
+    }
 }
 
 - (BOOL) isActiveInboxAndAccount {
@@ -90,6 +95,11 @@
 
 - (BOOL) isActiveFAQAndAccount {
     return self.accountActive && self.enabledFeatures.faqEnabled;
+}
+
+- (BOOL) isUserAuthEnabled {
+    return (self.userAuthConfig.isjwtAuthEnabled
+            && self.userAuthConfig.isStrictModeEnabled);
 }
 
 - (BOOL) isActiveConvAvailable{

@@ -26,6 +26,6 @@ static CGFloat NOTIFICATION_BANNER_HEIGHT = 70;
 
 +(instancetype)sharedInstance;
 -(void)displayBannerWithChannel:(FCChannels *)channel;
--(void)setMessage:(NSString *)message;
+-(void)setMessage:(NSString *)message inChannel:(FCChannels *)channel;
 
 @end

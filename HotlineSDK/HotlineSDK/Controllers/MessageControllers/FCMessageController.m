@@ -47,6 +47,9 @@
 #import "FCUserUtil.h"
 #import "FCCoreServices.h"
 #import "FCCSATUtil.h"
+#import "FCJWTAuthValidator.h"
+#import "FCJWTUtilities.h"
+#import "FCLoadingViewBehaviour.h"
 
 typedef struct {
     BOOL isLoading;
@@ -56,8 +59,13 @@ typedef struct {
     BOOL isModalPresentationPreferred;
 } FDMessageControllerFlags;
 
+@interface ConversationOptions()
+    @property (nonatomic, strong) NSNumber *channelID;
+@end
 
-@interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate>
+
+
+@interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate, HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIActivityIndicatorView *loadingView;
@@ -102,6 +110,9 @@ typedef struct {
 @property (nonatomic, strong) UILabel *typicalReply;
 @property (nonatomic) NSInteger titleWidth;
 @property (nonatomic) NSInteger titleHeight;
+@property (nonatomic, strong) UIView* messageDetailView;
+@property (nonatomic, strong) FCLoadingViewBehaviour* loadingViewBehaviour;
+@property (nonatomic) BOOL isJWTAlertShown;
 
 @end
 
@@ -154,6 +165,13 @@ typedef struct {
     return _conversation;
 }
 
+-(UIView *)messageDetailView {
+    if(!_messageDetailView) {
+        _messageDetailView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    }
+    return _messageDetailView;
+}
+
 -(BOOL)isModal{
     return  _flags.isModalPresentationPreferred;
 }
@@ -162,7 +180,7 @@ typedef struct {
     parent.navigationItem.title = self.channel.name;
     self.messagesDisplayedCount = 20;
     self.initalLoading = true;
-    [self setBackgroundForView:self.view];
+    [self setBackgroundForView:self.messageDetailView];
     [self setSubviews];
     [self updateMessages];
     [self setNavigationItem];
@@ -246,7 +264,7 @@ typedef struct {
 }
 
 -(UIView *)tableHeaderView{
-    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, TABLE_VIEW_TOP_OFFSET)];
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.messageDetailView.frame.size.height, TABLE_VIEW_TOP_OFFSET)];
     headerView.backgroundColor = self.tableView.backgroundColor;
     return headerView;
 }
@@ -294,6 +312,12 @@ typedef struct {
     [self processPendingCSAT];
     [self checkRestoreStateChanged];
     [self.inputToolbar setSendButtonEnabled: [FCStringUtil isNotEmptyString:self.inputToolbar.textView.text]];
+    
+    //Add JWT Enabled disabled check
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        [self addJWTObservers];
+        [self jwtStateChange];
+    }
 }
 
 //TODO:checkRestoreStateChanged is duplicated in HLChannelViewController HLInterstitialViewController ~Sanjith
@@ -385,13 +409,13 @@ typedef struct {
     [self handleDismissMessageInputView];
     [HotlineAppState sharedInstance].currentVisibleChannel = nil;
     [self localNotificationUnSubscription];
-    
-    
     if (self.CSATView.isShowing) {
         FDLog(@"Leaving message screen with active CSAT, Recording YES state");
         [self handleUserEvadedCSAT];
     }
-    
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        [self removeJWTObservers];
+    }
 }
 
 -(void)registerAppAudioCategory{
@@ -439,7 +463,7 @@ typedef struct {
 }
 
 -(UIView *)headerView{
-    float headerViewWidth      = self.view.frame.size.width;
+    float headerViewWidth      = self.messageDetailView.frame.size.width;
     float headerViewHeight     = 25;
     CGRect headerViewFrame     = CGRectMake(0, 0, headerViewWidth, headerViewHeight);
     UIView *headerView = [[UIView alloc]initWithFrame:headerViewFrame];
@@ -454,7 +478,8 @@ typedef struct {
     self.bannerMessageView = [UIView new];
     self.bannerMessageView.translatesAutoresizingMaskIntoConstraints = NO;
     self.bannerMessageView.backgroundColor = [[FCTheme sharedInstance] conversationOverlayBackgroundColor];
-    [self.view addSubview:self.bannerMessageView];
+    self.messageDetailView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.messageDetailView addSubview:self.bannerMessageView];
 
     self.bannerMesagelabel = [[UILabel alloc] init];
     self.bannerMesagelabel.font = [[FCTheme sharedInstance] conversationOverlayTextFont];
@@ -478,26 +503,26 @@ typedef struct {
     [self.tableView setContentInset:UIEdgeInsetsMake(0, 0, FRESHCHAT_MESSAGE_BOTTOM_PADDING, 0)];
     self.tableView.rowHeight = UITableViewAutomaticDimension;    
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
-    [self.view addSubview:self.tableView];
+    [self.messageDetailView addSubview:self.tableView];
     
     //Bottomview
     self.bottomView = [[UIView alloc]init];
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:self.bottomView];
+    [self.messageDetailView addSubview:self.bottomView];
     
     //LoadingActivityIndicator
     self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.loadingView.translatesAutoresizingMaskIntoConstraints = NO;
     self.loadingView.color = [[FCTheme sharedInstance] progressBarColor];
     [self.loadingView startAnimating];
-    [self.view addSubview:self.loadingView];
+    [self.messageDetailView addSubview:self.loadingView];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[loadingView]-|" options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"loadingView":self.loadingView}]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[loadingView]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"loadingView":self.loadingView}]];
+    [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[loadingView]-|" options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"loadingView":self.loadingView}]];
+    [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[loadingView]-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"loadingView":self.loadingView}]];
     
     
-    self.bottomViewHeightConstraint = [FCAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.view];
-    self.bottomViewBottomConstraint = [FCAutolayoutHelper bottomAlign:self.bottomView toView:self.view];
+    self.bottomViewHeightConstraint = [FCAutolayoutHelper setHeight:0 forView:self.bottomView inView:self.messageDetailView];
+    self.bottomViewBottomConstraint = [FCAutolayoutHelper bottomAlign:self.bottomView toView:self.messageDetailView];
     
     self.yesNoPrompt = [[FCCSATYesNoPrompt alloc]initWithDelegate:self andKey:LOC_CSAT_PROMPT_PARTIAL];
     self.yesNoPrompt.translatesAutoresizingMaskIntoConstraints = NO;
@@ -510,13 +535,13 @@ typedef struct {
     [self.bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlayText]|" options:0 metrics:nil views:self.views]];
     [self.bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[overlayText]-5-|" options:0 metrics:nil views:self.views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:self.views]];
+    [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageOverlayView]|" options:0 metrics:nil views:self.views]];
     
     [self setViewVerticalConstraint:overlayText];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:self.views]];
+    [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:self.views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:self.views]];
+    [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:self.views]];
     
     if([self.channel.type isEqualToString:CHANNEL_TYPE_BOTH]){
         
@@ -533,6 +558,12 @@ typedef struct {
     if([self.channel.type isEqualToString:CHANNEL_TYPE_AGENT_ONLY]){
         self.isOneWayChannel = YES;
     }
+    
+    [self.view addSubview:self.messageDetailView];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[messageDetailView]|" options:0 metrics:nil views:@{@"messageDetailView":self.messageDetailView}]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageDetailView]|" options:0 metrics:nil views:@{@"messageDetailView":self.messageDetailView}]];
+    
 }
 
 - (void) setBackgroundForView : (UIView *)view{
@@ -550,7 +581,7 @@ typedef struct {
 }
 
 - (float)lineCountForLabel:(UILabel *)label {
-    CGSize maximumLabelSize = CGSizeMake(self.view.frame.size.width-10,9999);
+    CGSize maximumLabelSize = CGSizeMake(self.messageDetailView.frame.size.width-10,9999);
     CGSize sizeOfText = [label.text boundingRectWithSize:maximumLabelSize
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                             attributes:@{NSFontAttributeName:label.font}
@@ -562,7 +593,6 @@ typedef struct {
 
 -(void)updateBottomViewWith:(UIView *)view andHeight:(CGFloat) height{
     [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
     [self.bottomView addSubview:view];
     self.bottomViewHeightConstraint.constant = height;
     
@@ -577,7 +607,7 @@ typedef struct {
     FCAgentMessageCell *agentCell;
     FCUserMessageCell *userCell;
     BOOL isAgentMessage = true;
-    CGRect screenRect = self.view.bounds;
+    CGRect screenRect = self.messageDetailView.bounds;
     if (indexPath.row < self.messages.count) {
         FCMessageData *message = self.messages[(self.messageCount - self.messagesDisplayedCount)+indexPath.row];
         isAgentMessage = [FCMessageHelper isCurrentUser:[message messageUserType]]?NO:YES; //Changed
@@ -590,7 +620,7 @@ typedef struct {
             agentCell.tagVal = indexPath.row;
             agentCell.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20);
             agentCell.messageData = message;
-            [agentCell drawMessageViewForMessage:message parentView:self.view withTag:indexPath.row];
+            [agentCell drawMessageViewForMessage:message parentView:self.messageDetailView withTag:indexPath.row];
         } else {
             userCell = [tableView dequeueReusableCellWithIdentifier:userCellIdentifier];
             if (!userCell) {
@@ -598,7 +628,7 @@ typedef struct {
             }
             userCell.maxcontentWidth = (NSInteger) screenRect.size.width - ((screenRect.size.width/100)*20);
             userCell.messageData = message;
-            [userCell drawMessageViewForMessage:message parentView:self.view];
+            [userCell drawMessageViewForMessage:message parentView:self.messageDetailView];
         }
     }
     
@@ -643,7 +673,7 @@ typedef struct {
     UIActivityIndicatorView* refreshIndicator=(UIActivityIndicatorView*)[cell viewWithTag:KONOTOR_REFRESHINDICATOR_TAG];
     if(refreshIndicator==nil){
         refreshIndicator=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [refreshIndicator setFrame:CGRectMake(self.view.frame.size.width/2-10, cell.contentView.frame.size.height/2-10, 20, 20)];
+        [refreshIndicator setFrame:CGRectMake(self.messageDetailView.frame.size.width/2-10, cell.contentView.frame.size.height/2-10, 20, 20)];
         refreshIndicator.tag=KONOTOR_REFRESHINDICATOR_TAG;
         [cell.contentView addSubview:refreshIndicator];
     }
@@ -693,9 +723,20 @@ typedef struct {
 }
 
 -(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message{
-    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title message:message delegate:self
-                                        cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:title
+                                                  message:message
+                                                 delegate:self
+                                        cancelButtonTitle:@"OK"
+                                        otherButtonTitles: nil];
     [alert show];
+    
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
+        if (buttonIndex == [alertView cancelButtonIndex]){
+            self.isJWTAlertShown = FALSE;
+        }
+    }
 }
 
 -(void)inputToolbar:(FCInputToolbarView *)toolbar sendButtonPressed:(id)sender{
@@ -735,8 +776,12 @@ typedef struct {
     [ctx performBlock:^{
         BOOL isChannelValid = NO;
         BOOL hasTags =  [FCConversationUtil hasTags:self.convOptions];
+        BOOL filterByChannelId = (self.convOptions.channelID != nil);
         FCChannels *channelToChk = [FCChannels getWithID:self.channelID inContext:ctx];
         if ( channelToChk && ( [channelToChk.isHidden intValue] == 0 || [channelToChk.isDefault intValue] == 1 ) ) {
+            if(filterByChannelId) {
+                isChannelValid = YES;
+             }
             if(hasTags){ // contains tags .. so check that as well
                 if([channelToChk hasAtleastATag:self.convOptions.tags]){
                     isChannelValid = YES;
@@ -746,7 +791,12 @@ typedef struct {
                 isChannelValid = YES;
             }
         }
-        if(hasTags){
+        if(filterByChannelId) {
+            [[FCTagManager sharedInstance] getChannel:nil channelIds:@[self.convOptions.channelID] inContext:[FCDataManager sharedInstance].mainObjectContext withCompletion:^(NSArray<FCChannels *> *channels, NSError *error){
+                [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
+            }];
+        }
+        else if(hasTags){
             [[FCTagManager sharedInstance] getChannelsForTags:self.convOptions.tags inContext:ctx withCompletion:^(NSArray *channels, NSError *error) {
                 [self processNavStackChanges:channels channelsError:error isValidChannel:isChannelValid];
             }];
@@ -767,7 +817,7 @@ typedef struct {
         FCSecureStore *secureStore = [FCSecureStore sharedInstance];
         NSString *overlayText = [secureStore objectForKey:HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE];
         self.bannerMesagelabel.text = overlayText;
-        [self.view removeConstraints:self.viewVerticalConstraints];
+        [self.messageDetailView removeConstraints:self.viewVerticalConstraints];
         [self setViewVerticalConstraint: overlayText];
     }
 }
@@ -779,7 +829,7 @@ typedef struct {
     }
     NSDictionary *overlayHeightmetrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
     self.viewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:overlayHeightmetrics views:self.views];
-    [self.view addConstraints:self.viewVerticalConstraints];
+    [self.messageDetailView addConstraints:self.viewVerticalConstraints];
 }
 
 -(void) processNavStackChanges: (NSArray*)channels channelsError:(NSError *)error isValidChannel:(BOOL)isValidChannel  {
@@ -916,15 +966,15 @@ typedef struct {
     NSTimeInterval animationDuration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     _flags.isKeyboardOpen = YES;
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect keyboardRect = [self.view convertRect:keyboardFrame fromView:nil];
-    CGFloat calculatedHeight = self.view.bounds.size.height - keyboardRect.origin.y;
+    CGRect keyboardRect = [self.messageDetailView convertRect:keyboardFrame fromView:nil];
+    CGFloat calculatedHeight = self.messageDetailView.bounds.size.height - keyboardRect.origin.y;
     CGFloat keyboardCoveredHeight = self.keyboardHeight < calculatedHeight ? calculatedHeight : self.keyboardHeight;
     self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
     self.CSATView.CSATPromptCenterYConstraint.constant = -calculatedHeight/2;
     
     self.keyboardHeight = keyboardCoveredHeight;
     [UIView animateWithDuration:animationDuration animations:^{
-        [self.view layoutIfNeeded];
+        [self.messageDetailView layoutIfNeeded];
     } completion:^(BOOL finished) {
         [self scrollTableViewToLastCell];
     }];
@@ -936,9 +986,9 @@ typedef struct {
     self.keyboardHeight = 0.0;
     self.bottomViewBottomConstraint.constant = 0.0;
     self.CSATView.CSATPromptCenterYConstraint.constant = 0;
-    [self.view layoutIfNeeded];
+    [self.messageDetailView layoutIfNeeded];
     [UIView animateWithDuration:animationDuration animations:^{
-        [self.view layoutIfNeeded];
+        [self.messageDetailView layoutIfNeeded];
     }];
 }
 
@@ -1129,8 +1179,8 @@ typedef struct {
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (_flags.isKeyboardOpen){
         CGPoint fingerLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
-        CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.view];
-        float viewFrameHeight = self.view.frame.size.height;
+        CGPoint absoluteFingerLocation = [scrollView convertPoint:fingerLocation toView:self.messageDetailView];
+        float viewFrameHeight = self.messageDetailView.frame.size.height;
         NSInteger keyboardOffsetFromBottom = viewFrameHeight - absoluteFingerLocation.y;
         
         if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged
@@ -1161,44 +1211,19 @@ typedef struct {
         [imageController presentOnController:self];
     } else if ([fragmentType isEqualToValue:@5]) {
         NSURL *url = [fragment getOpenURL];
-        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
-        NSNumber *articleID = [[NSNumber alloc] initWithInt:-1];
-        for (NSURLQueryItem *queryItem in [urlComponents queryItems]) {
-            if (queryItem.value == nil) {
-                continue;
-            }
-            if ([queryItem.name isEqualToString:@"article_id"]) {
-                articleID = [[NSNumber alloc] initWithInteger:[queryItem.value integerValue]];
-                break;
-            }
-        }
-        
-        if(articleID.integerValue != -1) {
-            @try{
-                FAQOptions *option = [FAQOptions new];
-                if([FCConversationUtil hasTags:self.convOptions]){
-                    [option filterContactUsByTags:self.convOptions.tags withTitle:self.convOptions.filteredViewTitle];
-                }
-                [FCFAQUtil launchArticleID:articleID withNavigationCtlr:self.navigationController andFaqOptions:option]; // Question - The developer will have no controller over the behaviour
-            }
-            @catch(NSException* e){
-                ALog(@"%@",e);
-            }
-        }
-        else {
-            @try{
-                NSURL *actionUrl = [fragment getOpenURL];
-                if([[UIApplication sharedApplication] canOpenURL:actionUrl]){
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[UIApplication sharedApplication] openURL:actionUrl];
-                    });
-                }
-            }
-            @catch(NSException* e){
-                ALog(@"%@",e);
+        BOOL linkHandled  = [FCUtilities handleLink:url faqOptions:nil navigationController:self handleFreshchatLinks:NO];
+        if(!linkHandled) {
+            if([[UIApplication sharedApplication] canOpenURL:url]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:url];
+                });
             }
         }
     }
+}
+
+-(BOOL)handleLinkDelegate: (NSURL *)url {
+    return [FCUtilities handleLink:url faqOptions:nil navigationController:self handleFreshchatLinks:NO];
 }
 
 //TODO: Needs refractor
@@ -1251,6 +1276,7 @@ typedef struct {
 
 -(void)processPendingCSAT{
     
+    
     if ([FCStringUtil isNotEmptyString:self.inputToolbar.textView.text] || [FCAudioRecorder isRecording]){
         FDLog(@"Not showing CSAT prompt, User is currently engaging input toolbar");
         return;
@@ -1264,7 +1290,7 @@ typedef struct {
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing && self.yesNoPrompt) {
                 [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
-                [self.view layoutIfNeeded];
+                [self.messageDetailView layoutIfNeeded];
             }
         });
     }
@@ -1362,7 +1388,7 @@ typedef struct {
     }];
 }
 - (void) dismissKeyboard {
-    [self.view endEditing:YES];
+    [self.messageDetailView endEditing:YES];
 }
 
 -(void)dealloc{
@@ -1370,7 +1396,66 @@ typedef struct {
     self.tableView.dataSource = nil;
     self.inputToolbar.delegate = nil;
     self.audioMessageInputView.delegate = nil;
+    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
+        [_loadingViewBehaviour killTimer];
+        self.loadingViewBehaviour = nil;
+    }
     [self localNotificationUnSubscription];
 }
+
+#pragma mark - LoadingView behaviour change
+
+-(FCLoadingViewBehaviour*)loadingViewBehaviour {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
+    }
+    return _loadingViewBehaviour;
+}
+
+-(UIView *)contentDisplayView{
+    return self.tableView;
+}
+
+-(NSString *)emptyText{
+    return @"";
+}
+
+-(NSString *)loadingText{
+    return @"";
+}
+
+#pragma mark - Show/Hide JWT Loading/Alert
+
+-(void) showJWTLoading {
+    if(_loadingViewBehaviour == nil){
+        _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:2];
+    }
+    [self.messageDetailView endEditing:YES];
+    [_loadingViewBehaviour setJWTState:TRUE];
+    [_loadingViewBehaviour showLoadingScreen];
+    [self.messageDetailView setHidden:true];
+}
+
+-(void) hideJWTLoading {    
+    [_loadingViewBehaviour setJWTState:FALSE];
+    [_loadingViewBehaviour hideLoadingScreen];
+    [self.messageDetailView setHidden:false];
+}
+
+-(void) showJWTVerificationFailedAlert {
+    [self showJWTLoading];
+    if(!self.isJWTAlertShown) {
+        [self showAlertWithTitle:nil
+                      andMessage:HLLocalizedString(LOC_JWT_FAILURE_ALERT_MESSAGE)];
+        self.isJWTAlertShown = TRUE;
+        [_loadingViewBehaviour killTimer];
+        if(self.tabBarController != nil) {
+            [self.parentViewController.navigationController popViewControllerAnimated:YES];
+        } else {
+            [self dismissViewControllerAnimated:true completion:nil];
+        }
+    }
+}
+
 
 @end
