@@ -564,10 +564,11 @@
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *localeId = [NSString stringWithFormat:@"locale=%@",[FCLocaleUtil getLocalLocale]];
     NSString *path = [NSString stringWithFormat:HOTLINE_API_TYPLICAL_REPLY,appID];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_GET];
-    [request setRelativePath:path andURLParams:@[appKey]];
+    [request setRelativePath:path andURLParams:@[appKey,localeId]];
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {

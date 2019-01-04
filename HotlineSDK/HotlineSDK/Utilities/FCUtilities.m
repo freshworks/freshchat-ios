@@ -430,6 +430,10 @@ static NSInteger networkIndicator = 0;
     return false;
 }
 
++ (void) removeResponseTimeFetchInterval {
+    [FCUserDefaults removeObjectForKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
+}
+
 +(BOOL) canMakeDAUCall {
     NSDate *currentdate = [NSDate date];
     NSDate *lastFetchDate = [[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];

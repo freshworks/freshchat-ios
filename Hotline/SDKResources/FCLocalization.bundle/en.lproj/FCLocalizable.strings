@@ -139,3 +139,6 @@
 "currently_replying_in_2_hours"="Currently replying in 2 hours";
 "currently_replying_in_few_hours"="Currently replying in few hours";
 
+/*Business hour offline response */
+"business_hour_offline"="We are away now";
+

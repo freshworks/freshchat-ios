@@ -122,6 +122,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [[FCReachabilityManager sharedInstance] start];
         [self registerAppNotificationListeners];
         self.messagePoller = [[FCMessagePoller alloc] initWithPollType:OffScreenPollFetch];
+        [FCUtilities removeResponseTimeFetchInterval];
     }
     return self;
 }
