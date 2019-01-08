@@ -199,6 +199,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
         [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
         [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
+        [store setBoolValue:config.responseExpectationVisible forKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
         [[FCTheme sharedInstance]setThemeWithName:config.themeName];
     }
     
@@ -796,6 +797,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     config.gallerySelectionEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+    config.responseExpectationVisible = [store boolValueForKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
     if([store objectForKey:HOTLINE_DEFAULTS_THEME_NAME]){
         config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
     } else {

@@ -340,10 +340,13 @@ typedef struct {
     [self checkChannel];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self.messagesPoller begin];
-    if([FCUtilities canMakeTypicallyRepliesCall] ){
-        [self fetchReplyResonseTime];
-    } else {
-        [self updateReplyResponseTime];
+    FCSecureStore *secureStore = [FCSecureStore sharedInstance];
+    if ([secureStore boolValueForKey: FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE]) {
+        if([FCUtilities canMakeTypicallyRepliesCall] ){
+            [self fetchReplyResonseTime];
+        } else {
+            [self updateReplyResponseTime];
+        }
     }
 }
 
