@@ -340,6 +340,10 @@ typedef struct {
     [self checkChannel];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self.messagesPoller begin];
+    [self showResponseExpectation];
+}
+
+-(void) showResponseExpectation {
     FCSecureStore *secureStore = [FCSecureStore sharedInstance];
     if ([secureStore boolValueForKey: FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE]) {
         if([FCUtilities canMakeTypicallyRepliesCall] ){
@@ -1225,11 +1229,7 @@ typedef struct {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
     [self setNavigationTitle:self.parentViewController];
-    if([FCUtilities canMakeTypicallyRepliesCall] ){
-        [self fetchReplyResonseTime];
-    } else {
-        [self updateReplyResponseTime];
-    }
+    [self showResponseExpectation];
     [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];
 }
