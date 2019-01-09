@@ -89,7 +89,6 @@
                     else if (errCode == 23){
                         [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
                     }
-                    if (handler) handler(responseInfo, error ? error : nil);
                 }                
             }
             
