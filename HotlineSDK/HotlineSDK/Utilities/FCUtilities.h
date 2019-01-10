@@ -87,6 +87,7 @@
 + (NSMutableAttributedString *) getAttributedContentForString :(NSString *)strVal withFont :(UIFont *) font;
 + (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName;
 + (void) cacheImageWithUrl : (NSString *) url;
++ (void) removeResponseTimeFetchInterval;
 + (NSString *) applyRegexForInputText :(NSString *) inputText;
 + (void) processResetChanges;
 + (void) addFlagToDisableUserPropUpdate;

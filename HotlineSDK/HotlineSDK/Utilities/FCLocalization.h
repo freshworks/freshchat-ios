@@ -126,6 +126,8 @@ static NSString *DEFAULT_LOCALIZATION_TABLE = @"FCLocalizable";
 #define LOC_CURRENTLY_REPLYING_IN_TWO_HOURS @"currently_replying_in_2_hours"
 #define LOC_CURRENTLY_REPLYING_IN_FEW_HOURS @"currently_replying_in_few_hours"
 
+#define LOC_BUSINESS_HOURS_OFFLINE @"business_hour_offline"
+
 @interface FCLocalization : NSObject
 
 +(NSString *)localize:(NSString *)key;

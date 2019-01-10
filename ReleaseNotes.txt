@@ -4,6 +4,14 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.2.0 
+__________________________
+Enhancements:
+- Ability to configure custom response expectations and away message for channels.
+- Config to hide response time.
+Fix:
+- Fix stale cache of response time.
+
 Ver 2.1.0 
 __________________________
 Enhancement

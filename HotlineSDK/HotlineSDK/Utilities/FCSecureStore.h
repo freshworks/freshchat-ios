@@ -36,6 +36,7 @@
 #define HOTLINE_DEFAULTS_CONVERSATION_BANNER_MESSAGE @"hotline_conversation_banner_message"
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_OLD_USER_INFO @"hotline_defaults_old_user_info"
+#define FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE @"freshchat_defaults_response_expectation_visible"
 
 #define FRESHCHAT_CONFIG_RC_FAQ_ENABLED @"freshchat_config_rc_faq_enabled"
 #define FRESHCHAT_CONFIG_RC_INBOX_ENABLED @"freshchat_config_rc_inbox_enabled"

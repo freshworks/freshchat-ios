@@ -47,6 +47,8 @@
 #define CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL @"config_rc_last_response_time_expectation_fetch_interval"
 #define FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE @"freshchat_response_time_expectation_value"
 #define FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE @"freshchat_response_time_7_days_value"
+#define FRESHCHAT_CUSTOM_RESPONSE_VALUE @"freshchat_custom_response_Value"
+#define FRESHCHAT_OFFLINE_RESPONSE_VALUE @"freshchat_offline_response_value"
 
 #define CONFIG_RC_USER_CSAT_VIEW_TIMER_ENABLED @"config_rc_user_csat_view_timer_enabled"
 #define CONFIG_RC_MAXIMUM_USER_SURVEY_VIEW_MILLIS @"config_rc_maximum_user_survey_view_millis"

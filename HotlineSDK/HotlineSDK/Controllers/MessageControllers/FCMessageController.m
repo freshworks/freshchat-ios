@@ -235,19 +235,24 @@ typedef struct {
     }
 }
 
--(void) showReplyResponseTime:(NSInteger) time withType :(enum ResponseTimeType) type {
-    NSString *replyResponseTime = [FCUtilities getReplyResponseForTime:time andType:type];
-    if(![FCStringUtil isEmptyString:trimString(replyResponseTime)]){
-        self.typicalReply.text = replyResponseTime;
-        [UIView animateWithDuration:0.5 animations:^{
-            self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
-            self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
-            self.typicalReply.alpha = 1;
-        }];
+-(void) showReplyResponseTimeFrom:(NSDictionary *) currentlyReplyDict withType :(enum ResponseTimeType) type {
+    NSDictionary *currentChannelDictionary = currentlyReplyDict[self.channel.channelID];
+    NSNumber *currentChannelTime = currentChannelDictionary[@"responseTime"];
+    if (currentChannelTime != nil) {
+        NSInteger time = [currentChannelTime intValue];
+        
+        [self animateAndShowReplyTimeMessage:[FCUtilities getReplyResponseForTime:time andType:type]];
     }
-    else{
-        [self hideReplyResponseTime];
-    }
+}
+
+-(void) animateAndShowReplyTimeMessage:(NSString *) message {
+    self.typicalReply.text = message;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.channelName.frame = CGRectMake(0, 2, self.titleWidth, self.titleHeight - self.titleHeight/3 - 4);
+        self.typicalReply.frame = CGRectMake(0, self.titleHeight - self.titleHeight/3 - 4, self.titleWidth, self.titleHeight/3);
+        self.typicalReply.alpha = 1;
+    }];
 }
 
 -(void) hideReplyResponseTime {
@@ -335,28 +340,55 @@ typedef struct {
     [self checkChannel];
     [HotlineAppState sharedInstance].currentVisibleChannel = self.channel;
     [self.messagesPoller begin];
-    if([FCUtilities canMakeTypicallyRepliesCall] ){
-        [self fetchReplyResonseTime];
-    } else {
-        [self updateReplyResponseTime];
+    [self showResponseExpectation];
+}
+
+-(void) showResponseExpectation {
+    FCSecureStore *secureStore = [FCSecureStore sharedInstance];
+    if ([secureStore boolValueForKey: FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE]) {
+        if([FCUtilities canMakeTypicallyRepliesCall] ){
+            [self fetchReplyResonseTime];
+        } else {
+            [self updateReplyResponseTime];
+        }
     }
 }
 
 -(void) updateReplyResponseTime {
+    self.typicalReply.text = @"";
+    NSDictionary *offlineReplyDict = [FCUserDefaults getDictionary:FRESHCHAT_OFFLINE_RESPONSE_VALUE];
+    NSDictionary *customReplyDict = [FCUserDefaults getDictionary:FRESHCHAT_CUSTOM_RESPONSE_VALUE];
     NSDictionary *currentlyReplyDict = [FCUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
     NSDictionary *avgReplyDict = [FCUserDefaults getDictionary:FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE];
-    if (currentlyReplyDict != nil) {
-        NSNumber *currentChannelTime = currentlyReplyDict[self.channel.channelID];
-        if (currentChannelTime != nil) {
-            [self showReplyResponseTime:[currentChannelTime integerValue] withType:CURRENT_AVG];
+    if (offlineReplyDict != nil) {
+        NSDictionary *offlineDetails = [offlineReplyDict objectForKey: _channel.channelID];
+        if (offlineDetails != nil) {
+            [self animateAndShowReplyTimeMessage: HLLocalizedString(LOC_BUSINESS_HOURS_OFFLINE)];
         }
     }
-    else if (avgReplyDict != nil) {
-        NSNumber *currentChannelTime = avgReplyDict[self.channel.channelID];
-        if (currentChannelTime != nil) {
-            [self showReplyResponseTime:[currentChannelTime integerValue] withType:LAST_WEEK_AVG];
+    
+    if ([self checkIfResponseLabelIsEmpty] && customReplyDict != nil) {
+        NSDictionary *offlineDetails = [customReplyDict objectForKey: _channel.channelID];
+        if (offlineDetails != nil && offlineDetails[@"customRespMsg"] != nil) {
+            [self animateAndShowReplyTimeMessage: offlineDetails[@"customRespMsg"]];
         }
     }
+    
+    if ([self checkIfResponseLabelIsEmpty] && currentlyReplyDict != nil) {
+        [self showReplyResponseTimeFrom:currentlyReplyDict withType:CURRENT_AVG];
+    }
+    
+    if ([self checkIfResponseLabelIsEmpty] && avgReplyDict != nil) {
+        [self showReplyResponseTimeFrom:avgReplyDict withType:LAST_WEEK_AVG];
+    }
+    
+    if ([self checkIfResponseLabelIsEmpty]) {
+        [self hideReplyResponseTime];
+    }
+}
+
+-(BOOL) checkIfResponseLabelIsEmpty {
+    return trimString(self.typicalReply.text).length == 0;
 }
 
 -(void)fetchReplyResonseTime{
@@ -365,13 +397,10 @@ typedef struct {
             if(!error) {
                 [FCUserDefaults setObject:[NSDate date] forKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
                 NSDictionary* channelsInfo = responseInfo.responseAsDictionary;
-                if(!([channelsInfo[@"channelResponseTime"] count] == 0)) { //If the array is nil, it will be 0 as well, as nil maps to 0; therefore checking whether the array exists is unnecessary
-                    [FCUserDefaults setDictionary:[self getChannelReplyTimeForResponse:channelsInfo[@"channelResponseTime"]] forKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
-                    
-                }
-                if(!([channelsInfo[@"channelResponseTimesFor7Days"] count] == 0)) {
-                    [FCUserDefaults setDictionary:[self getChannelReplyTimeForResponse:channelsInfo[@"channelResponseTimesFor7Days"]] forKey:FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE];
-                }
+                [self storeTheResponseFrom:channelsInfo ofResponseKey:@"channelResponseTime" inLocalKey:FRESHCHAT_RESPONSE_TIME_EXPECTATION_VALUE];
+                [self storeTheResponseFrom:channelsInfo ofResponseKey:@"channelResponseTimesFor7Days" inLocalKey:FRESHCHAT_RESPONSE_TIME_7_DAYS_VALUE];
+                [self storeTheResponseFrom:channelsInfo ofResponseKey:@"channelCustomResponse" inLocalKey:FRESHCHAT_CUSTOM_RESPONSE_VALUE];
+                [self storeTheResponseFrom:channelsInfo ofResponseKey:@"channelsWithAllMembersAway" inLocalKey:FRESHCHAT_OFFLINE_RESPONSE_VALUE];
                 [self updateReplyResponseTime];
             } else {
                 [self hideReplyResponseTime];
@@ -380,13 +409,20 @@ typedef struct {
     }];
 }
 
+- (void)storeTheResponseFrom: (NSDictionary *)channelsInfo ofResponseKey: (NSString *) responseKey inLocalKey: (NSString *) localKey {
+    if(!([channelsInfo[responseKey] count] == 0)) { //If the array is nil, it will be 0 as well, as nil maps to 0; therefore checking whether the array exists is unnecessary
+        [FCUserDefaults setDictionary:[self getChannelReplyTimeForResponse:channelsInfo[responseKey]] forKey:localKey];
+    } else {
+        [FCUserDefaults removeObjectForKey:localKey];
+    }
+}
+
 - (NSMutableDictionary *) getChannelReplyTimeForResponse : (NSArray *)convArr{
     NSMutableDictionary *replyResponseDict = [[NSMutableDictionary alloc]init];
     for (int i = 0; i < [convArr count]; i++) {
-        NSDictionary* item = [convArr objectAtIndex:i];
-        NSNumber *responseTime = item[@"responseTime"];
+        NSMutableDictionary* item = [convArr objectAtIndex:i];
         NSNumber *channelId = item[@"channelId"];
-        [replyResponseDict setObject:responseTime forKey:channelId];
+        [replyResponseDict setObject:item forKey:channelId];
     }
     return replyResponseDict;
 }
@@ -1193,11 +1229,7 @@ typedef struct {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.tableView reloadData];
     [self setNavigationTitle:self.parentViewController];
-    if([FCUtilities canMakeTypicallyRepliesCall] ){
-        [self fetchReplyResonseTime];
-    } else {
-        [self updateReplyResponseTime];
-    }
+    [self showResponseExpectation];
     [self inputToolbar:self.inputToolbar textViewDidChange:self.inputToolbar.textView];
     [self scrollTableViewToLastCell];
 }

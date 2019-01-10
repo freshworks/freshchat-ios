@@ -69,6 +69,10 @@ enum TagFilterType {
  * Enable/Disable Notification banner when a support message is received. Defaults to YES
  */
 @property (nonatomic, assign) BOOL showNotificationBanner;
+/*
+ * Show/Hide Channel response time on the chat. Defaults to YES
+ */
+@property (nonatomic, assign) BOOL responseExpectationVisible;
 
 /**
  *  Initialize Freshchat.
