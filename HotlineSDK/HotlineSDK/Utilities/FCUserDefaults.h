@@ -59,6 +59,11 @@
 
 #define FRESHCHAT_DEFAULTS_USER_IOS_VERSION @"freshchat_defaults_user_ios_version"
 
+#define CONFIG_RC_UNSUPPORTED_FRAGMENT_DISPLAY_ERROR_CODES_ENABLED @"config_rc_unsupported_fragment_display_error_codes_enabled"
+#define CONFIG_RC_UNSUPPORTED_FRAGMENT_ERROR_CODE_PLACEHOLDER @"config_rc_unsupported_fragment_error_code_placeholder"
+#define CONFIG_RC_UNSUPPORTED_FRAGMENT_GLOBAL_ERROR_MSG @"config_rc_unsupported_fragment_global_error_msg"
+#define CONFIG_RC_UNSUPPORTED_FRAGMENT_ERROR_MESSAGE_BY_TYPES @"config_rc_unsupported_fragment_error_message_by_types"
+
 #define FRESTCHAT_DEFAULTS_MESSAGE_MASK @"freshchat_defaults_message_mask"
 
 @interface FCUserDefaults : NSObject

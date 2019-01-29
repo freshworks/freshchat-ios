@@ -31,9 +31,10 @@
         self.enabledFeatures                = [[FCEnabledFeatures alloc] init];
         self.accountActive                  = [self getDefaultAccountActive];
         self.sessionTimeOutInterval         = [self getDefaultSessionTimeOutInterval];
-        self.csatSettings                    = [[FCCSatSettings alloc]init];
-        self.messageMaskConfig              = [[FCMessageMaskConfig alloc] init];
+        self.csatSettings                   = [[FCCSatSettings alloc]init];
         self.userAuthConfig                 = [[FCUserAuthConfig alloc] init];
+        self.messageMaskConfig              = [[FCMessageMaskConfig alloc] init];
+        self.unsupportedFragErrMsg          = [[FCUnsupportedFragmentErrorMsgs alloc] init];
     }
     return self;
 }
@@ -68,6 +69,7 @@
     NSDictionary *refreshIntervalsDict  = [configDict objectForKey:@"refreshIntervals"];
     NSDictionary *convConfigDict        = [configDict objectForKey:@"conversationConfig"];
     NSDictionary *csatSettingsDict      = [configDict objectForKey:@"csatSettings"];
+    NSDictionary *unsupportedMsgErrDict = [configDict objectForKey:@"unsupportedFragmentConfig"];
     NSDictionary *userAuthConfig     = [configDict objectForKey:@"userAuthConfig"];
     NSDictionary *messageMaskingConfigDict  = [configDict objectForKey:@"messageMaskingConfig"];
     
@@ -85,6 +87,10 @@
     }
     if (csatSettingsDict != nil) {
         [self.csatSettings updateCSatConfig:csatSettingsDict];
+    }
+
+    if (unsupportedMsgErrDict != nil) {
+        [self.unsupportedFragErrMsg updateUnsupportedFragmentMsgInfo:unsupportedMsgErrDict];
     }
     
     if(messageMaskingConfigDict != nil) {

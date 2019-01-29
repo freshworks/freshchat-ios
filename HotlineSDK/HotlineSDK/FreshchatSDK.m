@@ -592,6 +592,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [[Freshchat sharedInstance] updateUserLocaleProperties:localLocale];
         [[FCSecureStore sharedInstance] removeObjectWithKey:FC_SOLUTIONS_LAST_REQUESTED_TIME];
         [[FCSecureStore sharedInstance] removeObjectWithKey:FC_CHANNELS_LAST_REQUESTED_TIME];
+        [FCUserDefaults removeObjectForKey:CONFIG_RC_LAST_API_FETCH_INTERVAL_TIME];//Remove RC last fetch time
         [FCUtilities initiatePendingTasks];
         [[FCNotificationBanner sharedInstance] resetView];
     }

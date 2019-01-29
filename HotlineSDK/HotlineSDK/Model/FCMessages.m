@@ -7,6 +7,7 @@
 //
 
 #import "FCMessages.h"
+#import "FCLocalization.h"
 #import "FCRemoteConfig.h"
 #import "FCJWTAuthValidator.h"
 
@@ -345,6 +346,8 @@
         NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
         description = extraJSONDict[@"label"];
+    } else{
+        description = HLLocalizedString(LOC_MESSAGE_UNSUPPORTED_CONTENT);
     }
     return description;
 }

@@ -781,6 +781,25 @@
     return [self getTextAlignmentForKey:trimString([self fetchThemeValueForKey:@"ConversationDetail.TeamMemberMessageTextStyle.textAlignment"])];
 }
 
+-(UIFont *) unsupportedMsgFragmentFont {
+    return [self getFontWithKey:@"ConversationDetail.UnsupportedContentTextStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+-(UIColor *) unsupportedMsgFragmentFontColor {
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.UnsupportedContentTextStyle.textColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
+}
+
+-(UIColor *) unsupportedMsgFragmentBorderColor {
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.UnsupportedContentTextStyle.borderColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
+}
+
+-(UIColor *) unsupportedMsgFragmentBackgroundColor {
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.UnsupportedContentTextStyle.background"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_GRAY];
+}
+
 -(id) getMessageDetailBackgroundComponent{
     NSString *bgComponent = [self fetchThemeValueForKey:@"ConversationDetail.MessageListStyle.background"];
     if(([bgComponent hasPrefix:@"#"]) && (bgComponent.length == 7)){

@@ -309,18 +309,13 @@ JWTScheduler *jwtScheduler;
 }
 
 - (IBAction)articleFilter1:(id)sender{
-    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
-    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
-    [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
     
     options.showContactUsOnAppBar = true;
-    if(contactUsTagsArray.count){
-        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
-    }
-    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
+    [options filterContactUsByTags:@[@"cht1"] withTitle:self.faqContactUsTitleField1.text];
+    [options filterByTags:@[@"faqt1",@"faqt2"] withTitle:self.faqTitleField1.text andType: ARTICLE];
     [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 

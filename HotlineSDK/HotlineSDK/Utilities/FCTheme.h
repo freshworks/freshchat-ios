@@ -16,6 +16,7 @@
 #define IMAGE_SEND_ICON @"ConversationDetail.SendIcon"
 #define IMAGE_AVATAR_AGENT @"ConversationDetail.TeamMemberAvatarIcon"
 #define IMAGE_INPUT_TOOLBAR_MIC @"ConversationDetail.RecordIcon"
+#define IMAGE_UNKNOWN_MSG_TYPE_ICON @"ConversationDetail.UnsupportedContentTextStyle.icon"
 #define IMAGE_CONTACT_US_ICON @"ContactUsIcon"
 #define IMAGE_CONTACT_US_LIGHT_ICON @"ContactUsLightIcon"
 #define IMAGE_BACK_BUTTON @"BackButton"
@@ -209,6 +210,11 @@
 -(UIColor *)channelListBackgroundColor;
 -(UIColor *)channelCellSelectedColor;
 
+-(UIFont *) unsupportedMsgFragmentFont;
+-(UIColor *) unsupportedMsgFragmentFontColor;
+-(UIColor *) unsupportedMsgFragmentBorderColor;
+-(UIColor *) unsupportedMsgFragmentBackgroundColor;
+
 //Message Conversation Overlay
 
 - (UIColor *) conversationOverlayBackgroundColor;
@@ -265,5 +271,6 @@
 -(NSString *)agentMessageRightPadding;
 -(NSString *)agentMessageTopPadding;
 -(NSString *)agentMessageBottomPadding;
+
 
 @end
