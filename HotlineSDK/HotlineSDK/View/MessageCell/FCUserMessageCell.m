@@ -19,6 +19,7 @@
 #import "FCAudioFragment.h"
 #import "FCFileFragment.h"
 #import "FCDateUtil.h"
+#import "FCUnsupportedFragment.h"
 
 @implementation FCUserMessageCell
 
@@ -135,12 +136,6 @@
             [contentEncloser addSubview:imageFragment];
             [fragmensViewArr addObject:[@"image_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"IMAGE");
-        } else if([fragment.type isEqualToString:@"3"]) {
-            //Skip now
-            //NSLog(@"Audio");
-        } else if([fragment.type isEqualToString:@"4"]) {
-            //Skip now
-            //NSLog(@"Video");
         } else if([fragment.type isEqualToString:@"5"] ) {
             FCDeeplinkFragment *fileFragment = [[FCDeeplinkFragment alloc] initWithFragment:fragment];
             [views setObject:fileFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
@@ -148,9 +143,12 @@
             fileFragment.delegate = self.delegate;
             [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"Button");
-        } else if([fragment.type isEqualToString:@"6"]) {
-            //Skip now
-            //NSLog(@"File");
+        } else {
+            //For Unknown fragment
+            FCUnsupportedFragment *unknownFragment = [[FCUnsupportedFragment alloc] initWithFragment:fragment];
+            [views setObject:unknownFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
+            [contentEncloser addSubview:unknownFragment];
+            [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
         }
     }
     

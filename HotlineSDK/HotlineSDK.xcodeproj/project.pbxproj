@@ -165,10 +165,14 @@
 		CEFA05621EE82F5400DC74CF /* FCImageFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05611EE82F5400DC74CF /* FCImageFragment.m */; };
 		CEFA05651EE82F7400DC74CF /* FCFileFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFA05641EE82F7400DC74CF /* FCFileFragment.m */; };
 		EA035F1620D9515800165D00 /* FCAttributedText.h in Headers */ = {isa = PBXBuildFile; fileRef = EA035F1520D9515800165D00 /* FCAttributedText.h */; };
+		EA104804213F247700122843 /* FCUnsupportedFragment.h in Headers */ = {isa = PBXBuildFile; fileRef = EA104802213F247700122843 /* FCUnsupportedFragment.h */; };
+		EA104805213F247700122843 /* FCUnsupportedFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = EA104803213F247700122843 /* FCUnsupportedFragment.m */; };
 		EA306AA521B7C96B005211E4 /* FCMessageMaskConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = EA306AA321B7C96A005211E4 /* FCMessageMaskConfig.h */; };
 		EA306AA621B7C96B005211E4 /* FCMessageMaskConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = EA306AA421B7C96A005211E4 /* FCMessageMaskConfig.m */; };
 		EA6EB25E21070D4400411D5F /* FCCSATUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6EB25C21070D4400411D5F /* FCCSATUtil.h */; };
 		EA6EB25F21070D4400411D5F /* FCCSATUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6EB25D21070D4400411D5F /* FCCSATUtil.m */; };
+		EA7B897D2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h in Headers */ = {isa = PBXBuildFile; fileRef = EA7B897B2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h */; };
+		EA7B89802187B3F200447052 /* FCUnsupportedFragmentErrMsgs.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7B897F2187B3F200447052 /* FCUnsupportedFragmentErrMsgs.m */; };
 		EA80219A20D99CCD00412B5A /* FCCSatSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = EA80219820D99CCD00412B5A /* FCCSatSettings.h */; };
 		EA80219B20D99CCD00412B5A /* FCCSatSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = EA80219920D99CCD00412B5A /* FCCSatSettings.m */; };
 		EAB07907216B696B00B701C9 /* FCUserAuthConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB07905216B696B00B701C9 /* FCUserAuthConfig.h */; };
@@ -483,11 +487,15 @@
 		CEFA05631EE82F7400DC74CF /* FCFileFragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCFileFragment.h; path = MessageFragments/FCFileFragment.h; sourceTree = "<group>"; };
 		CEFA05641EE82F7400DC74CF /* FCFileFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCFileFragment.m; path = MessageFragments/FCFileFragment.m; sourceTree = "<group>"; };
 		EA035F1520D9515800165D00 /* FCAttributedText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCAttributedText.h; sourceTree = "<group>"; };
+		EA104802213F247700122843 /* FCUnsupportedFragment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCUnsupportedFragment.h; sourceTree = "<group>"; };
+		EA104803213F247700122843 /* FCUnsupportedFragment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCUnsupportedFragment.m; sourceTree = "<group>"; };
 		EA306AA321B7C96A005211E4 /* FCMessageMaskConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCMessageMaskConfig.h; sourceTree = "<group>"; };
 		EA306AA421B7C96A005211E4 /* FCMessageMaskConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCMessageMaskConfig.m; sourceTree = "<group>"; };
 		EA63B61220D8DCEF00C36350 /* FreshchatModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FreshchatModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		EA6EB25C21070D4400411D5F /* FCCSATUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCCSATUtil.h; sourceTree = "<group>"; };
 		EA6EB25D21070D4400411D5F /* FCCSATUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCCSATUtil.m; sourceTree = "<group>"; };
+		EA7B897B2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCUnsupportedFragmentErrorMsgs.h; sourceTree = "<group>"; };
+		EA7B897F2187B3F200447052 /* FCUnsupportedFragmentErrMsgs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCUnsupportedFragmentErrMsgs.m; sourceTree = "<group>"; };
 		EA80219820D99CCD00412B5A /* FCCSatSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCCSatSettings.h; sourceTree = "<group>"; };
 		EA80219920D99CCD00412B5A /* FCCSatSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCCSatSettings.m; sourceTree = "<group>"; };
 		EAB07905216B696B00B701C9 /* FCUserAuthConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCUserAuthConfig.h; sourceTree = "<group>"; };
@@ -579,6 +587,8 @@
 				CE982B891F2728B900B87A66 /* FCRemoteConfig.m */,
 				EA80219820D99CCD00412B5A /* FCCSatSettings.h */,
 				EA80219920D99CCD00412B5A /* FCCSatSettings.m */,
+				EA7B897B2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h */,
+				EA7B897F2187B3F200447052 /* FCUnsupportedFragmentErrMsgs.m */,
 				EAB07905216B696B00B701C9 /* FCUserAuthConfig.h */,
 				EAB07906216B696B00B701C9 /* FCUserAuthConfig.m */,
 				CEF6B9011F3739F000692519 /* FCConversationConfig.h */,
@@ -1033,6 +1043,8 @@
 				CEFA05611EE82F5400DC74CF /* FCImageFragment.m */,
 				CE372FC21EEA8CBB001C803F /* FCDeeplinkFragment.h */,
 				CE372FC31EEA8CBB001C803F /* FCDeeplinkFragment.m */,
+				EA104802213F247700122843 /* FCUnsupportedFragment.h */,
+				EA104803213F247700122843 /* FCUnsupportedFragment.m */,
 			);
 			name = MessageFragments;
 			sourceTree = "<group>";
@@ -1047,7 +1059,9 @@
 				951A3CD321996DF90096E816 /* FCJWTViewController.h in Headers */,
 				EAB0790B216CB7D000B701C9 /* FCJWTUtilities.h in Headers */,
 				CEDCBC041FD55E700054CFCE /* FCFooterView.h in Headers */,
+				EA7B897D2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h in Headers */,
 				EA035F1620D9515800165D00 /* FCAttributedText.h in Headers */,
+				EA104804213F247700122843 /* FCUnsupportedFragment.h in Headers */,
 				EA80219A20D99CCD00412B5A /* FCCSatSettings.h in Headers */,
 				EA306AA521B7C96B005211E4 /* FCMessageMaskConfig.h in Headers */,
 				EA6EB25E21070D4400411D5F /* FCCSATUtil.h in Headers */,
@@ -1205,6 +1219,7 @@
 				CEFA05621EE82F5400DC74CF /* FCImageFragment.m in Sources */,
 				CE16BA241DEDAC4F00EE714C /* FCCSATYesNoPrompt.m in Sources */,
 				CEFA055A1EE82F2000DC74CF /* FCAudioFragment.m in Sources */,
+				EA7B89802187B3F200447052 /* FCUnsupportedFragmentErrMsgs.m in Sources */,
 				3CADFA311E25B20D00829E7F /* FCLoadingViewBehaviour.m in Sources */,
 				EAB0790C216CB7D000B701C9 /* FCJWTUtilities.m in Sources */,
 				CE642C1F1F308C1D00264CA0 /* FCAgentMessageCell.m in Sources */,
@@ -1300,6 +1315,7 @@
 				3C0651041E38C8A100F8B190 /* FCMessagePoller.m in Sources */,
 				35B2EF9D1D000E620014867F /* FCChannelUpdater.m in Sources */,
 				35B2EF8D1D000E620014867F /* FreshchatSDK.m in Sources */,
+				EA104805213F247700122843 /* FCUnsupportedFragment.m in Sources */,
 				35D4E81E1D118E9000EFFE07 /* FCChannelViewController.m in Sources */,
 				CE3EFB531EDFEEE000470AB1 /* FCMessages.m in Sources */,
 				CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */,

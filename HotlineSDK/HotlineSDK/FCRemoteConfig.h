@@ -11,6 +11,7 @@
 #import "FCEnabledFeatures.h"
 #import "FCConversationConfig.h"
 #import "FCCSatSettings.h"
+#import "FCUnsupportedFragmentErrorMsgs.h"
 #import "FCUserDefaults.h"
 #import "FCMessageMaskConfig.h"
 #import "FCUserAuthConfig.h"
@@ -29,6 +30,7 @@
 @property (nonatomic, strong) FCRefreshIntervals *refreshIntervals;
 @property (nonatomic, strong) FCEnabledFeatures *enabledFeatures;
 @property (nonatomic, strong) FCCSatSettings *csatSettings;
+@property (nonatomic, strong) FCUnsupportedFragmentErrorMsgs *unsupportedFragErrMsg;
 @property (nonatomic, strong) FCMessageMaskConfig *messageMaskConfig;
 @property (nonatomic, strong) FCUserAuthConfig *userAuthConfig;
 

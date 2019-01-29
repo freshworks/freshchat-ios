@@ -534,13 +534,13 @@
     
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
-    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    NSString *appKey = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
     NSString *path = [NSString stringWithFormat:FRESHCHAT_API_REMOTE_CONFIG_PATH,appID];
-    
     NSURL *configBaseUrl = [NSURL URLWithString:[NSString stringWithFormat:HOTLINE_USER_DOMAIN,[NSString stringWithFormat:FRESHCHAT_API_REMOTE_CONFIG_PREFIX,[store objectForKey:HOTLINE_DEFAULTS_DOMAIN]]]];
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithBaseURL:configBaseUrl andMethod:HTTP_METHOD_GET];
-    
-    [request setRelativePath:path andURLParams:@[appKey]];
+    NSMutableArray *reqParams = [[NSMutableArray alloc]initWithArray:@[appKey,PARAM_PLATFORM_IOS]];
+    [reqParams addObjectsFromArray:[FCLocaleUtil userLocaleParams:NO]];
+    [request setRelativePath:path andURLParams:reqParams];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     
     NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
