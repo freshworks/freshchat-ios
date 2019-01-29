@@ -65,6 +65,9 @@
 "error_message_account_not_active_text" = "This section is no longer available";
 "error_message_account_not_active_cancel" = "Cancel";
 
+/*Unsupported message content */
+"message_unsupported_content" = "Unsupported message content";
+
 /* Posting audio message alerts */
 "short_audio_alert_title" = "Your message is too short.";
 "short_audio_alert_description_text" = "The audio recording is too short. Please try again";
@@ -141,4 +144,3 @@
 
 /*Business hour offline response */
 "business_hour_offline"="We are away now";
-

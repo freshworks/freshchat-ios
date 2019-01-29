@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.2.0
+Version         : 2.3.0
+
+Ver 2.3.0 
+__________________________
+Enhancement
+- Graceful handling of unsupported messages
+Fix
+- Invalid image asset reference
 
 Ver 2.2.0 
 __________________________

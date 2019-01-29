@@ -117,6 +117,19 @@
 			<key>dividerColor</key>
 			<string>#B3B3B3</string>
 		</dict>
+		<key>FallbackMessageStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>textColor</key>
+			<string></string>
+			<key>borderColor</key>
+			<string></string>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
 		<key>CustomerSurveyDialogStyle</key>
 		<dict>
 			<key>background</key>
@@ -262,6 +275,21 @@
 			<string>10</string>
 			<key>UserBubbleRight</key>
 			<string>10</string>
+		</dict>
+		<key>UnsupportedContentTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>10.0f</string>
+			<key>textColor</key>
+			<string>#8D96A5</string>
+			<key>background</key>
+			<string>#FFFFFF</string>
+			<key>borderColor</key>
+			<string>#F2F3F5</string>
+			<key>icon</key>
+			<string>FCResources.bundle/Images/freshchat_unsupported_content_icon</string>
 		</dict>
 	</dict>
 	<key>ChannelList</key>
