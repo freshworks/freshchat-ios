@@ -124,8 +124,10 @@
     FCContainerController *containerCtr =  (FCContainerController*)self.parentViewController;
     [containerCtr.footerView setViewColor:[FCTheme sharedInstance].dialogueBackgroundColor];
     [self setSubviews];
+    if(!self.faqOptions){
+        self.faqOptions = [FAQOptions new];
+    }
     [self fixAudioPlayback];
-    [self handleArticleVoteAfterSometime];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -149,7 +151,7 @@
 }
 
 -(void)handleArticleVoteAfterSometime{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [self handleArticleVotePrompt];
     });
 }
@@ -213,7 +215,6 @@
     [self.webView loadHTMLString:self.embedHTML baseURL:nil];
     [self.view addSubview:self.webView];
     [self.webView setBackgroundColor:[UIColor whiteColor]];
-    
     self.bottomView = [[UIView alloc]init];
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.bottomView];
@@ -261,6 +262,7 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
     [self.activityIndicator stopAnimating];
+    [self handleArticleVoteAfterSometime];
 }
 
 //Hack for playing audio on WebView
@@ -297,14 +299,14 @@
     
 }
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    [self handleArticleVotePrompt];
-}
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if(self.webView.scrollView.contentOffset.y >= 0 && self.webView.scrollView.contentOffset.y < (self.webView.scrollView.contentSize.height - self.webView.scrollView.frame.size.height)){
-        if(self.bottomViewHeightConstraint.constant > 0 ) {
-            [self hideBottomView]; // only hide when necessary
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if((scrollView.contentOffset.y+self.bottomViewHeightConstraint.constant) >= (scrollView.contentSize.height - scrollView.frame.size.height)){
+        [self handleArticleVotePrompt];
+    }
+    else{
+        if(![self isArticeVoted]){
+            [self hideBottomView];
         }
     }
 }
@@ -312,36 +314,37 @@
 -(void)handleArticleVotePrompt{
     if (self.webView.scrollView.contentOffset.y >= ((self.webView.scrollView.contentSize.height-20) - self.webView.scrollView.frame.size.height)) {
         if(self.bottomViewHeightConstraint.constant == 0 ) {
-            BOOL isArticleVoted = [self.votingManager isArticleVoted:self.articleID];
-            BOOL articleVote = [self.votingManager getArticleVoteFor:self.articleID];
-            if (!isArticleVoted) {
+            //Removed "getArticleVoteFor" as its not needed now as we are showing feedview once rated - Function will be there future use
+            if (![self isArticeVoted]) {
                 [self showArticleRatingPrompt];
             }
             else{
-                if (articleVote == NO) {
-                    [self showContactUsPrompt];
-                }
+                [self hideBottomView];
             }
         }
     }
+}
+
+- (BOOL) isArticeVoted{
+    return [self.votingManager isArticleVoted:self.articleID];
 }
 
 -(void) showArticleRatingPrompt{
     [self updateBottomViewWith:self.articleVotePromptView];
 }
 
--(void)showContactUsPrompt{
+-(void)showPromptWithContactUsHidden : (BOOL) showContactUS{
     if(self.faqOptions && ![self.faqOptions showContactUsOnFaqScreens]){
-        self.thankYouPromptView.Button1.hidden = YES;
+        self.thankYouPromptView.contactUsBtn.hidden = showContactUS;
     }
     else{
-        self.thankYouPromptView.Button1.hidden = NO;
+        self.thankYouPromptView.contactUsBtn.hidden = showContactUS;
     }
     [self updateBottomViewWith:self.thankYouPromptView];
 }
 
 -(void)showThankYouPrompt{
-    self.thankYouPromptView.Button1.hidden = YES;
+    self.thankYouPromptView.contactUsBtn.hidden = YES;
     [self updateBottomViewWith:self.thankYouPromptView];
 }
 
@@ -366,14 +369,18 @@
 }
 
 -(void)yesButtonClicked:(id)sender{
-    [self showThankYouPrompt];
+    [self showPromptWithContactUsHidden:YES];
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"UpVoting Completed");
     }];
 }
 
 -(void)noButtonClicked:(id)sender{
-    [self showContactUsPrompt];
+    if(![self.faqOptions showContactUsOnFaqNotHelpful]){
+        [self showPromptWithContactUsHidden:YES];
+    }else{
+        [self showPromptWithContactUsHidden:NO];
+    }
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"DownVoting Completed");
     }];

@@ -42,6 +42,7 @@
 @property (nonatomic) BOOL isKeyboardOpen;
 @property (nonatomic, strong) FCEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
+@property (nonatomic, strong) FCFooterView  *footerView;
 @end
 
 @implementation FCSearchViewController
@@ -49,7 +50,6 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupSubviews];
-    [self setupTap];
     self.view.userInteractionEnabled=YES;
     [self configureBackButton];
 }
@@ -73,9 +73,8 @@
     self.faqOptions = options;
 }
 
-// NOT Used - Need to be used when we figure out how to show Contact us on search
--(BOOL)canDisplayFooterView{
-    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+- (BOOL) canHideContactUsBar {
+    return ((self.faqOptions && !self.faqOptions.showContactUsOnFaqScreens));
 }
 
 -(FCTheme *)theme{
@@ -98,14 +97,6 @@
 -(void)localNotificationUnSubscription{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
-
--(void)setupTap{
-    self.recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
-    [self.recognizer setNumberOfTapsRequired:1];
-    if(self.searchResults.count == 0){
-        [self.view addGestureRecognizer:self.recognizer];
-    }
 }
 
 - (void)handleTapBehind:(UITapGestureRecognizer *)sender{
@@ -163,18 +154,42 @@
     
     self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
     
-    [self setEmptySearchResultView];
+    self.contactUsView = [[FCMarginalView alloc] initWithDelegate:self];
+    self.contactUsView.clipsToBounds = YES;
+    
+    BOOL isembedView = (self.tabBarController != nil) ? true : false;
+    self.footerView = [[FCFooterView alloc] initFooterViewWithEmbedded:isembedView];
+    self.footerView.translatesAutoresizingMaskIntoConstraints = false;
 
+    [self.footerView setViewColor:[self.theme articleListBackgroundColor]];
+    [self setEmptySearchResultView];
+    
     [self.view addSubview:self.searchBar];
     
-    NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView};
+    [self.view addSubview:self.contactUsView];
+    
+    [self.view addSubview:self.footerView];
+    
+    NSDictionary *views = @{ @"top":self.topLayoutGuide,@"searchBar" : self.searchBar,@"trial":self.tableView, @"ContactUsView" : self.contactUsView, @"footerView" : self.footerView};
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|"
                                                                       options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[trial]|"
                                                                       options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial]|"
-                                                                      options:0 metrics:nil views:views]];
+    int footerViewHeight = 20;
+    if([FCUtilities isPoweredByFooterViewHidden]){
+        footerViewHeight = 0;
+    }
+    else if([FCUtilities hasNotchDisplay] && !isembedView) {
+        footerViewHeight = 33;
+    }
+    int contactUsHeight = [self canHideContactUsBar] ? 0 : 44;
+    NSDictionary *metrics = @{ @"contactUsHtVal" : @(contactUsHeight),  @"footerViewHtVal" : @(footerViewHeight) };
+        
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][searchBar][trial][ContactUsView(contactUsHtVal)][footerView(footerViewHtVal)]|" options:0 metrics:metrics views:views]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[ContactUsView]|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[footerView]|" options:0 metrics:nil views:views]];
 }
 
 - (void) setEmptySearchResultView{
@@ -221,7 +236,12 @@
     self.keyboardHeight = 0.0;
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:animationDuration animations:^{
-        [self.view layoutIfNeeded];
+        if([FCStringUtil isEmptyString:self.searchBar.text]){
+            [self dismissModalViewControllerAnimated:NO];
+        }
+        else{
+            [self.view layoutIfNeeded];
+        }
     }];
 }
 
@@ -342,7 +362,6 @@
         [self filterArticlesForSearchTerm:searchText];
         [self.view removeGestureRecognizer:self.recognizer];
     }else{
-        [self.view addGestureRecognizer:self.recognizer];
         self.tableView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.5];
         self.searchResults = nil;
         [self hideEmptySearchView];

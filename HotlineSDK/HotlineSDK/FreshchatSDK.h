@@ -417,6 +417,11 @@ enum TagFilterType {
  * Default set to NO which hides "contact us" button on the navigation bar
  */
 @property (nonatomic) BOOL showContactUsOnAppBar;
+/*
+ * Option to show conversation link on article rating bar for Negative response,
+ * Default set to YES which shows conversation link there
+ */
+@property (nonatomic) BOOL showContactUsOnFaqNotHelpful;
 /**
  *  @discussion This method lets you to filter the list of Categories or Articles by tags
  *

@@ -20,6 +20,7 @@
 #import "FCTagManager.h"
 #import "FCLocalization.h"
 #import "FCControllerUtils.h"
+#import "FCCategoryViewBehaviour.h"
 
 @interface FCArticlesController ()
 
@@ -28,6 +29,7 @@
 @property (strong, nonatomic) FCTheme *theme;
 @property (nonatomic,strong) FAQOptions *faqOptions;
 @property BOOL isFilteredView;
+@property (nonatomic, strong) FCCategoryViewBehaviour *categoryViewBehaviour;
 
 @end
 
@@ -91,7 +93,7 @@
 }
 
 -(BOOL)canDisplayFooterView{
-    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens && !self.faqOptions.showContactUsOnAppBar;
 }
 
 -(void)updateDataSource{
@@ -128,16 +130,29 @@
 }
 
 -(void)setNavigationItem{
+    
     UIBarButtonItem *searchBarButton = [[FCBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_SEARCH_ICON]
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     [self configureBackButton];
+    NSMutableArray *rtNavBarItems = [NSMutableArray new];
     if(!self.isFilteredView){
-        self.parentViewController.navigationItem.rightBarButtonItems = @[searchBarButton];
+         [rtNavBarItems addObject:searchBarButton];
     }
+    if(self.faqOptions && self.faqOptions.showContactUsOnAppBar && self.faqOptions.showContactUsOnFaqScreens){
+        UIBarButtonItem *contactUsBarButton = [[FCBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_CONTACT_US_ICON]
+                                                                               style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
+        [rtNavBarItems addObject:contactUsBarButton];
+    }
+    
     if(!self.category && !self.embedded){
         UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
+    self.parentViewController.navigationItem.rightBarButtonItems = rtNavBarItems;
+}
+
+-(void)contactUsButtonAction:(id)sender{
+    [self.categoryViewBehaviour launchConversations];
 }
 
 -(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
