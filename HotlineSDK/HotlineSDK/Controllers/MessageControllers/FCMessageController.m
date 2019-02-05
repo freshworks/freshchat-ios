@@ -776,15 +776,14 @@ typedef struct {
 }
 
 -(void)inputToolbar:(FCInputToolbarView *)toolbar sendButtonPressed:(id)sender{
-    
-    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
-        return;
-    }
-    
     NSCharacterSet *trimChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *toSend = [self.inputToolbar.textView.text stringByTrimmingCharactersInSet:trimChars];
     self.inputToolbar.textView.text = @"";
     [self.inputToolbar setSendButtonEnabled:NO];
+    if(![[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
+        [self inputToolbar:toolbar textViewDidChange:toolbar.textView];
+        return;
+    }//Condition added later to avoid inconsistancy with failed/incorrect config or inactive account
     [FCMessageHelper uploadMessageWithImage:nil textFeed:toSend onConversation:self.conversation andChannel:self.channel];
     [self checkPushNotificationState];
     [self inputToolbar:toolbar textViewDidChange:toolbar.textView];

@@ -312,7 +312,7 @@ JWTScheduler *jwtScheduler;
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
-    
+    options.showContactUsOnFaqNotHelpful = TRUE;
     options.showContactUsOnAppBar = true;
     [options filterContactUsByTags:@[@"cht1"] withTitle:self.faqContactUsTitleField1.text];
     [options filterByTags:@[@"faqt1",@"faqt2"] withTitle:self.faqTitleField1.text andType: ARTICLE];
@@ -326,6 +326,8 @@ JWTScheduler *jwtScheduler;
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
+    options.showContactUsOnFaqNotHelpful = TRUE;
+    options.showContactUsOnAppBar = TRUE;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }

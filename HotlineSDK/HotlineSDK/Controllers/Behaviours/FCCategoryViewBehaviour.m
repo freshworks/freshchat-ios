@@ -164,14 +164,14 @@
     if([FCFAQUtil hasFilteredViewTitle:self.faqOptions] && [FCFAQUtil hasTags:self.faqOptions] && !self.isFallback){
         self.categoryViewDelegate.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
     }
-    if(self.faqOptions && self.faqOptions.showContactUsOnAppBar){
+    if(self.faqOptions && self.faqOptions.showContactUsOnFaqScreens && self.faqOptions.showContactUsOnAppBar){
         [rightBarItems addObject:contactUsBarButton];
     }
     self.categoryViewDelegate.parentViewController.navigationItem.rightBarButtonItems = rightBarItems;
 }
 
 -(BOOL)canDisplayFooterView{
-    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens;
+    return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens && !self.faqOptions.showContactUsOnAppBar;
 }
 
 @end

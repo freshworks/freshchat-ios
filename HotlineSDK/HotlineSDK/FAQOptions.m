@@ -28,6 +28,7 @@
     if (self) {
         self.showFaqCategoriesAsGrid = YES;
         self.showContactUsOnFaqScreens = YES;
+        self.showContactUsOnFaqNotHelpful = YES;
         self.showContactUsOnAppBar = NO;
         self.filterType = CATEGORY;
         self.filterByTags = @[];
@@ -49,7 +50,6 @@
 -(NSString *) filteredViewTitle{
     return self.tagViewTitle;
 }
-
 
 -(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title {
     self.contactUsTags = [FCUtilities convertTagsArrayToLowerCase:tags];

@@ -4,12 +4,19 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.4.0 
+__________________________
+Enhancement :
+- Add FAQ options flag showContactUsOnFaqNotHelpful for showing ContactUs in article detail view
+Changes: 
+- When `showContactUsOnAppBar` is true, contact us button will be shown in app bar only
+Fix :
+- Invalid image asset reference
+
 Ver 2.3.0 
 __________________________
 Enhancement
 - Graceful handling of unsupported messages
-Fix
-- Invalid image asset reference
 
 Ver 2.2.0 
 __________________________

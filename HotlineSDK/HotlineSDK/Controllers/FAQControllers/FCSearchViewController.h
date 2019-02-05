@@ -11,9 +11,11 @@
 #import <UIKit/UIKit.h>
 #import "FCViewController.h"
 #import "FAQOptionsInterface.h"
+#import "FCMarginalView.h"
 
-@interface FCSearchViewController : FCViewController <UITableViewDataSource, UITableViewDelegate,FAQOptionsInterface>
+@interface FCSearchViewController : FCViewController <UITableViewDataSource, UITableViewDelegate,FAQOptionsInterface, FDMarginalViewDelegate>
 
 @property (strong, nonatomic) NSArray *searchResults;
+@property (nonatomic, strong)FCMarginalView *contactUsView;
 
 @end

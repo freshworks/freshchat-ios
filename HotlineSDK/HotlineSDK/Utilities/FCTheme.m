@@ -115,6 +115,7 @@
 
 -(UIImage *)getImageWithKey:(NSString *)key{
     NSString *imageName = [self fetchThemeValueForKey:[NSString stringWithFormat:@"Images.%@",key]];
+    if(imageName.length == 0)return nil;
     UIImage *image = [UIImage imageNamed:imageName];
     if([FCUtilities isDeviceLanguageRTL] && ([key isEqualToString:IMAGE_SEND_ICON] || [key isEqualToString:IMAGE_BACK_BUTTON] || [key isEqualToString:IMAGE_TABLEVIEW_ACCESSORY_ICON])){
         image =  [image imageFlippedForRightToLeftLayoutDirection];
@@ -175,7 +176,7 @@
 
 -(UIImage *)getImageValueWithKey:(NSString *)key{
     NSString *imageName = [self fetchThemeValueForKey:[NSString stringWithFormat:@"%@",key]];
-    
+    if(imageName.length == 0)return nil;
     UIImage *image = [UIImage imageNamed:imageName];
     if([FCUtilities isDeviceLanguageRTL] && ![key isEqualToString:IMAGE_SEARCH_ICON]){
        image =  [image imageFlippedForRightToLeftLayoutDirection];

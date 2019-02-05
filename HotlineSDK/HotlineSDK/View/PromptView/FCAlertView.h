@@ -16,7 +16,7 @@
 
 @interface FCAlertView : FCPromptView
 
-@property (nonatomic, strong) UIButton *Button1;
+@property (nonatomic, strong) UIButton *contactUsBtn;
 @property (nonatomic, strong) UILabel *promptLabel;
 
 -(instancetype)initWithDelegate:(id <FCAlertViewDelegate>)delegate andKey:(NSString *)key;

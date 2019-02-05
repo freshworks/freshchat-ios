@@ -29,24 +29,25 @@
         self.promptLabel = [self createPromptLabel:key];
         [self addSubview:self.promptLabel];
         
-        self.Button1 = [self createPromptButton:@"contact_us" withKey:key];
-        [self.Button1 setTitleColor:[[FCTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
-        [self.Button1 addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.Button1];
-        [self setBackgroundColor:[UIColor whiteColor]];
+        self.contactUsBtn = [self createPromptButton:@"contact_us" withKey:key];
+        [self.contactUsBtn setTitleColor:[[FCTheme sharedInstance] dialogueButtonColor] forState:UIControlStateNormal];
+        [self.contactUsBtn addTarget:self.delegate action:@selector(buttonClickedEvent:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.contactUsBtn];
+        self.contactUsBtn.backgroundColor = [[FCTheme sharedInstance] talkToUsButtonBackgroundColor];
         [self addSpacersInView:self];
     }
     return self;
 }
 
 -(void)setupConstraints{
-    self.buttonLabelWidth = [self getDesiredWidthFor:self.Button1];
-    self.views = @{@"Button1" : self.Button1, @"Prompt":self.promptLabel};
-    self.metrics = @{ @"buttonLabelWidth" : @(self.buttonLabelWidth),  @"buttonSpacing" : @(BUTTON_SPACING) };
+    self.buttonLabelWidth = [self getDesiredWidthFor:self.contactUsBtn];
+    self.views = @{@"Button1" : self.contactUsBtn, @"Prompt":self.promptLabel};
+    float buttonHeight = self.contactUsBtn.isHidden ? 0 : self.contactUsBtn.intrinsicContentSize.height+5;//% added for better size
+    self.metrics = @{ @"buttonHeight" : @(buttonHeight) };
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[Button1]|" options:NSLayoutFormatAlignAllCenterY metrics:self.metrics views:self.views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[Prompt]|" options:0 metrics:self.metrics views:self.views]];
-    [self addConstraint:@"V:|[Prompt][Button1]|" InView:self];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[Prompt][Button1(buttonHeight)]|" options:0 metrics:self.metrics views:self.views]];
 }
 
 -(void)layoutSubviews{

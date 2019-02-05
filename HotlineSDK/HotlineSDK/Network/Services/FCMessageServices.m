@@ -348,7 +348,7 @@ static FCNotificationHandler *handleUpdateNotification;
             // TODO : Come up with a better logic to do this migration
             NSMutableDictionary *dictionary = [responseInfo responseAsDictionary][CONTENT_LOCALE];
             NSNumber *responseLocaleId = [dictionary objectForKey:@"localeId"];
-            if( ![requestlocaleId isEqualToNumber:responseLocaleId] ) {
+            if([responseLocaleId isKindOfClass: [NSNumber class]] && ![requestlocaleId isEqualToNumber:responseLocaleId]) {
                 [FCUserDefaults setNumber:responseLocaleId forKey:FC_CHANNELS_LAST_RECEIVED_LOCALE];
             }
             [FCLocaleUtil updateLocale];
