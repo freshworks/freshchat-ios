@@ -20,7 +20,6 @@
 #import "FCTagManager.h"
 #import "FCLocalization.h"
 #import "FCControllerUtils.h"
-#import "FCCategoryViewBehaviour.h"
 
 @interface FCArticlesController ()
 
@@ -29,7 +28,6 @@
 @property (strong, nonatomic) FCTheme *theme;
 @property (nonatomic,strong) FAQOptions *faqOptions;
 @property BOOL isFilteredView;
-@property (nonatomic, strong) FCCategoryViewBehaviour *categoryViewBehaviour;
 
 @end
 
@@ -152,7 +150,9 @@
 }
 
 -(void)contactUsButtonAction:(id)sender{
-    [self.categoryViewBehaviour launchConversations];
+    ConversationOptions *options = [ConversationOptions new];
+    [options filterByTags:self.faqOptions.contactUsTags withTitle:self.faqOptions.contactUsTitle];
+    [[Freshchat sharedInstance] showConversations:self withOptions:options];
 }
 
 -(UIViewController<UIGestureRecognizerDelegate> *)gestureDelegate{
