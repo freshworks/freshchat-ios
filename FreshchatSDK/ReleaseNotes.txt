@@ -2,14 +2,21 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.3.0
+Version         : 2.4.0
+
+Ver 2.4.0 
+__________________________
+Enhancement :
+- Add FAQ options flag showContactUsOnFaqNotHelpful for showing ContactUs in article detail view
+Changes: 
+- When `showContactUsOnAppBar` is true, contact us button will be shown in app bar only
+Fix :
+- Invalid image asset reference
 
 Ver 2.3.0 
 __________________________
 Enhancement
 - Graceful handling of unsupported messages
-Fix
-- Invalid image asset reference
 
 Ver 2.2.0 
 __________________________
