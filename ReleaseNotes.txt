@@ -1,4 +1,9 @@
 
+Ver 2.4.1 
+__________________________
+Bug Fix:
+- Custom localised strings being cleared on resetUser
+
 Ver 2.4.0 
 __________________________
 Enhancement :
