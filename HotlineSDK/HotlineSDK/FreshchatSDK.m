@@ -805,6 +805,9 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
         config.themeName = FD_DEFAULT_THEME_NAME;
     }
     
+    if([store objectForKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE]){
+        config.stringsBundle = [store objectForKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
+    }
     //Clear FDWebImage user cache
     [[FDImageCache sharedImageCache] clearMemory];
     [[FDImageCache sharedImageCache] clearDiskOnCompletion:nil];
