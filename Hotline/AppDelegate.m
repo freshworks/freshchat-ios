@@ -205,7 +205,6 @@
         //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     //}
     
-    //[[Freshchat sharedInstance] setUserProperties:@{ @"SDK Version" : [Freshchat SDKVersion] }];
     
     
 
@@ -214,6 +213,7 @@
     }];
     
     [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSLog(@"Loop1:::");
         NSLog(@"Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
         NSLog(@"Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
         /*

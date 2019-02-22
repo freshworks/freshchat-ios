@@ -707,15 +707,14 @@ static NSInteger networkIndicator = 0;
 }
 
 +(void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID {
-    if (restoreID && externalID) {
-        if ( restoreID != [FreshchatUser sharedInstance].restoreID || externalID != [FreshchatUser sharedInstance].externalID ) {
-            FreshchatUser *currentUser = [FreshchatUser sharedInstance];
-            if(currentUser != nil) {
-                currentUser.restoreID = restoreID;
-                currentUser.externalID = externalID;
-                [FCLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
-                [FCUsers storeUserInfo:currentUser];
-            }
+    FreshchatUser *currentUser = [FreshchatUser sharedInstance];
+    if (currentUser && restoreID && externalID) {
+        if ( ![restoreID isEqualToString:currentUser.restoreID]
+            || ![externalID isEqualToString:currentUser.externalID]) {
+            currentUser.restoreID = restoreID;
+            currentUser.externalID = externalID;
+            [FCUsers storeUserInfo:currentUser];
+            [FCLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
         }
     }
 }
@@ -747,12 +746,7 @@ static NSInteger networkIndicator = 0;
     if(userDict[@"jwtUserAuthToken"]){
         user.jwtToken = userDict[@"jwtUserAuthToken"];
     }
-    if([[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
-        [FCUsers storeUserInfo:user];
-    }
-    else{
-        [[Freshchat sharedInstance]setUser:user];
-    }
+    [FCUsers storeUserInfo:user];
     [self updateUserAlias: userDict[@"alias"]];
 }
 

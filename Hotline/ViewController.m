@@ -15,6 +15,7 @@
 #import "JWTScheduler.h"
 #import "Hotline_Demo-Swift.h"
 
+
 #define kOFFSET_FOR_KEYBOARD 160.0
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
 #define JWT_SCHEDULER_STORYBOARD_CONTROLLER @"JWTScheduler"
@@ -60,6 +61,9 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *event;
 @property (nonatomic, retain) IBOutlet UILabel *tokenState;
+@property (weak, nonatomic) IBOutlet UILabel *restoreIDCount;
+
+@property int restoreEventCount;
 
 @end
 
@@ -115,6 +119,11 @@
             NSLog(@"--Without tags : %d",count);
         }];
     }];
+    [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        self.restoreEventCount = self.restoreEventCount + 1;
+        self.restoreIDCount.text = [NSString stringWithFormat:@"RE : %d",self.restoreEventCount];
+     }];
+
     
     self.faqTagsField1.delegate = self;
     self.faqTitleField1.delegate = self;
@@ -152,8 +161,9 @@
                                                  name:FRESHCHAT_ACTION_USER_ACTIONS
                                                object:nil];
     
-    
 }
+
+
 
 - (void) jwtActionEvent:(NSNotification *)notif {
     NSLog(@"====JWT Event - %@ ====", notif.userInfo[@"action"]);
@@ -291,7 +301,7 @@
 JWTScheduler *jwtScheduler;
 
 - (IBAction)chatButtonPressed:(id)sender {
-    /*
+    
      SampleController *sampleController;
      //SampleViewController hidden
      if(sampleController == nil) {
@@ -299,13 +309,14 @@ JWTScheduler *jwtScheduler;
         sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     }
     [self presentViewController:sampleController animated:YES completion:nil];
-    */
+    /*
     
     if( jwtScheduler == nil) {
         UIStoryboard *jwtSchedulerSB = [UIStoryboard storyboardWithName:JWT_SCHEDULER_STORYBOARD_CONTROLLER bundle:nil];
         jwtScheduler = [jwtSchedulerSB instantiateViewControllerWithIdentifier:JWT_SCHEDULER_STORYBOARD_CONTROLLER];
     }
     [self presentViewController:jwtScheduler animated:YES completion:nil];
+     */
 }
 
 - (IBAction)articleFilter1:(id)sender{

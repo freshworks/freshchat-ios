@@ -114,6 +114,8 @@
     FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
     NSData *userData;
     NSError *error = nil;
+    
+    
     if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]){
         if(userInfo){
             userData = [NSJSONSerialization dataWithJSONObject:@{@"user" : userInfo } options:NSJSONWritingPrettyPrinted error:&error];
@@ -144,6 +146,12 @@
                 
 
                 ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
+                
+                NSDictionary *response = responseInfo.responseAsDictionary;
+                if(response && response[@"identifier"] && response[@"restoreId"]) {
+                    [FCUtilities updateUserWithExternalID:response[@"identifier"]
+                                            withRestoreID:response[@"restoreId"]];
+                }
                 
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 [FCCoreServices setAsUploadedTo:userProperties withCompletion:nil];
@@ -671,7 +679,7 @@
                     [FCUtilities updateUserWithData:response];
                     [FCUserUtil setUserMessageInitiated];
                     [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
-                    [FCUtilities updateUserWithExternalID:response[@"identifier"] withRestoreID:response[@"restoreId"]];
+                    [FCLocalNotification post:FRESHCHAT_USER_RESTORE_ID_GENERATED info:@{}];
                     [FCUtilities initiatePendingTasks];
                 }
             }
