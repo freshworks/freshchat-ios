@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.4.1
+Version         : 2.4.2
+
+Ver 2.4.2 
+__________________________
+Bug Fix:
+- Trigger Restore ID event when there is change in restore ID and external ID.
 
 Ver 2.4.1 
 __________________________
