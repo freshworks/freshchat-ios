@@ -25,6 +25,9 @@
 @property (nonatomic) BOOL kill;
 @property (strong, nonatomic) NSTimer *timer;
 @property (nonatomic) int itemCount;
+@property (weak, nonatomic) IBOutlet UISwitch *restoreEventSwitch;
+
+
 @end
 
 @implementation SampleController
@@ -58,7 +61,9 @@
         }
         
         self.userDetails.text = userContent;
-    }];    
+    }];
+    
+
 }
 
 -(float)getTimeoutDuration {
@@ -148,7 +153,7 @@
         [self.timer invalidate];
         [self.timerState setOn:false];
     }
-    [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_USER_RESTORE_ID_GENERATED];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED];
     [self dismissViewControllerAnimated:true completion:nil];
 }
@@ -171,6 +176,31 @@
     [[Freshchat sharedInstance] showFAQs:self];
     //[[Freshchat sharedInstance] openFreshchatDeeplink:@"freshchat://channels1?id=192" viewController:self];
 
+}
+
+- (IBAction)restoreEvent:(id)sender {
+    if(self.restoreEventSwitch.isOn) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createLoopInRestoreID) name:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil];
+        [[Freshchat sharedInstance] identifyUserWithExternalID:@"sanjith" restoreID:@"d6cdc47a-8028-42d6-9d84-cd2a08fdd1a8"];
+    } else {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil];
+    }
+}
+
+-(void) createLoopInRestoreID {
+    NSLog(@"Loop:::");
+    for (int i=0; i<=3; i++) {
+        FreshchatUser *user = [FreshchatUser sharedInstance];
+        user.firstName = @"Hey";
+        user.lastName = @"There";
+        user.email = @"adsfasfasfads@asdfsd.com";
+        [[Freshchat sharedInstance] setUser:user];
+        
+        [[Freshchat sharedInstance] setUserProperties:@{ @"SDK Version" : [Freshchat SDKVersion] }];
+        
+        FreshchatMessage *message = [[FreshchatMessage alloc] init];
+        [message setMessage:@"Hey there"];
+    }
 }
 
 - (IBAction)clearUserData:(id)sender {

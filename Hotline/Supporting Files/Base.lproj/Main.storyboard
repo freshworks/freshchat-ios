@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -304,6 +304,15 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RE : 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w0I-zx-NB5">
+                                <rect key="frame" x="60" y="37" width="45" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="w26-mQ-s0V"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -374,6 +383,7 @@
                             <constraint firstItem="BNf-Bw-oY1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="175" id="cVh-IU-hLT"/>
                             <constraint firstItem="jHv-ef-rKy" firstAttribute="leading" secondItem="C0T-Li-Hoq" secondAttribute="trailing" constant="5.5" id="ciC-fE-Vrb"/>
                             <constraint firstItem="Ztz-Gx-OpG" firstAttribute="top" secondItem="vvd-O5-Z8Q" secondAttribute="bottom" constant="8" symbolic="YES" id="dQP-Px-R9k"/>
+                            <constraint firstItem="w0I-zx-NB5" firstAttribute="leading" secondItem="O2s-Q2-4ac" secondAttribute="trailing" constant="16" id="dV6-h3-QFB"/>
                             <constraint firstItem="Pxz-Rs-ylS" firstAttribute="bottom" secondItem="SbT-UN-Q0R" secondAttribute="bottom" id="ePs-bg-gsO"/>
                             <constraint firstItem="O2s-Q2-4ac" firstAttribute="top" secondItem="7TW-UG-4UY" secondAttribute="top" constant="1" id="ebt-Jk-Ba5"/>
                             <constraint firstItem="czu-LN-JcU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="f5K-oQ-pu9"/>
@@ -389,6 +399,7 @@
                             <constraint firstItem="HDy-Fi-0Kp" firstAttribute="trailing" secondItem="eHB-8x-7aF" secondAttribute="trailing" id="mt5-Nf-CyF"/>
                             <constraint firstItem="C0T-Li-Hoq" firstAttribute="leading" secondItem="dY0-x9-7bQ" secondAttribute="trailing" constant="3" id="mvP-5l-Bww"/>
                             <constraint firstItem="SEa-zO-e9J" firstAttribute="top" secondItem="fFR-YA-pJM" secondAttribute="bottom" constant="8" symbolic="YES" id="oGm-du-Ppy"/>
+                            <constraint firstItem="ZXU-9Z-Pij" firstAttribute="leading" secondItem="w0I-zx-NB5" secondAttribute="trailing" constant="31" id="ohe-40-aCj"/>
                             <constraint firstItem="ZIn-zO-eWh" firstAttribute="leading" secondItem="2NX-Cc-icV" secondAttribute="trailing" constant="8" id="ooU-Xw-8eB"/>
                             <constraint firstItem="O2s-Q2-4ac" firstAttribute="leading" secondItem="k2Q-6y-c57" secondAttribute="leading" id="pF0-H1-qRN"/>
                             <constraint firstItem="SEa-zO-e9J" firstAttribute="trailing" secondItem="czu-LN-JcU" secondAttribute="trailing" constant="-85" id="pFS-oA-dei"/>
@@ -396,6 +407,7 @@
                             <constraint firstItem="jHv-ef-rKy" firstAttribute="leading" secondItem="6K3-OF-eKN" secondAttribute="leading" id="prI-vH-4mu"/>
                             <constraint firstItem="g6Y-Bv-rEC" firstAttribute="leading" secondItem="6K3-OF-eKN" secondAttribute="trailing" constant="50" id="qN3-Te-Vxn"/>
                             <constraint firstItem="vvd-O5-Z8Q" firstAttribute="top" secondItem="wPs-cd-dxH" secondAttribute="bottom" constant="14" id="rFU-Rl-3Rd"/>
+                            <constraint firstItem="Pxz-Rs-ylS" firstAttribute="top" secondItem="w0I-zx-NB5" secondAttribute="bottom" constant="8" id="rVD-xl-kzR"/>
                             <constraint firstItem="ZXU-9Z-Pij" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="14" id="s4r-ce-O2t"/>
                             <constraint firstItem="MJM-Jw-hHw" firstAttribute="bottom" secondItem="7TW-UG-4UY" secondAttribute="bottom" constant="10" id="sCX-sH-2b5"/>
                             <constraint firstItem="7TW-UG-4UY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZXU-9Z-Pij" secondAttribute="trailing" constant="20" id="sVt-BY-ogi"/>
@@ -439,6 +451,7 @@
                         <outlet property="message" destination="ZIn-zO-eWh" id="Vng-CN-Pb9"/>
                         <outlet property="myGridSwitch" destination="6K3-OF-eKN" id="wfX-Xt-QEA"/>
                         <outlet property="mysWitch" destination="Pxz-Rs-ylS" id="aaD-Wn-Xwh"/>
+                        <outlet property="restoreIDCount" destination="w0I-zx-NB5" id="orG-ep-mhc"/>
                         <outlet property="sendMessageTag" destination="2NX-Cc-icV" id="9ja-ti-XRj"/>
                         <outlet property="tokenState" destination="jHv-ef-rKy" id="7cb-xC-Xm5"/>
                         <outlet property="unreadCountAll" destination="bSg-fe-dcT" id="Dfw-61-1qb"/>
