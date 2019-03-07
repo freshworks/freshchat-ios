@@ -94,6 +94,8 @@
 + (void) removeFlagToDisableUserPropUpdate;
 + (BOOL) canUpdateUserProperties;
 + (BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UIViewController *) navController handleFreshchatLinks:(BOOL) handleFreshchatLinks;
++ (BOOL) canMakeConversationFetchCall;
++ (void) updateCurrentTimeForKey : (NSString *) keyName;
 
 @end
 
