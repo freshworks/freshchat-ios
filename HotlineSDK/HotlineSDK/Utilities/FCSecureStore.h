@@ -59,7 +59,7 @@
 #define FC_CONVERSATIONS_LAST_MODIFIED_AT_V2 @"freshchat_defaults_conversations_last_updated_svr_time_v2"
 //Added V2 to fix wrong last updated conversation time with v1.4.1
 #define FC_CONVERSATIONS_LAST_MODIFIED_AT @"hotline_defaults_conversations_last_updated_svr_time"
-#define FC_CONVERSATIONS_LAST_REQUESTED_TIME @"hotline_defaults_conversations_last_updated_itv_time"
+#define FC_CONVERSATIONS_LAST_REQUESTED_TIME @"freshchat_defaults_conversations_last_updated_itv_time"
 
 #define HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME @"hotline_defaults_dau_last_updated_time"
 

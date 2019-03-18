@@ -706,6 +706,23 @@ static NSInteger networkIndicator = 0;
      }];
 }
 
++ (BOOL) canMakeConversationFetchCall {
+    if([[FCRemoteConfig sharedInstance] isActiveConvAvailable]){
+        NSNumber * messageFetchLastUpdatedTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
+        
+        if(!messageFetchLastUpdatedTime){
+            // if first time, fetch now
+            return TRUE;
+        }
+        
+        NSTimeInterval activeConvFetch = [FCRemoteConfig sharedInstance].refreshIntervals.msgFetchIntervalNormal;
+        if(([FCUtilities getCurrentTimeInMillis] - [messageFetchLastUpdatedTime longValue]) > activeConvFetch){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 +(void) updateUserWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID {
     FreshchatUser *currentUser = [FreshchatUser sharedInstance];
     if (currentUser && restoreID && externalID) {
@@ -871,6 +888,10 @@ static NSInteger networkIndicator = 0;
         }
     }
     return [[NSString new] stringByPaddingToLength:[matchStr length] withString:@"*" startingAtIndex:0];
+}
+
++ (void) updateCurrentTimeForKey : (NSString *) keyName {
+    [[FCSecureStore sharedInstance] setObject:[NSNumber numberWithLong: [[NSDate date] timeIntervalSince1970] * 1000] forKey:keyName];
 }
 
 + (void) addFlagToDisableUserPropUpdate {

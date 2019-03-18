@@ -143,6 +143,7 @@ static FCNotificationHandler *handleUpdateNotification;
         [[FCAPIClient sharedInstance] request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
             if (!error) {
+                //FC_CONVERSATIONS_LAST_REQUESTED_TIME : Added after v2.4.2
                 NSDictionary *response = responseInfo.responseAsDictionary;
                 NSArray *conversations = response[@"conversations"];
                 
@@ -188,6 +189,7 @@ static FCNotificationHandler *handleUpdateNotification;
                         if(!error){
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [self processMessageResponse:response];
+                                [FCUtilities updateCurrentTimeForKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
                                 if(handler) handler(nil);
                             });
                         }
@@ -199,13 +201,14 @@ static FCNotificationHandler *handleUpdateNotification;
                 else {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self processMessageResponse:response];
+                        [FCUtilities updateCurrentTimeForKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME];
                         if(handler) handler(nil);
                     });
                 }
             }else{
                 [FCMessageHelper performSelectorOnMainThread:@selector(conversationsDownloadFailed) withObject: nil waitUntilDone:NO];
                 if(handler) handler(error);
-            }            
+            }
         });
     }];
 }

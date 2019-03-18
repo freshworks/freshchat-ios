@@ -30,7 +30,8 @@ enum MessageRequestSource {
     MissingConversation         = 7, // Not used
     OnScreenPollWithToken       = 11,
     OnScreenPollWithoutToken    = 12,
-    OffScreenPoll               = 13
+    OffScreenPoll               = 13,
+    JWTUpdateUser               = 14
 };
 
 @interface FCMessageServices : NSObject

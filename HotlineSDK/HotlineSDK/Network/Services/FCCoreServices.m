@@ -334,6 +334,14 @@
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if (!error) {
             if(statusCode == 200){
+                
+                if([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCUtilities canMakeConversationFetchCall]){
+                        [FCMessageServices fetchChannelsAndMessagesWithFetchType:InitFetch
+                                                                         source :JWTUpdateUser
+                                                                      andHandler:nil];
+                    
+                }
+                
                 FDLog(@"Pushed properties to server %@", info);
                 NSDictionary *response = responseInfo.responseAsDictionary;
                 [FCUtilities updateUserWithExternalID:[response objectForKey:@"identifier"] withRestoreID:[response objectForKey:@"restoreId"]];
