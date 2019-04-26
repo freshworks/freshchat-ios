@@ -88,7 +88,6 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
             [FCMessageServices fetchChannelsAndMessagesWithFetchType:fetchType
                                                               source:Notification
                                                           andHandler:^(NSError *error){
-                if(!error){
                     NSManagedObjectContext *mContext = [FCDataManager sharedInstance].mainObjectContext;
                     [mContext performBlock:^{
                         @try {
@@ -108,7 +107,6 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
                                           fromMethod:NSStringFromSelector(_cmd)];
                         }
                     }];
-                }
             }];
             
         }
