@@ -1,4 +1,9 @@
 
+Ver 2.4.4 
+__________________________
+Bug Fix :
+- Improved user experience during API failures.
+
 Ver 2.4.3 
 __________________________
 Enhancement :
