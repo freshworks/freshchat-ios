@@ -523,13 +523,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.0 */ = {
+		354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.2 */ = {
 			isa = PBXGroup;
 			children = (
 				354F26C41D0AED2F00DCD158 /* FCKeyChainStore.h */,
 				354F26C51D0AED2F00DCD158 /* FCKeyChainStore.m */,
 			);
-			path = "UICKeyChainStore-2.1.0";
+			path = "UICKeyChainStore-2.1.2";
 			sourceTree = "<group>";
 		};
 		35591B721B9EDCCE00BC0B60 /* HotlineModels */ = {
@@ -547,7 +547,7 @@
 			children = (
 				CE8C7A3C1F6C216B00E77494 /* SDWebImage */,
 				CE274D001DB78E5C00733EDB /* HCSStarRatingView-1.4.5 */,
-				354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.0 */,
+				354F26C31D0AED2F00DCD158 /* UICKeyChainStore-2.1.2 */,
 				35B2EFCE1D000EE80014867F /* Reachability */,
 			);
 			path = Vendor;

@@ -176,32 +176,34 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 
 -(void)updateConfig:(FreshchatConfig *)config andRegisterUser:(void(^)(NSError *error))completion{
     FCSecureStore *store = [FCSecureStore sharedInstance];
-    if (config) {
-        
-        if([config.appID isEqualToString: config.appKey] || (![FCUtilities isValidUUIDForKey:config.appID] && ![FCUtilities isValidUUIDForKey:config.appKey])){
-            [self addInvalidAppIDKeyExceptionString:@"AppId or AppKey!"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        if (config) {
+            
+            if([config.appID isEqualToString: config.appKey] || (![FCUtilities isValidUUIDForKey:config.appID] && ![FCUtilities isValidUUIDForKey:config.appKey])){
+                [self addInvalidAppIDKeyExceptionString:@"AppId or AppKey!"];
+            }
+            else if([FCUtilities isValidUUIDForKey:config.appID] && ![FCUtilities isValidUUIDForKey:config.appKey]){
+                [self addInvalidAppIDKeyExceptionString:@"AppKey!"];
+            }
+            else if(![FCUtilities isValidUUIDForKey:config.appID] && [FCUtilities isValidUUIDForKey:config.appKey]){
+                [self addInvalidAppIDKeyExceptionString:@"AppId!"];
+            }
+            [FDImageCache sharedImageCache].config.maxCacheAge = FD_IMAGE_CACHE_DURATION;
+            [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
+            [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
+            [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
+            [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
+            [store setBoolValue:config.gallerySelectionEnabled forKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
+            //[store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
+            [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
+            [store setBoolValue:config.teamMemberInfoVisible forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
+            [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
+            [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
+            [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
+            [store setBoolValue:config.responseExpectationVisible forKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
+            [[FCTheme sharedInstance]setThemeWithName:config.themeName];
         }
-        else if([FCUtilities isValidUUIDForKey:config.appID] && ![FCUtilities isValidUUIDForKey:config.appKey]){
-            [self addInvalidAppIDKeyExceptionString:@"AppKey!"];
-        }
-        else if(![FCUtilities isValidUUIDForKey:config.appID] && [FCUtilities isValidUUIDForKey:config.appKey]){
-            [self addInvalidAppIDKeyExceptionString:@"AppId!"];
-        }
-        [FDImageCache sharedImageCache].config.maxCacheAge = FD_IMAGE_CACHE_DURATION;
-        [store setObject:config.stringsBundle forKey:HOTLINE_DEFAULTS_STRINGS_BUNDLE];
-        [store setObject:config.appID forKey:HOTLINE_DEFAULTS_APP_ID];
-        [store setObject:config.appKey forKey:HOTLINE_DEFAULTS_APP_KEY];
-        [store setObject:config.domain forKey:HOTLINE_DEFAULTS_DOMAIN];
-        [store setBoolValue:config.gallerySelectionEnabled forKey:HOTLINE_DEFAULTS_GALLERY_SELECTION_ENABLED];
-        //[store setBoolValue:config.voiceMessagingEnabled forKey:HOTLINE_DEFAULTS_VOICE_MESSAGE_ENABLED];
-        [store setBoolValue:config.cameraCaptureEnabled forKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
-        [store setBoolValue:config.teamMemberInfoVisible forKey:HOTLINE_DEFAULTS_AGENT_AVATAR_ENABLED];
-        [store setBoolValue:config.notificationSoundEnabled forKey:HOTLINE_DEFAULTS_NOTIFICATION_SOUND_ENABLED];
-        [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
-        [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
-        [store setBoolValue:config.responseExpectationVisible forKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
-        [[FCTheme sharedInstance]setThemeWithName:config.themeName];
-    }
+    });
     
     [FCJWTUtilities setTokenInitialState];
     [FCUserUtil registerUser:completion];
