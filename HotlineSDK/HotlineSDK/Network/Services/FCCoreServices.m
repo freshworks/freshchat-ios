@@ -143,16 +143,21 @@
                 if (statusCode == 201) FDLog(@"New user created successfully");
                 
                 if (statusCode == 304) FDLog(@"Existing user is mapped successfully");
-                
 
                 ALog(@"User registered - %@", [userInfo valueForKeyPath:@"user.alias"]);
                 
                 NSDictionary *response = responseInfo.responseAsDictionary;
-                if(response && response[@"identifier"] && response[@"restoreId"]) {
-                    [FCUtilities updateUserWithExternalID:response[@"identifier"]
-                                            withRestoreID:response[@"restoreId"]];
+                if(response) {
+                    //Always honour alias from server as its points to created customer. Else other api's will fail 404
+                    if(response[@"alias"]){
+                        [FCUtilities updateUserAlias:response[@"alias"]];
+                    }
+                    if(response[@"identifier"] && response[@"restoreId"]) {
+                        [FCUtilities updateUserWithExternalID:response[@"identifier"]
+                                                withRestoreID:response[@"restoreId"]];
+                    }
+                    
                 }
-                
                 [[FCSecureStore sharedInstance] setBoolValue:YES forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
                 [FCCoreServices setAsUploadedTo:userProperties withCompletion:nil];
                 if (handler) handler(nil);
