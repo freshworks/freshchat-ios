@@ -95,7 +95,11 @@
     FCUsers *user = nil;
     NSManagedObjectContext *context = [[FCDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_USERS_ENTITY];
-    NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+    __block NSMutableArray *matches = [[NSMutableArray alloc] init];
+    [context performBlockAndWait:^{
+        NSArray *tempMatches = [context executeFetchRequest:fetchRequest error:nil];
+        matches = [tempMatches mutableCopy];
+    }];
     if (matches.count == 1) {
         user = matches.firstObject;
     }
