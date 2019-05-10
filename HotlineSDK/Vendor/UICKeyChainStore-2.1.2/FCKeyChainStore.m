@@ -1,6 +1,7 @@
 //
-//  FDKeyChainStore.m
-//  FDKeyChainStore
+//
+//  UICKeyChainStore.m
+//  UICKeyChainStore
 //
 //  Created by Kishikawa Katsumi on 11/11/20.
 //  Copyright (c) 2011 Kishikawa Katsumi. All rights reserved.
@@ -21,7 +22,7 @@ static NSString *_defaultService;
 + (NSString *)defaultService
 {
     if (!_defaultService) {
-        _defaultService = [[NSBundle bundleForClass:[self class]] bundleIdentifier] ?: @"";
+        _defaultService = [[NSBundle mainBundle] bundleIdentifier] ?: @"";
     }
     
     return _defaultService;
@@ -118,6 +119,7 @@ static NSString *_defaultService;
 - (void)commonInit
 {
     _accessibility = FDKeyChainStoreAccessibilityAfterFirstUnlock;
+    _useAuthenticationUI = YES;
 }
 
 #pragma mark -
@@ -363,7 +365,7 @@ static NSString *_defaultService;
     query[(__bridge __strong id)kSecAttrAccount] = key;
     
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, NULL);
-    return status == errSecSuccess;
+    return status == errSecSuccess || status == errSecInteractionNotAllowed;
 }
 
 #pragma mark -
@@ -530,8 +532,10 @@ static NSString *_defaultService;
 #if TARGET_OS_IOS
     if (floor(NSFoundationVersionNumber) > floor(1144.17)) { // iOS 9+
         query[(__bridge __strong id)kSecUseAuthenticationUI] = (__bridge id)kSecUseAuthenticationUIFail;
+#if  __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0
     } else if (floor(NSFoundationVersionNumber) > floor(1047.25)) { // iOS 8+
         query[(__bridge __strong id)kSecUseNoAuthenticationUI] = (__bridge id)kCFBooleanTrue;
+#endif
     }
 #elif TARGET_OS_WATCH || TARGET_OS_TV
     query[(__bridge __strong id)kSecUseAuthenticationUI] = (__bridge id)kSecUseAuthenticationUIFail;
@@ -769,7 +773,10 @@ static NSString *_defaultService;
     NSArray *items = [self.class prettify:[self itemClassObject] items:[self items]];
     NSMutableArray *keys = [[NSMutableArray alloc] init];
     for (NSDictionary *item in items) {
-        [keys addObject:item[@"key"]];
+        NSString *key = item[@"key"];
+        if (key) {
+            [keys addObject:key];
+        }
     }
     return keys.copy;
 }
@@ -1065,23 +1072,10 @@ static NSString *_defaultService;
 
 + (NSString *)generatePassword
 {
-    return CFBridgingRelease(SecCreateSharedWebCredentialPassword());
+    return (NSString *)CFBridgingRelease(SecCreateSharedWebCredentialPassword());
 }
 
 #endif
-
-#pragma mark -
-
-- (void)synchronize
-{
-    // Deprecated, calling this method is no longer required
-}
-
-- (BOOL)synchronizeWithError:(NSError *__autoreleasing *)error
-{
-    // Deprecated, calling this method is no longer required
-    return true;
-}
 
 #pragma mark -
 
@@ -1149,6 +1143,20 @@ static NSString *_defaultService;
         }
     }
 #endif
+    
+    if (!_useAuthenticationUI) {
+#if TARGET_OS_IOS
+        if (floor(NSFoundationVersionNumber) > floor(1144.17)) { // iOS 9+
+            query[(__bridge __strong id)kSecUseAuthenticationUI] = (__bridge id)kSecUseAuthenticationUIFail;
+#if  __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0
+        } else if (floor(NSFoundationVersionNumber) > floor(1047.25)) { // iOS 8+
+            query[(__bridge __strong id)kSecUseNoAuthenticationUI] = (__bridge id)kCFBooleanTrue;
+#endif
+        }
+#elif TARGET_OS_WATCH || TARGET_OS_TV
+        query[(__bridge __strong id)kSecUseAuthenticationUI] = (__bridge id)kSecUseAuthenticationUIFail;
+#endif
+    }
     
     return query;
 }
@@ -1384,3 +1392,20 @@ static NSString *_defaultService;
 }
 
 @end
+
+@implementation FCKeyChainStore (Deprecation)
+
+- (void)synchronize
+{
+    // Deprecated, calling this method is no longer required
+}
+
+- (BOOL)synchronizeWithError:(NSError *__autoreleasing *)error
+{
+    // Deprecated, calling this method is no longer required
+    return true;
+}
+
+@end
+
+

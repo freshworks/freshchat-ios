@@ -1,4 +1,5 @@
 //
+//
 //  FDKeyChainStore.h
 //  FDKeyChainStore
 //
@@ -96,9 +97,16 @@ typedef NS_ENUM(NSInteger, FDKeyChainStoreAccessibility) {
 }
 __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_4_0);
 
-typedef NS_ENUM(NSInteger, FDKeyChainStoreAuthenticationPolicy) {
-    FDKeyChainStoreAuthenticationPolicyUserPresence = kSecAccessControlUserPresence,
-};
+typedef NS_ENUM(unsigned long, FDKeyChainStoreAuthenticationPolicy) {
+    FDKeyChainStoreAuthenticationPolicyUserPresence        = 1 << 0,
+    FDKeyChainStoreAuthenticationPolicyTouchIDAny          NS_ENUM_AVAILABLE(10_12_1, 9_0) = 1u << 1,
+    FDKeyChainStoreAuthenticationPolicyTouchIDCurrentSet   NS_ENUM_AVAILABLE(10_12_1, 9_0) = 1u << 3,
+    FDKeyChainStoreAuthenticationPolicyDevicePasscode      NS_ENUM_AVAILABLE(10_11, 9_0) = 1u << 4,
+    FDKeyChainStoreAuthenticationPolicyControlOr           NS_ENUM_AVAILABLE(10_12_1, 9_0) = 1u << 14,
+    FDKeyChainStoreAuthenticationPolicyControlAnd          NS_ENUM_AVAILABLE(10_12_1, 9_0) = 1u << 15,
+    FDKeyChainStoreAuthenticationPolicyPrivateKeyUsage     NS_ENUM_AVAILABLE(10_12_1, 9_0) = 1u << 30,
+    FDKeyChainStoreAuthenticationPolicyApplicationPassword NS_ENUM_AVAILABLE(10_12_1, 9_0) = 1u << 31,
+}__OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0);
 
 @interface FCKeyChainStore : NSObject
 
@@ -114,6 +122,7 @@ typedef NS_ENUM(NSInteger, FDKeyChainStoreAuthenticationPolicy) {
 @property (nonatomic) FDKeyChainStoreAccessibility accessibility;
 @property (nonatomic, readonly) FDKeyChainStoreAuthenticationPolicy authenticationPolicy
 __OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0);
+@property (nonatomic) BOOL useAuthenticationUI;
 
 @property (nonatomic) BOOL synchronizable;
 
@@ -279,3 +288,4 @@ __OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0);
 @end
 
 NS_ASSUME_NONNULL_END
+

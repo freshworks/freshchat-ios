@@ -59,7 +59,12 @@
     NSManagedObjectContext *context = [[FCDataManager sharedInstance]mainObjectContext];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_USER_PROPERTIES_ENTITY];
     fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"uploadStatus == NO"];
-    return [context executeFetchRequest:fetchRequest error:nil];
+    __block NSMutableArray *matches = [[NSMutableArray alloc] init];
+    [context performBlockAndWait:^{
+        NSArray *tempMatches = [context executeFetchRequest:fetchRequest error:nil];
+        matches = [tempMatches mutableCopy];
+    }];
+    return matches;
 }
 
 @end
