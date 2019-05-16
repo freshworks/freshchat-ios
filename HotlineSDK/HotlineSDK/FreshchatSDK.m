@@ -203,13 +203,13 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [store setBoolValue:config.responseExpectationVisible forKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
             [[FCTheme sharedInstance]setThemeWithName:config.themeName];
         }
+        
+        [FCJWTUtilities setTokenInitialState];
+        [FCUserUtil registerUser:completion];
+        if([FCUserUtil isUserRegistered]) {
+            [FCUtilities postUnreadCountNotification];
+        }
     });
-    
-    [FCJWTUtilities setTokenInitialState];
-    [FCUserUtil registerUser:completion];
-    if([FCUserUtil isUserRegistered]) {
-        [FCUtilities postUnreadCountNotification];
-    }
 }
 
 - (void) addInvalidAppIDKeyExceptionString :(NSString *) string{
