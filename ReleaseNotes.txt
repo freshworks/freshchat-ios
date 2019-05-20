@@ -13,6 +13,11 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.5.1 
+__________________________
+Enhancement :
+- Improvements in keychain store.
+
 Ver 2.5.0 
 __________________________
 Enhancement :
