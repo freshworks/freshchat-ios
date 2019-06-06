@@ -2,7 +2,11 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.5.1
+Version         : 2.5.2
+
+Ver 2.5.2 
+__________________________
+Fix file access permission for background access to database.
 
 Ver 2.5.1 
 __________________________
