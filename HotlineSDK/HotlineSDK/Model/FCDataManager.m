@@ -69,17 +69,23 @@
     path = [libraryPath stringByAppendingPathComponent:@"Database"];
     FDLog(@"\n\n\n%@\n\n\n", path);
     NSFileManager *manager = [NSFileManager defaultManager];
+    NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionCompleteUnlessOpen};
     BOOL isDirectory;
-    if (![manager fileExistsAtPath:path isDirectory:&isDirectory]) {
-        NSError *error = nil;
-        NSDictionary *attr = @{ NSFileProtectionKey: NSFileProtectionComplete};
+    NSError *error = nil;
+    if (![manager fileExistsAtPath:path isDirectory:&isDirectory] || !isDirectory) {
         [manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:attr error:&error];
-        if (error){
+        if (error) {
             NSDictionary *errorInfo = @{@"Folder Creation Failed" :@{
                                                 @"Reason:"   : error.description,
                                                 @"FolderPath" : path
                                                 }};
             logInfo(errorInfo);
+        }
+    }
+    else {
+        if (![manager setAttributes:attr ofItemAtPath:path error:&error]) {
+            NSString *exceptionDesc = [NSString stringWithFormat:@"Unresolved FileProtectionComplete error %@, %@", error, [error userInfo]];
+            [[FCMemLogger new]addMessage:exceptionDesc];
         }
     }
     return path;
@@ -496,9 +502,13 @@
     [self deleteAllEntriesOfEntity:FRESHCHAT_CSAT_ENTITY handler:^(NSError *error){
         [self deleteAllEntriesOfEntity:FRESHCHAT_MESSAGES_ENTITY handler:^(NSError *error){
             [self deleteAllEntriesOfEntity:FRESHCHAT_MESSAGE_FRAGMENTS_ENTITY handler:^(NSError *error){
-                [self deleteAllEntriesOfEntity:FRESHCHAT_CHANNELS_ENTITY handler:^(NSError *error){
-                    [self deleteAllEntriesOfEntity:FRESHCHAT_USER_PROPERTIES_ENTITY handler:^(NSError *error){
-                        mainHandler(error);
+                [self deleteAllEntriesOfEntity:FRESHCHAT_CONVERSATIONS_ENTITY handler:^(NSError *error){
+                    [self deleteAllEntriesOfEntity:FRESHCHAT_CHANNELS_ENTITY handler:^(NSError *error){
+                        [self deleteAllEntriesOfEntity:FRESHCHAT_USER_PROPERTIES_ENTITY handler:^(NSError *error){
+                            [self deleteAllEntriesOfEntity:FRESHCHAT_PARTICIPANTS_ENTITY handler:^(NSError *error){
+                                mainHandler(error);
+                            } inContext:self.mainObjectContext];
+                        } inContext:self.mainObjectContext];
                     } inContext:self.mainObjectContext];
                 } inContext:self.mainObjectContext];
             } inContext:self.mainObjectContext];

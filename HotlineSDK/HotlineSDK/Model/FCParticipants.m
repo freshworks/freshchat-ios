@@ -29,16 +29,16 @@
 }
 
 +(FCParticipants *)createWithInfo:(NSDictionary *) participantInfo inContext:(NSManagedObjectContext *)context{
-    
     FCParticipants *paricipant = [NSEntityDescription insertNewObjectForEntityForName:FRESHCHAT_PARTICIPANTS_ENTITY inManagedObjectContext:context];
     return [self updateParticipant:paricipant withInfo:participantInfo ];
 }
 
 + (FCParticipants*) updateParticipant: (FCParticipants *) participant withInfo : (NSDictionary *) participantInfo{
-    participant.firstName      = [participantInfo valueForKey: @"firstName"];
-    participant.lastName       = [participantInfo valueForKey: @"lastName"];
-    participant.alias          = [participantInfo valueForKey: @"alias"] ? [participantInfo valueForKey: @"alias"] :@"";
-    participant.profilePicURL  = [participantInfo valueForKey: @"profilePicUrl"];
+    participant.firstName      = participantInfo [@"firstName"];
+    //For system generated names last name won't be available
+    participant.lastName       = participantInfo [@"lastName"] ? participantInfo [@"lastName"] :@"";
+    participant.alias          = participantInfo [@"alias"] ? participantInfo [@"alias"] :@"";
+    participant.profilePicURL  = participantInfo [@"profilePicUrl"];
     return participant;
 }
 

@@ -165,11 +165,15 @@ static FCNotificationHandler *handleUpdateNotification;
                 for (int i=0; i<conversations.count; i++) {
                     NSDictionary *conversationInfo = conversations[i];
                     channelId = conversationInfo[@"channelId"];
-                    FCChannels *channel = [FCChannels getWithID:channelId inContext:[FCDataManager sharedInstance].mainObjectContext];
                     NSArray *participants = conversationInfo[@"participants"];
-                    if(participants > 0){
-                        for(NSDictionary *participant in participants) {
-                            [FCParticipants addParticipantWithInfo:participant inContext:[FCDataManager sharedInstance].mainObjectContext];
+                    NSManagedObjectContext *ctx = [FCDataManager sharedInstance].mainObjectContext;
+                    FCChannels *channel = nil;
+                    if(ctx){
+                        channel = [FCChannels getWithID:channelId inContext:ctx];
+                        if(participants.count > 0){
+                            for(NSDictionary *participant in participants) {
+                                [FCParticipants addParticipantWithInfo:participant inContext:ctx];
+                            }
                         }
                     }
                     
@@ -178,7 +182,6 @@ static FCNotificationHandler *handleUpdateNotification;
                         break;
                     }
                 }
-                
                 
                 if(!channelPresent){
                     // Channel does not exist; reset channel interval key to force fetch channels

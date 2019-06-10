@@ -4,14 +4,9 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
-Ver 2.4.2 
+Ver 2.5.2 
 __________________________
-Restore ID event triggered only when there is change in restore ID and external ID.
-Freshchat iOS SDK - Powered by Freshdesk
-
-Documentation   : https://support.freshchat.com
-Support Email   : support@freshchat.com
-Version         : 1.5.6
+Fix file access permission for background access to database.
 
 Ver 2.5.1 
 __________________________
@@ -36,11 +31,6 @@ Enhancement :
 Ver 2.4.2 
 __________________________
 Restore ID event triggered only when there is change in restore ID and external ID.
-Freshchat iOS SDK - Powered by Freshdesk
-
-Documentation   : https://support.freshchat.com
-Support Email   : support@freshchat.com
-Version         : 1.5.6
 
 Ver 2.4.1 
 __________________________
