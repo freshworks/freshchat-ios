@@ -989,6 +989,8 @@ typedef struct {
 
 -(void)handleBecameActive:(NSNotification *)notification{
     [self.messagesPoller begin];
+    [FCCSATUtil deleteExpiredCSAT];
+    [self processPendingCSAT];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
@@ -1316,6 +1318,7 @@ typedef struct {
     //Check for CSAT Timeout state
     if([FCCSATUtil isCSATExpiredForInitiatedTime:[csat.initiatedTime longValue]] && [self.conversation isCSATResponsePending]){
         [FCCSATUtil deleteCSATAndUpdateConversation:csat];
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
