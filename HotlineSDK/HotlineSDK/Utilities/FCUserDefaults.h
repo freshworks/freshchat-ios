@@ -24,6 +24,11 @@
 #define CONFIG_RC_SESSION_TIMEOUT_INTERVAL @"config_rc_session_timeout_interval"
 #define CONFIG_RC_ACTIVE_CONV_FETCH_BACKOFF_RATIO @"config_rc_active_conv_fetch_backoff_ratio"
 
+#define CONFIG_RC_HIDE_RESOLVED_CONVERSATION @"config_rc_hide_resolved_conversation"
+#define CONFIG_RC_HIDE_RESOLVED_CONVERSATION_MILLIS @"config_rc_hide_resolved_conversation_millis"
+#define CONFIG_RC_REOPENED_MESSAGE_TYPES @"config_rc_reopened_message_types"
+#define CONFIG_RC_RESOLVED_MESSAGE_TYPES @"config_rc_resolved_message_types"
+
 #define CONFIG_RC_ACTIVE_CONV_MAX_FETCH_INTERVAL @"config_rc_active_conv_max_fetch_interval"
 #define CONFIG_RC_ACTIVE_CONV_MIN_FETCH_INTERVAL @"config_rc_active_conv_min_fetch_interval"
 

@@ -27,9 +27,20 @@
     @dynamic belongsToConversation;
     @dynamic uploadStatus;
     @dynamic isDownloading;
+    @dynamic messageType;
 
     static BOOL messageExistsDirty = YES;
     static BOOL messageTimeDirty = YES;
+
+
+- (void)awakeFromFetch {
+    [super awakeFromFetch];
+    if (nil == self.messageType) {
+        [self willChangeValueForKey:@"messageType"];
+        self.messageType = @1;
+        [self didChangeValueForKey:@"messageType"];
+    }
+}
 
 +(NSString *) generateMessageID {
     NSTimeInterval  today = [[NSDate date] timeIntervalSince1970];
@@ -45,6 +56,7 @@
     FCMessages *message = [NSEntityDescription insertNewObjectForEntityForName:FRESHCHAT_MESSAGES_ENTITY inManagedObjectContext:context];
     [message setMessageAlias:[FCMessages generateMessageID]];
     [message setMessageUserType:USER_TYPE_MOBILE];
+    [message setMessageType:@1];
     [message setIsRead:YES];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
     message.belongsToConversation = conversation;
@@ -190,6 +202,7 @@
         newMessage.isWelcomeMessage = NO;
         newMessage.messageAlias = [message valueForKey:@"alias"];
         [newMessage setMessageUserType:USER_TYPE_AGENT];
+        [newMessage setMessageType:[message valueForKey:@"messageType"]];
         if([message[@"readByUser"] boolValue]) {
             newMessage.isRead = YES;
         } else {
@@ -237,12 +250,23 @@
 +(NSArray *)getAllMesssageForChannel:(FCChannels *)channel{
     NSMutableArray *messages = [[NSMutableArray alloc]init];
     NSArray *matches = channel.messages.allObjects;
-    for (int i=0; i<matches.count; i++) {
-        FCMessageData *message = [matches[i] ReturnMessageDataFromManagedObject];
-        if (message) {
-            [messages addObject:message];
+    NSArray *filteredMessages = [FCMessageHelper getUserAndAgentMsgs:matches];
+    BOOL isHideConversationsEnabled = [[FCRemoteConfig sharedInstance].conversationConfig hideResolvedConversation];
+        
+    for (int i=0; i<filteredMessages.count; i++) {
+        FCMessageData *message = [filteredMessages[i] ReturnMessageDataFromManagedObject];
+        if (message){
+            if(isHideConversationsEnabled){
+                long long hideConvResolvedMillis = [FCMessageHelper getResolvedConvsHideTimeForChannel:channel.channelID];
+                if(([message.createdMillis longLongValue] > hideConvResolvedMillis) || message.isWelcomeMessage){
+                    [messages addObject:message];
+                }
+            }
+            else{
+                [messages addObject:message];
+            }
         }
-    }  
+    }
     return messages;
 }
 

@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
     @property (nonatomic) BOOL isDownloading;
     @property (nullable, nonatomic, retain) FCChannels *belongsToChannel;
     @property (nullable, nonatomic, retain) FCConversations *belongsToConversation;
+    @property (nullable, nonatomic, retain) NSNumber *messageType;
 
     +(FCMessages *)getWelcomeMessageForChannel:(FCChannels *)channel;
     +(void) removeWelcomeMessage:(FCChannels *)channel;

@@ -214,6 +214,48 @@ __weak static id <KonotorDelegate> _delegate;
     [[FCMessageHelper delegate] didStartUploadingNewMessage];
 }
 
++ (long long) getResolvedConvsHideTimeForChannel : (NSNumber *)channelID {
+    
+    FCChannels *channel = [FCChannels getWithID:channelID inContext:[FCDataManager sharedInstance].mainObjectContext];
+    NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:NO];
+    
+    NSArray *allMessages = channel.messages.allObjects;
+    
+    NSArray *sortedMsgsArray = [allMessages sortedArrayUsingDescriptors:@[sortDesc]];
+    
+    long rcHideAfterMillis = [FCRemoteConfig sharedInstance].conversationConfig.hideResolvedConversationMillis;
+    
+    NSArray <FCMessages *> * resolvedAndReopenedMsgs = [FCMessageHelper getStatusMsgs:sortedMsgsArray];
+    
+    if(resolvedAndReopenedMsgs.count > 0){
+        //check if last msg is resolved type then get difference b/w current time resolved time
+        if (([[FCUtilities getResolvedMsgTypes] containsObject:resolvedAndReopenedMsgs.firstObject.messageType]) && ([FCUtilities getCurrentTimeInMillis] - [resolvedAndReopenedMsgs.firstObject.createdMillis longLongValue] > rcHideAfterMillis)){
+            return [resolvedAndReopenedMsgs.firstObject.createdMillis longLongValue];
+        }
+        for (int i=0; i<resolvedAndReopenedMsgs.count; i++) {
+            if (i+1 < resolvedAndReopenedMsgs.count) {
+                //check for reopened - resolve and compare the time interval with remote config
+                if (([[FCUtilities getReopenedMsgTypes] containsObject:resolvedAndReopenedMsgs[i].messageType]) && ([resolvedAndReopenedMsgs[i].createdMillis longLongValue] - [resolvedAndReopenedMsgs[i+1].createdMillis longLongValue]) > rcHideAfterMillis){
+                    return [resolvedAndReopenedMsgs[i+1].createdMillis longLongValue];
+                }
+            }
+        }
+    }
+    return 0;
+}
+
++ (NSArray *) getUserAndAgentMsgs: (NSArray *) allMessages{
+    //Added to avoid disply empty staus messages if remote config fails
+    // is added if any chance for old message(s) type value is 0
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"messageType == 1 OR messageType == 0"];
+    return [allMessages filteredArrayUsingPredicate:predicate];
+}
+
++ (NSArray *) getStatusMsgs: (NSArray *) allMessages{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(messageType IN %@)", [FCUtilities getResolvedReopenedMsgTypes]];
+    return [allMessages filteredArrayUsingPredicate:predicate];
+}
+
 +(BOOL) playMessageWithMessageID:(NSString *) messageID
 {
     return [FCAudioPlayer playMessageWithMessageID:messageID];

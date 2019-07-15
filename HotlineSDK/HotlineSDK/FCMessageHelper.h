@@ -65,7 +65,8 @@
 +(void) NotifyServerError;
 +(BOOL) isRecording;
 
-
-
++ (long long) getResolvedConvsHideTimeForChannel : (NSNumber *)channelID;
++ (NSArray *) getUserAndAgentMsgs: (NSArray *) allMessages;
++ (NSArray *) getStatusMsgs: (NSArray *) allMessages;
 
 @end
