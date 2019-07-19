@@ -20,6 +20,10 @@
 @property (nonatomic, assign) float activeConvFetchBackoffRatio;
 @property (nonatomic, assign) BOOL launchDeeplinkFromNotification;
 @property (nonatomic, assign) long activeConvWindow;
+@property (nonatomic, assign) BOOL hideResolvedConversation;
+@property (nonatomic, assign) long hideResolvedConversationMillis;
+@property (nonatomic, strong) NSArray *reopenedMsgtypes;
+@property (nonatomic, strong) NSArray *resolvedMsgTypes;
 
 - (void) updateConvConfig : (NSDictionary *) configDict;
 

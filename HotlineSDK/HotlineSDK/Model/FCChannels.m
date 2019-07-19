@@ -14,6 +14,9 @@
 #import "FDImageView.h"
 #import "FCTags.h"
 #import "FCCSATUtil.h"
+#import "FCRemoteConfig.h"
+#import "FCSecureStore.h"
+#import "FCMessageHelper.h"
 
 @implementation FCChannels
 
@@ -153,7 +156,15 @@
 //assumes this method is called from whichever thread invokes this.
 -(NSInteger)unreadCount{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_MESSAGES_ENTITY];
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@",self];
+    NSPredicate *predicate;
+    
+    if([FCRemoteConfig sharedInstance].conversationConfig.hideResolvedConversation){
+        long long hideConvResolvedMillis = [FCMessageHelper getResolvedConvsHideTimeForChannel:self.channelID];
+        predicate = hideConvResolvedMillis ? [NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND (messageType == 1 OR messageType == 0) AND createdMillis.longValue > %ld", self, hideConvResolvedMillis] : [NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND (messageType == 1 OR messageType == 0)", self];
+    }
+    else{
+        predicate =[NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND (messageType == 1 OR messageType == 0)", self];
+    }
     request.predicate = predicate;
     NSArray *messages = [self.managedObjectContext executeFetchRequest:request error:nil];
     BOOL hasExpiredCSAT = [FCCSATUtil isCSATExpiredForInitiatedTime:[self.primaryConversation.hasCsat.allObjects.firstObject.initiatedTime longValue]];

@@ -35,9 +35,20 @@
     return FALSE;
 }
 
+- (void) updateMaximumUserSurveyViewMillis : (long) maximumUserSurveyMillis{
+    [FCUserDefaults setLong:maximumUserSurveyMillis forKey:CONFIG_RC_MAXIMUM_USER_SURVEY_VIEW_MILLIS];
+    self.maximumUserSurveyViewMillis = maximumUserSurveyMillis;
+}
+
+- (void) updateUserCsatViewTimer : (BOOL) isEnabled{
+    [FCUserDefaults setBool:isEnabled forKey:CONFIG_RC_USER_CSAT_VIEW_TIMER_ENABLED];
+    self.isUserCsatViewTimerEnabled = isEnabled;
+}
+
 - (void) updateCSatConfig : (NSDictionary *) info {
-    [FCUserDefaults setBool:[info[@"userCsatViewTimer"] boolValue] forKey:CONFIG_RC_USER_CSAT_VIEW_TIMER_ENABLED];
-    [FCUserDefaults setLong:[info[@"maximumUserSurveyViewMillis"] longValue] forKey:CONFIG_RC_MAXIMUM_USER_SURVEY_VIEW_MILLIS];
+    
+    [self updateMaximumUserSurveyViewMillis:[info[@"maximumUserSurveyViewMillis"] longValue]];
+    [self updateUserCsatViewTimer:[info[@"userCsatViewTimer"] boolValue]];
 }
 
 @end

@@ -288,6 +288,20 @@ static NSInteger networkIndicator = 0;
     return ceil(([[NSDate date] timeIntervalSince1970]) * ONE_SECONDS_IN_MS);
 }
 
+#pragma add Hide Conversation Changes
+
++ (NSArray *) getReopenedMsgTypes; {
+    return [FCRemoteConfig sharedInstance].conversationConfig.reopenedMsgtypes;
+}
+
++ (NSArray *) getResolvedMsgTypes{
+    return [FCRemoteConfig sharedInstance].conversationConfig.resolvedMsgTypes;
+}
+
++ (NSArray *) getResolvedReopenedMsgTypes {
+    return [[FCRemoteConfig sharedInstance].conversationConfig.resolvedMsgTypes arrayByAddingObjectsFromArray:[FCRemoteConfig sharedInstance].conversationConfig.reopenedMsgtypes];
+}
+
 + (NSString*)convertIntoMD5 :(NSString *) str
 {
     // Create pointer to the string as UTF8

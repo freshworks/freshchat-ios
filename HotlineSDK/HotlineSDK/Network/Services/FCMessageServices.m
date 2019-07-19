@@ -137,8 +137,8 @@ static FCNotificationHandler *handleUpdateNotification;
         NSString *path = [NSString stringWithFormat:HOTLINE_API_DOWNLOAD_ALL_MESSAGES_API, appID,userAlias];
         NSString *afterTime = [NSString stringWithFormat:@"messageAfter=%@",lastUpdateTime];
         NSString *source = [NSString stringWithFormat:@"src=%d",requestSource];
-
-        [request setRelativePath:path andURLParams:@[appKey, afterTime, source]];
+        NSString *sendStatusMsg = @"sendStatusMessages=true";//NO formatting required for sending true value only
+        [request setRelativePath:path andURLParams:@[appKey, afterTime, source, sendStatusMsg]];
         
         [[FCAPIClient sharedInstance] request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
             dispatch_async(dispatch_get_main_queue(),^{
@@ -259,14 +259,16 @@ static FCNotificationHandler *handleUpdateNotification;
                         newMessage.isRead = YES;
                     }
                 }else {
-                    messageText = [newMessage getDetailDescriptionForMessage];
+                    if([newMessage.messageType integerValue] == 0 || [newMessage.messageType integerValue] == 1){
+                        messageText = [newMessage getDetailDescriptionForMessage];
+                    }
                 }
                 
                 if([newMessage.messageUserType integerValue] == 0) { //Set user messages from other devices/os
                      newMessage.isRead = YES;
-                } else {
+                }
+                else if([newMessage.messageType integerValue] == 1){
                     [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"MESSAGE_RECEIVED"}];
-
                 }                
             }
         }

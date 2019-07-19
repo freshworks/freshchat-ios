@@ -36,6 +36,7 @@
 #import "FCJWTAuthValidator.h"
 #import "FCJWTUtilities.h"
 #import "FCRemoteConfig.h"
+#import "FCMessages.h"
 
 @interface FCChannelViewController () <HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
@@ -163,7 +164,6 @@
         [self.tableView reloadData];
     }
 }
- 
 
 -(NSArray *)sortChannelList:(NSArray *)channelInfos{
     
@@ -298,8 +298,25 @@
 -(FCMessages *)getLastMessageInChannel:(NSNumber *)channelID{
     FCChannels *channel = [FCChannels getWithID:channelID inContext:[FCDataManager sharedInstance].mainObjectContext];
     NSSortDescriptor *sortDesc =[[NSSortDescriptor alloc] initWithKey:@"createdMillis" ascending:YES];
-    NSArray *messages = channel.messages.allObjects;
-    return [messages sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
+    NSArray *allMessages = channel.messages.allObjects;
+    NSArray *agentAndUserMsgs = [FCMessageHelper getUserAndAgentMsgs:allMessages];
+    NSMutableArray *filteredMsgs = [[NSMutableArray alloc]init];
+
+    //Note : messageType for old messages as 0 and new with 1
+    if([FCRemoteConfig sharedInstance].conversationConfig.hideResolvedConversation){
+        long long hideConvResolvedMillis = [FCMessageHelper getResolvedConvsHideTimeForChannel:channelID];
+        if(hideConvResolvedMillis){
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"createdMillis.longValue > %ld OR isWelcomeMessage == 1", hideConvResolvedMillis];
+            [filteredMsgs addObjectsFromArray: [agentAndUserMsgs filteredArrayUsingPredicate:predicate]];
+        }
+        else{
+            [filteredMsgs addObjectsFromArray:agentAndUserMsgs];
+        }
+    }
+    else{
+        [filteredMsgs addObjectsFromArray:agentAndUserMsgs];
+    }
+    return [filteredMsgs sortedArrayUsingDescriptors:@[sortDesc]].lastObject;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

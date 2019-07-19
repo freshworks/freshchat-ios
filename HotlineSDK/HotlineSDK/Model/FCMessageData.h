@@ -18,6 +18,7 @@
 @property (nullable, nonatomic, retain) NSString *messageAlias;
 @property (nullable, nonatomic, retain) NSString *messageUserAlias;
 @property (nullable, nonatomic, retain) NSNumber *messageUserType;
+@property (nullable, nonatomic, retain) NSNumber *messageType;
 @property (nullable, nonatomic, retain) NSArray *fragments;
 @property(nullable, nonatomic, retain) NSNumber *uploadStatus;
 @property (nonatomic) BOOL isMarkedForUpload;

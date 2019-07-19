@@ -63,8 +63,6 @@ typedef struct {
     @property (nonatomic, strong) NSNumber *channelID;
 @end
 
-
-
 @interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate, HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -989,6 +987,8 @@ typedef struct {
 
 -(void)handleBecameActive:(NSNotification *)notification{
     [self.messagesPoller begin];
+    [FCCSATUtil deleteExpiredCSAT];
+    [self processPendingCSAT];
 }
 
 -(void)handleEnteredBackground:(NSNotification *)notification{
@@ -1002,12 +1002,9 @@ typedef struct {
     _flags.isKeyboardOpen = YES;
     CGRect keyboardFrame = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardRect = [self.messageDetailView convertRect:keyboardFrame fromView:nil];
-    CGFloat calculatedHeight = self.messageDetailView.bounds.size.height - keyboardRect.origin.y;
-    CGFloat keyboardCoveredHeight = self.keyboardHeight < calculatedHeight ? calculatedHeight : self.keyboardHeight;
-    self.bottomViewBottomConstraint.constant = - keyboardCoveredHeight;
-    self.CSATView.CSATPromptCenterYConstraint.constant = -calculatedHeight/2;
-    
-    self.keyboardHeight = keyboardCoveredHeight;
+    self.keyboardHeight = self.messageDetailView.bounds.size.height - keyboardRect.origin.y;
+    self.bottomViewBottomConstraint.constant = - self.keyboardHeight;
+    self.CSATView.CSATPromptCenterYConstraint.constant = - self.keyboardHeight/2;
     [UIView animateWithDuration:animationDuration animations:^{
         [self.messageDetailView layoutIfNeeded];
     } completion:^(BOOL finished) {
@@ -1316,6 +1313,7 @@ typedef struct {
     //Check for CSAT Timeout state
     if([FCCSATUtil isCSATExpiredForInitiatedTime:[csat.initiatedTime longValue]] && [self.conversation isCSATResponsePending]){
         [FCCSATUtil deleteCSATAndUpdateConversation:csat];
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{

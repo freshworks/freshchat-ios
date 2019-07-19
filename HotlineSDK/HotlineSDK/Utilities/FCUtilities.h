@@ -97,6 +97,10 @@
 + (BOOL) canMakeConversationFetchCall;
 + (void) updateCurrentTimeForKey : (NSString *) keyName;
 
++ (NSArray *) getResolvedMsgTypes;
++ (NSArray *) getReopenedMsgTypes;
++ (NSArray *) getResolvedReopenedMsgTypes;
+
 @end
 
 #endif

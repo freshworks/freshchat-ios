@@ -72,7 +72,6 @@ static BOOL messageTimeDirty = YES;
     NSManagedObjectContext *context = [datamanager mainObjectContext];
     FCMessageUtil *message = [NSEntityDescription insertNewObjectForEntityForName:FRESHCHAT_MESSAGES_ENTITY inManagedObjectContext:context];
     [message setMessageUserId:[USER_TYPE_MOBILE stringValue]];
-    [message setMessageType:@1];
     [message setMessageRead:YES];
     [message setText:text];
     [message setCreatedMillis:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]*1000]];
