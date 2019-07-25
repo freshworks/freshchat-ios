@@ -17,5 +17,6 @@
 -(void)upVoteForArticle:(NSNumber *)articleID inCategory:(NSNumber *)categoryID withCompletion:(void(^)(NSError *error))completion;
 -(BOOL)isArticleVoted:(NSNumber *)articleID;
 -(BOOL)getArticleVoteFor:(NSNumber *)articleID;
+-(void) clearVotingForArticle : (NSNumber *) articleID;
 
 @end

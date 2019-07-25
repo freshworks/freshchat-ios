@@ -76,6 +76,11 @@
     }
 }
 
+-(void) clearVotingForArticle : (NSNumber *) articleID {
+    NSString *articleIDString = [NSString stringWithFormat:@"%@",articleID];
+    [self.votedArticlesDictionary removeObjectForKey:articleIDString];
+}
+
 -(BOOL)getArticleVoteFor:(NSNumber *)articleID{
     NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
     BOOL isArticleVoted = [[self.votedArticlesDictionary valueForKey:articleIDString] boolValue];

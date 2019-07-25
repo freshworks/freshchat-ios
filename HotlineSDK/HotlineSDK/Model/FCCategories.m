@@ -13,6 +13,8 @@
 #import "FCTagManager.h"
 #import "FCTags.h"
 #import "FCUtilities.h"
+#import "FCVotingManager.h"
+#import "FCSecureStore.h"
 
 @implementation FCCategories
 
@@ -63,6 +65,7 @@
     
     //Update article if exist or create a new one
     NSArray *articles =  categoryInfo[@"articles"];
+    NSNumber *faqLastUpdatedTime = [FCUtilities getLastUpdatedTimeForKey:HOTLINE_DEFAULTS_SOLUTIONS_LAST_UPDATED_SERVER_TIME];
     for (int j=0; j<articles.count; j++) {
         NSDictionary *articleInfo = articles[j];
         NSNumber *articleId = articleInfo[@"articleId"];
@@ -78,6 +81,11 @@
             }else{
                 article = [FCArticles createWithInfo:articleInfo inContext:context];
                 [category addArticlesObject:article];
+            }
+            //Compare sol. last upate with article to clear existing voting
+            if(faqLastUpdatedTime &&
+               ([articleInfo[@"lastUpdatedAt"] doubleValue] > [faqLastUpdatedTime doubleValue])){
+                    [self updateRatingsForArticle:articleId];
             }
             if(tags.count>0){
                 for(NSString *tagName in tags){
@@ -96,6 +104,13 @@
         }
     }
     return category;
+}
+
++ (void) updateRatingsForArticle : (NSNumber *)articleId{
+    BOOL isArticleVoted = [[FCVotingManager sharedInstance] isArticleVoted:articleId];
+    if(isArticleVoted){
+        [[FCVotingManager sharedInstance] clearVotingForArticle:articleId];
+    }
 }
 
 @end
