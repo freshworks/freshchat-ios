@@ -66,6 +66,11 @@
     }
 }
 
+-(BOOL)isArticleDownvoted:(NSNumber *)articleID {
+    NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
+    return (![[self.votedArticlesDictionary objectForKey:articleIDString] boolValue]);
+}
+
 -(BOOL)isArticleVoted:(NSNumber *)articleID{
     NSString * articleIDString = [NSString stringWithFormat:@"%@",articleID];
     if ([self.votedArticlesDictionary valueForKey:articleIDString]) {

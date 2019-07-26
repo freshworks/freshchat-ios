@@ -18,5 +18,6 @@
 -(BOOL)isArticleVoted:(NSNumber *)articleID;
 -(BOOL)getArticleVoteFor:(NSNumber *)articleID;
 -(void) clearVotingForArticle : (NSNumber *) articleID;
+-(BOOL)isArticleDownvoted:(NSNumber *)articleID;
 
 @end
