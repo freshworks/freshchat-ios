@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.6.0
+Version         : 2.6.1
+
+Ver 2.6.1 
+__________________________
+Enhancements :
+- Once the article is updated, users will again see the voting option.
+- Now users will be able to message you from the downvoted article screen, even if they leave and come back again.
 
 Ver 2.6.0 
 __________________________
