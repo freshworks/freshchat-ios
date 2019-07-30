@@ -319,7 +319,12 @@
                 [self showArticleRatingPrompt];
             }
             else{
-                [self hideBottomView];
+                if([self.votingManager isArticleDownvoted:self.articleID]){
+                    [self showPromptWithContactUsHidden:NO];
+                }
+                else{
+                    [self hideBottomView];
+                }
             }
         }
     }
