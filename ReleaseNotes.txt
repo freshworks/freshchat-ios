@@ -1,4 +1,9 @@
 
+Ver 2.6.2 
+__________________________
+Bug fix :
+- Fix Away Messages not being displayed due to an incompatibility in version 2.6.0 and 2.6.1
+
 Ver 2.6.1 
 __________________________
 Enhancements :
