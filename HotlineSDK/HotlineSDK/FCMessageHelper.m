@@ -247,7 +247,7 @@ __weak static id <KonotorDelegate> _delegate;
 + (NSArray *) getUserAndAgentMsgs: (NSArray *) allMessages{
     //Added to avoid disply empty staus messages if remote config fails
     // is added if any chance for old message(s) type value is 0
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"messageType == 1 OR messageType == 0"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"messageType < 1000"];
     return [allMessages filteredArrayUsingPredicate:predicate];
 }
 
