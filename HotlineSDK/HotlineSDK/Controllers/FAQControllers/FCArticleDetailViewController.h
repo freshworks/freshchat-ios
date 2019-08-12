@@ -18,8 +18,10 @@
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;
 @property (strong, nonatomic) NSString *categoryTitle;
-@property (strong,nonatomic) NSString *articleTitle;
-@property (strong,nonatomic) NSNumber *categoryID;
+@property (strong, nonatomic) NSString *articleTitle;
+@property (strong, nonatomic) NSNumber *categoryID;
+@property (strong, nonatomic) NSString *articleAlias;
+@property (strong, nonatomic) NSString *categoryAlias;
 @property (nonatomic, assign) BOOL isFromSearchView;
 @property  BOOL isFilteredView;
 @property  BOOL showCloseButton;

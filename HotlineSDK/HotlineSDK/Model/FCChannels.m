@@ -33,6 +33,7 @@
 @dynamic conversations;
 @dynamic messages;
 @dynamic isRestricted;
+@dynamic channelAlias;
 
 +(FCChannels *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     FCChannels *channel = [NSEntityDescription insertNewObjectForEntityForName:FRESHCHAT_CHANNELS_ENTITY inManagedObjectContext:context];
@@ -89,6 +90,7 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
+    channel.channelAlias = channelInfo[@"channelAlias"];
     
     //FDwebimage prefetch image and will be used by channel fetch
     if(channel.iconURL){

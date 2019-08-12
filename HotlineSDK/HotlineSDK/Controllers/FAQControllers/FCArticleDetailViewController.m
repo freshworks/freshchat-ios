@@ -127,7 +127,26 @@
     if(!self.faqOptions){
         self.faqOptions = [FAQOptions new];
     }
+    /*
+     Please donot change audioPlayback, its for audio category checks for the application.
+     App might be playing audio in bg and same time there might be audio content in article.
+     */
     [self fixAudioPlayback];
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+    if(self.categoryAlias) {
+        [eventsDict setObject:self.categoryAlias forKey:@(FCPropertyFAQCategoryID)];
+    }
+    [eventsDict setObject:self.categoryTitle forKey:@(FCPropertyFAQCategoryName)];
+    if(self.articleAlias){
+        [eventsDict setObject:self.articleAlias  forKey:@(FCPropertyFAQID)];
+    }
+    [eventsDict setObject:self.articleTitle  forKey:@(FCPropertyFAQTitle)];
+    if ([self.faqOptions.tags count] > 0){
+        [eventsDict setObject:self.faqOptions.tags forKey:@(FCPropertyInputTags)];
+    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQOpen
+                                                              withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -375,6 +394,9 @@
 
 -(void)yesButtonClicked:(id)sender{
     [self showPromptWithContactUsHidden:YES];
+
+    [self updateEventIsArticleHelpful:YES];
+    
     [self.votingManager upVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"UpVoting Completed");
     }];
@@ -386,6 +408,9 @@
     }else{
         [self showPromptWithContactUsHidden:NO];
     }
+    
+    [self updateEventIsArticleHelpful:NO];
+
     [self.votingManager downVoteForArticle:self.articleID inCategory:self.categoryID withCompletion:^(NSError *error) {
         FDLog(@"DownVoting Completed");
     }];
@@ -401,6 +426,22 @@
     else{
         [[Freshchat sharedInstance] showConversations:self];
     }
+}
+
+- (void) updateEventIsArticleHelpful : (BOOL) isHelpful{
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+    if(self.categoryAlias){
+        [eventsDict setObject:self.categoryAlias forKey:@(FCPropertyFAQCategoryID)];
+    }
+    [eventsDict setObject:self.categoryTitle forKey:@(FCPropertyFAQCategoryName)];
+    if(self.articleAlias){
+        [eventsDict setObject:self.articleAlias forKey:@(FCPropertyFAQID)];
+    }
+    [eventsDict setObject:self.articleTitle forKey:@(FCPropertyFAQTitle)];
+    [eventsDict setObject:@(isHelpful) forKey:@(FCPropertyIsHelpful)];
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQVote
+                                                               withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 @end

@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *position;
 @property (nullable, nonatomic, retain) NSSet<FCConversations *> *conversations;
 @property (nullable, nonatomic, retain) NSSet<FCMessages *> *messages;
+@property (nullable, nonatomic, retain) NSString *channelAlias;
 
 +(FCChannels *)getWithID:(NSNumber *)channelID inContext:(NSManagedObjectContext *)context;
 +(FCChannels *)getWithName:(NSString *)name inContext:(NSManagedObjectContext *)context;

@@ -188,6 +188,21 @@ typedef struct {
     [FCMessageServices fetchChannelsAndMessagesWithFetchType:ScreenLaunchFetch source:ChatScreen andHandler:nil];
     [FCMessages markAllMessagesAsReadForChannel:self.channel];
     [self prepareInputToolbar];
+    
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+    if(self.channel.channelAlias){
+        [eventsDict setObject:self.channel.channelAlias forKey:@(FCPropertyChannelID)];
+    }
+    [eventsDict setObject:self.channel.name forKey:@(FCPropertyChannelName)];
+    if(self.convOptions.tags.count > 0){
+        [eventsDict setObject:self.convOptions.tags forKey:@(FCPropertyInputTags)];
+    }
+    if(self.conversation.conversationAlias){
+        [eventsDict setObject:self.conversation.conversationAlias forKey:@(FCPropertyConversationID)];
+    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventConversationOpen
+                                                              withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 -(void) setNavigationTitle:(UIViewController *)parent {
@@ -1317,7 +1332,20 @@ typedef struct {
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing && self.yesNoPrompt) {
+            if ([self.conversation isCSATResponsePending] && !self.CSATView.isShowing && self.yesNoPrompt) { //Height check to avoid calling multiple times
+                if (self.bottomViewHeightConstraint.constant != YES_NO_PROMPT_HEIGHT){
+                    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+                    if(self.channel.channelAlias){
+                        [eventsDict setObject:self.channel.channelAlias forKey:@(FCPropertyChannelID)];
+                    }
+                    [eventsDict setObject:self.channel.name forKey:@(FCPropertyChannelName)];
+                    if(self.conversation.conversationAlias){
+                        [eventsDict setObject:self.conversation.conversationAlias forKey:@(FCPropertyConversationID)];
+                    }
+                    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventCSatOpen
+                                                                                withParams:eventsDict];
+                    [FCEventsHelper postNotificationForEvent:outEvent];
+                }
                 [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
                 [self.messageDetailView layoutIfNeeded];
             }
@@ -1379,9 +1407,37 @@ typedef struct {
     HLCsatHolder *csatHolder = [[HLCsatHolder alloc]init];
     csatHolder.isIssueResolved = self.CSATView.isResolved;
     [self storeAndPostCSAT:csatHolder];
+    
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+    if(self.channel.channelAlias) {
+        [eventsDict setObject:self.channel.channelAlias forKey:@(FCPropertyChannelID)];
+    }
+    [eventsDict setObject:self.channel.name forKey:@(FCPropertyChannelName)];
+    [eventsDict setObject:self.conversation.conversationAlias forKey:@(FCPropertyConversationID)]; //No nil check, value should be available
+    [eventsDict setObject:@(csatHolder.isIssueResolved) forKey:@(FCPropertyResolutionStatus)];
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventCSatSubmit
+                                                               withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 -(void)submittedCSAT:(HLCsatHolder *)csatHolder{
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+    if(self.channel.channelAlias){
+        [eventsDict setObject:self.channel.channelAlias forKey:@(FCPropertyChannelID)];
+    }
+    [eventsDict setObject:self.channel.name forKey:@(FCPropertyChannelName)];
+    if(csatHolder.userRatingCount){
+        [eventsDict setObject:@(csatHolder.userRatingCount) forKey:@(FCPropertyRating)];
+    }
+    [eventsDict setObject:@(csatHolder.isIssueResolved) forKey:@(FCPropertyResolutionStatus)];
+    if(csatHolder.userComments.length > 0){
+        [eventsDict setObject:csatHolder.userComments forKey:@(FCPropertyComment)];
+    }
+    [eventsDict setObject:self.conversation.conversationAlias forKey:@(FCPropertyConversationID)];
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventCSatSubmit
+                                                              withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
+    
     [self storeAndPostCSAT:csatHolder];
 }
 

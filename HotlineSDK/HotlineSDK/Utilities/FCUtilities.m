@@ -985,6 +985,13 @@ static NSInteger networkIndicator = 0;
             return YES;
         }
     } else if(!handleFreshchatLinks) {
+        
+        FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventLinkTap
+                                                                  withParams:@{
+                                                                               @(FCPropertyURL)  : url.absoluteString
+                                                                               }];
+        [FCEventsHelper postNotificationForEvent:outEvent];
+        
         if ([Freshchat sharedInstance].customLinkHandler != nil) {
             return [Freshchat sharedInstance].customLinkHandler(url);
         }

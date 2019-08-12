@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="17G65" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="1">
+    <entity name="FCArticles" representedClassName="FCArticles" elementID="HLArticle" syncable="YES">
+        <attribute name="articleAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="articleDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="categoryAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categoryID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastUpdatedTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCCategories" inverseName="articles" inverseEntity="FCCategories" syncable="YES"/>
+    </entity>
+    <entity name="FCCategories" representedClassName="FCCategories" elementID="HLCategory" syncable="YES">
+        <attribute name="categoryAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categoryDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categoryID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="iconURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastUpdatedTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="articles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FCArticles" inverseName="category" inverseEntity="FCArticles" syncable="YES"/>
+    </entity>
+    <entity name="FCChannels" representedClassName="FCChannels" elementID="HLChannel" syncable="YES">
+        <attribute name="channelAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="channelID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="iconURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isDefault" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isHidden" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isRestricted" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FCConversations" inverseName="belongsToChannel" inverseEntity="FCConversations" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FCMessages" inverseName="belongsToChannel" inverseEntity="FCMessages" syncable="YES"/>
+    </entity>
+    <entity name="FCConversations" representedClassName="FCConversations" elementID="KonotorConversation" syncable="YES">
+        <attribute name="conversationAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationHostUserAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationHostUserId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="hasPendingCsat" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="unreadMessagesCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="updatedMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCChannels" inverseName="conversations" inverseEntity="FCChannels" syncable="YES"/>
+        <relationship name="hasCsat" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FCCsat" inverseName="belongToConversation" inverseEntity="FCCsat" syncable="YES"/>
+        <relationship name="hasMessages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FCMessages" inverseName="belongsToConversation" inverseEntity="FCMessages" syncable="YES"/>
+    </entity>
+    <entity name="FCCsat" representedClassName="FCCsat" elementID="HLCsat" syncable="YES">
+        <attribute name="conversationID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="csatID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="csatStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="initiatedTime" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isIssueResolved" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mobileUserCommentsAllowed" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="question" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userComments" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userRatingCount" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="belongToConversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCConversations" inverseName="hasCsat" inverseEntity="FCConversations" syncable="YES"/>
+    </entity>
+    <entity name="FCFAQSearchIndex" representedClassName="FCFAQSearchIndex" elementID="FDIndex" syncable="YES">
+        <attribute name="articleID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="descMatches" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="keyWord" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="titleMatches" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="FCMessageBinaries" representedClassName="FCMessageBinaries" elementID="KonotorMessageBinary" syncable="YES">
+        <attribute name="binaryAudio" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="binaryImage" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="binaryThumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
+    </entity>
+    <entity name="FCMessageFragments" representedClassName="FCMessageFragments" elementID="Fragment" syncable="YES">
+        <attribute name="binaryData1" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="binaryData2" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contentType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="extraJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessages" inverseName="fragments" inverseEntity="FCMessages" syncable="YES"/>
+    </entity>
+    <entity name="FCMessages" representedClassName="FCMessages" elementID="Message" syncable="YES">
+        <attribute name="channelId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="conversationId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="createdMillis" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isDownloading" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isMarkedForUpload" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isRead" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isWelcomeMessage" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="marketingId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="messageAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageType" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="messageUserAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageUserType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="belongsToChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCChannels" inverseName="messages" inverseEntity="FCChannels" syncable="YES"/>
+        <relationship name="belongsToConversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCConversations" inverseName="hasMessages" inverseEntity="FCConversations" syncable="YES"/>
+        <relationship name="fragments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FCMessageFragments" inverseName="message" inverseEntity="FCMessageFragments" syncable="YES"/>
+    </entity>
+    <entity name="FCParticipants" representedClassName="FCParticipants" elementID="FDParticipant" syncable="YES">
+        <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profilePicURL" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="FCTags" representedClassName="FCTags" elementID="HLTags" syncable="YES">
+        <attribute name="taggableID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="taggableType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="tagName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="FCUserProperties" representedClassName="FCUserProperties" elementID="KonotorCustomProperty" syncable="YES">
+        <attribute name="isUserProperty" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serializedData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="uploadStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="FCUsers" representedClassName="FCUsers" elementID="KonotorUser" syncable="YES">
+        <attribute name="appSpecificIdentifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isUserCreatedOnServer" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userAlias" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasProperties" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="FCUserProperties" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="FCArticles" positionX="0" positionY="0" width="128" height="180"/>
+        <element name="FCCategories" positionX="0" positionY="0" width="128" height="180"/>
+        <element name="FCChannels" positionX="0" positionY="0" width="128" height="255"/>
+        <element name="FCConversations" positionX="0" positionY="0" width="128" height="210"/>
+        <element name="FCCsat" positionX="0" positionY="0" width="128" height="195"/>
+        <element name="FCFAQSearchIndex" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="FCMessageBinaries" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="FCMessageFragments" positionX="0" positionY="0" width="128" height="180"/>
+        <element name="FCMessages" positionX="0" positionY="0" width="128" height="285"/>
+        <element name="FCParticipants" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="FCTags" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="FCUserProperties" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="FCUsers" positionX="0" positionY="0" width="128" height="165"/>
+    </elements>
+</model>

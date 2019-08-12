@@ -65,6 +65,9 @@
     articleDetailController.articleDescription = article.articleDescription;
     articleDetailController.categoryTitle=article.category.title;
     articleDetailController.categoryID = article.categoryID;
+    articleDetailController.articleAlias = article.articleAlias;
+    //TODO: Not getting category Alias as response, BE has to fix this. Till then it will avoid nil value
+    articleDetailController.categoryAlias = article.categoryAlias ? article.categoryAlias : article.category.categoryAlias;
     return articleDetailController;
 }
 

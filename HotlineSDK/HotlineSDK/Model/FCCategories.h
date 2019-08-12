@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSSet *articles;
 @property (nonatomic, retain) NSString *iconURL;
 @property (nonatomic, retain) NSDate * lastUpdatedTime;
+@property (nonatomic, retain) NSString *categoryAlias;
 
 @end
 

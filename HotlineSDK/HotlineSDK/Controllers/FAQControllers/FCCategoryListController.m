@@ -91,6 +91,7 @@
     FCContainerController * containerCtr =  (FCContainerController*)self.parentViewController;
     [containerCtr.footerView setViewColor:self.tableView.backgroundColor];
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
+    [FCCategoryViewBehaviour updateEventForOpenCategoryWithTags:self.faqOptions.tags];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

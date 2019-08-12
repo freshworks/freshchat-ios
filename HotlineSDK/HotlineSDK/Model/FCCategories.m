@@ -26,6 +26,7 @@
 @dynamic articles;
 @dynamic iconURL;
 @dynamic lastUpdatedTime;
+@dynamic categoryAlias;
 
 +(FCCategories *)getWithID:(NSNumber *)categoryID inContext:(NSManagedObjectContext *)context{
     FCCategories *category = nil;
@@ -53,12 +54,13 @@
 
 +(FCCategories *)updateCategory:(FCCategories *)category withInfo:(NSDictionary *)categoryInfo{
     NSManagedObjectContext *context = category.managedObjectContext;
-    category.categoryID = categoryInfo[@"categoryId"];
-    category.title = categoryInfo[@"title"];
-    category.iconURL = categoryInfo[@"icon"];
-    category.position = categoryInfo[@"position"];
-    category.lastUpdatedTime = [NSDate dateWithTimeIntervalSince1970:[categoryInfo[@"lastUpdatedAt"]doubleValue]];
+    category.categoryID          = categoryInfo[@"categoryId"];
+    category.title               = categoryInfo[@"title"];
+    category.iconURL             = categoryInfo[@"icon"];
+    category.position            = categoryInfo[@"position"];
+    category.lastUpdatedTime     = [NSDate dateWithTimeIntervalSince1970:[categoryInfo[@"lastUpdatedAt"]doubleValue]];
     category.categoryDescription = categoryInfo[@"description"];
+    category.categoryAlias       = categoryInfo[@"categoryAlias"];
     if(category.iconURL){
         [FCUtilities cacheImageWithUrl:category.iconURL];
     }

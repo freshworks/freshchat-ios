@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FCViewController.h"
 #import "FCFooterView.h"
+#import "FCEventsHelper.h"
 
 #define FRESHCHAT_ACCOUNT_DELETED_EVENT @"com.freshworks.freshchat_account_deleted_event"
 

@@ -18,6 +18,7 @@
 #import "FCAttachmentImageController.h"
 #import "FCLocalNotification.h"
 #import "FCRemoteConfig.h"
+#import "FCEventsHelper.h"
 
 @implementation FCViewController : UIViewController
 
@@ -35,11 +36,9 @@
 }
 
 - (void) postNotifForScreenTransition {
-    if([self.class isEqual:[FCChannelViewController class]]
-       || [self.class isEqual:[FCMessageController class]]
-       || [self.class isEqual:[FCAttachmentImageController class]]) {
-        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"SCREEN_VIEWED"}];
-    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventScreenView
+                                                               withParams:nil];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 -(void)viewDidAppear:(BOOL)animated{

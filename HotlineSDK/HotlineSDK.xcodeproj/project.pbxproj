@@ -179,6 +179,9 @@
 		EAB07908216B696B00B701C9 /* FCUserAuthConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB07906216B696B00B701C9 /* FCUserAuthConfig.m */; };
 		EAB0790B216CB7D000B701C9 /* FCJWTUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB07909216CB7D000B701C9 /* FCJWTUtilities.h */; };
 		EAB0790C216CB7D000B701C9 /* FCJWTUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB0790A216CB7D000B701C9 /* FCJWTUtilities.m */; };
+		EACA6D1A22F03CA8000F1AC9 /* FCEventsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EA16778B22F0333A00E3C46E /* FCEventsHelper.m */; };
+		EACA6D1C22F03F87000F1AC9 /* FreshchatEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = EACA6D1B22F03F87000F1AC9 /* FreshchatEvent.m */; };
+		EACA6D2022F04028000F1AC9 /* FCOutboundEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = EACA6D1E22F04028000F1AC9 /* FCOutboundEvent.m */; };
 		EAD751E520EF9B44003DE477 /* FCLocaleConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD751E420EF9B44003DE477 /* FCLocaleConstants.h */; };
 /* End PBXBuildFile section */
 
@@ -489,6 +492,9 @@
 		EA035F1520D9515800165D00 /* FCAttributedText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCAttributedText.h; sourceTree = "<group>"; };
 		EA104802213F247700122843 /* FCUnsupportedFragment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCUnsupportedFragment.h; sourceTree = "<group>"; };
 		EA104803213F247700122843 /* FCUnsupportedFragment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCUnsupportedFragment.m; sourceTree = "<group>"; };
+		EA16778B22F0333A00E3C46E /* FCEventsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCEventsHelper.m; sourceTree = "<group>"; };
+		EA16778C22F0333A00E3C46E /* FCEventsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCEventsHelper.h; sourceTree = "<group>"; };
+		EA16778F22F037EC00E3C46E /* FreshchatModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FreshchatModel 4.xcdatamodel"; sourceTree = "<group>"; };
 		EA306AA321B7C96A005211E4 /* FCMessageMaskConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCMessageMaskConfig.h; sourceTree = "<group>"; };
 		EA306AA421B7C96A005211E4 /* FCMessageMaskConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCMessageMaskConfig.m; sourceTree = "<group>"; };
 		EA63B61220D8DCEF00C36350 /* FreshchatModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FreshchatModel 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -503,6 +509,9 @@
 		EAB07909216CB7D000B701C9 /* FCJWTUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCJWTUtilities.h; sourceTree = "<group>"; };
 		EAB0790A216CB7D000B701C9 /* FCJWTUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCJWTUtilities.m; sourceTree = "<group>"; };
 		EAB37784221AE5AC00F2094F /* FreshchatModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FreshchatModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		EACA6D1B22F03F87000F1AC9 /* FreshchatEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreshchatEvent.m; sourceTree = "<group>"; };
+		EACA6D1D22F04027000F1AC9 /* FCOutboundEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCOutboundEvent.h; sourceTree = "<group>"; };
+		EACA6D1E22F04028000F1AC9 /* FCOutboundEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCOutboundEvent.m; sourceTree = "<group>"; };
 		EAD751E420EF9B44003DE477 /* FCLocaleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCLocaleConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -576,6 +585,11 @@
 				950A3F83216740BE0000754E /* JWTProxy */,
 				35B2EED91D000E620014867F /* FreshchatSDK.h */,
 				35B2EEDA1D000E620014867F /* FreshchatSDK.m */,
+				EACA6D1B22F03F87000F1AC9 /* FreshchatEvent.m */,
+				EA16778C22F0333A00E3C46E /* FCEventsHelper.h */,
+				EA16778B22F0333A00E3C46E /* FCEventsHelper.m */,
+				EACA6D1D22F04027000F1AC9 /* FCOutboundEvent.h */,
+				EACA6D1E22F04028000F1AC9 /* FCOutboundEvent.m */,
 				35B2EEDE1D000E620014867F /* FCMessageHelper.h */,
 				35B2EEDF1D000E620014867F /* FCMessageHelper.m */,
 				35B2EEDD1D000E620014867F /* FreshchatUser.m */,
@@ -1185,6 +1199,7 @@
 				35B2EFC51D000E620014867F /* FCAudioMessageInputView.m in Sources */,
 				35B2EFB81D000E620014867F /* FCAudioRecorder.m in Sources */,
 				CE8C7A6F1F6C216B00E77494 /* FDWebImageDownloaderOperation.m in Sources */,
+				EACA6D1C22F03F87000F1AC9 /* FreshchatEvent.m in Sources */,
 				CE0C7C6E1D9539A100F545AE /* FCPlistManager.m in Sources */,
 				CE8C7A801F6C216B00E77494 /* UIImage+MultiFormat.m in Sources */,
 				35B2EFC01D000E620014867F /* FCLabel.m in Sources */,
@@ -1256,6 +1271,7 @@
 				35B2EF991D000E620014867F /* FCMessageUtil.m in Sources */,
 				CEFA05651EE82F7400DC74CF /* FCFileFragment.m in Sources */,
 				35B2EFBE1D000E620014867F /* FCSearchBar.m in Sources */,
+				EACA6D2022F04028000F1AC9 /* FCOutboundEvent.m in Sources */,
 				EA6EB25F21070D4400411D5F /* FCCSATUtil.m in Sources */,
 				35B2EFB61D000E620014867F /* HotlineAppState.m in Sources */,
 				35D4E8161D118E9000EFFE07 /* FCArticleDetailViewController.m in Sources */,
@@ -1311,6 +1327,7 @@
 				CEFA055B1EE82F2000DC74CF /* FCHtmlFragment.m in Sources */,
 				EA306AA621B7C96B005211E4 /* FCMessageMaskConfig.m in Sources */,
 				951A3CD421996DF90096E816 /* FCJWTViewController.m in Sources */,
+				EACA6D1A22F03CA8000F1AC9 /* FCEventsHelper.m in Sources */,
 				CEA6AC3A1DD94C6D00B60002 /* FCGrowingTextView.m in Sources */,
 				3C160B061D05A59C000440D4 /* FCFAQUtil.m in Sources */,
 				3C0651041E38C8A100F8B190 /* FCMessagePoller.m in Sources */,
@@ -1597,12 +1614,13 @@
 		CE95B5781F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				EA16778F22F037EC00E3C46E /* FreshchatModel 4.xcdatamodel */,
 				EAB37784221AE5AC00F2094F /* FreshchatModel 3.xcdatamodel */,
 				EA63B61220D8DCEF00C36350 /* FreshchatModel 2.xcdatamodel */,
 				CE1739791F6D725E00950F30 /* FreshchatModel 1.xcdatamodel */,
 				CE95B5791F6D6E5D006EC8AA /* FreshchatModel.xcdatamodel */,
 			);
-			currentVersion = EAB37784221AE5AC00F2094F /* FreshchatModel 3.xcdatamodel */;
+			currentVersion = EA16778F22F037EC00E3C46E /* FreshchatModel 4.xcdatamodel */;
 			path = FreshchatModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

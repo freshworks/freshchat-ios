@@ -174,4 +174,15 @@
     return self.faqOptions && self.faqOptions.showContactUsOnFaqScreens && !self.faqOptions.showContactUsOnAppBar;
 }
 
++(void) updateEventForOpenCategoryWithTags : (NSArray *) tags{
+    NSDictionary *optionsDict;
+    if(tags.count >0){
+        optionsDict=  @{
+                        @(FCPropertyInputTags): tags
+                        };
+    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQCategoryListOpen withParams:optionsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
+}
+
 @end

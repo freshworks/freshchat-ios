@@ -23,6 +23,7 @@
 #import "FCLocalNotification.h"
 #import "FCRemoteConfig.h"
 #import "FCJWTAuthValidator.h"
+#import "FCEventsHelper.h"
 
 #define KONOTOR_IMG_COMPRESSION YES
 
@@ -176,7 +177,6 @@ __weak static id <KonotorDelegate> _delegate;
     } else {
         [self uploadMessage:message withImage:image inChannel:channel andConversation:conversation];
     }
-
 }
 
 + (void) uploadMessage :(FCMessages *) message withImage:(UIImage*)image inChannel:(FCChannels *) channel andConversation : (FCConversations *)conversation {
@@ -199,7 +199,18 @@ __weak static id <KonotorDelegate> _delegate;
     NSArray *freshchatRegexArray = [FCUserDefaults getObjectForKey:FRESTCHAT_DEFAULTS_MESSAGE_MASK];
     textFeedback = freshchatRegexArray.count > 0 ? [FCUtilities applyRegexForInputText:textFeedback] : textFeedback;
     [self uploadNewMsgWithImage:image textFeed:textFeedback onConversation:conversation andChannel:channel];
-    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"MESSAGE_SENT"}];
+    
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+    if(channel.channelAlias){
+        [eventsDict setObject:channel.channelAlias forKey:@(FCPropertyChannelID)];
+    }
+    [eventsDict setObject:channel.name forKey:@(FCPropertyChannelName)];
+    if(conversation){
+        [eventsDict setObject:conversation.conversationAlias forKey:@(FCPropertyConversationID)];
+    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventMessageSent
+                                                               withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 +(void)uploadImage:(UIImage *)image onConversation:(FCConversations *)conversation onChannel:(FCChannels *)channel{

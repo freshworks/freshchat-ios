@@ -178,7 +178,7 @@
                                                               completion([FCControllerUtils getCategoryController:options]);
                                                           }
                                                           else {
-                                                              [options filterContactUsByTags:@[] withTitle:@""];
+                                                              [options filterContactUsByTags:options.tags withTitle:@""];
                                                               completion([FCControllerUtils getCategoryController:options]);
                                                           }
                                                       }];
@@ -207,7 +207,7 @@
                                                        }];
                                                    } else {
                                                        // No Matching tags so no need to pass it around
-                                                       [options filterByTags:@[] withTitle:@"" andType:0];
+                                                       [options filterByTags:options.tags withTitle:@"" andType:0];
                                                        completion([FCControllerUtils getCategoryController:options]);
                                                    }
                                                }];

@@ -60,6 +60,7 @@
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]){
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
+    NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
     if([FCFAQUtil hasFilteredViewTitle:self.faqOptions]){
         if(self.faqOptions.filteredType == ARTICLE){
             parent.navigationItem.title = [self.faqOptions filteredViewTitle];
@@ -71,11 +72,22 @@
     else{
         if(self.category){
             parent.navigationItem.title = self.category.title;
+            if(self.category.categoryAlias){
+                [eventsDict setObject:self.category.categoryAlias forKey:@(FCPropertyFAQCategoryID)];
+            }
+            [eventsDict setObject:self.category.title forKey:@(FCPropertyFAQCategoryName)];
         }
         else{
             parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
         }
     }
+    if ([self.faqOptions.tags count] > 0){
+        [eventsDict setObject:self.faqOptions.tags forKey:@(FCPropertyInputTags)];
+    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQListOpen
+                                                              withParams:eventsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
+    
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -160,6 +172,7 @@
 }
 
 -(void)searchButtonAction:(id)sender{
+    
     FCSearchViewController *searchViewController = [[FCSearchViewController alloc] init];
     [FCFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];

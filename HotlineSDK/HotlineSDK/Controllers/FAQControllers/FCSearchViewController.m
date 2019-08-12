@@ -43,6 +43,9 @@
 @property (nonatomic, strong) FCEmptyResultView *emptyResultView;
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property (nonatomic, strong) FCFooterView  *footerView;
+@property (nonatomic, assign) BOOL isFAQSearchEventAdded;
+@property (nonatomic, assign) NSString *searchString;
+ 
 @end
 
 @implementation FCSearchViewController
@@ -283,8 +286,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.searchResults.count) {
         FCArticleContent *article = self.searchResults[indexPath.row];
+        [self updateEventForRelevantSearch : YES];
         [FCFAQUtil launchArticleID:article.articleID withNavigationCtlr:self andFaqOptions:self.faqOptions fromLink:false]; //TODO: - Pass this from outside - Rex
     }
 }
@@ -352,6 +357,7 @@
 
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [self updateEventForRelevantSearch : NO];
     [self dismissModalViewControllerAnimated:NO];
 }
 
@@ -386,6 +392,19 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES]; 
+}
+
+- (void) updateEventForRelevantSearch : (BOOL) isRelevant {
+    if((trimString(self.searchBar.text).length == 0) || ([self.searchString isEqualToString:self.searchBar.text] &&  self.isFAQSearchEventAdded)) return;
+    self.isFAQSearchEventAdded = YES;
+    self.searchString = trimString(self.searchBar.text);
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQSearch
+                                                               withParams:@{
+                                                                            @(FCPropertySearchKey)      : self.searchBar.text,
+                                                                            @(FCPropertySearchFAQCount) : @(self.searchResults.count),
+                                                                            @(FCPropertyIsRelevant)     : @(isRelevant)
+                                                                            }];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 @end
