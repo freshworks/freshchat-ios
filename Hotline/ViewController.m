@@ -166,7 +166,7 @@
     NSLog(@"====JWT Token Status - %@ ====", [[Freshchat sharedInstance] getUserIdTokenStatus]);
     self.tokenState.text = [[Freshchat sharedInstance] getUserIdTokenStatus];
     
-    FreshchatEvent *fcEvent = notif.userInfo[@"Event"];
+    FreshchatEvent *fcEvent = notif.userInfo[@"event"];
     
     NSLog(@"====Freshchat event  - %@ ====", [[ViewController getEventNameDict] objectForKey:@(fcEvent.name)]);
     self.event.text = [[ViewController getEventNameDict] objectForKey:@(fcEvent.name)];
