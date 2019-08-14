@@ -158,7 +158,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userActionEvent:)
-                                                 name:FRESHCHAT_ACTION_USER_ACTIONS
+                                                 name:FRESHCHAT_EVENTS
                                                object:nil];
 }
 

@@ -48,7 +48,7 @@
     fcEvent.name = event.eventName;
     fcEvent.properties = event.properties;
     NSDictionary *dict = [NSDictionary dictionaryWithObject:fcEvent forKey:@"event"];
-    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:dict];
+    [FCLocalNotification post:FRESHCHAT_EVENTS info:dict];
 }
 
 @end
