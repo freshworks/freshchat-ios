@@ -2,7 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.6.2
+Version         : 2.7.0
+
+Ver 2.7.0 
+__________________________
+Enhancements :
+- Added new user events.
+- Events are richer with metdata.
+Breaking change :
+- Action name for user events change from `FRESHCHAT_ACTION_USER_ACTIONS` to `FRESHCHAT_EVENTS`.
+- Change in format of the event object (the key for the information is now  `event` instead of `action`).
 
 Ver 2.6.2 
 __________________________
