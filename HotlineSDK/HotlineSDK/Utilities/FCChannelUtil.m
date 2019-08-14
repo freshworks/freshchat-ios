@@ -7,6 +7,7 @@
 //
 
 #import "FCChannelUtil.h"
+#import "FCControllerUtils.h"
 
 @interface ConversationOptions()
 
@@ -26,7 +27,6 @@
     ConversationOptions *convOptions = [[ConversationOptions alloc] init];
     [convOptions filterByChannelID:channelID withTitle:title];
     [[Freshchat sharedInstance] showConversations:viewController withOptions:convOptions];
-
 }
 
 @end

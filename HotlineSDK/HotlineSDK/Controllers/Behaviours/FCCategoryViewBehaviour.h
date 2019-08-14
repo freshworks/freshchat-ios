@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "FCCategories.h"
 #import "FreshchatSDK.h"
+#import "FCEventsHelper.h"
 
 @protocol HLCategoryViewBehaviourDelegate
 
@@ -32,6 +33,7 @@
 -(void) launchConversations;
 -(BOOL) canDisplayFooterView;
 -(void) setNavigationItem;
++(void) updateEventForOpenCategoryWithTags : (NSArray *) tags;
 
 @end
 

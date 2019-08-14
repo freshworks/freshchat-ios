@@ -83,6 +83,19 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
     
             FCChannels *channel = [FCChannels getWithID:channelID inContext:[FCDataManager sharedInstance].mainObjectContext];
             
+            NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+            if(channel){
+                if(channel.channelAlias){
+                    [eventsDict setObject:channel.channelAlias forKey:@(FCPropertyChannelID)];
+                }
+                [eventsDict setObject:channel.name forKey:@(FCPropertyChannelName)];
+                [eventsDict setObject:channel.conversations.allObjects.firstObject.conversationAlias forKey:@(FCPropertyConversationID)];
+
+            }
+            FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventNotificationReceive
+                                                                      withParams:eventsDict];
+            [FCEventsHelper postNotificationForEvent:outEvent];
+            
             enum MessageFetchType fetchType = channel ? FetchMessages : FetchAll;
             
             [FCMessageServices fetchChannelsAndMessagesWithFetchType:fetchType

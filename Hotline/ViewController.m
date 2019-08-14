@@ -157,19 +157,27 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(jwtActionEvent:)
-                                                 name:FRESHCHAT_ACTION_USER_ACTIONS
+                                             selector:@selector(userActionEvent:)
+                                                 name:FRESHCHAT_EVENTS
                                                object:nil];
-    
 }
 
-
-
-- (void) jwtActionEvent:(NSNotification *)notif {
-    NSLog(@"====JWT Event - %@ ====", notif.userInfo[@"action"]);
-    self.event.text = notif.userInfo[@"action"];
-    NSLog(@"====JWT Event - %@ ====", [[Freshchat sharedInstance] getUserIdTokenStatus]);
+- (void) userActionEvent:(NSNotification *)notif {
+    NSLog(@"====JWT Token Status - %@ ====", [[Freshchat sharedInstance] getUserIdTokenStatus]);
     self.tokenState.text = [[Freshchat sharedInstance] getUserIdTokenStatus];
+    
+    FreshchatEvent *fcEvent = notif.userInfo[@"event"];
+    
+    NSLog(@"====Freshchat event  - %@ ====", [[ViewController getEventNameDict] objectForKey:@(fcEvent.name)]);
+    self.event.text = [[ViewController getEventNameDict] objectForKey:@(fcEvent.name)];
+    
+    //Compare with any event name
+    if(fcEvent.name == FCEventFAQOpen){
+        NSLog(@"Category open event");
+    }
+    
+    //Print event properties
+    NSLog(@"Event properties %@", fcEvent.properties);
 }
 
 - (void) receiveHLPlayNotification:(NSNotification *) notification{
@@ -320,13 +328,18 @@ JWTScheduler *jwtScheduler;
 }
 
 - (IBAction)articleFilter1:(id)sender{
+    NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
+    NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
+    [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
     options.showFaqCategoriesAsGrid = self.gridval;
     options.showContactUsOnFaqScreens = self.switchVal;
     options.showContactUsOnFaqNotHelpful = TRUE;
-    options.showContactUsOnAppBar = true;
-    [options filterContactUsByTags:@[@"cht1"] withTitle:self.faqContactUsTitleField1.text];
-    [options filterByTags:@[@"faqt1",@"faqt2"] withTitle:self.faqTitleField1.text andType: ARTICLE];
+    options.showContactUsOnAppBar = TRUE;
+    if(contactUsTagsArray.count){
+        [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
+    }
+    [options filterByTags:arr withTitle:self.faqTitleField1.text andType: ARTICLE];
     [[Freshchat sharedInstance]showFAQs:self withOptions:options];
 }
 
@@ -380,7 +393,6 @@ JWTScheduler *jwtScheduler;
     }
     [[Freshchat sharedInstance] showConversations:self withOptions:opt];
    
-    
 }
 
 - (IBAction)showLanguagePicker:(id)sender {
@@ -516,6 +528,28 @@ JWTScheduler *jwtScheduler;
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
     int sectionWidth = 300;
     return sectionWidth;
+}
+
++ (NSDictionary *) getEventNameDict
+{
+    return @{
+            @(FCEventFAQCategoryListOpen) : @"FCEventFAQCategoryListOpen",
+            @(FCEventFAQListOpen)         : @"FCEventFAQListOpen",
+            @(FCEventFAQOpen)             : @"FCEventFAQOpen",
+            @(FCEventFAQSearch)           : @"FCEventFAQSearch",
+            @(FCEventFAQVote)             : @"FCEventFAQVote",
+            @(FCEventChannelListOpen)     : @"FCEventChannelListOpen",
+            @(FCEventMessageSent)         : @"FCEventMessageSent",
+            @(FCEventConversationOpen)    : @"FCEventConversationOpen",
+            @(FCEventCSatOpen)            : @"FCEventCSatOpen",
+            @(FCEventCSatSubmit)          : @"FCEventCSatSubmit",
+            @(FCEventCSatExpiry)          : @"FCEventCSatExpiry",
+            @(FCEventLinkTap)             : @"FCEventLinkTap",
+            @(FCEventScreenView)          : @"FCEventScreenView",
+            @(FCEventMessageReceive)      : @"FCEventMessageReceive",
+            @(FCEventNotificationReceive) : @"FCEventNotificationReceive",
+            @(FCEventIdTokenStatusChange) : @"FCEventIdTokenStatusChange"
+        };
 }
 
 @end

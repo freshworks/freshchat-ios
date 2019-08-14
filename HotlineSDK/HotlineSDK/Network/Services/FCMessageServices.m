@@ -37,6 +37,7 @@
 #import "FCUserUtil.h"
 #import "FCParticipants.h"
 #import "FCCSATUtil.h"
+#import "FCEventsHelper.h"
 
 #define ERROR_CODE_USER_NOT_CREATED 1
 
@@ -219,6 +220,7 @@ static FCNotificationHandler *handleUpdateNotification;
 +(BOOL)processMessageResponse:(NSDictionary *)response{
     NSNumber *channelId;
     NSString *messageText;
+    BOOL isMsgReceiveEventTrggered = NO;
     BOOL isRestore = [[FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_REQUESTED_TIME] isEqualToNumber:@0];
     __block NSNumber *lastUpdateTime = [FCUtilities getLastUpdatedTimeForKey:FC_CONVERSATIONS_LAST_MODIFIED_AT_V2];
     NSArray *conversations = response[@"conversations"];
@@ -267,9 +269,12 @@ static FCNotificationHandler *handleUpdateNotification;
                 if([newMessage.messageUserType integerValue] == 0) { //Set user messages from other devices/os
                      newMessage.isRead = YES;
                 }
-                else if([newMessage.messageType integerValue] == 1){
-                    [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"MESSAGE_RECEIVED"}];
-                }                
+                if(!isMsgReceiveEventTrggered && (newMessage.messageUserType != 0) && ([newMessage.messageType intValue] < 1000)){
+                    isMsgReceiveEventTrggered = YES;
+                    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventMessageReceive
+                                                                                withParams:nil];
+                    [FCEventsHelper postNotificationForEvent:outEvent];
+                }
             }
         }
         
@@ -278,7 +283,6 @@ static FCNotificationHandler *handleUpdateNotification;
             [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
         }
     }
-    
     [[FCDataManager sharedInstance]save];
 
     FCSecureStore *secureStore = [FCSecureStore sharedInstance];

@@ -10,6 +10,7 @@
 #import "FCRemoteConfig.h"
 #import "FCMacros.h"
 #import "FCUtilities.h"
+#import "FCEventsHelper.h"
 
 @implementation FCCSATUtil
 
@@ -22,6 +23,16 @@
         FDLog(@"There are %d unuploaded CSATs", (int)results.count);
         for (FCCsat *csat in results) {
             if([FCCSATUtil isCSATExpiredForInitiatedTime:[csat.initiatedTime longValue]]){
+                //expired csat
+                NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
+                if(csat.belongToConversation.belongsToChannel.channelAlias){
+                    [eventsDict setObject:csat.belongToConversation.belongsToChannel.channelAlias forKey:@(FCPropertyChannelID)];
+                }
+                [eventsDict setObject:csat.belongToConversation.belongsToChannel.name forKey:@(FCPropertyChannelName)];
+                [eventsDict setObject:csat.belongToConversation.conversationAlias forKey:@(FCPropertyConversationID)];
+                FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventCSatExpiry
+                                                                           withParams:eventsDict];
+                [FCEventsHelper postNotificationForEvent:outEvent];
                 [FCCSATUtil deleteCSATAndUpdateConversation:csat];
             }
         }

@@ -56,7 +56,8 @@
 
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
-
+#define MAX_SOL_FILTER_TAGS 25
+#define FILTER_TAGS_EXCEED_MSG @"Limit exceeded - Maximum number of filter tag(s) allowed is 25."
 
 @interface FCNotificationBanner ()
 
@@ -657,7 +658,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [self showFAQs:controller withOptions:[FAQOptions new]];
     }
     else{
-        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_FAQ_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_FAQ_FEATURE_DISABLED_TEXT) message:nil
+                              andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
     }
 }
 
@@ -666,7 +668,8 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [self showConversations:controller withOptions:[ConversationOptions new]];
     }
     else{
-        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_CHANNELS_FEATURE_DISABLED_TEXT) message:nil andCancelText:@"Cancel"];
+        [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_CHANNELS_FEATURE_DISABLED_TEXT) message:nil
+                              andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
     }
 }
 
@@ -675,12 +678,20 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
         return;
     }
+    if(options.tags.count > MAX_SOL_FILTER_TAGS) {
+        ALog(FILTER_TAGS_EXCEED_MSG)
+        return;
+    }
     [FCControllerUtils presentOn:controller option:options];
 }
 
 - (void) showConversations:(UIViewController *)controller withOptions :(ConversationOptions *)options {
     if([FCUtilities isAccountDeleted]){
         [FCUtilities showAlertViewWithTitle:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_TEXT) message:nil andCancelText:HLLocalizedString(LOC_ERROR_MESSAGE_ACCOUNT_NOT_ACTIVE_CANCEL)];
+        return;
+    }
+    if(options.tags.count > MAX_SOL_FILTER_TAGS) {
+        ALog(FILTER_TAGS_EXCEED_MSG)
         return;
     }
     [FCControllerUtils presentOn:controller option:options];
@@ -695,10 +706,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(UIViewController*) getConversationsControllerForEmbedWithOptions:(ConversationOptions *) convOptions{
+    if(convOptions.tags.count > MAX_SOL_FILTER_TAGS) {
+        ALog(FILTER_TAGS_EXCEED_MSG)
+        return [[FCInterstitialViewController alloc]init];
+    }
     return [FCControllerUtils getEmbedded:convOptions];
 }
 
 -(UIViewController*) getFAQsControllerForEmbedWithOptions:(FAQOptions *) faqOptions{
+    if(faqOptions.tags.count > MAX_SOL_FILTER_TAGS) {
+        ALog(FILTER_TAGS_EXCEED_MSG)
+        return [[FCInterstitialViewController alloc]init];
+    }
     return [FCControllerUtils getEmbedded:faqOptions];
 }
 
@@ -755,7 +774,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         if(![self isFreshchatNotification:info]){
             return;
         }
-        [FCLocalNotification post:FRESHCHAT_ACTION_USER_ACTIONS info:@{@"action" :@"NOTIFICATION_RECEIVED"}];
+        
         self.notificationHandler = [[FCNotificationHandler alloc]init];
         [self.notificationHandler handleNotification:info appState:appState];
     } @catch (NSException *exception) {

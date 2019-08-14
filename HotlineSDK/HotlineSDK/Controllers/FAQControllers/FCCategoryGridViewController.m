@@ -81,15 +81,14 @@
     return HLLocalizedString(LOC_LOADING_FAQ_TEXT);
 }
 
-
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = HLLocalizedString(LOC_FAQ_TITLE_TEXT);
     self.theme = [FCTheme sharedInstance];
     [self setupSubviews];
     [self adjustUIBounds];
     [self theming];
+    [FCCategoryViewBehaviour updateEventForOpenCategoryWithTags:self.faqOptions.tags];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

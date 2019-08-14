@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Freshdesk. All rights reserved.
 //
 
+#import "FreshchatSDK.h"
+
 #ifndef HotlineSDK_FDLocalNotification_h
 #define HotlineSDK_FDLocalNotification_h
 

@@ -33,6 +33,7 @@
 @dynamic conversations;
 @dynamic messages;
 @dynamic isRestricted;
+@dynamic channelAlias;
 
 +(FCChannels *)createWithInfo:(NSDictionary *)channelInfo inContext:(NSManagedObjectContext *)context{
     FCChannels *channel = [NSEntityDescription insertNewObjectForEntityForName:FRESHCHAT_CHANNELS_ENTITY inManagedObjectContext:context];
@@ -89,6 +90,7 @@
     channel.lastUpdated = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"updated"]doubleValue]];
     channel.created = [NSDate dateWithTimeIntervalSince1970:[channelInfo[@"created"]doubleValue]];
     channel.isHidden = channelInfo[@"hidden"];
+    channel.channelAlias = channelInfo[@"channelAlias"];
     
     //FDwebimage prefetch image and will be used by channel fetch
     if(channel.iconURL){
@@ -160,10 +162,10 @@
     
     if([FCRemoteConfig sharedInstance].conversationConfig.hideResolvedConversation){
         long long hideConvResolvedMillis = [FCMessageHelper getResolvedConvsHideTimeForChannel:self.channelID];
-        predicate = hideConvResolvedMillis ? [NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND (messageType == 1 OR messageType == 0) AND createdMillis.longValue > %ld", self, hideConvResolvedMillis] : [NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND (messageType == 1 OR messageType == 0)", self];
+        predicate = hideConvResolvedMillis ? [NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND messageType < 1000 AND createdMillis.longValue > %ld", self, hideConvResolvedMillis] : [NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND messageType < 1000", self];
     }
     else{
-        predicate =[NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND (messageType == 1 OR messageType == 0)", self];
+        predicate =[NSPredicate predicateWithFormat:@"isRead == NO AND belongsToChannel == %@ AND messageType < 1000", self];
     }
     request.predicate = predicate;
     NSArray *messages = [self.managedObjectContext executeFetchRequest:request error:nil];

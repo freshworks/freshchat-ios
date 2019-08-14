@@ -4,6 +4,11 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.6.2 
+__________________________
+Bug fix :
+- Fix Away Messages not being displayed due to an incompatibility in version 2.6.0 and 2.6.1
+
 Ver 2.6.1 
 __________________________
 Enhancements :

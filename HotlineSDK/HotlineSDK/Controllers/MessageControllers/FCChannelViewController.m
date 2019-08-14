@@ -71,6 +71,16 @@
                                                                     };
     self.iconDownloader = [[FCIconDownloader alloc]init];
     [self setNavigationItem];
+    
+    NSDictionary *optionsDict;
+    if(self.convOptions.tags.count >0){
+        optionsDict=  @{
+                        @(FCPropertyInputTags): self.convOptions.tags
+                        };
+    }
+    FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventChannelListOpen
+                                                               withParams:optionsDict];
+    [FCEventsHelper postNotificationForEvent:outEvent];
 }
 
 - (void) setConversationOptions:(ConversationOptions *)options{

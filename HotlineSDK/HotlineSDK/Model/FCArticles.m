@@ -20,6 +20,8 @@
 @dynamic position;
 @dynamic title;
 @dynamic category;
+@dynamic articleAlias;
+@dynamic categoryAlias;
 
 +(FCArticles *)getWithID:(NSNumber *)articleID inContext:(NSManagedObjectContext *)context{
     FCArticles *article = nil;
@@ -51,6 +53,8 @@
     article.title                = [articleInfo valueForKey:@"title"];
     article.articleDescription   = [articleInfo valueForKey:@"content"];
     article.position             = @([[articleInfo valueForKey:@"position"]intValue]);
+    article.articleAlias         = [articleInfo valueForKey:@"articleAlias"];
+    article.categoryAlias        = [articleInfo valueForKey:@"categoryAlias"];
     return article;
 }
 
