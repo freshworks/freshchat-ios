@@ -4,6 +4,15 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.7.0 
+__________________________
+Enhancements :
+- Added new user events.
+- Events are richer with metdata.
+Breaking change :
+- Action name for user events change from `FRESHCHAT_ACTION_USER_ACTIONS` to `FRESHCHAT_EVENTS`.
+- Change in format of the event object (the key for the information is now  `event` instead of `action`).
+
 Ver 2.6.2 
 __________________________
 Bug fix :
