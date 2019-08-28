@@ -18,6 +18,9 @@
 #import "FCPlistManager.h"
 #import "FCStringUtil.h"
 
+#define FC_SEND_BTN_VERTICAL_PADDING 8
+#define FC_SEND_BTN_HOTIZONTAL_PADDING 8
+
 @interface FCInputToolbarView () <UITextViewDelegate>{
     NSString *placeHolderText;
 }
@@ -91,6 +94,8 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
         
         sendButton = [FCButton buttonWithType:UIButtonTypeSystem];
         sendButton.backgroundColor = [UIColor clearColor];
+        //Only inc. surface area, No interfere with current button size
+        sendButton.imageEdgeInsets = UIEdgeInsetsMake(-FC_SEND_BTN_VERTICAL_PADDING, -FC_SEND_BTN_HOTIZONTAL_PADDING, -FC_SEND_BTN_VERTICAL_PADDING, -FC_SEND_BTN_HOTIZONTAL_PADDING);
         UIImage *sendImage = [self.theme getImageValueWithKey:IMAGE_SEND_ICON];
         if(sendImage != nil){
             [sendButton setBackgroundImage:sendImage forState:UIControlStateNormal];
@@ -99,7 +104,6 @@ micButton, attachButtonYConstraint, accessoryViewYConstraint, accessoryViewConta
             [sendButton setTitle:HLLocalizedString(LOC_SEND_BUTTON_TEXT) forState:UIControlStateNormal];
             [sendButton setTitleColor:[self.theme sendButtonColor] forState:UIControlStateNormal];
         }
-        
         sendButton.translatesAutoresizingMaskIntoConstraints = NO;
         [sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         

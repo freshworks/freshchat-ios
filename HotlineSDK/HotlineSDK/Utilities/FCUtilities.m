@@ -31,6 +31,7 @@
 #import "FCJWTAuthValidator.h"
 #import "FCFAQUtil.h"
 #import "FCChannelUtil.h"
+#import "FDThemeConstants.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -559,6 +560,13 @@ static NSInteger networkIndicator = 0;
     return image;
 }
 
++ (FCBarButtonItem *) getCloseBarBtnItemforCtr : (id) ctr withSelector:(SEL) selector{
+     return [[FCBarButtonItem alloc] initWithImage:[[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON]
+                                                                                            style:UIBarButtonItemStylePlain
+                                                                                           target:ctr
+                                                                                           action:selector];
+}
+
 +(NSString *) getLocalizedPositiveFeedCSATQues{
     return ([FCLocalization isNotEmpty:LOC_MESSAGES_AGENT_LABEL_TEXT] ? HLLocalizedString(LOC_CSAT_CHAT_RESOLUTION_QUESTION_TEXT) : nil);
 }
@@ -997,6 +1005,15 @@ static NSInteger networkIndicator = 0;
         }
     }
     return NO;
+}
+
++ (NSString *) getSDKThemeName {
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    if([store objectForKey:HOTLINE_DEFAULTS_THEME_NAME]){
+        return [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
+    } else {
+        return  [store objectForKey: FD_DEFAULT_THEME_NAME];
+    }
 }
 
 @end

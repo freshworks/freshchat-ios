@@ -20,6 +20,7 @@
 #import "FCTagManager.h"
 #import "FCLocalization.h"
 #import "FCControllerUtils.h"
+#import "FCUtilities.h"
 
 @interface FCArticlesController ()
 
@@ -63,15 +64,15 @@
     NSMutableDictionary *eventsDict = [[NSMutableDictionary alloc] init];
     if([FCFAQUtil hasFilteredViewTitle:self.faqOptions]){
         if(self.faqOptions.filteredType == ARTICLE){
-            parent.navigationItem.title = [self.faqOptions filteredViewTitle];
+            parent.navigationItem.title = trimString([self.faqOptions filteredViewTitle]);
         }
         else{
-            parent.navigationItem.title = self.category.title;
+            parent.navigationItem.title = trimString(self.category.title);
         }
     }
     else{
         if(self.category){
-            parent.navigationItem.title = self.category.title;
+            parent.navigationItem.title = trimString(self.category.title);
             if(self.category.categoryAlias){
                 [eventsDict setObject:self.category.categoryAlias forKey:@(FCPropertyFAQCategoryID)];
             }
@@ -155,7 +156,14 @@
     }
     
     if(!self.category && !self.embedded){
-        UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        UIImage *closeImage = [self.theme getImageValueWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+        FCBarButtonItem *closeButton;
+        if (closeImage) {
+            closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(closeButton:)];
+        }
+        else{
+            closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        }
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
     self.parentViewController.navigationItem.rightBarButtonItems = rtNavBarItems;
@@ -191,7 +199,7 @@
     
     if (indexPath.row < self.articles.count) {
         FCArticles *article = self.articles[indexPath.row];
-        cell.articleText.text = article.title;
+        cell.articleText.text = trimString(article.title);
     }
     return cell;
 }

@@ -16,6 +16,7 @@
 #import "FCMessageController.h"
 #import "FCResponseInfo.h"
 #import "FCAttributedText.h"
+#import "FCBarButtonItem.h"
 
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
@@ -87,6 +88,7 @@
 + (NSMutableAttributedString *) getAttributedContentForString :(NSString *)strVal withFont :(UIFont *) font;
 + (void) loadImageAndPlaceholderBgWithUrl:(NSString *)url forView:(UIImageView *)imageView withColor: (UIColor*)color andName:(NSString *)channelName;
 + (void) cacheImageWithUrl : (NSString *) url;
++ (FCBarButtonItem *) getCloseBarBtnItemforCtr : (id) ctr withSelector:(SEL) selector;
 + (void) removeResponseTimeFetchInterval;
 + (NSString *) applyRegexForInputText :(NSString *) inputText;
 + (void) processResetChanges;
@@ -96,6 +98,7 @@
 + (BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions navigationController:(UIViewController *) navController handleFreshchatLinks:(BOOL) handleFreshchatLinks;
 + (BOOL) canMakeConversationFetchCall;
 + (void) updateCurrentTimeForKey : (NSString *) keyName;
++ (NSString *) getSDKThemeName;
 
 + (NSArray *) getResolvedMsgTypes;
 + (NSArray *) getReopenedMsgTypes;

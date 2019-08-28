@@ -82,6 +82,12 @@
             return FALSE;
         }
         
+        //Token expiry
+        if([FCJWTUtilities isValidityExpiedForJWTToken:jwtIdToken]){
+            ALog(@"Freshchat API : Expired JWT Token");
+            return FALSE;
+        }
+        
         //User registered
         if([FCUserUtil isUserRegistered]) {
              [FCUsers updateUserWithIdToken:jwtIdToken];

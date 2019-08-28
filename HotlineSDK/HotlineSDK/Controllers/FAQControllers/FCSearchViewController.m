@@ -148,15 +148,16 @@
     self.tableView.translatesAutoresizingMaskIntoConstraints=NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
     {
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
     [self.view addSubview:self.tableView];
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
-    
+    if(![FCUtilities hasNotchDisplay]) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
+    }
     self.contactUsView = [[FCMarginalView alloc] initWithDelegate:self];
     self.contactUsView.clipsToBounds = YES;
     
@@ -270,7 +271,7 @@
     if (indexPath.row < self.searchResults.count) {
         FCArticleContent *article = self.searchResults[indexPath.row];
         [cell.textLabel sizeToFit];
-        cell.articleText.text = article.title;
+        cell.articleText.text = trimString(article.title);
     }
     return cell;
 }

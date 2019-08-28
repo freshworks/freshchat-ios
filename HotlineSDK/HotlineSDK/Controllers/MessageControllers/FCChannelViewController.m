@@ -201,7 +201,14 @@
 }
 
 -(void)setNavigationItem{
-    UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    UIImage *closeImage = [self.theme getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+    UIBarButtonItem *closeButton;
+    if (closeImage) {
+        closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(closeButton:)];
+    }
+    else{
+        closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_CHANNELS_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+    }
     self.parentViewController.navigationItem.title = HLLocalizedString(LOC_CHANNELS_TITLE_TEXT);
 
     if (!self.embedded) {
@@ -212,7 +219,7 @@
         [self configureBackButton];
     }
     if([FCConversationUtil hasFilteredViewTitle:self.convOptions]){
-        self.parentViewController.navigationItem.title = self.convOptions.filteredViewTitle;
+        self.parentViewController.navigationItem.title = trimString(self.convOptions.filteredViewTitle);
     }
 }
 
@@ -269,14 +276,14 @@
         
         FCMessages *lastMessage = [self getLastMessageInChannel:channel.channelID];
         cell.separatorInset = UIEdgeInsetsZero;
-        cell.titleLabel.text  = channel.name;
+        cell.titleLabel.text  = trimString(channel.name);
         
         cell.tag = indexPath.row;
         
         NSDate* date=[NSDate dateWithTimeIntervalSince1970:lastMessage.createdMillis.longLongValue/1000];
         
         if([lastMessage.createdMillis intValue]){
-            cell.lastUpdatedLabel.text= [FCDateUtil stringRepresentationForDate:date includeTimeForCurrentYear:NO];
+            cell.lastUpdatedLabel.text= trimString([FCDateUtil stringRepresentationForDate:date includeTimeForCurrentYear:NO]);
         }
         else{
             cell.lastUpdatedLabel.text = nil;
@@ -285,21 +292,18 @@
         NSString *fragmentHTML = [lastMessage getDetailDescriptionForMessage];
         NSError *parseErr;
         NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithData:[fragmentHTML dataUsingEncoding:NSUnicodeStringEncoding]
-                                                                                                   options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
-                                                                                        documentAttributes:nil
-                                                                                                     error:&parseErr];
-        
+                      options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
+           documentAttributes:nil
+                        error:&parseErr];
         if(parseErr) {
-            cell.detailLabel.text = fragmentHTML;
+            cell.detailLabel.text = trimString(fragmentHTML);
         } else {
-            cell.detailLabel.text = [attributedTitleString string];
+            cell.detailLabel.text = trimString([attributedTitleString string]);
         }
         NSInteger unreadCount = [FCMessages getUnreadMessagesCountForChannel:channel.channelID];
         
         [cell.badgeView updateBadgeCount:unreadCount];
-        
         [FCUtilities loadImageAndPlaceholderBgWithUrl:channel.iconURL forView:cell.imgView withColor:[[FCTheme sharedInstance] channelIconPlaceholderImageBackgroundColor] andName:channel.name];
-
     }
     [cell adjustPadding];
     return cell;

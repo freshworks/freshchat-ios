@@ -157,14 +157,20 @@
                                                                     NSForegroundColorAttributeName: [[FCTheme sharedInstance] navigationBarTitleColor],
                                                                     NSFontAttributeName: [[FCTheme sharedInstance] navigationBarTitleFont]
                                                                     };
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:HLLocalizedString(LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN) style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
-    
-    [backButton setTitleTextAttributes:@{
-                                         NSFontAttributeName :[[FCTheme sharedInstance] imgAttachBackButtonFont],
-                                         NSForegroundColorAttributeName :[[FCTheme sharedInstance] imgAttachBackButtonFontColor]
-                                         } forState:UIControlStateNormal];
-    
+
+    FCBarButtonItem *backButton;
+    UIImage *closeImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+    if (closeImage) {
+        backButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(dismissPresentedView)];
+    }
+    else {
+        backButton = [[FCBarButtonItem alloc] initWithTitle:HLLocalizedString(LOC_PIC_MSG_ATTACHMENT_CLOSE_BTN) style:UIBarButtonItemStylePlain target:self action:@selector(dismissPresentedView)];
+        
+        [backButton setTitleTextAttributes:@{
+                                             NSFontAttributeName :[[FCTheme sharedInstance] imgAttachBackButtonFont],
+                                             NSForegroundColorAttributeName :[[FCTheme sharedInstance] imgAttachBackButtonFontColor]
+                                             } forState:UIControlStateNormal];
+    }
     self.navigationItem.leftBarButtonItem = backButton;
 }
 

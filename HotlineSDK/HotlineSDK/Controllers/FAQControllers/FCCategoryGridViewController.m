@@ -221,7 +221,7 @@
     }
     if (indexPath.row < self.categories.count){
         FCCategories *category = self.categories[indexPath.row];
-        cell.label.text = category.title;
+        cell.label.text = trimString(category.title);
         cell.backgroundColor = [self.theme faqCategoryBackgroundColor];
         cell.cardView.backgroundColor = [[FCTheme sharedInstance] gridViewCardBackgroundColor];
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;

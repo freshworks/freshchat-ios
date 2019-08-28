@@ -107,16 +107,12 @@
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    if([FCFAQUtil hasFilteredViewTitle:self.faqOptions]){
-        if(self.faqOptions.filteredType == ARTICLE){
-            parent.navigationItem.title = self.faqOptions.filteredViewTitle;
-        }
-        else{
-            parent.navigationItem.title = self.categoryTitle;
-        }
+    if ([FCFAQUtil hasFilteredViewTitle:self.faqOptions] && self.faqOptions.filteredType == ARTICLE) {
+        parent.navigationItem.title = trimString(self.faqOptions.filteredViewTitle);
     }
-    else{
-        parent.navigationItem.title = self.categoryTitle;
+    else {
+        parent.navigationItem.title = trimString(self.categoryTitle);
+        
     }
     [self setNavigationItem];
     [self registerAppAudioCategory];
@@ -208,7 +204,14 @@
 
 -(void)setBackButton {
     if(!self.embedded && self.showCloseButton){
-        UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        UIImage *closeImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+        FCBarButtonItem *closeButton;
+        if (closeImage) {
+            closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(closeButton:)];
+        }
+        else {
+            closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        }
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     } else {
         [self configureBackButton];

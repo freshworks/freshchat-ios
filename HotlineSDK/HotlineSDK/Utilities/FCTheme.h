@@ -20,6 +20,7 @@
 #define IMAGE_CONTACT_US_ICON @"ContactUsIcon"
 #define IMAGE_CONTACT_US_LIGHT_ICON @"ContactUsLightIcon"
 #define IMAGE_BACK_BUTTON @"BackButton"
+#define IMAGE_SOLUTION_CLOSE_BUTTON @"CloseButton"
 #define IMAGE_CLOSE_PREVIEW @"CloseImagePreview"
 #define IMAGE_MESSAGE_SENDING_ICON @"MessageSending"
 #define IMAGE_MESSAGE_SENT_ICON @"MessageSent"

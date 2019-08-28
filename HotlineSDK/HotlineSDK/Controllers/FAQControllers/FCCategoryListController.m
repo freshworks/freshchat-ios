@@ -155,8 +155,8 @@
     }
     if (indexPath.row < self.categories.count) {
         FCCategories *category =  self.categories[indexPath.row];
-        cell.titleLabel.text  = category.title;
-        cell.detailLabel.text = category.categoryDescription;
+        cell.titleLabel.text  = trimString(category.title);
+        cell.detailLabel.text = trimString(category.categoryDescription);
         cell.separatorInset = UIEdgeInsetsZero;
         [FCUtilities loadImageAndPlaceholderBgWithUrl:category.iconURL forView:cell.imgView withColor:[[FCTheme sharedInstance] faqPlaceholderIconBackgroundColor] andName:category.title];
     }
