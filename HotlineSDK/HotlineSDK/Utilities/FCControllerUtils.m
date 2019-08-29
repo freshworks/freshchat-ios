@@ -63,7 +63,7 @@
     UIImage *closeImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
     FCBarButtonItem *closeButton;
     if (closeImage) {
-        closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:actionSelector];
+        closeButton = [FCUtilities getCloseBarBtnItemforCtr:targetObj withSelector:actionSelector];
     }
     else{
         closeButton = [[FCBarButtonItem alloc]initWithTitle:title

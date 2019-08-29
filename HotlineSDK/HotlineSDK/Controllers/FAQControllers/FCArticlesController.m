@@ -156,7 +156,7 @@
     }
     
     if(!self.category && !self.embedded){
-        UIImage *closeImage = [self.theme getImageValueWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+        UIImage *closeImage = [self.theme getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
         FCBarButtonItem *closeButton;
         if (closeImage) {
             closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(closeButton:)];
