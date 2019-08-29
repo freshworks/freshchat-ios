@@ -1,4 +1,13 @@
 
+Ver 2.7.1 
+__________________________
+Enhancements :
+- Added option to set image for close button.
+- Custom theme retention across user sessions if not initialised.
+Bug Fixes :
+- Fixed background scrolling in message list screen.
+- UI improvements for newer devices.
+
 Ver 2.7.0 
 __________________________
 Enhancements :
