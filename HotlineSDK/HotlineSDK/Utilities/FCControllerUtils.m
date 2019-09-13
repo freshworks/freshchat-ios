@@ -109,6 +109,7 @@
     FCInterstitialViewController *interstitialCtr = [[FCInterstitialViewController alloc]
                                                    initViewControllerWithOptions:options andIsEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:interstitialCtr];
+    [navigationController setModalPresentationStyle:UIModalPresentationFullScreen];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 

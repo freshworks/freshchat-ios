@@ -59,6 +59,7 @@
 +(NSArray *) convertTagsArrayToLowerCase : (NSArray *)tags;
 + (BOOL) hasNotchDisplay;
 +(BOOL)isiOS10;
++ (BOOL)isVerLessThaniOS13;
 + (BOOL)isDeviceLanguageRTL;
 
 + (void)initiatePendingTasks;

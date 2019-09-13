@@ -678,6 +678,10 @@ static NSInteger networkIndicator = 0;
     return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0");
 }
 
++ (BOOL)isVerLessThaniOS13 {
+    return SYSTEM_VERSION_LESS_THAN(@"13.0");
+}
+
 +(void)initiatePendingTasks{
     [FCLocalNotification post:HOTLINE_NOTIFICATION_PERFORM_PENDING_TASKS];
 }
