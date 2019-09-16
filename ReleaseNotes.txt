@@ -1,4 +1,10 @@
 
+Ver 2.7.2 
+__________________________
+Fixes :
+- iOS 13 UI fixes and enhancements.
+- Fix App Store warning for deprecated UIWebView.
+
 Ver 2.7.1 
 __________________________
 Enhancements :
