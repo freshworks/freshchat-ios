@@ -60,10 +60,17 @@
                    forTarget:(id)targetObj
                     selector: (SEL) actionSelector
                        title: (NSString *)title {
-    UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:title
+    UIImage *closeImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+    FCBarButtonItem *closeButton;
+    if (closeImage) {
+        closeButton = [FCUtilities getCloseBarBtnItemforCtr:targetObj withSelector:actionSelector];
+    }
+    else{
+        closeButton = [[FCBarButtonItem alloc]initWithTitle:title
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:targetObj
                                                                   action:actionSelector];
+    }
     if(!controller.parentViewController.navigationItem.leftBarButtonItem ) {
         controller.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     }
@@ -102,6 +109,7 @@
     FCInterstitialViewController *interstitialCtr = [[FCInterstitialViewController alloc]
                                                    initViewControllerWithOptions:options andIsEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:interstitialCtr];
+    [navigationController setModalPresentationStyle:UIModalPresentationFullScreen];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 

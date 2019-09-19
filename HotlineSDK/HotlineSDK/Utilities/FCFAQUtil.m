@@ -53,6 +53,7 @@
         } else {
             articleDetailController.showCloseButton = YES;
             UINavigationController *navController = [[UINavigationController alloc]     initWithRootViewController:container];
+            [navController setModalPresentationStyle:UIModalPresentationFullScreen];
             [viewController presentViewController:navController animated:YES completion:nil];
         }
     });

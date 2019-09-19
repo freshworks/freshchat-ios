@@ -29,7 +29,7 @@
 
 @interface FCArticleDetailViewController () <UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) UIWebView *webView;
+@property (strong, nonatomic) WKWebView *webView;
 @property (strong, nonatomic) FCSecureStore *secureStore;
 @property (strong, nonatomic) FCVotingManager *votingManager;
 @property (strong,nonatomic) FCYesNoPromptView *articleVotePromptView;
@@ -69,6 +69,9 @@
             "</style>"
             "<bdi>" //For bidirection text
             "<body>"
+            "<header>"//for fixing font size with WKWebview and remove zoom capability
+            "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'>"
+            "</header>"
             "<div class='article-title'><h3>"
             "%@" // Article Title
             "</h3></div>"
@@ -107,16 +110,12 @@
 #pragma mark - Life cycle methods
 
 -(void)willMoveToParentViewController:(UIViewController *)parent{
-    if([FCFAQUtil hasFilteredViewTitle:self.faqOptions]){
-        if(self.faqOptions.filteredType == ARTICLE){
-            parent.navigationItem.title = self.faqOptions.filteredViewTitle;
-        }
-        else{
-            parent.navigationItem.title = self.categoryTitle;
-        }
+    if ([FCFAQUtil hasFilteredViewTitle:self.faqOptions] && self.faqOptions.filteredType == ARTICLE) {
+        parent.navigationItem.title = trimString(self.faqOptions.filteredViewTitle);
     }
-    else{
-        parent.navigationItem.title = self.categoryTitle;
+    else {
+        parent.navigationItem.title = trimString(self.categoryTitle);
+        
     }
     [self setNavigationItem];
     [self registerAppAudioCategory];
@@ -166,7 +165,6 @@
 
 -(void)networkReachable{
     [self.webView loadHTMLString:self.embedHTML baseURL:nil];
-    [self handleArticleVoteAfterSometime];
 }
 
 -(void)handleArticleVoteAfterSometime{
@@ -208,7 +206,14 @@
 
 -(void)setBackButton {
     if(!self.embedded && self.showCloseButton){
-        UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        UIImage *closeImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+        FCBarButtonItem *closeButton;
+        if (closeImage) {
+            closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(closeButton:)];
+        }
+        else {
+            closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_FAQ_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        }
         self.parentViewController.navigationItem.leftBarButtonItem = closeButton;
     } else {
         [self configureBackButton];
@@ -225,10 +230,17 @@
 }
 
 -(void)setSubviews{
-    self.webView = [[UIWebView alloc]init];
+    //Data detector types are available from iOS 10+ only in WKWebView
+    if ([FCUtilities isiOS10]) {
+        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+        config.dataDetectorTypes = WKDataDetectorTypeAll;
+        self.webView = [[WKWebView alloc]initWithFrame:CGRectZero configuration:config];
+    }
+    else{
+        self.webView = [[WKWebView alloc]init];
+    }
+    self.webView.navigationDelegate = self;
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.webView.delegate = self;
-    self.webView.dataDetectorTypes = UIDataDetectorTypeAll;
     self.webView.scrollView.scrollEnabled = YES;
     self.webView.scrollView.delegate = self;
     [self.webView loadHTMLString:self.embedHTML baseURL:nil];
@@ -261,25 +273,38 @@
 
 #pragma mark - Webview delegate
 
--(BOOL)webView:(UIWebView *)inWeb shouldStartLoadWithRequest:(NSURLRequest *)inRequest navigationType:(UIWebViewNavigationType)inType {
-    if (inType == UIWebViewNavigationTypeLinkClicked){
-        if(![FCUtilities handleLink:[inRequest URL] faqOptions:self.faqOptions navigationController:self handleFreshchatLinks:NO]) {
-            [[UIApplication sharedApplication] openURL:[inRequest URL]];
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{
+    
+    NSURL *requestURL = navigationAction.request.URL;
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    if((navigationAction.navigationType == WKNavigationTypeLinkActivated) && (requestURL != nil)){
+        if(navigationAction.targetFrame == nil){
+            if(![FCUtilities handleLink:requestURL faqOptions:self.faqOptions navigationController:self handleFreshchatLinks:NO]) {
+                [app openURL:requestURL];
+            }
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
         }
-        return NO;
+        if (requestURL.scheme && [app canOpenURL:requestURL]) {
+            [app openURL:requestURL];
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
     }
-    return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
--(void)webViewDidStartLoad:(UIWebView *)webView{
+- (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
     [self.activityIndicator startAnimating];
 }
 
--(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
     [self.activityIndicator stopAnimating];
+    NSLog(@"Article loading failed : %@", error);
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
     [self.activityIndicator stopAnimating];
     [self handleArticleVoteAfterSometime];
 }
@@ -442,6 +467,10 @@
     FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQVote
                                                                withParams:eventsDict];
     [FCEventsHelper postNotificationForEvent:outEvent];
+}
+
+- (void)dealloc {
+    self.webView.scrollView.delegate = nil;
 }
 
 @end

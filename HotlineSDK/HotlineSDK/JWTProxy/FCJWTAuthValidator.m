@@ -92,7 +92,6 @@
             return LOADING;
         }
     }
-    
     return NO_CHANGE;
 }
 

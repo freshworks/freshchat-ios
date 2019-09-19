@@ -11,9 +11,10 @@
 #import "FCAlertView.h"
 #import "FCViewController.h"
 #import "FAQOptionsInterface.h"
+#import <WebKit/WebKit.h>
 
 //Implement FDYesNoPromptViewDelegate if needed
-@interface FCArticleDetailViewController : FCViewController <UIWebViewDelegate, UIScrollViewDelegate, FCYesNoPromptViewDelegate, FCAlertViewDelegate, FAQOptionsInterface>
+@interface FCArticleDetailViewController : FCViewController <WKNavigationDelegate, UIScrollViewDelegate, FCYesNoPromptViewDelegate, FCAlertViewDelegate, FAQOptionsInterface>
 
 @property (strong, nonatomic) NSString *articleDescription;
 @property (strong, nonatomic) NSNumber *articleID;

@@ -279,8 +279,11 @@ static FCNotificationHandler *handleUpdateNotification;
         }
         
         if(!isRestore && ![FCNotificationHandler areNotificationsEnabled] && messageText){
-            handleUpdateNotification = [[FCNotificationHandler alloc] init];
-            [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
+            //Donot show polling notification banner for JWT enabled a/c
+            if(![[FCRemoteConfig sharedInstance] isUserAuthEnabled]) {
+                handleUpdateNotification = [[FCNotificationHandler alloc] init];
+                [handleUpdateNotification showActiveStateNotificationBanner:channel withMessage:messageText];
+            }
         }
     }
     [[FCDataManager sharedInstance]save];

@@ -124,6 +124,9 @@
 }
 
 - (NSString *) fetchThemeValueForKey : (NSString *)keyPath {
+    if(!self.themePreferences){
+        [self setThemeWithName:[FCUtilities getSDKThemeName]];
+    }
     if([self.themePreferences valueForKeyPath:keyPath]){
         return [self.themePreferences valueForKeyPath:keyPath];
     }
@@ -802,7 +805,7 @@
 }
 
 -(id) getMessageDetailBackgroundComponent{
-    NSString *bgComponent = [self fetchThemeValueForKey:@"ConversationDetail.MessageListStyle.background"];
+    NSString *bgComponent = [self fetchThemeValueForKey:IMAGE_CONVERSATION_BACKGROUND];
     if(([bgComponent hasPrefix:@"#"]) && (bgComponent.length == 7)){
         UIColor *color = [FCTheme colorValueWithHex:bgComponent];
         return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];

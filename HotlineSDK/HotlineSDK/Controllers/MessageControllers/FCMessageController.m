@@ -238,7 +238,7 @@ typedef struct {
 }
 
 -(void) updateTitle {
-    self.channelName.text = self.channel.name;
+    self.channelName.text = trimString(self.channel.name);
 }
 
 -(void) setFooterView {
@@ -541,7 +541,8 @@ typedef struct {
     [self.bannerMessageView addSubview:self.bannerMesagelabel];
     
     self.tableView = [[UITableView alloc]init];
-    [self setBackgroundForView:self.tableView];
+    //Clear color to avoid default white color for image as background
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;

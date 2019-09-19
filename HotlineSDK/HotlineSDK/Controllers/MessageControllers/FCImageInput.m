@@ -185,6 +185,7 @@
             [popover presentPopoverFromRect:CGRectMake(self.sourceViewController.view.frame.origin.x,self.sourceViewController.view.frame.origin.y+sourceViewController.view.frame.size.height-20,40,40) inView:self.sourceViewController.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
         });
     }else{
+        [imagePicker setModalPresentationStyle:UIModalPresentationFullScreen];
         [self.sourceViewController presentViewController:imagePicker animated:YES completion:NULL];
     }
 }
@@ -215,6 +216,7 @@
     self.imageController.delegate = self;
     self.imagePicked = selectedImage;
     UINavigationController *navcontroller = [[UINavigationController alloc] initWithRootViewController:self.imageController];
+    [navcontroller setModalPresentationStyle:UIModalPresentationFullScreen];
     [self.sourceViewController presentViewController:navcontroller animated:YES completion:nil];
 }
 

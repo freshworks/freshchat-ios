@@ -126,13 +126,14 @@
     self.searchBar.showsCancelButton = YES;
     self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchBar becomeFirstResponder];
-    
-    UITextField *txtSearchField = [self.searchBar valueForKey:@"_searchField"];
-    [txtSearchField setBorderStyle:UITextBorderStyleRoundedRect];
-    txtSearchField.layer.cornerRadius = 4;
-    txtSearchField.layer.borderWidth = 1.0f;
-    txtSearchField.layer.borderColor = [self.theme searchBarTextViewBorderColor].CGColor;
-    [txtSearchField setValue:[self.theme SearchBarTextPlaceholderColor] forKeyPath:@"_placeholderLabel.textColor"];
+    if([FCUtilities isVerLessThaniOS13]) {
+        UITextField *txtSearchField = [self.searchBar valueForKey:@"_searchField"];
+        [txtSearchField setBorderStyle:UITextBorderStyleRoundedRect];
+        txtSearchField.layer.cornerRadius = 4;
+        txtSearchField.layer.borderWidth = 1.0f;
+        txtSearchField.layer.borderColor = [self.theme searchBarTextViewBorderColor].CGColor;
+        [txtSearchField setValue:[self.theme SearchBarTextPlaceholderColor] forKeyPath:@"_placeholderLabel.textColor"];
+    }
     
     UIView *mainSubView = [self.searchBar.subviews lastObject];
     for (id subview in mainSubView.subviews) {
@@ -148,15 +149,16 @@
     self.tableView.translatesAutoresizingMaskIntoConstraints=NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     if([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
     {
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
     [self.view addSubview:self.tableView];
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
-    
+    if(![FCUtilities hasNotchDisplay]) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
+    }
     self.contactUsView = [[FCMarginalView alloc] initWithDelegate:self];
     self.contactUsView.clipsToBounds = YES;
     
@@ -270,7 +272,7 @@
     if (indexPath.row < self.searchResults.count) {
         FCArticleContent *article = self.searchResults[indexPath.row];
         [cell.textLabel sizeToFit];
-        cell.articleText.text = article.title;
+        cell.articleText.text = trimString(article.title);
     }
     return cell;
 }

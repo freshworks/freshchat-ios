@@ -241,6 +241,7 @@ typedef NS_ENUM(NSInteger, FCNotifType) {
     [messageController setConversationOptions:[ConversationOptions new]];
     FCContainerController *containerController = [[FCContainerController alloc]initWithController:messageController andEmbed:NO];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:containerController];
+    [navigationController setModalPresentationStyle:UIModalPresentationFullScreen];
     [controller presentViewController:navigationController animated:YES completion:nil];
 }
 

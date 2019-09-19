@@ -47,6 +47,7 @@
 		CE1739761F6D703700950F30 /* FreshchatModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE1739751F6D703700950F30 /* FreshchatModels.bundle */; };
 		CE6054681F87967500326E5A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1159FC1DF1EA5800800A6C /* Security.framework */; };
 		CE60546A1F8797EF00326E5A /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE6054691F8797EF00326E5A /* Photos.framework */; };
+		EA5F0B94231B11EE007BD6C4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA5F0B91231B11EE007BD6C4 /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,8 @@
 		CEDFEEC71E4CD825002DCB4B /* HotlineConfigStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotlineConfigStrings.h; sourceTree = "<group>"; };
 		CEE4E84E1DA3ACCB00E29C93 /* Hotline Demo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Hotline Demo.entitlements"; sourceTree = "<group>"; };
 		CEED0CDD1C19858200BBB600 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		EA5F0B91231B11EE007BD6C4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		EA5F0B95231B1218007BD6C4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA5F0B94231B11EE007BD6C4 /* WebKit.framework in Frameworks */,
 				CE60546A1F8797EF00326E5A /* Photos.framework in Frameworks */,
 				CE6054681F87967500326E5A /* Security.framework in Frameworks */,
 				354D0D271C48D143004D2AA1 /* libFreshchatSDK.a in Frameworks */,
@@ -286,6 +290,7 @@
 			children = (
 				354D0D161C48D10F004D2AA1 /* HotlineSDK.xcodeproj */,
 				3C1159FC1DF1EA5800800A6C /* Security.framework */,
+				EA5F0B95231B1218007BD6C4 /* WebKit.framework */,
 				356F1C131B9DD23B002F1E2A /* CoreMedia.framework */,
 				356F1C111B9DD223002F1E2A /* AudioToolbox.framework */,
 				CEED0CDD1C19858200BBB600 /* AdSupport.framework */,
@@ -328,6 +333,7 @@
 		CE6054671F87967500326E5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA5F0B91231B11EE007BD6C4 /* WebKit.framework */,
 				CE6054691F8797EF00326E5A /* Photos.framework */,
 			);
 			name = Frameworks;
@@ -409,6 +415,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -687,7 +694,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Hotline/Hotline Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -718,7 +725,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Hotline/Hotline Demo-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

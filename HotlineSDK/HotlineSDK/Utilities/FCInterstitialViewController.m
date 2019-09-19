@@ -299,8 +299,15 @@
 }
 
 -(void)setNavigationItem {
-    UIBarButtonItem *closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_RESTORE_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
     if (!self.isEmbedView) {
+        UIImage *closeImage = [[FCTheme sharedInstance] getImageWithKey:IMAGE_SOLUTION_CLOSE_BUTTON];
+        FCBarButtonItem *closeButton;
+        if (closeImage) {
+            closeButton = [FCUtilities getCloseBarBtnItemforCtr:self withSelector:@selector(closeButton:)];
+        }
+        else {
+            closeButton = [[FCBarButtonItem alloc]initWithTitle:HLLocalizedString(LOC_RESTORE_CLOSE_BUTTON_TEXT) style:UIBarButtonItemStylePlain target:self action:@selector(closeButton:)];
+        }
         self.navigationItem.leftBarButtonItem = closeButton;
     }
 }

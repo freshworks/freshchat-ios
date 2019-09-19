@@ -98,6 +98,7 @@ static const CGFloat THROWING_THRESHOLD = 1600;
 }
 
 -(void)presentOnController:(UIViewController *)controller{
+    [self setModalPresentationStyle:UIModalPresentationFullScreen];
     [controller presentViewController:self animated:NO completion:nil];
 }
 
