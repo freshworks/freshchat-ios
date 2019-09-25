@@ -724,7 +724,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #pragma mark Push notifications
 
 -(void)setPushRegistrationToken:(NSData *)deviceToken {
-    NSString *deviceTokenString = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">"withString:@""] stringByReplacingOccurrencesOfString:@" "withString:@""];
+    NSUInteger length = deviceToken.length;
+    if (length == 0) {
+        ALog("Missing Push Registration Token, please check your calling delegate method")
+        return;
+    }
+    const unsigned char *buffer = deviceToken.bytes;
+    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(length * 2)];
+    for (int i = 0; i < length; ++i) {
+        [hexString appendFormat:@"%02x", buffer[i]];
+    }
+    NSString *deviceTokenString = [hexString copy];
+    
     if ([self isDeviceTokenUpdated:deviceTokenString]) {
         [self storeDeviceToken:deviceTokenString];
         [self registerDeviceToken];
