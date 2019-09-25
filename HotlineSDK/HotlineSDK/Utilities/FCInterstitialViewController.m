@@ -36,7 +36,7 @@
     int footerViewHeight;
 }
 
-@property (nonatomic, strong) FreshchatOptions *options;
+@property (nonatomic, strong) FreshchatOptions *freshchatOptions;
 @property (nonatomic, assign) BOOL isEmbedView;
 @property (nonatomic) BOOL restoring;
 @property (nonatomic, strong) FCLoadingViewBehaviour *loadingViewBehaviour;
@@ -48,16 +48,16 @@
 -(instancetype) initViewControllerWithOptions:(FreshchatOptions *) options andIsEmbed:(BOOL) isEmbed{
     self = [super init];
     if (self) {
-        self.options = options;
+        self.freshchatOptions = options;
         self.isEmbedView = isEmbed;
-        self.restoring = [self.options isKindOfClass:[ConversationOptions class]] ? [FreshchatUser sharedInstance].isRestoring : false;
+        self.restoring = [self.freshchatOptions isKindOfClass:[ConversationOptions class]] ? [FreshchatUser sharedInstance].isRestoring : false;
     }
     return self;
 }
 
 -(FCLoadingViewBehaviour*)loadingViewBehaviour {
     if(_loadingViewBehaviour == nil){
-        enum SupportType type = [self.options isKindOfClass:[ConversationOptions class]] ? 2 : 1;
+        enum SupportType type = [self.freshchatOptions isKindOfClass:[ConversationOptions class]] ? 2 : 1;
         _loadingViewBehaviour = [[FCLoadingViewBehaviour alloc] initWithViewController:self withType:type];
     }
     return _loadingViewBehaviour;
@@ -78,10 +78,10 @@
     else if(self.restoring) {
         return HLLocalizedString(LOC_RESTORING_CHANNEL_TEXT);
     }
-    else if([self.options isKindOfClass:[FAQOptions class]]){
+    else if([self.freshchatOptions isKindOfClass:[FAQOptions class]]){
         return HLLocalizedString(LOC_LOADING_FAQ_TEXT);
     }
-    else if([self.options isKindOfClass:[ConversationOptions class]]){
+    else if([self.freshchatOptions isKindOfClass:[ConversationOptions class]]){
         return HLLocalizedString(LOC_LOADING_CHANNEL_TEXT);
     }
     return 0;
@@ -112,7 +112,7 @@
 }
 
 -(void) checkRestoreStateChanged {
-    self.restoring = [self.options isKindOfClass:[ConversationOptions class]] ? [FreshchatUser sharedInstance].isRestoring : false;
+    self.restoring = [self.freshchatOptions isKindOfClass:[ConversationOptions class]] ? [FreshchatUser sharedInstance].isRestoring : false;
     if(!self.restoring) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self prepareController];
@@ -123,7 +123,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance ]navigationBarBackgroundColor];
-    self.view.backgroundColor = ([self.options isKindOfClass:[ConversationOptions class]]) ? [[FCTheme sharedInstance] channelListBackgroundColor] : [[FCTheme sharedInstance] faqCategoryBackgroundColor] ;
+    self.view.backgroundColor = ([self.freshchatOptions isKindOfClass:[ConversationOptions class]]) ? [[FCTheme sharedInstance] channelListBackgroundColor] : [[FCTheme sharedInstance] faqCategoryBackgroundColor] ;
     [self setNavigationItem];
 }
 
@@ -150,13 +150,13 @@
 }
 
 -(void)prepareController{
-    if([self.options isKindOfClass:[FAQOptions class]]){
+    if([self.freshchatOptions isKindOfClass:[FAQOptions class]]){
         self.view.backgroundColor = [[FCTheme sharedInstance] faqCategoryBackgroundColor];
-        [self handleFAQs:self withOptions:(FAQOptions *)self.options andEmbed:self.isEmbedView];
+        [self handleFAQs:self withOptions:(FAQOptions *)self.freshchatOptions andEmbed:self.isEmbedView];
     }
-    else if([self.options isKindOfClass:[ConversationOptions class]]){
+    else if([self.freshchatOptions isKindOfClass:[ConversationOptions class]]){
         self.view.backgroundColor = [[FCTheme sharedInstance] channelListBackgroundColor];
-        [self handleConversations:self withOptions:(ConversationOptions *)self.options andEmbed:self.isEmbedView];
+        [self handleConversations:self withOptions:(ConversationOptions *)self.freshchatOptions andEmbed:self.isEmbedView];
     }
     //[self setFooterView];
 }
@@ -233,7 +233,7 @@
         //default with or without error
         if(!preferredController) {
             FCChannelViewController *channelViewController = [[FCChannelViewController alloc]init];
-            [channelViewController setConversationOptions:self.options];
+            [channelViewController setConversationOptions:self.freshchatOptions];
             preferredController = [[FCContainerController alloc]initWithController:channelViewController andEmbed:isEmbed];
         }
         

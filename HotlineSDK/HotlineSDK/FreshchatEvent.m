@@ -30,4 +30,34 @@
             objectForKey:[[FCEventsHelper getEventsDict] objectForKey:@(property)]];
 }
 
+- (NSString *) getEventName {
+    if (self.name) {
+        NSString *eventName = [self getEventNameDict][@(self.name)];
+        return  eventName != nil ? eventName : @"";
+    }
+    return @"";
+}
+
+- (NSDictionary *) getEventNameDict
+{
+    return @{
+             @(FCEventFAQCategoryListOpen) : @"FCEventFAQCategoryListOpen",
+             @(FCEventFAQListOpen)         : @"FCEventFAQListOpen",
+             @(FCEventFAQOpen)             : @"FCEventFAQOpen",
+             @(FCEventFAQSearch)           : @"FCEventFAQSearch",
+             @(FCEventFAQVote)             : @"FCEventFAQVote",
+             @(FCEventChannelListOpen)     : @"FCEventChannelListOpen",
+             @(FCEventMessageSent)         : @"FCEventMessageSent",
+             @(FCEventConversationOpen)    : @"FCEventConversationOpen",
+             @(FCEventCSatOpen)            : @"FCEventCSatOpen",
+             @(FCEventCSatSubmit)          : @"FCEventCSatSubmit",
+             @(FCEventCSatExpiry)          : @"FCEventCSatExpiry",
+             @(FCEventLinkTap)             : @"FCEventLinkTap",
+             @(FCEventScreenView)          : @"FCEventScreenView",
+             @(FCEventMessageReceive)      : @"FCEventMessageReceive",
+             @(FCEventNotificationReceive) : @"FCEventNotificationReceive",
+             @(FCEventIdTokenStatusChange) : @"FCEventIdTokenStatusChange"
+             };
+}
+
 @end

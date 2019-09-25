@@ -274,4 +274,14 @@
 -(NSString *)agentMessageBottomPadding;
 
 
+// Quick reply
+-(UIFont *)getQuickReplyMessageFont;
+-(UIColor *)getQuickReplyBackgroundColor;
+-(UIColor *)getQuickReplyCellBackgroundColor;
+-(UIColor *)getQuickReplyMessageColor;
+-(float)getQuickReplyCellPadding;
+-(float)getQuickReplyRowPadding;
+-(float)getQuickReplyMessageCornerRadius;
+-(float)getQuickReplyHeightPercentage;
+
 @end

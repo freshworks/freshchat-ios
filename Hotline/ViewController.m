@@ -168,8 +168,8 @@
     
     FreshchatEvent *fcEvent = notif.userInfo[@"event"];
     
-    NSLog(@"====Freshchat event  - %@ ====", [[ViewController getEventNameDict] objectForKey:@(fcEvent.name)]);
-    self.event.text = [[ViewController getEventNameDict] objectForKey:@(fcEvent.name)];
+    NSLog(@"====Freshchat event  - %@ ====", [fcEvent getEventName]);
+    self.event.text = [fcEvent getEventName];
     
     //Compare with any event name
     if(fcEvent.name == FCEventFAQOpen){
@@ -528,28 +528,6 @@ JWTScheduler *jwtScheduler;
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
     int sectionWidth = 300;
     return sectionWidth;
-}
-
-+ (NSDictionary *) getEventNameDict
-{
-    return @{
-            @(FCEventFAQCategoryListOpen) : @"FCEventFAQCategoryListOpen",
-            @(FCEventFAQListOpen)         : @"FCEventFAQListOpen",
-            @(FCEventFAQOpen)             : @"FCEventFAQOpen",
-            @(FCEventFAQSearch)           : @"FCEventFAQSearch",
-            @(FCEventFAQVote)             : @"FCEventFAQVote",
-            @(FCEventChannelListOpen)     : @"FCEventChannelListOpen",
-            @(FCEventMessageSent)         : @"FCEventMessageSent",
-            @(FCEventConversationOpen)    : @"FCEventConversationOpen",
-            @(FCEventCSatOpen)            : @"FCEventCSatOpen",
-            @(FCEventCSatSubmit)          : @"FCEventCSatSubmit",
-            @(FCEventCSatExpiry)          : @"FCEventCSatExpiry",
-            @(FCEventLinkTap)             : @"FCEventLinkTap",
-            @(FCEventScreenView)          : @"FCEventScreenView",
-            @(FCEventMessageReceive)      : @"FCEventMessageReceive",
-            @(FCEventNotificationReceive) : @"FCEventNotificationReceive",
-            @(FCEventIdTokenStatusChange) : @"FCEventIdTokenStatusChange"
-        };
 }
 
 @end

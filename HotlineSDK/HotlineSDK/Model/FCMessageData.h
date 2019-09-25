@@ -21,6 +21,7 @@
 @property (nullable, nonatomic, retain) NSNumber *messageType;
 @property (nullable, nonatomic, retain) NSArray *fragments;
 @property(nullable, nonatomic, retain) NSNumber *uploadStatus;
+@property (nullable, nonatomic, retain) NSString *replyFragments;
 @property (nonatomic) BOOL isMarkedForUpload;
 @property (nonatomic) BOOL isWelcomeMessage;
 @property (nonatomic) BOOL isRead;

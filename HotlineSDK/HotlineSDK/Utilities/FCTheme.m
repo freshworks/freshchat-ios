@@ -1093,4 +1093,45 @@
     return color ? color : [FCTheme colorWithHex:FD_COLOR_BLACK];
 }
 
+#pragma mark Quick Reply
+
+-(UIFont *)getQuickReplyMessageFont{
+    return [self getFontValueWithKey:@"ConversationDetail.QuickReplyStyle" andDefaultSize:FD_FONT_SIZE_MEDIUM];
+}
+
+- (UIColor *)getQuickReplyBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.QuickReplyStyle.background"];
+    return color ?color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+- (UIColor *)getQuickReplyCellBackgroundColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.QuickReplyStyle.cellBackground"];
+    return color ?color : [FCTheme colorWithHex:FD_QUICK_REPLY_COLOR];
+}
+
+-(UIColor *)getQuickReplyMessageColor{
+    UIColor *color = [self getColorValueForKeyPath:@"ConversationDetail.QuickReplyStyle.textColor"];
+    return color ? color : [FCTheme colorWithHex:FD_COLOR_WHITE];
+}
+
+-(float)getQuickReplyCellPadding{
+    CGFloat value = [[self fetchThemeValueForKey:@"ConversationDetail.QuickReplyStyle.cellPadding"] floatValue];
+    return value > 0.0 ? value : 10.0;
+}
+
+-(float)getQuickReplyRowPadding{
+    CGFloat value = [[self fetchThemeValueForKey:@"ConversationDetail.QuickReplyStyle.rowPadding"] floatValue];
+    return value > 0.0 ? value : 10.0;
+}
+
+-(float)getQuickReplyMessageCornerRadius{
+    CGFloat value = [[self fetchThemeValueForKey:@"ConversationDetail.QuickReplyStyle.cornerRadius"] floatValue];
+    return value > 0.0 ? value : 10.0;
+}
+
+-(float)getQuickReplyHeightPercentage{
+    CGFloat value = [[self fetchThemeValueForKey:@"ConversationDetail.QuickReplyStyle.maxHeightPercentage"] floatValue];
+    return value > 0.0 ? value : 35.0;
+}
+
 @end

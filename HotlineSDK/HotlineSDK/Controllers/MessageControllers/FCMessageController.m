@@ -50,6 +50,8 @@
 #import "FCJWTAuthValidator.h"
 #import "FCJWTUtilities.h"
 #import "FCLoadingViewBehaviour.h"
+#import "FCReplyCollectionCell.h"
+#import "FCReplyFlowLayout.h"
 
 typedef struct {
     BOOL isLoading;
@@ -63,7 +65,7 @@ typedef struct {
     @property (nonatomic, strong) NSNumber *channelID;
 @end
 
-@interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate, HLLoadingViewBehaviourDelegate,UIAlertViewDelegate>
+@interface FCMessageController () <UITableViewDelegate, UITableViewDataSource, HLMessageCellDelegate, HLMessageCellDelegate, FDAudioInputDelegate, KonotorDelegate, HLLoadingViewBehaviourDelegate,UIAlertViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, FCReplyDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIActivityIndicatorView *loadingView;
@@ -73,6 +75,7 @@ typedef struct {
 @property (nonatomic, strong) FCAudioMessageInputView *audioMessageInputView;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewHeightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewBottomConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *collectionViewDynamicConstraint;
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIImage *sentImage;
 @property (nonatomic, strong) FCConversations *conversation;
@@ -111,6 +114,8 @@ typedef struct {
 @property (nonatomic, strong) UIView* messageDetailView;
 @property (nonatomic, strong) FCLoadingViewBehaviour* loadingViewBehaviour;
 @property (nonatomic) BOOL isJWTAlertShown;
+@property (nonatomic) UICollectionView* collectionView;
+@property (nonnull, nonatomic, strong) NSMutableArray* replyTexts;
 
 @end
 
@@ -177,6 +182,7 @@ typedef struct {
 -(void)willMoveToParentViewController:(UIViewController *)parent{
     parent.navigationItem.title = self.channel.name;
     self.messagesDisplayedCount = 20;
+    self.replyTexts = [[NSMutableArray alloc] init];
     self.initalLoading = true;
     [self setBackgroundForView:self.messageDetailView];
     [self setSubviews];
@@ -555,6 +561,38 @@ typedef struct {
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped:)]];
     [self.messageDetailView addSubview:self.tableView];
     
+    //CollectionView
+    FCTheme* theme = [FCTheme sharedInstance];
+    FCReplyFlowLayout * layout = [FCReplyFlowLayout new];
+    layout.minimumLineSpacing = [theme getQuickReplyRowPadding];
+    layout.minimumInteritemSpacing = [theme getQuickReplyCellPadding];
+    
+    layout.delegate = self;
+    [layout setScrollDirection: UICollectionViewScrollDirectionVertical];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout: layout];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    self.collectionView.bounces = NO;
+    [self.collectionView invalidateIntrinsicContentSize];
+    [self.collectionView registerClass:FCReplyCollectionCell.self forCellWithReuseIdentifier:@"replyCell"];
+    self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.collectionView.backgroundColor = [theme getQuickReplyBackgroundColor];
+    
+    UIView *parentCollectionView = [[UIView alloc] initWithFrame:CGRectZero];
+    parentCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    parentCollectionView.layer.shadowOffset = CGSizeMake(0, 0);
+    parentCollectionView.layer.shadowOpacity = 0.2;
+    parentCollectionView.layer.masksToBounds = NO;
+    
+    if([FCUtilities isDeviceLanguageRTL]){
+        self.collectionView.transform = CGAffineTransformMakeScale(-1, 1);
+    }
+    
+    [self.messageDetailView addSubview:parentCollectionView];
+    [parentCollectionView addSubview:self.collectionView];
+    
+    self.collectionViewDynamicConstraint = [FCAutolayoutHelper setHeight:0.0 forView:parentCollectionView inView:self.messageDetailView];
+    
     //Bottomview
     self.bottomView = [[UIView alloc]init];
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -580,7 +618,9 @@ typedef struct {
      self.views = @{@"tableView" : self.tableView,
                     @"bottomView" : self.bottomView,
                     @"messageOverlayView": self.bannerMessageView,
-                    @"overlayText" : self.bannerMesagelabel};
+                    @"overlayText" : self.bannerMesagelabel,
+                    @"collectionView" : self.collectionView,
+                    @"parentCollectionView": parentCollectionView};
     
     [self.bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlayText]|" options:0 metrics:nil views:self.views]];
     [self.bannerMessageView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[overlayText]-5-|" options:0 metrics:nil views:self.views]];
@@ -592,6 +632,18 @@ typedef struct {
     [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomView]|" options:0 metrics:nil views:self.views]];
     
     [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:self.views]];
+    
+    [self.messageDetailView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[parentCollectionView]|" options:0 metrics:nil views:self.views]];
+    
+    if (@available(iOS 11.0, *)) {
+        UILayoutGuide *guide = parentCollectionView.safeAreaLayoutGuide;
+        [NSLayoutConstraint activateConstraints:@[[self.collectionView.leadingAnchor constraintEqualToAnchor:guide.leadingAnchor], [self.collectionView.trailingAnchor constraintEqualToAnchor:guide.trailingAnchor]]];
+    } else {
+        [parentCollectionView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:self.views]];
+    }
+    
+    
+    [parentCollectionView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:0 metrics:nil views:self.views]];
     
     if([self.channel.type isEqualToString:CHANNEL_TYPE_BOTH]){
         
@@ -877,7 +929,7 @@ typedef struct {
         overlayViewHeight= (MIN([self lineCountForLabel:self.bannerMesagelabel],3.0) *self.bannerMesagelabel.font.pointSize)+15;
     }
     NSDictionary *overlayHeightmetrics = @{@"overlayHeight":[NSNumber numberWithFloat:overlayViewHeight]};
-    self.viewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][bottomView]" options:0 metrics:overlayHeightmetrics views:self.views];
+    self.viewVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[messageOverlayView(overlayHeight)][tableView][parentCollectionView][bottomView]" options:0 metrics:overlayHeightmetrics views:self.views];
     [self.messageDetailView addConstraints:self.viewVerticalConstraints];
 }
 
@@ -1196,6 +1248,9 @@ typedef struct {
         self.messagesDisplayedCount = self.messageCount;
     }
     [self.tableView reloadData];
+    
+    [self checkForReplyFragments];
+    
     [FCMessages markAllMessagesAsReadForChannel:self.channel];
     if(obj==nil)
         [self scrollTableViewToLastCell];
@@ -1208,6 +1263,55 @@ typedef struct {
         self.initalLoading = false;
     }
     [self processPendingCSAT];
+}
+
+-(void) checkForReplyFragments {
+    [self.replyTexts removeAllObjects];
+    FCCsat *csat = [self getCSATObject];
+    BOOL showTextBox = NO;
+    //Check for CSAT Timeout state
+    if(!([FCCSATUtil isCSATExpiredForInitiatedTime:[csat.initiatedTime longValue]] && [self.conversation isCSATResponsePending])){
+        if(self.messages.count > 0) {
+            NSString *replyFragments = ((FCMessageData *)[self.messages lastObject]).replyFragments;
+            if(replyFragments) {
+                NSData *jsonData = [replyFragments dataUsingEncoding:NSUTF8StringEncoding];
+                
+                NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil];
+                NSDictionary *jsonDict = jsonArray.firstObject;
+                if(jsonDict && ![jsonDict isKindOfClass:[NSNull class]] && jsonDict[@"fragmentType"] && [jsonDict[@"fragmentType"] integerValue] == FRESHCHAT_COLLECTION_FRAGMENT && jsonDict[@"fragments"]) {
+                    NSArray *fragmentArray = jsonDict[@"fragments"];
+                    for (NSDictionary *dictionary in fragmentArray) {
+                        if (dictionary[@"fragmentType"] && [dictionary[@"fragmentType"] integerValue] == FRESHCHAT_REPLY_FRAGMENT && dictionary[@"label"]) {
+                            NSString *label = trimString(dictionary[@"label"]);
+                            if (label.length > 0) {
+                                [self.replyTexts insertObject:label atIndex:[self.replyTexts count]];
+                            }
+                        }
+                        if (dictionary[@"fragmentType"] && [dictionary[@"fragmentType"] integerValue] == 1) {
+                            showTextBox = YES;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    if([self.replyTexts count] == 0) {
+        self.collectionViewDynamicConstraint.constant = 0;
+    } else {
+        self.collectionViewDynamicConstraint.constant = 5;
+        if(showTextBox){
+            [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+        } else{
+            [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            self.bottomViewHeightConstraint.constant = 0.0;
+        }
+    }
+    
+    [self.collectionView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView layoutIfNeeded];
+    });
 }
 
 -(NSArray *)fetchMessages{
@@ -1330,6 +1434,9 @@ typedef struct {
     if([FCCSATUtil isCSATExpiredForInitiatedTime:[csat.initiatedTime longValue]] && [self.conversation isCSATResponsePending]){
         [FCCSATUtil deleteCSATAndUpdateConversation:csat];
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+        if(self.collectionViewDynamicConstraint.constant != 0) {
+            [self setCollectionViewHeight:0];
+        }
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1348,6 +1455,7 @@ typedef struct {
                     [FCEventsHelper postNotificationForEvent:outEvent];
                 }
                 [self updateBottomViewWith:self.yesNoPrompt andHeight:YES_NO_PROMPT_HEIGHT];
+                self.collectionViewDynamicConstraint.constant = 0;
                 [self.messageDetailView layoutIfNeeded];
             }
         });
@@ -1419,6 +1527,8 @@ typedef struct {
     FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventCSatSubmit
                                                                withParams:eventsDict];
     [FCEventsHelper postNotificationForEvent:outEvent];
+    [self.view endEditing:true];
+    [self checkForReplyFragments];
 }
 
 -(void)submittedCSAT:(HLCsatHolder *)csatHolder{
@@ -1440,6 +1550,8 @@ typedef struct {
     [FCEventsHelper postNotificationForEvent:outEvent];
     
     [self storeAndPostCSAT:csatHolder];
+    [self.view endEditing:true];
+    [self checkForReplyFragments];
 }
 
 -(void)storeAndPostCSAT:(HLCsatHolder *)csatHolder{
@@ -1543,5 +1655,57 @@ typedef struct {
     }
 }
 
+#pragma mark - UICollectionView Delegate
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return [self.replyTexts count];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    FCReplyCollectionCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"replyCell" forIndexPath:indexPath];
+    [cell updateLabelText: [self.replyTexts objectAtIndex:indexPath.row]];
+    if([FCUtilities isDeviceLanguageRTL]){
+        cell.transform = CGAffineTransformMakeScale(-1, 1);
+    }
+
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:NO];
+    [FCMessageHelper uploadMessageWithImage:nil textFeed:self.replyTexts[indexPath.row] onConversation:self.conversation andChannel:self.channel];
+    [self checkPushNotificationState];
+    [self refreshView];
+    [self.messagesPoller reset];
+    [self.replyTexts removeAllObjects];
+    self.collectionViewDynamicConstraint.constant = 0;
+    if(!self.inputToolbar.superview) {
+        [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
+    }
+}
+
+- (CGSize)getSizeforRow:(int)row {
+    UILabel * label = [[UILabel alloc] initWithFrame: CGRectMake(0, 0, self.collectionView.frame.size.width - 36, FLT_MAX)];
+    [label setText: [self.replyTexts objectAtIndex:row]];
+    label.numberOfLines = 2;
+    label.font = [[FCTheme sharedInstance] getQuickReplyMessageFont];
+    [label sizeToFit];
+    return label.frame.size;
+}
+
+- (void)setCollectionViewHeight:(CGFloat)height {
+    FCTheme* theme = [FCTheme sharedInstance];
+    CGFloat viewHeight = [theme getQuickReplyHeightPercentage]/100;
+    self.collectionView.contentSize =  CGSizeMake(self.collectionView.frame.size.width, height);
+    CGFloat collectionViewHeight = self.messageDetailView.frame.size.height *viewHeight > height ? height : self.messageDetailView.frame.size.height *viewHeight;
+    self.collectionViewDynamicConstraint.constant = collectionViewHeight;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self scrollTableViewToLastCell];
+    });
+}
 
 @end
