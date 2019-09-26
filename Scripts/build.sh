@@ -75,7 +75,7 @@ do
 
   printHeader "Building SDK for $SDK with Architecture $ARCH"
 
-  xcodebuild $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target FreshchatSDK -sdk $SDK -arch $ARCH -configuration Release clean build
+  xcodebuild BITCODE_GENERATION_MODE=bitcode $COMPILER_FLAGS OTHER_CFLAGS="${OTHER_CFLAGS}" -project HotlineSDK/HotlineSDK.xcodeproj -target FreshchatSDK -sdk $SDK -arch $ARCH -configuration Release clean build
   if [ $? -ne 0 ] 
   then 
     printHeader "build Failed :("
