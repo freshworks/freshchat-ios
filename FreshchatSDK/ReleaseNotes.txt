@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 2.7.2
+Version         : 2.8.0
+
+Ver 2.8.0 
+__________________________
+Feature :
+Support for showing proactive reply suggestions.
+Bug Fix :
+Push notification token fix for apps built via Xcode 11.
 
 Ver 2.7.2 
 __________________________
