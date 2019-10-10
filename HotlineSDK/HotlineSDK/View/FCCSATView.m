@@ -79,6 +79,7 @@
         self.feedbackView.textColor = self.theme.csatPromptInputTextFontColor;
         self.feedbackView.layer.borderWidth = 0.5;
         self.feedbackView.layer.borderColor =  self.theme.csatPromptInputTextBorderColor.CGColor;
+        self.feedbackView.backgroundColor = self.theme.csatDialogBackgroundColor;
         self.feedbackView.translatesAutoresizingMaskIntoConstraints = NO;
         #if DEBUG
         self.feedbackView.accessibilityIdentifier = @"txtFeedback";

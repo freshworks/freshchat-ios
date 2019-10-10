@@ -53,6 +53,7 @@ enum FragmentStatus {
 
     -(void)storeImageDataOfMessage:(FCMessageData *)message withCompletion:(void (^)())completion;
     - (NSURL *) getOpenURL;
+    - (BOOL)isQuickReplyFragment;
 @end
 
 NS_ASSUME_NONNULL_END

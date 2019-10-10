@@ -4,6 +4,18 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.8.1 
+__________________________
+Fix :
+- iOS 13 Dark Mode UI Fixes.
+
+Ver 2.8.0 
+__________________________
+Feature :
+Support for showing proactive reply suggestions.
+Bug Fix :
+Push notification token fix for apps built via Xcode 11.
+
 Ver 2.7.2 
 __________________________
 Fixes :

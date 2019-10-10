@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
     @property (nullable, nonatomic, retain) NSNumber *marketingId;
     @property (nullable, nonatomic, retain) NSString *messageAlias;
     @property (nullable, nonatomic, retain) NSString *messageUserAlias;
+    @property (nullable, nonatomic, retain) NSString *replyFragments;
     @property (nullable, nonatomic, retain) NSNumber *messageUserType;
     @property (nullable, nonatomic, retain) NSNumber *uploadStatus;
     @property (nonatomic) BOOL isMarkedForUpload;

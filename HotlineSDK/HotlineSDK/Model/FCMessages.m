@@ -217,6 +217,17 @@
     [newMessage setCreatedMillis:[message valueForKey:@"createdMillis"]];
     [newMessage setMarketingId:[message valueForKey:@"marketingId"]];
     [newMessage setMessageUserAlias:[message valueForKey:@"messageUserAlias"]];
+    NSString *jsonString = @"";
+    if ([message valueForKey:@"replyFragments"]) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[message valueForKey:@"replyFragments"]
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:nil];
+        if (jsonData) {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+        }
+    }
+    [newMessage setReplyFragments:jsonString];
     [FCMessageFragments createFragments:[message valueForKey:@"messageFragments"] toMessage:newMessage];
     [[FCDataManager sharedInstance]save];
     
@@ -235,6 +246,7 @@
     message.marketingId = self.marketingId;
     message.isWelcomeMessage = self.isWelcomeMessage;
     message.messageUserAlias = self.messageUserAlias;
+    message.replyFragments = self.replyFragments;
     message.fragments = [FCMessageFragments getAllFragments:self];
     return message;
 }
@@ -360,20 +372,57 @@
 }
 
 -(NSString *)getDetailDescriptionForMessage {
-    NSString *description = nil;
-    FCMessageFragments *fragment = [FCMessageFragments getAllFragments:self].lastObject;
-    if([fragment.type isEqualToString:@"2"]) {
-        description = @"📷";
-    } else if([fragment.type isEqualToString:@"1"]) {
-        description = fragment.content;
-    } else if ([fragment.type isEqualToString:@"5"]) {
-        NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
-        description = extraJSONDict[@"label"];
-    } else{
-        description = HLLocalizedString(LOC_MESSAGE_UNSUPPORTED_CONTENT);
+    NSString *description = @"";
+    NSArray *allFragments = [FCMessageFragments getAllFragments:self];
+    BOOL hasImage = NO;
+    NSString *textLabel = @"";
+    BOOL hasQuickReplyFragment = NO;
+    for (int i=0; i< allFragments.count; i++) {
+        FragmentData *fragment = allFragments[i];
+        if([fragment.type isEqualToString:@"2"]) {
+            hasImage = YES;
+        } else if([fragment.type isEqualToString:@"1"]) {
+            if (textLabel.length > 0) {
+                textLabel = [NSString stringWithFormat:@"%@ %@", textLabel, fragment.content];
+            } else {
+                textLabel = [NSString stringWithFormat:@"%@", fragment.content];
+            }
+        } else if ([fragment.type isEqualToString:@"5"]) {
+            NSData *extraJSONData = [fragment.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData options:0 error:nil];
+            NSString *label = extraJSONDict[@"label"];
+            if (!label) {
+                label = HLLocalizedString(LOC_DEFAULT_ACTION_BUTTON_TEXT);
+            }
+            
+            if (label) {
+                if (textLabel.length > 0) {
+                    textLabel = [NSString stringWithFormat:@"%@ 🔘 %@", textLabel, label];
+                } else {
+                    textLabel = [NSString stringWithFormat:@"🔘 %@", label];
+                }
+            }
+        }
+        if([fragment isQuickReplyFragment]) {
+            hasQuickReplyFragment = YES;
+        }
     }
-    return description;
+    if(hasImage) {
+        description = [NSString stringWithFormat:@"%@📷", description];
+    }
+    
+    if(textLabel.length > 0) {
+        if (description.length > 0) {
+            description = [NSString stringWithFormat:@"%@ %@", description, textLabel];
+        } else {
+            description = [NSString stringWithFormat:@"%@", textLabel];
+        }
+    }
+    
+    if(description.length == 0 && !hasQuickReplyFragment) {
+        description = @"❗️";
+    }
+    return [description substringToIndex: MIN(300, [description length])];
 }
 
 

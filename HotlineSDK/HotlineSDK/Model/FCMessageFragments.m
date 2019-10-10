@@ -9,6 +9,7 @@
 
 #include "FCMessageFragments.h"
 #include "FCFragmentData.h"
+#include "FCConstants.h"
 
 @implementation FCMessageFragments
 
@@ -256,6 +257,25 @@
         url = [[NSURL alloc] initWithString:self.content];
     }
     return url;
+}
+
+- (BOOL)isQuickReplyFragment {
+    NSData *extraJSONData = [self.extraJSON dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *extraJSONDict = [NSJSONSerialization JSONObjectWithData:extraJSONData
+                                                                  options:0
+                                                                    error:&err];
+    if(!err && extraJSONDict[@"fragments"]) {
+        NSArray *fragments = extraJSONDict[@"fragments"];
+        for(int i=0; i< fragments.count; i++) {
+            NSDictionary *fragmentDictionary = fragments[i];
+            if(fragmentDictionary[@"fragmentType"] && [fragmentDictionary[@"fragmentType"] intValue] == FRESHCHAT_REPLY_FRAGMENT) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
 }
 
 @end

@@ -221,7 +221,7 @@
             fileFragment.delegate = self.delegate;
             [fragmensViewArr addObject:[@"button_" stringByAppendingFormat:@"%d",i]];
             //NSLog(@"BUTTON");
-        } else {
+        } else if(![fragment isQuickReplyFragment]) {
             //For Unknown fragment
             FCUnsupportedFragment *unknownFragment = [[FCUnsupportedFragment alloc] initWithFragment:fragment];
             [views setObject:unknownFragment forKey:[@"button_" stringByAppendingFormat:@"%d",i]];
