@@ -724,12 +724,18 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #pragma mark Push notifications
 
 -(void)setPushRegistrationToken:(NSData *)deviceToken {
-    NSUInteger length = deviceToken.length;
+    NSData *token = [NSData new];
+    if([deviceToken isKindOfClass:[NSString class]]) {
+        token = [self dataFromHexString:((NSString *)deviceToken)];
+    } else if ([deviceToken isKindOfClass:[NSData class]]) {
+        token = deviceToken;
+    }
+    NSUInteger length = token.length;
     if (length == 0) {
         ALog("Missing Push Registration Token, please check your calling delegate method")
         return;
     }
-    const unsigned char *buffer = deviceToken.bytes;
+    const unsigned char *buffer = token.bytes;
     NSMutableString *hexString  = [NSMutableString stringWithCapacity:(length * 2)];
     for (int i = 0; i < length; ++i) {
         [hexString appendFormat:@"%02x", buffer[i]];
@@ -740,6 +746,21 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
         [self storeDeviceToken:deviceTokenString];
         [self registerDeviceToken];
     }
+}
+
+- (NSData *)dataFromHexString:(NSString* )string
+{
+    NSMutableData *stringData = [[NSMutableData alloc] init];
+    unsigned char whole_byte;
+    char byte_chars[3] = {'\0','\0','\0'};
+    int i;
+    for (i=0; i < [string length] / 2; i++) {
+        byte_chars[0] = [string characterAtIndex:i*2];
+        byte_chars[1] = [string characterAtIndex:i*2+1];
+        whole_byte = strtol(byte_chars, NULL, 16);
+        [stringData appendBytes:&whole_byte length:1];
+    }
+    return stringData;
 }
 
 -(void) storeDeviceToken:(NSString *) deviceTokenString{

@@ -150,8 +150,10 @@
 
 -(void)setNavigationItem{
     
-    self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.tintColor = [[FCTheme sharedInstance] imgAttachBackButtonFontColor];
+    self.navigationController.navigationBar.barStyle = [[FCTheme sharedInstance]statusBarStyle] ==
+                                            UIStatusBarStyleLightContent ? UIBarStyleBlack : UIBarStyleDefault;
+    self.navigationController.navigationBar.barTintColor = [[FCTheme sharedInstance] navigationBarBackgroundColor];
     
     self.navigationController.navigationBar.titleTextAttributes = @{
                                                                     NSForegroundColorAttributeName: [[FCTheme sharedInstance] navigationBarTitleColor],
