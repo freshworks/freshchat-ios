@@ -62,8 +62,8 @@
 
     [self addConstraintWithBaseLine:@"H:|[leftSpacer][Button2(desiredWidth1)]-15-[Button1(desiredWidth2)][rightSpacer(leftSpacer)]|" inView:self];
 
-    [self addConstraint:@"V:[promptLabel]-16-[Button1]" InView:self];
-    [self addConstraint:@"V:[promptLabel]-16-[Button2]" InView:self];
+    [self addConstraint:@"V:[promptLabel]-16-[Button1]-10-|" InView:self];
+    [self addConstraint:@"V:[promptLabel]-16-[Button2]-10-|" InView:self];
     
     [super layoutSubviews];
 }
