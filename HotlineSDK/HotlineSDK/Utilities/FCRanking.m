@@ -39,14 +39,14 @@
  */
 
 
-+(NSMutableArray *)rankTheArticleForSearchTerm:(NSString *)term withContext:(NSManagedObjectContext *)context{
++(NSMutableArray *)rankTheArticleForSearchTerm:(NSString *)term withContext:(NSManagedObjectContext *)context taggedArticleIds: (NSArray *) taggedArticleIds {
     //tokenize string
     NSMutableDictionary *articleDictionary = [[NSMutableDictionary alloc] init];
     term = [term lowercaseString];
     NSArray *wordsArray = [term componentsSeparatedByString:@" "];
-    articleDictionary = [FCRanking randomWordMatchFor:wordsArray forArticle:articleDictionary inContext:context];
-    articleDictionary = [FCRanking exactWordMatchFor:term withPredicateString:@"title like[cd] %@" forArticle:articleDictionary inContext:context withRankValue:2];
-    articleDictionary = [FCRanking exactWordMatchFor:term withPredicateString:@"articleDescription like[cd] %@" forArticle:articleDictionary inContext:context withRankValue:1];
+    articleDictionary = [FCRanking randomWordMatchFor:wordsArray forArticle:articleDictionary inContext:context taggedArticleIds:taggedArticleIds];
+    articleDictionary = [FCRanking exactWordMatchFor:term withPredicateString:@"title like[cd] %@" forArticle:articleDictionary inContext:context withRankValue:2 taggedArticleIds:taggedArticleIds];
+    articleDictionary = [FCRanking exactWordMatchFor:term withPredicateString:@"articleDescription like[cd] %@" forArticle:articleDictionary inContext:context withRankValue:1 taggedArticleIds:taggedArticleIds];
     return [FCRanking sortArticles:articleDictionary inContext:context];
 }
 
@@ -72,7 +72,7 @@
  If a description match is found 1 point is found to the rank
  
 */
-+(NSMutableDictionary *)randomWordMatchFor:(NSArray *)wordsArray forArticle:(NSMutableDictionary *)articleDictionary inContext:(NSManagedObjectContext *)context{
++(NSMutableDictionary *)randomWordMatchFor:(NSArray *)wordsArray forArticle:(NSMutableDictionary *)articleDictionary inContext:(NSManagedObjectContext *)context  taggedArticleIds: (NSArray *) taggedArticleIds {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_FAQ_SEARCH_INDEX_ENTITY];
     NSError *fetchError;
     NSUInteger wordCount = [wordsArray count];
@@ -80,8 +80,11 @@
         NSString* searchWord =wordsArray[i];
         if (searchWord.length > 2 ) {
             searchWord = [@"*" stringByAppendingString:[searchWord stringByAppendingString:@"*"]];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"keyWord like %@",searchWord];
-            [request setPredicate:predicate];
+            NSMutableArray<NSPredicate*> *predicateArr = [[NSMutableArray alloc] initWithArray:@[[NSPredicate predicateWithFormat:@"keyWord like %@",searchWord]]];
+            if ([taggedArticleIds count] > 0) {
+                [predicateArr addObject:[NSPredicate predicateWithFormat:@"articleID IN %@",taggedArticleIds]];
+            }
+            [request setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicateArr]];
             NSArray *matchingIndices = [context executeFetchRequest:request error:&fetchError];
             NSUInteger indexCount =[matchingIndices count];
             for (int j=0; j< indexCount; j++) {
@@ -126,11 +129,15 @@
  If a description match is found 1 point is found to the rank
  
 */
-+(NSMutableDictionary *)exactWordMatchFor:(NSString *)term withPredicateString:(NSString *)predicateString forArticle:(NSMutableDictionary *)articleDictionary inContext:(NSManagedObjectContext *)context withRankValue:(NSUInteger)rankValue{
++(NSMutableDictionary *)exactWordMatchFor:(NSString *)term withPredicateString:(NSString *)predicateString forArticle:(NSMutableDictionary *)articleDictionary inContext:(NSManagedObjectContext *)context withRankValue:(NSUInteger)rankValue taggedArticleIds: (NSArray *) taggedArticleIds {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:FRESHCHAT_ARTICLES_ENTITY];
     NSError *fetchError;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString,term];
-    [request setPredicate:predicate];
+    NSMutableArray<NSPredicate *> *predicateArr = [[NSMutableArray alloc] initWithArray:@[[NSPredicate predicateWithFormat:predicateString,term]]];
+    if ([taggedArticleIds count] > 0) {
+        [predicateArr addObject:[NSPredicate predicateWithFormat:@"articleID IN %@",taggedArticleIds]];
+    }
+    [request setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicateArr]];
+    
     NSArray *matchingArticles = [context executeFetchRequest:request error:&fetchError];
     for (int i=0; i<[matchingArticles count]; i++) {
         NSInteger rank = 0;

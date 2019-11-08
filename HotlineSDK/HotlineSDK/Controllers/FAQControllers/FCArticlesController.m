@@ -146,9 +146,7 @@
                                                                         style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonAction:)];
     [self configureBackButton];
     NSMutableArray *rtNavBarItems = [NSMutableArray new];
-    if(!self.isFilteredView){
-         [rtNavBarItems addObject:searchBarButton];
-    }
+    [rtNavBarItems addObject:searchBarButton];
     if(self.faqOptions && self.faqOptions.showContactUsOnAppBar && self.faqOptions.showContactUsOnFaqScreens){
         UIBarButtonItem *contactUsBarButton = [[FCBarButtonItem alloc] initWithImage:[self.theme getImageWithKey:IMAGE_CONTACT_US_ICON]
                                                                                style:UIBarButtonItemStylePlain target:self action:@selector(contactUsButtonAction:)];
@@ -180,8 +178,8 @@
 }
 
 -(void)searchButtonAction:(id)sender{
-    
     FCSearchViewController *searchViewController = [[FCSearchViewController alloc] init];
+    searchViewController.isFallback = self.isFallback;
     [FCFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];

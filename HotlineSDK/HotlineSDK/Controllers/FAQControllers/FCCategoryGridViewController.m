@@ -244,6 +244,7 @@
     if (indexPath.row < self.categories.count) {
         FCCategories *category = self.categories[indexPath.row];
         FCArticlesController *articleController = [[FCArticlesController alloc] initWithCategory:category];
+        articleController.isFallback = self.categoryViewBehaviour.isFallback;
         [FCFAQUtil setFAQOptions:self.faqOptions onController:articleController];
         FCContainerController *container = [[FCContainerController alloc]initWithController:articleController andEmbed:NO];
         [self.navigationController pushViewController:container animated:YES];
