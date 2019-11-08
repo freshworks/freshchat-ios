@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         		 = "FreshchatSDK"
-  s.version      		 = "2.8.1"
+  s.version      		 = "2.9.0"
   s.summary      		 = "Freshchat iOS SDK - Modern messaging software that your sales and customer engagement teams will love."
   s.description  		 = <<-DESC
                    			Modern messaging software that your sales and customer engagement teams will love.
