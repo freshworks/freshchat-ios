@@ -1,4 +1,9 @@
 
+Ver 2.9.0 
+__________________________
+Enhancement :
+- Support for filtered FAQ search.
+
 Ver 2.8.1 
 __________________________
 Fix :
