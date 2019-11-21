@@ -17,5 +17,6 @@
 
 @property (strong, nonatomic) NSArray *searchResults;
 @property (nonatomic, strong)FCMarginalView *contactUsView;
+@property (nonatomic, assign) BOOL isFallback;
 
 @end

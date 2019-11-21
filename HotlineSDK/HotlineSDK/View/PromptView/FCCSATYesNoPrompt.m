@@ -50,8 +50,8 @@
     promptLabel.translatesAutoresizingMaskIntoConstraints = NO;
     promptLabel.textColor = [theme custSatDialogueTitleTextColor];
     promptLabel.font = [theme custSatDialogueTitleFont];
-    promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    promptLabel.numberOfLines = 0;
+    promptLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    promptLabel.numberOfLines = 4;
     promptLabel.textAlignment= NSTextAlignmentCenter;
     promptLabel.text = HLLocalizedString([key stringByAppendingString:
                                           LOC_TEXT_PARTIAL]);

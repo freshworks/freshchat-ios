@@ -11,6 +11,6 @@
 
 @interface FCRanking : NSObject
 
-+(NSMutableArray *)rankTheArticleForSearchTerm:(NSString *)term withContext:(NSManagedObjectContext *)context;
++(NSMutableArray *)rankTheArticleForSearchTerm:(NSString *)term withContext:(NSManagedObjectContext *)context taggedArticleIds: (NSArray *) matchedArticleIds;
 
 @end

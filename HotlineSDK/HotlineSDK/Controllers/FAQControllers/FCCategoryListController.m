@@ -174,6 +174,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FCCategories *category =  self.categories[indexPath.row];
     FCArticlesController *articleController = [[FCArticlesController alloc]initWithCategory:category];
+    articleController.isFallback = self.categoryViewBehaviour.isFallback;
     [FCFAQUtil setFAQOptions: self.faqOptions onController:articleController];
     FCContainerController *container = [[FCContainerController alloc]initWithController:articleController andEmbed:NO];
     

@@ -4,6 +4,11 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 1.5.6
 
+Ver 2.9.0 
+__________________________
+Enhancement :
+- Support for filtered FAQ search.
+
 Ver 2.8.1 
 __________________________
 Fix :

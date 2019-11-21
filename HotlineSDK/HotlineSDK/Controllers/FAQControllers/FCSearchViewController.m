@@ -26,6 +26,7 @@
 #import "FCEmptyResultView.h"
 #import "FCAutolayoutHelper.h"
 #import "FCFAQUtil.h"
+#import "FCTagManager.h"
 
 #define SEARCH_CELL_REUSE_IDENTIFIER @"SearchCell"
 #define SEARCH_BAR_HEIGHT 44
@@ -44,7 +45,8 @@
 @property (nonatomic, strong) FAQOptions *faqOptions;
 @property (nonatomic, strong) FCFooterView  *footerView;
 @property (nonatomic, assign) BOOL isFAQSearchEventAdded;
-@property (nonatomic, assign) NSString *searchString;
+@property (nonatomic, strong) NSString *searchString;
+@property (strong, nonatomic) NSArray *taggedArticleIds;
  
 @end
 
@@ -156,7 +158,7 @@
         self.tableView.cellLayoutMarginsFollowReadableWidth = NO;
     }
     [self.view addSubview:self.tableView];
-    if(![FCUtilities hasNotchDisplay]) {
+    if(SYSTEM_VERSION_LESS_THAN(@"11.0")) {
         self.tableView.contentInset = UIEdgeInsetsMake(-(SEARCH_BAR_HEIGHT/2), 0, SEARCH_BAR_HEIGHT, 0);
     }
     self.contactUsView = [[FCMarginalView alloc] initWithDelegate:self];
@@ -320,13 +322,12 @@
         term = [FCStringUtil replaceSpecialCharacters:term with:@""];
         NSManagedObjectContext *context = [FCDataManager sharedInstance].backgroundContext ;
         [context performBlock:^{
-            NSArray *articles = [FCRanking rankTheArticleForSearchTerm:term withContext:context];
+            NSArray *articles = [FCRanking rankTheArticleForSearchTerm:term withContext:context taggedArticleIds:self.taggedArticleIds];
             if ([articles count] > 0) {
                 [self hideEmptySearchView];
                 self.searchResults = articles;
                 [self reloadSearchResults];
             }else{
-                
                 self.searchResults = nil;
                 [self showEmptySearchView];
                 [self reloadSearchResults];
@@ -334,7 +335,11 @@
         }];
     }else{
         [self hideEmptySearchView];
-        [self fetchAllArticles];
+        if (self.isFallback || ![FCFAQUtil hasTags:self.faqOptions]) { //Has no Cateogries for given tags or Has no given tags
+            [self fetchAllArticles];
+        } else {
+            [self fetchFilteredArticles];
+        }
     }
 }
 
@@ -345,6 +350,22 @@
         self.searchResults = [context executeFetchRequest:request error:nil];
         [self reloadSearchResults];
     }];
+}
+
+-(void)fetchFilteredArticles {
+        NSManagedObjectContext *context = [FCDataManager sharedInstance].mainObjectContext;
+        [[FCTagManager sharedInstance] getArticlesForTags:self.faqOptions.tags
+                                                      inContext:context
+                                                 withCompletion:^(NSArray <FCArticles *> *articles) {
+                                                         
+                                                         NSMutableArray* articleIds = [[NSMutableArray alloc] init];
+                                                         for (int i = 0; i<[articles count]; i++) {
+                                                             [articleIds insertObject:articles[i].articleID atIndex:0];
+                                                         }
+                                                         self.taggedArticleIds = articleIds;
+                                                         self.searchResults = articles;
+                                                         [self reloadSearchResults];
+                                                     }];
 }
 
 -(void)reloadSearchResults{
@@ -397,9 +418,10 @@
 }
 
 - (void) updateEventForRelevantSearch : (BOOL) isRelevant {
-    if((trimString(self.searchBar.text).length == 0) || ([self.searchString isEqualToString:self.searchBar.text] &&  self.isFAQSearchEventAdded)) return;
-    self.isFAQSearchEventAdded = YES;
+    NSString *searchStr = trimString(self.searchBar.text);
+    if ((searchStr.length == 0) || ![searchStr isKindOfClass:[NSString class]] || ([searchStr isEqualToString:self.searchString] &&  self.isFAQSearchEventAdded)) return;
     self.searchString = trimString(self.searchBar.text);
+    self.isFAQSearchEventAdded = YES;
     FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventFAQSearch
                                                                withParams:@{
                                                                             @(FCPropertySearchKey)      : self.searchBar.text,

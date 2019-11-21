@@ -9,7 +9,7 @@
 #ifndef FCVersionConstants_h
 #define FCVersionConstants_h
 
-#define FRESHCHAT_SDK_VERSION @"2.8.1"
-#define FRESHCHAT_SDK_BUILD_NUMBER @"281"
+#define FRESHCHAT_SDK_VERSION @"2.9.0"
+#define FRESHCHAT_SDK_BUILD_NUMBER @"290"
 
 #endif /* FCVersionConstants_h */

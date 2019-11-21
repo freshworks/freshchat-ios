@@ -14,5 +14,6 @@
 @interface FCArticlesController : FCListViewController<FAQOptionsInterface>
 
 -(instancetype)initWithCategory:(FCCategories *)category;
+@property BOOL isFallback;
 
 @end

@@ -126,6 +126,7 @@
 
 -(void)searchButtonAction:(id)sender{
     FCSearchViewController *searchViewController = [[FCSearchViewController alloc] init];
+    searchViewController.isFallback = self.isFallback;
     [FCFAQUtil setFAQOptions:self.faqOptions onController:searchViewController];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:searchViewController];
     [navController setModalPresentationStyle:UIModalPresentationCustom];
@@ -158,9 +159,7 @@
     }
     
     NSMutableArray *rightBarItems = [NSMutableArray new];
-    if(!self.isFilteredView || self.isFallback ){
-        [rightBarItems addObject:searchBarButton];
-    }
+    [rightBarItems addObject:searchBarButton];
     if([FCFAQUtil hasFilteredViewTitle:self.faqOptions] && [FCFAQUtil hasTags:self.faqOptions] && !self.isFallback){
         self.categoryViewDelegate.parentViewController.navigationItem.title = self.faqOptions.filteredViewTitle;
     }

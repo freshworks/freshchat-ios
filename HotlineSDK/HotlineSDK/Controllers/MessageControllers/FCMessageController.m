@@ -697,6 +697,7 @@ typedef struct {
     [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.bottomView addSubview:view];
     self.bottomViewHeightConstraint.constant = height;
+    self.bottomViewHeightConstraint.active = ![view isKindOfClass:[FCYesNoPromptView class]];
     
     NSDictionary *views = @{ @"bottomInputView" : view };
     [self.bottomView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomInputView]|" options:0 metrics:nil views:views]];
