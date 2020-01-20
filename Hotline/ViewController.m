@@ -63,6 +63,8 @@
 @property (nonatomic, retain) IBOutlet UILabel *tokenState;
 @property (weak, nonatomic) IBOutlet UILabel *restoreIDCount;
 
+@property (nonatomic, strong)InEventsController *inbountTrackVC;
+
 @property int restoreEventCount;
 
 @end
@@ -310,13 +312,14 @@ JWTScheduler *jwtScheduler;
 
 - (IBAction)chatButtonPressed:(id)sender {
     
-     SampleController *sampleController;
+    SampleController *sampleController;
      //SampleViewController hidden
      if(sampleController == nil) {
         UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
         sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     }
     [self presentViewController:sampleController animated:YES completion:nil];
+     
     /*
     
     if( jwtScheduler == nil) {
@@ -528,6 +531,18 @@ JWTScheduler *jwtScheduler;
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
     int sectionWidth = 300;
     return sectionWidth;
+}
+
+- (IBAction)senderlaunchEventsTrackerVC:(id) sender {
+    
+    UIStoryboard* storyboard = [UIStoryboard
+                               storyboardWithName:EVENTS_TRACK_VIEW_STORYBOARD_CONTROLLER
+                                                         bundle:nil];
+    InEventsController *inEventCtr = [storyboard instantiateViewControllerWithIdentifier:@"inEvents"];
+
+    [self presentViewController:inEventCtr
+                       animated:YES
+                     completion:nil];
 }
 
 @end

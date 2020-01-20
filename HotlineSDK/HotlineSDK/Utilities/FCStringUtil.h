@@ -26,6 +26,7 @@
 +(NSString *)replaceInString:(NSString *)string usingRegex:(NSString *)regexString replaceWith:(NSString *) replaceString;
 +(BOOL)isNotEmptyString:(NSString *)str;
 +(BOOL)isEmptyString:(NSString *)str;
++(NSString *) getStringValue : (NSObject *) object;
 
 @end
 

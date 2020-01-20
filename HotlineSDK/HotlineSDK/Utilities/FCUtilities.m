@@ -32,6 +32,7 @@
 #import "FCFAQUtil.h"
 #import "FCChannelUtil.h"
 #import "FDThemeConstants.h"
+#import "FCEventsManager.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -43,7 +44,6 @@
 
 #pragma mark - General Utitlites
 
-static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
@@ -73,6 +73,14 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
+}
+
++ (BOOL) isSDKInitialized {
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    if([store objectForKey:HOTLINE_DEFAULTS_APP_ID] && [store objectForKey:HOTLINE_DEFAULTS_APP_KEY] ){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 +(NSString *) getTracker{
@@ -449,24 +457,28 @@ static NSInteger networkIndicator = 0;
     [FCUserDefaults removeObjectForKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
 }
 
-+(BOOL) canMakeDAUCall {
++ (BOOL) isTodaySameAsDate : (NSDate *) date {
     NSDate *currentdate = [NSDate date];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
+    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:date];
+    NSComparisonResult result;
+    result = [currentdate compare:date];
+    if(result == NSOrderedDescending){//date comparision, current should be greater than
+        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+            return false;
+        }
+    }
+    return true;
+}
+
++(BOOL) canMakeDAUCall {
     NSDate *lastFetchDate = [[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
     if(!lastFetchDate){
         return true;
     }
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
-    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
-    NSComparisonResult result;
-    result = [currentdate compare:lastFetchDate];
-    if(result == NSOrderedDescending){//date comparision, current should be greater than
-        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
-            return true;
-        }
-    }
-    return false;
+    return ![self isTodaySameAsDate:lastFetchDate];
 }
 
 +(BOOL) containsHTMLContent: (NSString *)content {
@@ -703,6 +715,7 @@ static NSInteger networkIndicator = 0;
 
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion {
     [FCCoreServices resetUserData:^{
+        [[FCEventsManager sharedInstance] reset];
         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
         [FCUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];        
         FreshchatUser* oldUser = [FreshchatUser sharedInstance];

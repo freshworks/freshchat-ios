@@ -37,6 +37,7 @@
 #define HOTLINE_DEFAULTS_ADID @"hotline_defaults_adid"
 #define HOTLINE_DEFAULTS_OLD_USER_INFO @"hotline_defaults_old_user_info"
 #define FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE @"freshchat_defaults_response_expectation_visible"
+#define FRESHCHAT_DEFAULTS_EVENTS_UPLOAD_ENABLED @"freshchat_defaults_events_upload_enabled"
 
 #define FRESHCHAT_CONFIG_RC_FAQ_ENABLED @"freshchat_config_rc_faq_enabled"
 #define FRESHCHAT_CONFIG_RC_INBOX_ENABLED @"freshchat_config_rc_inbox_enabled"
@@ -62,6 +63,12 @@
 #define FC_CONVERSATIONS_LAST_REQUESTED_TIME @"freshchat_defaults_conversations_last_updated_itv_time"
 
 #define HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME @"hotline_defaults_dau_last_updated_time"
+
+//Events last recorded time with daily counter
+#define FRESHCHAT_DEFAULTS_EVENTS_LAST_RECORDED_TIME @"freshchat_defaults_events_last_recorded_time"
+//For events counter
+#define FRESHCHAT_DEFAULTS_EVENTS_IDENTIFIER_COUNT @"freshchat_defaults_events_identifier_count"
+#define FRESHCHAT_DEFAULTS_EVENTS_DAILY_COUNTER @"freshchat_defaults_events_daily_counter"
 
 #define HOTLINE_DEFAULTS_PUSH_TOKEN @"hotline_defaults_push_token"
 //#define HOTLINE_DEFAULTS_NOTIFICATION_DISABLED_ALERT_SHOWN @"hotline_defaults_notification_disabled_alert_shown"

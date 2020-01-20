@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		024529422385B8EF0018FC38 /* InEventsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024529412385B8EF0018FC38 /* InEventsController.swift */; };
+		024529462385B9170018FC38 /* InEventsController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 024529452385B9170018FC38 /* InEventsController.storyboard */; };
 		350D9E211CFDBD48004091C8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 350D9E1F1CFDBD48004091C8 /* Crashlytics.framework */; };
 		350D9E221CFDBD48004091C8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 350D9E201CFDBD48004091C8 /* Fabric.framework */; };
 		3513FF801CDCC3A3009A7034 /* FCLocalization.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3513FF7F1CDCC3A3009A7034 /* FCLocalization.bundle */; };
@@ -82,6 +84,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		024529412385B8EF0018FC38 /* InEventsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InEventsController.swift; sourceTree = "<group>"; };
+		024529452385B9170018FC38 /* InEventsController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InEventsController.storyboard; sourceTree = "<group>"; };
 		350D9E1F1CFDBD48004091C8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		350D9E201CFDBD48004091C8 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		3513FF7F1CDCC3A3009A7034 /* FCLocalization.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FCLocalization.bundle; sourceTree = "<group>"; };
@@ -253,6 +257,8 @@
 				CEDFEEC71E4CD825002DCB4B /* HotlineConfigStrings.h */,
 				356F19F11B9DBF14002F1E2A /* ViewController.h */,
 				356F19F21B9DBF14002F1E2A /* ViewController.m */,
+				024529412385B8EF0018FC38 /* InEventsController.swift */,
+				024529452385B9170018FC38 /* InEventsController.storyboard */,
 				35D707141BE2498B0035FD74 /* FDSettingsController.h */,
 				35D707151BE2498B0035FD74 /* FDSettingsController.m */,
 				354D0D311C48D32D004D2AA1 /* Images */,
@@ -462,6 +468,7 @@
 				3C314F0C1C97DFCA00A255D4 /* FCResources.bundle in Resources */,
 				957C58CA219ACAB900ED31E1 /* Media.xcassets in Resources */,
 				3518351B1D273997000EB496 /* background.png in Resources */,
+				024529462385B9170018FC38 /* InEventsController.storyboard in Resources */,
 				955807EF21958521000CD9A7 /* JWTScheduler.storyboard in Resources */,
 				354D0D651C48D504004D2AA1 /* Images.xcassets in Resources */,
 				3513FF801CDCC3A3009A7034 /* FCLocalization.bundle in Resources */,
@@ -527,6 +534,7 @@
 				95FA87C720BC49AB00457575 /* L012Localizer.swift in Sources */,
 				9579AD0E217F5796004AAD98 /* InAppBrowser.m in Sources */,
 				356F19F31B9DBF14002F1E2A /* ViewController.m in Sources */,
+				024529422385B8EF0018FC38 /* InEventsController.swift in Sources */,
 				35D707331BE2C1AF0035FD74 /* PSPDFUIKitMainThreadGuard.m in Sources */,
 				356F19F01B9DBF14002F1E2A /* AppDelegate.m in Sources */,
 				CE130DD11EF189090028CEE7 /* SampleController.m in Sources */,

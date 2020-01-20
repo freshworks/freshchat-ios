@@ -50,4 +50,6 @@
 
 +(NSArray *) updatePropertiesTo: (NSMutableDictionary *) userInfo;
 
++ (NSURLSessionDataTask *) uploadInboundEvents:(NSDictionary *)events withCompletion:(void(^)(BOOL uploaded, NSDictionary *uploadedEvents, NSError *error))handler;
+
 @end

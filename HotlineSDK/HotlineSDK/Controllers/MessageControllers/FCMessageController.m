@@ -52,6 +52,7 @@
 #import "FCLoadingViewBehaviour.h"
 #import "FCReplyCollectionCell.h"
 #import "FCReplyFlowLayout.h"
+#import "FCEventsManager.h"
 
 typedef struct {
     BOOL isLoading;
@@ -209,6 +210,8 @@ typedef struct {
     FCOutboundEvent *outEvent = [[FCOutboundEvent alloc] initOutboundEvent:FCEventConversationOpen
                                                               withParams:eventsDict];
     [FCEventsHelper postNotificationForEvent:outEvent];
+    //Upload events every time user comes to conv. screen to give latest events update before chat
+    [[FCEventsManager sharedInstance] processEventBatch];
 }
 
 -(void) setNavigationTitle:(UIViewController *)parent {
@@ -429,7 +432,8 @@ typedef struct {
 }
 
 - (void)storeTheResponseFrom: (NSDictionary *)channelsInfo ofResponseKey: (NSString *) responseKey inLocalKey: (NSString *) localKey {
-    if(!([channelsInfo[responseKey] count] == 0)) { //If the array is nil, it will be 0 as well, as nil maps to 0; therefore checking whether the array exists is unnecessary
+    //Added typecast to fix error with new XCode
+    if(!([(NSArray *)channelsInfo[responseKey] count] == 0)) { //If the array is nil, it will be 0 as well, as nil maps to 0; therefore checking whether the array exists is unnecessary
         [FCUserDefaults setDictionary:[self getChannelReplyTimeForResponse:channelsInfo[responseKey]] forKey:localKey];
     } else {
         [FCUserDefaults removeObjectForKey:localKey];

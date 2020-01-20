@@ -191,6 +191,7 @@
     //config.pictureMessagingEnabled = YES;
     config.cameraCaptureEnabled = YES;
     config.responseExpectationVisible = YES;
+    config.eventsUploadEnabled = YES;
     if(![FreshchatUser sharedInstance].firstName){
         //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
     }

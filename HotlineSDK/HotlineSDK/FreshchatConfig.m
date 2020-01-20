@@ -28,6 +28,7 @@
         self.cameraCaptureEnabled = YES;
         self.showNotificationBanner = YES;
         self.responseExpectationVisible = YES;
+        self.eventsUploadEnabled = YES;
     }
     return self;
 }
