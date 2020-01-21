@@ -91,13 +91,11 @@
 }
 
 - (void) loadEvents {
-    [self runSync:^{
-        NSData *data = [NSData dataWithContentsOfFile:self.plistPath];
-        if(data){
-            NSDictionary *eventsDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-            self.inBoundEvents = [eventsDict mutableCopy];
-        }
-    }];
+    NSData *data = [NSData dataWithContentsOfFile:self.plistPath];
+    if(data){
+        NSDictionary *eventsDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        self.inBoundEvents = [eventsDict mutableCopy];
+    }
 }
 
 -(NSNumber *)nextEventId{
@@ -123,8 +121,8 @@
             delIndex = (currentIndex - unuploadedEventsLimit);
         }
         [self.inBoundEvents removeObjectForKey:[NSNumber numberWithInt:delIndex]];
-        [self updateEventFile:self.inBoundEvents];
     }
+    [self updateEventFile:self.inBoundEvents];
     if(self.triggerEventsBatch.count > 0 && [FCUserUtil isUserRegistered]){
         if (self.triggerEventsBatch.count >= [FCRemoteConfig sharedInstance].eventsConfig.triggerUploadOnEventsCount){
             [self processEventBatchWithEvents:[self.triggerEventsBatch copy]];

@@ -37,6 +37,8 @@ class JWTTestViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapRecognizer)
         
+        self.jwtTokenState?.text = "\("Token State : ") \(String(describing: Freshchat.sharedInstance().getUserIdTokenStatus() ?? ""))"
+        
         self.jwtTokenValue?.text = UserDefaults.standard.string(forKey: "jwtToken")
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -64,7 +66,7 @@ class JWTTestViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     @objc func updateJWTTokenState()
     {
-        self.jwtTokenState?.text = "\("Token State : ") + \(String(describing: Freshchat.sharedInstance()?.getUserIdTokenStatus()))"
+        self.jwtTokenState?.text = "\("Token State : ") \(String(describing: Freshchat.sharedInstance().getUserIdTokenStatus() ?? ""))"
     }
     
     @IBAction func generateSampleJWTToken (_ sender: UIButton) {
