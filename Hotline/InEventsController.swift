@@ -34,6 +34,7 @@ class InEventsController: UIViewController {
                 //Cancel Action
             }))
             self.present(alert, animated: true, completion: nil)
+            
             return;
         }
         

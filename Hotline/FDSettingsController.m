@@ -213,6 +213,8 @@
             [[Freshchat sharedInstance]resetUserWithCompletion:^{
                 //[[Freshchat sharedInstance] setUser:[AppDelegate createFreshchatUser]];
                 //[self updateFields];
+                //Reset JWT Token
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"jwtToken"];
             }];
             break;
     }
