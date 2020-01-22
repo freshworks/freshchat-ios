@@ -1,4 +1,11 @@
 
+Ver 3.1.0 
+__________________________
+Feature :
+- Add user events from your app to Freshchat Timeline to give your agents context on user's journey and problems.
+Enhancement :
+- New device models added to track user devices.
+
 Ver 2.9.0 
 __________________________
 Enhancement :
