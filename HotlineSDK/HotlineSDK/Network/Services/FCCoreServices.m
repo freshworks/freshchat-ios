@@ -800,4 +800,38 @@
     return task;
 }
 
++ (NSURLSessionDataTask *) uploadInboundEvents:(NSDictionary *)events withCompletion:(void(^)(BOOL uploaded, NSDictionary *uploadedEvents, NSError *error))handler{
+    NSMutableArray *uploadEvents = [[NSMutableArray alloc] init];
+    for(NSNumber *eventId in events){
+        NSDictionary *eventInfo = [events objectForKey:eventId];
+        [uploadEvents addObject:eventInfo];
+    }
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
+    NSString *userAlias = [FCUtilities currentUserAlias];
+    NSString *appKey = [NSString stringWithFormat:@"t=%@",[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
+    
+    NSString *path = [NSString stringWithFormat:FRESHCHAT_API_TRACK_INBOUND_EVENTS,appID, userAlias];
+    NSError *error = nil;
+    NSData *eventData = [NSJSONSerialization dataWithJSONObject:uploadEvents options:NSJSONWritingPrettyPrinted error:&error];
+
+    FCServiceRequest *request = [[FCServiceRequest alloc]initWithMethod:HTTP_METHOD_POST];
+    [request setBody:eventData];
+    [request setRelativePath:path andURLParams:@[appKey]];
+    FCAPIClient *apiClient = [FCAPIClient sharedInstance];
+    __block NSDictionary *blockEvents = [events copy];
+    NSURLSessionDataTask *task = [apiClient request:request isIdAuthEnabled:YES withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
+        NSDictionary *response = responseInfo.responseAsDictionary;
+        if(handler){
+            if (statusCode == 202 && response[@"success"]) {
+                handler(true, blockEvents, error);
+            } else {
+                handler(false, blockEvents, error);
+            }
+        }
+    }];
+    return task;
+}
+
 @end

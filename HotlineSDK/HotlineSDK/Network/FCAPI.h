@@ -63,3 +63,5 @@
 #define FRESHCHAT_API_JWT_VALIDATE_PATH @"/app/services/app/%@/jwt/validate"
 
 #define FRESHCHAT_API_USER_RENEW_BY_JWT_PATH @"/app/services/app/%@/user/renew-by-jwt"
+
+#define FRESHCHAT_API_TRACK_INBOUND_EVENTS @"/app/services/app/%@/user/%@/events/multi"

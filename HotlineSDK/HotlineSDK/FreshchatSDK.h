@@ -121,6 +121,10 @@ typedef enum {
  * Show/Hide Channel response time on the chat. Defaults to YES
  */
 @property (nonatomic, assign) BOOL responseExpectationVisible;
+/*
+ * Enable/Disable application events with Freshchat. Default to YES
+ */
+@property (nonatomic, assign) BOOL eventsUploadEnabled;
 
 /**
  *  Initialize Freshchat.
@@ -385,6 +389,16 @@ typedef enum {
  *  Send message to particular channel with specified tag value
  */
 -(void) sendMessage:(FreshchatMessage *)messageObject;
+
+/**
+ *  Tracking custom events performed by user in Application
+ *
+ *  @discussion This methods lets you to track user events performed into your app and will be available in Freshchat's agent portal
+ *
+ *  @param name - Name of the event
+ *  @param properties - Properties added for an event
+ **/
+- (void) trackEvent : (NSString *) name withProperties : (NSDictionary<NSString*, id> *) properties;
 
 /**
  *  Dismiss SDK for deeplink screens

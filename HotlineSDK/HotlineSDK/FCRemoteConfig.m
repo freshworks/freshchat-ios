@@ -35,6 +35,7 @@
         self.userAuthConfig                 = [[FCUserAuthConfig alloc] init];
         self.messageMaskConfig              = [[FCMessageMaskConfig alloc] init];
         self.unsupportedFragErrMsg          = [[FCUnsupportedFragmentErrorMsgs alloc] init];
+        self.eventsConfig                   = [[FCEventsConfig alloc] init];
     }
     return self;
 }
@@ -72,6 +73,7 @@
     NSDictionary *unsupportedMsgErrDict = [configDict objectForKey:@"unsupportedFragmentConfig"];
     NSDictionary *userAuthConfig     = [configDict objectForKey:@"userAuthConfig"];
     NSDictionary *messageMaskingConfigDict  = [configDict objectForKey:@"messageMaskingConfig"];
+    NSDictionary *eventsConfigDict         = [configDict objectForKey:@"eventsConfig"];
     
     [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
     [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
@@ -99,6 +101,10 @@
     
     if (userAuthConfig != nil) {
         [self.userAuthConfig updateUserAuthConfig:userAuthConfig];
+    }
+    
+    if (eventsConfigDict != nil) {
+        [self.eventsConfig updateEventsConfig:eventsConfigDict];
     }
 }
 

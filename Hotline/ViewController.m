@@ -15,12 +15,12 @@
 #import "JWTScheduler.h"
 #import "Hotline_Demo-Swift.h"
 
-
 #define kOFFSET_FOR_KEYBOARD 160.0
 #define SAMPLE_STORYBOARD_CONTROLLER @"SampleController"
 #define JWT_SCHEDULER_STORYBOARD_CONTROLLER @"JWTScheduler"
+#define JWT_TEST_SAMPLE_STORYBOARD_CONTROLLER @"JWTTestViewController"
 
-@interface ViewController ()<UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate>
+@interface ViewController ()<UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UIActionSheetDelegate, UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -29,9 +29,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *unreadCountTags;
 
 @property (nonatomic, strong) IBOutlet UITextField *faqTagsField1;
-
-@property (nonatomic, strong) IBOutlet UITextView *jwtTextView;
-@property (nonatomic, strong) IBOutlet UITextView *userAliasView;
 
 @property (nonatomic, strong) IBOutlet UITextField *faqTitleField1;
 
@@ -49,10 +46,13 @@
 
 @property (nonatomic, strong) IBOutlet UISwitch *mysWitch;
 @property (nonatomic, strong) IBOutlet UISwitch *myGridSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *faqNotHelpfulSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *showContactUsOnAppBarSwitch;
 
 @property (nonatomic, assign) BOOL switchVal;
-
-@property (nonatomic, assign) BOOL gridval;
+@property (nonatomic, assign) BOOL gridFaqVal;
+@property (nonatomic, assign) BOOL faqHelpfulVal;
+@property (nonatomic, assign) BOOL contactUsAppbarVal;
 
 @property (nonatomic, retain) UIAlertController *pickerViewPopup;
 @property (nonatomic, retain) UIPickerView *categoryPickerView;
@@ -60,8 +60,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *languageTranslation;
 
 @property (nonatomic, retain) IBOutlet UILabel *event;
-@property (nonatomic, retain) IBOutlet UILabel *tokenState;
 @property (weak, nonatomic) IBOutlet UILabel *restoreIDCount;
+
+@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, retain) UITextField *activeField;
+
+@property (nonatomic, strong) JWTTestViewController *jwtTestViewController;
+
+@property (nonatomic, strong)InEventsController *inbountTrackVC;
 
 @property int restoreEventCount;
 
@@ -74,7 +80,10 @@
 
 - (void)viewDidLoad {
     self.switchVal = true;
-    self.gridval = true;
+    self.gridFaqVal = true;
+    self.faqHelpfulVal = true;
+    self.contactUsAppbarVal = true;
+    
     [self setupSubview];
     [self.languageTranslation setHidden:YES];
     #if ENABLE_RTL_RUNTIME
@@ -84,6 +93,8 @@
     self.view.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0.95 alpha:1];
     [super viewDidLoad];
     [self configurePicker];
+    
+    self.scrollView.delegate = self;
     
     NSLog(@"~~Current User :Restore-ID  %@", [FreshchatUser sharedInstance].restoreID);
     NSLog(@"~~Current User :Identifier  %@", [FreshchatUser sharedInstance].externalID);
@@ -121,7 +132,7 @@
     }];
     [[NSNotificationCenter defaultCenter]addObserverForName:FRESHCHAT_USER_RESTORE_ID_GENERATED object:nil queue:nil usingBlock:^(NSNotification *note) {
         self.restoreEventCount = self.restoreEventCount + 1;
-        self.restoreIDCount.text = [NSString stringWithFormat:@"RE : %d",self.restoreEventCount];
+        self.restoreIDCount.text = [NSString stringWithFormat:@"RE Count : %d",self.restoreEventCount];
      }];
 
     
@@ -132,10 +143,7 @@
     self.conversationTitle.delegate = self;
     self.conversationTags.delegate = self;
     self.message.delegate = self;
-    self.jwtTextView.delegate = self;
-    self.userAliasView.delegate = self;
-    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"jwtToken"];
-    self.jwtTextView.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"jwtToken"];
+    
     self.sendMessageTag.delegate = self;
     //[[Freshchat sharedInstance] updateConversationBannerMessage:@"123"];
 
@@ -160,11 +168,57 @@
                                              selector:@selector(userActionEvent:)
                                                  name:FRESHCHAT_EVENTS
                                                object:nil];
+    [self registerForKeyboardNotifications];
+}
+
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(keyboardWasShown:)
+            name:UIKeyboardDidShowNotification object:nil];
+   [[NSNotificationCenter defaultCenter] addObserver:self
+             selector:@selector(keyboardWillBeHidden:)
+             name:UIKeyboardWillHideNotification object:nil];
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your application might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, self.activeField.frame.origin) ) {
+        CGPoint scrollPoint = CGPointMake(0.0, self.activeField.frame.origin.y-kbSize.height);
+        [self.scrollView setContentOffset:scrollPoint animated:YES];
+    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.activeField = textField;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.activeField = nil;
 }
 
 - (void) userActionEvent:(NSNotification *)notif {
-    NSLog(@"====JWT Token Status - %@ ====", [[Freshchat sharedInstance] getUserIdTokenStatus]);
-    self.tokenState.text = [[Freshchat sharedInstance] getUserIdTokenStatus];
     
     FreshchatEvent *fcEvent = notif.userInfo[@"event"];
     
@@ -201,86 +255,10 @@
     
 }
 
--(void)keyboardWillShow {
-    // Animate the current view out of the way
-    if (self.view.frame.origin.y >= 0)
-    {
-        [self setViewMovedUp:YES];
-    }
-    else if (self.view.frame.origin.y < 0)
-    {
-        [self setViewMovedUp:NO];
-    }
-}
-
-- (void)textViewDidChange:(UITextView *)textView {
-    [[NSUserDefaults standardUserDefaults] setObject:self.jwtTextView.text forKey:@"jwtToken"];
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     return YES;
-}
-
--(void)keyboardWillHide {
-    if (self.view.frame.origin.y >= 0)
-    {
-        [self setViewMovedUp:YES];
-    }
-    else if (self.view.frame.origin.y < 0)
-    {
-        [self setViewMovedUp:NO];
-    }
-}
-
--(void)textFieldDidEndEditing:(UITextField *)sender
-
-{
-    //move the main view, so that the keyboard does not hide it.
-    if  (self.view.frame.origin.y < 0)
-    {
-        [self setViewMovedUp:NO];
-    }
-}
-
-
-
--(void)textFieldDidBeginEditing:(UITextField *)sender
-{
-    if ([sender isEqual:self.faqTitleField1]||[sender isEqual:self.faqTagsField1]||[sender isEqual:self.faqContactUsTagsField1]||[sender isEqual:self.faqContactUsTitleField1])
-    {
-        //move the main view, so that the keyboard does not hide it.
-        if  (self.view.frame.origin.y >= 0)
-        {
-            [self setViewMovedUp:YES];
-        }
-    }
-}
-
-//method to move the view up/down whenever the keyboard is shown/dismissed
--(void)setViewMovedUp:(BOOL)movedUp
-{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
-    
-    CGRect rect = self.view.frame;
-    if (movedUp)
-    {
-        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
-        // 2. increase the size of the view so that the area behind the keyboard is covered up.
-        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
-        rect.size.height += kOFFSET_FOR_KEYBOARD;
-    }
-    else
-    {
-        // revert back to the normal state.
-        rect.origin.y += kOFFSET_FOR_KEYBOARD;
-        rect.size.height -= kOFFSET_FOR_KEYBOARD;
-    }
-    self.view.frame = rect;
-    
-    [UIView commitAnimations];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -296,27 +274,19 @@
     }else{
         //self.imageView.image = [UIImage imageNamed:@"background"];
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
 }
 JWTScheduler *jwtScheduler;
 
 - (IBAction)chatButtonPressed:(id)sender {
-    
      SampleController *sampleController;
+
      //SampleViewController hidden
      if(sampleController == nil) {
         UIStoryboard *sb = [UIStoryboard storyboardWithName:SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
         sampleController = [sb instantiateViewControllerWithIdentifier:SAMPLE_STORYBOARD_CONTROLLER];
     }
     [self presentViewController:sampleController animated:YES completion:nil];
+     
     /*
     
     if( jwtScheduler == nil) {
@@ -327,15 +297,23 @@ JWTScheduler *jwtScheduler;
      */
 }
 
+- (IBAction) loadJWTTestSampleView:(id)sender{
+    
+    UIStoryboard *jwtSampleView = [UIStoryboard storyboardWithName:JWT_TEST_SAMPLE_STORYBOARD_CONTROLLER bundle:nil];
+    self.jwtTestViewController = [jwtSampleView instantiateViewControllerWithIdentifier:JWT_TEST_SAMPLE_STORYBOARD_CONTROLLER];
+    self.jwtTestViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:self.jwtTestViewController animated:YES completion:nil];
+}
+
 - (IBAction)articleFilter1:(id)sender{
     NSArray *arr = [self.faqTagsField1.text componentsSeparatedByString:@","];
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
+    options.showFaqCategoriesAsGrid = self.gridFaqVal;
     options.showContactUsOnFaqScreens = self.switchVal;
-    options.showContactUsOnFaqNotHelpful = TRUE;
-    options.showContactUsOnAppBar = TRUE;
+    options.showContactUsOnFaqNotHelpful = self.faqHelpfulVal;
+    options.showContactUsOnAppBar = self.contactUsAppbarVal;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
@@ -348,10 +326,10 @@ JWTScheduler *jwtScheduler;
     NSMutableArray *contactUsTagsArray =[[NSMutableArray alloc] initWithArray:[self.faqContactUsTagsField1.text componentsSeparatedByString:@","]];
     [contactUsTagsArray removeObject:@""];
     FAQOptions *options = [FAQOptions new];
-    options.showFaqCategoriesAsGrid = self.gridval;
+    options.showFaqCategoriesAsGrid = self.gridFaqVal;
     options.showContactUsOnFaqScreens = self.switchVal;
-    options.showContactUsOnFaqNotHelpful = TRUE;
-    options.showContactUsOnAppBar = TRUE;
+    options.showContactUsOnFaqNotHelpful = self.faqHelpfulVal;
+    options.showContactUsOnAppBar = self.contactUsAppbarVal;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.faqContactUsTitleField1.text];
     }
@@ -374,9 +352,6 @@ JWTScheduler *jwtScheduler;
     }
     UIViewController *viewController = [[Freshchat sharedInstance] getConversationsControllerForEmbedWithOptions:opt];
     [self.navigationController pushViewController:viewController animated:true];
-    
-    
-    //
 }
 
 - (IBAction)channelFilter2:(id)sender{
@@ -391,27 +366,12 @@ JWTScheduler *jwtScheduler;
     if(contactUsTagsArray.count){
         [options filterContactUsByTags:contactUsTagsArray withTitle:self.convContactUsTitle.text];
     }
-    [[Freshchat sharedInstance] showConversations:self withOptions:opt];
+    [[Freshchat sharedInstance] showConversations:self];
    
 }
 
 - (IBAction)showLanguagePicker:(id)sender {
     [self presentViewController:self.pickerViewPopup animated:true completion:nil];
-}
-
-
-- (IBAction)setJWTUser:(id)sender{
-    if(self.jwtTextView.text.length == 0) {
-        return;
-    }
-    [[Freshchat sharedInstance] setUserWithIdToken:self.jwtTextView.text];
-}
-
-- (IBAction)idenfiyJWTUser:(id)sender{
-    if(self.jwtTextView.text.length == 0){
-        return;
-    }
-    [[Freshchat sharedInstance] restoreUserWithIdToken:self.jwtTextView.text];
 }
 
 - (IBAction)sendMessage:(id)sender{
@@ -429,18 +389,30 @@ JWTScheduler *jwtScheduler;
     }
 }
 
-- (IBAction) getUserAliasForJWT:(id)sender {
-    self.userAliasView.text = [[Freshchat sharedInstance] getFreshchatUserId];
-    NSLog(@"User Id is - %@", [[Freshchat sharedInstance] getFreshchatUserId]);
-    NSLog(@"User Token state - %@",[[Freshchat sharedInstance] getUserIdTokenStatus]);
-}
-
 - (IBAction)switchGridAction:(id)sender {
     
     if ([self.myGridSwitch isOn]) {
-        self.gridval = true;
+        self.gridFaqVal = true;
     } else {
-        self.gridval = false;
+        self.gridFaqVal = false;
+    }
+}
+
+- (IBAction)switchAppBarAction:(id)sender {
+    
+    if ([self.showContactUsOnAppBarSwitch isOn]) {
+        self.contactUsAppbarVal = true;
+    } else {
+        self.contactUsAppbarVal = false;
+    }
+}
+
+- (IBAction)switchFAQHelpfulAction:(id)sender {
+    
+    if ([self.faqNotHelpfulSwitch isOn]) {
+        self.faqHelpfulVal = true;
+    } else {
+        self.faqHelpfulVal = false;
     }
 }
 
@@ -528,6 +500,18 @@ JWTScheduler *jwtScheduler;
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
     int sectionWidth = 300;
     return sectionWidth;
+}
+
+- (IBAction)launchEventsView:(id) sender {
+    
+    UIStoryboard* storyboard = [UIStoryboard
+                               storyboardWithName:EVENTS_TRACK_VIEW_STORYBOARD_CONTROLLER
+                                                         bundle:nil];
+    InEventsController *inEventCtr = [storyboard instantiateViewControllerWithIdentifier:@"inEvents"];
+    inEventCtr.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:inEventCtr
+                       animated:YES
+                     completion:nil];
 }
 
 @end

@@ -53,11 +53,14 @@
 #import "FCJWTAuthValidator.h"
 #import "FCJWTUtilities.h"
 #import "FCJWTAuthValidator.h"
+#import "FCEventsManager.h"
+#import "FCEventsConstants.h"
 
 static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #define FD_IMAGE_CACHE_DURATION 60 * 60 * 24 * 365
 #define MAX_SOL_FILTER_TAGS 25
 #define FILTER_TAGS_EXCEED_MSG @"Limit exceeded - Maximum number of filter tag(s) allowed is 25."
+#define FRESHCHATSDK_NOT_INITIALIZED_MSG @"FreshchatSDK is not initialized, Please check the documentation."
 
 @interface FCNotificationBanner ()
 
@@ -202,6 +205,7 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
             [store setBoolValue:config.showNotificationBanner forKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
             [store setObject:config.themeName forKey:HOTLINE_DEFAULTS_THEME_NAME];
             [store setBoolValue:config.responseExpectationVisible forKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
+            [store setBoolValue:config.eventsUploadEnabled forKey:FRESHCHAT_DEFAULTS_EVENTS_UPLOAD_ENABLED];
             [[FCTheme sharedInstance]setThemeWithName:config.themeName];
         }
         
@@ -654,6 +658,12 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 #pragma mark - Route controllers
 
 -(void)showFAQs:(UIViewController *)controller{
+    
+    if (![FCUtilities isSDKInitialized]){ //Adding check again as its firsts check if SDK is initialized
+        ALog(FRESHCHATSDK_NOT_INITIALIZED_MSG);
+        return;
+    }
+    
     if([[FCRemoteConfig sharedInstance] isActiveFAQAndAccount]){
         [self showFAQs:controller withOptions:[FAQOptions new]];
     }
@@ -664,6 +674,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(void)showConversations:(UIViewController *)controller{
+    if (![FCUtilities isSDKInitialized]){
+        ALog(FRESHCHATSDK_NOT_INITIALIZED_MSG);
+        return;
+    }
+    
     if([[FCRemoteConfig sharedInstance] isActiveInboxAndAccount]){
         [self showConversations:controller withOptions:[ConversationOptions new]];
     }
@@ -706,6 +721,11 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(UIViewController*) getConversationsControllerForEmbedWithOptions:(ConversationOptions *) convOptions{
+    if (![FCUtilities isSDKInitialized]){
+        ALog(FRESHCHATSDK_NOT_INITIALIZED_MSG)
+        return [[FCInterstitialViewController alloc]init];;
+    }
+    
     if(convOptions.tags.count > MAX_SOL_FILTER_TAGS) {
         ALog(FILTER_TAGS_EXCEED_MSG)
         return [[FCInterstitialViewController alloc]init];
@@ -714,11 +734,44 @@ static BOOL FC_POLL_WHEN_APP_ACTIVE = NO;
 }
 
 -(UIViewController*) getFAQsControllerForEmbedWithOptions:(FAQOptions *) faqOptions{
+    if (![FCUtilities isSDKInitialized]){
+        ALog(FRESHCHATSDK_NOT_INITIALIZED_MSG)
+        return [[FCInterstitialViewController alloc]init];;
+    }
+    
     if(faqOptions.tags.count > MAX_SOL_FILTER_TAGS) {
         ALog(FILTER_TAGS_EXCEED_MSG)
         return [[FCInterstitialViewController alloc]init];
     }
+    
     return [FCControllerUtils getEmbedded:faqOptions];
+}
+
+#pragma mark InEvents
+
+- (void) trackEvent : (NSString *) name withProperties : (NSDictionary<NSString*, id> *) properties{
+    
+    if ([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && [FCJWTUtilities hasInvalidTokenState]) {
+        return;
+    }
+    if([FCStringUtil isEmptyString:name]){
+        ALog(FRESHCHAT_ERROR_EVENT_NAME_EMPTY);
+        return;
+    }
+    if(![FCEventsHelper hasValidEventNameLength:name]){
+        ALog(FRESHCHAT_ERROR_EVENT_NAME_EXCEEDS_LIMIT, [FCRemoteConfig sharedInstance].eventsConfig.maxCharsPerEventName, [name substringToIndex: [FCRemoteConfig sharedInstance].eventsConfig.maxCharsPerEventName]);
+        return;
+    }
+    
+    BOOL canUploadEvents = [[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_EVENTS_UPLOAD_ENABLED];
+    if(canUploadEvents && [FCEventsHelper canUploadEventWithCount]) {
+        NSDictionary *validatedProperties = [FCEventsHelper getValidatedEventsProps : properties];
+        NSMutableDictionary *event = [NSMutableDictionary new];
+        [event setValue:name forKey:@"eventName"];
+        [event setObject:validatedProperties forKey:@"properties"];
+        [event setValue:@([FCUtilities getCurrentTimeInMillis]) forKey:@"occTime"];
+        [[FCEventsManager sharedInstance] submitSDKEventWithInfo:event];
+    }
 }
 
 #pragma mark Push notifications
@@ -852,6 +905,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     config.cameraCaptureEnabled = [store boolValueForKey:HOTLINE_DEFAULTS_CAMERA_CAPTURE_ENABLED];
     config.showNotificationBanner = [store boolValueForKey:HOTLINE_DEFAULTS_SHOW_NOTIFICATION_BANNER];
     config.responseExpectationVisible = [store boolValueForKey:FRESHCHAT_DEFAULTS_RESPONSE_EXPECTATION_VISIBLE];
+    config.eventsUploadEnabled = [store boolValueForKey:FRESHCHAT_DEFAULTS_EVENTS_UPLOAD_ENABLED];
     if([store objectForKey:HOTLINE_DEFAULTS_THEME_NAME]){
         config.themeName = [store objectForKey:HOTLINE_DEFAULTS_THEME_NAME];
     } else {
@@ -911,6 +965,7 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
 
 -(void)resetUserWithCompletion:(void (^)())completion{
     [self resetUserWithCompletion:completion init:true andOldUser:nil];
+    [[FCEventsManager sharedInstance] reset];
 }
 
 -(void)unreadCountWithCompletion:(void (^)(NSInteger count))completion{

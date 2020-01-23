@@ -34,6 +34,7 @@
 +(void) removeUUIDWithAppID:(NSString *)appID;
 +(void) removeUUID;
 +(void) resetAlias;
++ (BOOL) isSDKInitialized;
 +(NSString *)getUserAliasWithCreate;
 +(NSString *)generateUserAlias;
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion;
@@ -104,6 +105,8 @@
 + (NSArray *) getResolvedMsgTypes;
 + (NSArray *) getReopenedMsgTypes;
 + (NSArray *) getResolvedReopenedMsgTypes;
+
++ (BOOL) isTodaySameAsDate : (NSDate *) date;
 
 @end
 

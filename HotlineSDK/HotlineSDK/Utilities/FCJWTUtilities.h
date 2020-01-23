@@ -45,5 +45,9 @@
 
 + (BOOL) isJWTTokenInvalid;
 
++ (BOOL) hasInvalidTokenState;
+
++ (BOOL) hasValidTokenState;
+
 @end
 

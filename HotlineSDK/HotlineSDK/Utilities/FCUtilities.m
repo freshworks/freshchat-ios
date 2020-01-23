@@ -32,6 +32,7 @@
 #import "FCFAQUtil.h"
 #import "FCChannelUtil.h"
 #import "FDThemeConstants.h"
+#import "FCEventsManager.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -43,7 +44,6 @@
 
 #pragma mark - General Utitlites
 
-static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
 
 +(NSBundle *)frameworkBundle {
     static NSBundle* frameworkBundle = nil;
@@ -73,6 +73,14 @@ static bool IS_USER_REGISTRATION_IN_PROGRESS = NO;
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
+}
+
++ (BOOL) isSDKInitialized {
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    if([store objectForKey:HOTLINE_DEFAULTS_APP_ID] && [store objectForKey:HOTLINE_DEFAULTS_APP_KEY] ){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 +(NSString *) getTracker{
@@ -449,24 +457,28 @@ static NSInteger networkIndicator = 0;
     [FCUserDefaults removeObjectForKey:CONFIG_RC_LAST_RESPONSE_TIME_EXPECTATION_FETCH_INTERVAL];
 }
 
-+(BOOL) canMakeDAUCall {
++ (BOOL) isTodaySameAsDate : (NSDate *) date {
     NSDate *currentdate = [NSDate date];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
+    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:date];
+    NSComparisonResult result;
+    result = [currentdate compare:date];
+    if(result == NSOrderedDescending){//date comparision, current should be greater than
+        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+            return false;
+        }
+    }
+    return true;
+}
+
++(BOOL) canMakeDAUCall {
     NSDate *lastFetchDate = [[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
     if(!lastFetchDate){
         return true;
     }
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-    NSDateComponents* currentComp = [calendar components:unitFlags fromDate:currentdate];
-    NSDateComponents* lastFetchComp = [calendar components:unitFlags fromDate:lastFetchDate];
-    NSComparisonResult result;
-    result = [currentdate compare:lastFetchDate];
-    if(result == NSOrderedDescending){//date comparision, current should be greater than
-        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
-            return true;
-        }
-    }
-    return false;
+    return ![self isTodaySameAsDate:lastFetchDate];
 }
 
 +(BOOL) containsHTMLContent: (NSString *)content {
@@ -620,10 +632,13 @@ static NSInteger networkIndicator = 0;
       @"iPhone10,5":   @"iPhone 8 Plus",
       @"iPhone10,3":   @"iPhone X",
       @"iPhone10,6":   @"iPhone X",
-      @"iPhone11,2":   @"iPhoneXs",
-      @"iPhone11,4":   @"iPhoneXsMax",
-      @"iPhone11,6":   @"iPhoneXsMax",
-      @"iPhone11,8":   @"iPhoneXr",
+      @"iPhone11,2":   @"iPhone XS",
+      @"iPhone11,4":   @"iPhone XS Max",
+      @"iPhone11,6":   @"iPhone XS Max",
+      @"iPhone11,8":   @"iPhone XR",
+      @"iPhone12,1":   @"iPhone 11",
+      @"iPhone12,3":   @"iPhone 11 Pro",
+      @"iPhone12,5":   @"iPhone 11 Pro Max",
       
       @"iPad1,1":  @"iPad",
       @"iPad2,1":  @"iPad 2(WiFi)",
@@ -656,10 +671,28 @@ static NSInteger networkIndicator = 0;
       @"iPad6,8":  @"iPad Pro (12.9 inch)",
       @"iPad6,3":  @"iPad Pro (9.7 inch)",
       @"iPad6,4":  @"iPad Pro (9.7 inch)",
+      @"iPad6,11": @"iPad (2017)",
+      @"iPad6,12": @"iPad (2017)",
       @"iPad7,1":  @"iPad Pro 12.9 Inch 2. Generation",
       @"iPad7,2":  @"iPad Pro 12.9 Inch 2. Generation",
       @"iPad7,3":  @"iPad Pro 10.5 Inch",
       @"iPad7,4":  @"iPad Pro 10.5 Inch",
+      @"iPad7,5":  @"iPad 6th Gen (WiFi)",
+      @"iPad7,6":  @"iPad 6th Gen (WiFi+Cellular)",
+      @"iPad7,11": @"iPad 7th Gen 10.2-inch (WiFi)",
+      @"iPad7,12": @"iPad 7th Gen 10.2-inch (WiFi+Cellular)",
+      @"iPad8,1":  @"iPad Pro 3rd Gen (11 inch, WiFi)",
+      @"iPad8,2":  @"iPad Pro 3rd Gen (11 inch, 1TB, WiFi)",
+      @"iPad8,3":  @"iPad Pro 3rd Gen (11 inch, WiFi+Cellular)",
+      @"iPad8,4":  @"iPad Pro 3rd Gen (11 inch, 1TB, WiFi+Cellular)",
+      @"iPad8,5":  @"iPad Pro 3rd Gen (12.9 inch, WiFi)",
+      @"iPad8,6":  @"iPad Pro 3rd Gen (12.9 inch, 1TB, WiFi)",
+      @"iPad8,7":  @"iPad Pro 3rd Gen (12.9 inch, WiFi+Cellular)",
+      @"iPad8,8":  @"iPad Pro 3rd Gen (12.9 inch, 1TB, WiFi+Cellular)",
+      @"iPad11,1": @"iPad mini 5th Gen (WiFi)",
+      @"iPad11,2": @"iPad mini 5th Gen",
+      @"iPad11,3": @"iPad Air 3rd Gen (WiFi)",
+      @"iPad11,4": @"iPad Air 3rd Gen",
       
       @"iPod1,1":  @"iPod 1st Gen",
       @"iPod2,1":  @"iPod 2nd Gen",
@@ -667,7 +700,7 @@ static NSInteger networkIndicator = 0;
       @"iPod4,1":  @"iPod 4th Gen",
       @"iPod5,1":  @"iPod 5th Gen",
       @"iPod7,1":  @"iPod 6th Gen",
-      
+      @"iPod9,1":  @"iPod 7th Gen",
       };
     NSString *deviceName = commonNamesDictionary[machineName];
     if (!deviceName) { deviceName = machineName; }
@@ -703,6 +736,7 @@ static NSInteger networkIndicator = 0;
 
 +(void) resetDataAndRestoreWithExternalID: (NSString *) externalID withRestoreID: (NSString *)restoreID withCompletion:(void (^)())completion {
     [FCCoreServices resetUserData:^{
+        [[FCEventsManager sharedInstance] reset];
         [[FCSecureStore sharedInstance] setBoolValue:NO forKey:HOTLINE_DEFAULTS_IS_USER_REGISTERED];
         [FCUserDefaults removeObjectForKey:HOTLINE_DEFAULTS_IS_MESSAGE_SENT];        
         FreshchatUser* oldUser = [FreshchatUser sharedInstance];

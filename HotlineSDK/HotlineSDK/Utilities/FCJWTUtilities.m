@@ -197,8 +197,15 @@
 }
 
 + (BOOL) isJWTTokenInvalid {
-    return ([[FCRemoteConfig sharedInstance] isUserAuthEnabled]
-            && !([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_VALID)) ? TRUE : FALSE;
+    return ([[FCRemoteConfig sharedInstance] isUserAuthEnabled] && ![self hasValidTokenState]) ? TRUE : FALSE;
+}
+
++ (BOOL) hasInvalidTokenState {
+    return ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_INVALID);
+}
+
++ (BOOL) hasValidTokenState {
+    return ([[FCJWTAuthValidator sharedInstance] getDefaultJWTState] == TOKEN_VALID);
 }
 
 + (BOOL) compareAlias:(NSString *)str1 str2:(NSString *)str2 {

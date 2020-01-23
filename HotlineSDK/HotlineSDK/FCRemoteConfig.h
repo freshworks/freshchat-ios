@@ -15,6 +15,7 @@
 #import "FCUserDefaults.h"
 #import "FCMessageMaskConfig.h"
 #import "FCUserAuthConfig.h"
+#import "FCEventsConfig.h"
 
 @interface FCRemoteConfig : NSObject
 
@@ -33,6 +34,7 @@
 @property (nonatomic, strong) FCUnsupportedFragmentErrorMsgs *unsupportedFragErrMsg;
 @property (nonatomic, strong) FCMessageMaskConfig *messageMaskConfig;
 @property (nonatomic, strong) FCUserAuthConfig *userAuthConfig;
+@property (nonatomic, strong) FCEventsConfig *eventsConfig;
 
 - (void) updateRemoteConfig : (NSDictionary *) configDict;
 

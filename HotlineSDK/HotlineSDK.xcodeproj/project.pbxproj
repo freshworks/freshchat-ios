@@ -21,6 +21,11 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		024529482386E62C0018FC38 /* FCEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 024529472386E62C0018FC38 /* FCEventsConstants.h */; };
+		02C480B62377E07700EDADB2 /* FCEventsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C480B42377E07700EDADB2 /* FCEventsManager.h */; };
+		02C480B72377E07700EDADB2 /* FCEventsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C480B52377E07700EDADB2 /* FCEventsManager.m */; };
+		02C480BA2377E27200EDADB2 /* FCEventsConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C480B82377E27200EDADB2 /* FCEventsConfig.h */; };
+		02C480BB2377E27200EDADB2 /* FCEventsConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C480B92377E27200EDADB2 /* FCEventsConfig.m */; };
 		354F26C61D0AED2F00DCD158 /* FCKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 354F26C51D0AED2F00DCD158 /* FCKeyChainStore.m */; };
 		356727E01D216842007ECF89 /* FCLocalNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 356727DF1D216842007ECF89 /* FCLocalNotification.m */; };
 		35B2EF871D000E620014867F /* FCContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B2EECE1D000E620014867F /* FCContainerController.m */; };
@@ -204,6 +209,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		024529472386E62C0018FC38 /* FCEventsConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCEventsConstants.h; sourceTree = "<group>"; };
+		02C480B42377E07700EDADB2 /* FCEventsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCEventsManager.h; sourceTree = "<group>"; };
+		02C480B52377E07700EDADB2 /* FCEventsManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCEventsManager.m; sourceTree = "<group>"; };
+		02C480B82377E27200EDADB2 /* FCEventsConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCEventsConfig.h; sourceTree = "<group>"; };
+		02C480B92377E27200EDADB2 /* FCEventsConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCEventsConfig.m; sourceTree = "<group>"; };
 		354F26C41D0AED2F00DCD158 /* FCKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCKeyChainStore.h; sourceTree = "<group>"; };
 		354F26C51D0AED2F00DCD158 /* FCKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCKeyChainStore.m; sourceTree = "<group>"; };
 		35591AB11B9ED58100BC0B60 /* libFreshchatSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFreshchatSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -599,6 +609,8 @@
 				EA16778B22F0333A00E3C46E /* FCEventsHelper.m */,
 				EACA6D1D22F04027000F1AC9 /* FCOutboundEvent.h */,
 				EACA6D1E22F04028000F1AC9 /* FCOutboundEvent.m */,
+				02C480B42377E07700EDADB2 /* FCEventsManager.h */,
+				02C480B52377E07700EDADB2 /* FCEventsManager.m */,
 				35B2EEDE1D000E620014867F /* FCMessageHelper.h */,
 				35B2EEDF1D000E620014867F /* FCMessageHelper.m */,
 				35B2EEDD1D000E620014867F /* FreshchatUser.m */,
@@ -609,6 +621,8 @@
 				CE982B861F262D5B00B87A66 /* FCRefreshIntervals.m */,
 				CE982B881F2728B900B87A66 /* FCRemoteConfig.h */,
 				CE982B891F2728B900B87A66 /* FCRemoteConfig.m */,
+				02C480B82377E27200EDADB2 /* FCEventsConfig.h */,
+				02C480B92377E27200EDADB2 /* FCEventsConfig.m */,
 				EA80219820D99CCD00412B5A /* FCCSatSettings.h */,
 				EA80219920D99CCD00412B5A /* FCCSatSettings.m */,
 				EA7B897B2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h */,
@@ -749,6 +763,7 @@
 				35B2EED71D000E620014867F /* FCNotificationHandler.h */,
 				35B2EED81D000E620014867F /* FCNotificationHandler.m */,
 				CE0C7C6C1D9539A100F545AE /* FCPlistManager.h */,
+				024529472386E62C0018FC38 /* FCEventsConstants.h */,
 				EAD751E420EF9B44003DE477 /* FCLocaleConstants.h */,
 				CE0C7C6D1D9539A100F545AE /* FCPlistManager.m */,
 				35B2EF2B1D000E620014867F /* FCAutolayoutHelper.h */,
@@ -1099,9 +1114,12 @@
 				EA7B897D2187AAA300447052 /* FCUnsupportedFragmentErrorMsgs.h in Headers */,
 				EA035F1620D9515800165D00 /* FCAttributedText.h in Headers */,
 				C3D291A0230D79540034B27E /* FCReplyFlowLayout.h in Headers */,
+				02C480B62377E07700EDADB2 /* FCEventsManager.h in Headers */,
 				EA104804213F247700122843 /* FCUnsupportedFragment.h in Headers */,
 				EA80219A20D99CCD00412B5A /* FCCSatSettings.h in Headers */,
+				02C480BA2377E27200EDADB2 /* FCEventsConfig.h in Headers */,
 				EA306AA521B7C96B005211E4 /* FCMessageMaskConfig.h in Headers */,
+				024529482386E62C0018FC38 /* FCEventsConstants.h in Headers */,
 				EA6EB25E21070D4400411D5F /* FCCSATUtil.h in Headers */,
 				EAD751E520EF9B44003DE477 /* FCLocaleConstants.h in Headers */,
 				EAB07907216B696B00B701C9 /* FCUserAuthConfig.h in Headers */,
@@ -1169,6 +1187,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				ar,
 			);
@@ -1278,6 +1297,7 @@
 				35B2EF8E1D000E620014867F /* FreshchatConfig.m in Sources */,
 				CE8C7A7A1F6C216B00E77494 /* NSImage+WebCache.m in Sources */,
 				CE8C7A861F6C216B00E77494 /* UIImageView+WebCache.m in Sources */,
+				02C480BB2377E27200EDADB2 /* FCEventsConfig.m in Sources */,
 				C3D2919D230D43F10034B27E /* FCReplyCollectionCell.m in Sources */,
 				354F26C61D0AED2F00DCD158 /* FCKeyChainStore.m in Sources */,
 				3CADFA301E25B20D00829E7F /* FCCategoryViewBehaviour.m in Sources */,
@@ -1339,6 +1359,7 @@
 				35B2EFBC1D000E620014867F /* FCCell.m in Sources */,
 				CE95B57A1F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld in Sources */,
 				35B2EFB21D000E620014867F /* FCUtilities.m in Sources */,
+				02C480B72377E07700EDADB2 /* FCEventsManager.m in Sources */,
 				CEFA055C1EE82F2000DC74CF /* FCVideoFragment.m in Sources */,
 				35B2EFAB1D000E620014867F /* FCDateUtil.m in Sources */,
 				CE982B871F262D5B00B87A66 /* FCRefreshIntervals.m in Sources */,

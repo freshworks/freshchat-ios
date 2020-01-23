@@ -98,6 +98,10 @@
     return ([propertyPatternPredicate evaluateWithObject:name]) ? YES : NO;
 }
 
++(NSString *) getStringValue : (NSObject *) object {
+    return [NSString stringWithFormat:@"%@", object];
+}
+
 +(BOOL) checkRegexPattern:(NSString *)regexStr inString:(NSString *)string{
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexStr

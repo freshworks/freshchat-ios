@@ -20,6 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSDictionary *) getEventsDict;
 
++ (NSDictionary *) getValidatedEventsProps : (NSDictionary *) properties;
+
++ (void) removeEventsIdentifier;
+
++ (BOOL) canUploadEventWithCount;
+
++ (BOOL) hasValidEventNameLength: (NSString *) key;
+
 @end
 
 NS_ASSUME_NONNULL_END
