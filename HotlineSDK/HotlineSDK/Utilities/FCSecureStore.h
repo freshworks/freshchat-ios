@@ -63,6 +63,7 @@
 #define FC_CONVERSATIONS_LAST_REQUESTED_TIME @"freshchat_defaults_conversations_last_updated_itv_time"
 
 #define HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME @"hotline_defaults_dau_last_updated_time"
+#define HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER @"hotline_defaults_dau_last_updated_time_unknown_user"
 
 //Events last recorded time with daily counter
 #define FRESHCHAT_DEFAULTS_EVENTS_LAST_RECORDED_TIME @"freshchat_defaults_events_last_recorded_time"

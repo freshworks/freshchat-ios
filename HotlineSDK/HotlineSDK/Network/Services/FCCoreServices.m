@@ -374,6 +374,10 @@
 
 +(NSURLSessionDataTask *)performDAUCall{
     if([FCUtilities canMakeDAUCall]){
+        BOOL isUserRegistered = [FCUserUtil isUserRegistered];
+        if (!isUserRegistered) {
+            [[FCSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER];
+        }
         [[FCSecureStore sharedInstance] setObject:[NSDate date] forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
         FCSecureStore *store = [FCSecureStore sharedInstance];
         NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
@@ -394,12 +398,18 @@
                     FDLog(@"Could not make DAU call %@", error);
                     FDLog(@"Response : %@", responseInfo.response);
                     [[FCSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
+                    if (!isUserRegistered) {
+                        [[FCSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER];
+                    }
                 }
             }];
             
             return task;
         }
         @catch (NSException *exception) {
+            if (!isUserRegistered) {
+                [[FCSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER];
+            }
             [[FCSecureStore sharedInstance] removeObjectWithKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
             FDLog(@"Activity request failed due to an error %@", exception.description);
         }

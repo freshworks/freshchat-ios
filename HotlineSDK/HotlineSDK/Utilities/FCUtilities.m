@@ -33,6 +33,7 @@
 #import "FCChannelUtil.h"
 #import "FDThemeConstants.h"
 #import "FCEventsManager.h"
+#import "FCUserUtil.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -458,6 +459,10 @@ static NSInteger networkIndicator = 0;
 }
 
 + (BOOL) isTodaySameAsDate : (NSDate *) date {
+    return [FCUtilities isSameDate:date excludeDay:false];
+}
+
++ (BOOL) isSameDate : (NSDate *) date excludeDay : (BOOL) excludeDay{
     NSDate *currentdate = [NSDate date];
     NSCalendar* calendar = [NSCalendar currentCalendar];
     unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
@@ -466,7 +471,7 @@ static NSInteger networkIndicator = 0;
     NSComparisonResult result;
     result = [currentdate compare:date];
     if(result == NSOrderedDescending){//date comparision, current should be greater than
-        if (!([currentComp day] == [lastFetchComp day] && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
+        if (!(([currentComp day] == [lastFetchComp day] || excludeDay) && [currentComp month] == [lastFetchComp month] && [currentComp year]  == [lastFetchComp year])){
             return false;
         }
     }
@@ -474,11 +479,19 @@ static NSInteger networkIndicator = 0;
 }
 
 +(BOOL) canMakeDAUCall {
-    NSDate *lastFetchDate = [[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
-    if(!lastFetchDate){
-        return true;
+    FCSecureStore* store = [FCSecureStore sharedInstance];
+    if ([FCUserUtil isUserRegistered]) {
+        NSDate *lastFetchDate = [store objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME];
+        if(lastFetchDate){
+            return ![self isTodaySameAsDate:lastFetchDate];
+        }
+    } else {
+        NSDate *lastFetchDateForNonRegisteredUser = [store objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER];
+        if(lastFetchDateForNonRegisteredUser){
+            return ![FCUtilities isSameDate:lastFetchDateForNonRegisteredUser excludeDay:true];
+        }
     }
-    return ![self isTodaySameAsDate:lastFetchDate];
+    return true;
 }
 
 +(BOOL) containsHTMLContent: (NSString *)content {
