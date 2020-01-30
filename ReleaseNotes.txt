@@ -1,4 +1,9 @@
 
+Ver 3.2.0 
+__________________________
+Enhancement:
+- Introducing changes in MUV calculation to take care of cases where customer's SDK implementation is not optimised. This would bring down the unique visitors count.
+
 Ver 3.1.0 
 __________________________
 Feature :
