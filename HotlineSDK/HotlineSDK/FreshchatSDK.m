@@ -929,8 +929,12 @@ static BOOL CLEAR_DATA_IN_PROGRESS = NO;
     [[FreshchatUser sharedInstance]resetUser]; // This clear Sercure Store data as well.
     
     //Clear secure store
+    NSDate *lastFetchDateForNonRegisteredUser = [[FCSecureStore sharedInstance] objectForKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER];
     [[FCSecureStore sharedInstance]clearStoreData];
     [[FCSecureStore persistedStoreInstance]clearStoreData];
+    if(lastFetchDateForNonRegisteredUser){
+        [[FCSecureStore sharedInstance] setObject:lastFetchDateForNonRegisteredUser forKey:HOTLINE_DEFAULTS_DAU_LAST_UPDATED_TIME_UNKNOWN_USER];
+    }
     [[FCVotingManager sharedInstance].votedArticlesDictionary removeAllObjects];
     [FCUserDefaults clearUserDefaults];
     [store setBoolValue:isAccountDeleted forKey:FRESHCHAT_DEFAULTS_IS_ACCOUNT_DELETED];
