@@ -1,4 +1,9 @@
 
+Ver 3.2.1 
+__________________________
+Bug Fix :
+- Fixed handling non-string type properties in user events
+
 Ver 3.2.0 
 __________________________
 Enhancement:
