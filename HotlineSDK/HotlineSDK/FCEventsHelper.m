@@ -100,11 +100,11 @@
             newProps[FRESHCHAT_INVALID_PROPERTY] = [NSString stringWithFormat:FRESHCHAT_ERROR_PROPERTY_NAME_EXCEEDS_LIMIT,
                                                    [key substringToIndex: [FCRemoteConfig sharedInstance].eventsConfig.maxCharsPerEventPropertyName]];
         }
-        else if ([FCStringUtil isEmptyString:properties[key]]) {
-            newProps[FRESHCHAT_INVALID_PROPERTY] = [NSString stringWithFormat:FRESHCHAT_ERROR_PROPERTY_VALUE_EMPTY,key];
-        }
         else if (![self hasValidKeyValueType:properties[key]]){
             newProps[FRESHCHAT_INVALID_PROPERTY] = [NSString stringWithFormat:FRESHCHAT_ERROR_PROPERTY_VALUE_UNSUPPORTED, key];
+        }
+        else if ([FCStringUtil isEmptyString:[NSString stringWithFormat:@"%@", properties[key]]]) {
+            newProps[FRESHCHAT_INVALID_PROPERTY] = [NSString stringWithFormat:FRESHCHAT_ERROR_PROPERTY_VALUE_EMPTY,key];
         }
         else if (![self hasValidPropertyKeyValueLength:properties[key]]){
             newProps[FRESHCHAT_INVALID_PROPERTY] = [NSString stringWithFormat:FRESHCHAT_ERROR_PROPERTY_VALUE_EXCEEDS_LIMIT, key];
@@ -126,6 +126,7 @@
 }
 
 +(BOOL) hasValidPropertyKeyValueLength: (NSObject *) keyValue {
+    keyValue = [NSString stringWithFormat:@"%@", keyValue];
     return (( trimString([FCStringUtil getStringValue : keyValue]).length > 0)
             && (([FCStringUtil getStringValue : keyValue].length) <= [FCRemoteConfig sharedInstance].eventsConfig.maxCharsPerEventPropertyValue));
 }
