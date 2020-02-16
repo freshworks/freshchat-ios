@@ -22,7 +22,7 @@ end
 
 
 ## Documentation
-[Integration Guide](https://support.freshchat.com/support/solutions/articles/232945-freshchat-ios-sdk-integration) 
+[Integration Guide](https://support.freshchat.com/support/solutions/articles/50000000048-freshchat-ios-sdk-integration-steps) 
 
 [API docs](http://cocoadocs.org/docsets/FreshchatSDK)
 
