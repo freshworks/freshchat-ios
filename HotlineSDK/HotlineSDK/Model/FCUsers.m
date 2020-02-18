@@ -94,18 +94,19 @@
 +(FCUsers *)getUser{
     FCUsers *user = nil;
     NSManagedObjectContext *context = [[FCDataManager sharedInstance]mainObjectContext];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_USERS_ENTITY];
-    __block NSMutableArray *matches = [[NSMutableArray alloc] init];
-    [context performBlockAndWait:^{
-        NSArray *tempMatches = [context executeFetchRequest:fetchRequest error:nil];
-        matches = [tempMatches mutableCopy];
-    }];
-    if (matches.count == 1) {
-        user = matches.firstObject;
-    }
-    if (matches.count > 1) {
-        user = nil;
-        FDLog(@"Attention! Duplicates found in users table !");
+    @try {
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:HOTLINE_USERS_ENTITY];
+        NSArray *matches             = [context executeFetchRequest:fetchRequest error:nil];
+        if (matches.count == 1) {
+            user = matches.firstObject;
+        }
+        if (matches.count > 1) {
+            user = nil;
+            FDLog(@"Attention! Duplicates found in users table !");
+        }
+    } @catch (NSException *exception) {
+        NSString *exceptionDesc = [NSString stringWithFormat:@"COREDATA_EXCEPTION: %@", exception.description];
+        FDLog(@"Error in retrieving properties from table : %@ %@", HOTLINE_USERS_ENTITY, exceptionDesc);
     }
     return user;
 }

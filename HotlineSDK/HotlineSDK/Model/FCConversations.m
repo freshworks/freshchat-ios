@@ -35,31 +35,36 @@
 
 +(FCConversations *) RetriveConversationForConversationId: (NSString *)conversationId{
     NSError *pError;
+    FCConversations *conversation = nil;
     NSManagedObjectContext *context = [[FCDataManager sharedInstance]mainObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:FRESHCHAT_CONVERSATIONS_ENTITY inManagedObjectContext:context];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
-    [request setEntity:entityDescription];
-    
-    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"conversationAlias == %@",conversationId];
-    
-    [request setPredicate:predicate];
-    
-    NSArray *array = [context executeFetchRequest:request error:&pError];
-    
-    if([array count]==0) return nil;
-    
-    if([array count] >1){
-        FDLog(@"%@", @"Multiple conversations stored with the same ID");
-    }
-    
-    else if([array count]==1){
-        FCConversations *conversation = [array objectAtIndex:0];
-        if(conversation){
-            return conversation;
+    @try {
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:FRESHCHAT_CONVERSATIONS_ENTITY inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        
+        [request setEntity:entityDescription];
+        
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"conversationAlias == %@",conversationId];
+        
+        [request setPredicate:predicate];
+        
+        NSArray *array = [context executeFetchRequest:request error:&pError];
+        if(!pError){
+            if([array count]==0) return nil;
+            
+            if([array count] >1){
+                FDLog(@"%@", @"Multiple conversations stored with the same ID");
+            } else if([array count]==1){
+                conversation = [array objectAtIndex:0];
+            }
         }
+        else {
+            FDLog(@"Failed to fetch conversation %@",pError);
+        }
+    } @catch (NSException *exception) {
+        NSString *exceptionDesc = [NSString stringWithFormat:@"COREDATA_EXCEPTION: %@", exception.description];
+        FDLog(@"Error in retrieving properties from table : %@ %@", FRESHCHAT_CONVERSATIONS_ENTITY, exceptionDesc);
     }
-    return nil;
+    return conversation;
 }
 
 -(KonotorConversationData *) ReturnConversationDataFromManagedObject

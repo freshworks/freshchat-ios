@@ -43,6 +43,7 @@
     NSManagedObjectContext *context = [FCDataManager sharedInstance].mainObjectContext;
     [context performBlock:^{
         FCConversations *conversation = [FCConversations RetriveConversationForConversationId:csat.belongToConversation.conversationAlias];
+        if (conversation == nil) return ;
         @try {
             conversation.hasPendingCsat = @0;
             [context deleteObject:csat];

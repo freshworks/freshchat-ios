@@ -1505,7 +1505,7 @@ typedef struct {
 }
 
 -(void)updateBottomViewAfterCSATSubmisssion{
-    if (!self.isOneWayChannel) {
+    if ((!self.isOneWayChannel) && self.inputToolbar != nil) {
         [self updateBottomViewWith:self.inputToolbar andHeight:INPUT_TOOLBAR_HEIGHT];
     }else{
         [self cleanupBottomView];

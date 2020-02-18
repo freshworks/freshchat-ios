@@ -403,7 +403,6 @@
 }
 
 -(void)updateBottomViewWith:(FCPromptView *)view{
-    FDLog(@"Show View Called");
     [[self.bottomView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     [self.bottomView addSubview:view];

@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NSPersistentStoreCoordinator *psc;
 @property (nonatomic, strong) NSPersistentStore *persistentStore;
 @property (nonatomic, strong) NSManagedObjectModel *objectModel;
-@property (nonatomic, strong) FCMemLogger *logger;
+@property (atomic, strong) FCMemLogger *logger;
 
 @end
 
@@ -139,9 +139,10 @@
 
 -(void)preparePSC{
     NSURL *SQLiteURL = [self konotorSQLiteURL];
-    BOOL requiresMigration = [self isMigrationRequired:self.psc storeURL:SQLiteURL];
+    
     self.psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self loadKonotorDataModel]];
     
+    BOOL requiresMigration = [self isMigrationRequired:self.psc storeURL:SQLiteURL];
     self.persistentStore = [self linkPSC:self.psc URL:SQLiteURL mode:[self configWithJournalWALMode]
                                              errorInfo:@{@"FAILURE_POINT" : @"Link PSC with Journal-WAL mode failed"}];
     
