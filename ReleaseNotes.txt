@@ -1,4 +1,9 @@
 
+Ver 3.2.2 
+__________________________
+Bug fix :
+- Coredata improvements.
+
 Ver 3.2.1 
 __________________________
 Bug Fix :
