@@ -112,6 +112,10 @@
 		950A3F85216742990000754E /* FCJWTAuthValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 950A3F84216742990000754E /* FCJWTAuthValidator.m */; };
 		951A3CD321996DF90096E816 /* FCJWTViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 951A3CD121996DF90096E816 /* FCJWTViewController.h */; };
 		951A3CD421996DF90096E816 /* FCJWTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 951A3CD221996DF90096E816 /* FCJWTViewController.m */; };
+		95B580F4240E775000740BDD /* FCBaseMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B580F3240E775000740BDD /* FCBaseMessageModel.m */; };
+		95B580F8240E779200740BDD /* FCHybridMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B580F7240E779200740BDD /* FCHybridMessageModel.m */; };
+		95B58100240E781100740BDD /* FCBaseMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B580FF240E781100740BDD /* FCBaseMessageController.m */; };
+		95B58103240E782C00740BDD /* FCHybridMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B58102240E782C00740BDD /* FCHybridMessageController.m */; };
 		95EBEDF721A7FF390087F6D4 /* FCChannelUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 95EBEDF521A7FF390087F6D4 /* FCChannelUtil.h */; };
 		95EBEDF821A7FF390087F6D4 /* FCChannelUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 95EBEDF621A7FF390087F6D4 /* FCChannelUtil.m */; };
 		C3D2919C230D43F10034B27E /* FCReplyCollectionCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C3D2919A230D43F10034B27E /* FCReplyCollectionCell.h */; };
@@ -391,6 +395,18 @@
 		950A3F86216744F40000754E /* FCJWTAuthValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCJWTAuthValidator.h; sourceTree = "<group>"; };
 		951A3CD121996DF90096E816 /* FCJWTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCJWTViewController.h; sourceTree = "<group>"; };
 		951A3CD221996DF90096E816 /* FCJWTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCJWTViewController.m; sourceTree = "<group>"; };
+		95B580F3240E775000740BDD /* FCBaseMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCBaseMessageModel.m; sourceTree = "<group>"; };
+		95B580F5240E776900740BDD /* FCBaseMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageModel.h; sourceTree = "<group>"; };
+		95B580F6240E778700740BDD /* FCHybridMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageModel.h; sourceTree = "<group>"; };
+		95B580F7240E779200740BDD /* FCHybridMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCHybridMessageModel.m; sourceTree = "<group>"; };
+		95B580FB240E77C200740BDD /* FCBaseMessageControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageControllerProtocol.h; sourceTree = "<group>"; };
+		95B580FC240E77D600740BDD /* FCHybridMessageControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageControllerProtocol.h; sourceTree = "<group>"; };
+		95B580FF240E781100740BDD /* FCBaseMessageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCBaseMessageController.m; sourceTree = "<group>"; };
+		95B58101240E781800740BDD /* FCBaseMessageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageController.h; sourceTree = "<group>"; };
+		95B58102240E782C00740BDD /* FCHybridMessageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCHybridMessageController.m; sourceTree = "<group>"; };
+		95B58104240E784600740BDD /* FCHybridMessageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageController.h; sourceTree = "<group>"; };
+		95B58105240E7A8100740BDD /* FCBaseMessageModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageModelProtocol.h; sourceTree = "<group>"; };
+		95B58106240E7A8F00740BDD /* FCHybridMessageModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageModelProtocol.h; sourceTree = "<group>"; };
 		95DEF8B520E39B8B00422D58 /* FCProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCProtocols.h; sourceTree = "<group>"; };
 		95EBEDF521A7FF390087F6D4 /* FCChannelUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCChannelUtil.h; sourceTree = "<group>"; };
 		95EBEDF621A7FF390087F6D4 /* FCChannelUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCChannelUtil.m; sourceTree = "<group>"; };
@@ -601,6 +617,7 @@
 		35B2EEBB1D000E620014867F /* HotlineSDK */ = {
 			isa = PBXGroup;
 			children = (
+				95B580EF240E768C00740BDD /* Messaging */,
 				950A3F83216740BE0000754E /* JWTProxy */,
 				35B2EED91D000E620014867F /* FreshchatSDK.h */,
 				35B2EEDA1D000E620014867F /* FreshchatSDK.m */,
@@ -1006,6 +1023,49 @@
 			path = JWTProxy;
 			sourceTree = "<group>";
 		};
+		95B580EF240E768C00740BDD /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				95B580F2240E76B200740BDD /* Model */,
+				95B580F1240E76A900740BDD /* Protocol */,
+				95B580F0240E76A000740BDD /* Controller */,
+			);
+			path = Messaging;
+			sourceTree = "<group>";
+		};
+		95B580F0240E76A000740BDD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				95B580FF240E781100740BDD /* FCBaseMessageController.m */,
+				95B58101240E781800740BDD /* FCBaseMessageController.h */,
+				95B58102240E782C00740BDD /* FCHybridMessageController.m */,
+				95B58104240E784600740BDD /* FCHybridMessageController.h */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		95B580F1240E76A900740BDD /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				95B580FB240E77C200740BDD /* FCBaseMessageControllerProtocol.h */,
+				95B58105240E7A8100740BDD /* FCBaseMessageModelProtocol.h */,
+				95B580FC240E77D600740BDD /* FCHybridMessageControllerProtocol.h */,
+				95B58106240E7A8F00740BDD /* FCHybridMessageModelProtocol.h */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		95B580F2240E76B200740BDD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				95B580F3240E775000740BDD /* FCBaseMessageModel.m */,
+				95B580F5240E776900740BDD /* FCBaseMessageModel.h */,
+				95B580F6240E778700740BDD /* FCHybridMessageModel.h */,
+				95B580F7240E779200740BDD /* FCHybridMessageModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		C3D29199230D43B50034B27E /* ReplyCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1336,6 +1396,7 @@
 				C5D4ED991E57036100E121B4 /* FCUserDefaults.m in Sources */,
 				35B2EFA11D000E620014867F /* FCSolutionUpdater.m in Sources */,
 				35B2EF941D000E620014867F /* FCCategories.m in Sources */,
+				95B58100240E781100740BDD /* FCBaseMessageController.m in Sources */,
 				35B2EFAA1D000E620014867F /* FCBackgroundTaskManager.m in Sources */,
 				CEC95A851E097B44009A1FCD /* FCConversationUtil.m in Sources */,
 				35B2EFC11D000E620014867F /* FCMarginalView.m in Sources */,
@@ -1368,6 +1429,8 @@
 				35B2EFA21D000E620014867F /* FCIconDownloader.m in Sources */,
 				35B2EFCC1D000E620014867F /* FCPromptView.m in Sources */,
 				CE3EFB571EDFF9B000470AB1 /* FCMessageFragments.m in Sources */,
+				95B58103240E782C00740BDD /* FCHybridMessageController.m in Sources */,
+				95B580F4240E775000740BDD /* FCBaseMessageModel.m in Sources */,
 				CE8C7A691F6C216B00E77494 /* FDWebImageCompat.m in Sources */,
 				35B2EF981D000E620014867F /* FCDataManager.m in Sources */,
 				CEFA055B1EE82F2000DC74CF /* FCHtmlFragment.m in Sources */,
@@ -1381,6 +1444,7 @@
 				35B2EF8D1D000E620014867F /* FreshchatSDK.m in Sources */,
 				EA104805213F247700122843 /* FCUnsupportedFragment.m in Sources */,
 				35D4E81E1D118E9000EFFE07 /* FCChannelViewController.m in Sources */,
+				95B580F8240E779200740BDD /* FCHybridMessageModel.m in Sources */,
 				CE3EFB531EDFEEE000470AB1 /* FCMessages.m in Sources */,
 				CE982B8A1F2728B900B87A66 /* FCRemoteConfig.m in Sources */,
 				CE8BF9091DD5FFB700814009 /* FCTags.m in Sources */,
