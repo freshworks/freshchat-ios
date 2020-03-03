@@ -30,7 +30,7 @@
 
 +(void)uploadUnuploadedPropertiesWithForceUpdate:(BOOL) forceUpdate;
 
-+(NSURLSessionDataTask *)fetchRemoteConfig;
++(void)fetchRemoteConfig;
 
 +(NSURLSessionDataTask *)performHeartbeatCall;
 

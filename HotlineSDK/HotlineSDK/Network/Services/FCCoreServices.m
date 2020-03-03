@@ -303,15 +303,18 @@
             return;
         }
         
-        [self updateUserProperties:info handler:^(NSError *error) {
+        [self updateUserProperties:info handler:^(NSError *error, NSDictionary *response) {
             if (!error) {
                 [FCCoreServices setAsUploadedTo:userProperties withCompletion:^{
                     IN_PROGRESS = NO;
                     NSArray *remaining = [FCUserProperties getUnuploadedProperties];
                     if (remaining.count > 0) {
+                        [FCUtilities updateUserAlias: response[@"alias"]];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self uploadUnuploadedProperties];
                         });
+                    } else {
+                        [FCUtilities updateUserWithData:response];
                     }
                 }];
             }
@@ -320,7 +323,7 @@
     }];
 }
 
-+(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error))handler{
++(NSURLSessionDataTask *)updateUserProperties:(NSDictionary *)info handler:(void (^)(NSError *error, NSDictionary *response))handler{
     if(![FCUserUtil isUserRegistered]) {
         return nil; // This should never happen .. just a safety check
     }
@@ -347,10 +350,8 @@
                     
                 }
                 
-                FDLog(@"Pushed properties to server %@", info);
-                NSDictionary *response = responseInfo.responseAsDictionary;
+                  NSDictionary *response = responseInfo.responseAsDictionary;
                 [FCUtilities updateUserWithExternalID:[response objectForKey:@"identifier"] withRestoreID:[response objectForKey:@"restoreId"]];
-                [FCUtilities updateUserWithData:response];
                 if([[FCRemoteConfig sharedInstance]isUserAuthEnabled] && ([FreshchatUser sharedInstance].jwtToken != nil)){
                     [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_VALID];
                     if([FCUserUtil isUserRegistered]) {
@@ -358,13 +359,13 @@
                         [FCMessageServices uploadUnuploadedCSAT];
                     }
                 }
-                if (handler) handler(nil);
+                if (handler) handler(nil, response);
             }
         }else{
             if(statusCode == Conflict) {
                 [[FCJWTAuthValidator sharedInstance] updateAuthState:TOKEN_INVALID];
             }
-            if (handler) handler(error);
+            if (handler) handler(error,nil);
             FDLog(@"Could not update user properties %@", error);
             FDLog(@"Response : %@", responseInfo.response);
         }
@@ -561,8 +562,13 @@
     return task;
 }
 
-+(NSURLSessionDataTask *)fetchRemoteConfig{
-    
+static Boolean FC_REMOTE_CONFIG_IN_PROGRESS = NO;
+
++(void)fetchRemoteConfig{
+    if (FC_REMOTE_CONFIG_IN_PROGRESS) {
+        return;
+    }
+    FC_REMOTE_CONFIG_IN_PROGRESS = YES;
     FCSecureStore *store = [FCSecureStore sharedInstance];
     NSString *appID = [store objectForKey:HOTLINE_DEFAULTS_APP_ID];
     NSString *appKey = [NSString stringWithFormat:HOTLINE_REQUEST_PARAMS,[store objectForKey:HOTLINE_DEFAULTS_APP_KEY]];
@@ -574,7 +580,8 @@
     [request setRelativePath:path andURLParams:reqParams];
     FCAPIClient *apiClient = [FCAPIClient sharedInstance];
     
-    NSURLSessionDataTask *task = [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+    [apiClient request:request withHandler:^(FCResponseInfo *responseInfo, NSError *error) {
+        FC_REMOTE_CONFIG_IN_PROGRESS = NO;
         NSInteger statusCode = ((NSHTTPURLResponse *)responseInfo.response).statusCode;
         if(!error && statusCode == 200) {
             //Add flg flag for config fetch
@@ -588,7 +595,7 @@
             FDLog(@"User remote config fetch call failed %@", error);
         }
     }];
-    return task;
+    //return task;
 }
 
 +(NSURLSessionDataTask *)fetchTypicalReply:(void (^)(FCResponseInfo *responseInfo, NSError *error))handler {
