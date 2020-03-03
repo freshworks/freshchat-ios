@@ -7,7 +7,7 @@
 //
 
 #import "FCBaseMessageModel.h"
-#import "FCHybridMessageModelProtocol.h"
+#import "FCProtocols.h"
 
 @interface FCHybridMessageModel : FCBaseMessageModel <FCHybridMessageModelProtocol>
 

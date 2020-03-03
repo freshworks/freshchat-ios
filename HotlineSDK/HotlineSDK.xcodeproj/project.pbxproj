@@ -399,14 +399,10 @@
 		95B580F5240E776900740BDD /* FCBaseMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageModel.h; sourceTree = "<group>"; };
 		95B580F6240E778700740BDD /* FCHybridMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageModel.h; sourceTree = "<group>"; };
 		95B580F7240E779200740BDD /* FCHybridMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCHybridMessageModel.m; sourceTree = "<group>"; };
-		95B580FB240E77C200740BDD /* FCBaseMessageControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageControllerProtocol.h; sourceTree = "<group>"; };
-		95B580FC240E77D600740BDD /* FCHybridMessageControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageControllerProtocol.h; sourceTree = "<group>"; };
 		95B580FF240E781100740BDD /* FCBaseMessageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCBaseMessageController.m; sourceTree = "<group>"; };
 		95B58101240E781800740BDD /* FCBaseMessageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageController.h; sourceTree = "<group>"; };
 		95B58102240E782C00740BDD /* FCHybridMessageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCHybridMessageController.m; sourceTree = "<group>"; };
 		95B58104240E784600740BDD /* FCHybridMessageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageController.h; sourceTree = "<group>"; };
-		95B58105240E7A8100740BDD /* FCBaseMessageModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCBaseMessageModelProtocol.h; sourceTree = "<group>"; };
-		95B58106240E7A8F00740BDD /* FCHybridMessageModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridMessageModelProtocol.h; sourceTree = "<group>"; };
 		95DEF8B520E39B8B00422D58 /* FCProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCProtocols.h; sourceTree = "<group>"; };
 		95EBEDF521A7FF390087F6D4 /* FCChannelUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCChannelUtil.h; sourceTree = "<group>"; };
 		95EBEDF621A7FF390087F6D4 /* FCChannelUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCChannelUtil.m; sourceTree = "<group>"; };
@@ -1027,7 +1023,6 @@
 			isa = PBXGroup;
 			children = (
 				95B580F2240E76B200740BDD /* Model */,
-				95B580F1240E76A900740BDD /* Protocol */,
 				95B580F0240E76A000740BDD /* Controller */,
 			);
 			path = Messaging;
@@ -1042,17 +1037,6 @@
 				95B58104240E784600740BDD /* FCHybridMessageController.h */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		95B580F1240E76A900740BDD /* Protocol */ = {
-			isa = PBXGroup;
-			children = (
-				95B580FB240E77C200740BDD /* FCBaseMessageControllerProtocol.h */,
-				95B58105240E7A8100740BDD /* FCBaseMessageModelProtocol.h */,
-				95B580FC240E77D600740BDD /* FCHybridMessageControllerProtocol.h */,
-				95B58106240E7A8F00740BDD /* FCHybridMessageModelProtocol.h */,
-			);
-			path = Protocol;
 			sourceTree = "<group>";
 		};
 		95B580F2240E76B200740BDD /* Model */ = {

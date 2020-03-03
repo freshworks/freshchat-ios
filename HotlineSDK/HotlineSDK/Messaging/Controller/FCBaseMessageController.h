@@ -7,7 +7,7 @@
 //
 
 #import "FCJWTViewController.h"
-#import "FCBaseMessageControllerProtocol.h"
+#import "FCProtocols.h"
 
 @interface FCBaseMessageController : FCJWTViewController<FCBaseMessageControllerProtocol>
 

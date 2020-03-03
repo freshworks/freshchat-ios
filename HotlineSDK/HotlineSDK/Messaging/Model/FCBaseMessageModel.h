@@ -6,7 +6,7 @@
 //  Copyright © 2020 Freshdesk. All rights reserved.
 //
 
-#import "FCBaseMessageModelProtocol.h"
+#import "FCProtocols.h"
 
 @interface FCBaseMessageModel : NSObject <FCBaseMessageModelProtocol>
 
