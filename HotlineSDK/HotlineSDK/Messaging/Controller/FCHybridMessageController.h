@@ -10,5 +10,5 @@
 #import "FCProtocols.h"
 
 @interface FCHybridMessageController : FCBaseMessageController<FCHybridMessageControllerProtocol>
-
+-(id)initWithURL:(nonnull NSURL *) url;
 @end
