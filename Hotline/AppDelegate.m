@@ -198,6 +198,7 @@
     config.teamMemberInfoVisible = FALSE;
     config.cameraCaptureEnabled = YES;
     config.gallerySelectionEnabled = YES;
+    config.hybridExperienceEnabled = YES;
     NSLog(@"Current User :Name  %@ %@", [FreshchatUser sharedInstance].firstName,[FreshchatUser sharedInstance].lastName);
     NSLog(@"Current User :Identifier  %@ restoreID: %@", [FreshchatUser sharedInstance].externalID, [FreshchatUser sharedInstance].restoreID);
     [[Freshchat sharedInstance]initWithConfig:config];

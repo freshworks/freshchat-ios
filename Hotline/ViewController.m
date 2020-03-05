@@ -79,6 +79,8 @@
 @synthesize dataArray;
 
 - (void)viewDidLoad {
+    NSString *str = [[NSUserDefaults standardUserDefaults] stringForKey:@"hybridExperience.url"];
+    self.faqTagsField1.text = str;
     self.switchVal = true;
     self.gridFaqVal = true;
     self.faqHelpfulVal = true;
@@ -368,6 +370,11 @@ JWTScheduler *jwtScheduler;
     }
     [[Freshchat sharedInstance] showConversations:self];
    
+}
+- (IBAction)urlChange:(id)sender {
+    NSString *valueToSave = self.faqTagsField1.text;
+    [[NSUserDefaults standardUserDefaults] setObject:valueToSave forKey:@"hybridExperience.url"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction)showLanguagePicker:(id)sender {

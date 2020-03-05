@@ -24,6 +24,7 @@
 #import "FCLocalization.h"
 #import "FCUtilities.h"
 #import "FCAutolayoutHelper.h"
+#import "FCSecureStore.h"
 
 @interface ConversationOptions()
 
@@ -224,10 +225,16 @@
         FCContainerController *preferredController = nil;
         if (!error) {
             if (channelInfos.count == 1) {
-                FCChannelInfo *channelInfo = [channelInfos firstObject];
-                FCMessageController *messageController = [[FCMessageController alloc]initWithChannelID:channelInfo.channelID
-                                                                                     andPresentModally:YES];
-                preferredController = [[FCContainerController alloc]initWithController:messageController andEmbed:isEmbed];
+                FCSecureStore *store = [FCSecureStore sharedInstance];
+                if([store boolValueForKey:HOTLINE_DEFAULTS_HYBRID_EXPERIENCE_ENABLED]){
+                    preferredController = [FCUtilities getHybridView:isEmbed];
+                }
+                if (preferredController == nil) {
+                    FCChannelInfo *channelInfo = [channelInfos firstObject];
+                    FCMessageController *messageController = [[FCMessageController alloc]initWithChannelID:channelInfo.channelID
+                                                                                         andPresentModally:YES];
+                    preferredController = [[FCContainerController alloc]initWithController:messageController andEmbed:isEmbed];
+                }
             }
         }
         //default with or without error

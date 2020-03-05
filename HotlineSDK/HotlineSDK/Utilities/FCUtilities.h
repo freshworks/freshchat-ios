@@ -17,6 +17,7 @@
 #import "FCResponseInfo.h"
 #import "FCAttributedText.h"
 #import "FCBarButtonItem.h"
+#import "FCContainerController.h"
 
 #define FRESHCHAT_USER_RESTORE_STATE @"com.freshworks.freshchat_user_restore_state"
 
@@ -108,6 +109,7 @@
 
 + (BOOL) isTodaySameAsDate : (NSDate *) date;
 + (BOOL) hasHybridViewEnabled;
++ (FCContainerController *) getHybridView: (BOOL) isEmbed;
 
 @end
 

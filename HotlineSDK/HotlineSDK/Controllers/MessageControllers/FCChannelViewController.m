@@ -366,10 +366,17 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.channels.count) {
-        FCChannels *channel = self.channels[indexPath.row];
-        FCMessageController *conversationController = [[FCMessageController alloc]initWithChannelID:channel.channelID andPresentModally:NO];
-        FCContainerController *container = [[FCContainerController alloc]initWithController:conversationController andEmbed:NO];
-        [FCConversationUtil setConversationOptions:self.convOptions andViewController:conversationController];
+        FCContainerController *container;
+        FCSecureStore *store = [FCSecureStore sharedInstance];
+        if([store boolValueForKey:HOTLINE_DEFAULTS_HYBRID_EXPERIENCE_ENABLED]){
+            container = [FCUtilities getHybridView:NO];
+        }
+        if(container == nil) {
+            FCChannels *channel = self.channels[indexPath.row];
+            FCMessageController *conversationController = [[FCMessageController alloc]initWithChannelID:channel.channelID andPresentModally:NO];
+            container = [[FCContainerController alloc]initWithController:conversationController andEmbed:NO];
+            [FCConversationUtil setConversationOptions:self.convOptions andViewController:conversationController];
+        }
         [self.navigationController pushViewController:container animated:YES];
     }
 }

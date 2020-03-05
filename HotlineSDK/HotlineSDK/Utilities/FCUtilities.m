@@ -34,6 +34,7 @@
 #import "FDThemeConstants.h"
 #import "FCEventsManager.h"
 #import "FCUserUtil.h"
+#import "FCHybridMessageController.h"
 
 #define EXTRA_SECURE_STRING @"73463f9d-70de-41f8-857a-58590bdd5903"
 #define ERROR_CODE_USER_DELETED 19
@@ -743,6 +744,16 @@ static NSInteger networkIndicator = 0;
     NSString *newAlias = [FCUtilities generateUserAlias];
     [[FCSecureStore sharedInstance] setObject:newAlias forKey:HOTLINE_DEFAULTS_DEVICE_UUID];
     FDLog(@"Created new alias: %@",newAlias);
+}
+
++(FCContainerController *) getHybridView: (BOOL) isEmbed {
+    NSString *str = [[NSUserDefaults standardUserDefaults] stringForKey:@"hybridExperience.url"];
+    NSURL *url = [[NSURL alloc] initWithString:str];
+    if (url !=  nil) {
+        FCHybridMessageController *hybridMsgCtrl = [[FCHybridMessageController alloc] initWithURL:url];
+        return [[FCContainerController alloc]initWithController:hybridMsgCtrl andEmbed:isEmbed];
+    }
+    return nil;
 }
 
 
