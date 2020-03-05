@@ -62,6 +62,9 @@
 #define CONFIG_RC_JWT_AUTH_STRICT_MODE_ENABLED @"config_rc_jwt_auth_strict_mode_enabled"
 #define CONFIG_RC_JWT_AUTH_LOADING_TIMEOUT_INTERVAL @"config_rc_jwt_auth_loading_timeout_interval"
 
+#define CONFIG_RC_HYBRID_WEB_APP_ENABLED @"config_rc_hybrid_web_app_enabled"
+#define CONFIG_RC_HYBRID_WEB_APP_URL @"config_rc_hybrid_sdk_web_app_url"
+
 #define CONFIG_RC_EVENTS_MAX_DELAY_IN_MILLIS_UNTIL_UPLOAD @"config_rc_events_max_delay_in_millis_until_upload"
 #define CONFIG_RC_EVENTS_MAX_EVENTS_PER_BATCH @"config_rc_events_max_events_per_batch"
 #define CONFIG_RC_EVENTS_MAX_ALLOWED_EVENTS_PER_DAY @"config_rc_events_max_allowed_events_per_day"

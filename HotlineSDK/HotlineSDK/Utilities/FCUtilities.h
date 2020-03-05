@@ -107,6 +107,7 @@
 + (NSArray *) getResolvedReopenedMsgTypes;
 
 + (BOOL) isTodaySameAsDate : (NSDate *) date;
++ (BOOL) hasHybridViewEnabled;
 
 @end
 

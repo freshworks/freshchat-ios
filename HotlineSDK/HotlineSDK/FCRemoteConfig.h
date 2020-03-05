@@ -16,6 +16,7 @@
 #import "FCMessageMaskConfig.h"
 #import "FCUserAuthConfig.h"
 #import "FCEventsConfig.h"
+#import "FCHybridConfig.h"
 
 @interface FCRemoteConfig : NSObject
 
@@ -35,6 +36,7 @@
 @property (nonatomic, strong) FCMessageMaskConfig *messageMaskConfig;
 @property (nonatomic, strong) FCUserAuthConfig *userAuthConfig;
 @property (nonatomic, strong) FCEventsConfig *eventsConfig;
+@property (nonatomic, strong) FCHybridConfig *hybridConfig;
 
 - (void) updateRemoteConfig : (NSDictionary *) configDict;
 

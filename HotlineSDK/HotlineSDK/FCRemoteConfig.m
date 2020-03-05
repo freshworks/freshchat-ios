@@ -74,6 +74,7 @@
     NSDictionary *userAuthConfig     = [configDict objectForKey:@"userAuthConfig"];
     NSDictionary *messageMaskingConfigDict  = [configDict objectForKey:@"messageMaskingConfig"];
     NSDictionary *eventsConfigDict         = [configDict objectForKey:@"eventsConfig"];
+    NSDictionary *hybridConfigDict      = [configDict objectForKey:@"hybridConfig"];
     
     [self updateAccountActive:[[configDict objectForKey:@"accountActive"] boolValue]];
     [self updateSessionTimeOutInterval:[[configDict objectForKey:@"sessionTimeoutInterval"] longValue]];
@@ -105,6 +106,10 @@
     
     if (eventsConfigDict != nil) {
         [self.eventsConfig updateEventsConfig:eventsConfigDict];
+    }
+    
+    if (hybridConfigDict != nil) {
+        [self.hybridConfig updateHybridConfig:hybridConfigDict];
     }
 }
 

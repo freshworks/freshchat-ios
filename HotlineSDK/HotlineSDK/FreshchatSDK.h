@@ -102,6 +102,10 @@ typedef enum {
  */
 @property (nonatomic, assign) BOOL gallerySelectionEnabled;
 /*
+ * Allow the user to load hybrid SDK. Default to NO.
+ */
+@property (nonatomic, assign) BOOL hybridExperienceEnabled;
+/*
  * Allow the user to attach images using the camera. Defaults to YES.
  */
 @property (nonatomic, assign) BOOL cameraCaptureEnabled;

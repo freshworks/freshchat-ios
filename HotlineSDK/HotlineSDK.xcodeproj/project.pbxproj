@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		024529482386E62C0018FC38 /* FCEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 024529472386E62C0018FC38 /* FCEventsConstants.h */; };
+		02559240240E99BB005A03E0 /* FCHybridConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 0255923E240E99BB005A03E0 /* FCHybridConfig.h */; };
+		02559241240E99BB005A03E0 /* FCHybridConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0255923F240E99BB005A03E0 /* FCHybridConfig.m */; };
 		02C480B62377E07700EDADB2 /* FCEventsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C480B42377E07700EDADB2 /* FCEventsManager.h */; };
 		02C480B72377E07700EDADB2 /* FCEventsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C480B52377E07700EDADB2 /* FCEventsManager.m */; };
 		02C480BA2377E27200EDADB2 /* FCEventsConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C480B82377E27200EDADB2 /* FCEventsConfig.h */; };
@@ -214,6 +216,8 @@
 
 /* Begin PBXFileReference section */
 		024529472386E62C0018FC38 /* FCEventsConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCEventsConstants.h; sourceTree = "<group>"; };
+		0255923E240E99BB005A03E0 /* FCHybridConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCHybridConfig.h; sourceTree = "<group>"; };
+		0255923F240E99BB005A03E0 /* FCHybridConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCHybridConfig.m; sourceTree = "<group>"; };
 		02C480B42377E07700EDADB2 /* FCEventsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCEventsManager.h; sourceTree = "<group>"; };
 		02C480B52377E07700EDADB2 /* FCEventsManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCEventsManager.m; sourceTree = "<group>"; };
 		02C480B82377E27200EDADB2 /* FCEventsConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCEventsConfig.h; sourceTree = "<group>"; };
@@ -642,6 +646,8 @@
 				EA7B897F2187B3F200447052 /* FCUnsupportedFragmentErrMsgs.m */,
 				EAB07905216B696B00B701C9 /* FCUserAuthConfig.h */,
 				EAB07906216B696B00B701C9 /* FCUserAuthConfig.m */,
+				0255923E240E99BB005A03E0 /* FCHybridConfig.h */,
+				0255923F240E99BB005A03E0 /* FCHybridConfig.m */,
 				CEF6B9011F3739F000692519 /* FCConversationConfig.h */,
 				CEF6B9021F3739F000692519 /* FCConversationConfig.m */,
 				EA306AA321B7C96A005211E4 /* FCMessageMaskConfig.h */,
@@ -1160,6 +1166,7 @@
 				C3D291A0230D79540034B27E /* FCReplyFlowLayout.h in Headers */,
 				02C480B62377E07700EDADB2 /* FCEventsManager.h in Headers */,
 				EA104804213F247700122843 /* FCUnsupportedFragment.h in Headers */,
+				02559240240E99BB005A03E0 /* FCHybridConfig.h in Headers */,
 				EA80219A20D99CCD00412B5A /* FCCSatSettings.h in Headers */,
 				02C480BA2377E27200EDADB2 /* FCEventsConfig.h in Headers */,
 				EA306AA521B7C96B005211E4 /* FCMessageMaskConfig.h in Headers */,
@@ -1400,6 +1407,7 @@
 				35B2EFA31D000E620014867F /* FCResponseInfo.m in Sources */,
 				CE8C7A7E1F6C216B00E77494 /* UIImage+GIF.m in Sources */,
 				35B2EFB71D000E620014867F /* FCAudioPlayer.m in Sources */,
+				02559241240E99BB005A03E0 /* FCHybridConfig.m in Sources */,
 				35D4E81D1D118E9000EFFE07 /* FCMessageController.m in Sources */,
 				35B2EFBC1D000E620014867F /* FCCell.m in Sources */,
 				CE95B57A1F6D6E5D006EC8AA /* FreshchatModel.xcdatamodeld in Sources */,

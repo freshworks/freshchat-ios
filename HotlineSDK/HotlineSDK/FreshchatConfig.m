@@ -29,6 +29,7 @@
         self.showNotificationBanner = YES;
         self.responseExpectationVisible = YES;
         self.eventsUploadEnabled = YES;
+        self.hybridExperienceEnabled = NO;
     }
     return self;
 }

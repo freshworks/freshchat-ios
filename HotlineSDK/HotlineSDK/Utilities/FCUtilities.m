@@ -979,6 +979,14 @@ static NSInteger networkIndicator = 0;
     return ![[FCSecureStore sharedInstance] boolValueForKey:FRESHCHAT_DEFAULTS_DROP_UPDATE_USER_PROPERTIES];
 }
 
++ (BOOL) hasHybridViewEnabled {
+    FCSecureStore *store = [FCSecureStore sharedInstance];
+    if([store boolValueForKey:HOTLINE_DEFAULTS_HYBRID_EXPERIENCE_ENABLED]){
+        return [FCRemoteConfig sharedInstance].hybridConfig.webAppEnabled;
+    }
+    return false;
+}
+
 +(BOOL) handleLink : (NSURL *)url faqOptions: (FAQOptions *)faqOptions
     navigationController:(UIViewController *) navController
     handleFreshchatLinks:(BOOL) handleFreshchatLinks {
