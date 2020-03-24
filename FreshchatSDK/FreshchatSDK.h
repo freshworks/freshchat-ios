@@ -71,6 +71,8 @@ typedef enum {
 
 @class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface FreshchatConfig : NSObject
 
 /*
@@ -92,11 +94,11 @@ typedef enum {
  * theme plist file's name. Freshchat needs this for theming to work.
  * The setter throws an exception for an invalid filename
  */
-@property (nonatomic, strong) NSString *themeName;
+@property (nonatomic, strong, nullable) NSString *themeName;
 /**
  * Option to supply the SDK with a strings bundle for localization
  */
-@property (nonatomic, strong) NSString *stringsBundle;
+@property (nonatomic, strong, nullable) NSString *stringsBundle;
 /*
  * Allow the user to attach images using the gallery. Defaults to YES.
  */
@@ -244,7 +246,7 @@ typedef enum {
 *  @param restoreID Set the restore id for the user, to lookup and restore the user across devices/sessions/platforms
 *
 */
--(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(NSString *) restoreID;
+-(void)identifyUserWithExternalID:(NSString *) externalID restoreID:(nullable NSString *) restoreID;
 
 /**
  * Identify and restore an user base on reference_id and can only be called in auth strict mode
@@ -264,7 +266,7 @@ typedef enum {
  * @param Completion block to be called when clearData is completed
  *
  */
--(void)resetUserWithCompletion:(void (^)())completion;
+-(void)resetUserWithCompletion:(nullable void (^)())completion;
 /**
  *  Set User properties
  *
@@ -273,7 +275,7 @@ typedef enum {
  *  @param props An NSDictionary containing the Properties for the User.
  *
  */
--(void)setUserProperties:(NSDictionary*)props;
+-(void)setUserProperties:(NSDictionary<NSString *, NSString*> *)props;
 /**
  *  Set user property
  *
@@ -378,7 +380,7 @@ typedef enum {
  *  @param completion Completion block with count.
  *
  */
--(void)unreadCountForTags:(NSArray *)tags withCompletion:(void(^)(NSInteger count))completion;
+-(void)unreadCountForTags:(nullable NSArray *)tags withCompletion:(void(^)(NSInteger count))completion;
 
 /**
  *  Show custom banner for users in message screen
@@ -409,13 +411,13 @@ typedef enum {
  *  Code block for handling links. Return 'YES' to override default link behaviour and 'NO' to handle it on the block itself.
  */
 
-@property (nonatomic, copy) BOOL(^customLinkHandler)(NSURL*);
+@property (nullable, nonatomic, copy) BOOL(^customLinkHandler)(NSURL*);
 
 /**
  *  Code block for push notification tap events . Return 'YES' to not allow channel open and 'NO' to launch the coresponding channel.
  */
 
-@property (nonatomic, copy) BOOL(^onNotificationClicked)(NSString*);
+@property (nullable, nonatomic, copy) BOOL(^onNotificationClicked)(NSString*);
 
 @end
 
@@ -425,31 +427,31 @@ typedef enum {
 /*
  * User first name
  */
-@property (strong, nonatomic) NSString *firstName;
+@property (strong, nonatomic, nullable) NSString *firstName;
 /*
  * User last name
  */
-@property (strong, nonatomic) NSString *lastName;
+@property (strong, nonatomic, nullable) NSString *lastName;
 /*
  * User email
  */
-@property (strong, nonatomic) NSString *email;
+@property (strong, nonatomic, nullable) NSString *email;
 /*
  * Phone Number - Preferably Mobile Number
  */
-@property (strong, nonatomic) NSString *phoneNumber;
+@property (strong, nonatomic, nullable) NSString *phoneNumber;
 /*
  * Phone Country Code e.g +91 for India
  */
-@property (strong, nonatomic) NSString *phoneCountryCode;
+@property (strong, nonatomic, nullable) NSString *phoneCountryCode;
 /*
  * Unique identifier for the user.
  */
-@property (strong, nonatomic, readonly) NSString *externalID;
+@property (strong, nonatomic, readonly, nullable) NSString *externalID;
 /*
  * Restore id for user
  */
-@property (strong, nonatomic, readonly) NSString *restoreID;
+@property (strong, nonatomic, readonly, nullable) NSString *restoreID;
 
 /*
  * Access the user info. If update user was called earlier, the instance would contain the persisted values.
@@ -493,7 +495,7 @@ typedef enum {
  *
  *  @param Type can be either Category or Article determining what to show. ( list of filtered articles or categories)
  */
--(void) filterByTags:(NSArray *) tags withTitle:(NSString *) title  andType : (enum TagFilterType) type;
+-(void) filterByTags: (nullable NSArray *) tags withTitle:(nullable NSString *) title  andType : (enum TagFilterType) type;
 
 /**
  *  @discussion This method lets you to filter the list of Channels by tags when user clicks on contact us
@@ -502,19 +504,19 @@ typedef enum {
  *
  *  @param Title for the list of filtered channels view
  */
--(void)filterContactUsByTags:(NSArray *) tags withTitle:(NSString *) title;
+-(void)filterContactUsByTags:(nullable NSArray *) tags withTitle:(nullable NSString *) title;
  
 /**
  *  Preferred navigation bar title
  */
--(NSString *)filteredViewTitle;
+-(nullable NSString *)filteredViewTitle;
 
 /**
  *  List of tags you have supplied already
  *
  *  @discussion List of tags which are configured in portal
  */
--(NSArray *)tags;
+-(nullable NSArray *)tags;
 
 /**
  *  Tags Filter type - FAQ's or Articles tags
@@ -524,12 +526,12 @@ typedef enum {
 /**
  *  Tags used to filter channels when clicking on "Contact Us" on FAQ screens
  */
--(NSArray *) contactUsTags;
+-(nullable NSArray *) contactUsTags;
 
 /**
  *  Title for the list of filtered channels view which clicking "Contact Us"
  */
--(NSString *) contactUsTitle;
+-(nullable NSString *) contactUsTitle;
 
 @end
 
@@ -546,17 +548,17 @@ typedef enum {
  *  @param Title for the list of filtered channels view
  *
  */
--(void)filterByTags:(NSArray *)tags withTitle:(NSString *)title;
+-(void)filterByTags:(nullable NSArray *)tags withTitle:(nullable NSString *)title;
 
 /**
  *  Preferred navigation bar title for filtered view of channels
  */
--(NSString *)filteredViewTitle;
+-(nullable NSString *)filteredViewTitle;
 
 /**
  *  Tags used for filtering the channels list
  */
--(NSArray *)tags;
+-(nullable NSArray *)tags;
 
 @end
 
@@ -573,7 +575,7 @@ typedef enum {
 /*
  * Parameter dictionary for a Freshchat screen's event
  */
-@property (strong, nonatomic) NSDictionary *properties;
+@property (nullable, strong, nonatomic) NSDictionary *properties;
 
 /**
  * Freshchat screens's event value
@@ -583,7 +585,7 @@ typedef enum {
  * @param Enum parameter key for event
  *
  */
-- (id) valueForEventProperty : (FCEventProperty) property;
+- (nullable id) valueForEventProperty : (FCEventProperty) property;
 
 
 /**
@@ -619,3 +621,5 @@ typedef enum {
 -(instancetype)initWithMessage:(NSString *)message andTag:(NSString *)tag;
 
 @end
+
+NS_ASSUME_NONNULL_END

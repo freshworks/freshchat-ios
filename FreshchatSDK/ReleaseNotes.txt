@@ -2,7 +2,15 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 3.3.2
+Version         : 3.3.3
+
+Ver 3.3.3 
+__________________________
+Enhancements :
+- Added Nullability check to API's.
+Bug fixes :
+- Rendering custom font in Article.
+- Statusbar being overlapped by inapp notification from iOS 13+ devices.
 
 Ver 3.3.2 
 __________________________
