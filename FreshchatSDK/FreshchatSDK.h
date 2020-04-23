@@ -36,7 +36,9 @@ typedef enum {
     FCEventScreenView,
     FCEventMessageReceive,
     FCEventNotificationReceive,
-    FCEventIdTokenStatusChange
+    FCEventIdTokenStatusChange,
+    FCEventDropDownReceive,
+    FCEventDropDownSelect
 } FCEvent;
 
 /*
@@ -58,7 +60,8 @@ typedef enum {
     FCPropertyRating,
     FCPropertyResolutionStatus,
     FCPropertyComment,
-    FCPropertyURL
+    FCPropertyURL,
+    FCPropertyOption
 } FCEventProperty;
 
 

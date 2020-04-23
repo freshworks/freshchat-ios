@@ -18,6 +18,8 @@
 		<string>FCResources.bundle/Images/freshchat_send_icon</string>
 		<key>RecordIcon</key>
 		<string>FCResources.bundle/Images/freshchat_mic_icon</string>
+		<key>DropDownIcon</key>
+		<string>FCResources.bundle/Images/freshhcat_dropdown_icon</string>
 		<key>TeamMemberAvatarStyle</key>
 		<dict>
 			<key>visible</key>
@@ -311,6 +313,38 @@
 			<string>10</string>
 			<key>maxHeightPercentage</key>
 			<string>35</string>
+		</dict>
+		<key>DropDownBarStyle</key>
+		<dict>
+			<key>borderColor</key>
+			<string>#45A4EC</string>
+			<key>textStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>textColor</key>
+				<string>#3A4B67</string>
+			</dict>
+		</dict>
+		<key>DropDownPickerStyle</key>
+		<dict>
+			<key>optionTextStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>textColor</key>
+				<string>#000000</string>
+			</dict>
+			<key>rowHeight</key>
+			<string>44</string>
+			<key>viewPortraitHeight</key>
+			<string>220</string>
+			<key>viewLandScapeHeight</key>
+			<string>132</string>
 		</dict>
 	</dict>
 	<key>ChannelList</key>

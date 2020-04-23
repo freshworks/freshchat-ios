@@ -144,3 +144,6 @@
 
 /*Business hour offline response */
 "business_hour_offline"="We are away now";
+
+/*Drop Down Fragment*/
+"dropdown_choose_select"="Click here to select";
