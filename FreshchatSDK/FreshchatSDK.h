@@ -38,7 +38,10 @@ typedef enum {
     FCEventNotificationReceive,
     FCEventIdTokenStatusChange,
     FCEventDropDownReceive,
-    FCEventDropDownSelect
+    FCEventDropDownSelect,
+    FCEventCarouselShow,
+    FCEventCarouselSelect,
+    FCEventCarouselView
 } FCEvent;
 
 /*

@@ -2,7 +2,11 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 3.5.0
+Version         : 3.6.0
+
+Ver 3.6.0 
+__________________________
+Support for messages with Carousel options.
 
 Ver 3.5.0 
 __________________________
