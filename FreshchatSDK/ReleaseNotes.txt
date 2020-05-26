@@ -2,11 +2,21 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 3.6.0
+Version         : 3.6.1
+
+Ver 3.6.1 
+__________________________
+Enhancements:
+- Allow Navigation Bar customisation overriding UIAppearance settings.
+- Display only Team member's first name.
+Bug fixes :
+- Fixed Attachment issues in iOS13.
+- Fixed Read Receipts bug.
 
 Ver 3.6.0 
 __________________________
-Support for messages with Carousel options.
+Feature :
+- Support for messages with Carousel options.
 
 Ver 3.5.0 
 __________________________
