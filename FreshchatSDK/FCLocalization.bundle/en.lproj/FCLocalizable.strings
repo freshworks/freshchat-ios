@@ -102,6 +102,9 @@
 "image_attachment_select_existing_image"="Upload from gallery";
 "image_attachment_select_new_image"="Take a picture";
 
+/*general*/
+"date_today" = "Today";
+"date_tomorrow" = "Tomorrow";
 
 /*Notifications*/
 "notification_message_default"="You've got a message!";
@@ -154,3 +157,45 @@
 "default_carousel_card_select_btn" = "Select";
 "default_carousel_list_preview_text" = "Choose an option";
 
+/*Calendar*/
+"calendar_find_slots_btn" = "Find a slot";
+"calendar_cancel_invite_btn" = "Not interested";
+
+"calendar_channel_list_awaiting_confirmation" = "Awaiting time slot confirmation";
+
+"calendar_view_title" = "Schedule a Meeting";
+"calendar_email_description" = "Kindly provide us your email address to schedule a meeting with our team";
+"calendar_email_placeholder" = "Enter your email id";
+"calendar_next_btn" = "Next";
+
+"calendar_alert_cancel_title" = "Cancel Booking";
+"calendar_cancel_alert_description" = "Are you sure you want to cancel this booking?";
+"calendar_cancel_alert_continue_btn" = "Continue";
+"calendar_cancel_alert_booking_btn" = "Cancel Booking";
+
+"calendar_slots_date_format" = "d MMM yyyy";
+"calendar_slots_time_format" = "h:mm a";
+
+"calendar_slots_session_morning" = "Morning";
+"calendar_slots_session_afternoon" = "Afternoon";
+"calendar_slots_session_evening" = "Evening";
+"calendar_slots_session_night" = "Night";
+"calendar_slots_show_more_btn" = "Show More";
+"calendar_slots_cancel_btn" = "Cancel";
+"calendar_slots_retry_btn" = "Retry";
+
+"calendar_no_slots_available_text" = "No Slots Available";
+"calendar_slots_error" = "An Error was encountered";
+
+"calendar_invite_confirm_btn" = "Confirm";
+"calendar_invite_change_slot_btn" = "Change Slot";
+
+"calendar_duration_hour" = "hour";
+"calendar_duration_hours" = "hours";
+"calendar_duration_mins" = "mins";
+
+"calendar_invite_banner_view_label" = "View";
+"calendar_invite_scheduled" = "Scheduled";
+"calendar_invite_failed" = "Failed";
+"calendar_invite_pending" = "Awaiting Confirmation";
+"calendar_invite_scheduled_description" = "Meeting with our Team";

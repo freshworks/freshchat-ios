@@ -2,7 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 3.6.2
+Version         : 3.7.0
+
+Ver 3.7.0 
+__________________________
+Feature :
+- Support to book meetings
+Enhancement:
+- Optimisation for iOS 13
+Bug fix :
+- Minor bug fixes
 
 Ver 3.6.2 
 __________________________

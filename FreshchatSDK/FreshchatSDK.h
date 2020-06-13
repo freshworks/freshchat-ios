@@ -41,7 +41,13 @@ typedef enum {
     FCEventDropDownSelect,
     FCEventCarouselShow,
     FCEventCarouselSelect,
-    FCEventCarouselView
+    FCEventCarouselView,
+    FCEventCalendarFindTimeSlotClick,
+    FCEventCalendarInviteCancel,
+    FCEventCalendarNoTimeSlotFound,
+    FCEventCalendarBookingSuccess,
+    FCEventCalendarBookingRetry,
+    FCEventCalendarBookingFailure
 } FCEvent;
 
 /*
@@ -64,7 +70,8 @@ typedef enum {
     FCPropertyResolutionStatus,
     FCPropertyComment,
     FCPropertyURL,
-    FCPropertyOption
+    FCPropertyOption,
+    FCPropertyInviteId
 } FCEventProperty;
 
 
