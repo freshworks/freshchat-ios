@@ -2,7 +2,15 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 3.7.2
+Version         : 3.7.3
+
+Ver 3.7.3 
+__________________________
+Enhancement:
+- Minor improvements on message loading.
+Bug Fixes:
+- Fixed FAQ not helpful bug.
+- Fixed attaching HEIC/TIFF images.
 
 Ver 3.7.2 
 __________________________
@@ -27,7 +35,6 @@ Ver 3.6.2
 __________________________
 Enhancement:
 - Removed deprecated UIAlertViews.
-
 Ver 3.6.1 
 __________________________
 Enhancements:
