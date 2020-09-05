@@ -14,14 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    internal func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         self.initFreshchatSDK()
         return true
     }
     
     func initFreshchatSDK() {
-        let fchatConfig = FreshchatConfig.init(appID: String!, andAppKey: <#T##String!#>) //Enter your AppID and AppKey here
+        let fchatConfig = FreshchatConfig.init(appID: "", andAppKey: "") //Enter your AppID and AppKey here
         Freshchat.sharedInstance().initWith(fchatConfig)
     }
 
