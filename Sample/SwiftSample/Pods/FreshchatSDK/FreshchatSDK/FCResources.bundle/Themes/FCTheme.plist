@@ -13,11 +13,18 @@
 		<key>CancelIcon</key>
 		<string>FCResources.bundle/Images/freshchat_cancel_icon</string>
 		<key>TeamMemberAvatarIcon</key>
-		<string>FCResources.bundle/Images/freshchat_agent_avatar_icon</string>
+		<string></string>
 		<key>SendIcon</key>
 		<string>FCResources.bundle/Images/freshchat_send_icon</string>
 		<key>RecordIcon</key>
 		<string>FCResources.bundle/Images/freshchat_mic_icon</string>
+		<key>DropDownIcon</key>
+		<string>FCResources.bundle/Images/freshhcat_dropdown_icon</string>
+		<key>TeamMemberAvatarStyle</key>
+		<dict>
+			<key>visible</key>
+			<true/>
+		</dict>
 		<key>TeamMemberNameTextStyle</key>
 		<dict>
 			<key>fontName</key>
@@ -112,12 +119,25 @@
 			<key>dividerColor</key>
 			<string>#B3B3B3</string>
 		</dict>
+		<key>FallbackMessageStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>textColor</key>
+			<string></string>
+			<key>borderColor</key>
+			<string></string>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
 		<key>CustomerSurveyDialogStyle</key>
 		<dict>
 			<key>background</key>
-			<string>#DCDCDC</string>
+			<string>#F7F7F7</string>
 			<key>dividerColor</key>
-			<string>#E6E6E6</string>
+			<string>#B3B3B3</string>
 		</dict>
 		<key>CustomerSurveyRatingBarStyle</key>
 		<dict>
@@ -142,7 +162,7 @@
 			<key>textColor</key>
 			<string>#000000</string>
 			<key>borderColor</key>
-			<string>#B3B3B3</string>
+			<string>#808285</string>
 		</dict>
 		<key>CustomerSurveySubmitButtonTextStyle</key>
 		<dict>
@@ -151,9 +171,9 @@
 			<key>textSize</key>
 			<string>15.0f</string>
 			<key>textColor</key>
-			<string>#007AFF</string>
+			<string>#378CF8</string>
 			<key>background</key>
-			<string>#FFFFFF</string>
+			<string>#F7F7F7</string>
 		</dict>
 		<key>ChatResolutionPromptTextStyle</key>
 		<dict>
@@ -258,6 +278,207 @@
 			<key>UserBubbleRight</key>
 			<string>10</string>
 		</dict>
+		<key>UnsupportedContentTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>10.0f</string>
+			<key>textColor</key>
+			<string>#8D96A5</string>
+			<key>background</key>
+			<string>#FFFFFF</string>
+			<key>borderColor</key>
+			<string>#F2F3F5</string>
+			<key>icon</key>
+			<string>FCResources.bundle/Images/freshchat_unsupported_content_icon</string>
+		</dict>
+		<key>QuickReplyStyle</key>
+		<dict>
+			<key>background</key>
+			<string>#FFFFFF</string>
+			<key>fontName</key>
+			<string>Arial</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>textColor</key>
+			<string>#FFFFFF</string>
+			<key>cellBackground</key>
+			<string>#0380fc</string>
+			<key>cornerRadius</key>
+			<string>10</string>
+			<key>cellPadding</key>
+			<string>10</string>
+			<key>rowPadding</key>
+			<string>10</string>
+			<key>maxHeightPercentage</key>
+			<string>35</string>
+		</dict>
+		<key>DropDownBarStyle</key>
+		<dict>
+			<key>borderColor</key>
+			<string>#45A4EC</string>
+			<key>textStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>textColor</key>
+				<string>#3A4B67</string>
+			</dict>
+		</dict>
+		<key>DropDownPickerStyle</key>
+		<dict>
+			<key>optionTextStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>textColor</key>
+				<string>#000000</string>
+			</dict>
+			<key>rowHeight</key>
+			<string>44</string>
+			<key>viewPortraitHeight</key>
+			<string>220</string>
+			<key>viewLandScapeHeight</key>
+			<string>132</string>
+		</dict>
+		<key>CarouselCardStyle</key>
+		<dict>
+			<key>titleTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#000000</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+			</dict>
+			<key>descriptionTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#000000</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+			</dict>
+			<key>actionButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#0079FF</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+			</dict>
+			<key>selectedTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#808080</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+			</dict>
+			<key>selectedCardStyle</key>
+			<dict>
+				<key>background</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<key>CalendarInviteOptionsStyle</key>
+		<dict>
+			<key>findSlotButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0</string>
+				<key>background</key>
+				<string>#0053BF</string>
+			</dict>
+			<key>notInterestedButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#687D99</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0</string>
+			</dict>
+		</dict>
+		<key>CalendarEventStyle</key>
+		<dict>
+			<key>statusStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293A5A</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+			</dict>
+			<key>meetingDurationTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>12.0</string>
+			</dict>
+			<key>avatarBorderColor</key>
+			<string>#FFFFFF</string>
+			<key>descriptionTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>12.0</string>
+			</dict>
+			<key>meetingTimeTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293A5A</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+			</dict>
+			<key>meetingDateTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>12.0</string>
+			</dict>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
+		<key>CalendarBannerStyle</key>
+		<dict>
+			<key>textStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>12.0</string>
+				<key>background</key>
+				<string>#4F5F78</string>
+			</dict>
+		</dict>
 	</dict>
 	<key>ChannelList</key>
 	<dict>
@@ -333,6 +554,184 @@
 			<key>textColor</key>
 			<string>#525454</string>
 		</dict>
+	</dict>
+	<key>Calendar</key>
+	<dict>
+		<key>NavigationBar</key>
+		<dict>
+			<key>titleTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#283A59</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0</string>
+			</dict>
+			<key>meetingDurationTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#465571</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>13.0</string>
+			</dict>
+			<key>background</key>
+			<string>#F5F5F5</string>
+			<key>dividerColor</key>
+			<string>#B3B3B3</string>
+		</dict>
+		<key>EmailPrompt</key>
+		<dict>
+			<key>descriptionTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#000000</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+			</dict>
+			<key>emailInputViewStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#495973</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+			</dict>
+			<key>nextButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+				<key>background</key>
+				<string>#0249A6</string>
+			</dict>
+		</dict>
+		<key>TimeSlotPrompt</key>
+		<dict>
+			<key>sessionNameTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#808080</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+			</dict>
+			<key>dateTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+			</dict>
+			<key>slotButtonStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>textSize</key>
+				<string>13.0</string>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>selectBackground</key>
+				<string>#091E42</string>
+				<key>borderColor</key>
+				<string>#595959</string>
+			</dict>
+			<key>showMoreButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#707C92</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0</string>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>borderColor</key>
+				<string>#707C92</string>
+			</dict>
+			<key>stateDescriptionTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>16.0</string>
+			</dict>
+			<key>dividerColor</key>
+			<string>#E1E4E8</string>
+		</dict>
+		<key>ConfirmationPrompt</key>
+		<dict>
+			<key>avatarBorderColor</key>
+			<string>#FFFFFF</string>
+			<key>descriptionTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>16.0</string>
+			</dict>
+			<key>meetingTimeTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>21.0</string>
+			</dict>
+			<key>meetingDateTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#293B5B</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>16.0</string>
+			</dict>
+			<key>confirmButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0</string>
+				<key>background</key>
+				<string>#0249A6</string>
+			</dict>
+			<key>changeSlotButtonStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#707C92</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0</string>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>borderColor</key>
+				<string>#707C92</string>
+			</dict>
+		</dict>
+		<key>backgroundColor</key>
+		<string>#FFFFFF</string>
 	</dict>
 	<key>NavigationBar</key>
 	<dict>
@@ -444,6 +843,8 @@
 		</dict>
 		<key>NotificationCancel</key>
 		<string>FCResources.bundle/Images/freshchat_notification_cancel_icon</string>
+		<key>ShowPushPrompt</key>
+		<true/>
 	</dict>
 	<key>Miscellaneous</key>
 	<dict>
@@ -495,6 +896,8 @@
 			<string>13.0f</string>
 			<key>textColor</key>
 			<string>#000000</string>
+			<key>textColorHint</key>
+			<string>#808285</string>
 			<key>borderColor</key>
 			<string>#FFFFFF</string>
 			<key>textCursorColor</key>
@@ -631,6 +1034,30 @@
 		<string>FCResources.bundle/Images/freshchat_channels_image</string>
 		<key>FAQImage</key>
 		<string>FCResources.bundle/Images/freshchat_faq_image</string>
+		<key>CloseButton</key>
+		<string></string>
+		<key>CarouselPlaceholderImage</key>
+		<string>FCResources.bundle/Images/freshchat_carousel_placeholder_image</string>
+		<key>CarouselErrorImage</key>
+		<string>FCResources.bundle/Images/freshchat_carousel_error_image</string>
+		<key>CalendarIcon</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_icon</string>
+		<key>CalendarCloseIcon</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_close_icon</string>
+		<key>CalendarScheduledIcon</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_scheduled_icon</string>
+		<key>CalendarBannerImage</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_banner</string>
+		<key>CalendarAgentAvatar</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_agent_avatar</string>
+		<key>CalendarCustomerAvatar</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_customer_avatar</string>
+		<key>CalenderCancelledIcon</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_cancelled_icon</string>
+		<key>CalenderPendingConfirmationIcon</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_pending_icon</string>
+		<key>CalendarErrorIcon</key>
+		<string>FCResources.bundle/Images/freshchat_calendar_error_icon</string>
 	</dict>
 </dict>
 </plist>

@@ -23,7 +23,8 @@
 }
 
 -(void) initFreshchatSDK {
-    FreshchatConfig *fchatConfig = [[FreshchatConfig alloc] initWithAppID:<#(NSString *)#> andAppKey:<#(NSString *)#>]; //Enter your AppID and AppKey here
+    FreshchatConfig *fchatConfig = [[FreshchatConfig alloc] initWithAppID:@"AppId" andAppKey:@"AppKey"]; //Enter your AppID and AppKey here
+    fchatConfig.themeName = @"CustomThemeFile";//Your Custom Theme File
     [[Freshchat sharedInstance] initWithConfig:fchatConfig];
 }
 

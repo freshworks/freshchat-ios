@@ -1,12 +1,16 @@
 PODS:
-  - FreshchatSDK (1.3.0)
+  - FreshchatSDK (3.7.5)
 
 DEPENDENCIES:
   - FreshchatSDK
 
+SPEC REPOS:
+  trunk:
+    - FreshchatSDK
+
 SPEC CHECKSUMS:
-  FreshchatSDK: 3a93e5b37acfb9029f0dcdd28475e1f1688a2a77
+  FreshchatSDK: b3876e9b4b7f0cbd31d77722ac26f518fc7bb6b7
 
 PODFILE CHECKSUM: eb6919cac3a9518b7a317af82f78d215806568bb
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.9.2

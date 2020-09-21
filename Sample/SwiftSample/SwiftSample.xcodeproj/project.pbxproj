@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		028C691A251894740013E7DC /* CustomThemeFile.plist in Resources */ = {isa = PBXBuildFile; fileRef = 028C6919251894740013E7DC /* CustomThemeFile.plist */; };
 		CE684E531F6FC20A0047DA52 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE684E521F6FC20A0047DA52 /* AppDelegate.swift */; };
 		CE684E551F6FC20A0047DA52 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE684E541F6FC20A0047DA52 /* ViewController.swift */; };
 		CE684E581F6FC20A0047DA52 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE684E561F6FC20A0047DA52 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		028C6919251894740013E7DC /* CustomThemeFile.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = CustomThemeFile.plist; sourceTree = SOURCE_ROOT; };
 		0CD20E6C304056A509E9E5B2 /* Pods-SwiftSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftSample/Pods-SwiftSample.debug.xcconfig"; sourceTree = "<group>"; };
 		0EA68094E36C2BE4FEC47AFB /* Pods_SwiftSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE28680F1F6FC5BD0099DB91 /* SwiftSample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftSample-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			children = (
 				CE684E521F6FC20A0047DA52 /* AppDelegate.swift */,
 				CE684E541F6FC20A0047DA52 /* ViewController.swift */,
+				028C6919251894740013E7DC /* CustomThemeFile.plist */,
 				CE684E561F6FC20A0047DA52 /* Main.storyboard */,
 				CE684E591F6FC20A0047DA52 /* Assets.xcassets */,
 				CE684E5B1F6FC20A0047DA52 /* LaunchScreen.storyboard */,
@@ -162,7 +165,6 @@
 				CE684E4B1F6FC20A0047DA52 /* Sources */,
 				CE684E4C1F6FC20A0047DA52 /* Frameworks */,
 				CE684E4D1F6FC20A0047DA52 /* Resources */,
-				02B432EFC5AADE191BD4F848 /* [CP] Embed Pods Frameworks */,
 				D8B3A732F1B0EDCD9D9C2939 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -245,6 +247,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -266,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE684E5D1F6FC20A0047DA52 /* LaunchScreen.storyboard in Resources */,
+				028C691A251894740013E7DC /* CustomThemeFile.plist in Resources */,
 				CE684E5A1F6FC20A0047DA52 /* Assets.xcassets in Resources */,
 				CE684E581F6FC20A0047DA52 /* Main.storyboard in Resources */,
 			);
@@ -288,34 +292,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02B432EFC5AADE191BD4F848 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4DB51E496866C3A87338861F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftSample-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D8B3A732F1B0EDCD9D9C2939 /* [CP] Copy Pods Resources */ = {
@@ -324,13 +316,20 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-resources.sh",
+				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK/FCResources.bundle",
+				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK/FreshchatModels.bundle",
+				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK/FCLocalization.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FCResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FreshchatModels.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FCLocalization.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -505,7 +504,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftSample/SwiftSample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -522,7 +521,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sample.SwiftSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftSample/SwiftSample-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
