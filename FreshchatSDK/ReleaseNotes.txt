@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 3.7.8
+Version         : 4.0.0
+
+Ver 4.0.0 
+__________________________
+Enhancements :
+- Support for live translation of messages.
+- Pre-populate caption text while attaching images.
 
 Ver 3.7.8 
 __________________________

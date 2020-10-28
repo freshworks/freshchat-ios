@@ -199,3 +199,6 @@
 "calendar_invite_failed" = "Failed";
 "calendar_invite_pending" = "Awaiting Confirmation";
 "calendar_invite_scheduled_description" = "Meeting with our Team";
+
+/*Translation*/
+"translation_original_message_title" = "Original";

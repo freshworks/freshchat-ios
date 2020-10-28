@@ -41,6 +41,8 @@ typedef enum {
     FCEventDropDownSelect,
     FCEventCarouselShow,
     FCEventCarouselSelect,
+    FCEventShowOriginalClick,
+    FCEventHideOriginalClick,
     FCEventCarouselView,
     FCEventCalendarFindTimeSlotClick,
     FCEventCalendarInviteCancel,
@@ -78,6 +80,7 @@ typedef enum {
 #define FRESHCHAT_DID_FINISH_PLAYING_AUDIO_MESSAGE @"com.freshworks.freshchat_play_inapp_audio"
 #define FRESHCHAT_WILL_PLAY_AUDIO_MESSAGE @"com.freshworks.freshchat_pause_inapp_audio"
 #define FRESHCHAT_USER_RESTORE_ID_GENERATED @"com.freshworks.freshchat_user_restore_id_generated"
+#define FRESHCHAT_SET_TOKEN_TO_REFRESH_DEVICE_PROPERTIES @"com.freshworks.freshchat_set_token_to_refresh_device_properties"
 #define FRESHCHAT_USER_LOCALE_CHANGED @"com.freshworks.freshchat_user_locale_changed"
 #define FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED @"com.freshworks.freshchat_unread_message_count_changed"
 #define FRESHCHAT_EVENTS @"com.freshworks.freshchat_events"
