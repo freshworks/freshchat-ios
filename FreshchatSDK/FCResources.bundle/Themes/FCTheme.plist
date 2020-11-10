@@ -119,6 +119,22 @@
 			<key>dividerColor</key>
 			<string>#B3B3B3</string>
 		</dict>
+		<key>TranslationMessageStyle</key>
+		<dict>
+			<key>originalMessageTitleTextStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>12.0f</string>
+				<key>textColor</key>
+				<string>#607A96</string>
+			</dict>
+			<key>toggleIconBackgroundColor</key>
+			<string>#D6D8D9</string>
+			<key>originalMessageBarColor</key>
+			<string>#607A96</string>
+		</dict>
 		<key>FallbackMessageStyle</key>
 		<dict>
 			<key>fontName</key>
@@ -242,7 +258,7 @@
 			<key>UserMessageRight</key>
 			<string>8</string>
 			<key>UserMessageTop</key>
-			<string>8</string>
+			<string>6</string>
 			<key>UserMessageBottom</key>
 			<string>8</string>
 			<key>AgentMessageLeft</key>
@@ -250,7 +266,7 @@
 			<key>AgentMessageRight</key>
 			<string>8</string>
 			<key>AgentMessageTop</key>
-			<string>8</string>
+			<string>6</string>
 			<key>AgentMessageBottom</key>
 			<string>8</string>
 		</dict>
@@ -1058,6 +1074,8 @@
 		<string>FCResources.bundle/Images/freshchat_calendar_pending_icon</string>
 		<key>CalendarErrorIcon</key>
 		<string>FCResources.bundle/Images/freshchat_calendar_error_icon</string>
+		<key>TranslationToggleIcon</key>
+		<string>FCResources.bundle/Images/freshchat_msg_translate_toggle_icon</string>
 	</dict>
 </dict>
 </plist>
