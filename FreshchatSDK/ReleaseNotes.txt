@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 4.0.0
+Version         : 4.0.1
+
+Ver 4.0.1 
+__________________________
+Bug Fix:
+Minor Bug fixes.
 
 Ver 4.0.0 
 __________________________
@@ -59,7 +64,7 @@ Bug fix :
 Ver 3.7.1 
 __________________________
 Enhancement : 
-- Support for multiline placeholder text in feedback view.
+- Support for multiline placeholder text in feedback view
 
 Ver 3.7.0 
 __________________________
