@@ -1014,6 +1014,103 @@
 			<string>#9A9B9E</string>
 		</dict>
 	</dict>
+	<key>ErrorPage</key>
+	<dict>
+		<key>ErrorPageStyle</key>
+		<dict>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
+		<key>HeaderTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>17.0f</string>
+			<key>textColor</key>
+			<string>#394660</string>
+		</dict>
+		<key>SubTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>textColor</key>
+			<string>#394660</string>
+		</dict>
+		<key>ButtonStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>textColor</key>
+			<string>#707C92</string>
+			<key>borderColor</key>
+			<string>#707C92</string>
+		</dict>
+	</dict>
+	<key>Pagination</key>
+	<dict>
+		<key>PaginationStyle</key>
+		<dict>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
+		<key>RetryTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>textColor</key>
+			<string>#77777B</string>
+		</dict>
+		<key>LoadMoreTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>17.0f</string>
+			<key>textColor</key>
+			<string>#77777B</string>
+		</dict>
+	</dict>
+	<key>LoadingScreen</key>
+	<dict>
+		<key>LoadingScreenTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>17.0f</string>
+			<key>textColor</key>
+			<string>#77777B</string>
+		</dict>
+		<key>LoadingScreenStyle</key>
+		<dict>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
+	</dict>
+	<key>SearchScreen</key>
+	<dict>
+		<key>InfoStyle</key>
+		<dict>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
+		<key>InfoTextStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>17.0f</string>
+			<key>textColor</key>
+			<string>#495973</string>
+		</dict>
+	</dict>
 	<key>Images</key>
 	<dict>
 		<key>NotificationCancel</key>
@@ -1074,6 +1171,12 @@
 		<string>FCResources.bundle/Images/freshchat_calendar_pending_icon</string>
 		<key>CalendarErrorIcon</key>
 		<string>FCResources.bundle/Images/freshchat_calendar_error_icon</string>
+		<key>APIErrorIcon</key>
+		<string>FCResources.bundle/Images/freshchat_error_encountered</string>
+		<key>NoContentIcon</key>
+		<string>FCResources.bundle/Images/freshchat_no_content</string>
+		<key>InternetErrorIcon</key>
+		<string>FCResources.bundle/Images/freshchat_network_error</string>
 		<key>TranslationToggleIcon</key>
 		<string>FCResources.bundle/Images/freshchat_msg_translate_toggle_icon</string>
 	</dict>

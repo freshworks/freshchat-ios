@@ -28,6 +28,7 @@
 
 /* No Internet Connectivity */
 "offline_internet_message"="Uh-uh. No internet connection";
+"offline_internet_sub_message"="Please check your internet connection.";
 
 /*Channels*/
 "channels_title_text"="Conversations";
@@ -77,12 +78,12 @@
 
 /* Search View Place Holder */
 "search_placeholder_text"="Search FAQs";
-"search_empty_result_text"="Whoops! We couldn't find what you were looking for.";
 "empty_channel_text" = "Oops, no messages here!";
 "empty_faq_text" = "Sorry! There are no FAQs available";
 "loading_channel_text" = "Loading Messages";
 "restoring_channel_text" = "Restoring Messages";
-"loading_faq_text" = "Loading FAQs";
+"loading_faq_text" = "Loading";
+"min_character_search_text" = "Minimum 3 characters needed to search";
 
 /* Camera Unavailable alert */
 "camera_unavailable_title"="Your camera is unavailable";
@@ -182,10 +183,8 @@
 "calendar_slots_session_night" = "Night";
 "calendar_slots_show_more_btn" = "Show More";
 "calendar_slots_cancel_btn" = "Cancel";
-"calendar_slots_retry_btn" = "Retry";
 
 "calendar_no_slots_available_text" = "No Slots Available";
-"calendar_slots_error" = "An Error was encountered";
 
 "calendar_invite_confirm_btn" = "Confirm";
 "calendar_invite_change_slot_btn" = "Change Slot";
@@ -199,6 +198,17 @@
 "calendar_invite_failed" = "Failed";
 "calendar_invite_pending" = "Awaiting Confirmation";
 "calendar_invite_scheduled_description" = "Meeting with our Team";
+
+/*Error Pages*/
+"error_text" = "An error was encountered";
+"retry_button_text" = "Retry";
+"empty_article_text" = "No articles found";
+"empty_article_category_text" = "No articles found for '%@'";
+
+/*Pagination*/
+"load_more_text" = "Loading More...";
+"retry_load_more_text" = "Failed to Load. Tap to Retry.";
+"internet_retry_load_more_text" = "No Internet Connection. Tap to Retry.";
 
 /*Translation*/
 "translation_original_message_title" = "Original";

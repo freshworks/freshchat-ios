@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 4.0.1
+Version         : 4.1.0
+
+Ver 4.1.0 
+__________________________
+Feature :
+- Omni Kbase support for bundled accounts.
 
 Ver 4.0.1 
 __________________________
@@ -14,6 +19,10 @@ __________________________
 Enhancements :
 - Support for live translation of messages.
 - Pre-populate caption text while attaching images.
+Freshchat iOS SDK - Powered by Freshdesk
+Documentation   : https://support.freshchat.com
+Support Email   : support@freshchat.com
+Version         : 3.7.8
 
 Ver 3.7.8 
 __________________________
