@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 4.1.4
+Version         : 4.1.5
+
+Ver 4.1.5 
+__________________________
+Bug Fix:
+- UI bug fix in JWT accounts.
 
 Ver 4.1.4 
 __________________________
