@@ -143,6 +143,10 @@ NS_ASSUME_NONNULL_BEGIN
  * Enable/Disable application events with Freshchat. Default to YES
  */
 @property (nonatomic, assign) BOOL eventsUploadEnabled;
+/*
+ * Enable/Disable Freshchat remote logs. Default to YES
+ */
+@property (nonatomic, assign) BOOL errorLogsEnabled;
 
 /**
  *  Initialize Freshchat.
