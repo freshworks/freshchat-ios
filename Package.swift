@@ -5,14 +5,6 @@ let package = Package(
     platforms: [
         .iOS(.v8)
     ],
-    products: [
-        .library(
-            name: "FreshchatSDK",
-            targets: [
-              "FreshchatSDKTarget"
-            ]
-        )
-    ],
     targets: [
         .binaryTarget(
             name: "FreshchatSDKTarget",
