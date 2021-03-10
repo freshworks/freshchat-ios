@@ -1,0 +1,24 @@
+framework module FreshchatSDK {
+  umbrella header "Freshchat.h"
+
+  // This exports all modules imported by the umbrella header
+  export *
+
+  // `module *` defines that all headers imported in the umbrella are themselves submodules
+  // `{ export * }` here exports any modules imported by these submodules
+  module * { export * }
+
+
+  // When a new system framework is required, it should be added here
+  link framework "Foundation"
+  link framework "AVFoundation"
+  link framework "AudioToolbox"
+  link framework "CoreMedia"
+  link framework "CoreData"
+  link framework "ImageIO"
+  link framework "Photos"
+  link framework "SystemConfiguration"
+  link framework "Security"
+  link framework "WebKit"
+  link framework "CoreServices"
+}
