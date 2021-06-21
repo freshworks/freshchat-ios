@@ -495,6 +495,28 @@
 				<string>#4F5F78</string>
 			</dict>
 		</dict>
+		<key>NewMessagesCountButtonStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>13.0f</string>
+			<key>textColor</key>
+			<string>#000000</string>
+			<key>borderColor</key>
+			<string>#E1E2E6</string>
+			<key>background</key>
+			<string>#FFFFFF</string>
+		</dict>
+		<key>NewMessagesDividerStyle</key>
+		<dict>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textSize</key>
+			<string>13.0f</string>
+			<key>textColor</key>
+			<string>#707C92</string>
+		</dict>
 	</dict>
 	<key>ChannelList</key>
 	<dict>
