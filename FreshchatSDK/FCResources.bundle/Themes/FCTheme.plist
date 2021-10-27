@@ -517,6 +517,27 @@
 			<key>textColor</key>
 			<string>#707C92</string>
 		</dict>
+		<key>FAQSuggestionStyle</key>
+		<dict>
+			<key>textStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>13.0</string>
+			</dict>
+			<key>FAQSuggestionIcon</key>
+			<string>FCResources.bundle/Images/freshchat_faq_suggestion_icon</string>
+			<key>FAQSelectionHighlightColor</key>
+			<string>#EBEDF0</string>
+		</dict>
+		<key>CollectionFragmentStyle</key>
+		<dict>
+			<key>borderColor</key>
+			<string>#CFD7DF</string>
+		</dict>
 	</dict>
 	<key>ChannelList</key>
 	<dict>

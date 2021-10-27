@@ -2,7 +2,15 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 4.3.0
+Version         : 5.0.0
+
+Ver 5.0.0 
+__________________________
+Enhancement : 
+- Support for Bots created using bots builder.
+Bug fixes :
+- Fix to solve "Oops, no messages here!" message.
+- Minor bug fixes.
 
 Ver 4.3.0 
 __________________________
