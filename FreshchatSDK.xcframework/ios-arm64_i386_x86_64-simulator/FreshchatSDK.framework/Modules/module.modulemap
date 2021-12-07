@@ -3,4 +3,17 @@ framework module Freshchat {
 
   export *
   module * { export * }
+  
+  // When a new system framework is required, it should be added here
+    link framework "Foundation"
+    link framework "AVFoundation"
+    link framework "AudioToolbox"
+    link framework "CoreMedia"
+    link framework "CoreData"
+    link framework "ImageIO"
+    link framework "Photos"
+    link framework "SystemConfiguration"
+    link framework "Security"
+    link framework "WebKit"
+    link framework "CoreServices"
 }
