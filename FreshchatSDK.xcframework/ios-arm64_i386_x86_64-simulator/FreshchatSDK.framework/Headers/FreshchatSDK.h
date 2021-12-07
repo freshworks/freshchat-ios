@@ -24,8 +24,10 @@ typedef enum {
     FCEventFAQCategoryListOpen,
     FCEventFAQListOpen,
     FCEventFAQOpen,
+    FCEventBotFAQOpen,
     FCEventFAQSearch,
     FCEventFAQVote,
+    FCEventBotFAQVote,
     FCEventChannelListOpen,
     FCEventMessageSent,
     FCEventConversationOpen,
@@ -56,8 +58,12 @@ typedef enum {
  * Parameter enums for events
  */ 
 typedef enum {
+    FCPropertyBotFAQReferenceId,
+    FCPropertyBotFAQPlaceholderReferenceId,
     FCPropertyFAQCategoryID,
     FCPropertyFAQCategoryName,
+    FCPropertyBotFAQTitle,
+    FCPropertyBotFAQFeedback,
     FCPropertyFAQID,
     FCPropertyFAQTitle,
     FCPropertySearchKey,

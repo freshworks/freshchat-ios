@@ -1,9 +1,8 @@
 //
 //  Freshchat.h
-//  HotlineSDK
+//  Freshchat
 //
-//  Created by Hemanth Kumar on 13/02/21.
-//  Copyright © 2021 Freshdesk. All rights reserved.
+//  Created by Harish Kumar on 26/11/21.
 //
-
-#import <FreshchatSDK/FreshchatSDK.h>
+#import <UIKit/UIKit.h>
+#import "FreshchatSDK.h"

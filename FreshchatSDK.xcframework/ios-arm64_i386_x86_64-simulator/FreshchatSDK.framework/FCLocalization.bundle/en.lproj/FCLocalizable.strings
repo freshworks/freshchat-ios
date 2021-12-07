@@ -85,6 +85,13 @@
 "loading_faq_text" = "Loading";
 "min_character_search_text" = "Minimum 3 characters needed to search";
 
+/* New Unread Messages */
+"single_new_message_text"="%d New Message";
+"multiple_new_messages_text"="%d New Messages";
+
+/* New Message divider */
+"new_messages_divider_text"="New Messages";
+
 /* Camera Unavailable alert */
 "camera_unavailable_title"="Your camera is unavailable";
 "camera_unavailable_description"="Oopsie! Your device doesn't have a camera or the camera is not available for use";
