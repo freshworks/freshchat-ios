@@ -15,6 +15,12 @@ pod 'FreshchatSDK'
 end
 ```
 
+> Starting with version X.X.X, we deploy the framework using XCFrameworks bundle. If you cannot support this approach, you can instead integrate using the library directly by using the following in your **Podfile**:
+>
+> ```ruby
+> pod 'FreshchatSDK/VendoredLibrary'
+> ```
+
 #### Samples
 [Objective-C](https://github.com/freshdesk/freshchat-ios/tree/master/Sample/ObjectiveCSample)
 
@@ -22,7 +28,7 @@ end
 
 
 ## Documentation
-[Integration Guide](https://support.freshchat.com/support/solutions/articles/50000000048-freshchat-ios-sdk-integration-steps) 
+[Integration Guide](https://support.freshchat.com/support/solutions/articles/50000000048-freshchat-ios-sdk-integration-steps)
 
 [API docs](http://cocoadocs.org/docsets/FreshchatSDK)
 
