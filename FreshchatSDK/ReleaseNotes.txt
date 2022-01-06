@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.0.3
+Version         : 5.0.4
+
+Ver 5.0.4 
+__________________________
+Bug Fix :
+ - Fix FAQ article title override in search flow.
+ - Minor bug fixes.
 
 Ver 5.0.3 
 __________________________
