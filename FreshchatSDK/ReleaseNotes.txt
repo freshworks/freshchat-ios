@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.0.5
+Version         : 5.0.6
+
+Ver 5.0.6 
+__________________________
+Bug Fix :
+ - Quick replies support only for last message in a conversation.
+ - Fix for crash while opening a chat when translation enabled.
 
 Ver 5.0.5 
 __________________________
