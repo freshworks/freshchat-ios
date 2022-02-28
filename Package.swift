@@ -1,7 +1,6 @@
 // swift-tools-version:5.3
 import PackageDescription
 let package = Package(
-    exclude: ["Sample"],
     name: "FreshchatSDK",
     platforms: [
         .iOS(.v9)
