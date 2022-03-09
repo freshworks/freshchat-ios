@@ -8,11 +8,11 @@ let package = Package(
     products: [
         .library(
             name: "FreshchatSDK",
-            targets: ["FreshchatSDKTarget"]),
+            targets: ["FreshchatSDK"]),
     ],
     targets: [
         .binaryTarget(
-            name: "FreshchatSDKTarget",
+            name: "FreshchatSDK",
             path: "FreshchatSDK.xcframework"
         ),
     ]
