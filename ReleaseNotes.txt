@@ -2,9 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.0.9
+Version         : 5.1.0
 
-Ver 5.0.9
+Ver 5.1.0 
+__________________________
+Enhancement :
+- New device models added to track user devices.
+Bug Fix :
+- Theme fix for CSAT prompt.
+
+Ver 5.0.9 
 __________________________
 Bug Fix :
  - Incorrect display of messages in a botflow.
