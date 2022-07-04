@@ -8,11 +8,23 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			oqH/+YcXm1VRIeYOo3aa+lfsOs8=
+			N78AiKKcPPQDW+XAuvqvVnMuMc8=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
+		<key>FCResources.bundle/Images/fc_slash_command_image.png</key>
+		<data>
+		bTGNwSxG5sHxMzH1jFLktu55EgU=
+		</data>
+		<key>FCResources.bundle/Images/fc_slash_command_image@2x.png</key>
+		<data>
+		JVsmlMZK2UQQjw3etw9kMNT+unE=
+		</data>
+		<key>FCResources.bundle/Images/fc_slash_command_image@3x.png</key>
+		<data>
+		W++/tIpnh1Xb43QeKPEGpvu7hOc=
+		</data>
 		<key>FCResources.bundle/Images/freshchat_agent_avatar_icon.png</key>
 		<data>
 		O36BEqFJaJRxIJ91olyu6ghqefk=
@@ -317,6 +329,18 @@
 		<data>
 		NjtjC8j/IvfGHfud4ZZX6NwuEM4=
 		</data>
+		<key>FCResources.bundle/Images/freshchat_menu_quick_actions.png</key>
+		<data>
+		Klaw0amvgxo21pKpLsTb/ajWD7g=
+		</data>
+		<key>FCResources.bundle/Images/freshchat_menu_quick_actions@2x.png</key>
+		<data>
+		pHsf0tzG1wvNaI7bi8+NOw2N308=
+		</data>
+		<key>FCResources.bundle/Images/freshchat_menu_quick_actions@3x.png</key>
+		<data>
+		XjGmzfUUgY0zEHf4WQzlyb4lO9s=
+		</data>
 		<key>FCResources.bundle/Images/freshchat_mic_icon.png</key>
 		<data>
 		GYH6zaQxWREFxaTBzQIh2urp8gw=
@@ -503,7 +527,7 @@
 		</data>
 		<key>FCResources.bundle/Themes/FCTheme.plist</key>
 		<data>
-		R5QtuHmdKHaWfcS4AV4qZf6qDU8=
+		wZMWrvL5TNbR0/1RuOzR5UDV2cI=
 		</data>
 		<key>FCResources.bundle/Themes/normalize.css</key>
 		<data>
@@ -517,9 +541,13 @@
 		<data>
 		7ETxVT2kMyPqZlQZ399b1/2QFiE=
 		</data>
-		<key>FreshchatModel.momd/FreshchatModel 10.omo</key>
+		<key>FreshchatModel.momd/FreshchatModel 11.mom</key>
 		<data>
-		QE+drXNW0fHDbcVbbAEGHw5EScg=
+		Y259VqrSfO8FDyF2SjtiWWwJIDc=
+		</data>
+		<key>FreshchatModel.momd/FreshchatModel 11.omo</key>
+		<data>
+		F/56NMtg679y0eeDn0jdLQlVrTc=
 		</data>
 		<key>FreshchatModel.momd/FreshchatModel 2.mom</key>
 		<data>
@@ -559,7 +587,7 @@
 		</data>
 		<key>FreshchatModel.momd/VersionInfo.plist</key>
 		<data>
-		zhkxKKMMIPOfw5/MJk6Swetcb60=
+		iaNueKZ6r8jEcCPcd0jmjzOmZq4=
 		</data>
 		<key>FreshchatModels-Info.plist</key>
 		<data>
@@ -573,9 +601,13 @@
 		<data>
 		7ETxVT2kMyPqZlQZ399b1/2QFiE=
 		</data>
-		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 10.omo</key>
+		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 11.mom</key>
 		<data>
-		QE+drXNW0fHDbcVbbAEGHw5EScg=
+		Y259VqrSfO8FDyF2SjtiWWwJIDc=
+		</data>
+		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 11.omo</key>
+		<data>
+		F/56NMtg679y0eeDn0jdLQlVrTc=
 		</data>
 		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 2.mom</key>
 		<data>
@@ -615,15 +647,19 @@
 		</data>
 		<key>FreshchatModels.bundle/FreshchatModel.momd/VersionInfo.plist</key>
 		<data>
-		0aeU+BCR7C8pTGMIpx1G2fqbJSQ=
+		iaNueKZ6r8jEcCPcd0jmjzOmZq4=
+		</data>
+		<key>FreshchatModels.bundle/FreshchatModels</key>
+		<data>
+		eY05jTCu8t/RPuFflW2fqAROiBQ=
 		</data>
 		<key>FreshchatModels.bundle/Info.plist</key>
 		<data>
-		O8oaBH4Ut0kWXMOejrwDaSLjyPk=
+		BhJQzVPS6YNcUQYWmhHdfVzYHlc=
 		</data>
 		<key>Headers/FreshchatSDK.h</key>
 		<data>
-		ouPduk8bYHPxE8qeeUd6K5uCoLk=
+		VO36qmKymekFro/ZJpXJVf3YX5I=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -640,14 +676,47 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			oqH/+YcXm1VRIeYOo3aa+lfsOs8=
+			N78AiKKcPPQDW+XAuvqvVnMuMc8=
 			</data>
 			<key>hash2</key>
 			<data>
-			/5T3gF5zA/L+2HBy1Df7LltvGLUNQYeoMiIfTQCZFNA=
+			g7mNVbb+wptArMJpL0Gefc/yoDvV+lf8P2vbx0choRQ=
 			</data>
 			<key>optional</key>
 			<true/>
+		</dict>
+		<key>FCResources.bundle/Images/fc_slash_command_image.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			bTGNwSxG5sHxMzH1jFLktu55EgU=
+			</data>
+			<key>hash2</key>
+			<data>
+			cgV/+n0nB7R7CY3XeOx9tW+K3tDZeXOCzlcGR/Fnd7o=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/fc_slash_command_image@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			JVsmlMZK2UQQjw3etw9kMNT+unE=
+			</data>
+			<key>hash2</key>
+			<data>
+			vz2mT9wugO36OUWrBSlaUyb/aap9ZAWHUq5btU52drA=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/fc_slash_command_image@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			W++/tIpnh1Xb43QeKPEGpvu7hOc=
+			</data>
+			<key>hash2</key>
+			<data>
+			eeMYMZyRZteXN+kXvGrSrSg9k5z4P9iO2hKZBQthCa4=
+			</data>
 		</dict>
 		<key>FCResources.bundle/Images/freshchat_agent_avatar_icon.png</key>
 		<dict>
@@ -1485,6 +1554,39 @@
 			7BOrrpK2UlceL/aEB/2PZzpVoR981nhaZYRosDvdyJg=
 			</data>
 		</dict>
+		<key>FCResources.bundle/Images/freshchat_menu_quick_actions.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Klaw0amvgxo21pKpLsTb/ajWD7g=
+			</data>
+			<key>hash2</key>
+			<data>
+			6cwPRXGUgjX4ex/zrFDXCoF73XKkLyYnEUW8AHeDzc8=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/freshchat_menu_quick_actions@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			pHsf0tzG1wvNaI7bi8+NOw2N308=
+			</data>
+			<key>hash2</key>
+			<data>
+			v0DShHDBPODnCGI+8E4CDXM21HRD0GpwSG3R9nGcxSo=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/freshchat_menu_quick_actions@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			XjGmzfUUgY0zEHf4WQzlyb4lO9s=
+			</data>
+			<key>hash2</key>
+			<data>
+			KPxqMombBRITTVHJPsjXNSo8nAuSgPfRh2c7+dMQFYY=
+			</data>
+		</dict>
 		<key>FCResources.bundle/Images/freshchat_mic_icon.png</key>
 		<dict>
 			<key>hash</key>
@@ -1995,11 +2097,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			R5QtuHmdKHaWfcS4AV4qZf6qDU8=
+			wZMWrvL5TNbR0/1RuOzR5UDV2cI=
 			</data>
 			<key>hash2</key>
 			<data>
-			VRCxorVEKVOqO0huPm4V/eOLcg5OMFnbTaLZDijB2a8=
+			wsP3jDhnoFHRFKWegjPyv2yrMvLJqDGVfwdb9wSvMG8=
 			</data>
 		</dict>
 		<key>FCResources.bundle/Themes/normalize.css</key>
@@ -2035,15 +2137,26 @@
 			Qunq50e/U9WhsoMq1UOW4p+3xH3YSHvMtAMYXreySM4=
 			</data>
 		</dict>
-		<key>FreshchatModel.momd/FreshchatModel 10.omo</key>
+		<key>FreshchatModel.momd/FreshchatModel 11.mom</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QE+drXNW0fHDbcVbbAEGHw5EScg=
+			Y259VqrSfO8FDyF2SjtiWWwJIDc=
 			</data>
 			<key>hash2</key>
 			<data>
-			J6PiixCeJrne7CGQ0MyeFAtPmVKdMR7BV9gxC30H+mY=
+			S4c9su9/nfDv7hqaTuHcyoeOGKCW/jHsiWMFf66ejV0=
+			</data>
+		</dict>
+		<key>FreshchatModel.momd/FreshchatModel 11.omo</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			F/56NMtg679y0eeDn0jdLQlVrTc=
+			</data>
+			<key>hash2</key>
+			<data>
+			JtAvKP/x0nieLEL+Uu2qysEG17e23l5GgfP1xlU1Z34=
 			</data>
 		</dict>
 		<key>FreshchatModel.momd/FreshchatModel 2.mom</key>
@@ -2149,11 +2262,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zhkxKKMMIPOfw5/MJk6Swetcb60=
+			iaNueKZ6r8jEcCPcd0jmjzOmZq4=
 			</data>
 			<key>hash2</key>
 			<data>
-			8g0jjfMUyCuKPaiaHOPmkRJZS8tNMlVF2UXwV/ZaMKo=
+			9p/gNdE/FF/V3A27dAQtFTEVmTNqrFbCAlHjw/cBK84=
 			</data>
 		</dict>
 		<key>FreshchatModels-Info.plist</key>
@@ -2189,15 +2302,26 @@
 			Qunq50e/U9WhsoMq1UOW4p+3xH3YSHvMtAMYXreySM4=
 			</data>
 		</dict>
-		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 10.omo</key>
+		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 11.mom</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QE+drXNW0fHDbcVbbAEGHw5EScg=
+			Y259VqrSfO8FDyF2SjtiWWwJIDc=
 			</data>
 			<key>hash2</key>
 			<data>
-			J6PiixCeJrne7CGQ0MyeFAtPmVKdMR7BV9gxC30H+mY=
+			S4c9su9/nfDv7hqaTuHcyoeOGKCW/jHsiWMFf66ejV0=
+			</data>
+		</dict>
+		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 11.omo</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			F/56NMtg679y0eeDn0jdLQlVrTc=
+			</data>
+			<key>hash2</key>
+			<data>
+			JtAvKP/x0nieLEL+Uu2qysEG17e23l5GgfP1xlU1Z34=
 			</data>
 		</dict>
 		<key>FreshchatModels.bundle/FreshchatModel.momd/FreshchatModel 2.mom</key>
@@ -2303,33 +2427,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			0aeU+BCR7C8pTGMIpx1G2fqbJSQ=
+			iaNueKZ6r8jEcCPcd0jmjzOmZq4=
 			</data>
 			<key>hash2</key>
 			<data>
-			nnR4aui5j2hiPmaVYZu7HQ0pZcDGezd+DnYwBZ6zE+4=
+			9p/gNdE/FF/V3A27dAQtFTEVmTNqrFbCAlHjw/cBK84=
+			</data>
+		</dict>
+		<key>FreshchatModels.bundle/FreshchatModels</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			eY05jTCu8t/RPuFflW2fqAROiBQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			AXqGu2qPQuYvz/MKDoO0UHSffqRn3mipe9kIg3tTJ9E=
 			</data>
 		</dict>
 		<key>FreshchatModels.bundle/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			O8oaBH4Ut0kWXMOejrwDaSLjyPk=
+			BhJQzVPS6YNcUQYWmhHdfVzYHlc=
 			</data>
 			<key>hash2</key>
 			<data>
-			NLUlwyXnnS1izCMJZd5QGStZVibuLCc8M20Uw4wPXvk=
+			QnsmPxkEaF25Bn/BowL60ehT5Fgsyjv9JcVSuffoQU8=
 			</data>
 		</dict>
 		<key>Headers/FreshchatSDK.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ouPduk8bYHPxE8qeeUd6K5uCoLk=
+			VO36qmKymekFro/ZJpXJVf3YX5I=
 			</data>
 			<key>hash2</key>
 			<data>
-			SHRSbECwZV6HhoimYAyHvAYpoYTUGMmezRWj7mjuNLU=
+			zDVPq2EH8w9Ws2YlFUlVbq7tYUkA5XDRDgJdL70eOCk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

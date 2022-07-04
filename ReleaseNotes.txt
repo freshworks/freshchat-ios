@@ -2,7 +2,15 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.1.0
+Version         : 5.2.0
+
+Ver 5.2.0 
+__________________________
+Feature :
+- Support for read-only and single select carousel in bots flow.
+- Support for quick options in bot flow.
+Bug fix :
+- Display missing suggested article(s) in initial bot flow.
 
 Ver 5.1.0 
 __________________________

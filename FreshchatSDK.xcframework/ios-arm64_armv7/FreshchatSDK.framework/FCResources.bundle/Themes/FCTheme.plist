@@ -117,7 +117,7 @@
 			<key>background</key>
 			<string>#FFFFFF</string>
 			<key>dividerColor</key>
-			<string>#B3B3B3</string>
+			<string>#CFD7DF</string>
 		</dict>
 		<key>TranslationMessageStyle</key>
 		<dict>
@@ -318,9 +318,9 @@
 			<key>textSize</key>
 			<string>15.0f</string>
 			<key>textColor</key>
-			<string>#FFFFFF</string>
+			<string>#12344D</string>
 			<key>cellBackground</key>
-			<string>#0380fc</string>
+			<string>#FFFFFF</string>
 			<key>cornerRadius</key>
 			<string>10</string>
 			<key>cellPadding</key>
@@ -329,6 +329,58 @@
 			<string>10</string>
 			<key>maxHeightPercentage</key>
 			<string>35</string>
+			<key>borderColor</key>
+			<string>#CFD7DF</string>
+		</dict>
+		<key>QuickActions</key>
+		<dict>
+			<key>SlashCommand</key>
+			<dict>
+				<key>selectedColor</key>
+				<string>#EBEFF3</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>background</key>
+				<string>#FFFFFF</string>
+			</dict>
+			<key>Menu</key>
+			<dict>
+				<key>selectedColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>menuButtonColor</key>
+				<string>#45A4EC</string>
+				<key>background</key>
+				<string></string>
+			</dict>
+			<key>Button</key>
+			<dict>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>buttonColor</key>
+				<string>#F5F7F9</string>
+				<key>selectedColor</key>
+				<string>#CFD7DF</string>
+				<key>background</key>
+				<string>#FFFFFF</string>
+				<key>borderColor</key>
+				<string>#CFD7DF</string>
+				<key>dividerColor</key>
+				<string>#F3F5F7</string>
+			</dict>
 		</dict>
 		<key>DropDownBarStyle</key>
 		<dict>
@@ -364,41 +416,60 @@
 		</dict>
 		<key>CarouselCardStyle</key>
 		<dict>
+			<key>subTitleTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#475867</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0f</string>
+			</dict>
 			<key>titleTextStyle</key>
 			<dict>
 				<key>textColor</key>
-				<string>#000000</string>
+				<string>#12344D</string>
 				<key>fontName</key>
 				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
 				<key>textSize</key>
-				<string>17.0f</string>
+				<string>15.0f</string>
 			</dict>
 			<key>descriptionTextStyle</key>
 			<dict>
 				<key>textColor</key>
-				<string>#000000</string>
+				<string>#12344D</string>
 				<key>fontName</key>
 				<string>SYS_DEFAULT_FONT_NAME</string>
 				<key>textSize</key>
-				<string>15.0f</string>
+				<string>13.0f</string>
 			</dict>
 			<key>actionButtonStyle</key>
 			<dict>
-				<key>textColor</key>
-				<string>#0079FF</string>
-				<key>fontName</key>
-				<string>SYS_DEFAULT_FONT_NAME</string>
-				<key>textSize</key>
-				<string>15.0f</string>
-			</dict>
-			<key>selectedTextStyle</key>
-			<dict>
-				<key>textColor</key>
-				<string>#808080</string>
-				<key>fontName</key>
-				<string>SYS_DEFAULT_FONT_NAME</string>
-				<key>textSize</key>
-				<string>15.0f</string>
+				<key>carouselButtonStyle</key>
+				<dict>
+					<key>textSize</key>
+					<string>15.0f</string>
+					<key>textColor</key>
+					<string>#0079FF</string>
+					<key>fontName</key>
+					<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				</dict>
+				<key>CarouselSelectButton</key>
+				<dict>
+					<key>textColor</key>
+					<string>#FFFFFF</string>
+					<key>backgroundColor</key>
+					<string>#12344D</string>
+				</dict>
+				<key>CarouselViewButton</key>
+				<dict>
+					<key>textColor</key>
+					<string>#12344D</string>
+					<key>backgroundColor</key>
+					<string>#FFFFFF</string>
+					<key>borderColor</key>
+					<string>#12344D</string>
+				</dict>
 			</dict>
 			<key>selectedCardStyle</key>
 			<dict>
@@ -1156,8 +1227,12 @@
 	</dict>
 	<key>Images</key>
 	<dict>
+		<key>SlashCommandIcon</key>
+		<string>FCResources.bundle/Images/fc_slash_command_image</string>
 		<key>NotificationCancel</key>
 		<string>FCResources.bundle/Images/freshchat_notification_cancel_icon</string>
+		<key>MenuQuickActionIcon</key>
+		<string>FCResources.bundle/Images/freshchat_menu_quick_actions</string>
 		<key>SearchIcon</key>
 		<string>FCResources.bundle/Images/freshchat_search_icon</string>
 		<key>ContactUsIcon</key>

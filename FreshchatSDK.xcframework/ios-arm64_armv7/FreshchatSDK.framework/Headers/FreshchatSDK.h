@@ -51,7 +51,8 @@ typedef enum {
     FCEventCalendarNoTimeSlotFound,
     FCEventCalendarBookingSuccess,
     FCEventCalendarBookingRetry,
-    FCEventCalendarBookingFailure
+    FCEventCalendarBookingFailure,
+    FCEventQuickActionSelect
 } FCEvent;
 
 /*
@@ -79,7 +80,9 @@ typedef enum {
     FCPropertyComment,
     FCPropertyURL,
     FCPropertyOption,
-    FCPropertyInviteId
+    FCPropertyInviteId,
+    FCProperyQuickActionType,
+    FCProperyQuickActionLabel
 } FCEventProperty;
 
 

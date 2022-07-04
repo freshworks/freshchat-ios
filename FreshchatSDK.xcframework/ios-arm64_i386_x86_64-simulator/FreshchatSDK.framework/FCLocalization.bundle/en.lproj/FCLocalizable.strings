@@ -160,7 +160,6 @@
 "dropdown_choose_select"="Click here to select";
 
 /*Carousel*/
-"carousel_card_selected_text" = "Selected";
 "default_carousel_card_view_btn" = "View";
 "default_carousel_card_select_btn" = "Select";
 "default_carousel_list_preview_text" = "Choose an option";
