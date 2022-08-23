@@ -2,14 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.0.5
+Version         : 5.2.3
 
-Ver 5.0.5 
+Ver 5.2.3 
 __________________________
+Enhancement :
+- Rebranding changes for SDK.
 Bug Fix :
- - Unread count overlap for topic list.
- - Black navigation bar appearance on navigating via push notification.
- - Rare invalid domain prompt during sdk initialization.
+- Add TOKEN_NOT_PROCESSED state for JWT auth users.
 
 Ver 5.0.4 
 __________________________
