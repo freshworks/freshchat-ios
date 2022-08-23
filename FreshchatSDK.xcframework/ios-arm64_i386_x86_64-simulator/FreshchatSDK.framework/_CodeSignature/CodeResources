@@ -521,6 +521,18 @@
 		<data>
 		Q+dIFKHTNZNjOZJW64cGznB7z6k=
 		</data>
+		<key>FCResources.bundle/Images/freshworksLogo.png</key>
+		<data>
+		QImoF2a5fAgBdapyJqbfU2nM2Jc=
+		</data>
+		<key>FCResources.bundle/Images/freshworksLogo@2x.png</key>
+		<data>
+		jwttXl/2dHDAI+cKg9DLWEp1y80=
+		</data>
+		<key>FCResources.bundle/Images/freshworksLogo@3x.png</key>
+		<data>
+		2WodO7pbsrBS9pf8w+oJl0Tiwpo=
+		</data>
 		<key>FCResources.bundle/Info.plist</key>
 		<data>
 		V69CHBhL650PDDrKJivNcxL9zNs=
@@ -2076,6 +2088,39 @@
 			<key>hash2</key>
 			<data>
 			Qwm0qOUh+SzIzHDgjlJ/whelhLjCPwEZBQ+yHxFc4Lk=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/freshworksLogo.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			QImoF2a5fAgBdapyJqbfU2nM2Jc=
+			</data>
+			<key>hash2</key>
+			<data>
+			A7fDJ1sGd2uKM9ccTqqhQKdEVNv5t0vK8aQKrzgDSv0=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/freshworksLogo@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			jwttXl/2dHDAI+cKg9DLWEp1y80=
+			</data>
+			<key>hash2</key>
+			<data>
+			I3MXgXYC0HLamScbP9uKNfd93b7XVbTqS9yaEdCxOtA=
+			</data>
+		</dict>
+		<key>FCResources.bundle/Images/freshworksLogo@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			2WodO7pbsrBS9pf8w+oJl0Tiwpo=
+			</data>
+			<key>hash2</key>
+			<data>
+			tWXVWIx4PewayaHIpu6eoOLYzyiBU8BQ2iSuLBOD/uk=
 			</data>
 		</dict>
 		<key>FCResources.bundle/Info.plist</key>

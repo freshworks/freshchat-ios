@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.2.2
+Version         : 5.2.3
+
+Ver 5.2.3 
+__________________________
+Enhancement :
+- Rebranding changes for SDK.
+Bug Fix :
+- Add TOKEN_NOT_PROCESSED state for JWT auth users.
 
 Ver 5.2.2 
 __________________________
