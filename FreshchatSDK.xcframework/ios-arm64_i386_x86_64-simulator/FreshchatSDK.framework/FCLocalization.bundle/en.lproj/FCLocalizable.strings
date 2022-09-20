@@ -106,9 +106,11 @@
 "pic_msg_attachment_title_text"="Picture";
 
 /*Image Attachment*/
+"msg_attachment_prompt_title"="Maximum file size should be 20MB";
 "image_attachment_cancel_button_text"="Cancel";
 "image_attachment_select_existing_image"="Upload from gallery";
 "image_attachment_select_new_image"="Take a picture";
+"file_attachment_browse_files"="Browse from files";
 
 /*general*/
 "date_today" = "Today";
@@ -218,3 +220,26 @@
 
 /*Translation*/
 "translation_original_message_title" = "Original";
+
+/*Placeholder*/
+"placeholder_phonenumber_text" = "Enter Phone number";
+"placeholder_email_text" = "Enter email";
+"placeholder_number_text" = "Enter number";
+
+/*Validation Error */
+"phonenumber_validationerror_text" = "Enter valid phone number";
+"email_validationerror_text" = "Enter valid email";
+"number_validationerror_text" = "Enter valid number";
+
+/* File attachment*/
+"send_attachment_title_only_image" = "Upload an image";
+"send_attachment_title_only_file" = "Upload a file";
+"send_attachment_title_both_image_and_file" = "Upload a file/image";
+"file_attachment_error_title" = "Unable to attach";
+"file_attachment_unsupported_format_error_message" = "Attachment format is not supported";
+"file_attachment_verification_pending_error_title" = "Pending malware scan";
+"file_attachment_verification_pending_error_message" = "File is not yet scanned, It might harm your device. So download at your  discretion";
+"file_attachment_verification_pending_download_option" = "Download";
+
+"alert_view_ok_title" = "Ok";
+"alert_view_cancel_title" = "Cancel";

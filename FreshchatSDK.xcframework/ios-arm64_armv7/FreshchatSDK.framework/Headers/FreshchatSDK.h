@@ -52,6 +52,11 @@ typedef enum {
     FCEventCalendarBookingSuccess,
     FCEventCalendarBookingRetry,
     FCEventCalendarBookingFailure,
+    FCEventFileAttachmentUploadSuccess,
+    FCEventFileAttachmentUploadError,
+    FCEventFileAttachmentOpen,
+    FCEventFileAttachmentOpenError,
+    FCEventBotFileAttachmentUpload,
     FCEventQuickActionSelect
 } FCEvent;
 
@@ -156,6 +161,10 @@ NS_ASSUME_NONNULL_BEGIN
  * Enable/Disable Freshchat remote logs. Default to YES
  */
 @property (nonatomic, assign) BOOL errorLogsEnabled;
+/*
+ * Enable/Disable file attachment. Default to YES
+ */
+@property (nonatomic, assign) BOOL fileAttachmentEnabled;
 
 /**
  *  Initialize Freshchat.

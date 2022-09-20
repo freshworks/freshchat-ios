@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.2.3
+Version         : 5.3.0
+
+Ver 5.3.0 
+__________________________
+Feature :
+- Bot will now be able to validate text in Mobile number, Email-ID and Number input types from customer in the conversation.
+- Customer can upload file for bot flows and attachment option.
 
 Ver 5.2.3 
 __________________________

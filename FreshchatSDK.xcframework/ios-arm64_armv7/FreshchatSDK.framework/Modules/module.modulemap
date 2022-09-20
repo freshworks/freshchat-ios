@@ -4,3 +4,8 @@ framework module FreshchatSDK {
   export *
   module * { export * }
 }
+
+module FreshchatSDK.Swift {
+    header "FreshchatSDK-Swift.h"
+    requires objc
+}

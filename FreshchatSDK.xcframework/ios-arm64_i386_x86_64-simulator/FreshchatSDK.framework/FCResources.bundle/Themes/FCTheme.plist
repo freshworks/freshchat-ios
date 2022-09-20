@@ -6,6 +6,8 @@
 	<dict>
 		<key>AttachIcon</key>
 		<string>FCResources.bundle/Images/freshchat_upload_icon</string>
+		<key>FileAttachmentSendIcon</key>
+		<string>FCResources.bundle/Images/freshchat_file_send_icon</string>
 		<key>ChatBubbleRight</key>
 		<string>FCResources.bundle/Images/freshchat_chat_bubble_right</string>
 		<key>ChatBubbleLeft</key>
@@ -134,6 +136,22 @@
 			<string>#D6D8D9</string>
 			<key>originalMessageBarColor</key>
 			<string>#607A96</string>
+		</dict>
+		<key>PlaceholderValidation</key>
+		<dict>
+			<key>validationTextStyle</key>
+			<dict>
+				<key>textSize</key>
+				<string>13.0f</string>
+				<key>textColor</key>
+				<string>#C82124</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+			</dict>
+			<key>dividerBackgroundColor</key>
+			<string>#FAC386</string>
+			<key>background</key>
+			<string>#FEF1E1</string>
 		</dict>
 		<key>FallbackMessageStyle</key>
 		<dict>
@@ -609,6 +627,59 @@
 			<key>borderColor</key>
 			<string>#CFD7DF</string>
 		</dict>
+		<key>AttachmentMessageStyle</key>
+		<dict>
+			<key>nameTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>15.0</string>
+			</dict>
+			<key>infoTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#475867</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>13.0</string>
+			</dict>
+			<key>borderColor</key>
+			<string>#CFD7DF</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>dotSeperatorColor</key>
+			<string>#92A2B1</string>
+		</dict>
+		<key>AttachmentPreviewScreen</key>
+		<dict>
+			<key>SendButton</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textSize</key>
+				<string>17.0</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<key>AttachmentInputViewStyle</key>
+		<dict>
+			<key>titleTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#2C5CC5</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0</string>
+			</dict>
+		</dict>
 	</dict>
 	<key>ChannelList</key>
 	<dict>
@@ -1005,6 +1076,8 @@
 		<dict>
 			<key>progressBarColor</key>
 			<string>#6D6D6D</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
 		</dict>
 	</dict>
 	<key>SearchBar</key>
@@ -1297,6 +1370,8 @@
 		<string>FCResources.bundle/Images/freshchat_network_error</string>
 		<key>TranslationToggleIcon</key>
 		<string>FCResources.bundle/Images/freshchat_msg_translate_toggle_icon</string>
+		<key>AttachmentFragmentIcon</key>
+		<string>FCResources.bundle/Images/attachment_fragment_icon</string>
 	</dict>
 </dict>
 </plist>
