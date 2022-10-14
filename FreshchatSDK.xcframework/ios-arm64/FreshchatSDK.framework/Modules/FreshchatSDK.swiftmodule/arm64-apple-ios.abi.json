@@ -1,0 +1,112 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCValidationErrorView.swift",
+      "kind": "StringLiteral",
+      "offset": 164,
+      "length": 21,
+      "value": "\"FreshchatSDK.FCValidationErrorView\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 126,
+      "length": 51,
+      "value": "\"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,15}\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 195,
+      "length": 21,
+      "value": "\"^\\+?(-?\\d){9,15}$\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 235,
+      "length": 30,
+      "value": "\"(\\+?|-?)\\d{1,140}+\\.?\\d*\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 323,
+      "length": 7,
+      "value": "\"email\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 340,
+      "length": 7,
+      "value": "\"phone\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 358,
+      "length": 8,
+      "value": "\"number\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 323,
+      "length": 7,
+      "value": "\"email\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 340,
+      "length": 7,
+      "value": "\"phone\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 358,
+      "length": 8,
+      "value": "\"number\""
+    }
+  ]
+}
