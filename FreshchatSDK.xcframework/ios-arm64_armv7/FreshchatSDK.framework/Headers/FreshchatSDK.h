@@ -57,7 +57,8 @@ typedef enum {
     FCEventFileAttachmentOpen,
     FCEventFileAttachmentOpenError,
     FCEventBotFileAttachmentUpload,
-    FCEventQuickActionSelect
+    FCEventQuickActionSelect,
+    FCEventFeedbackMessageSent
 } FCEvent;
 
 /*
@@ -87,7 +88,8 @@ typedef enum {
     FCPropertyOption,
     FCPropertyInviteId,
     FCProperyQuickActionType,
-    FCProperyQuickActionLabel
+    FCProperyQuickActionLabel,
+    FCPropertyFeedbackType
 } FCEventProperty;
 
 

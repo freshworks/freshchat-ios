@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.3.1
+Version         : 5.3.2
+
+Ver 5.3.2 
+__________________________
+Enhancement :
+- This version lets you receive feedback (opinion polls & comments) from users during bot interactions.
 
 Ver 5.3.1 
 __________________________
