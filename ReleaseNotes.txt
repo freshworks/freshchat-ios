@@ -2,7 +2,15 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.3.2
+Version         : 5.3.3
+
+Ver 5.3.3 
+__________________________
+Improvement :
+- Minor UI changes and improvements to accomodate for ios devices and versions.
+Bug Fixes :
+- Fix for Quick Action Pre-defined buttons.
+- Fix impacting CSAT users for RTL users.
 
 Ver 5.3.2 
 __________________________
