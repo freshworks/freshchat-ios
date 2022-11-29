@@ -1,0 +1,229 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "CoreMedia",
+        "printedName": "CoreMedia",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK"
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCValidationErrorView.swift",
+      "kind": "StringLiteral",
+      "offset": 164,
+      "length": 21,
+      "value": "\"FreshchatSDK.FCValidationErrorView\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FeedbackOpinionCell\/FCFeedbackOpinionTableViewCell.swift",
+      "kind": "StringLiteral",
+      "offset": 382,
+      "length": 17,
+      "value": "\"OpinionPollIcon\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 126,
+      "length": 51,
+      "value": "\"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,15}\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 195,
+      "length": 21,
+      "value": "\"^\\+?(-?\\d){9,15}$\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 235,
+      "length": 30,
+      "value": "\"(\\+?|-?)\\d{1,140}+\\.?\\d*\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 323,
+      "length": 7,
+      "value": "\"email\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 340,
+      "length": 7,
+      "value": "\"phone\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 358,
+      "length": 8,
+      "value": "\"number\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 10,
+      "value": "\"feedback\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 323,
+      "length": 7,
+      "value": "\"email\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 340,
+      "length": 7,
+      "value": "\"phone\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 358,
+      "length": 8,
+      "value": "\"number\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 10,
+      "value": "\"feedback\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FCAckView.swift",
+      "kind": "StringLiteral",
+      "offset": 147,
+      "length": 9,
+      "value": "\"FreshchatSDK.FCAckView\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "FloatLiteral",
+      "offset": 758,
+      "length": 5,
+      "value": "540.0"
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "IntegerLiteral",
+      "offset": 793,
+      "length": 2,
+      "value": "52"
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "IntegerLiteral",
+      "offset": 824,
+      "length": 1,
+      "value": "8"
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "StringLiteral",
+      "offset": 859,
+      "length": 32,
+      "value": "\"FCFeedbackOpinionTableViewCell\""
+    },
+    {
+      "filePath": "\/Users\/tsivakumar\/Desktop\/Projects\/Freshchat SDK\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "StringLiteral",
+      "offset": 275,
+      "length": 21,
+      "value": "\"FreshchatSDK.FCFeedbackOpinionPoll\""
+    }
+  ]
+}
