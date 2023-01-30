@@ -238,6 +238,7 @@
 "thanks_feedback_comment_text" = "Thank you for the feedback";
 
 "submit_button_text" = "Submit";
+"rating_label_text" = "Rate us";
 
 /* File attachment*/
 "send_attachment_title_only_image" = "Upload an image";
