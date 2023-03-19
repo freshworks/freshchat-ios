@@ -2,11 +2,26 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.4.4
+Version         : 5.4.5
 
-Ver 5.4.4 
+Ver 5.4.5 
 __________________________
-- Bug fixes & improvements.
+Feature :
+- Support for user attribute placeholders in bot message.
+Bug Fix :
+- Fix to show bot flow message instead of unsupported format error message.
+- Fix to show HTML entities instead of entity names.
+
+Ver 5.4.4
+__________________________
+Bug fixes :
+
+- Fix for updating user details along with user creation. 
+- Fix to stop auto scrolling of Carousel cards to initial card.
+- Fix for overlapping new message indicator with reply editor.
+- Fix to allow sending attachment only when bot requests an attachment.
+- Fix for localisation of FAQ search bar cancel text.
+- Fix to stop FAQ content from shaking while scrolling with less content.
 
 Ver 5.4.3 
 __________________________
