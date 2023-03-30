@@ -397,6 +397,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(UIViewController*) getFAQsControllerForEmbedWithOptions:(FAQOptions *) faqOptions;
 /**
+ *  Set bot variables for all or specific bots
+ *
+ *  @discussion Set variables to store attributes values based on customer or the conversation
+ *
+ *  @param variables Dictionary of variables applied for all bots
+ *
+ *  @param specificVariables Dictionary of variables applied for a specfiic bot or bots
+ *
+ */
+-(void)setBotVariables:(NSDictionary *)variables withBotSpecificVariables: (NSDictionary *)specificVariables;
+
+/**
  *  Get an embeddable controller for Conversations
  *
  *  @discussion Return a controller with Conversation view that can be embedded in other Controllers (e.g. in a UITabBarController )

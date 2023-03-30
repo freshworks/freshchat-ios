@@ -2,7 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.4.5
+Version         : 5.5.0
+
+Ver 5.5.0 
+__________________________
+Feature :
+- Ability to pass custom properties and bot properties related to a conversation.
+Enhancement :
+- Display links configured for bot articles.
+Bug Fix :
+- Fix to allow sending attachment for first message in non bot conversatons.
 
 Ver 5.4.5 
 __________________________

@@ -16,6 +16,9 @@
 "article_vote_prompt_yes_button_text"="Yes";
 "article_vote_prompt_no_button_text"="No";
 
+/* Bot Articles */
+"bot_article_link_text"="View full article";
+
 /* Article Vote thank you prompt */
 "thank_you_prompt_text"="Thanks for your feedback!";
 "thank_you_prompt_contact_us_button_text"="Still looking for help? Talk to us";

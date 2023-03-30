@@ -1528,6 +1528,8 @@ background: #475867;
 		<string>FCResources.bundle/Images/freshchat_msg_translate_toggle_icon</string>
 		<key>AttachmentFragmentIcon</key>
 		<string>FCResources.bundle/Images/attachment_fragment_icon</string>
+		<key>OpenFAQArticle</key>
+		<string>FCResources.bundle/Images/freshchat_open_new_tab</string>
 	</dict>
 </dict>
 </plist>

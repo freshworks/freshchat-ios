@@ -299,6 +299,47 @@ iframe {
     font-size : 1em;
 }
 
+.article-link-button {
+     margin-top: 7px;
+     margin-bottom: 7px;
+     height: 48px;
+     width: calc(100% - 32px);
+     max-width: 520px;
+     background-color: transparent;
+     -webkit-tap-highlight-color: transparent;
+     border:none;
+ }
+
+ .article-link-button:active {
+   background-color: rgb(18, 52, 77, .08);
+ }
+
+ .article-link-anchor{
+     margin-left: 16px;
+     margin-right:16px;
+     height: 48px;
+     -webkit-tap-highlight-color: transparent;
+     color: rgb(18, 52, 77, .08);
+ }
+
+ .article-link-text{
+     text-align: center;
+     font-family: -apple-system;
+     font-weight: 600;
+     font-size: 16px;
+     color: #2C5CC5;
+ }
+
+ .article-link-icon{
+     width: 18px;
+     margin-left: 6px;
+     height: 18px;
+     box-shadow:none;
+     background-color: transparent;
+     outline: none;
+     border:none;
+ }
+
 a {
     color : #0000FF !important;
 }
