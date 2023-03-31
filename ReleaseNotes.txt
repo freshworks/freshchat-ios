@@ -7,11 +7,11 @@ Version         : 5.5.0
 Ver 5.5.0 
 __________________________
 Feature :
-- Ability to pass custom properties and bot properties related to a conversation.
+- Introducing the ability to pass custom properties and bot properties related to a conversation from the mobile app to the bots via SDK.
 Enhancement :
 - Display links configured for bot articles.
 Bug Fix :
-- Fix to allow sending attachment for first message in non bot conversatons.
+- Fix to allow attachments in the first message while talking to an agent.
 
 Ver 5.4.5 
 __________________________
