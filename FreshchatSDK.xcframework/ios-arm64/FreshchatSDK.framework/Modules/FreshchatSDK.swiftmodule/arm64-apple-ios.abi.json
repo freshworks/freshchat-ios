@@ -1,0 +1,479 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "CoreAudio",
+        "printedName": "CoreAudio",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "CoreMedia",
+        "printedName": "CoreMedia",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCValidationErrorView.swift",
+      "kind": "StringLiteral",
+      "offset": 164,
+      "length": 21,
+      "value": "\"FreshchatSDK.FCValidationErrorView\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 231,
+      "length": 11,
+      "value": "\"user.name\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 268,
+      "length": 16,
+      "value": "\"user.firstName\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 309,
+      "length": 15,
+      "value": "\"user.lastName\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 346,
+      "length": 12,
+      "value": "\"user.email\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 12,
+      "value": "\"user.phone\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 231,
+      "length": 11,
+      "value": "\"user.name\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 268,
+      "length": 16,
+      "value": "\"user.firstName\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 309,
+      "length": 15,
+      "value": "\"user.lastName\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 346,
+      "length": 12,
+      "value": "\"user.email\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 12,
+      "value": "\"user.phone\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "Dictionary",
+      "offset": 2807,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FeedbackOpinionCell\/FCFeedbackOpinionTableViewCell.swift",
+      "kind": "StringLiteral",
+      "offset": 382,
+      "length": 17,
+      "value": "\"OpinionPollIcon\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 126,
+      "length": 51,
+      "value": "\"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,15}\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 195,
+      "length": 21,
+      "value": "\"^\\+?(-?\\d){9,15}$\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 235,
+      "length": 30,
+      "value": "\"(\\+?|-?)\\d{1,140}+\\.?\\d*\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 323,
+      "length": 7,
+      "value": "\"email\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 340,
+      "length": 7,
+      "value": "\"phone\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 358,
+      "length": 8,
+      "value": "\"number\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 10,
+      "value": "\"feedback\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 323,
+      "length": 7,
+      "value": "\"email\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 340,
+      "length": 7,
+      "value": "\"phone\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 358,
+      "length": 8,
+      "value": "\"number\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 10,
+      "value": "\"feedback\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCAckView.swift",
+      "kind": "StringLiteral",
+      "offset": 147,
+      "length": 9,
+      "value": "\"FreshchatSDK.FCAckView\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "StringLiteral",
+      "offset": 430,
+      "length": 31,
+      "value": "\"FCFeedbackRatingTableViewCell\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "IntegerLiteral",
+      "offset": 698,
+      "length": 2,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "StringLiteral",
+      "offset": 861,
+      "length": 18,
+      "value": "\"RatingUnstarIcon\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "StringLiteral",
+      "offset": 907,
+      "length": 16,
+      "value": "\"RatingStarIcon\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "FloatLiteral",
+      "offset": 944,
+      "length": 5,
+      "value": "350.0"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "FloatLiteral",
+      "offset": 978,
+      "length": 4,
+      "value": "36.0"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "FloatLiteral",
+      "offset": 1012,
+      "length": 4,
+      "value": "36.0"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "FloatLiteral",
+      "offset": 1049,
+      "length": 4,
+      "value": "20.0"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "FloatLiteral",
+      "offset": 1079,
+      "length": 4,
+      "value": "20.0"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "kind": "StringLiteral",
+      "offset": 279,
+      "length": 16,
+      "value": "\"FreshchatSDK.FCFeedbackRating\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "FloatLiteral",
+      "offset": 758,
+      "length": 5,
+      "value": "540.0"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "IntegerLiteral",
+      "offset": 793,
+      "length": 2,
+      "value": "52"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "IntegerLiteral",
+      "offset": 824,
+      "length": 1,
+      "value": "8"
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "StringLiteral",
+      "offset": 859,
+      "length": 32,
+      "value": "\"FCFeedbackOpinionTableViewCell\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "kind": "StringLiteral",
+      "offset": 275,
+      "length": 21,
+      "value": "\"FreshchatSDK.FCFeedbackOpinionPoll\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 132,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 154,
+      "length": 3,
+      "value": "\" \""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 176,
+      "length": 3,
+      "value": "\"+\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 199,
+      "length": 3,
+      "value": "\"\/\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 227,
+      "length": 3,
+      "value": "\"_\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 251,
+      "length": 3,
+      "value": "\"-\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 272,
+      "length": 3,
+      "value": "\".\""
+    },
+    {
+      "filePath": "\/Users\/amurugan\/Documents\/Developer\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 335,
+      "length": 16,
+      "value": "\"OpenFAQArticle\""
+    }
+  ]
+}
