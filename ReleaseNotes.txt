@@ -2,13 +2,22 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.5.1
+Version         : 5.5.3
 
-Ver 5.5.2
+Ver 5.5.3 
 __________________________
-Enhancements :
+Bug Fixes :
+- Fix for app version not updating in device properties section.
+- Fix spaces in multiline bot messages with paragraph tag.
+- Fix profile image flickering for bot or agent message in chat.
+- Fix for localization with country value.
+- Fix display of CSAT title with theme color.
+
+Ver 5.5.2 
+__________________________
+Bug fix :
 - Improve conversation fetch when user comes to chat without notification click.
-- Update invalid initilization experience with alert message. 
+- Update invalid initialization experience with alert message.
 
 Ver 5.5.1 
 __________________________
