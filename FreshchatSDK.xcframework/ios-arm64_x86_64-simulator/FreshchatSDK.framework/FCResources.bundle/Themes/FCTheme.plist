@@ -4,137 +4,6 @@
 <dict>
 	<key>ConversationDetail</key>
 	<dict>
-		<key>FeedbackRatingStyle</key>
-		<dict>
-			<key>selectedfontName</key>
-			<string>SYS_SEMI_BOLD_FONT_NAME</string>
-			<key>selectedTitleTextColor</key>
-			<string>#12344D</string>
-			<key>fontName</key>
-			<string>SYS_DEFAULT_FONT_NAME</string>
-			<key>textColor</key>
-			<string>#475867
-</string>
-			<key>textSize</key>
-			<string>17.0f</string>
-			<key>backgroundColor</key>
-			<string>#FFFFFF</string>
-			<key>submitButtonStyle</key>
-			<dict>
-				<key>backgroundColor</key>
-				<string>#12344D</string>
-				<key>textColor</key>
-				<string>#FFFFFF</string>
-				<key>textSize</key>
-				<string>17.0f</string>
-				<key>fontName</key>
-				<string>SYS_SEMI_BOLD_FONT_NAME</string>
-			</dict>
-		</dict>
-		<key>FeedbackSuccessDialog</key>
-		<dict>
-			<key>dividerBackgroundColor</key>
-			<string>#EBEFF3</string>
-			<key>backgroundColor</key>
-			<string>#FEFFFF</string>
-			<key>fontName</key>
-			<string>SYS_DEFAULT_FONT_NAME</string>
-			<key>textColor</key>
-			<string>#475867
-
-
-
-#475867</string>
-			<key>textSize</key>
-			<string>15.0f</string>
-		</dict>
-		<key>FeedbackPollStyle</key>
-		<dict>
-			<key>dividerBackgroundColor</key>
-			<string>#EBEFF3</string>
-			<key>backgroundColor</key>
-			<string>#FFFFFF</string>
-			<key>submitButtonStyle</key>
-			<dict>
-				<key>backgroundColor</key>
-				<string>#12344D</string>
-				<key>textColor</key>
-				<string>#FFFFFF</string>
-				<key>textSize</key>
-				<string>17.0f</string>
-				<key>fontName</key>
-				<string>SYS_SEMI_BOLD_FONT_NAME</string>
-			</dict>
-			<key>optionButtonStyle</key>
-			<dict>
-				<key>selectedfontName</key>
-				<string>SYS_SEMI_BOLD_FONT_NAME</string>
-				<key>selectedTextColor</key>
-				<string>#2C5CC5</string>
-				<key>selectedColor</key>
-				<string>#E5F2FD</string>
-				<key>fontName</key>
-				<string>SYS_DEFAULT_FONT_NAME</string>
-				<key>textColor</key>
-				<string>#12344D</string>
-				<key>textSize</key>
-				<string>15.0f</string>
-				<key>backgroundColor</key>
-				<string>#EBEFF3</string>
-			</dict>
-		</dict>
-		<key>FeedbackSuccessDialog</key>
-		<dict>
-			<key>dividerBackgroundColor</key>
-			<string>#EBEFF3</string>
-			<key>backgroundColor</key>
-			<string>#FEFFFF</string>
-			<key>fontName</key>
-			<string>SYS_DEFAULT_FONT_NAME</string>
-			<key>textColor</key>
-			<string>#475867
-
-background: #475867;
-
-#475867</string>
-			<key>textSize</key>
-			<string>15.0f</string>
-		</dict>
-		<key>FeedbackPollStyle</key>
-		<dict>
-			<key>dividerBackgroundColor</key>
-			<string>#EBEFF3</string>
-			<key>backgroundColor</key>
-			<string>#FFFFFF</string>
-			<key>submitButtonStyle</key>
-			<dict>
-				<key>backgroundColor</key>
-				<string>#12344D</string>
-				<key>textColor</key>
-				<string>#FFFFFF</string>
-				<key>textSize</key>
-				<string>17.0f</string>
-				<key>fontName</key>
-				<string>SYS_SEMI_BOLD_FONT_NAME</string>
-			</dict>
-			<key>optionButtonStyle</key>
-			<dict>
-				<key>selectedfontName</key>
-				<string>SYS_SEMI_BOLD_FONT_NAME</string>
-				<key>selectedTextColor</key>
-				<string>#2C5CC5</string>
-				<key>selectedColor</key>
-				<string>#E5F2FD</string>
-				<key>fontName</key>
-				<string>SYS_DEFAULT_FONT_NAME</string>
-				<key>textColor</key>
-				<string>#12344D</string>
-				<key>textSize</key>
-				<string>15.0f</string>
-				<key>backgroundColor</key>
-				<string>#EBEFF3</string>
-			</dict>
-		</dict>
 		<key>AttachIcon</key>
 		<string>FCResources.bundle/Images/freshchat_upload_icon</string>
 		<key>FileAttachmentSendIcon</key>
@@ -284,6 +153,32 @@ background: #475867;
 			<key>background</key>
 			<string>#FEF1E1</string>
 		</dict>
+		<key>FeedbackRatingStyle</key>
+		<dict>
+			<key>selectedfontName</key>
+			<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			<key>selectedTitleTextColor</key>
+			<string>#12344D</string>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textColor</key>
+			<string>#475867</string>
+			<key>textSize</key>
+			<string>17.0f</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>submitButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+		</dict>
 		<key>FeedbackSuccessDialog</key>
 		<dict>
 			<key>dividerBackgroundColor</key>
@@ -293,13 +188,44 @@ background: #475867;
 			<key>fontName</key>
 			<string>SYS_DEFAULT_FONT_NAME</string>
 			<key>textColor</key>
-			<string>#475867
-
-
-
-#475867</string>
+			<string>#475867</string>
 			<key>textSize</key>
 			<string>15.0f</string>
+		</dict>
+		<key>FeedbackPollStyle</key>
+		<dict>
+			<key>dividerBackgroundColor</key>
+			<string>#EBEFF3</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>submitButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+			<key>optionButtonStyle</key>
+			<dict>
+				<key>selectedfontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>selectedTextColor</key>
+				<string>#2C5CC5</string>
+				<key>selectedColor</key>
+				<string>#E5F2FD</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>backgroundColor</key>
+				<string>#EBEFF3</string>
+			</dict>
 		</dict>
 		<key>FallbackMessageStyle</key>
 		<dict>
@@ -488,7 +414,7 @@ background: #475867;
 			<key>cellBackground</key>
 			<string>#FFFFFF</string>
 			<key>cornerRadius</key>
-			<string>10</string>
+			<string>8</string>
 			<key>cellPadding</key>
 			<string>10</string>
 			<key>rowPadding</key>
@@ -497,6 +423,17 @@ background: #475867;
 			<string>35</string>
 			<key>borderColor</key>
 			<string>#CFD7DF</string>
+			<key>selectedTextStyle</key>
+			<dict>
+				<key>selectedCellFontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+			<key>selectedCellBorderColor</key>
+			<string>#BBDCFE</string>
+			<key>selectedCellBackgroundColor</key>
+			<string>#E5F2FD</string>
+			<key>selectedCellTextColor</key>
+			<string>#2C5CC5</string>
 		</dict>
 		<key>QuickActions</key>
 		<dict>
@@ -550,35 +487,102 @@ background: #475867;
 		</dict>
 		<key>DropDownBarStyle</key>
 		<dict>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
 			<key>borderColor</key>
 			<string>#45A4EC</string>
 			<key>textStyle</key>
 			<dict>
 				<key>fontName</key>
-				<string>SYS_DEFAULT_FONT_NAME</string>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
 				<key>textSize</key>
 				<string>15.0f</string>
 				<key>textColor</key>
-				<string>#3A4B67</string>
+				<string>#2C5CC5</string>
 			</dict>
 		</dict>
 		<key>DropDownPickerStyle</key>
 		<dict>
-			<key>optionTextStyle</key>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>SearchResultsView</key>
 			<dict>
+				<key>textColor</key>
+				<string>#475867</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+			<key>multiSelectDropDownStyle</key>
+			<dict>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>selectedBackgroundColor</key>
+				<string>#E5F2FD</string>
+				<key>selectedfontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>selectedTitleTextColor</key>
+				<string>#2C5CC5</string>
+				<key>backgroundColor</key>
+				<string>#FFFFFF</string>
+			</dict>
+			<key>SelectionViewStyle</key>
+			<dict>
+				<key>selectedDropDowns</key>
+				<dict>
+					<key>textColor</key>
+					<string>#475867</string>
+					<key>textSize</key>
+					<string>15.0f</string>
+					<key>fontName</key>
+					<string>SYS_DEFAULT_FONT_NAME</string>
+				</dict>
 				<key>fontName</key>
 				<string>SYS_DEFAULT_FONT_NAME</string>
 				<key>textSize</key>
-				<string>15.0f</string>
+				<string>17.0f</string>
+				<key>backgroundColor</key>
+				<string>#F5F7F9</string>
 				<key>textColor</key>
-				<string>#000000</string>
+				<string>#2C5CC5</string>
 			</dict>
-			<key>rowHeight</key>
-			<string>44</string>
-			<key>viewPortraitHeight</key>
-			<string>220</string>
-			<key>viewLandScapeHeight</key>
-			<string>132</string>
+			<key>NavigationBar</key>
+			<dict>
+				<key>grabberBackgroundColor</key>
+				<string>#CFD7DF</string>
+				<key>sendButtonStyle</key>
+				<dict>
+					<key>textSize</key>
+					<string>17.0f</string>
+					<key>textColor</key>
+					<string>#2C5CC5</string>
+					<key>selectedfontName</key>
+					<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				</dict>
+				<key>titleTextStyle</key>
+				<dict>
+					<key>fontName</key>
+					<string>SYS_SEMI_BOLD_FONT_NAME</string>
+					<key>textColor</key>
+					<string>#12344D</string>
+					<key>textSize</key>
+					<string>17.0f</string>
+				</dict>
+			</dict>
+			<key>optionTextStyle</key>
+			<dict>
+				<key>highlightViewBackgroundColor</key>
+				<string>#12344D</string>
+				<key>backgroundColor</key>
+				<string>#FFFFFF</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+			</dict>
 		</dict>
 		<key>CarouselCardStyle</key>
 		<dict>
@@ -641,6 +645,41 @@ background: #475867;
 			<dict>
 				<key>background</key>
 				<string>#FFFFFF</string>
+			</dict>
+		</dict>
+		<key>MultiSelectBottomSheetStyle</key>
+		<dict>
+			<key>selectedfontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textColor</key>
+			<string>#475867</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>submitButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+			<key>deselectAllButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#F5F7F9</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>borderColor</key>
+				<string>#CFD7DF</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
 			</dict>
 		</dict>
 		<key>CalendarInviteOptionsStyle</key>
@@ -826,6 +865,33 @@ background: #475867;
 				<string>SYS_DEFAULT_BOLD_FONT_NAME</string>
 				<key>textSize</key>
 				<string>17.0</string>
+			</dict>
+		</dict>
+		<key>DateAndTimePickerStyle</key>
+		<dict>
+			<key>titleTextStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+			</dict>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>selectedDateTextColor</key>
+			<string>#12344D</string>
+			<key>sendButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
 			</dict>
 		</dict>
 	</dict>
@@ -1235,35 +1301,35 @@ background: #475867;
 			<key>fontName</key>
 			<string>SYS_DEFAULT_FONT_NAME</string>
 			<key>textSize</key>
-			<string>14.0f</string>
+			<string>17.0f</string>
 			<key>textColor</key>
-			<string>#0079FF</string>
+			<string>#2C5CC5</string>
 		</dict>
 		<key>SearchQueryTextStyle</key>
 		<dict>
 			<key>fontName</key>
 			<string>SYS_DEFAULT_FONT_NAME</string>
 			<key>textSize</key>
-			<string>13.0f</string>
+			<string>17.0f</string>
 			<key>textColor</key>
-			<string>#000000</string>
+			<string>#12344D</string>
 			<key>textColorHint</key>
-			<string>#808285</string>
+			<string>#12344D</string>
 			<key>borderColor</key>
 			<string>#FFFFFF</string>
 			<key>textCursorColor</key>
-			<string>#0079FF</string>
+			<string>#2C5CC5</string>
 			<key>background</key>
 			<string>#FFFFFF</string>
 		</dict>
 		<key>SearchBarStyle</key>
 		<dict>
 			<key>background</key>
-			<string>#F8F8F8</string>
+			<string>#EBEFF3</string>
 			<key>searchIcon</key>
-			<string></string>
+			<string>FCResources.bundle/Images/fc_dropdown_search_icon</string>
 			<key>clearIcon</key>
-			<string></string>
+			<string>FCResources.bundle/Images/fc_search_bar_clear_icon</string>
 		</dict>
 	</dict>
 	<key>FAQList</key>
@@ -1448,6 +1514,16 @@ background: #475867;
 	</dict>
 	<key>Images</key>
 	<dict>
+		<key>DropDownClearIcon</key>
+		<string>FCResources.bundle/Images/fc_search_bar_clear_icon</string>
+		<key>DropDownSearchIcon</key>
+		<string>FCResources.bundle/Images/fc_dropdown_search_icon</string>
+		<key>DropDownCancelledIcon</key>
+		<string>FCResources.bundle/Images/fc_dropdown_cancel</string>
+		<key>DropDownSelectedIcon</key>
+		<string>FCResources.bundle/Images/fc_dropdown_selected_icon</string>
+		<key>DropDownUnselectedIcon</key>
+		<string>FCResources.bundle/Images/fc_dropdown_unselected_icon</string>
 		<key>SlashCommandIcon</key>
 		<string>FCResources.bundle/Images/fc_slash_command_image</string>
 		<key>NotificationCancel</key>
@@ -1458,8 +1534,6 @@ background: #475867;
 		<string>FCResources.bundle/Images/freshchat_star_icon</string>
 		<key>RatingUnstarIcon</key>
 		<string>FCResources.bundle/Images/freshchat_unstar_icon</string>
-		<key>OpinionPollIcon</key>
-		<string>FCResources.bundle/Images/freshchat_opinionpoll_tick_icon</string>
 		<key>OpinionPollIcon</key>
 		<string>FCResources.bundle/Images/freshchat_opinionpoll_tick_icon</string>
 		<key>SearchIcon</key>
@@ -1530,6 +1604,8 @@ background: #475867;
 		<string>FCResources.bundle/Images/attachment_fragment_icon</string>
 		<key>OpenFAQArticle</key>
 		<string>FCResources.bundle/Images/freshchat_open_new_tab</string>
+		<key>QuickReplyButtonRedirectionIcon</key>
+		<string>FCResources.bundle/Images/fc_quickreply_redirection</string>
 	</dict>
 </dict>
 </plist>

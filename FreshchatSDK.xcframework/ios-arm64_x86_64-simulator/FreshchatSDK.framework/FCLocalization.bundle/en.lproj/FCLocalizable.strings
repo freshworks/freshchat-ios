@@ -163,7 +163,17 @@
 "business_hour_offline"="We are away now";
 
 /*Drop Down Fragment*/
-"dropdown_choose_select"="Click here to select";
+"dropdown_choose_select"="Select an option";
+"dropdown_search_placeholder_text" = "Search";
+"dropdown_no_search_results_text" = "No search results";
+"dropdown_choose_multi_select" = "Select all that apply";
+"multiselect_select_all_title" = "Select all";
+"multiselect_deselect_all_title" = "Deselect all";
+"dropdown_selected_label" = "Selected";
+
+/*Button Fragment*/
+"button_choose_select" = "Choose an option";
+"button_choose_multi_select" = "Select response";
 
 /*Carousel*/
 "default_carousel_card_view_btn" = "View";
@@ -256,3 +266,13 @@
 
 "alert_view_ok_title" = "Ok";
 "alert_view_cancel_title" = "Cancel";
+
+"date_picker_title" = "Select date";
+"time_picker_title" = "Select time";
+
+//Multiselect bottom sheet
+"multiselect_select_all_btn_title" = "Select all";
+"multiselect_deselect_all_btn_title" = "Deselect all";
+"multiselect_submit_btn_title" = "Submit";
+
+

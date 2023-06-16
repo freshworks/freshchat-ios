@@ -2,9 +2,18 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.5.3
+Version         : 5.6.0
 
-Ver 5.5.3 
+Ver 5.6.0 
+__________________________
+Features :
+- We are adding support for multi-select as a new input type for your customers. Customers will now be able to pick and choose multiple choices that appears as list and dropdown.
+- We are adding support for Date and time as a new input type for your customers. Customers will now be able to pick a date and pick a time within the bot flow.
+Enhancements :
+- Update UI for single select button and dropdown options.
+Bug fix :
+- Fix for notifications not coming when an old user is restored over existing user.
+Ver 5.5.3
 __________________________
 Bug Fixes :
 - Fix for app version not updating in device properties section.
@@ -24,7 +33,7 @@ __________________________
 Bug fix :
 - Fix CFBundleSupportedPlatforms issue while submitting app to store.
 
-Ver 5.5.0 
+Ver 5.5.0
 __________________________
 Feature :
 - Introducing the ability to pass custom properties and bot properties related to a conversation from the mobile app to the bots via SDK.
@@ -44,7 +53,6 @@ Bug Fix :
 Ver 5.4.4
 __________________________
 Bug fixes :
-
 - Fix for updating user details along with user creation. 
 - Fix to stop auto scrolling of Carousel cards to initial card.
 - Fix for overlapping new message indicator with reply editor.

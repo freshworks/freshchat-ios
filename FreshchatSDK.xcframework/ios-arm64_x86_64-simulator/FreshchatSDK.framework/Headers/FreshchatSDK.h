@@ -40,7 +40,9 @@ typedef enum {
     FCEventNotificationReceive,
     FCEventIdTokenStatusChange,
     FCEventDropDownReceive,
-    FCEventDropDownSelect,
+    FCEventDropDownSent,
+    FCEventButtonReceive,
+    FCEventButtonSent,
     FCEventCarouselShow,
     FCEventCarouselSelect,
     FCEventShowOriginalClick,
@@ -58,7 +60,11 @@ typedef enum {
     FCEventFileAttachmentOpenError,
     FCEventBotFileAttachmentUpload,
     FCEventQuickActionSelect,
-    FCEventFeedbackMessageSent
+    FCEventFeedbackMessageSent,
+    FCEventDatePickerShow,
+    FCEventDatePickerSelect,
+    FCEventTimePickerShow,
+    FCEventTimePickerSelect,
 } FCEvent;
 
 /*
@@ -90,7 +96,8 @@ typedef enum {
     FCProperyQuickActionType,
     FCProperyQuickActionLabel,
     FCPropertyFeedbackType,
-    FCPropertyConversationReferenceID
+    FCPropertyConversationReferenceID,
+    FCPropertyIsMultiSelect
 } FCEventProperty;
 
 
