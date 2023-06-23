@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.6.0
+Version         : 5.7.0
+
+Ver 5.7.0 
+__________________________
+Feature:
+- We are adding support for Phone number and OTP as a new input type for your customers. Customers will now be able to enter their phone numbers with country code to generate an OTP which is then entered by user and is accepted by the SDK to process user information.
 
 Ver 5.6.0 
 __________________________

@@ -4,6 +4,181 @@
 <dict>
 	<key>ConversationDetail</key>
 	<dict>
+		<key>Country</key>
+		<dict>
+			<key>defaultCountryCode</key>
+			<string>US</string>
+			<key>TextStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>14.0f</string>
+				<key>textColor</key>
+				<string>#000000</string>
+			</dict>
+		</dict>
+		<key>CountryList</key>
+		<dict>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>CloseButtonStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>textColor</key>
+				<string>#2C5CC5</string>
+			</dict>
+			<key>ScreenTitleStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+			</dict>
+			<key>RowStyle</key>
+			<dict>
+				<key>checkmarkColor</key>
+				<string>#2C5CC5</string>
+				<key>selectedColor</key>
+				<string>#E5F2FD</string>
+				<key>unselectedColor</key>
+				<string>#FFFFFF</string>
+			</dict>
+			<key>SelectedCountryStyle</key>
+			<dict>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#2C5CC5</string>
+			</dict>
+			<key>UnselectedCountryStyle</key>
+			<dict>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+			</dict>
+			<key>SelectedCountryCodeStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#2C5CC5</string>
+			</dict>
+			<key>UnselectedCountryCodeStyle</key>
+			<dict>
+				<key>textColor</key>
+				<string>#647A8E
+</string>
+			</dict>
+		</dict>
+		<key>ResendOTP</key>
+		<dict>
+			<key>ViewStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#EBEFF3</string>
+			</dict>
+			<key>NormalButtonStyle</key>
+			<dict>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#2C5CC5</string>
+			</dict>
+			<key>DisabledButtonStyle</key>
+			<dict>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#475867</string>
+			</dict>
+		</dict>
+		<key>FeedbackRatingStyle</key>
+		<dict>
+			<key>selectedfontName</key>
+			<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			<key>selectedTitleTextColor</key>
+			<string>#12344D</string>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textColor</key>
+			<string>#475867</string>
+			<key>textSize</key>
+			<string>17.0f</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>submitButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+		</dict>
+		<key>FeedbackSuccessDialog</key>
+		<dict>
+			<key>dividerBackgroundColor</key>
+			<string>#EBEFF3</string>
+			<key>backgroundColor</key>
+			<string>#FEFFFF</string>
+			<key>fontName</key>
+			<string>SYS_DEFAULT_FONT_NAME</string>
+			<key>textColor</key>
+			<string>#475867</string>
+			<key>textSize</key>
+			<string>15.0f</string>
+		</dict>
+		<key>FeedbackPollStyle</key>
+		<dict>
+			<key>dividerBackgroundColor</key>
+			<string>#EBEFF3</string>
+			<key>backgroundColor</key>
+			<string>#FFFFFF</string>
+			<key>submitButtonStyle</key>
+			<dict>
+				<key>backgroundColor</key>
+				<string>#12344D</string>
+				<key>textColor</key>
+				<string>#FFFFFF</string>
+				<key>textSize</key>
+				<string>17.0f</string>
+				<key>fontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+			</dict>
+			<key>optionButtonStyle</key>
+			<dict>
+				<key>selectedfontName</key>
+				<string>SYS_SEMI_BOLD_FONT_NAME</string>
+				<key>selectedTextColor</key>
+				<string>#2C5CC5</string>
+				<key>selectedColor</key>
+				<string>#E5F2FD</string>
+				<key>fontName</key>
+				<string>SYS_DEFAULT_FONT_NAME</string>
+				<key>textColor</key>
+				<string>#12344D</string>
+				<key>textSize</key>
+				<string>15.0f</string>
+				<key>backgroundColor</key>
+				<string>#EBEFF3</string>
+			</dict>
+		</dict>
 		<key>AttachIcon</key>
 		<string>FCResources.bundle/Images/freshchat_upload_icon</string>
 		<key>FileAttachmentSendIcon</key>
@@ -104,7 +279,7 @@
 			<key>textColor</key>
 			<string>#000000</string>
 			<key>textColorHint</key>
-			<string>#D3D3D3</string>
+			<string>#647A8E</string>
 			<key>textCursorColor</key>
 			<string>#808285</string>
 			<key>borderColor</key>
@@ -1327,9 +1502,9 @@
 			<key>background</key>
 			<string>#EBEFF3</string>
 			<key>searchIcon</key>
-			<string>FCResources.bundle/Images/fc_dropdown_search_icon</string>
+			<string>FCResources.bundle/Images/freshchat_search_bar_search_icon</string>
 			<key>clearIcon</key>
-			<string>FCResources.bundle/Images/fc_search_bar_clear_icon</string>
+			<string>FCResources.bundle/Images/freshchat_search_bar_clear_icon</string>
 		</dict>
 	</dict>
 	<key>FAQList</key>
@@ -1602,10 +1777,16 @@
 		<string>FCResources.bundle/Images/freshchat_msg_translate_toggle_icon</string>
 		<key>AttachmentFragmentIcon</key>
 		<string>FCResources.bundle/Images/attachment_fragment_icon</string>
+		<key>CountryCodeDropdownIcon</key>
+		<string>FCResources.bundle/Images/freshchat_down_icon</string>
 		<key>OpenFAQArticle</key>
 		<string>FCResources.bundle/Images/freshchat_open_new_tab</string>
 		<key>QuickReplyButtonRedirectionIcon</key>
 		<string>FCResources.bundle/Images/fc_quickreply_redirection</string>
+		<key>GrabberIcon</key>
+		<string>FCResources.bundle/Images/freshchat_grabber_icon</string>
+		<key>CheckmarkIcon</key>
+		<string>FCResources.bundle/Images/freshchat_country_checkmark</string>
 	</dict>
 </dict>
 </plist>

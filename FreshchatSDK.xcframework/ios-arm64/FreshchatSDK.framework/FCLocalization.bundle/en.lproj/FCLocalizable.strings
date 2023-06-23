@@ -237,6 +237,7 @@
 
 /*Placeholder*/
 "placeholder_phonenumber_text" = "Enter Phone number";
+"placeholder_otp_text" = "Enter OTP";
 "placeholder_email_text" = "Enter email";
 "placeholder_number_text" = "Enter number";
 "placeholder_feedback_text" = "Add your feedback here";
@@ -266,6 +267,15 @@
 
 "alert_view_ok_title" = "Ok";
 "alert_view_cancel_title" = "Cancel";
+
+/* Country List */
+"country_list_title" = "Select country";
+"country_list_search_placeholder" = "Search";
+"country_list_close_button_title" = "Close";
+"country_list_no_search_result" = "No search result";
+
+/* Resend OTP */
+"resend_otp_subtext" = "in";
 
 "date_picker_title" = "Select date";
 "time_picker_title" = "Select time";
