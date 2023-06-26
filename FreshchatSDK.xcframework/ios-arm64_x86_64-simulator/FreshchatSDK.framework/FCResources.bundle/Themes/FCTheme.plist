@@ -815,6 +815,20 @@
 					<key>borderColor</key>
 					<string>#12344D</string>
 				</dict>
+				<key>CarouselMultiselectNormalStateStyle</key>
+				<dict>
+					<key>textColor</key>
+					<string>#12344D</string>
+					<key>backgroundColor</key>
+					<string>#FFFFFF</string>
+				</dict>
+				<key>CarouselMultiselectSelectedStateStyle</key>
+				<dict>
+					<key>textColor</key>
+					<string>#12344D</string>
+					<key>backgroundColor</key>
+					<string>#F5F7F9</string>
+				</dict>
 			</dict>
 			<key>selectedCardStyle</key>
 			<dict>
@@ -1689,6 +1703,10 @@
 	</dict>
 	<key>Images</key>
 	<dict>
+		<key>MultiselectSelectedStateCheckboxIcon</key>
+		<string>FCResources.bundle/Images/fc_multiselect_selected_checkbox_icon</string>
+		<key>MultiselectCarouselNormalStateCheckboxIcon</key>
+		<string>FCResources.bundle/Images/fc_multiselect_unselected_checkbox_icon</string>
 		<key>DropDownClearIcon</key>
 		<string>FCResources.bundle/Images/fc_search_bar_clear_icon</string>
 		<key>DropDownSearchIcon</key>

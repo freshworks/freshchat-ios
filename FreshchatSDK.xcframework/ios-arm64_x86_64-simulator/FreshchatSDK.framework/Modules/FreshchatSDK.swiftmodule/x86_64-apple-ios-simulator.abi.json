@@ -16,6 +16,16 @@
       },
       {
         "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
         "name": "UIKit",
         "printedName": "UIKit",
         "declKind": "Import",
@@ -439,1190 +449,1211 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCReplyFlowLayout.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiSelectCarouselsViewModel.swift",
+      "kind": "BooleanLiteral",
+      "offset": 261,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiSelectCarouselsViewModel.swift",
+      "kind": "Dictionary",
+      "offset": 316,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCReplyFlowLayout.swift",
       "kind": "FloatLiteral",
       "offset": 397,
       "length": 3,
       "value": "0.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCReplyFlowLayout.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCReplyFlowLayout.swift",
       "kind": "FloatLiteral",
       "offset": 566,
       "length": 3,
       "value": "0.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCValidationErrorView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCValidationErrorView.swift",
       "kind": "StringLiteral",
       "offset": 164,
       "length": 21,
       "value": "\"FreshchatSDK.FCValidationErrorView\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCDropDownViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCDropDownViewModel.swift",
       "kind": "BooleanLiteral",
       "offset": 248,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCDropDownViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCDropDownViewModel.swift",
       "kind": "BooleanLiteral",
       "offset": 531,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCDropDownViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCDropDownViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 592,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 231,
       "length": 11,
       "value": "\"user.name\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 268,
       "length": 16,
       "value": "\"user.firstName\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 309,
       "length": 15,
       "value": "\"user.lastName\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 346,
       "length": 12,
       "value": "\"user.email\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 380,
       "length": 12,
       "value": "\"user.phone\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 231,
       "length": 11,
       "value": "\"user.name\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 268,
       "length": 16,
       "value": "\"user.firstName\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 309,
       "length": 15,
       "value": "\"user.lastName\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 346,
       "length": 12,
       "value": "\"user.email\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
       "offset": 380,
       "length": 12,
       "value": "\"user.phone\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Dictionary",
       "offset": 3021,
       "length": 3,
       "value": "[]"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Cell\/FCDropDownTableViewCell.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Cell\/FCDropDownTableViewCell.swift",
       "kind": "StringLiteral",
       "offset": 461,
       "length": 24,
       "value": "\"DropDownUnselectedIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Cell\/FCDropDownTableViewCell.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Cell\/FCDropDownTableViewCell.swift",
       "kind": "StringLiteral",
       "offset": 520,
       "length": 22,
       "value": "\"DropDownSelectedIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FeedbackOpinionCell\/FCFeedbackOpinionTableViewCell.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FeedbackOpinionCell\/FCFeedbackOpinionTableViewCell.swift",
       "kind": "StringLiteral",
       "offset": 382,
       "length": 17,
       "value": "\"OpinionPollIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "StringLiteral",
       "offset": 2654,
       "length": 21,
       "value": "\"button_multi_select\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "StringLiteral",
       "offset": 2721,
       "length": 9,
       "value": "\"buttons\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "StringLiteral",
       "offset": 2778,
       "length": 10,
       "value": "\"callback\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 2836,
       "length": 4,
       "value": "1002"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 2882,
       "length": 2,
       "value": "51"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 2921,
       "length": 2,
       "value": "52"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 2964,
       "length": 4,
       "value": "1000"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "BooleanLiteral",
       "offset": 3012,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "BooleanLiteral",
       "offset": 3144,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3285,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3340,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3371,
       "length": 2,
       "value": "36"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "FloatLiteral",
       "offset": 3412,
       "length": 3,
       "value": "8.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3446,
       "length": 2,
       "value": "12"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3485,
       "length": 2,
       "value": "14"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3525,
       "length": 2,
       "value": "15"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3564,
       "length": 2,
       "value": "54"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "FloatLiteral",
       "offset": 3601,
       "length": 4,
       "value": "10.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "FloatLiteral",
       "offset": 3629,
       "length": 4,
       "value": "20.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
       "offset": 3664,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/FCDropDownHandler.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/FCDropDownHandler.swift",
       "kind": "IntegerLiteral",
       "offset": 434,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 171,
       "length": 24,
       "value": "\"dropdown_choose_select\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 238,
       "length": 33,
       "value": "\"dropdown_no_search_results_text\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 303,
       "length": 30,
       "value": "\"dropdown_choose_multi_select\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 377,
       "length": 34,
       "value": "\"dropdown_search_placeholder_text\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 451,
       "length": 30,
       "value": "\"multiselect_select_all_title\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 523,
       "length": 32,
       "value": "\"multiselect_deselect_all_title\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 590,
       "length": 25,
       "value": "\"dropdown_selected_label\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 643,
       "length": 18,
       "value": "\"send_button_text\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 710,
       "length": 22,
       "value": "\"button_choose_select\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/FClocalisationConstant.swift",
       "kind": "StringLiteral",
       "offset": 762,
       "length": 28,
       "value": "\"button_choose_multi_select\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyRedirectionCell.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyRedirectionCell.swift",
       "kind": "IntegerLiteral",
       "offset": 507,
       "length": 2,
       "value": "20"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 126,
       "length": 51,
       "value": "\"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,15}\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 195,
       "length": 21,
       "value": "\"^\\+?(-?\\d){9,15}$\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 235,
       "length": 30,
       "value": "\"(\\+?|-?)\\d{1,140}+\\.?\\d*\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 323,
       "length": 7,
       "value": "\"email\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 340,
       "length": 7,
       "value": "\"phone\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 372,
       "length": 22,
       "value": "\"phoneWithCountryCode\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 402,
       "length": 5,
       "value": "\"otp\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 418,
       "length": 8,
       "value": "\"number\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 440,
       "length": 10,
       "value": "\"feedback\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 323,
       "length": 7,
       "value": "\"email\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 340,
       "length": 7,
       "value": "\"phone\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 372,
       "length": 22,
       "value": "\"phoneWithCountryCode\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 402,
       "length": 5,
       "value": "\"otp\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 418,
       "length": 8,
       "value": "\"number\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 440,
       "length": 10,
       "value": "\"feedback\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiselectBottomSheet.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiselectBottomSheet.swift",
       "kind": "IntegerLiteral",
-      "offset": 853,
+      "offset": 930,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiselectBottomSheet.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiselectBottomSheet.swift",
       "kind": "StringLiteral",
-      "offset": 431,
+      "offset": 463,
       "length": 24,
       "value": "\"FreshchatSDK.FCMultiselectBottomSheet\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
       "kind": "IntegerLiteral",
       "offset": 344,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
       "kind": "IntegerLiteral",
       "offset": 354,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
       "kind": "IntegerLiteral",
       "offset": 344,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
       "kind": "IntegerLiteral",
       "offset": 354,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/DatePicker\/FCDatePickerView.swift",
       "kind": "StringLiteral",
       "offset": 399,
       "length": 16,
       "value": "\"FreshchatSDK.FCDatePickerView\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/View\/FCDropDownPromptView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/View\/FCDropDownPromptView.swift",
       "kind": "StringLiteral",
       "offset": 355,
       "length": 33,
       "value": "\"ConversationDetail.DropDownIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/View\/FCDropDownPromptView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/View\/FCDropDownPromptView.swift",
       "kind": "StringLiteral",
       "offset": 412,
       "length": 8,
       "value": "\"000000\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/View\/FCDropDownPromptView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/View\/FCDropDownPromptView.swift",
       "kind": "StringLiteral",
       "offset": 156,
       "length": 20,
       "value": "\"FreshchatSDK.FCDropDownPromptView\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCAckView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCAckView.swift",
       "kind": "StringLiteral",
       "offset": 147,
       "length": 9,
       "value": "\"FreshchatSDK.FCAckView\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
       "kind": "IntegerLiteral",
       "offset": 936,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
       "kind": "StringLiteral",
       "offset": 978,
       "length": 63,
       "value": "\"\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
       "kind": "StringLiteral",
       "offset": 993,
       "length": 1,
       "value": "\" \""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
       "kind": "StringLiteral",
       "offset": 1013,
       "length": 1,
       "value": "\" \""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
       "kind": "StringLiteral",
       "offset": 1040,
       "length": 18,
       "value": "\"\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/OTP\/ResendOTPView.swift",
       "kind": "IntegerLiteral",
       "offset": 884,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "IntegerLiteral",
       "offset": 631,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "IntegerLiteral",
       "offset": 637,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 694,
       "length": 3,
       "value": "5.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "BooleanLiteral",
       "offset": 1540,
       "length": 4,
       "value": "true"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1588,
       "length": 4,
       "value": "44.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1622,
       "length": 4,
       "value": "44.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1652,
       "length": 4,
       "value": "46.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1687,
       "length": 3,
       "value": "0.5"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1719,
       "length": 4,
       "value": "56.5"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "IntegerLiteral",
       "offset": 1754,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1788,
       "length": 4,
       "value": "36.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "IntegerLiteral",
       "offset": 1831,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1867,
       "length": 3,
       "value": "0.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "FloatLiteral",
       "offset": 1907,
       "length": 3,
       "value": "0.3"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "StringLiteral",
       "offset": 2116,
       "length": 23,
       "value": "\"DropDownTableViewCell\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "StringLiteral",
       "offset": 2163,
       "length": 37,
       "value": "\"SearchBar.SearchBarStyle.searchIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "StringLiteral",
       "offset": 2223,
       "length": 36,
       "value": "\"SearchBar.SearchBarStyle.clearIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "StringLiteral",
       "offset": 2291,
       "length": 23,
       "value": "\"DropDownCancelledIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/Controller\/FCDropdownViewController.swift",
       "kind": "IntegerLiteral",
       "offset": 35191,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "StringLiteral",
       "offset": 430,
       "length": 31,
       "value": "\"FCFeedbackRatingTableViewCell\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "IntegerLiteral",
       "offset": 698,
       "length": 2,
       "value": "1"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "StringLiteral",
       "offset": 861,
       "length": 18,
       "value": "\"RatingUnstarIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "StringLiteral",
       "offset": 907,
       "length": 16,
       "value": "\"RatingStarIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "FloatLiteral",
       "offset": 944,
       "length": 5,
       "value": "350.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "FloatLiteral",
       "offset": 978,
       "length": 4,
       "value": "36.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "FloatLiteral",
       "offset": 1012,
       "length": 4,
       "value": "36.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "FloatLiteral",
       "offset": 1049,
       "length": 4,
       "value": "20.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "FloatLiteral",
       "offset": 1079,
       "length": 4,
       "value": "20.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackRating.swift",
       "kind": "StringLiteral",
       "offset": 279,
       "length": 16,
       "value": "\"FreshchatSDK.FCFeedbackRating\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
       "kind": "FloatLiteral",
       "offset": 758,
       "length": 5,
       "value": "540.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
       "kind": "IntegerLiteral",
       "offset": 793,
       "length": 2,
       "value": "52"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
       "kind": "IntegerLiteral",
       "offset": 824,
       "length": 1,
       "value": "8"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
       "kind": "StringLiteral",
       "offset": 859,
       "length": 32,
       "value": "\"FCFeedbackOpinionTableViewCell\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Feedback\/FCFeedbackOpinionPoll.swift",
       "kind": "StringLiteral",
       "offset": 275,
       "length": 21,
       "value": "\"FreshchatSDK.FCFeedbackOpinionPoll\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCReplyCollectionCell.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCReplyCollectionCell.swift",
       "kind": "BooleanLiteral",
       "offset": 540,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCTableSearchViewModel.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/ViewModel\/FCTableSearchViewModel.swift",
       "kind": "BooleanLiteral",
       "offset": 1459,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryCodeHelper.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryCodeHelper.swift",
       "kind": "Array",
       "offset": 284,
       "length": 2,
       "value": "[]"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 183,
       "length": 4,
       "value": "\"+1\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 218,
       "length": 15,
       "value": "\"United States\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 264,
       "length": 4,
       "value": "\"US\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 368,
       "length": 14,
       "value": "\"CountryCodes\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 413,
       "length": 6,
       "value": "\"json\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 489,
       "length": 6,
       "value": "\"code\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 530,
       "length": 11,
       "value": "\"dial_code\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 575,
       "length": 6,
       "value": "\"name\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 696,
       "length": 13,
       "value": "\"FCResources\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 719,
       "length": 8,
       "value": "\"bundle\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 785,
       "length": 9,
       "value": "\"\/Flags\/\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "FloatLiteral",
       "offset": 873,
       "length": 3,
       "value": "0.5"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "IntegerLiteral",
       "offset": 929,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "FloatLiteral",
       "offset": 982,
       "length": 3,
       "value": "0.3"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "IntegerLiteral",
       "offset": 1038,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "FloatLiteral",
       "offset": 1091,
       "length": 4,
       "value": "0.12"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 1166,
       "length": 20,
       "value": "\"country_list_title\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 1234,
       "length": 33,
       "value": "\"country_list_search_placeholder\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 1314,
       "length": 33,
       "value": "\"country_list_close_button_title\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 1392,
       "length": 31,
       "value": "\"country_list_no_search_result\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "FloatLiteral",
       "offset": 1512,
       "length": 4,
       "value": "0.25"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "IntegerLiteral",
       "offset": 1568,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "IntegerLiteral",
       "offset": 1641,
       "length": 2,
       "value": "30"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 1681,
       "length": 12,
       "value": "\"Resend OTP\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/CountryPickerConstants.swift",
       "kind": "StringLiteral",
       "offset": 1731,
       "length": 20,
       "value": "\"resend_otp_subtext\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "Array",
       "offset": 1165,
       "length": 2,
       "value": "[]"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "Array",
       "offset": 1202,
       "length": 2,
       "value": "[]"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 132,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 154,
       "length": 3,
       "value": "\" \""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 176,
       "length": 3,
       "value": "\"+\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 199,
       "length": 3,
       "value": "\"\/\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 227,
       "length": 3,
       "value": "\"_\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 251,
       "length": 3,
       "value": "\"-\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 272,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 310,
       "length": 4,
       "value": "\"\n\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 374,
       "length": 16,
       "value": "\"OpenFAQArticle\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
       "offset": 434,
       "length": 33,
       "value": "\"QuickReplyButtonRedirectionIcon\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
       "offset": 515,
       "length": 3,
       "value": "0.6"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
       "offset": 543,
       "length": 3,
       "value": "0.4"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
       "offset": 571,
       "length": 3,
       "value": "0.1"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
       "offset": 622,
       "length": 4,
       "value": "0.05"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
       "offset": 674,
       "length": 3,
       "value": "0.2"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
       "offset": 701,
       "length": 5,
       "value": "540.0"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
       "offset": 742,
       "length": 4,
       "value": "1000"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
       "offset": 781,
       "length": 3,
       "value": "750"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
       "offset": 822,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
       "offset": 860,
       "length": 2,
       "value": "11"
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 909,
+      "length": 26,
+      "value": "\"isEligibleForMultiSelect\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
       "kind": "StringLiteral",
       "offset": 838,
       "length": 11,
       "value": "\"replyCell\""
     },
     {
-      "filePath": "\/Volumes\/Work\/Projects\/FreshchatSDK\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
       "kind": "StringLiteral",
       "offset": 909,
       "length": 17,
