@@ -108,6 +108,8 @@ typedef enum {
 #define FRESHCHAT_USER_LOCALE_CHANGED @"com.freshworks.freshchat_user_locale_changed"
 #define FRESHCHAT_UNREAD_MESSAGE_COUNT_CHANGED @"com.freshworks.freshchat_unread_message_count_changed"
 #define FRESHCHAT_EVENTS @"com.freshworks.freshchat_events"
+#define FRESHCHAT_BOT_ACTION_TRIGGER_FUNCTION @"com.freshworks.freshchat_bot_action_trigger_function"
+
 
 @class FreshchatConfig, FreshchatUser, FAQOptions, ConversationOptions, FreshchatMessage;
 

@@ -2,16 +2,27 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.8.0
+Version         : 5.9.0
 
-Ver 5.8.0 
+Ver 5.9.0 
 __________________________
-Feature:
+Feature :
+- Say hi to bot actions! Certain actions may need to be performed before or after the execution of a response in a bot conversation to complete the process. These changes can be anything in the chat screen, API triggers, pop-up feedbacks or articles, handover to agents, stop/Minimize conversations etc. You will be able to configure this via the bot builder using actions.
+Enhancement :
+- Handle disabling of reply editor when bot reponse is pending.
+- Improved displaying of last message in topic list with multiline text.
+Bug :
+- Fix sporadic crash while setting user properties.
+- Fix triggering bot flow messages even when bot is unpublished.
+
+Ver 5.8.0
+__________________________
+Feature :
 - We are adding support for multi-select Carousel as a new input type for your customers. Customers will now be able to pick and choose multiple choices that appears as a series of options with a horizontal scroll (carousel) on the screen. The options list can also contain images.
 
 Ver 5.7.0 
 __________________________
-Feature:
+Feature :
 - We are adding support for Phone number and OTP as a new input type for your customers. Customers will now be able to enter their phone numbers with country code to generate an OTP which is then entered by user and is accepted by the SDK to process user information.
 
 Ver 5.6.0 
@@ -23,7 +34,23 @@ Enhancements :
 - Update UI for single select button and dropdown options.
 Bug fix :
 - Fix for notifications not coming when an old user is restored over existing user.
+
 Ver 5.5.3
+__________________________
+Bug Fixes :
+- Fix for app version not updating in device properties section.
+- Fix spaces in multiline bot messages with paragraph tag.
+- Fix profile image flickering for bot or agent message in chat.
+- Fix for localization with country value.
+- Fix display of CSAT title with theme color.
+
+Ver 5.5.2 
+__________________________
+Bug fix :
+- Improve conversation fetch when user comes to chat without notification click.
+- Update invalid initialization experience with alert message.
+
+Ver 5.5.3 
 __________________________
 Bug Fixes :
 - Fix for app version not updating in device properties section.

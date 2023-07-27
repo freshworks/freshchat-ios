@@ -69,6 +69,33 @@
         "name": "UIKit",
         "printedName": "UIKit",
         "declKind": "Import",
+        "moduleName": "FreshchatSDK"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
         "moduleName": "FreshchatSDK",
         "declAttributes": [
           "RawDocComment"
@@ -98,6 +125,26 @@
         "kind": "Import",
         "name": "UIKit",
         "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
         "declKind": "Import",
         "moduleName": "FreshchatSDK",
         "declAttributes": [
@@ -503,6 +550,104 @@
       "offset": 592,
       "length": 1,
       "value": "0"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 159,
+      "length": 54,
+      "value": "\"com.freshworks.freshchat_bot_action_trigger_function\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 263,
+      "length": 13,
+      "value": "\"HIDE_WIDGET\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 303,
+      "length": 17,
+      "value": "\"MINIMIZE_WIDGET\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 354,
+      "length": 26,
+      "value": "\"SEND_AS_CUSTOMER_MESSAGE\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 414,
+      "length": 15,
+      "value": "\"WIDGET_OPENED\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 449,
+      "length": 10,
+      "value": "\"OPEN_URL\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 489,
+      "length": 21,
+      "value": "\"TRIGGER_JS_FUNCTION\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 263,
+      "length": 13,
+      "value": "\"HIDE_WIDGET\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 303,
+      "length": 17,
+      "value": "\"MINIMIZE_WIDGET\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 354,
+      "length": 26,
+      "value": "\"SEND_AS_CUSTOMER_MESSAGE\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 414,
+      "length": 15,
+      "value": "\"WIDGET_OPENED\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 449,
+      "length": 10,
+      "value": "\"OPEN_URL\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "StringLiteral",
+      "offset": 489,
+      "length": 21,
+      "value": "\"TRIGGER_JS_FUNCTION\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/BotActionManager\/FCBotActionManager.swift",
+      "kind": "Array",
+      "offset": 1102,
+      "length": 2,
+      "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
@@ -1564,84 +1709,126 @@
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
-      "offset": 434,
+      "offset": 437,
+      "length": 6,
+      "value": "\"name\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 471,
+      "length": 11,
+      "value": "\"sleepTime\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 505,
+      "length": 6,
+      "value": "\"data\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 533,
+      "length": 5,
+      "value": "\"url\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 563,
+      "length": 8,
+      "value": "\"params\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 597,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
+      "kind": "StringLiteral",
+      "offset": 652,
       "length": 33,
       "value": "\"QuickReplyButtonRedirectionIcon\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
-      "offset": 515,
+      "offset": 733,
       "length": 3,
       "value": "0.6"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
-      "offset": 543,
+      "offset": 761,
       "length": 3,
       "value": "0.4"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
-      "offset": 571,
+      "offset": 789,
       "length": 3,
       "value": "0.1"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
-      "offset": 622,
+      "offset": 840,
       "length": 4,
       "value": "0.05"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
-      "offset": 674,
+      "offset": 892,
       "length": 3,
       "value": "0.2"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "FloatLiteral",
-      "offset": 701,
+      "offset": 919,
       "length": 5,
       "value": "540.0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
-      "offset": 742,
+      "offset": 960,
       "length": 4,
       "value": "1000"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
-      "offset": 781,
+      "offset": 999,
       "length": 3,
       "value": "750"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
-      "offset": 822,
+      "offset": 1040,
       "length": 2,
       "value": "10"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "IntegerLiteral",
-      "offset": 860,
+      "offset": 1078,
       "length": 2,
       "value": "11"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCConstantsData.swift",
       "kind": "StringLiteral",
-      "offset": 909,
+      "offset": 1127,
       "length": 26,
       "value": "\"isEligibleForMultiSelect\""
     },
