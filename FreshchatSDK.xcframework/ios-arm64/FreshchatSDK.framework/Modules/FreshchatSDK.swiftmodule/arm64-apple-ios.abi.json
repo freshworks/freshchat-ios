@@ -203,6 +203,16 @@
       },
       {
         "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "FreshchatSDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
         "name": "UIKit",
         "printedName": "UIKit",
         "declKind": "Import",
@@ -750,142 +760,170 @@
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "StringLiteral",
-      "offset": 2654,
+      "offset": 2993,
       "length": 21,
       "value": "\"button_multi_select\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "StringLiteral",
-      "offset": 2721,
+      "offset": 3060,
       "length": 9,
       "value": "\"buttons\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "StringLiteral",
-      "offset": 2778,
+      "offset": 3117,
       "length": 10,
       "value": "\"callback\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 2836,
+      "offset": 3175,
       "length": 4,
       "value": "1002"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 2882,
+      "offset": 3221,
       "length": 2,
       "value": "51"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 2921,
+      "offset": 3260,
       "length": 2,
       "value": "52"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 2964,
+      "offset": 3303,
       "length": 4,
       "value": "1000"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3360,
+      "length": 4,
+      "value": "1001"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "BooleanLiteral",
-      "offset": 3012,
+      "offset": 3408,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "BooleanLiteral",
-      "offset": 3144,
+      "offset": 3540,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3285,
+      "offset": 3681,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3340,
+      "offset": 3736,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3371,
+      "offset": 3767,
       "length": 2,
       "value": "36"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "FloatLiteral",
-      "offset": 3412,
+      "offset": 3808,
       "length": 3,
       "value": "8.0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3446,
+      "offset": 3842,
       "length": 2,
       "value": "12"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3485,
+      "offset": 3881,
       "length": 2,
       "value": "14"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3525,
+      "offset": 3921,
       "length": 2,
       "value": "15"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3564,
+      "offset": 3960,
       "length": 2,
       "value": "54"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "FloatLiteral",
-      "offset": 3601,
+      "offset": 3997,
       "length": 4,
       "value": "10.0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "FloatLiteral",
-      "offset": 3629,
+      "offset": 4025,
       "length": 4,
       "value": "20.0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
       "kind": "IntegerLiteral",
-      "offset": 3664,
+      "offset": 4060,
       "length": 1,
       "value": "0"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonViewModel.swift",
+      "kind": "BooleanLiteral",
+      "offset": 6257,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/AccessibilityConstants.swift",
+      "kind": "StringLiteral",
+      "offset": 217,
+      "length": 17,
+      "value": "\"countryCodeView\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Constants\/AccessibilityConstants.swift",
+      "kind": "StringLiteral",
+      "offset": 328,
+      "length": 28,
+      "value": "\"fcStarRatingCollectionView\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Controllers\/SingleMultiSelectDropDown\/FCDropDownHandler.swift",
@@ -1835,16 +1873,23 @@
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
       "kind": "StringLiteral",
-      "offset": 838,
+      "offset": 905,
       "length": 11,
       "value": "\"replyCell\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
       "kind": "StringLiteral",
-      "offset": 909,
+      "offset": 976,
       "length": 17,
       "value": "\"redirectionCell\""
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/ReplyCell\/FCQuickReplyButtonView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1111,
+      "length": 5,
+      "value": "false"
     }
   ]
 }

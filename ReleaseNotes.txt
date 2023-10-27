@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.9.0
+Version         : 5.9.1
+
+Ver 5.9.1 
+__________________________
+Bug Fix :
+- UI fixes for API generated proactive reply suggestions.
+- Fix intermittent delays in updating team member information when a conversation is assigned from the bot flow.
 
 Ver 5.9.0 
 __________________________
