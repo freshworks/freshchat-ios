@@ -2,11 +2,17 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.9.1
+Version         : 5.9.2
+
+Ver 5.9.2 
+__________________________
+Bug Fixes:
+- Addressed crashes affecting users running iOS versions prior to 13.
+- Fixed compromised visibility of the date picker view in dark mode.
 
 Ver 5.9.1 
 __________________________
-Bug Fix :
+Bug Fix -
 - UI fixes for API generated proactive reply suggestions.
 - Fix intermittent delays in updating team member information when a conversation is assigned from the bot flow.
 
