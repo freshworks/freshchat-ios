@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.9.2
+Version         : 5.9.3
+
+Ver 5.9.3 
+__________________________
+Bug Fixes :
+- Fix display of team member information in chat messages.
+- Fix infinite loading issue for users with expired JWT authentication.
+- Minor enhancements.
 
 Ver 5.9.2 
 __________________________
