@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 5.9.3
+Version         : 5.9.4
+
+Ver 5.9.4 
+__________________________
+Bug Fixes:
+- Fix crash in JWT user restore caused by the use of numbers for user referenceID values.
+- Fix incorrect token status when expired tokens were added during the user restoration process for JWT users.
 
 Ver 5.9.3 
 __________________________
