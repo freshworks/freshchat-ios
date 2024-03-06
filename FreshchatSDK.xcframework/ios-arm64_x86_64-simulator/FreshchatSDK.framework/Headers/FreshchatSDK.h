@@ -326,10 +326,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  This will clean up all the data associated with the SDK for the user.
  *  Please use the completion block if you are updating user information or subsequently calling init
  *
- * @param Completion block to be called when clearData is completed
+ * @param completion block to be called when clearData is completed
  *
  */
--(void)resetUserWithCompletion:(nullable void (^)())completion;
+-(void)resetUserWithCompletion:(nullable void (^)(void))completion;
 /**
  *  Set User properties
  *
@@ -576,20 +576,20 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @discussion This method lets you to filter the list of Categories or Articles by tags
  *
- *  @param Array of tags to filter by. Tags can be configured in the portal
+ *  @param tags as Array to filter. Tags can be configured in the portal
  *
- *  @param Title for the list of filtered view
+ *  @param title for the list of filtered view
  *
- *  @param Type can be either Category or Article determining what to show. ( list of filtered articles or categories)
+ *  @param type can be either Category or Article determining what to show. ( list of filtered articles or categories)
  */
 -(void) filterByTags: (nullable NSArray *) tags withTitle:(nullable NSString *) title  andType : (enum TagFilterType) type;
 
 /**
  *  @discussion This method lets you to filter the list of Channels by tags when user clicks on contact us
  *
- *  @param Array of tags to filter the channels list
+ *  @param tags as Array to filter the channels list
  *
- *  @param Title for the list of filtered channels view
+ *  @param title for the list of filtered channels view
  */
 -(void)filterContactUsByTags:(nullable NSArray *) tags withTitle:(nullable NSString *) title;
  
@@ -630,9 +630,9 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @discussion This method lets you to launch and present a controller with the list of Channels filtered by the tags
  *
- *  @param Array of tags to filter the channels list
+ *  @param tags as Array to filter the channels list
  *
- *  @param Title for the list of filtered channels view
+ *  @param title for the list of filtered channels view
  *
  */
 -(void)filterByTags:(nullable NSArray *)tags withTitle:(nullable NSString *)title;
@@ -682,7 +682,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @discussion this method lets you to get value for a Freshchat event property
  *
- * @param Enum parameter key for event
+ * @param property as enum parameter key for event
  *
  */
 - (nullable id) valueForEventProperty : (FCEventProperty) property;
