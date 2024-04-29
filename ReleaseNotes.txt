@@ -4,6 +4,18 @@ Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
 Version         : 6.0.0
 
+Ver 6.1.1
+__________________________
+Enhancement :
+- Added code signing for the SDK to enhance security and mitigate potential risks associated with unverified code.
+
+Ver 6.1.0
+__________________________
+Enhancements:
+- We have integrated Apple's Required Reason API, ensuring compliance with App Store guidelines.
+Bug Fix:
+- Fix intermittent issue related to user creation occurring without user properties.
+
 Ver 6.0.0 
 __________________________
 Enhancements:

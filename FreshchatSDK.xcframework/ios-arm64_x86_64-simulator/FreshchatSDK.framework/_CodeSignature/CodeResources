@@ -1977,6 +1977,10 @@
 		<data>
 		v19lUEthLnXWKX1z/Kg1+Gd9Zhc=
 		</data>
+		<key>PrivacyInfo.xcprivacy</key>
+		<data>
+		yb43zkkIWrm9dUwRdNls6Ts5onE=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -5417,6 +5421,13 @@
 			<key>hash2</key>
 			<data>
 			/3HGqMHeOBUxN9bwJhUWg5QlBlVpVXUVGSBk3T4LaVw=
+			</data>
+		</dict>
+		<key>PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mfX80xE2LA12pDmLW0lQyAxr1o16B/l60xjOKWqPhfo=
 			</data>
 		</dict>
 	</dict>
