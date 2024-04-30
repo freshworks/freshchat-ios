@@ -2,9 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.0.0
+Version         : 6.1.2
 
-Ver 6.1.1
+Ver 6.1.2 
+__________________________
+Bug Fix :
+- Update Privacy Accessed API Reasons value for required reason API changes.
+
+Ver 6.1.1 
 __________________________
 Enhancement :
 - Added code signing for the SDK to enhance security and mitigate potential risks associated with unverified code.
