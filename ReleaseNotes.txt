@@ -2,7 +2,15 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.1.2
+Version         : 6.1.3
+
+Ver 6.1.3 
+__________________________
+Bug Fixes :
+- Fix reply editor missing for optional text replies with third-party bot quick selection option message.
+- Fix for articles search with Group or Category filtering in Freshdesk knowledge base.
+- Fix handling of anchor links for FAQ articles.
+- Fix branding view overlapping with the home slider button on iPad devices.
 
 Ver 6.1.2 
 __________________________
