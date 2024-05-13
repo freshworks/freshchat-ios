@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.1.3
+Version         : 6.1.4
+
+Ver 6.1.4 
+__________________________
+Bug Fixes:
+- Fix for missing device models to track user devices.
+- Fix for bot variables not updating since release 6.0.0.
+- Fix for missing assets when using an old theme customization file.
 
 Ver 6.1.3 
 __________________________
