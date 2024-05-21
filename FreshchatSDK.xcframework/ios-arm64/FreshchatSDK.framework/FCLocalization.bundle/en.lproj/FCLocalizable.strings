@@ -69,6 +69,9 @@
 "error_message_account_not_active_text" = "This section is no longer available";
 "error_message_account_not_active_cancel" = "Cancel";
 
+/* Topic not available*/
+"error_message_topic_not_available_text" = "Oops, this chat is no longer available";
+
 /*Unsupported message content */
 "message_unsupported_content" = "Unsupported message content";
 
