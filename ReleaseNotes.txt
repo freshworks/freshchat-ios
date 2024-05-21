@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.1.4
+Version         : 6.2.0
+
+Ver 6.2.0 
+__________________________
+Enhancement :
+- Added support for the Middle East data center. 
+Bug Fix :
+- Fix to block users from messaging in disabled private topics when opened using tags.
 
 Ver 6.1.4 
 __________________________
