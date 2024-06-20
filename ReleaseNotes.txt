@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.0
+Version         : 6.2.1
+
+Ver 6.2.1 
+__________________________
+Bug Fixes:
+- Fix occasional crashes in the setUser and identifyUser APIs.
+- Fix crash in the JWT restore API when using invalid tokens.
 
 Ver 6.2.0 
 __________________________
