@@ -2,7 +2,18 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.1
+Version         : 6.2.2
+
+Ver 6.2.2 
+__________________________
+Bug Fix :
+- Fix for bot quick actions display once a conversation is resolved.
+- Added support for html content in carousels and fix for hyperlink redirection in carousel's secorndary button and description content.
+- Fix for chat history restoration issue with pagination.
+- Fix for bot specific variables not updating in bot flows.
+- Fix correct display of search options in the searchable list for Slash command quick actions.
+- Fix security issue where HTML injection is allowed through the chat input field.
+- Fix crash in bot articles feedback option when sent in languages other than English.
 
 Ver 6.2.1 
 __________________________
