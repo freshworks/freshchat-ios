@@ -10,7 +10,7 @@
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/CountryListCell.nib</key>
 		<data>
-		uMsVWuTxxQA8k+QhWfK1Rm0mIFo=
+		FcWLTeSBXQsyTCewYLF5PWipA3U=
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/CountryPickerController.nib</key>
 		<data>
@@ -1915,7 +1915,7 @@
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/FreshchatSDK</key>
 		<data>
-		z0u5Xnv1CePxKExF4kZVpM2cppI=
+		T1by/ZkvUi/0WaiZYqCmLB8TySA=
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
 		<data>
@@ -1931,7 +1931,7 @@
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		mYldq0kaju+9bSsX/tdgUO8QM74=
+		jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
@@ -1963,7 +1963,7 @@
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		iFLYldzJ7T2qkkzYzQBSiBTzULw=
+		7mFjs1XQU2St9XElGeomuaKi1bE=
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/CountryCodes.json</key>
 		<data>
@@ -3876,7 +3876,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/FreshchatSDK</key>
 		<data>
-		p0eQM5fW1HqUrZenTm4fYRLHHEY=
+		6g11CMZUSOi5xyFdDJs7Lt2COA8=
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
 		<data>
@@ -3892,7 +3892,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		mYldq0kaju+9bSsX/tdgUO8QM74=
+		jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -3908,7 +3908,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		mYldq0kaju+9bSsX/tdgUO8QM74=
+		jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -3932,7 +3932,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/OBJCResendOTPView.nib</key>
 		<data>
-		fAncJx3uu94LVrRCFSTuNafh91k=
+		gKAimdJfdCFjUbU8rv0mF5lsmV0=
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/PrivacyInfo.xcprivacy</key>
 		<data>
@@ -3940,7 +3940,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		FW5lQ/CmycyCOWGtaKT9doX5JFU=
+		9r9ZXU+779UK6g+VsWF8xw+YkdE=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -3960,11 +3960,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			uMsVWuTxxQA8k+QhWfK1Rm0mIFo=
+			FcWLTeSBXQsyTCewYLF5PWipA3U=
 			</data>
 			<key>hash2</key>
 			<data>
-			MzmCgQ8IbnIjq1GrY8nx33ftIpL2tR5Z/08RXAOmv5k=
+			OFsg9119aZKn+HYhSs93eCRTMU0t1/cOXiB8a8lS2q4=
 			</data>
 		</dict>
 		<key>ios-arm64/FreshchatSDK.framework/CountryPickerController.nib</key>
@@ -9187,11 +9187,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			z0u5Xnv1CePxKExF4kZVpM2cppI=
+			T1by/ZkvUi/0WaiZYqCmLB8TySA=
 			</data>
 			<key>hash2</key>
 			<data>
-			S8vn+ET3XZVzlyJZhfHwcpUS6LGKaoqKqTlRlnljrgQ=
+			UR91YrFKXsw3eW1RhK/y5t9VLfdfal0ExtTfzSk+9t0=
 			</data>
 		</dict>
 		<key>ios-arm64/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
@@ -9231,11 +9231,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mYldq0kaju+9bSsX/tdgUO8QM74=
+			jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 			</data>
 			<key>hash2</key>
 			<data>
-			35CyFI7JwJFP8Dve3c7+5AxohpsLq3PLvnBFPPUN4Qo=
+			B1I7Pw1p9Z0spFJDVxQCc4LGmk1v3qJ4jLVEkaTyUGo=
 			</data>
 		</dict>
 		<key>ios-arm64/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
@@ -9319,11 +9319,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			iFLYldzJ7T2qkkzYzQBSiBTzULw=
+			7mFjs1XQU2St9XElGeomuaKi1bE=
 			</data>
 			<key>hash2</key>
 			<data>
-			7T1IbriFr7w2dKhKZYImDxS2UW14BPNMXE0a9eOwlBQ=
+			34uBj18auex2mk+vw7jxr9Ti/oJynz7CbeHr+hdi14A=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/CountryCodes.json</key>
@@ -14568,11 +14568,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			p0eQM5fW1HqUrZenTm4fYRLHHEY=
+			6g11CMZUSOi5xyFdDJs7Lt2COA8=
 			</data>
 			<key>hash2</key>
 			<data>
-			wXxr903hmm6WCJBUkpOlaHwKr9Q5GoJjR/Crb5ij8kI=
+			fJy0Ip74wFghhk1abyvkb8cZACLostFRLXsMWjAdNaw=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
@@ -14612,11 +14612,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mYldq0kaju+9bSsX/tdgUO8QM74=
+			jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 			</data>
 			<key>hash2</key>
 			<data>
-			35CyFI7JwJFP8Dve3c7+5AxohpsLq3PLvnBFPPUN4Qo=
+			B1I7Pw1p9Z0spFJDVxQCc4LGmk1v3qJ4jLVEkaTyUGo=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -14656,11 +14656,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mYldq0kaju+9bSsX/tdgUO8QM74=
+			jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 			</data>
 			<key>hash2</key>
 			<data>
-			35CyFI7JwJFP8Dve3c7+5AxohpsLq3PLvnBFPPUN4Qo=
+			B1I7Pw1p9Z0spFJDVxQCc4LGmk1v3qJ4jLVEkaTyUGo=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -14722,11 +14722,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			fAncJx3uu94LVrRCFSTuNafh91k=
+			gKAimdJfdCFjUbU8rv0mF5lsmV0=
 			</data>
 			<key>hash2</key>
 			<data>
-			AdWMIaESNfDIDvus+1hkALgU3bLuXx0ooAYGzRq/3Gg=
+			Y6g/nxupGCY1BH4UNf8nrFt4upQ4bXzBwAfjR2uDFsI=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/PrivacyInfo.xcprivacy</key>
@@ -14744,11 +14744,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FW5lQ/CmycyCOWGtaKT9doX5JFU=
+			9r9ZXU+779UK6g+VsWF8xw+YkdE=
 			</data>
 			<key>hash2</key>
 			<data>
-			2d9UZil/OiJcOzB0X106Z1BSaLgAnpz/ZITryhSlm2E=
+			ZqeJcy0+pf01fjtv1dlke6jonPkOD3iEyVpY7235nE4=
 			</data>
 		</dict>
 	</dict>
