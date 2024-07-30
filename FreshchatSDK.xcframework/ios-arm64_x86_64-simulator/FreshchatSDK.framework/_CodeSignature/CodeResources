@@ -1927,7 +1927,7 @@
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		mYldq0kaju+9bSsX/tdgUO8QM74=
+		jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -1943,11 +1943,11 @@
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		DhmgVSZtn1mqMDc0PzH32WEt7/U=
+		tolZOv9Ni7/L+c06G39RT5Bo1fs=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		mYldq0kaju+9bSsX/tdgUO8QM74=
+		jP8Gg+9lpxEW/TjMJKyucGfyR5E=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -1963,7 +1963,7 @@
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		gJiOAbzIkvabR2VDAKx5Yzxzf4k=
+		6DQgPS4jnTvmxF6OvJZGWZO1Tjs=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -1975,7 +1975,7 @@
 		</data>
 		<key>OBJCResendOTPView.nib</key>
 		<data>
-		fAncJx3uu94LVrRCFSTuNafh91k=
+		gKAimdJfdCFjUbU8rv0mF5lsmV0=
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
@@ -5336,7 +5336,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			35CyFI7JwJFP8Dve3c7+5AxohpsLq3PLvnBFPPUN4Qo=
+			B1I7Pw1p9Z0spFJDVxQCc4LGmk1v3qJ4jLVEkaTyUGo=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -5364,14 +5364,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ru8eTy/5SSTHJScqxQAYgCC/xtZoHUgTqaWeUEfAp7M=
+			u82pklghWiyx4jd+ciO2smZt+eBLbN79RYacq+7J7kA=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			35CyFI7JwJFP8Dve3c7+5AxohpsLq3PLvnBFPPUN4Qo=
+			B1I7Pw1p9Z0spFJDVxQCc4LGmk1v3qJ4jLVEkaTyUGo=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -5399,7 +5399,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			qVogMfG6BcFi4BQQJJM8bGl1vRHA8D3SYm1qEwrwlWA=
+			vpOo/vXi7OrDXFO2ZgXVhwFPgD41B9hVhIEW/bZhPFQ=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -5420,7 +5420,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			AdWMIaESNfDIDvus+1hkALgU3bLuXx0ooAYGzRq/3Gg=
+			Y6g/nxupGCY1BH4UNf8nrFt4upQ4bXzBwAfjR2uDFsI=
 			</data>
 		</dict>
 		<key>PrivacyInfo.xcprivacy</key>

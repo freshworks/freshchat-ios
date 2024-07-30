@@ -2686,125 +2686,125 @@
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
       "offset": 195,
-      "length": 21,
-      "value": "\"^\\+?(-?\\d){9,15}$\""
+      "length": 23,
+      "value": "\"^\\+?(-?[0-9]){9,15}$\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 235,
-      "length": 30,
-      "value": "\"(\\+?|-?)\\d{1,140}+\\.?\\d*\""
+      "offset": 237,
+      "length": 32,
+      "value": "\"(\\+?|-?)[0-9]{1,140}+\\.?\\d*\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 323,
+      "offset": 327,
       "length": 7,
       "value": "\"email\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 340,
+      "offset": 344,
       "length": 7,
       "value": "\"phone\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 372,
+      "offset": 376,
       "length": 22,
       "value": "\"phoneWithCountryCode\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 402,
+      "offset": 406,
       "length": 5,
       "value": "\"otp\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 418,
+      "offset": 422,
       "length": 8,
       "value": "\"number\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 440,
+      "offset": 444,
       "length": 10,
       "value": "\"feedback\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "BooleanLiteral",
-      "offset": 860,
+      "offset": 864,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 1200,
+      "offset": 1204,
       "length": 17,
       "value": "\"SELF MATCHES %@\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "IntegerLiteral",
-      "offset": 1356,
+      "offset": 1360,
       "length": 3,
       "value": "500"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 323,
+      "offset": 327,
       "length": 7,
       "value": "\"email\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 340,
+      "offset": 344,
       "length": 7,
       "value": "\"phone\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 372,
+      "offset": 376,
       "length": 22,
       "value": "\"phoneWithCountryCode\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 402,
+      "offset": 406,
       "length": 5,
       "value": "\"otp\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 418,
+      "offset": 422,
       "length": 8,
       "value": "\"number\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "StringLiteral",
-      "offset": 440,
+      "offset": 444,
       "length": 10,
       "value": "\"feedback\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/PlaceHolder\/FCPlaceholderValidation.swift",
       "kind": "BooleanLiteral",
-      "offset": 2203,
+      "offset": 2207,
       "length": 5,
       "value": "false"
     },
@@ -6926,64 +6926,71 @@
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1220,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "Array",
-      "offset": 1165,
+      "offset": 1269,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "Array",
-      "offset": 1202,
+      "offset": 1306,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "IntegerLiteral",
-      "offset": 1575,
+      "offset": 1679,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1751,
+      "offset": 1855,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "FloatLiteral",
-      "offset": 6833,
+      "offset": 7119,
       "length": 4,
       "value": "0.01"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "BooleanLiteral",
-      "offset": 6942,
+      "offset": 7228,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "BooleanLiteral",
-      "offset": 8819,
+      "offset": 9105,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "IntegerLiteral",
-      "offset": 9145,
+      "offset": 9572,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/CountryPicker\/Views\/CountryPickerController.swift",
       "kind": "BooleanLiteral",
-      "offset": 9514,
+      "offset": 9941,
       "length": 4,
       "value": "true"
     },
