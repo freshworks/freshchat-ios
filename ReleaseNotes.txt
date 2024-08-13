@@ -2,7 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.3
+Version         : 6.2.4
+
+Ver 6.2.4 
+__________________________
+Bug Fix :
+-  Optimise message rendering in the chat detail view.
+-  Fix a rare crash linked with keychain storage component.
+-  Fix an occasional crash when searching for support articles.
+-  Fix auto-scrolling not work correctly after selecting carousel and dropdown messages.
+-  Fix an issue for keyboard automatically dismiss after user sent a message in non-bot.
 
 Ver 6.2.3 
 __________________________
