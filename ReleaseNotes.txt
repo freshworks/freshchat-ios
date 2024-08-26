@@ -2,7 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.4
+Version         : 6.2.5
+
+Ver 6.2.5 
+__________________________
+Bug Fix :	
+- Fix orientations of quick reply option for RTL users.
+- Fix missing underlines in phone numbers within chat messages.
+- Fix missing separator line between the reply editor and footer branding view.
+- Fix display of file extension and size on the chat preview screen when the file name is long.
+- Fix text and image position swapping in chat messages after restoring the user.
 
 Ver 6.2.4 
 __________________________
