@@ -1159,287 +1159,294 @@
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 831,
+      "offset": 1084,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 881,
+      "offset": 1134,
       "length": 62,
       "value": "\"<key>aps-environment<\/key>\n\t\t<string>development<\/string>\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 970,
+      "offset": 1223,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 1024,
+      "offset": 1280,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 1233,
+      "offset": 1310,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1519,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 1589,
+      "offset": 1875,
       "length": 34,
       "value": "\"Error unarchiving data: \""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 1622,
+      "offset": 1908,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Dictionary",
-      "offset": 1650,
+      "offset": 1936,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 2133,
+      "offset": 2419,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 2351,
+      "offset": 2637,
       "length": 4,
       "value": "\"{}\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 2577,
+      "offset": 2863,
       "length": 3,
       "value": "\"|\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Dictionary",
-      "offset": 2714,
+      "offset": 3000,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Array",
-      "offset": 2821,
+      "offset": 3107,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 2844,
+      "offset": 3130,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Dictionary",
-      "offset": 3210,
+      "offset": 3496,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 3257,
+      "offset": 3543,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 3292,
+      "offset": 3578,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 3401,
+      "offset": 3687,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 3556,
+      "offset": 3842,
       "length": 12,
       "value": "\"first_name\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 3694,
+      "offset": 3980,
       "length": 11,
       "value": "\"last_name\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 3946,
+      "offset": 4232,
       "length": 12,
       "value": "\"first_name\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 4129,
+      "offset": 4415,
       "length": 11,
       "value": "\"last_name\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 4306,
+      "offset": 4592,
       "length": 7,
       "value": "\"email\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 4554,
+      "offset": 4840,
       "length": 14,
       "value": "\"phone_number\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 5150,
+      "offset": 5436,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Dictionary",
-      "offset": 5178,
+      "offset": 5464,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 5222,
+      "offset": 5508,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 5539,
+      "offset": 5825,
       "length": 1,
       "value": "4"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 5557,
+      "offset": 5843,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 5577,
+      "offset": 5863,
       "length": 21,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 5595,
+      "offset": 5881,
       "length": 2,
       "value": "\"==\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "IntegerLiteral",
-      "offset": 5612,
+      "offset": 5898,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 5632,
+      "offset": 5918,
       "length": 20,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 5650,
+      "offset": 5936,
       "length": 1,
       "value": "\"=\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Array",
-      "offset": 5818,
+      "offset": 6104,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 6115,
+      "offset": 6401,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 7060,
+      "offset": 7346,
       "length": 354,
       "value": "\"<center><a class = \"article-link-anchor\" href = \"\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 7120,
+      "offset": 7406,
       "length": 1,
       "value": "\"\"><button class=\"article-link-button\" align = \"center\"  type = \"button\"><span align = \"center\" class = \"article-link-text\">\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 7265,
+      "offset": 7551,
       "length": 1,
       "value": "\"<img align = \"top\" class = \"article-link-icon\" src =\"data:image\/png;base64,\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "StringLiteral",
-      "offset": 7380,
+      "offset": 7666,
       "length": 1,
       "value": "\"\"\/><\/span><\/button><\/a><\/center>\""
     },
     {
       "filePath": "\/Users\/sshaikh\/Documents\/GitHub\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/Utilities\/FCUtilMethods.swift",
       "kind": "Dictionary",
-      "offset": 7914,
+      "offset": 8200,
       "length": 3,
       "value": "[]"
     },

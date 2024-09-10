@@ -2,7 +2,16 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.5
+Version         : 6.2.6
+
+Ver 6.2.6 
+__________________________
+Bug Fix :	
+- Fix for notification not working in iOS 18 sandbox environment.
+- Fix occasional issues with the reply editor display in the dropdown, carousel and option selections.
+- Fix for quick option selection menu buttons are not hidden after a conversation is resolved.
+- Fix for bot articles flow where links without descriptions are not working.
+- Fix rare crash during resetUser API call.
 
 Ver 6.2.5 
 __________________________
