@@ -2,7 +2,17 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.6
+Version         : 6.2.7
+
+Ver 6.2.7 
+__________________________
+Bug Fix :	
+- Fix the image with text alignment issue in conversation message.
+- Fix the issue where the “Was this answer helpful?” feedback options (Yes/No) were not displaying at the bottom of the article.
+- Fix where we removed the 256-character limit for setting up the user properties.
+- Fix added support for this year’s new devices.
+- Fix the issue where the reply editor was visible when sending a carousel via the public API. Now, the reply editor will not appear for carousels sent through the public API.
+- Fix an issue where the “Select All” button was not displayed in the multi-select carousel in some edge cases.
 
 Ver 6.2.6 
 __________________________
