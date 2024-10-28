@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.7
+Version         : 6.2.8
+
+Ver 6.2.8 
+__________________________
+Bug Fix :	
+- Fix UI issue where bot nodes configured after feedback bot message were not displayed properly.
+- Fix crash related to footer view when using multiselect buttons and dropdowns on apps built with Xcode 16 for iOS 18 users.
 
 Ver 6.2.7 
 __________________________

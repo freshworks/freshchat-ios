@@ -1923,11 +1923,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		zJgIpPAONpzeZJfTTuGZrOqCZh8=
+		cXmaN2LEVOE7YWcyI5UPgaAmpls=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		8SlOYRU26Qxt+6AeQ0d9Mx6juk8=
+		QXE7qxIExrvQIPHlbWUQ/pzNS1c=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -1943,11 +1943,11 @@
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		jibmBY1KpTuISGEYQaTqpYHViL8=
+		+Rhp1D/xuwcjG49PMALi406xxMg=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		8SlOYRU26Qxt+6AeQ0d9Mx6juk8=
+		QXE7qxIExrvQIPHlbWUQ/pzNS1c=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -1963,7 +1963,7 @@
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		Zzsn9EzXFKNbPA8sXxPsu4so6ts=
+		5Df/BOvMn3GGP4cdTGp4dQk0kbo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -5336,7 +5336,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6r2Hw/tuSn6R4dZu6D4JfOCRt6QgbtQ/cQumkQ+fGIc=
+			eQ+zRcYmFUWSfIhM+ponD6wqMN7a+jjj86YjZzCHVLg=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -5364,14 +5364,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			jYIdNs6U52BkaWhvF8dWWWwmFnCOd6Vv5x/QMm5RhB0=
+			JIWN3q0WVsB9a2Odx8MfV7mUsPJEB4he/ox6PIOWZy4=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6r2Hw/tuSn6R4dZu6D4JfOCRt6QgbtQ/cQumkQ+fGIc=
+			eQ+zRcYmFUWSfIhM+ponD6wqMN7a+jjj86YjZzCHVLg=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -5399,7 +5399,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Ydzy0IZXhJ7ktUjcAQnS/Gij3rZvE9f0z6xmbsIkgj4=
+			+SIECaB/JMfkCb3EXwR7V5B01fcNSNX+hzxXP2TKSbg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
