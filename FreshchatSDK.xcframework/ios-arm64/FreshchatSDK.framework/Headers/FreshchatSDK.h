@@ -65,6 +65,7 @@ typedef enum {
     FCEventDatePickerSelect,
     FCEventTimePickerShow,
     FCEventTimePickerSelect,
+    FCEventAgentProfileClick,
 } FCEvent;
 
 /*
@@ -97,7 +98,11 @@ typedef enum {
     FCProperyQuickActionLabel,
     FCPropertyFeedbackType,
     FCPropertyConversationReferenceID,
-    FCPropertyIsMultiSelect
+    FCPropertyIsMultiSelect,
+    FCPropertyAgentFirstName,
+    FCPropertyAgentLastName,
+    FCPropertyAgentEmail,
+    FCPropertyAgentId
 } FCEventProperty;
 
 
