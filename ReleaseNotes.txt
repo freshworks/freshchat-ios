@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.2.8
+Version         : 6.2.9
+
+Ver 6.2.9 
+__________________________
+Enhancement :
+- Exposed an FCEventAgentProfileClick event to retrieve agent details upon clicking the agent profile.
 
 Ver 6.2.8 
 __________________________
