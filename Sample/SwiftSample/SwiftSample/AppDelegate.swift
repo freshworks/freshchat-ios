@@ -7,22 +7,42 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // Override point for customization after application launch.
+        UNUserNotificationCenter.current().delegate = self
+        if #available(iOS 10.0, *) {
+            let center  = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
+                if error == nil{
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+            }
+        } else {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
         self.initFreshchatSDK()
         return true
     }
     
     func initFreshchatSDK() {
-        let fchatConfig = FreshchatConfig.init(appID: "AppId", andAppKey: "AppKey") //Enter your AppID and AppKey here
-        fchatConfig.themeName = "CustomThemeFile"
+        let appID = "appId"
+        let appKey = "appKey"
+        let domain = "domain"
+
+        let fchatConfig = FreshchatConfig.init(appID: appID, andAppKey: appKey) //Enter your AppID and AppKey here
+        fchatConfig.domain = domain
         Freshchat.sharedInstance().initWith(fchatConfig)
     }
 
@@ -48,6 +68,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Freshchat.sharedInstance().setPushRegistrationToken(deviceToken)
+    }
 
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        if Freshchat.sharedInstance().isFreshchatNotification(notification.request.content.userInfo) {
+            Freshchat.sharedInstance().handleRemoteNotification(notification.request.content.userInfo, andAppstate: UIApplication.shared.applicationState)
+        }
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if Freshchat.sharedInstance().isFreshchatNotification(response.notification.request.content.userInfo) {
+            Freshchat.sharedInstance().handleRemoteNotification(response.notification.request.content.userInfo, andAppstate: UIApplication.shared.applicationState)
+        }
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if Freshchat.sharedInstance().isFreshchatNotification(userInfo) {
+            Freshchat.sharedInstance().handleRemoteNotification(userInfo, andAppstate: application.applicationState)
+        }
+        completionHandler(UIBackgroundFetchResult.noData)
+    }
 }
 

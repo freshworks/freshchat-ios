@@ -20,6 +20,14 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Hold on, we would need permission send picture message.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To upload audio message</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Hold on, we would need permission to access your gallery.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Hold on, we would need permission to access your gallery.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

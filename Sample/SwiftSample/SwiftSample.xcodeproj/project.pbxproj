@@ -39,6 +39,7 @@
 		028C6919251894740013E7DC /* CustomThemeFile.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = CustomThemeFile.plist; sourceTree = SOURCE_ROOT; };
 		0CD20E6C304056A509E9E5B2 /* Pods-SwiftSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftSample/Pods-SwiftSample.debug.xcconfig"; sourceTree = "<group>"; };
 		0EA68094E36C2BE4FEC47AFB /* Pods_SwiftSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		563B02512D0B234B00E7019D /* SwiftSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftSample.entitlements; sourceTree = "<group>"; };
 		CE28680F1F6FC5BD0099DB91 /* SwiftSample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftSample-Bridging-Header.h"; sourceTree = "<group>"; };
 		CE684E4F1F6FC20A0047DA52 /* SwiftSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE684E521F6FC20A0047DA52 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +125,7 @@
 		CE684E511F6FC20A0047DA52 /* SwiftSample */ = {
 			isa = PBXGroup;
 			children = (
+				563B02512D0B234B00E7019D /* SwiftSample.entitlements */,
 				CE684E521F6FC20A0047DA52 /* AppDelegate.swift */,
 				CE684E541F6FC20A0047DA52 /* ViewController.swift */,
 				028C6919251894740013E7DC /* CustomThemeFile.plist */,
@@ -165,7 +167,7 @@
 				CE684E4B1F6FC20A0047DA52 /* Sources */,
 				CE684E4C1F6FC20A0047DA52 /* Frameworks */,
 				CE684E4D1F6FC20A0047DA52 /* Resources */,
-				D8B3A732F1B0EDCD9D9C2939 /* [CP] Copy Pods Resources */,
+				D162EFCFEEB0203EF86D120E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -226,7 +228,7 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = PKUQ4ZWJH3;
 						LastSwiftMigration = 0830;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					CE684E621F6FC20A0047DA52 = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -310,26 +312,22 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D8B3A732F1B0EDCD9D9C2939 /* [CP] Copy Pods Resources */ = {
+		D162EFCFEEB0203EF86D120E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-resources.sh",
-				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK/FCResources.bundle",
-				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK/FreshchatModels.bundle",
-				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK/FCLocalization.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FreshchatSDK/FreshchatSDK.framework/FreshchatSDK",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FCResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FreshchatModels.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FCLocalization.bundle",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FreshchatSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftSample/Pods-SwiftSample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -496,15 +494,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = PKUQ4ZWJH3;
+				CODE_SIGN_ENTITLEMENTS = SwiftSample/SwiftSample.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PKUQ4ZWJH3;
 				INFOPLIST_FILE = SwiftSample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sample.SwiftSample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Hotline Demo Dev Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftSample/SwiftSample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -514,14 +517,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = PKUQ4ZWJH3;
+				CODE_SIGN_ENTITLEMENTS = SwiftSample/SwiftSample.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PKUQ4ZWJH3;
 				INFOPLIST_FILE = SwiftSample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sample.SwiftSample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.freshdesk.example.hotlineios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Hotline Demo Dev Profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "SwiftSample/SwiftSample-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

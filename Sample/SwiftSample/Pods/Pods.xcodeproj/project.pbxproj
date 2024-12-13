@@ -9,8 +9,9 @@
 /* Begin PBXAggregateTarget section */
 		4E1D79809E0C3B8232439E38335A55B2 /* FreshchatSDK */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = FD4754ABF8D3E0D6E877EF398D1971D7 /* Build configuration list for PBXAggregateTarget "FreshchatSDK" */;
+			buildConfigurationList = 12A1057D20353CBE2F7DDC3D01D5416F /* Build configuration list for PBXAggregateTarget "FreshchatSDK" */;
 			buildPhases = (
+				ACEF24BE37C18141564C2C5022B9B533 /* [CP] Copy XCFrameworks */,
 			);
 			dependencies = (
 			);
@@ -19,13 +20,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		404CD3F98B2979CCCC476BC8C0295473 /* Pods-SwiftSample-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 759A0DF379F222F9CF403A504875E50E /* Pods-SwiftSample-dummy.m */; };
-		47E8311555C456D5AFBE23602846EF73 /* Pods-SwiftSample-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B8BB70714DDA15446CD28D366657401 /* Pods-SwiftSample-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CD6AB8E63634A7C834ADDF7B340498AD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		412787590D76DA263E3D88BB51E14364 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		47C1B69DCDB8B53D5CE7FACBE38581C6 /* Pods-SwiftSample-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7792EB8DF21CD97FD1DB96A6116A6BA0 /* Pods-SwiftSample-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7696679B01782CF6E4A771D0DB2D13A0 /* Pods-SwiftSample-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D8F23C570A9640E1F20A5E5F1ECB78 /* Pods-SwiftSample-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		93390BFF48F9C0E7FBF64E168115D3E8 /* PBXContainerItemProxy */ = {
+		CE24AC445EFF327AAC0BD76897AF8A73 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -35,108 +36,85 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		22EFBDB4BF23BA80049CA3062F16ECE5 /* Pods-SwiftSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSample.debug.xcconfig"; sourceTree = "<group>"; };
-		2C82D52756E4EDD109EE540680386CC5 /* Pods-SwiftSample-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SwiftSample-resources.sh"; sourceTree = "<group>"; };
-		31DECDDB8D87D55952F4913FF79332AC /* Pods-SwiftSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSample.release.xcconfig"; sourceTree = "<group>"; };
-		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		371F854881DE024031DF2422CAF86234 /* Pods-SwiftSample.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SwiftSample.modulemap"; sourceTree = "<group>"; };
-		43A886473B6A13FAA595CE4997A8381B /* FreshchatModels.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FreshchatModels.bundle; path = FreshchatSDK/FreshchatModels.bundle; sourceTree = "<group>"; };
-		4D808C1237BCA8ED033C3E7E901F7949 /* Pods-SwiftSample-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSample-Info.plist"; sourceTree = "<group>"; };
-		571C4374B588554E86BEC500B0BAC77E /* FCResources.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FCResources.bundle; path = FreshchatSDK/FCResources.bundle; sourceTree = "<group>"; };
-		5C796D2E5A6AB53EA562531DCD0066D3 /* FreshchatSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FreshchatSDK.h; path = FreshchatSDK/FreshchatSDK.h; sourceTree = "<group>"; };
-		73F4FB6509063E66E94E4BFE6E1F0776 /* FCLocalization.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = FCLocalization.bundle; path = FreshchatSDK/FCLocalization.bundle; sourceTree = "<group>"; };
-		759A0DF379F222F9CF403A504875E50E /* Pods-SwiftSample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SwiftSample-dummy.m"; sourceTree = "<group>"; };
-		7CB72F8ABF5CAA3F4481296C9D06F1D2 /* Pods_SwiftSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_SwiftSample.framework; path = "Pods-SwiftSample.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8820081E5136CCF53ECD665B0C425EB1 /* Pods-SwiftSample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSample-acknowledgements.plist"; sourceTree = "<group>"; };
-		9B8BB70714DDA15446CD28D366657401 /* Pods-SwiftSample-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SwiftSample-umbrella.h"; sourceTree = "<group>"; };
+		02F7B688E589A62522753C838BC7AAE2 /* Pods-SwiftSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSample.release.xcconfig"; sourceTree = "<group>"; };
+		34AA03134D5A28F4392397F6A78C77E5 /* Pods-SwiftSample-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SwiftSample-frameworks.sh"; sourceTree = "<group>"; };
+		37ECABACBF1E5BFB892B5F080280D8AB /* Pods-SwiftSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SwiftSample.debug.xcconfig"; sourceTree = "<group>"; };
+		5A1054A1C1CDBBB4E42E926963C87D38 /* Pods-SwiftSample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SwiftSample-acknowledgements.markdown"; sourceTree = "<group>"; };
+		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		7792EB8DF21CD97FD1DB96A6116A6BA0 /* Pods-SwiftSample-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SwiftSample-umbrella.h"; sourceTree = "<group>"; };
+		7CB72F8ABF5CAA3F4481296C9D06F1D2 /* Pods-SwiftSample */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-SwiftSample"; path = Pods_SwiftSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F8914ED02C240C147A37BFE4DA038E2 /* Pods-SwiftSample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSample-acknowledgements.plist"; sourceTree = "<group>"; };
+		840CB326EE764F9B3A3B76F1CF4320C3 /* FreshchatSDK-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "FreshchatSDK-xcframeworks.sh"; sourceTree = "<group>"; };
+		8FB5324FB65F860AB4A5541E8FD1DC85 /* FreshchatSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FreshchatSDK.debug.xcconfig; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		B0AF11EE916E7271F94AE38EB32A7315 /* FreshchatSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FreshchatSDK.release.xcconfig; sourceTree = "<group>"; };
-		B37600369E984A54541555057A558E8F /* FreshchatSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FreshchatSDK.debug.xcconfig; sourceTree = "<group>"; };
-		BEA52B45FDC96271E698ADCD3ACC22EF /* libFDFreshchatSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libFDFreshchatSDK.a; path = FreshchatSDK/libFDFreshchatSDK.a; sourceTree = "<group>"; };
-		DB320E51171F5E5CE04ACCF5C37E1BE2 /* Pods-SwiftSample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SwiftSample-acknowledgements.markdown"; sourceTree = "<group>"; };
+		A298687D06636BEDC537D717B783F6F9 /* Pods-SwiftSample-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SwiftSample-Info.plist"; sourceTree = "<group>"; };
+		E50B83D328BFDC128E2626693AF54A86 /* FreshchatSDK.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = FreshchatSDK.xcframework; sourceTree = "<group>"; };
+		E6D8F23C570A9640E1F20A5E5F1ECB78 /* Pods-SwiftSample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SwiftSample-dummy.m"; sourceTree = "<group>"; };
+		F44D6B989628F2673663923D0C2867B8 /* Pods-SwiftSample.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SwiftSample.modulemap"; sourceTree = "<group>"; };
+		FE31F89074C0BEA75B5CB486D3CB442F /* FreshchatSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FreshchatSDK.release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		32162FFA2458E8A65A511E065B04BD5F /* Frameworks */ = {
+		3BEA5E7C29960E436AD6EF0342847278 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD6AB8E63634A7C834ADDF7B340498AD /* Foundation.framework in Frameworks */,
+				412787590D76DA263E3D88BB51E14364 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		24E475B12D1553B0FE3981E23694B73C /* Pods-SwiftSample */ = {
+		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				371F854881DE024031DF2422CAF86234 /* Pods-SwiftSample.modulemap */,
-				DB320E51171F5E5CE04ACCF5C37E1BE2 /* Pods-SwiftSample-acknowledgements.markdown */,
-				8820081E5136CCF53ECD665B0C425EB1 /* Pods-SwiftSample-acknowledgements.plist */,
-				759A0DF379F222F9CF403A504875E50E /* Pods-SwiftSample-dummy.m */,
-				4D808C1237BCA8ED033C3E7E901F7949 /* Pods-SwiftSample-Info.plist */,
-				2C82D52756E4EDD109EE540680386CC5 /* Pods-SwiftSample-resources.sh */,
-				9B8BB70714DDA15446CD28D366657401 /* Pods-SwiftSample-umbrella.h */,
-				22EFBDB4BF23BA80049CA3062F16ECE5 /* Pods-SwiftSample.debug.xcconfig */,
-				31DECDDB8D87D55952F4913FF79332AC /* Pods-SwiftSample.release.xcconfig */,
+				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
 			);
-			name = "Pods-SwiftSample";
-			path = "Target Support Files/Pods-SwiftSample";
+			name = iOS;
 			sourceTree = "<group>";
 		};
-		3DED87D946F6453D96A5F28B884DD774 /* FreshchatSDK */ = {
+		7FF0754516A95F90E8B840E03B1E0390 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5C796D2E5A6AB53EA562531DCD0066D3 /* FreshchatSDK.h */,
-				737F90A563CDF460D639B1D53B4FE38A /* Frameworks */,
-				BD4FEF3D81F2C233269262F79A1246AE /* Resources */,
-				F00B7E9B705E816EC729F1C58012E6C8 /* Support Files */,
+				C207901AC78C320DA59180112E090788 /* FreshchatSDK */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C207901AC78C320DA59180112E090788 /* FreshchatSDK */ = {
+			isa = PBXGroup;
+			children = (
+				C8B9D661A9C2C8D8EC3681AB25A21999 /* Frameworks */,
+				FFA97AADA26E4BC083F4FE98595B261A /* Support Files */,
 			);
 			name = FreshchatSDK;
 			path = FreshchatSDK;
 			sourceTree = "<group>";
 		};
-		737F90A563CDF460D639B1D53B4FE38A /* Frameworks */ = {
+		C8B9D661A9C2C8D8EC3681AB25A21999 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BEA52B45FDC96271E698ADCD3ACC22EF /* libFDFreshchatSDK.a */,
+				E50B83D328BFDC128E2626693AF54A86 /* FreshchatSDK.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		82CB03303539AB52A97F2F8B9FDA25B0 /* Products */ = {
+		CDA925CC320629E5859155E7A54B8358 /* Pods-SwiftSample */ = {
 			isa = PBXGroup;
 			children = (
-				7CB72F8ABF5CAA3F4481296C9D06F1D2 /* Pods_SwiftSample.framework */,
+				F44D6B989628F2673663923D0C2867B8 /* Pods-SwiftSample.modulemap */,
+				5A1054A1C1CDBBB4E42E926963C87D38 /* Pods-SwiftSample-acknowledgements.markdown */,
+				7F8914ED02C240C147A37BFE4DA038E2 /* Pods-SwiftSample-acknowledgements.plist */,
+				E6D8F23C570A9640E1F20A5E5F1ECB78 /* Pods-SwiftSample-dummy.m */,
+				34AA03134D5A28F4392397F6A78C77E5 /* Pods-SwiftSample-frameworks.sh */,
+				A298687D06636BEDC537D717B783F6F9 /* Pods-SwiftSample-Info.plist */,
+				7792EB8DF21CD97FD1DB96A6116A6BA0 /* Pods-SwiftSample-umbrella.h */,
+				37ECABACBF1E5BFB892B5F080280D8AB /* Pods-SwiftSample.debug.xcconfig */,
+				02F7B688E589A62522753C838BC7AAE2 /* Pods-SwiftSample.release.xcconfig */,
 			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		BD4FEF3D81F2C233269262F79A1246AE /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				73F4FB6509063E66E94E4BFE6E1F0776 /* FCLocalization.bundle */,
-				571C4374B588554E86BEC500B0BAC77E /* FCResources.bundle */,
-				43A886473B6A13FAA595CE4997A8381B /* FreshchatModels.bundle */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		C4503DB91E61D05647EA69970F95D624 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				3DED87D946F6453D96A5F28B884DD774 /* FreshchatSDK */,
-			);
-			name = Pods;
+			name = "Pods-SwiftSample";
+			path = "Target Support Files/Pods-SwiftSample";
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -144,8 +122,8 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				C4503DB91E61D05647EA69970F95D624 /* Pods */,
-				82CB03303539AB52A97F2F8B9FDA25B0 /* Products */,
+				7FF0754516A95F90E8B840E03B1E0390 /* Pods */,
+				E1DAD44F934AFD7F22C9A2FFD2286611 /* Products */,
 				E64EECC3606A1BA2DAC144BC6A3317E3 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
@@ -153,24 +131,33 @@
 		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C0834CEBB1379A84116EF29F93051C60 /* iOS */,
+				578452D2E740E91742655AC8F1636D1F /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E1DAD44F934AFD7F22C9A2FFD2286611 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7CB72F8ABF5CAA3F4481296C9D06F1D2 /* Pods-SwiftSample */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E64EECC3606A1BA2DAC144BC6A3317E3 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				24E475B12D1553B0FE3981E23694B73C /* Pods-SwiftSample */,
+				CDA925CC320629E5859155E7A54B8358 /* Pods-SwiftSample */,
 			);
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		F00B7E9B705E816EC729F1C58012E6C8 /* Support Files */ = {
+		FFA97AADA26E4BC083F4FE98595B261A /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				B37600369E984A54541555057A558E8F /* FreshchatSDK.debug.xcconfig */,
-				B0AF11EE916E7271F94AE38EB32A7315 /* FreshchatSDK.release.xcconfig */,
+				840CB326EE764F9B3A3B76F1CF4320C3 /* FreshchatSDK-xcframeworks.sh */,
+				8FB5324FB65F860AB4A5541E8FD1DC85 /* FreshchatSDK.debug.xcconfig */,
+				FE31F89074C0BEA75B5CB486D3CB442F /* FreshchatSDK.release.xcconfig */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/FreshchatSDK";
@@ -179,11 +166,11 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		C9A67D37F0EE44A20AF5979B07438F7C /* Headers */ = {
+		92FDDF3F0420B0D4EC909BC230F2942F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				47E8311555C456D5AFBE23602846EF73 /* Pods-SwiftSample-umbrella.h in Headers */,
+				47C1B69DCDB8B53D5CE7FACBE38581C6 /* Pods-SwiftSample-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,21 +179,21 @@
 /* Begin PBXNativeTarget section */
 		76C26F16A4DBCB5D3A92BBCEF479178E /* Pods-SwiftSample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F36CDCACE10F7DE3F2ABB0B64F6419D0 /* Build configuration list for PBXNativeTarget "Pods-SwiftSample" */;
+			buildConfigurationList = A29AD392CFD10B4C445E1C9DFA9D000C /* Build configuration list for PBXNativeTarget "Pods-SwiftSample" */;
 			buildPhases = (
-				C9A67D37F0EE44A20AF5979B07438F7C /* Headers */,
-				BC8406A73A3CFA750CA38B70287253F9 /* Sources */,
-				32162FFA2458E8A65A511E065B04BD5F /* Frameworks */,
-				4F2A31C7822C67EF34663A438C14F8B6 /* Resources */,
+				92FDDF3F0420B0D4EC909BC230F2942F /* Headers */,
+				93A27CD892117D066EEA3CED0A1E93B1 /* Sources */,
+				3BEA5E7C29960E436AD6EF0342847278 /* Frameworks */,
+				A58574DF59E46A3E7D3B09947315F3E8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				682DFD50609F47CA294C9456976B31A5 /* PBXTargetDependency */,
+				7AF40E241BD73FF5A1EC60CC5DF1932C /* PBXTargetDependency */,
 			);
 			name = "Pods-SwiftSample";
-			productName = "Pods-SwiftSample";
-			productReference = 7CB72F8ABF5CAA3F4481296C9D06F1D2 /* Pods_SwiftSample.framework */;
+			productName = Pods_SwiftSample;
+			productReference = 7CB72F8ABF5CAA3F4481296C9D06F1D2 /* Pods-SwiftSample */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -215,19 +202,20 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = 82CB03303539AB52A97F2F8B9FDA25B0 /* Products */;
+			minimizedProjectReferenceProxies = 0;
+			productRefGroup = E1DAD44F934AFD7F22C9A2FFD2286611 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -238,7 +226,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4F2A31C7822C67EF34663A438C14F8B6 /* Resources */ = {
+		A58574DF59E46A3E7D3B09947315F3E8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -247,45 +235,103 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		ACEF24BE37C18141564C2C5022B9B533 /* [CP] Copy XCFrameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/FreshchatSDK/FreshchatSDK-xcframeworks.sh",
+				"${PODS_ROOT}/FreshchatSDK/FreshchatSDK.xcframework",
+			);
+			name = "[CP] Copy XCFrameworks";
+			outputPaths = (
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FreshchatSDK/FreshchatSDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/FreshchatSDK/FreshchatSDK-xcframeworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		BC8406A73A3CFA750CA38B70287253F9 /* Sources */ = {
+		93A27CD892117D066EEA3CED0A1E93B1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				404CD3F98B2979CCCC476BC8C0295473 /* Pods-SwiftSample-dummy.m in Sources */,
+				7696679B01782CF6E4A771D0DB2D13A0 /* Pods-SwiftSample-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		682DFD50609F47CA294C9456976B31A5 /* PBXTargetDependency */ = {
+		7AF40E241BD73FF5A1EC60CC5DF1932C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FreshchatSDK;
 			target = 4E1D79809E0C3B8232439E38335A55B2 /* FreshchatSDK */;
-			targetProxy = 93390BFF48F9C0E7FBF64E168115D3E8 /* PBXContainerItemProxy */;
+			targetProxy = CE24AC445EFF327AAC0BD76897AF8A73 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0176F6F0EB72A77758DE4E041A6E77FF /* Release */ = {
+		0C34931E8533196A4E52C839628C2131 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0AF11EE916E7271F94AE38EB32A7315 /* FreshchatSDK.release.xcconfig */;
+			baseConfigurationReference = 02F7B688E589A62522753C838BC7AAE2 /* Pods-SwiftSample.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-SwiftSample/Pods-SwiftSample-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSample/Pods-SwiftSample.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		196DFA3E4A09A28224918543529A1885 /* Debug */ = {
+		0E77E1D972507B28A5830A32EA83043C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FB5324FB65F860AB4A5541E8FD1DC85 /* FreshchatSDK.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2B9E26EAE2CD392AD762421F663075A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -308,6 +354,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -333,7 +380,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -346,44 +393,11 @@
 			};
 			name = Debug;
 		};
-		48DC0B9131D160C0710E3F03A4946FEE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22EFBDB4BF23BA80049CA3062F16ECE5 /* Pods-SwiftSample.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-SwiftSample/Pods-SwiftSample-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSample/Pods-SwiftSample.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		B01D14FDC83DCF9D4BE53066BEA96D05 /* Release */ = {
+		63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -406,6 +420,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -428,7 +443,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -440,13 +455,13 @@
 			};
 			name = Release;
 		};
-		B7D8D7C738E244F5B633C8590C546AAF /* Release */ = {
+		CB99ABE9BF8B106014892A8731159D36 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 31DECDDB8D87D55952F4913FF79332AC /* Pods-SwiftSample.release.xcconfig */;
+			baseConfigurationReference = 37ECABACBF1E5BFB892B5F080280D8AB /* Pods-SwiftSample.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -457,7 +472,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-SwiftSample/Pods-SwiftSample-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-SwiftSample/Pods-SwiftSample.modulemap";
@@ -469,51 +484,53 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		EFDD0D8E4C74BD8085058BDBFE10F396 /* Debug */ = {
+		E57C3A17684F7D683D0FD820EE652985 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B37600369E984A54541555057A558E8F /* FreshchatSDK.debug.xcconfig */;
+			baseConfigurationReference = FE31F89074C0BEA75B5CB486D3CB442F /* FreshchatSDK.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		12A1057D20353CBE2F7DDC3D01D5416F /* Build configuration list for PBXAggregateTarget "FreshchatSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0E77E1D972507B28A5830A32EA83043C /* Debug */,
+				E57C3A17684F7D683D0FD820EE652985 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				196DFA3E4A09A28224918543529A1885 /* Debug */,
-				B01D14FDC83DCF9D4BE53066BEA96D05 /* Release */,
+				2B9E26EAE2CD392AD762421F663075A1 /* Debug */,
+				63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F36CDCACE10F7DE3F2ABB0B64F6419D0 /* Build configuration list for PBXNativeTarget "Pods-SwiftSample" */ = {
+		A29AD392CFD10B4C445E1C9DFA9D000C /* Build configuration list for PBXNativeTarget "Pods-SwiftSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				48DC0B9131D160C0710E3F03A4946FEE /* Debug */,
-				B7D8D7C738E244F5B633C8590C546AAF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FD4754ABF8D3E0D6E877EF398D1971D7 /* Build configuration list for PBXAggregateTarget "FreshchatSDK" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EFDD0D8E4C74BD8085058BDBFE10F396 /* Debug */,
-				0176F6F0EB72A77758DE4E041A6E77FF /* Release */,
+				CB99ABE9BF8B106014892A8731159D36 /* Debug */,
+				0C34931E8533196A4E52C839628C2131 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
