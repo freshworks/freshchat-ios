@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.0
+Version         : 6.3.1
+
+Ver 6.3.1 
+__________________________
+Bug Fix :
+- Remote config values cleared when account configuration is changed dynamically.
 
 Ver 6.3.0 
 __________________________

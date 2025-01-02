@@ -1923,7 +1923,7 @@
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/FreshchatSDK</key>
 		<data>
-		0D+xuNDxE70jf4oqjDFzZ2GGzHU=
+		BASwOc3dsGPG4w6yx/KJWMJV1aM=
 		</data>
 		<key>ios-arm64/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
 		<data>
@@ -3892,7 +3892,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/FreshchatSDK</key>
 		<data>
-		WNxFbh6JVdm/mO35N6EER3wAZ/I=
+		Zt7c4T93KDwR6Msp1RSMYBn65ro=
 		</data>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
 		<data>
@@ -9225,11 +9225,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			0D+xuNDxE70jf4oqjDFzZ2GGzHU=
+			BASwOc3dsGPG4w6yx/KJWMJV1aM=
 			</data>
 			<key>hash2</key>
 			<data>
-			LXu4VIJIH6wxvphh2WflRTjmLA2a9NWOYzkt2l8t6Fo=
+			eH0mzvt7qbTfLn1xEHtF2SSUoJ4Fnv221jDfUM+3IBE=
 			</data>
 		</dict>
 		<key>ios-arm64/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
@@ -14628,11 +14628,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			WNxFbh6JVdm/mO35N6EER3wAZ/I=
+			Zt7c4T93KDwR6Msp1RSMYBn65ro=
 			</data>
 			<key>hash2</key>
 			<data>
-			+RzvQjynwJmX1l1sHIZfvh05kWAuTtlWAza4lFAZhzc=
+			XL7CFkX+smvbGeBNB3lOSEXICE16jkghRwZfDqGyLnU=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/FreshchatSDK.framework/Headers/FreshchatSDK-Swift.h</key>
