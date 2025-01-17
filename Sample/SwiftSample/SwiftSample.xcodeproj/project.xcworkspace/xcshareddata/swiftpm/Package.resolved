@@ -1,0 +1,15 @@
+{
+  "originHash" : "dc7b350d5edc3d5895b2908cacb93d827ea091927de655fbc9998fcaec93c261",
+  "pins" : [
+    {
+      "identity" : "freshchat-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/freshworks/freshchat-ios",
+      "state" : {
+        "branch" : "canary-6.3.3",
+        "revision" : "76df8299a75f2ae9d69a422acb19e22bb0acfb06"
+      }
+    }
+  ],
+  "version" : 3
+}
