@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/freshworks/freshchat-ios",
       "state" : {
-        "branch" : "canary-6.3.3",
-        "revision" : "76df8299a75f2ae9d69a422acb19e22bb0acfb06"
+        "branch" : "master",
+        "revision" : "1703546b185d9e923a9d37a204727bc9d3aa5e6d"
       }
     }
   ],
