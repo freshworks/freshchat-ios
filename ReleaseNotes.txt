@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.2
+Version         : 6.3.3
+
+Ver 6.3.3 
+__________________________
+Bug fix :
+- Fix an issue ensuring message content is in the correct order.
+- Fix UI issue when feedback bot message was the last node.
 
 Ver 6.3.2 
 __________________________

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,26 +12,23 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Llm-lL-Icb"/>
-                        <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="freshchat" translatesAutoresizingMaskIntoConstraints="NO" id="ZJe-lj-cWa">
-                                <rect key="frame" x="113" y="259" width="150" height="150"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="freshchat" translatesAutoresizingMaskIntoConstraints="NO" id="kaU-aT-Ga9">
+                                <rect key="frame" x="121.66666666666669" y="351" width="150" height="150"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="9UV-8I-sjX"/>
-                                    <constraint firstAttribute="height" constant="150" id="rWQ-8A-2Dr"/>
+                                    <constraint firstAttribute="height" constant="150" id="5Er-4H-MeY"/>
+                                    <constraint firstAttribute="width" constant="150" id="A67-LL-ttd"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="ZJe-lj-cWa" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="SfX-1g-8eq"/>
-                            <constraint firstItem="ZJe-lj-cWa" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="acr-lL-REU"/>
+                            <constraint firstItem="kaU-aT-Ga9" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="qg6-r4-pXK"/>
+                            <constraint firstItem="kaU-aT-Ga9" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="s3Q-Ne-Epx"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -43,5 +39,8 @@
     </scenes>
     <resources>
         <image name="freshchat" width="512" height="512"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

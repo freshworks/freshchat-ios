@@ -63,7 +63,6 @@ Carthage/Build
 # https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
 
 Podfile.lock
-podfile
 
 sonar-reports/
 .scannerwork

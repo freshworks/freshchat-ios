@@ -1,0 +1,15 @@
+{
+  "originHash" : "dc7b350d5edc3d5895b2908cacb93d827ea091927de655fbc9998fcaec93c261",
+  "pins" : [
+    {
+      "identity" : "freshchat-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/freshworks/freshchat-ios",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1703546b185d9e923a9d37a204727bc9d3aa5e6d"
+      }
+    }
+  ],
+  "version" : 3
+}
