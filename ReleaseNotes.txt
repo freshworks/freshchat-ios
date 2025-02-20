@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.3
+Version         : 6.3.4
+
+Ver 6.3.4 
+__________________________
+Bug Fix :
+- Fix an alignment issue with HTML list content in messages.
 
 Ver 6.3.3 
 __________________________
