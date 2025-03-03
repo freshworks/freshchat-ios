@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.4
+Version         : 6.3.5
+
+Ver 6.3.5 
+__________________________
+Bug Fix :
+- Fixed an issue where the unread message count was not updating instantly when opening the app.
+- Fixed an issue where pending messages were not fetched when reopening the chat after a period of time.
 
 Ver 6.3.4 
 __________________________
