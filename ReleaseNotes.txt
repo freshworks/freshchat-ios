@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.5
+Version         : 6.3.6
+
+Ver 6.3.6 
+__________________________
+Bug Fixes:
+- Fixed an issue where welcome messages for custom bots were not displayed on the topic list screen.
+- Fixed an isolated issue where the bot would trigger unexpectedly in the middle of a chat.
+- Added a missing property option for the FCEventButtonSent event sent from the SDK.
 
 Ver 6.3.5 
 __________________________
