@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.6
+Version         : 6.3.7
+
+Ver 6.3.7 
+__________________________
+Bug Fix :
+- Fixed an issue with incorrect chat status that may cause the bot to restart during a chat.
 
 Ver 6.3.6 
 __________________________
