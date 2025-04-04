@@ -1013,8 +1013,15 @@
     },
     {
       "filePath": "\/Users\/harkumar\/Documents\/Hotline\/freshchat_iOS_SDK_dev\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiselectBottomSheet.swift",
+      "kind": "BooleanLiteral",
+      "offset": 918,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/harkumar\/Documents\/Hotline\/freshchat_iOS_SDK_dev\/unity_ios_sdk_dev\/HotlineSDK\/HotlineSDK\/View\/Multiselect\/FCMultiselectBottomSheet.swift",
       "kind": "IntegerLiteral",
-      "offset": 934,
+      "offset": 976,
       "length": 1,
       "value": "0"
     },

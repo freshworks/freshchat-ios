@@ -2,7 +2,13 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.7
+Version         : 6.3.8
+
+Ver 6.3.8 
+__________________________
+Bug Fixes:
+- Fixed rare crashes that could occur when the app becomes active while checking for new support messages and when calling the resetUser API call.
+- Fixed an intermittent issue where the selected options counter would unexpectedly reset for multi-select options.
 
 Ver 6.3.7 
 __________________________
