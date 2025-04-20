@@ -2,7 +2,14 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.8
+Version         : 6.3.9
+
+Ver 6.3.9 
+__________________________
+Bug Fixes:
+- Fixed an issue where the scroll indicator was not visible when multiple FAQ articles appeared in the search results.
+- Fixed an issue that caused star rating views to be missing when multiple rating feedback messages were shown consecutively.
+- Fixed an issue where the reply editor was temporarily unavailable when a chat was assigned to an agent.
 
 Ver 6.3.8 
 __________________________
