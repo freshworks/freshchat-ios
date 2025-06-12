@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.3.9
+Version         : 6.4.0
+
+Ver 6.4.0 
+__________________________
+Bug Fix:
+- Fixed an occasional crash when persistent store coordinator is unavailable while accessing core data managed context.
 
 Ver 6.3.9 
 __________________________
