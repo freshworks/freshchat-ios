@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.4.0
+Version         : 6.4.1
+
+Ver 6.4.1 
+__________________________
+Bug Fix:
+- Fixed an issue where the text field would not appear for up to 10 seconds when the first bot message included an `assignment` action.
 
 Ver 6.4.0 
 __________________________
