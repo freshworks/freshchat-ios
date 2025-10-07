@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.4.1
+Version         : 6.4.2
+
+Ver 6.4.2 
+__________________________
+Bug Fix:
+- Added exception handling to HTML parsing to prevent crash in `Channels List` screen.
 
 Ver 6.4.1 
 __________________________

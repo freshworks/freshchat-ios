@@ -1827,7 +1827,7 @@
 		</data>
 		<key>FreshchatModel.momd/VersionInfo.plist</key>
 		<data>
-		QXPfp+l7ibA8qz9fcf6CgG0jO7s=
+		s6fXvCjojtSV9KEIAwu6cV0ugjE=
 		</data>
 		<key>FreshchatModels-Info.plist</key>
 		<data>
@@ -1931,11 +1931,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		PyHoyxAPGbAeUs4VuGZOiFHd6r4=
+		3KtRxF/wqCiZD3LWQFCaesRKQnY=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		VoW+KARR5NHI3BqNTueKYErRqkI=
+		QHVP97IBtnZDN04ggrdtnV5q9aU=
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
@@ -1951,7 +1951,7 @@
 		</data>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		GMSDDOVIBVsYWH8msKpK3qCHbAY=
+		K2nZlp4jCcCyBaSnXWGtAu7Wxrk=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -5156,7 +5156,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pUxRMbV4aTLnJKLp5sOGSw2E3AOJpBQQQWnDxjsRqq0=
+			IpOyUXMTPCAnaxyQkUUaFn72iXVP8XQI0cxCPBUlL2Y=
 			</data>
 		</dict>
 		<key>FreshchatModels-Info.plist</key>
@@ -5338,7 +5338,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zcWC3iHKVTzY/cRU/bpsojgXR6mLHkt3m6R9lofhLmI=
+			+JNxAkGozG5KXh+f/87nch2dk9e4X1NjxUn7b57c8n0=
 			</data>
 		</dict>
 		<key>Modules/FreshchatSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
@@ -5366,7 +5366,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			cOpl9LjRur08/ydUeXfUgqsMDd9vXHtIWjHRUIDwKSI=
+			ujFu65gFCy25t5WzitQ+OZSA/6tBMAjmd6FT19KiXw4=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
