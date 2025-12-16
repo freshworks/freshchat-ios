@@ -2,7 +2,12 @@ Freshchat iOS SDK - Powered by Freshdesk
 
 Documentation   : https://support.freshchat.com
 Support Email   : support@freshchat.com
-Version         : 6.4.3
+Version         : 6.4.4
+
+Ver 6.4.4 
+__________________________
+Enhancement:
+- Channel fetching is now performed safely after the completion of pending tasks, and only when the account is confirmed to be active.
 
 Ver 6.4.3 
 __________________________
